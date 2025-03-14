@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript Beginner Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #e8f0fe;
+            border-left: 5px solid #007bff;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <h1>TypeScript Beginner Questions - Set 1</h1>
+        
+        <div class="question">
+            <h2>1. What is TypeScript?</h2>
+            <p><strong>Answer:</strong> TypeScript is a strongly typed superset of JavaScript that compiles to plain JavaScript.</p>
+        </div>
+
+        <div class="question">
+            <h2>2. How do you declare a variable in TypeScript?</h2>
+            <p><strong>Answer:</strong> You can use <code>let</code>, <code>const</code>, or <code>var</code> to declare variables.</p>
+            <pre><code>let name: string = "Angela";
+const age: number = 30;</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>3. What are the basic data types in TypeScript?</h2>
+            <p><strong>Answer:</strong> TypeScript includes <code>string</code>, <code>number</code>, <code>boolean</code>, <code>array</code>, <code>tuple</code>, <code>enum</code>, <code>any</code>, <code>void</code>, <code>null</code>, and <code>undefined</code>.</p>
+        </div>
+
+        <div class="question">
+            <h2>4. How do you define an array in TypeScript?</h2>
+            <pre><code>let numbers: number[] = [1, 2, 3, 4, 5];</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>5. What is a tuple in TypeScript?</h2>
+            <pre><code>let person: [string, number] = ["Alice", 25];</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>6. What is an enum in TypeScript?</h2>
+            <pre><code>enum Color { Red, Green, Blue }
+let c: Color = Color.Green;</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>7. What is the difference between <code>any</code> and <code>unknown</code> in TypeScript?</h2>
+            <p><strong>Answer:</strong> <code>any</code> disables type checking, while <code>unknown</code> requires type checking before usage.</p>
+        </div>
+
+        <div class="question">
+            <h2>8. How do you define a function in TypeScript?</h2>
+            <pre><code>function greet(name: string): string {
+    return "Hello, " + name;
+}</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>9. What is a TypeScript interface?</h2>
+            <pre><code>interface Person {
+    name: string;
+    age: number;
+}</code></pre>
+        </div>
+
+  <div class="question">
+            <h2>10. What is type inference in TypeScript?</h2>
+        <p><strong>Answer:</strong> TypeScript automatically infers types when possible</p>
+      </div>
+    </div>
+    
+    <h1>TypeScript Beginner Questions - Set 2</h1>
+    <div class="question">
+      <h2>11. What is the difference between <code>let</code> and <code>const</code> in TypeScript?</h2>
+      <p><strong>Answer:</strong> <code>let</code> allows reassignment while <code>const</code> does not allow reassignment after initialization.</p>
+    </div>
+    <div class="question">
+      <h2>12. How do you create a union type in TypeScript?</h2>
+      <pre><code>let id: string | number;
+id = "123"; // valid
+id = 123;   // valid</code></pre>
+    </div>
+    <div class="question">
+      <h2>13. What is a type alias in TypeScript?</h2>
+      <pre><code>type Point = { x: number; y: number };
+let p: Point = { x: 10, y: 20 };</code></pre>
+    </div>
+    <div class="question">
+      <h2>14. How do you use an optional property in an interface?</h2>
+      <pre><code>interface User {
+    name: string;
+    age?: number;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>15. How do you define a default parameter in a TypeScript function?</h2>
+      <pre><code>function greet(name: string = "Guest"): string {
+    return "Hello, " + name;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>16. What are readonly properties in TypeScript?</h2>
+      <pre><code>interface Car {
+    readonly model: string;
+}
+let myCar: Car = { model: "Toyota" };
+// myCar.model = "Honda"; // Error</code></pre>
+    </div>
+    <div class="question">
+      <h2>17. How do you create an intersection type in TypeScript?</h2>
+      <pre><code>type Person = { name: string };
+type Employee = { id: number };
+type Worker = Person & Employee;
+let worker: Worker = { name: "Alice", id: 123 };</code></pre>
+    </div>
+    <div class="question">
+      <h2>18. What is a generic function in TypeScript?</h2>
+      <pre><code>function identity<T>(arg: T): T {
+    return arg;
+}
+console.log(identity<string>("Hello"));</code></pre>
+    </div>
+    <div class="question">
+      <h2>19. How do you create an async function in TypeScript?</h2>
+      <pre><code>async function fetchData(): Promise<string> {
+    return "Data fetched";
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>20. What is a never type in TypeScript?</h2>
+      <pre><code>function error(message: string): never {
+    throw new Error(message);
+}</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <h1>TypeScript Beginner Questions - Set 3</h1>
+    <div class="question">
+      <h2>21. What is the keyof operator in TypeScript?</h2>
+      <pre><code>type Person = { name: string; age: number };
+type PersonKeys = keyof Person; // "name" | "age"</code></pre>
+    </div>
+    <div class="question">
+      <h2>22. How do you use the typeof operator in TypeScript?</h2>
+      <pre><code>let user = { name: "Alice", age: 25 };
+type UserType = typeof user; // { name: string; age: number }</code></pre>
+    </div>
+    <div class="question">
+      <h2>23. What is a tuple in TypeScript?</h2>
+      <pre><code>let tuple: [string, number] = ["Alice", 30];</code></pre>
+    </div>
+    <div class="question">
+      <h2>24. How do you define an enum in TypeScript?</h2>
+      <pre><code>enum Color { Red, Green, Blue }
+let c: Color = Color.Green;</code></pre>
+    </div>
+    <div class="question">
+      <h2>25. What is type assertion in TypeScript?</h2>
+      <pre><code>let someValue: any = "hello";
+let strLength: number = (someValue as string).length;</code></pre>
+    </div>
+    <div class="question">
+      <h2>26. How do you make a property optional in TypeScript?</h2>
+      <pre><code>interface User {
+    name: string;
+    age?: number;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>27. What is a mapped type in TypeScript?</h2>
+      <pre><code>type Readonly<T> = { readonly [P in keyof T]: T[P] };
+type User = { name: string; age: number };
+type ReadonlyUser = Readonly<User>;</code></pre>
+    </div>
+    <div class="question">
+      <h2>28. How do you create a conditional type in TypeScript?</h2>
+      <pre><code>type IsString<T> = T extends string ? "Yes" : "No";
+type Test = IsString<string>; // "Yes"</code></pre>
+    </div>
+    <div class="question">
+      <h2>29. How do you use the extends keyword in TypeScript?</h2>
+      <pre><code>interface Animal {
+    name: string;
+}
+interface Dog extends Animal {
+    breed: string;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>30. What is a type guard in TypeScript?</h2>
+      <pre><code>function isString(value: any): value is string {
+    return typeof value === "string";
+}
+console.log(isString("hello")); // true</code></pre>
+    </div>
+    <h1>TypeScript Beginner Questions - Set 4</h1>
+    <div class="question">
+      <h2>31. What is an abstract class in TypeScript?</h2>
+      <pre><code>abstract class Animal {
+    abstract makeSound(): void;
+    move(): void {
+        console.log("Moving...");
+    }
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>32. What is the difference between an interface and a type in TypeScript?</h2>
+      <pre><code>interface User {
+    name: string;
+}
+type UserAlias = { name: string };</code></pre>
+    </div>
+    <div class="question">
+      <h2>33. How do you use the never type in TypeScript?</h2>
+      <pre><code>function error(message: string): never {
+    throw new Error(message);
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>34. What is an intersection type in TypeScript?</h2>
+      <pre><code>type A = { a: string };
+type B = { b: number };
+type AB = A & B;</code></pre>
+    </div>
+    <div class="question">
+      <h2>35. How do you use generics in TypeScript?</h2>
+      <pre><code>function identity<T>(arg: T): T {
+    return arg;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>36. What is the purpose of utility types in TypeScript?</h2>
+      <pre><code>type PartialUser = Partial<{ name: string; age: number }></code></pre>
+    </div>
+    <div class="question">
+      <h2>37. How do you use the Record utility type?</h2>
+      <pre><code>type UserRoles = Record;
+const roles: UserRoles = { admin: "Alice", user: "Bob" };</code></pre>
+    </div>
+    <div class="question">
+      <h2>38. What is a union type in TypeScript?</h2>
+      <pre><code>let value: string | number;
+value = "Hello";
+value = 42;</code></pre>
+    </div>
+    <div class="question">
+      <h2>39. How do you implement method overloading in TypeScript?</h2>
+      <pre><code>class Printer {
+    print(value: string): void;
+    print(value: number): void;
+    print(value: any) {
+        console.log(value);
+    }
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>40. What is a discriminated union in TypeScript?</h2>
+      <pre><code>type Shape =
+    | { kind: "circle"; radius: number }
+    | { kind: "square"; side: number };
+
+function getArea(shape: Shape): number {
+    if (shape.kind === "circle") {
+        return Math.PI * shape.radius ** 2;
+    } else {
+        return shape.side ** 2;
+    }
+}</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <h1>TypeScript Beginner Questions - Set 5</h1>
+    <div class="question">
+      <h2>41. How do you use optional properties in TypeScript interfaces?</h2>
+      <pre><code>interface User {
+    name: string;
+    age?: number;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>42. What is the keyof operator in TypeScript?</h2>
+      <pre><code>type User = { name: string; age: number };
+type UserKeys = keyof User; // 'name' | 'age'</code></pre>
+    </div>
+    <div class="question">
+      <h2>43. How do you use mapped types in TypeScript?</h2>
+      <pre><code>type ReadonlyUser = { [K in keyof User]: User[K] };</code></pre>
+    </div>
+    <div class="question">
+      <h2>44. What is type assertion in TypeScript?</h2>
+      <pre><code>let value: any = "Hello";
+let strLength: number = (value as string).length;</code></pre>
+    </div>
+    <div class="question">
+      <h2>45. How do you define a tuple type in TypeScript?</h2>
+      <pre><code>let user: [string, number] = ["Alice", 25];</code></pre>
+    </div>
+    <div class="question">
+      <h2>46. How do you use readonly properties in TypeScript?</h2>
+      <pre><code>interface User {
+    readonly id: number;
+    name: string;
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>47. How does TypeScript support async/await?</h2>
+      <pre><code>async function fetchData(): Promise<string> {
+    return "Data received";
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>48. What is a conditional type in TypeScript?</h2>
+      <pre><code>type Check<T> = T extends string ? "String" : "Not String";
+let result: Check<number>; // 'Not String'</code></pre>
+    </div>
+    <div class="question">
+      <h2>49. How do you use the Extract utility type?</h2>
+      <pre><code>type T = Extract<"a" | "b" | "c", "a" | "f">; // 'a'</code></pre>
+    </div>
+    <div class="question">
+      <h2>50. How do you use the Exclude utility type?</h2>
+      <pre><code>type T = Exclude<"a" | "b" | "c", "a" | "f">; // 'b' | 'c'</code></pre>
+    </div>
+    <div class="question">
+    <h2>51. How do you use the Exclude utility type?</h2>
+      <pre><code>type T = Exclude<"a" | "b" | "c", "a" | "f">; // 'b' | 'c'</code></pre>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h1>TypeScript Beginner Questions - Set 6</h1>
+    <div class="question">
+      <h2>51. How do you use the Pick utility type?</h2>
+      <pre><code>type User = { name: string; age: number; email: string };
+type UserName = Pick;</code></pre>
+    </div>
+    <div class="question">
+      <h2>52. How do you use the Omit utility type?</h2>
+      <pre><code>type User = { name: string; age: number; email: string };
+type UserWithoutEmail = Omit;</code></pre>
+    </div>
+    <div class="question">
+      <h2>53. What is a Record type in TypeScript?</h2>
+      <pre><code>type UserRoles = Record;
+let roles: UserRoles = { admin: true, editor: false };</code></pre>
+    </div>
+    <div class="question">
+      <h2>54. How do you make all properties in a TypeScript interface optional?</h2>
+      <pre><code>type User = { name: string; age: number };
+type PartialUser = Partial<User>;</code></pre>
+    </div>
+    <div class="question">
+      <h2>55. How do you make all properties in a TypeScript interface required?</h2>
+      <pre><code>type User = { name?: string; age?: number };
+type RequiredUser = Required<User>;</code></pre>
+    </div>
+    <div class="question">
+      <h2>56. What is a Readonly utility type?</h2>
+      <pre><code>type User = { name: string; age: number };
+type ReadonlyUser = Readonly<User>;</code></pre>
+    </div>
+    <div class="question">
+      <h2>57. How do you create an index signature in TypeScript?</h2>
+      <pre><code>interface Dictionary {
+    [key: string]: string;
+}
+let dict: Dictionary = { hello: "world" };</code></pre>
+    </div>
+    <div class="question">
+      <h2>58. What are template literal types in TypeScript?</h2>
+      <pre><code>type Greeting = `Hello, ${string}`;
+let msg: Greeting = "Hello, TypeScript";</code></pre>
+    </div>
+    <div class="question">
+      <h2>59. How do you define a function type in TypeScript?</h2>
+      <pre><code>type AddFn = (a: number, b: number) => number;
+const add: AddFn = (x, y) => x + y;</code></pre>
+    </div>
+    <div class="question">
+      <h2>60. What is an intersection type in TypeScript?</h2>
+      <pre><code>type A = { name: string };
+type B = { age: number };
+type AB = A & B;
+let person: AB = { name: "Alice", age: 25 };</code></pre>
+    </div>
+    	<div class="question">
+      <h2>61. What is an intersection type in TypeScript?</h2>
+      <pre><code>type A = { name: string };
+type B = { age: number };
+type AB = A & B;
+let person: AB = { name: "Alice", age: 25 
+    
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+<p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+</body>
+</html>
