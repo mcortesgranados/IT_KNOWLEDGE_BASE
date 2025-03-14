@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas de TypeScript - Nivel Principiante</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .code {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: "Courier New", Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Preguntas de TypeScript - Nivel Principiante</h1>
+        
+        <h2>Set 1</h2>
+        <div class="question">
+            <strong>1. ¿Qué es TypeScript?</strong>
+            <p>TypeScript es un superconjunto tipado de JavaScript desarrollado por Microsoft que se compila a JavaScript puro.</p>
+        </div>
+        <div class="question">
+            <strong>2. ¿Cómo se instala TypeScript?</strong>
+            <p>Se instala usando npm con el siguiente comando:</p>
+            <pre class="code">npm install -g typescript</pre>
+        </div>
+        <div class="question">
+            <strong>3. ¿Cómo se compila un archivo TypeScript?</strong>
+            <p>Se usa el compilador de TypeScript:</p>
+            <pre class="code">tsc archivo.ts</pre>
+        </div>
+        <div class="question">
+            <strong>4. ¿Qué extensión tienen los archivos TypeScript?</strong>
+            <p>La extensión es <code>.ts</code>.</p>
+        </div>
+        <div class="question">
+            <strong>5. ¿Cómo se define una variable con tipo en TypeScript?</strong>
+            <pre class="code">let nombre: string = "Angela";</pre>
+        </div>
+        <div class="question">
+            <strong>6. ¿Qué es la inferencia de tipos en TypeScript?</strong>
+            <p>Es la capacidad de TypeScript de deducir automáticamente el tipo de una variable sin necesidad de declararlo explícitamente.</p>
+        </div>
+        <div class="question">
+            <strong>7. ¿Cómo se define una función con tipos en TypeScript?</strong>
+            <pre class="code">
+function sumar(a: number, b: number): number {
+    return a + b;
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>8. ¿Qué son los tipos primitivos en TypeScript?</strong>
+            <p>Son <code>string</code>, <code>number</code>, <code>boolean</code>, <code>null</code>, <code>undefined</code> y <code>symbol</code>.</p>
+        </div>
+        <div class="question">
+            <strong>9. ¿Qué es una interfaz en TypeScript?</strong>
+            <p>Una interfaz define la estructura de un objeto.</p>
+            <pre class="code">
+interface Persona {
+    nombre: string;
+    edad: number;
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>10. ¿Cómo se usa una interfaz en TypeScript?</strong>
+            <pre class="code">
+const usuario: Persona = {
+    nombre: "Angela",
+    edad: 30
+};
+            </pre>
+        </div>
+
+	        
+        <h2>Set 2</h2>
+        <div class="question">
+            <strong>11. ¿Qué es un alias de tipo en TypeScript?</strong>
+            <p>Es una forma de definir un nombre personalizado para un tipo.</p>
+            <pre class="code">
+type ID = string | number;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>12. ¿Qué diferencia hay entre una interfaz y un alias de tipo?</strong>
+            <p>Las interfaces pueden extenderse y combinarse, mientras que los alias de tipo son más flexibles para definir tipos complejos.</p>
+        </div>
+        <div class="question">
+            <strong>13. ¿Cómo se declara un array tipado en TypeScript?</strong>
+            <pre class="code">let numeros: number[] = [1, 2, 3, 4];</pre>
+        </div>
+        <div class="question">
+            <strong>14. ¿Qué es una tupla en TypeScript?</strong>
+            <p>Una tupla es un array con una cantidad fija de elementos con tipos específicos.</p>
+            <pre class="code">let usuario: [string, number] = ["Angela", 30];</pre>
+        </div>
+        <div class="question">
+            <strong>15. ¿Cómo se define un tipo de objeto en TypeScript?</strong>
+            <pre class="code">
+let persona: { nombre: string; edad: number } = {
+    nombre: "Angela",
+    edad: 30
+};
+            </pre>
+        </div>
+        <div class="question">
+            <strong>16. ¿Cómo se usa una función de tipo flecha en TypeScript?</strong>
+            <pre class="code">
+const sumar = (a: number, b: number): number => a + b;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>17. ¿Qué es el tipo any en TypeScript?</strong>
+            <p>El tipo <code>any</code> permite que una variable pueda contener cualquier tipo de dato.</p>
+        </div>
+        <div class="question">
+            <strong>18. ¿Por qué es mejor evitar el uso de any?</strong>
+            <p>Porque deshabilita la verificación de tipos, reduciendo las ventajas de TypeScript.</p>
+        </div>
+        <div class="question">
+            <strong>19. ¿Cómo se define una unión de tipos en TypeScript?</strong>
+            <pre class="code">let valor: string | number;</pre>
+        </div>
+        <div class="question">
+            <strong>20. ¿Qué es un tipo literal en TypeScript?</strong>
+            <p>Es un tipo que solo permite ciertos valores específicos.</p>
+            <pre class="code">
+type Direccion = "norte" | "sur" | "este" | "oeste";
+            </pre>
+        </div>
+
+	<h2>Set 3</h2>
+        <div class="question">
+            <strong>9. ¿Cómo se implementa un genérico en TypeScript?</strong>
+            <pre class="code">
+function identidad<T>(valor: T): T {
+    return valor;
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>10. ¿Qué es un Decorador en TypeScript?</strong>
+            <p>Un decorador es una función que se aplica a una clase, método o propiedad para modificar su comportamiento.</p>
+            <pre class="code">
+function Log(target: any, propertyKey: string) {
+    console.log(`Llamado: ${propertyKey}`);
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>11. ¿Cómo se configura TypeScript con un archivo tsconfig.json?</strong>
+            <p>Se genera con el siguiente comando:</p>
+            <pre class="code">tsc --init</pre>
+        </div>
+        <div class="question">
+            <strong>12. ¿Qué son los módulos en TypeScript?</strong>
+            <p>Permiten dividir el código en archivos reutilizables.</p>
+            <pre class="code">
+export function saludar() {
+    return "Hola";
+}
+import { saludar } from "./modulo";
+            </pre>
+        </div>
+        <div class="question">
+            <strong>13. ¿Cómo se define un tipo condicional en TypeScript?</strong>
+            <pre class="code">
+type EsString<T> = T extends string ? "Sí" : "No";
+            </pre>
+        </div>
+        <div class="question">
+            <strong>14. ¿Qué es un mapped type en TypeScript?</strong>
+            <pre class="code">
+type Opcional<T> = { [P in keyof T]?: T[P] };
+            </pre>
+        </div>
+
+	 <h2>Set 4</h2>
+        <div class="question">
+            <strong>15. ¿Cómo se usa la palabra clave "readonly" en TypeScript?</strong>
+            <p>Se usa para hacer propiedades de solo lectura en una interfaz o clase.</p>
+            <pre class="code">
+interface Persona {
+    readonly nombre: string;
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>16. ¿Qué son los Enums en TypeScript?</strong>
+            <p>Los Enums permiten definir un conjunto de constantes con nombres descriptivos.</p>
+            <pre class="code">
+enum Direccion {
+    Arriba,
+    Abajo,
+    Izquierda,
+    Derecha
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>17. ¿Cómo se define una función con valores opcionales en TypeScript?</strong>
+            <pre class="code">
+function saludo(nombre: string, edad?: number) {
+    return edad ? `${nombre} tiene ${edad} años` : `Hola ${nombre}`;
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>18. ¿Qué es el tipo "never" en TypeScript?</strong>
+            <p>Se usa para funciones que nunca devuelven un valor, como errores.</p>
+            <pre class="code">
+function error(mensaje: string): never {
+    throw new Error(mensaje);
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>19. ¿Cómo se usa "Partial<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en opcionales.</p>
+            <pre class="code">
+type Persona = { nombre: string; edad: number; };
+type PersonaOpcional = Partial<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>20. ¿Qué hace "Pick<T, K>" en TypeScript?</strong>
+            <p>Permite seleccionar un subconjunto de propiedades de un tipo.</p>
+            <pre class="code">
+type Persona = { nombre: string; edad: number; email: string };
+type DatosBasicos = Pick<Persona, "nombre" | "email">;
+            </pre>
+        </div>
+
+	<h2>Set 5</h2>
+        <div class="question">
+            <strong>21. ¿Qué es "Record<K, T>" en TypeScript?</strong>
+            <p>Es un tipo que crea un objeto con claves de tipo K y valores de tipo T.</p>
+            <pre class="code">
+type UsuarioRoles = Record<string, boolean>;
+const roles: UsuarioRoles = { admin: true, editor: false };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>22. ¿Cómo se usa "Omit<T, K>" en TypeScript?</strong>
+            <p>Elimina una o más propiedades de un tipo.</p>
+            <pre class="code">
+type Persona = { nombre: string; edad: number; email: string };
+type SinEmail = Omit<Persona, "email">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>23. ¿Cómo definir una variable con un tipo específico?</strong>
+            <pre class="code">
+let edad: number = 30;
+let nombre: string = "Carlos";
+            </pre>
+        </div>
+        <div class="question">
+            <strong>24. ¿Qué son los "Type Assertions" en TypeScript?</strong>
+            <p>Permiten indicar a TypeScript el tipo de una variable.</p>
+            <pre class="code">
+let valor: any = "Hola";
+let longitud: number = (valor as string).length;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>25. ¿Qué hace "Exclude<T, U>"?</strong>
+            <p>Elimina los tipos de U del conjunto de T.</p>
+            <pre class="code">
+type Tipos = "a" | "b" | "c";
+type Excluido = Exclude<Tipos, "a">; // "b" | "c"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>26. ¿Cómo usar "Infer" en TypeScript?</strong>
+            <p>Permite extraer tipos dentro de una condicional.</p>
+            <pre class="code">
+type Extraer<T> = T extends Promise<infer U> ? U : never;
+type Resultado = Extraer<Promise<string>>; // string
+            </pre>
+        </div>
+	<h2>Set 6</h2>
+        <div class="question">
+            <strong>27. ¿Qué hace "Pick<T, K>" en TypeScript?</strong>
+            <p>Selecciona solo las propiedades especificadas de un tipo.</p>
+            <pre class="code">
+type Persona = { nombre: string; edad: number; email: string };
+type SoloNombre = Pick<Persona, "nombre">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>28. ¿Cómo se usa "Readonly<T>" en TypeScript?</strong>
+            <p>Hace que todas las propiedades de un tipo sean de solo lectura.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioReadonly = Readonly<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>29. ¿Qué hace "Partial<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en opcionales.</p>
+            <pre class="code">
+type Config = { modoOscuro: boolean; idioma: string };
+type ConfigOpcional = Partial<Config>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>30. ¿Cómo definir un tipo de función en TypeScript?</strong>
+            <pre class="code">
+type Suma = (a: number, b: number) => number;
+const sumar: Suma = (x, y) => x + y;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>31. ¿Qué es un "Tuple" en TypeScript?</strong>
+            <p>Es un array con un número fijo de elementos y tipos específicos.</p>
+            <pre class="code">
+let tupla: [string, number] = ["Hola", 10];
+            </pre>
+        </div>
+        <div class="question">
+            <strong>32. ¿Qué hace "NonNullable<T>"?</strong>
+            <p>Elimina los valores "null" y "undefined" de un tipo.</p>
+            <pre class="code">
+type Datos = string | null | undefined;
+type SoloString = NonNullable<Datos>; // string
+            </pre>
+        </div>
+		
+			 <h2>Set 7</h2>
+        <div class="question">
+            <strong>33. ¿Qué es un "Mapped Type" en TypeScript?</strong>
+            <p>Es un tipo que crea un nuevo tipo basado en otro existente, transformando sus propiedades.</p>
+            <pre class="code">
+type Opcional<T> = { [P in keyof T]?: T[P] };
+type UsuarioOpcional = Opcional<{ nombre: string; edad: number }>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>34. ¿Cómo se usa "Record<K, T>" en TypeScript?</strong>
+            <p>Crea un tipo con claves "K" y valores de tipo "T".</p>
+            <pre class="code">
+type Roles = Record<string, boolean>;
+const usuarioRoles: Roles = { admin: true, editor: false };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>35. ¿Qué es "keyof" en TypeScript?</strong>
+            <p>Es un operador que obtiene las claves de un tipo.</p>
+            <pre class="code">
+type Persona = { nombre: string; edad: number };
+type ClavesPersona = keyof Persona; // "nombre" | "edad"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>36. ¿Qué hace "Extract<T, U>" en TypeScript?</strong>
+            <p>Extrae los tipos de "T" que son asignables a "U".</p>
+            <pre class="code">
+type Valores = "activo" | "inactivo" | "pendiente";
+type SoloActivo = Extract<Valores, "activo">; // "activo"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>37. ¿Cómo funciona "Exclude<T, U>"?</strong>
+            <p>Elimina los tipos de "T" que son asignables a "U".</p>
+            <pre class="code">
+type Estados = "activo" | "inactivo" | "pendiente";
+type SinActivo = Exclude<Estados, "activo">; // "inactivo" | "pendiente"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>38. ¿Qué es "infer" en TypeScript?</strong>
+            <p>Permite inferir tipos dentro de condicionales de tipos.</p>
+            <pre class="code">
+type Retorno<T> = T extends (...args: any[]) => infer R ? R : never;
+type TipoDeRetorno = Retorno<() => string>; // string
+            </pre>
+        </div>
+		
+			<h2>Set 8</h2>
+        <div class="question">
+            <strong>39. ¿Qué hace "NonNullable<T>" en TypeScript?</strong>
+            <p>Elimina "null" y "undefined" de un tipo.</p>
+            <pre class="code">
+type Nombre = string | null | undefined;
+type SoloNombre = NonNullable<Nombre>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>40. ¿Cómo se usa "Partial<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de "T" en opcionales.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioParcial = Partial<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>41. ¿Qué hace "Required<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de "T" en requeridas.</p>
+            <pre class="code">
+type UsuarioOpcional = { nombre?: string; edad?: number };
+type UsuarioRequerido = Required<UsuarioOpcional>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>42. ¿Para qué se usa "Readonly<T>"?</strong>
+            <p>Hace que todas las propiedades de "T" sean de solo lectura.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioSoloLectura = Readonly<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>43. ¿Qué es "Omit<T, K>" en TypeScript?</strong>
+            <p>Elimina las propiedades "K" del tipo "T".</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; email: string };
+type UsuarioSinEmail = Omit<Usuario, "email">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>44. ¿Cómo funciona "Pick<T, K>"?</strong>
+            <p>Selecciona solo las propiedades "K" de "T".</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; email: string };
+type UsuarioNombreEmail = Pick<Usuario, "nombre" | "email">;
+            </pre>
+        </div>
+			 <h2>Set 9</h2>
+        <div class="question">
+            <strong>45. ¿Qué hace "Extract<T, U>" en TypeScript?</strong>
+            <p>Extrae los tipos de "T" que también están en "U".</p>
+            <pre class="code">
+type A = "a" | "b" | "c";
+type B = "a" | "c";
+type C = Extract<A, B>; // "a" | "c"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>46. ¿Para qué sirve "Exclude<T, U>"?</strong>
+            <p>Elimina los tipos de "T" que están en "U".</p>
+            <pre class="code">
+type A = "a" | "b" | "c";
+type B = "a" | "c";
+type C = Exclude<A, B>; // "b"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>47. ¿Cómo se usa "Record<K, T>"?</strong>
+            <p>Crea un tipo con claves "K" y valores de tipo "T".</p>
+            <pre class="code">
+type Usuarios = Record<string, { edad: number; activo: boolean }>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>48. ¿Qué es "ReturnType<T>"?</strong>
+            <p>Obtiene el tipo de retorno de una función.</p>
+            <pre class="code">
+function suma(a: number, b: number) {
+    return a + b;
+}
+type Resultado = ReturnType<typeof suma>; // number
+            </pre>
+        </div>
+        <div class="question">
+            <strong>49. ¿Cómo se usa "InstanceType<T>"?</strong>
+            <p>Obtiene el tipo de instancia de una clase.</p>
+            <pre class="code">
+class Persona {
+    constructor(public nombre: string, public edad: number) {}
+}
+type PersonaInstancia = InstanceType<typeof Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>50. ¿Qué hace "ThisType<T>" en TypeScript?</strong>
+            <p>Asigna un tipo específico a "this" en un objeto.</p>
+            <pre class="code">
+type ObjetoConThis = {
+    mensaje: string;
+    log: (this: ObjetoConThis) => void;
+};
+            </pre>
+        </div>
+			<h2>Set 10</h2>
+        <div class="question">
+            <strong>51. ¿Qué es "NonNullable<T>" en TypeScript?</strong>
+            <p>Elimina "null" y "undefined" de un tipo.</p>
+            <pre class="code">
+type A = string | null | undefined;
+type B = NonNullable<A>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>52. ¿Cómo se usa "Parameters<T>"?</strong>
+            <p>Obtiene los tipos de los parámetros de una función.</p>
+            <pre class="code">
+function suma(a: number, b: number) {
+    return a + b;
+}
+type Params = Parameters<typeof suma>; // [number, number]
+            </pre>
+        </div>
+        <div class="question">
+            <strong>53. ¿Qué hace "ConstructorParameters<T>"?</strong>
+            <p>Obtiene los tipos de los parámetros del constructor de una clase.</p>
+            <pre class="code">
+class Persona {
+    constructor(public nombre: string, public edad: number) {}
+}
+type PersonaParams = ConstructorParameters<typeof Persona>; // [string, number]
+            </pre>
+        </div>
+        <div class="question">
+            <strong>54. ¿Cómo funciona "OmitThisParameter<T>"?</strong>
+            <p>Elimina "this" del tipo de una función.</p>
+            <pre class="code">
+type MiFuncion = (this: { name: string }, edad: number) => void;
+type SinThis = OmitThisParameter<MiFuncion>; // (edad: number) => void
+            </pre>
+        </div>
+        <div class="question">
+            <strong>55. ¿Qué hace "Partial<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en opcionales.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+};
+type PersonaOpcional = Partial<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>56. ¿Cómo funciona "Required<T>"?</strong>
+            <p>Convierte todas las propiedades opcionales en obligatorias.</p>
+            <pre class="code">
+type Persona = {
+    nombre?: string;
+    edad?: number;
+};
+type PersonaObligatoria = Required<Persona>;
+            </pre>
+        </div>
+			<h2>Set 11</h2>
+        <div class="question">
+            <strong>57. ¿Qué hace "Readonly<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en solo lectura.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+};
+type PersonaSoloLectura = Readonly<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>58. ¿Cómo se usa "Record<K, T>"?</strong>
+            <p>Crea un objeto con claves de tipo K y valores de tipo T.</p>
+            <pre class="code">
+type Usuarios = Record<string, number>;
+const usuarios: Usuarios = { "Alice": 25, "Bob": 30 };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>59. ¿Qué es "Pick<T, K>" en TypeScript?</strong>
+            <p>Selecciona un subconjunto de propiedades de un tipo.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+    direccion: string;
+};
+type PersonaBasica = Pick<Persona, "nombre" | "edad">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>60. ¿Cómo funciona "Exclude<T, U>"?</strong>
+            <p>Excluye tipos de un conjunto.</p>
+            <pre class="code">
+type A = string | number | boolean;
+type B = Exclude<A, boolean>; // string | number
+            </pre>
+        </div>
+        <div class="question">
+            <strong>61. ¿Para qué sirve "Extract<T, U>"?</strong>
+            <p>Extrae los tipos comunes entre T y U.</p>
+            <pre class="code">
+type A = string | number | boolean;
+type B = Extract<A, string | number>; // string | number
+            </pre>
+        </div>
+        <div class="question">
+            <strong>62. ¿Qué hace "Awaited<T>" en TypeScript?</strong>
+            <p>Obtiene el tipo de retorno de una promesa.</p>
+            <pre class="code">
+type Resultado = Awaited<Promise<string>>; // string
+            </pre>
+        </div>
+			 <h2>Set 12</h2>
+        <div class="question">
+            <strong>63. ¿Qué hace "Omit<T, K>" en TypeScript?</strong>
+            <p>Elimina ciertas propiedades de un tipo.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+    direccion: string;
+};
+type PersonaSinDireccion = Omit<Persona, "direccion">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>64. ¿Cómo se usa "NonNullable<T>"?</strong>
+            <p>Elimina null y undefined de un tipo.</p>
+            <pre class="code">
+type A = string | null | undefined;
+type B = NonNullable<A>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>65. ¿Qué es "Partial<T>" en TypeScript?</strong>
+            <p>Hace que todas las propiedades de un tipo sean opcionales.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+};
+type PersonaOpcional = Partial<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>66. ¿Para qué sirve "Required<T>"?</strong>
+            <p>Hace que todas las propiedades opcionales de un tipo sean requeridas.</p>
+            <pre class="code">
+type Persona = {
+    nombre?: string;
+    edad?: number;
+};
+type PersonaRequerida = Required<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>67. ¿Qué hace "ConstructorParameters<T>"?</strong>
+            <p>Extrae los parámetros de un constructor.</p>
+            <pre class="code">
+class Persona {
+    constructor(public nombre: string, public edad: number) {}
+}
+type Params = ConstructorParameters<typeof Persona>; // [string, number]
+            </pre>
+        </div>
+        <div class="question">
+            <strong>68. ¿Cómo se usa "InstanceType<T>"?</strong>
+            <p>Obtiene el tipo de una instancia de una clase.</p>
+            <pre class="code">
+class Persona {
+    nombre: string;
+    constructor(nombre: string) {
+        this.nombre = nombre;
+    }
+}
+type PersonaInstance = InstanceType<typeof Persona>;
+            </pre>
+        </div>
+		 <h2>Set 13</h2>
+        <div class="question">
+            <strong>69. ¿Qué es un "Mapped Type" en TypeScript?</strong>
+            <p>Un tipo que permite modificar cada propiedad de otro tipo.</p>
+            <pre class="code">
+type ReadOnly<T> = {
+    readonly [K in keyof T]: T[K];
+};
+type Persona = { nombre: string; edad: number; };
+type PersonaReadOnly = ReadOnly<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>70. ¿Qué hace "Readonly<T>"?</strong>
+            <p>Hace que todas las propiedades de un tipo sean de solo lectura.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+};
+type PersonaSoloLectura = Readonly<Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>71. ¿Qué es un "Indexed Type" en TypeScript?</strong>
+            <p>Un tipo que permite acceder dinámicamente a las propiedades de un objeto.</p>
+            <pre class="code">
+type Persona = { nombre: string; edad: number; };
+type TipoDeNombre = Persona["nombre"]; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>72. ¿Cómo se usa "keyof" en TypeScript?</strong>
+            <p>Permite obtener las claves de un tipo como un tipo de unión.</p>
+            <pre class="code">
+type Persona = {
+    nombre: string;
+    edad: number;
+};
+type ClavesPersona = keyof Persona; // "nombre" | "edad"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>73. ¿Para qué sirve "Extract<T, U>"?</strong>
+            <p>Extrae los tipos que están en la intersección de T y U.</p>
+            <pre class="code">
+type A = "a" | "b" | "c";
+type B = "b" | "c" | "d";
+type C = Extract<A, B>; // "b" | "c"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>74. ¿Cómo funciona "Exclude<T, U>"?</strong>
+            <p>Excluye los tipos de T que también están en U.</p>
+            <pre class="code">
+type A = "a" | "b" | "c";
+type B = "b" | "c" | "d";
+type C = Exclude<A, B>; // "a"
+            </pre>
+        </div>
+			 <h2>Set 14</h2>
+        <div class="question">
+            <strong>75. ¿Qué es un "Conditional Type" en TypeScript?</strong>
+            <p>Es un tipo que se evalúa de forma condicional según una expresión booleana.</p>
+            <pre class="code">
+type EsString<T> = T extends string ? "Sí" : "No";
+type Resultado = EsString<number>; // "No"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>76. ¿Qué hace "NonNullable<T>" en TypeScript?</strong>
+            <p>Elimina los valores null y undefined de un tipo.</p>
+            <pre class="code">
+type Datos = string | null | undefined;
+type DatosLimpios = NonNullable<Datos>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>77. ¿Cómo se usa "infer" en TypeScript?</strong>
+            <p>Permite extraer tipos dentro de un "Conditional Type".</p>
+            <pre class="code">
+type ExtraerTipo<T> = T extends Array<infer U> ? U : never;
+type TipoElemento = ExtraerTipo<string[]>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>78. ¿Qué hace "ReturnType<T>"?</strong>
+            <p>Obtiene el tipo de retorno de una función.</p>
+            <pre class="code">
+function saludo(): string {
+    return "Hola";
+}
+type TipoSaludo = ReturnType<typeof saludo>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>79. ¿Para qué se usa "InstanceType<T>"?</strong>
+            <p>Obtiene el tipo de instancia de una clase.</p>
+            <pre class="code">
+class Persona {
+    nombre: string = "Juan";
+}
+type InstanciaPersona = InstanceType<typeof Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>80. ¿Cómo se usa "ThisType<T>"?</strong>
+            <p>Define explícitamente el tipo de "this" dentro de un objeto.</p>
+            <pre class="code">
+type Objeto = {
+    data: number;
+} & ThisType<{ obtenerDato: () => number }>;
+            </pre>
+        </div>
+			<h2>Set 15</h2>
+        <div class="question">
+            <strong>81. ¿Qué es un "Mapped Type" en TypeScript?</strong>
+            <p>Es un tipo que crea nuevos tipos basados en una estructura existente.</p>
+            <pre class="code">
+type Opcional<T> = { [P in keyof T]?: T[P] };
+type Usuario = { nombre: string; edad: number };
+type UsuarioOpcional = Opcional<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>82. ¿Qué hace "Readonly<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en solo lectura.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioSoloLectura = Readonly<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>83. ¿Cómo se usa "Partial<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en opcionales.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioParcial = Partial<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>84. ¿Qué hace "Pick<T, K>"?</strong>
+            <p>Selecciona ciertas propiedades de un tipo.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; email: string };
+type DatosBasicos = Pick<Usuario, "nombre" | "email">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>85. ¿Para qué se usa "Omit<T, K>"?</strong>
+            <p>Elimina ciertas propiedades de un tipo.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; email: string };
+type DatosSinEmail = Omit<Usuario, "email">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>86. ¿Qué es "Record<K, T>" en TypeScript?</strong>
+            <p>Crea un tipo de objeto con claves específicas y valores de un tipo determinado.</p>
+            <pre class="code">
+type Roles = "admin" | "usuario";
+type Permisos = Record<Roles, string[]>;
+            </pre>
+        </div>
+			<h2>Set 16</h2>
+        <div class="question">
+            <strong>87. ¿Qué hace "Exclude<T, U>" en TypeScript?</strong>
+            <p>Elimina de un tipo todas las propiedades que están en otro tipo.</p>
+            <pre class="code">
+type A = "a" | "b" | "c";
+type B = "b" | "c";
+type Resultado = Exclude<A, B>; // "a"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>88. ¿Qué hace "Extract<T, U>" en TypeScript?</strong>
+            <p>Selecciona las propiedades de un tipo que también están en otro tipo.</p>
+            <pre class="code">
+type A = "a" | "b" | "c";
+type B = "b" | "c";
+type Resultado = Extract<A, B>; // "b" | "c"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>89. ¿Para qué se usa "NonNullable<T>"?</strong>
+            <p>Elimina los valores "null" y "undefined" de un tipo.</p>
+            <pre class="code">
+type Opcional = string | null | undefined;
+type SolamenteString = NonNullable<Opcional>; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>90. ¿Qué hace "ReturnType<T>"?</strong>
+            <p>Obtiene el tipo de retorno de una función.</p>
+            <pre class="code">
+function suma(a: number, b: number): number {
+    return a + b;
+}
+type TipoRetorno = ReturnType<typeof suma>; // number
+            </pre>
+        </div>
+        <div class="question">
+            <strong>91. ¿Para qué se usa "InstanceType<T>"?</strong>
+            <p>Obtiene el tipo de instancia de una clase.</p>
+            <pre class="code">
+class Persona {
+    nombre: string;
+    constructor(nombre: string) {
+        this.nombre = nombre;
+    }
+}
+type TipoPersona = InstanceType<typeof Persona>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>92. ¿Qué hace "ThisParameterType<T>"?</strong>
+            <p>Obtiene el tipo de "this" en una función.</p>
+            <pre class="code">
+function saludo(this: { nombre: string }) {
+    console.log(`Hola, ${this.nombre}`);
+}
+type TipoThis = ThisParameterType<typeof saludo>;
+            </pre>
+        </div>
+		
+			<h2>Set 17</h2>
+        <div class="question">
+            <strong>93. ¿Qué hace "OmitThisParameter<T>" en TypeScript?</strong>
+            <p>Elimina el tipo "this" de una función.</p>
+            <pre class="code">
+function saludo(this: { nombre: string }, mensaje: string) {
+    console.log(`${mensaje}, ${this.nombre}`);
+}
+type TipoFuncion = OmitThisParameter<typeof saludo>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>94. ¿Cómo se usa "Partial<T>" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en opcionales.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioParcial = Partial<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>95. ¿Qué hace "Required<T>"?</strong>
+            <p>Convierte todas las propiedades opcionales de un tipo en obligatorias.</p>
+            <pre class="code">
+type UsuarioOpcional = { nombre?: string; edad?: number };
+type UsuarioRequerido = Required<UsuarioOpcional>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>96. ¿Qué hace "Readonly<T>"?</strong>
+            <p>Convierte todas las propiedades de un tipo en de solo lectura.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type UsuarioSoloLectura = Readonly<Usuario>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>97. ¿Cómo se usa "Record<K, T>"?</strong>
+            <p>Crea un tipo con claves específicas y un tipo de valor determinado.</p>
+            <pre class="code">
+type Roles = "admin" | "editor" | "usuario";
+type Permisos = Record<Roles, boolean>;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>98. ¿Qué hace "Pick<T, K>"?</strong>
+            <p>Selecciona ciertas propiedades de un tipo.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; email: string };
+type UsuarioNombreEmail = Pick<Usuario, "nombre" | "email">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>99. ¿Qué hace "Omit<T, K>"?</strong>
+            <p>Excluye ciertas propiedades de un tipo.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; email: string };
+type UsuarioSinEmail = Omit<Usuario, "email">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>100. ¿Para qué se usa "Awaited<T>" en TypeScript?</strong>
+            <p>Obtiene el tipo de un valor resuelto de una promesa.</p>
+            <pre class="code">
+type PromesaString = Promise<string>;
+type Resultado = Awaited<PromesaString>; // string
+            </pre>
+        </div>
+		
+			<h2>Set 18</h2>
+        <div class="question">
+            <strong>101. ¿Qué hace el operador "in" en TypeScript?</strong>
+            <p>Verifica si una propiedad existe en un objeto.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+const usuario: Usuario = { nombre: "Ana", edad: 30 };
+console.log("nombre" in usuario); // true
+            </pre>
+        </div>
+        <div class="question">
+            <strong>102. ¿Qué hace "keyof" en TypeScript?</strong>
+            <p>Obtiene las claves de un tipo como un tipo de unión.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+type ClavesUsuario = keyof Usuario; // "nombre" | "edad"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>103. ¿Cómo se usa "typeof" en TypeScript?</strong>
+            <p>Obtiene el tipo de una variable o expresión.</p>
+            <pre class="code">
+const nombre = "Ana";
+type TipoNombre = typeof nombre; // string
+            </pre>
+        </div>
+        <div class="question">
+            <strong>104. ¿Qué hace "extends" en TypeScript?</strong>
+            <p>Permite restringir tipos en genéricos.</p>
+            <pre class="code">
+type SoloNumeros<T extends number> = T;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>105. ¿Qué son los "index signatures" en TypeScript?</strong>
+            <p>Permiten definir objetos con claves dinámicas.</p>
+            <pre class="code">
+type Diccionario = { [key: string]: number };
+const datos: Diccionario = { a: 1, b: 2 };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>106. ¿Para qué se usa "infer" en TypeScript?</strong>
+            <p>Permite extraer tipos dentro de condiciones en genéricos.</p>
+            <pre class="code">
+type ExtraerTipo<T> = T extends Promise<infer R> ? R : T;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>107. ¿Qué hace "is" en TypeScript?</strong>
+            <p>Se usa en funciones de tipo guard para validar tipos.</p>
+            <pre class="code">
+function esNumero(x: any): x is number {
+    return typeof x === "number";
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>108. ¿Cómo se usa "never" en TypeScript?</strong>
+            <p>Indica que una función nunca retorna un valor.</p>
+            <pre class="code">
+function error(mensaje: string): never {
+    throw new Error(mensaje);
+}
+            </pre>
+        </div>
+        <div class="question">
+            <strong>109. ¿Qué hace "satisfies" en TypeScript?</strong>
+            <p>Verifica si un valor satisface un tipo sin restringirlo completamente.</p>
+            <pre class="code">
+const usuario = {
+    nombre: "Ana",
+    edad: 30,
+} satisfies { nombre: string; edad: number };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>110. ¿Qué hace "as const" en TypeScript?</strong>
+            <p>Convierte un objeto o array en una constante de solo lectura.</p>
+            <pre class="code">
+const colores = ["rojo", "verde", "azul"] as const;
+            </pre>
+        </div>
+		
+			  
+        <h2>Set 19</h2>
+        <div class="question">
+            <strong>111. ¿Qué hace el operador "??" en TypeScript?</strong>
+            <p>Es el operador de fusión de nulos, devuelve el lado derecho si el izquierdo es null o undefined.</p>
+            <pre class="code">
+let valor = null;
+let resultado = valor ?? "Valor por defecto";
+console.log(resultado); // "Valor por defecto"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>112. ¿Cómo se usa "Readonly" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en solo lectura.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+const usuario: Readonly<Usuario> = { nombre: "Ana", edad: 30 };
+// usuario.edad = 31; // Error: no se puede modificar
+            </pre>
+        </div>
+        <div class="question">
+            <strong>113. ¿Qué hace "Partial" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en opcionales.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number };
+const usuarioParcial: Partial<Usuario> = { nombre: "Ana" };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>114. ¿Qué hace "Required" en TypeScript?</strong>
+            <p>Convierte todas las propiedades de un tipo en obligatorias.</p>
+            <pre class="code">
+type Usuario = { nombre?: string; edad?: number };
+const usuarioCompleto: Required<Usuario> = { nombre: "Ana", edad: 30 };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>115. ¿Qué hace "Record" en TypeScript?</strong>
+            <p>Crea un objeto con claves y valores de tipo específico.</p>
+            <pre class="code">
+type Usuarios = Record<string, number>;
+const edades: Usuarios = { Ana: 30, Juan: 25 };
+            </pre>
+        </div>
+        <div class="question">
+            <strong>116. ¿Qué hace "Pick" en TypeScript?</strong>
+            <p>Permite seleccionar propiedades específicas de un tipo.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; correo: string };
+type UsuarioBasico = Pick<Usuario, "nombre" | "correo">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>117. ¿Qué hace "Omit" en TypeScript?</strong>
+            <p>Elimina propiedades específicas de un tipo.</p>
+            <pre class="code">
+type Usuario = { nombre: string; edad: number; correo: string };
+type UsuarioSinCorreo = Omit<Usuario, "correo">;
+            </pre>
+        </div>
+        <div class="question">
+            <strong>118. ¿Qué hace "Exclude" en TypeScript?</strong>
+            <p>Elimina tipos de una unión.</p>
+            <pre class="code">
+type Tipo = "a" | "b" | "c";
+type SoloA = Exclude<Tipo, "b" | "c">; // "a"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>119. ¿Qué hace "Extract" en TypeScript?</strong>
+            <p>Extrae tipos comunes de una unión.</p>
+            <pre class="code">
+type Tipo = "a" | "b" | "c";
+type SoloB = Extract<Tipo, "b" | "d">; // "b"
+            </pre>
+        </div>
+        <div class="question">
+            <strong>120. ¿Qué hace "NonNullable" en TypeScript?</strong>
+            <p>Elimina null y undefined de un tipo.</p>
+            <pre class="code">
+type Tipo = string | null | undefined;
+type SinNulos = NonNullable<Tipo>; // string
+            </pre>
+        </div>
+    </div>
+		
+    </div>
+    </div>
+		
+    </div>
+    </div>
+</body>
+</html>
+
+
