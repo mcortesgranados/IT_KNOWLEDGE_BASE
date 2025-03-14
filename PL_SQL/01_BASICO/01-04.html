@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .info-section {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+        
+        <div class="info-section">
+            <h2>Puntos 01-04: Información sobre el uso de GitHub, Azure, y AWS</h2>
+            <p><strong>Punto 01:</strong> El repositorio remoto del usuario está en GitHub.</p>
+            <p><strong>Punto 02:</strong> El servidor del usuario está en Azure.</p>
+            <p><strong>Punto 03:</strong> El usuario tiene un repositorio en GitHub y quiere copiar automáticamente archivos PHP a <code>/var/www/html</code> en un servidor de AWS después de hacer un commit.</p>
+            <p><strong>Punto 04:</strong> El usuario está interesado en usar GitHub Actions como alternativa a los servicios de AWS para automatizar el despliegue de archivos PHP desde GitHub a un servidor Apache.</p>
+        </div>
+
+        <div class="info-section">
+            <h2>Asignación de valores en PL/SQL: Uso de <code>:=</code></h2>
+            <p>En PL/SQL, el operador <code>:=</code> se usa para asignar un valor a una variable. Este operador asigna el valor de la expresión a la variable en el lado izquierdo del operador.</p>
+            
+            <p>A continuación, se muestra un ejemplo básico:</p>
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_salario NUMBER(7,2);<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_salario := 4500.50;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('El salario es: ' || v_salario);<br>
+                END;<br>
+                /
+            </div>
+            <p>En este código:</p>
+            <ul>
+                <li>Se declara una variable <code>v_salario</code> de tipo <code>NUMBER</code>.</li>
+                <li>La variable <code>v_salario</code> se inicializa con el valor <code>4500.50</code> utilizando el operador <code>:=</code>.</li>
+                <li>Se muestra el valor de la variable utilizando <code>DBMS_OUTPUT.PUT_LINE</code>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura Básica de un Bloque PL/SQL</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        code {
+            background-color: #f1f1f1;
+            padding: 5px;
+            border-radius: 5px;
+            display: block;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .syntax {
+            background-color: #eaf2f8;
+            padding: 10px;
+            border-left: 4px solid #007BFF;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            color: #007BFF;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Documentación realizada por: Angela Maria García Bermúdez</h3>
+        
+        <h1>Estructura Básica de un Bloque PL/SQL</h1>
+
+        <h2>Explicación</h2>
+        <p>
+            La estructura básica de un bloque PL/SQL está compuesta por cuatro secciones clave:
+        </p>
+        <ul>
+            <li><strong>DECLARE:</strong> (Opcional) Sección para declarar variables, cursores, constantes, excepciones y otros objetos PL/SQL.</li>
+            <li><strong>BEGIN:</strong> (Obligatoria) Aquí se incluye el código ejecutable.</li>
+            <li><strong>EXCEPTION:</strong> (Opcional) Sección para manejar excepciones (errores) que ocurran durante la ejecución del bloque.</li>
+            <li><strong>END:</strong> (Obligatoria) Marca el final del bloque PL/SQL.</li>
+        </ul>
+
+        <div class="syntax">
+            <h2>Sintaxis Básica</h2>
+            <code>
+                DECLARE<br>
+                &nbsp;&nbsp;-- Declaración de variables (opcional)<br>
+                BEGIN<br>
+                &nbsp;&nbsp;-- Código ejecutable<br>
+                EXCEPTION<br>
+                &nbsp;&nbsp;-- Manejo de excepciones (opcional)<br>
+                END;
+            </code>
+        </div>
+
+        <h2>Ejemplo de un Bloque PL/SQL con Estructura Básica</h2>
+        <pre>
+<code>DECLARE
+    v_nombre VARCHAR2(50) := 'Angela';
+    v_apellido VARCHAR2(50) := 'García';
+BEGIN
+    -- Imprimir nombre completo
+    DBMS_OUTPUT.PUT_LINE('Nombre completo: ' || v_nombre || ' ' || v_apellido);
+EXCEPTION
+    -- Manejo de excepciones en caso de error
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Ocurrió un error durante la ejecución.');
+END;
+/
+</code>
+        </pre>
+
+        <h2>Explicación del Código</h2>
+        <p>
+            <span class="highlight">DECLARE:</span> Se declaran dos variables:
+        </p>
+        <ul>
+            <li><strong>v_nombre:</strong> Almacena el nombre de una persona.</li>
+            <li><strong>v_apellido:</strong> Almacena el apellido de una persona.</li>
+        </ul>
+        <p>
+            <span class="highlight">BEGIN:</span> Se utiliza <code>DBMS_OUTPUT.PUT_LINE</code> para concatenar y mostrar el nombre completo en la consola.
+        </p>
+        <p>
+            <span class="highlight">EXCEPTION:</span> Si ocurre algún error durante la ejecución del bloque, se capturará y se imprimirá un mensaje de error.
+        </p>
+        <p>
+            <span class="highlight">END:</span> Marca el final del bloque PL/SQL.
+        </p>
+
+        <div class="footer">
+            <p>&copy; 2024 Guía de PL/SQL - Estructura Básica de un Bloque</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .code-block {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+
+        <div class="info-section">
+            <h2>Punto 01-26: Expresiones Booleanas</h2>
+            <p>En PL/SQL, las expresiones booleanas son fundamentales para la lógica de control y las decisiones en el código. Las expresiones booleanas pueden ser verdaderas (<code>TRUE</code>), falsas (<code>FALSE</code>), o indeterminadas (<code>NULL</code>).</p>
+            
+            <p><strong>Valores Booleanos:</strong></p>
+            <ul>
+                <li><strong><code>TRUE</code>:</strong> Representa una condición verdadera.</li>
+                <li><strong><code>FALSE</code>:</strong> Representa una condición falsa.</li>
+                <li><strong><code>NULL</code>:</strong> Representa una condición indeterminada.</li>
+            </ul>
+
+            <h3>Ejemplo de Expresiones Booleanas</h3>
+            <p>A continuación se muestra un ejemplo de cómo usar expresiones booleanas en una condición <code>IF</code> en PL/SQL:</p>
+
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_edad NUMBER := 25;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;es_adulto BOOLEAN;<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;-- Evaluar si la persona es adulta<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;IF v_edad >= 18 THEN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_adulto := TRUE;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ELSE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;es_adulto := FALSE;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;END IF;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;IF es_adulto THEN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('La persona es adulta.');<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ELSE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('La persona no es adulta.');<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;END IF;<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este ejemplo, se evalúa si una persona es adulta basándose en su edad. La variable <code>es_adulto</code> se asigna como <code>TRUE</code> si la edad es mayor o igual a 18, y como <code>FALSE</code> en caso contrario. Luego, se imprime un mensaje dependiendo del valor de <code>es_adulto</code>.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+Explicación de Expresiones Booleanas en PL/SQL:
+TRUE y FALSE: Son valores booleanos que representan condiciones verdaderas y falsas, respectivamente. Se usan en estructuras de control como IF y CASE.
+NULL: Representa una condición indeterminada. No es igual a TRUE ni FALSE, y se debe manejar específicamente para evitar errores en las evaluaciones lógicas.
+
+
+
+
+

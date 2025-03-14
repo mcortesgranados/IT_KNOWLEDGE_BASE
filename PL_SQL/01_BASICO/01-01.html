@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a PL/SQL: Bloques Anónimos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        code {
+            background-color: #f1f1f1;
+            padding: 5px;
+            border-radius: 5px;
+            display: block;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .syntax {
+            background-color: #eaf2f8;
+            padding: 10px;
+            border-left: 4px solid #007BFF;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            color: #007BFF;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Documentación realizada por: Angela Maria García Bermúdez</h3>
+        
+        <h1>Introducción a PL/SQL: Bloques Anónimos</h1>
+
+        <h2>Explicación</h2>
+        <p>
+            En PL/SQL, los <strong>bloques anónimos</strong> son bloques de código que se ejecutan sin estar almacenados previamente en la base de datos, a diferencia de los procedimientos o funciones que requieren ser almacenados y luego llamados. Un bloque PL/SQL anónimo no tiene nombre y se usa principalmente para ejecutar código temporal o para hacer pruebas.
+        </p>
+
+        <div class="syntax">
+            <h2>Sintaxis Básica</h2>
+            <code>
+                DECLARE<br>
+                &nbsp;&nbsp;-- Declaración de variables (opcional)<br>
+                BEGIN<br>
+                &nbsp;&nbsp;-- Código ejecutable<br>
+                EXCEPTION<br>
+                &nbsp;&nbsp;-- Manejo de excepciones (opcional)<br>
+                END;
+            </code>
+        </div>
+
+        <h2>Ejemplo de un Bloque PL/SQL Anónimo</h2>
+        <pre>
+<code>DECLARE
+    -- Declaración de variables
+    v_salario NUMBER(7, 2) := 1000.00;
+    v_bonificacion NUMBER(7, 2) := 200.00;
+    v_total_salario NUMBER(7, 2);
+BEGIN
+    -- Cálculo del salario total
+    v_total_salario := v_salario + v_bonificacion;
+    
+    -- Mostrar el resultado
+    DBMS_OUTPUT.PUT_LINE('El salario total del empleado es: ' || v_total_salario);
+EXCEPTION
+    -- Manejo de excepciones en caso de error
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Ocurrió un error durante la ejecución.');
+END;
+/
+</code>
+        </pre>
+
+        <h2>Explicación del Código</h2>
+        <p>
+            <span class="highlight">DECLARE:</span> Se declaran tres variables:
+        </p>
+        <ul>
+            <li><strong>v_salario:</strong> Almacena el salario base del empleado.</li>
+            <li><strong>v_bonificacion:</strong> Almacena la bonificación que se le añadirá al salario.</li>
+            <li><strong>v_total_salario:</strong> Almacena el salario total después de sumar la bonificación.</li>
+        </ul>
+        <p>
+            <span class="highlight">BEGIN:</span> Se realiza el cálculo sumando el salario base y la bonificación, luego se imprime el resultado utilizando el procedimiento <code>DBMS_OUTPUT.PUT_LINE</code>.
+        </p>
+        <p>
+            <span class="highlight">EXCEPTION:</span> Si ocurre algún error durante la ejecución del bloque, el control se transfiere a esta sección y se imprime un mensaje de error.
+        </p>
+        <p>
+            <span class="highlight">END:</span> Marca el final del bloque PL/SQL.
+        </p>
+
+        <div class="footer">
+            <p>&copy; 2024 Guía de PL/SQL - Bloques Anónimos</p>
+        </div>
+    </div>
+</body>
+</html>

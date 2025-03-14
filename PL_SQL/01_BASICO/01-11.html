@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .info-section {
+            margin-bottom: 40px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+        
+        <div class="info-section">
+            <h2>Puntos 01-11: Información sobre GitHub, Azure, AWS, GitHub Actions, Bucles y Cursores Simples</h2>
+            <p><strong>Punto 01:</strong> El repositorio remoto del usuario está en GitHub.</p>
+            <p><strong>Punto 02:</strong> El servidor del usuario está en Azure.</p>
+            <p><strong>Punto 03:</strong> El usuario tiene un repositorio en GitHub y quiere copiar automáticamente archivos PHP a <code>/var/www/html</code> en un servidor de AWS después de hacer un commit.</p>
+            <p><strong>Punto 04:</strong> El usuario está interesado en usar GitHub Actions como alternativa a los servicios de AWS para automatizar el despliegue de archivos PHP desde GitHub a un servidor Apache.</p>
+            <p><strong>Punto 05:</strong> El usuario necesita estar bien preparado para una presentación técnica sobre un flujo de trabajo de GitHub Actions para desplegar en un servidor Apache.</p>
+            <p><strong>Punto 06:</strong> El operador <code>||</code> se utiliza en PL/SQL para concatenar cadenas de texto.</p>
+            <p><strong>Punto 07:</strong> Las sentencias <code>IF-THEN-ELSE</code> permiten manejar condiciones simples en PL/SQL.</p>
+            <p><strong>Punto 08:</strong> Bucles <code>FOR</code> en PL/SQL: Iteración un número determinado de veces.</p>
+            <p><strong>Punto 09:</strong> Bucles <code>WHILE</code> en PL/SQL: Ejecución de un bucle mientras se cumpla una condición.</p>
+            <p><strong>Punto 10:</strong> Bucles <code>LOOP</code> en PL/SQL: Ejecución con salida manual usando <code>EXIT</code>.</p>
+            <p><strong>Punto 11:</strong> Cursores simples en PL/SQL: Declaración y uso de cursores para manejar resultados de consultas.</p>
+        </div>
+
+        <div class="info-section">
+            <h2>Cursores Simples en PL/SQL: Declaración y Uso</h2>
+            <p>Los cursores en PL/SQL son mecanismos que permiten manejar el conjunto de resultados de una consulta SELECT. Los cursores simples se declaran para almacenar los datos recuperados y luego se procesan fila por fila.</p>
+
+            <p>A continuación se muestra un ejemplo básico de cómo declarar y utilizar un cursor simple en PL/SQL:</p>
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;CURSOR c_empleados IS<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT nombre, salario FROM empleados;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_nombre empleados.nombre%TYPE;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_salario empleados.salario%TYPE;<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;OPEN c_empleados;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;LOOP<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FETCH c_empleados INTO v_nombre, v_salario;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT WHEN c_empleados%NOTFOUND;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('Empleado: ' || v_nombre || ' - Salario: ' || v_salario);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;END LOOP;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;CLOSE c_empleados;<br>
+                END;<br>
+                /
+            </div>
+            <p>En este código:</p>
+            <ul>
+                <li>El cursor <code>c_empleados</code> se declara para seleccionar los nombres y salarios de la tabla <code>empleados</code>.</li>
+                <li>El cursor se abre con <code>OPEN</code>, se recuperan los datos fila por fila con <code>FETCH</code>, y se cierra con <code>CLOSE</code>.</li>
+                <li>El bucle <code>LOOP</code> itera sobre cada fila del conjunto de resultados hasta que no quedan más filas, momento en que <code>c_empleados%NOTFOUND</code> devuelve <code>TRUE</code>, y se sale del bucle.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+Explicación del código PL/SQL:
+Cursor Simple: Un cursor simple se utiliza para recorrer un conjunto de filas recuperado por una consulta.
+Código ejemplo: El cursor c_empleados selecciona el nombre y salario de la tabla empleados, y luego se itera sobre cada fila mostrando los datos hasta que se alcanzan todas las filas.

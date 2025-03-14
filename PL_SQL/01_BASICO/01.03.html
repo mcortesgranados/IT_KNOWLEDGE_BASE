@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Declaración de Variables en PL/SQL: Tipos Básicos</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #007BFF;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        code {
+            background-color: #f1f1f1;
+            padding: 5px;
+            border-radius: 5px;
+            display: block;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .syntax {
+            background-color: #eaf2f8;
+            padding: 10px;
+            border-left: 4px solid #007BFF;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            color: #007BFF;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Documentación realizada por: Angela Maria García Bermúdez</h3>
+        
+        <h1>Declaración de Variables en PL/SQL: Tipos Básicos</h1>
+
+        <h2>Explicación</h2>
+        <p>
+            En PL/SQL, la declaración de variables es una parte esencial para almacenar datos temporales mientras se ejecuta el código. Los tipos de datos básicos más comunes en PL/SQL son:
+        </p>
+        <ul>
+            <li><strong>NUMBER:</strong> Utilizado para almacenar números enteros y decimales.</li>
+            <li><strong>VARCHAR2:</strong> Utilizado para almacenar cadenas de texto de longitud variable.</li>
+        </ul>
+
+        <div class="syntax">
+            <h2>Sintaxis Básica</h2>
+            <code>
+                DECLARE<br>
+                &nbsp;&nbsp;v_variable_nombre NUMBER(5, 2); -- Declaración de número con 5 dígitos y 2 decimales<br>
+                &nbsp;&nbsp;v_variable_texto VARCHAR2(50); -- Declaración de cadena de texto con un máximo de 50 caracteres<br>
+                BEGIN<br>
+                &nbsp;&nbsp;-- Código ejecutable<br>
+                END;
+            </code>
+        </div>
+
+        <h2>Ejemplo de Declaración de Variables</h2>
+        <pre>
+<code>DECLARE
+    v_salario NUMBER(7, 2) := 3500.50;
+    v_nombre VARCHAR2(50) := 'Angela';
+BEGIN
+    -- Imprimir variables
+    DBMS_OUTPUT.PUT_LINE('Salario: ' || v_salario);
+    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_nombre);
+END;
+/
+</code>
+        </pre>
+
+        <h2>Explicación del Código</h2>
+        <p>
+            <span class="highlight">v_salario:</span> Es una variable del tipo <code>NUMBER(7, 2)</code>, que puede almacenar números con hasta 7 dígitos en total, de los cuales 2 son decimales.
+        </p>
+        <p>
+            <span class="highlight">v_nombre:</span> Es una variable del tipo <code>VARCHAR2(50)</code>, que puede almacenar hasta 50 caracteres de texto.
+        </p>
+        <p>
+            Dentro del bloque <strong>BEGIN</strong>, se imprime el valor de ambas variables utilizando <code>DBMS_OUTPUT.PUT_LINE</code>.
+        </p>
+
+        <div class="footer">
+            <p>&copy; 2024 Guía de PL/SQL - Declaración de Variables en PL/SQL</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .code-block {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+
+        <div class="info-section">
+            <h2>Punto 01-29: Llamada a Funciones SQL</h2>
+            <p>En SQL, las funciones agregadas como <code>COUNT</code>, <code>SUM</code> y <code>AVG</code> se utilizan para realizar cálculos sobre un conjunto de datos. Estas funciones permiten obtener información resumida y son fundamentales en la manipulación y análisis de datos.</p>
+            
+            <p><strong>Funciones SQL:</strong></p>
+            <ul>
+                <li><strong><code>COUNT</code>:</strong> Cuenta el número de filas que cumplen con una condición específica.</li>
+                <li><strong><code>SUM</code>:</strong> Suma los valores de una columna numérica.</li>
+                <li><strong><code>AVG</code>:</strong> Calcula el promedio de los valores de una columna numérica.</li>
+            </ul>
+
+            <h3>Ejemplo de Llamada a Funciones SQL</h3>
+            <p>A continuación se muestra un ejemplo de cómo utilizar estas funciones en una consulta SQL:</p>
+
+            <div class="code-block">
+                SELECT<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;COUNT(*) AS total_registros,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;SUM(salario) AS suma_salarios,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;AVG(salario) AS promedio_salario<br>
+                FROM empleados;<br>
+            </div>
+
+            <p>En este ejemplo, se utilizan tres funciones:</p>
+            <ul>
+                <li><code>COUNT(*)</code>: Cuenta el número total de registros en la tabla <code>empleados</code>.</li>
+                <li><code>SUM(salario)</code>: Calcula la suma total de los salarios en la tabla <code>empleados</code>.</li>
+                <li><code>AVG(salario)</code>: Calcula el promedio de los salarios en la tabla <code>empleados</code>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+Explicación de Llamada a Funciones SQL:
+COUNT: Esta función devuelve el número de filas que coinciden con la condición especificada. Se puede utilizar para contar todas las filas o las filas que cumplen ciertos criterios.
+SUM: Suma los valores de una columna numérica. Es útil para obtener el total acumulado de una columna.
+AVG: Calcula el promedio de los valores de una columna numérica. Permite determinar la media de un conjunto de datos.
+
+
+
+
+
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .code-block {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+
+        <div class="info-section">
+            <h2>Punto 01-30: Introducción a las Transacciones</h2>
+            <p>En SQL, una transacción es un conjunto de operaciones que se ejecutan como una única unidad. La gestión de transacciones asegura que los datos se mantengan en un estado consistente, incluso en presencia de errores o fallos. Los dos conceptos clave en las transacciones son <code>COMMIT</code> y <code>ROLLBACK</code>.</p>
+            
+            <p><strong>Conceptos Clave:</strong></p>
+            <ul>
+                <li><strong><code>COMMIT</code>:</strong> Finaliza una transacción, guardando todos los cambios realizados en la base de datos. Una vez ejecutado, los cambios son permanentes y visibles para otras transacciones.</li>
+                <li><strong><code>ROLLBACK</code>:</strong> Revierte todos los cambios realizados durante una transacción, devolviendo la base de datos a su estado previo al inicio de la transacción. Se utiliza para deshacer cambios en caso de errores o inconsistencias.</li>
+            </ul>
+
+            <h3>Ejemplo de Uso de COMMIT y ROLLBACK</h3>
+            <p>A continuación se muestra un ejemplo de cómo utilizar <code>COMMIT</code> y <code>ROLLBACK</code> en una transacción SQL:</p>
+
+            <div class="code-block">
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;-- Iniciar la transacción<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;UPDATE empleados SET salario = salario * 1.1 WHERE departamento = 'Ventas';<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;-- Confirmar los cambios<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;COMMIT;<br>
+                EXCEPTION<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;WHEN OTHERS THEN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Deshacer los cambios en caso de error<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROLLBACK;<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este ejemplo, se inicia una transacción que actualiza los salarios de los empleados en el departamento de 'Ventas'. Si todo se ejecuta correctamente, se confirma la transacción con <code>COMMIT</code>. Si ocurre algún error, la transacción se revierte utilizando <code>ROLLBACK</code>, deshaciendo todos los cambios realizados.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+Explicación de Introducción a las Transacciones:
+COMMIT: Utilizado para confirmar y guardar los cambios realizados en la base de datos durante una transacción. Es una operación irreversible que asegura que los cambios sean permanentes.
+ROLLBACK: Utilizado para revertir todos los cambios realizados durante una transacción en caso de errores. Devuelve la base de datos a su estado anterior al inicio de la transacción.
+
+
+
+
+
+
+
+

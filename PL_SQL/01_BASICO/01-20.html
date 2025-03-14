@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .code-block {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+
+        <div class="info-section">
+            <h2>Puntos 01-20: Tipos de Datos CHAR y VARCHAR2 en PL/SQL</h2>
+            <p><strong>Punto 01:</strong> El repositorio remoto del usuario está en GitHub.</p>
+            <p><strong>Punto 02:</strong> El servidor del usuario está en Azure.</p>
+            <p><strong>Punto 03:</strong> El usuario tiene un repositorio en GitHub y quiere copiar automáticamente archivos PHP a <code>/var/www/html</code> en un servidor de AWS después de hacer un commit.</p>
+            <p><strong>Punto 04:</strong> El usuario está interesado en usar GitHub Actions como alternativa a los servicios de AWS para automatizar el despliegue de archivos PHP desde GitHub a un servidor Apache.</p>
+            <!-- Más puntos aquí, ya mencionados -->
+        </div>
+
+        <div class="info-section">
+            <h2>Tipos de Datos CHAR y VARCHAR2 en PL/SQL: Diferencias y Uso</h2>
+            <p>En PL/SQL, los tipos de datos <code>CHAR</code> y <code>VARCHAR2</code> se utilizan para almacenar cadenas de caracteres. A continuación se explican sus diferencias y el uso de cada uno:</p>
+
+            <ul>
+                <li><strong>CHAR:</strong> Es un tipo de dato de longitud fija. Si la cadena asignada tiene una longitud menor que la definida, se rellenará con espacios en blanco hasta completar la longitud especificada.</li>
+                <li><strong>VARCHAR2:</strong> Es un tipo de dato de longitud variable. Almacena solo los caracteres que se asignan, sin agregar espacios adicionales.</li>
+            </ul>
+
+            <h3>Uso de CHAR</h3>
+            <p>El tipo <code>CHAR</code> se utiliza cuando se sabe que la longitud de los datos siempre será la misma. Por ejemplo, códigos de país o códigos de estado con una longitud fija.</p>
+
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;codigo_pais CHAR(3) := 'COL';<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('Código de país: ' || codigo_pais);<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este ejemplo, el valor 'COL' se asigna a la variable <code>codigo_pais</code>, que tiene una longitud fija de 3 caracteres.</p>
+
+            <h3>Uso de VARCHAR2</h3>
+            <p>El tipo <code>VARCHAR2</code> es más flexible y se utiliza cuando la longitud de la cadena puede variar. Por ejemplo, nombres de usuarios o direcciones.</p>
+
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;nombre_usuario VARCHAR2(50) := 'Angela Maria García Bermúdez';<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('Nombre de usuario: ' || nombre_usuario);<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este ejemplo, el nombre de usuario se asigna a una variable de tipo <code>VARCHAR2</code> que puede almacenar hasta 50 caracteres, pero solo utilizará el espacio necesario para los caracteres asignados.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+Explicación de Tipos de Datos:
+CHAR: Se utiliza para almacenar cadenas de longitud fija. Si la cadena asignada es más corta que la longitud definida, se rellena con espacios en blanco.
+VARCHAR2: Almacena cadenas de longitud variable sin agregar espacios adicionales, siendo más eficiente cuando la longitud del texto varía.
+
+
+
+
+
+

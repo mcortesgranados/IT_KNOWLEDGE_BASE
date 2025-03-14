@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .code-block {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+
+        <div class="info-section">
+            <h2>Punto 01-28: Depuración Básica</h2>
+            <p>En PL/SQL, la depuración básica puede realizarse utilizando la función <code>DBMS_OUTPUT.PUT_LINE</code>. Esta función permite mostrar mensajes y valores de variables en la consola, lo cual es útil para verificar el flujo del programa y los resultados intermedios durante el desarrollo.</p>
+            
+            <p><strong>Uso de DBMS_OUTPUT.PUT_LINE:</strong></p>
+            <ul>
+                <li><strong>Propósito:</strong> Mostrar mensajes y valores en la consola.</li>
+                <li><strong>Configuración:</strong> Asegúrate de que la salida de <code>DBMS_OUTPUT</code> esté habilitada en tu herramienta de desarrollo, como SQL Developer.</li>
+            </ul>
+
+            <h3>Ejemplo de Depuración Básica</h3>
+            <p>A continuación se muestra un ejemplo de cómo utilizar <code>DBMS_OUTPUT.PUT_LINE</code> para mostrar el valor de una variable durante la ejecución de un bloque PL/SQL:</p>
+
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_numero NUMBER := 42;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_mensaje VARCHAR2(50);<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;-- Asignar un mensaje<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_mensaje := 'El número es: ' || v_numero;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;-- Mostrar el mensaje en la consola<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE(v_mensaje);<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este ejemplo, se declara una variable <code>v_numero</code> y se le asigna el valor 42. Luego, se concatena este valor en un mensaje y se utiliza <code>DBMS_OUTPUT.PUT_LINE</code> para mostrar el mensaje en la consola.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+Explicación de Depuración Básica en PL/SQL:
+DBMS_OUTPUT.PUT_LINE: Esta función es utilizada para imprimir mensajes y valores en la consola. Es útil para depurar y verificar el contenido de variables y el flujo de ejecución del código.
+
+

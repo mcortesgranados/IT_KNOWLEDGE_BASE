@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .info-section {
+            margin-bottom: 40px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+        
+        <div class="info-section">
+            <h2>Puntos 01-14: Información sobre GitHub, Azure, AWS, GitHub Actions, Bucles, Cursores y Excepciones Personalizadas</h2>
+            <p><strong>Punto 01:</strong> El repositorio remoto del usuario está en GitHub.</p>
+            <p><strong>Punto 02:</strong> El servidor del usuario está en Azure.</p>
+            <p><strong>Punto 03:</strong> El usuario tiene un repositorio en GitHub y quiere copiar automáticamente archivos PHP a <code>/var/www/html</code> en un servidor de AWS después de hacer un commit.</p>
+            <p><strong>Punto 04:</strong> El usuario está interesado en usar GitHub Actions como alternativa a los servicios de AWS para automatizar el despliegue de archivos PHP desde GitHub a un servidor Apache.</p>
+            <p><strong>Punto 05:</strong> El usuario necesita estar bien preparado para una presentación técnica sobre un flujo de trabajo de GitHub Actions para desplegar en un servidor Apache.</p>
+            <p><strong>Punto 06:</strong> El operador <code>||</code> se utiliza en PL/SQL para concatenar cadenas de texto.</p>
+            <p><strong>Punto 07:</strong> Las sentencias <code>IF-THEN-ELSE</code> permiten manejar condiciones simples en PL/SQL.</p>
+            <p><strong>Punto 08:</strong> Bucles <code>FOR</code> en PL/SQL: Iteración un número determinado de veces.</p>
+            <p><strong>Punto 09:</strong> Bucles <code>WHILE</code> en PL/SQL: Ejecución de un bucle mientras se cumpla una condición.</p>
+            <p><strong>Punto 10:</strong> Bucles <code>LOOP</code> en PL/SQL: Ejecución con salida manual usando <code>EXIT</code>.</p>
+            <p><strong>Punto 11:</strong> Cursores simples en PL/SQL: Declaración y uso de cursores para manejar resultados de consultas.</p>
+            <p><strong>Punto 12:</strong> Cursores implícitos en PL/SQL: Uso automático de cursores con comandos SQL simples.</p>
+            <p><strong>Punto 13:</strong> Excepciones estándar en PL/SQL: <code>NO_DATA_FOUND</code> y <code>TOO_MANY_ROWS</code>.</p>
+            <p><strong>Punto 14:</strong> Excepciones personalizadas en PL/SQL: Uso de <code>RAISE</code> para lanzar excepciones propias.</p>
+        </div>
+
+        <div class="info-section">
+            <h2>Excepciones Personalizadas en PL/SQL: Uso de RAISE</h2>
+            <p>En PL/SQL, además de las excepciones estándar, es posible definir y lanzar excepciones personalizadas usando la instrucción <code>RAISE</code>. Esto es útil cuando necesitas manejar situaciones específicas de tu aplicación.</p>
+
+            <p>Aquí tienes un ejemplo de cómo declarar y manejar una excepción personalizada:</p>
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_salario empleados.salario%TYPE := 5000;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;e_salario_bajo EXCEPTION;<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;-- Comprobar si el salario es demasiado bajo<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;IF v_salario &lt; 10000 THEN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RAISE e_salario_bajo;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;END IF;<br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('El salario es adecuado.');<br>
+                EXCEPTION<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;WHEN e_salario_bajo THEN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('Error: El salario es demasiado bajo.');<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este código:</p>
+            <ul>
+                <li>Se define una excepción personalizada llamada <code>e_salario_bajo</code>.</li>
+                <li>Si el salario es inferior a 10,000, se lanza la excepción usando <code>RAISE e_salario_bajo</code>.</li>
+                <li>La excepción es capturada en el bloque <code>EXCEPTION</code>, donde se maneja mostrando un mensaje de error.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+Explicación del código PL/SQL:
+Excepciones Personalizadas:
+
+Puedes definir tus propias excepciones con el fin de manejar situaciones particulares que no estén cubiertas por las excepciones estándar.
+Para lanzar una excepción personalizada, usa la instrucción RAISE seguida del nombre de la excepción.
+Código Ejemplo:
+
+Se ha definido una excepción personalizada e_salario_bajo.
+Si el salario de un empleado es inferior a 10,000, se lanza la excepción personalizada.
+En la sección EXCEPTION, esta excepción es manejada y se imprime un mensaje indicando que el salario es demasiado bajo.
+
+
+
+

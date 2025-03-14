@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .code-block {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+
+        <div class="info-section">
+            <h2>Punto 01-25: Uso de NULL en PL/SQL</h2>
+            <p>En PL/SQL, <code>NULL</code> representa un valor desconocido o ausente. Es fundamental entender cómo manejar <code>NULL</code> en condiciones y comparaciones para evitar errores y resultados inesperados en las consultas y operaciones.</p>
+            
+            <p><strong>Consideraciones Importantes:</strong></p>
+            <ul>
+                <li><strong>Comparaciones con NULL:</strong> En PL/SQL, <code>NULL</code> no se puede comparar directamente con otros valores usando operadores como <code>=</code> o <code>!=</code>. Para comprobar si un valor es <code>NULL</code>, se utilizan las funciones <code>IS NULL</code> y <code>IS NOT NULL</code>.</li>
+                <li><strong>Funciones de Tratamiento de NULL:</strong> Se pueden usar funciones como <code>NVL()</code> para proporcionar un valor alternativo si un valor es <code>NULL</code>.</li>
+            </ul>
+
+            <h3>Ejemplo de Manejo de NULL</h3>
+            <p>A continuación se muestra un ejemplo de cómo manejar <code>NULL</code> en una condición y en una comparación en PL/SQL:</p>
+
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_nombre VARCHAR2(50);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_saludo VARCHAR2(100);<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_nombre := NULL;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;IF v_nombre IS NULL THEN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_saludo := 'Hola, invitado!';<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ELSE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_saludo := 'Hola, ' || v_nombre;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;END IF;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE(v_saludo);<br>
+                END;<br>
+                /
+            </div>
+
+            <p>En este ejemplo, se asigna <code>NULL</code> a la variable <code>v_nombre</code>. Luego, se usa una condición <code>IF</code> para verificar si <code>v_nombre</code> es <code>NULL</code> y se asigna un saludo alternativo a <code>v_saludo</code> en caso afirmativo. Finalmente, se imprime el saludo.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+Explicación del Uso de NULL en PL/SQL:
+NULL en PL/SQL: Representa un valor desconocido o no asignado. No se puede usar directamente en comparaciones; en su lugar, se deben utilizar las funciones IS NULL o IS NOT NULL para comprobar si un valor es NULL.
+Manejo de NULL: La función NVL() puede ser usada para reemplazar un valor NULL con un valor predeterminado.
+
+
+
+
+
+
+

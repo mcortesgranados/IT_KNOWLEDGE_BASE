@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación de Angela Maria García Bermúdez</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .info-section {
+            margin-bottom: 40px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Documentación realizada por: Angela Maria García Bermúdez</h1>
+        
+        <div class="info-section">
+            <h2>Puntos 01-06: Información sobre GitHub, Azure, AWS, GitHub Actions y Concatenación de Cadenas</h2>
+            <p><strong>Punto 01:</strong> El repositorio remoto del usuario está en GitHub.</p>
+            <p><strong>Punto 02:</strong> El servidor del usuario está en Azure.</p>
+            <p><strong>Punto 03:</strong> El usuario tiene un repositorio en GitHub y quiere copiar automáticamente archivos PHP a <code>/var/www/html</code> en un servidor de AWS después de hacer un commit.</p>
+            <p><strong>Punto 04:</strong> El usuario está interesado en usar GitHub Actions como alternativa a los servicios de AWS para automatizar el despliegue de archivos PHP desde GitHub a un servidor Apache.</p>
+            <p><strong>Punto 05:</strong> El usuario necesita estar bien preparado para una presentación técnica sobre un flujo de trabajo de GitHub Actions para desplegar en un servidor Apache.</p>
+            <p><strong>Punto 06:</strong> Concatenación de cadenas utilizando el operador <code>||</code> en PL/SQL.</p>
+        </div>
+
+        <div class="info-section">
+            <h2>Concatenación de Cadenas en PL/SQL: Uso del Operador <code>||</code></h2>
+            <p>En PL/SQL, el operador <code>||</code> se utiliza para concatenar (unir) dos o más cadenas de texto. Este operador toma dos cadenas y las une en una sola.</p>
+
+            <p>A continuación se muestra un ejemplo básico de uso del operador <code>||</code> en PL/SQL:</p>
+            <div class="code-block">
+                DECLARE<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_nombre VARCHAR2(20) := 'Angela';<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_apellido VARCHAR2(20) := 'García';<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_nombre_completo VARCHAR2(50);<br>
+                BEGIN<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;v_nombre_completo := v_nombre || ' ' || v_apellido;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;DBMS_OUTPUT.PUT_LINE('Nombre Completo: ' || v_nombre_completo);<br>
+                END;<br>
+                /
+            </div>
+            <p>En este código:</p>
+            <ul>
+                <li>Se declaran dos variables <code>v_nombre</code> y <code>v_apellido</code> que contienen los nombres "Angela" y "García", respectivamente.</li>
+                <li>Se utiliza el operador <code>||</code> para concatenar el nombre y el apellido con un espacio en blanco entre ellos, formando la cadena completa <code>v_nombre_completo</code>.</li>
+                <li>El valor concatenado se muestra usando <code>DBMS_OUTPUT.PUT_LINE</code>.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

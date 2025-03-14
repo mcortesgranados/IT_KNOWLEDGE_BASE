@@ -1,0 +1,104 @@
+Nivel Básico (01-01 a 01-30):
+
+01-01. Introducción a PL/SQL: Bloques PL/SQL anónimos.
+01-02. Estructura básica: DECLARE, BEGIN, EXCEPTION, END.
+01-03. Declaración de variables: Tipos básicos como NUMBER, VARCHAR2.
+01-04. Asignación de valores a variables: Uso de := para asignar valores.
+01-05. Operadores aritméticos: Suma, resta, multiplicación, división.
+01-06. Concatenación de cadenas: Uso del operador ||.
+01-07. Sentencias IF-THEN-ELSE: Condiciones simples.
+01-08. Bucles FOR: Bucle que itera un número determinado de veces.
+01-09. Bucles WHILE: Ejecución de un bucle mientras se cumpla una condición.
+01-10. Bucles LOOP y EXIT: Bucles con salida manual.
+01-11. Cursores simples: Declaración y uso de cursores.
+01-12. Cursores implícitos: Uso de cursores con comandos SQL simples.
+01-13. Excepciones estándar: NO_DATA_FOUND, TOO_MANY_ROWS.
+01-14. Excepciones personalizadas: Uso de RAISE para excepciones propias.
+01-15. Operadores de comparación: =, !=, <, >, <=, >=.
+01-16. Sentencias SELECT INTO: Asignación de valores desde consultas.
+01-17. INSERT, UPDATE y DELETE: Operaciones DML básicas.
+01-18. Operaciones con fechas: Uso de SYSDATE y funciones de fecha.
+01-19. Funciones de conversión: TO_CHAR, TO_DATE.
+01-20. Tipos de datos CHAR y VARCHAR2: Diferencias y uso.
+01-21. Tipos de datos NUMBER y FLOAT: Uso en cálculos.
+01-22. Bloques anidados: Definición de bloques dentro de otros.
+01-23. Comentarios en PL/SQL: Uso de -- y /* */.
+01-24. Ejecución de bloques anónimos: En herramientas como SQL Developer.
+01-25. Uso de NULL en PL/SQL: Condiciones y comparaciones.
+01-26. Expresiones booleanas: Uso de TRUE, FALSE.
+01-27. Condiciones con CASE: Estructuras alternativas a IF.
+01-28. Depuración básica: Uso de DBMS_OUTPUT.PUT_LINE para mostrar salidas.
+01-29. Llamada a funciones SQL: COUNT, SUM, AVG.
+01-30. Introducción a las transacciones: Concepto de COMMIT y ROLLBACK.
+
+Nivel Intermedio (02-01 a 02-30):
+02-01. Procedimientos almacenados: Creación y ejecución.
+02-02. Funciones almacenadas: Creación y uso de funciones en PL/SQL.
+02-03. Paquetes: Creación de paquetes y uso de sus procedimientos y funciones.
+02-04. Variables de paquete: Uso de variables globales en paquetes.
+02-05. Cursores con parámetros: Cursores parametrizados para consultas dinámicas.
+02-06. Cursores implícitos en procedimientos: Uso dentro de procedimientos.
+02-07. Manejo de transacciones: Control de transacciones con SAVEPOINT.
+02-08. Bloques EXCEPTION personalizados: Creación y manejo avanzado de excepciones.
+02-09. Tipos de datos compuestos: Definición de registros con %ROWTYPE.
+02-10. Tablas de PL/SQL: Uso de colecciones indexadas.
+02-11. Cursores FOR LOOP: Manejo de cursores en bucles.
+02-12. Sentencias SQL dinámicas: Uso de EXECUTE IMMEDIATE.
+02-13. Ciclo de vida de cursores: Apertura, lectura, cierre y manejo de errores.
+02-14. Cursores implícitos avanzados: Uso de %FOUND, %NOTFOUND.
+02-15. Bulk Collect: Uso de BULK COLLECT para optimización de consultas.
+02-16. Forall: Uso de FORALL para operaciones masivas.
+02-17. Excepciones de usuario: Creación y manejo de excepciones personalizadas.
+02-18. Triggers antes de insertar: Disparadores BEFORE INSERT.
+02-19. Triggers después de insertar: Disparadores AFTER INSERT.
+02-20. Manejo de disparadores: Prioridades y orden de ejecución.
+02-21. Funciones analíticas: Uso de RANK, ROW_NUMBER.
+02-22. Subconsultas en PL/SQL: Uso de subconsultas en bloques PL/SQL.
+02-23. Manejo de índices en PL/SQL: Creación y uso de índices en tablas.
+02-24. Optimización de código: Identificación de cuellos de botella.
+02-25. Procedimientos con parámetros: Paso de parámetros IN, OUT e IN OUT.
+02-26. Paquetes de Oracle: Uso de DBMS_OUTPUT, DBMS_SCHEDULER.
+02-27. Ejecución condicional: Uso de estructuras complejas en bloques PL/SQL.
+02-28. Operadores lógicos: Uso de AND, OR, NOT.
+02-29. Combinar SQL y PL/SQL: Eficiencia en la combinación de comandos SQL.
+02-30. Documentación de código: Buenas prácticas de documentación en PL/SQL.
+
+Nivel Avanzado (03-01 a 03-30):
+03-01. Manejo avanzado de cursores REF: Uso de cursores REF para consultas dinámicas.
+03-02. Tipos de datos definidos por el usuario: Definición y uso de tipos de objetos.
+03-03. Pipelined Functions: Creación de funciones canalizadas para procesamiento paralelo.
+03-04. Triggers compuestos: Creación de disparadores INSTEAD OF.
+03-05. Desarrollo de aplicaciones con PL/SQL: Estructuración avanzada de código para grandes aplicaciones.
+03-06. Uso de UTL_FILE: Lectura y escritura de archivos desde PL/SQL.
+03-07. Manejo de LOBs: Manejo de BLOBs y CLOBs en PL/SQL.
+03-08. Seguridad en PL/SQL: Gestión de permisos y roles en procedimientos.
+03-09. PL/SQL dinámico avanzado: Manejo avanzado de EXECUTE IMMEDIATE con múltiples parámetros.
+03-10. Particionamiento de tablas: Uso y optimización de tablas particionadas en PL/SQL.
+03-11. Tuning avanzado de PL/SQL: Uso de herramientas de ajuste como DBMS_PROFILER.
+03-12. Programación paralela: Uso de DBMS_PARALLEL_EXECUTE.
+03-13. Depuración avanzada: Uso de DBMS_DEBUG.
+03-14. Optimización de consultas: Identificación y optimización de consultas lentas.
+03-15. Uso de caché en PL/SQL: Implementación de caché para mejorar el rendimiento.
+03-16. Manejo de errores avanzados: Uso de logs y auditoría de errores.
+03-17. Triggers complejos: Disparadores en múltiples niveles de eventos.
+03-18. Integración con otros lenguajes: Uso de Java y .NET en PL/SQL.
+03-19. PL/SQL en la nube: Ejecución de código PL/SQL en entornos en la nube.
+03-20. Implementación de seguridad en código: Protección contra inyección SQL.
+03-21. Optimización de cursores: Uso de BULK COLLECT en escenarios masivos.
+03-22. Programación orientada a objetos en PL/SQL: Uso de tipos de objetos y métodos.
+03-23. Integración con servicios externos: Consumo de APIs REST desde PL/SQL.
+03-24. Monitoreo y alertas en PL/SQL: Automatización del monitoreo de bases de datos.
+03-25. Manejo de tipos de datos JSON: Manejo avanzado de datos JSON en PL/SQL.
+03-26. Diseño de arquitecturas PL/SQL: Creación de arquitecturas modulares escalables.
+03-27. Automatización de tareas: Uso avanzado de DBMS_SCHEDULER.
+03-28. Persistencia de datos en PL/SQL: Técnicas avanzadas de almacenamiento y persistencia.
+03-29. Recuperación de fallos: Estrategias de recuperación y reinicio de transacciones
+
+
+
+
+
+
+
+
+
