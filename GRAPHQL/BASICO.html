@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas GraphQL Básico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+        }
+        code {
+            display: block;
+            background: #ececec;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+        
+        <div class="question">
+            <h2>1. ¿Qué es GraphQL?</h2>
+            <p>GraphQL es un lenguaje de consulta para APIs que permite a los clientes solicitar exactamente los datos que necesitan, evitando la sobrecarga de datos innecesarios.</p>
+        </div>
+        
+        <div class="question">
+            <h2>2. ¿Cómo se define un esquema en GraphQL?</h2>
+            <p>Se define usando el lenguaje de esquema de GraphQL (SDL). Un ejemplo de esquema básico:</p>
+            <code>
+                type Query {
+                    hello: String
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>3. ¿Cómo se hace una consulta simple en GraphQL?</h2>
+            <p>Ejemplo de consulta para obtener un mensaje de saludo:</p>
+            <code>
+                {
+                    hello
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>4. ¿Qué es una mutación en GraphQL?</h2>
+            <p>Las mutaciones permiten modificar datos en el servidor. Ejemplo de una mutación para agregar un usuario:</p>
+            <code>
+                mutation {
+                    addUser(name: "Juan") {
+                        id
+                        name
+                    }
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>5. ¿Qué es un resolver en GraphQL?</h2>
+            <p>Un resolver es una función que maneja una consulta o mutación y devuelve los datos solicitados.</p>
+        </div>
+
+        <div class="question">
+            <h2>6. ¿Cómo se define un tipo en GraphQL?</h2>
+            <p>Ejemplo de un tipo de usuario:</p>
+            <code>
+                type User {
+                    id: ID
+                    name: String
+                    email: String
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>7. ¿GraphQL reemplaza a REST?</h2>
+            <p>No, GraphQL es una alternativa a REST que ofrece mayor flexibilidad en la obtención de datos.</p>
+        </div>
+
+        <div class="question">
+            <h2>8. ¿Cómo se define un argumento en una consulta GraphQL?</h2>
+            <p>Ejemplo de una consulta con un argumento:</p>
+            <code>
+                type Query {
+                    user(id: ID!): User
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>9. ¿Cómo se ejecuta una consulta en GraphQL?</h2>
+            <p>Usando una herramienta como GraphiQL o Apollo Client.</p>
+        </div>
+
+  <div class="question">
+            <h2>10. ¿Qué es introspección en GraphQL?</h2>
+            <p>Es la capacidad de una API GraphQL para describir su propio esquema y tipos disponibles.</p>
+  </div>
+
+        <div class="question">
+            <h2>11. ¿Qué es una suscripción en GraphQL?</h2>
+            <p>Una suscripción permite recibir actualizaciones en tiempo real desde el servidor.</p>
+            <code>
+                type Subscription {
+                    newUser: User
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>12. ¿Qué es un tipo escalar en GraphQL?</h2>
+            <p>Son tipos de datos básicos como String, Int, Float, Boolean y ID.</p>
+        </div>
+
+        <div class="question">
+            <h2>13. ¿Cómo se pueden definir tipos personalizados en GraphQL?</h2>
+            <p>Ejemplo de tipo personalizado:</p>
+            <code>
+                type Address {
+                    street: String
+                    city: String
+                    zip: String
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>14. ¿Cómo se pueden definir relaciones entre tipos?</h2>
+            <p>Ejemplo de relación entre User y Address:</p>
+            <code>
+                type User {
+                    id: ID
+                    name: String
+                    address: Address
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>15. ¿Qué herramientas se pueden usar para GraphQL en el frontend?</h2>
+            <p>Apollo Client, Relay y urql son algunas herramientas populares.</p>
+        </div>
+
+        <div class="question">
+            <h2>16. ¿Cómo se pueden pasar parámetros a una mutación?</h2>
+            <p>Ejemplo de mutación con parámetros:</p>
+            <code>
+                mutation {
+                    createUser(name: "Maria", email: "maria@mail.com") {
+                        id
+                        name
+                    }
+                }
+            </code>
+        </div>
+
+        <div class="question">
+            <h2>17. ¿Qué es Apollo Server?</h2>
+            <p>Es una implementación de GraphQL en Node.js para construir APIs GraphQL.</p>
+        </div>
+
+        <div class="question">
+            <h2>18. ¿Cómo se pueden agregar validaciones en GraphQL?</h2>
+            <p>Se pueden implementar validaciones en los resolvers o usando directivas personalizadas.</p>
+        </div>
+
+        <div class="question">
+            <h2>19. ¿GraphQL es seguro?</h2>
+            <p>Sí, pero es importante implementar autenticación y control de acceso en el servidor.</p>
+        </div>
+
+        <div class="question">
+            <h2>20. ¿Cómo se puede hacer paginación en GraphQL?</h2>
+            <p>Usando parámetros como limit y offset en las consultas.</p>
+        </div>
+</div>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <div class="question">
+      <h2>21. ¿Cómo se maneja la autenticación en GraphQL?</h2>
+      <p>Generalmente se usa JWT (JSON Web Tokens) o sesiones, enviando el token en los headers de la petición.</p>
+    </div>
+    <div class="question">
+      <h2>22. ¿GraphQL usa HTTP?</h2>
+      <p>Sí, GraphQL generalmente se implementa sobre HTTP, utilizando el método POST para consultas y mutaciones.</p>
+    </div>
+    <div class="question">
+      <h2>23. ¿Cómo se manejan los errores en GraphQL?</h2>
+      <p>Los errores se devuelven en la sección "errors" de la respuesta JSON de GraphQL.</p>
+      <code> {
+        "errors": [
+        {
+        "message": "User not found",
+        "locations": [{"line": 2, "column": 3}]
+        }
+        ]
+        } </code> </div>
+    <div class="question">
+      <h2>24. ¿Qué es Apollo Client?</h2>
+      <p>Apollo Client es una biblioteca para consumir APIs GraphQL desde el frontend.</p>
+    </div>
+    <div class="question">
+      <h2>25. ¿Cómo se pueden evitar problemas de sobrecarga en GraphQL?</h2>
+      <p>Se pueden usar técnicas como limitación de profundidad de consulta, persistencia de consultas y caché.</p>
+    </div>
+    <div class="question">
+      <h2>26. ¿Cómo se pueden proteger las APIs GraphQL?</h2>
+      <p>Implementando autenticación, control de acceso, rate limiting y validaciones en los resolvers.</p>
+    </div>
+    <div class="question">
+      <h2>27. ¿Qué es DataLoader en GraphQL?</h2>
+      <p>Es una herramienta que ayuda a evitar el problema de N+1 consultas optimizando el acceso a la base de datos.</p>
+    </div>
+    <div class="question">
+      <h2>28. ¿Cómo se pueden filtrar datos en GraphQL?</h2>
+      <p>Pasando argumentos en la consulta, por ejemplo:</p>
+      <code> query {
+        users(filter: { age: 30 }) {
+        id
+        name
+        }
+        } </code> </div>
+    <div class="question">
+      <h2>29. ¿GraphQL soporta WebSockets?</h2>
+      <p>Sí, GraphQL soporta WebSockets para suscripciones en tiempo real.</p>
+    </div>
+    <div class="question">
+      <h2>30. ¿Cómo se pueden realizar consultas anidadas en GraphQL?</h2>
+      <p>Ejemplo de consulta anidada:</p>
+      <code> query {
+        user(id: 1) {
+        name
+        address {
+        city
+        zip
+        }
+        }
+        } </code> </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 21-30 -->
+    <div class="question">
+      <h2>31. ¿Cómo se pueden implementar roles en GraphQL?</h2>
+      <p>Se pueden definir permisos en los resolvers y verificar el rol del usuario antes de devolver datos.</p>
+    </div>
+    <div class="question">
+      <h2>32. ¿Qué es un resolver en GraphQL?</h2>
+      <p>Es una función que proporciona la lógica para recuperar los datos de un campo en una consulta.</p>
+    </div>
+    <div class="question">
+      <h2>33. ¿Cómo se manejan las relaciones entre entidades en GraphQL?</h2>
+      <p>Se pueden definir relaciones en el esquema y usar resolvers para recuperar datos relacionados.</p>
+    </div>
+    <div class="question">
+      <h2>34. ¿Qué es introspección en GraphQL?</h2>
+      <p>Es una característica que permite a los clientes consultar el esquema del servidor para conocer sus tipos y operaciones disponibles.</p>
+    </div>
+    <div class="question">
+      <h2>35. ¿Cómo se puede optimizar el rendimiento en GraphQL?</h2>
+      <p>Utilizando técnicas como caching, DataLoader y limitación de la profundidad de consulta.</p>
+    </div>
+    <div class="question">
+      <h2>36. ¿Qué diferencia hay entre GraphQL y REST en cuanto a respuestas?</h2>
+      <p>GraphQL permite a los clientes definir la estructura de la respuesta, mientras que REST devuelve respuestas fijas según los endpoints.</p>
+    </div>
+    <div class="question">
+      <h2>37. ¿Cómo se pueden manejar datos paginados en GraphQL?</h2>
+      <p>Usando argumentos como "limit" y "offset" o implementando el esquema de "cursor-based pagination".</p>
+    </div>
+    <div class="question">
+      <h2>38. ¿Qué es un fragmento en GraphQL?</h2>
+      <p>Es una forma de reutilizar partes de una consulta para evitar redundancia.</p>
+      <code> fragment userInfo on User {
+        id
+        name
+        email
+        }
+        query {
+        users {
+        ...userInfo
+        }
+        } </code> </div>
+    <div class="question">
+      <h2>39. ¿GraphQL permite el versionado de API?</h2>
+      <p>GraphQL no necesita versionado tradicional, ya que los clientes pueden solicitar solo los campos que necesitan.</p>
+    </div>
+    <div class="question">
+      <h2>40. ¿Cómo se puede implementar GraphQL en un backend de Node.js?</h2>
+      <p>Se puede usar Apollo Server o Express con graphql-js para definir esquemas y resolvers.</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 41-50 -->
+    <div class="question">
+      <h2>41. ¿Cómo se maneja la seguridad en GraphQL?</h2>
+      <p>Se puede manejar mediante autenticación, autorización, validación de entrada y control de acceso en los resolvers.</p>
+    </div>
+    <div class="question">
+      <h2>42. ¿Qué es Apollo Server?</h2>
+      <p>Es una implementación de servidor GraphQL para Node.js que facilita la creación de APIs GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>43. ¿Cómo se pueden depurar consultas en GraphQL?</h2>
+      <p>Se pueden usar herramientas como GraphiQL, Apollo Sandbox y logs en los resolvers.</p>
+    </div>
+    <div class="question">
+      <h2>44. ¿GraphQL es compatible con bases de datos relacionales?</h2>
+      <p>Sí, se puede usar con bases de datos relacionales a través de ORMs como Prisma o Sequelize.</p>
+    </div>
+    <div class="question">
+      <h2>45. ¿Cómo se pueden manejar errores personalizados en GraphQL?</h2>
+      <p>Se pueden lanzar errores en los resolvers y definir una estructura personalizada en la respuesta.</p>
+    </div>
+    <div class="question">
+      <h2>46. ¿GraphQL permite operaciones en lote?</h2>
+      <p>Sí, se pueden enviar múltiples consultas o mutaciones en una sola petición.</p>
+    </div>
+    <div class="question">
+      <h2>47. ¿Cómo se pueden suscribir los clientes a eventos en GraphQL?</h2>
+      <p>Mediante suscripciones usando WebSockets con Apollo Server o GraphQL Subscriptions.</p>
+    </div>
+    <div class="question">
+      <h2>48. ¿Qué diferencia hay entre una consulta y una mutación en GraphQL?</h2>
+      <p>Las consultas recuperan datos, mientras que las mutaciones los modifican o crean.</p>
+    </div>
+    <div class="question">
+      <h2>49. ¿Cómo se pueden estructurar esquemas grandes en GraphQL?</h2>
+      <p>Dividiendo el esquema en módulos y usando la función "mergeSchemas" de Apollo o herramientas similares.</p>
+    </div>
+    <div class="question">
+      <h2>50. ¿GraphQL permite la ejecución de middleware?</h2>
+      <p>Sí, se pueden usar middleware en resolvers para tareas como autenticación o validación de datos.</p>
+    </div>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 51-60 -->
+    <div class="question">
+      <h2>51. ¿Cómo se maneja la autenticación en GraphQL?</h2>
+      <p>Se puede manejar usando JWT (JSON Web Tokens), sesiones o API keys y verificarlas en los resolvers.</p>
+    </div>
+    <div class="question">
+      <h2>52. ¿Qué es GraphiQL?</h2>
+      <p>Es una herramienta de interfaz de usuario para explorar y probar APIs GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>53. ¿Cómo se pueden evitar ataques de denegación de servicio (DoS) en GraphQL?</h2>
+      <p>Implementando límites de profundidad de consulta, rate limiting y timeouts en las peticiones.</p>
+    </div>
+    <div class="question">
+      <h2>54. ¿Qué es DataLoader en GraphQL?</h2>
+      <p>Es una biblioteca para reducir el número de consultas a la base de datos mediante batching y caching.</p>
+    </div>
+    <div class="question">
+      <h2>55. ¿Cómo se pueden manejar múltiples orígenes de datos en GraphQL?</h2>
+      <p>Se pueden usar múltiples resolvers para recuperar datos de diferentes fuentes, como bases de datos y APIs externas.</p>
+    </div>
+    <div class="question">
+      <h2>56. ¿Qué es un esquema federado en GraphQL?</h2>
+      <p>Es un enfoque que permite dividir un esquema en múltiples microservicios y combinarlos en una API unificada.</p>
+    </div>
+    <div class="question">
+      <h2>57. ¿Cómo se pueden validar entradas en GraphQL?</h2>
+      <p>Se pueden definir reglas de validación en los resolvers o usar bibliotecas como Yup o Joi.</p>
+    </div>
+    <div class="question">
+      <h2>58. ¿GraphQL permite el cacheo de respuestas?</h2>
+      <p>Sí, mediante soluciones como Apollo Client Cache, Redis o estrategias de caching en el servidor.</p>
+    </div>
+    <div class="question">
+      <h2>59. ¿Cómo se pueden extender tipos en GraphQL?</h2>
+      <p>Usando la palabra clave "extend type" para agregar nuevos campos o funcionalidades a un tipo existente.</p>
+    </div>
+    <div class="question">
+      <h2>60. ¿Cómo se pueden documentar APIs GraphQL?</h2>
+      <p>Se pueden usar comentarios en el esquema, herramientas como GraphQL Playground o generar documentación automática con GraphQL Docs.</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 61-70 -->
+    <div class="question">
+      <h2>61. ¿Cómo se pueden manejar errores en GraphQL?</h2>
+      <p>Se pueden capturar errores en los resolvers y devolver mensajes personalizados en la respuesta.</p>
+    </div>
+    <div class="question">
+      <h2>62. ¿Qué diferencia hay entre REST y GraphQL en cuanto a manejo de errores?</h2>
+      <p>En REST, los errores se manejan con códigos HTTP; en GraphQL, se devuelven en el campo "errors" de la respuesta.</p>
+    </div>
+    <div class="question">
+      <h2>63. ¿Cómo se pueden crear alias en GraphQL?</h2>
+      <p>Usando nombres personalizados en la consulta, por ejemplo: <code>{ aliasNombre: usuario { id, nombre } }</code></p>
+    </div>
+    <div class="question">
+      <h2>64. ¿GraphQL soporta autenticación por OAuth?</h2>
+      <p>Sí, se puede implementar autenticación OAuth mediante tokens de acceso en las cabeceras de la petición.</p>
+    </div>
+    <div class="question">
+      <h2>65. ¿Cómo se pueden optimizar consultas en GraphQL?</h2>
+      <p>Usando técnicas como DataLoader, fragmentos, persistencia de consultas y limitando la profundidad de las consultas.</p>
+    </div>
+    <div class="question">
+      <h2>66. ¿Se pueden hacer peticiones GraphQL desde un navegador?</h2>
+      <p>Sí, usando fetch API en JavaScript o clientes como Apollo Client.</p>
+    </div>
+    <div class="question">
+      <h2>67. ¿Cómo se pueden definir valores por defecto en GraphQL?</h2>
+      <p>Asignando un valor en la declaración del argumento, por ejemplo: <code>edad: Int = 18</code></p>
+    </div>
+    <div class="question">
+      <h2>68. ¿Cómo se pueden realizar peticiones POST en GraphQL?</h2>
+      <p>Enviando una solicitud HTTP POST con el cuerpo en formato JSON, incluyendo la consulta y variables.</p>
+    </div>
+    <div class="question">
+      <h2>69. ¿GraphQL permite usar variables en las consultas?</h2>
+      <p>Sí, las variables se definen fuera de la consulta y se pasan en el cuerpo de la solicitud.</p>
+    </div>
+    <div class="question">
+      <h2>70. ¿Se puede limitar el número de resultados en una consulta GraphQL?</h2>
+      <p>Sí, mediante argumentos como "limit" o "first" en los resolvers.</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 71-80 -->
+    <div class="question">
+      <h2>71. ¿GraphQL permite consultas anidadas?</h2>
+      <p>Sí, se pueden realizar consultas anidadas para obtener datos relacionados en una sola petición.</p>
+    </div>
+    <div class="question">
+      <h2>72. ¿Cómo se define un tipo de entrada en GraphQL?</h2>
+      <p>Con la palabra clave "input", por ejemplo: <code>input UsuarioInput { nombre: String, edad: Int }</code></p>
+    </div>
+    <div class="question">
+      <h2>73. ¿Cómo se usa un tipo de entrada en una mutación?</h2>
+      <p>Se usa como argumento en la mutación, por ejemplo: <code>mutation { crearUsuario(input: UsuarioInput) { id, nombre } }</code></p>
+    </div>
+    <div class="question">
+      <h2>74. ¿Qué es el esquema en GraphQL?</h2>
+      <p>Es la definición de los tipos, consultas y mutaciones disponibles en una API GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>75. ¿Cómo se define una consulta con argumentos?</h2>
+      <p>Se especifican en la definición del esquema, por ejemplo: <code>type Query { usuario(id: ID!): Usuario }</code></p>
+    </div>
+    <div class="question">
+      <h2>76. ¿Cómo se pueden agregar comentarios en un esquema GraphQL?</h2>
+      <p>Usando el símbolo "#" antes del texto del comentario.</p>
+    </div>
+    <div class="question">
+      <h2>77. ¿Qué es una suscripción en GraphQL?</h2>
+      <p>Es una operación que permite recibir actualizaciones en tiempo real cuando cambian los datos.</p>
+    </div>
+    <div class="question">
+      <h2>78. ¿Cómo se define una suscripción en GraphQL?</h2>
+      <p>Se usa la palabra clave "type Subscription", por ejemplo: <code>type Subscription { usuarioCreado: Usuario }</code></p>
+    </div>
+    <div class="question">
+      <h2>79. ¿GraphQL es compatible con WebSockets?</h2>
+      <p>Sí, las suscripciones en GraphQL suelen implementarse usando WebSockets para recibir datos en tiempo real.</p>
+    </div>
+    <div class="question">
+      <h2>80. ¿Cómo se pueden filtrar resultados en GraphQL?</h2>
+      <p>Se pueden usar argumentos en las consultas, como "filter" o "where", para aplicar condiciones a los datos.</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 81-90 -->
+    <div class="question">
+      <h2>81. ¿Cómo se manejan los errores de validación en GraphQL?</h2>
+      <p>GraphQL devuelve un objeto "errors" en la respuesta con detalles sobre el error.</p>
+    </div>
+    <div class="question">
+      <h2>82. ¿Cómo se pueden combinar múltiples consultas en una sola petición?</h2>
+      <p>Se pueden combinar dentro de una misma consulta GraphQL utilizando múltiples selecciones de campos.</p>
+    </div>
+    <div class="question">
+      <h2>83. ¿Qué son las directivas en GraphQL?</h2>
+      <p>Son funciones especiales que modifican la ejecución de una consulta, como @include y @skip.</p>
+    </div>
+    <div class="question">
+      <h2>84. ¿Cómo se usa la directiva @include en GraphQL?</h2>
+      <p>Se usa para incluir un campo condicionalmente, por ejemplo: <code>{ usuario { nombre edad @include(if: true) } }</code></p>
+    </div>
+    <div class="question">
+      <h2>85. ¿Cómo se usa la directiva @skip en GraphQL?</h2>
+      <p>Se usa para excluir un campo condicionalmente, por ejemplo: <code>{ usuario { nombre edad @skip(if: false) } }</code></p>
+    </div>
+    <div class="question">
+      <h2>86. ¿Qué es la introspección en GraphQL?</h2>
+      <p>Es una funcionalidad que permite consultar el esquema de GraphQL para obtener información sobre tipos y operaciones disponibles.</p>
+    </div>
+    <div class="question">
+      <h2>87. ¿Cómo se usa la introspección en GraphQL?</h2>
+      <p>Se pueden hacer consultas como: <code>{ __schema { types { name } } }</code></p>
+    </div>
+    <div class="question">
+      <h2>88. ¿Qué es GraphiQL?</h2>
+      <p>Es una herramienta de interfaz gráfica para explorar y probar APIs GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>89. ¿Cómo se pueden prevenir consultas costosas en GraphQL?</h2>
+      <p>Se pueden establecer límites de profundidad y complejidad en el servidor.</p>
+    </div>
+    <div class="question">
+      <h2>90. ¿GraphQL permite la paginación?</h2>
+      <p>Sí, mediante parámetros como "first", "after", "last" y "before".</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 91-100 -->
+    <div class="question">
+      <h2>91. ¿Qué significa que GraphQL es fuertemente tipado?</h2>
+      <p>Significa que todos los datos y operaciones en GraphQL deben cumplir con un esquema predefinido.</p>
+    </div>
+    <div class="question">
+      <h2>92. ¿Cómo se define un tipo enum en GraphQL?</h2>
+      <p>Se usa la palabra clave "enum", por ejemplo: <code>enum Estado { ACTIVO, INACTIVO, PENDIENTE }</code></p>
+    </div>
+    <div class="question">
+      <h2>93. ¿Qué es un alias en GraphQL?</h2>
+      <p>Permite cambiar el nombre de un campo en la respuesta, por ejemplo: <code>{ usuarioActivo: usuario(id: 1) { nombre } }</code></p>
+    </div>
+    <div class="question">
+      <h2>94. ¿Para qué sirven las fragmentos en GraphQL?</h2>
+      <p>Para reutilizar partes de consultas, por ejemplo: <code>fragment DatosUsuario on Usuario { nombre edad }</code></p>
+    </div>
+    <div class="question">
+      <h2>95. ¿Cómo se usa un fragmento en una consulta?</h2>
+      <p>Se usa con "...", por ejemplo: <code>{ usuario { ...DatosUsuario } }</code></p>
+    </div>
+    <div class="question">
+      <h2>96. ¿GraphQL soporta autenticación?</h2>
+      <p>Sí, se puede implementar autenticación usando tokens como JWT.</p>
+    </div>
+    <div class="question">
+      <h2>97. ¿Cómo se pueden realizar consultas anidadas en GraphQL?</h2>
+      <p>Se pueden incluir campos relacionados dentro de la consulta, por ejemplo: <code>{ usuario { nombre direccion { ciudad pais } } }</code></p>
+    </div>
+    <div class="question">
+      <h2>98. ¿Cómo se pueden actualizar datos en GraphQL?</h2>
+      <p>Mediante mutaciones, por ejemplo: <code>mutation { actualizarUsuario(id: 1, nombre: "Nuevo") { id nombre } }</code></p>
+    </div>
+    <div class="question">
+      <h2>99. ¿Cómo se pueden eliminar datos en GraphQL?</h2>
+      <p>También mediante mutaciones, por ejemplo: <code>mutation { eliminarUsuario(id: 1) { id } }</code></p>
+    </div>
+    <div class="question">
+      <h2>100. ¿Se pueden usar múltiples mutaciones en una sola petición?</h2>
+      <p>Sí, es posible agrupar varias mutaciones en una misma consulta.</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 101-110 -->
+    <div class="question">
+      <h2>101. ¿Cómo se puede manejar la autorización en GraphQL?</h2>
+      <p>Se puede manejar a nivel de resolvers usando middleware o directivas personalizadas.</p>
+    </div>
+    <div class="question">
+      <h2>102. ¿Qué es Apollo Client?</h2>
+      <p>Es una librería de JavaScript para consumir APIs GraphQL en el frontend.</p>
+    </div>
+    <div class="question">
+      <h2>103. ¿Qué es Apollo Server?</h2>
+      <p>Es una implementación de servidor GraphQL en JavaScript.</p>
+    </div>
+    <div class="question">
+      <h2>104. ¿Cómo se define una suscripción en GraphQL?</h2>
+      <p>Usando la palabra clave "subscription", por ejemplo: <code>subscription { nuevaPublicacion { id titulo } }</code></p>
+    </div>
+    <div class="question">
+      <h2>105. ¿Para qué sirven las suscripciones en GraphQL?</h2>
+      <p>Permiten recibir actualizaciones en tiempo real cuando ocurren cambios en los datos.</p>
+    </div>
+    <div class="question">
+      <h2>106. ¿Qué protocolo se usa comúnmente para las suscripciones en GraphQL?</h2>
+      <p>WebSockets es el protocolo más común para manejar suscripciones en GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>107. ¿Qué es un esquema en GraphQL?</h2>
+      <p>Es la definición de los tipos de datos y operaciones disponibles en una API GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>108. ¿Cómo se define un esquema en GraphQL?</h2>
+      <p>Usando la sintaxis SDL (Schema Definition Language), por ejemplo: <code>type Usuario { id: ID! nombre: String! }</code></p>
+    </div>
+    <div class="question">
+      <h2>109. ¿Cómo se pueden evitar ataques de denegación de servicio (DoS) en GraphQL?</h2>
+      <p>Implementando límites de profundidad, análisis de complejidad y validaciones de seguridad.</p>
+    </div>
+    <div class="question">
+      <h2>110. ¿GraphQL es compatible con REST?</h2>
+      <p>Sí, GraphQL puede coexistir con APIs REST y hasta integrarse con ellas.</p>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas de GraphQL - Nivel Básico</h1>
+    <!-- Preguntas 111-120 -->
+    <div class="question">
+      <h2>111. ¿Qué diferencia hay entre GraphQL y SQL?</h2>
+      <p>GraphQL es un lenguaje de consulta para APIs, mientras que SQL es para bases de datos relacionales.</p>
+    </div>
+    <div class="question">
+      <h2>112. ¿Cómo se pueden manejar errores en GraphQL?</h2>
+      <p>GraphQL devuelve errores estructurados dentro del campo "errors" de la respuesta JSON.</p>
+    </div>
+    <div class="question">
+      <h2>113. ¿Qué es un resolver en GraphQL?</h2>
+      <p>Es una función que obtiene los datos solicitados en una consulta GraphQL.</p>
+    </div>
+    <div class="question">
+      <h2>114. ¿Cómo se definen los resolvers en GraphQL?</h2>
+      <p>Generalmente en el backend con funciones que resuelven los datos de cada campo solicitado.</p>
+    </div>
+    <div class="question">
+      <h2>115. ¿Se pueden usar variables en GraphQL?</h2>
+      <p>Sí, se pueden definir variables en una consulta usando el símbolo "$".</p>
+    </div>
+    <div class="question">
+      <h2>116. ¿Cómo se pasan variables en una consulta GraphQL?</h2>
+      <p>Se envían en el cuerpo de la petición junto con la consulta.</p>
+    </div>
+    <div class="question">
+      <h2>117. ¿GraphQL soporta paginación?</h2>
+      <p>Sí, mediante argumentos como "limit" y "offset" o usando el enfoque de "cursors".</p>
+    </div>
+    <div class="question">
+      <h2>118. ¿Qué es un input type en GraphQL?</h2>
+      <p>Es un tipo especial para enviar datos como argumento en mutaciones.</p>
+    </div>
+    <div class="question">
+      <h2>119. ¿Cómo se define un input type?</h2>
+      <p>Con la palabra clave "input", por ejemplo: <code>input UsuarioInput { nombre: String edad: Int }</code></p>
+    </div>
+    <div class="question">
+      <h2>120. ¿Cómo se usa un input type en una mutación?</h2>
+      <p>Se pasa como argumento, por ejemplo: <code>mutation { crearUsuario(datos: { nombre: "Ana", edad: 30 }) { id } }</code></p>
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+</body>
+</html>
