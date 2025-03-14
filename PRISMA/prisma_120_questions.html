@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas y Respuestas sobre Prisma</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h2 {
+            color: #333;
+        }
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            border-left: 5px solid #007bff;
+            font-family: 'Fira Code', monospace;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 3px 6px;
+            border-radius: 5px;
+        }
+    .question1 {            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 5px solid #007BFF;
+            background: #f9f9f9;
+            border-radius: 5px;
+}
+    .question2 {            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 5px solid #007BFF;
+            background: #f9f9f9;
+            border-radius: 5px;
+}
+    .question3 {            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 5px solid #007BFF;
+            background: #f9f9f9;
+            border-radius: 5px;
+}
+    </style>
+</head>
+<body>
+<div class="container">
+        <h1>Preguntas y Respuestas sobre Prisma</h1>
+        
+        <div class="question">
+            <h2>1. ¿Qué es Prisma y para qué se utiliza?</h2>
+            <p>Prisma es un ORM (Object-Relational Mapping) para Node.js y TypeScript que facilita la interacción con bases de datos de manera segura y eficiente.</p>
+        </div>
+        
+        <div class="question">
+            <h2>2. ¿Cómo se instala Prisma en un proyecto Node.js?</h2>
+            <p>Ejecuta el siguiente comando:</p>
+            <pre><code>npm install prisma --save-dev
+npm install @prisma/client</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>3. ¿Cómo se inicializa Prisma en un proyecto?</h2>
+            <p>Utiliza el siguiente comando:</p>
+            <pre><code>npx prisma init</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>4. ¿Dónde se configura la conexión a la base de datos?</h2>
+            <p>En el archivo <code>.env</code>, por ejemplo:</p>
+            <pre><code>DATABASE_URL="postgresql://user:password@localhost:5432/mydb?schema=public"</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>5. ¿Cómo definir un modelo en Prisma?</h2>
+            <pre><code>model User {
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String  @unique
+}</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>6. ¿Cómo aplicar migraciones en Prisma?</h2>
+            <p>Ejecuta:</p>
+            <pre><code>npx prisma migrate dev --name init</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>7. ¿Cómo generar el cliente de Prisma?</h2>
+            <p>Ejecuta:</p>
+            <pre><code>npx prisma generate</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>8. ¿Cómo crear un nuevo usuario con Prisma Client?</h2>
+            <pre><code>import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+async function main() {
+    const user = await prisma.user.create({
+        data: { name: 'John Doe', email: 'john@example.com' }
+    });
+    console.log(user);
+}
+main().catch(e => console.error(e)).finally(async () => { await prisma.$disconnect(); });</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>9. ¿Cómo obtener todos los usuarios de la base de datos?</h2>
+            <pre><code>const users = await prisma.user.findMany();
+console.log(users);</code></pre>
+        </div>
+        
+        <div class="question">
+            <h2>10. ¿Cómo abrir Prisma Studio?</h2>
+            <p>Ejecuta:</p>
+            <pre><code>npx prisma studio</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>11. ¿Cómo actualizar un usuario en Prisma?</h2>
+            <pre><code>const updatedUser = await prisma.user.update({
+    where: { id: 1 },
+    data: { name: 'Nuevo Nombre' }
+});
+console.log(updatedUser);</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>12. ¿Cómo eliminar un usuario en Prisma?</h2>
+            <pre><code>await prisma.user.delete({ where: { id: 1 } });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>13. ¿Cómo filtrar usuarios con una condición en Prisma?</h2>
+            <pre><code>const users = await prisma.user.findMany({ where: { name: "John" } });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>14. ¿Cómo contar registros en Prisma?</h2>
+            <pre><code>const count = await prisma.user.count();
+console.log(count);</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>15. ¿Cómo obtener un solo usuario en Prisma?</h2>
+            <pre><code>const user = await prisma.user.findUnique({ where: { email: "john@example.com" } });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>16. ¿Cómo ordenar registros en Prisma?</h2>
+            <pre><code>const users = await prisma.user.findMany({ orderBy: { name: 'asc' } });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>17. ¿Cómo obtener solo algunos campos en Prisma?</h2>
+            <pre><code>const users = await prisma.user.findMany({ select: { name: true } });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>18. ¿Cómo paginar resultados en Prisma?</h2>
+            <pre><code>const users = await prisma.user.findMany({ skip: 10, take: 5 });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>19. ¿Cómo realizar consultas anidadas en Prisma?</h2>
+            <pre><code>const userWithPosts = await prisma.user.findUnique({ include: { posts: true } });</code></pre>
+        </div>
+
+        <div class="question">
+            <h2>20. ¿Cómo usar transacciones en Prisma?</h2>
+            <pre><code>await prisma.$transaction([
+    prisma.user.create({ data: { name: "John" } }),
+    prisma.post.create({ data: { title: "Nuevo Post", userId: 1 } })
+]);</code></pre>
+        </div>
+</div>
+    <h1>Preguntas y Respuestas sobre Prisma</h1>
+    <div class="question">
+      <h2>21. ¿Cómo hacer consultas OR en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        OR: [
+            { name: "John" },
+            { email: "john@example.com" }
+        ]
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>22. ¿Cómo hacer consultas AND en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        AND: [
+            { name: "John" },
+            { email: { contains: "@example.com" } }
+        ]
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>23. ¿Cómo usar filtros de fechas en Prisma?</h2>
+      <pre><code>const recentUsers = await prisma.user.findMany({
+    where: {
+        createdAt: {
+            gte: new Date("2024-01-01")
+        }
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>24. ¿Cómo validar datos antes de insertarlos en Prisma?</h2>
+      <pre><code>import * as yup from 'yup';
+const userSchema = yup.object({
+    name: yup.string().required(),
+    email: yup.string().email().required()
+});
+
+async function createUser(data) {
+    await userSchema.validate(data);
+    return prisma.user.create({ data });
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>25. ¿Cómo realizar una consulta agregada en Prisma?</h2>
+      <pre><code>const avgAge = await prisma.user.aggregate({
+    _avg: {
+        age: true
+    }
+});
+console.log(avgAge);</code></pre>
+    </div>
+    <div class="question">
+      <h2>26. ¿Cómo hacer consultas con operadores avanzados en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        age: {
+            gte: 18,
+            lte: 30
+        }
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>27. ¿Cómo actualizar múltiples registros a la vez en Prisma?</h2>
+      <pre><code>await prisma.user.updateMany({
+    where: { active: false },
+    data: { active: true }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>28. ¿Cómo eliminar múltiples registros en Prisma?</h2>
+      <pre><code>await prisma.user.deleteMany({
+    where: { active: false }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>29. ¿Cómo manejar errores en Prisma?</h2>
+      <pre><code>try {
+    const user = await prisma.user.create({ data: { email: "invalid-email" } });
+} catch (error) {
+    console.error("Error al crear usuario:", error);
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>30. ¿Cómo usar Prisma con Express.js?</h2>
+      <pre><code>import express from 'express';
+import { PrismaClient } from '@prisma/client';
+const app = express();
+const prisma = new PrismaClient();
+app.use(express.json());
+
+app.get('/users', async (req, res) => {
+    const users = await prisma.user.findMany();
+    res.json(users);
+});
+
+app.listen(3000, () => console.log('Servidor corriendo en puerto 3000'));</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas sobre Prisma</h1>
+    <!-- Preguntas 21-30 -->
+    <div class="question">
+      <h2>31. ¿Cómo utilizar transactions en Prisma?</h2>
+      <pre><code>const result = await prisma.$transaction([
+    prisma.user.create({ data: { name: "Alice" } }),
+    prisma.post.create({ data: { title: "Nuevo Post", userId: 1 } })
+]);</code></pre>
+    </div>
+    <div class="question">
+      <h2>32. ¿Cómo hacer consultas paginadas en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    skip: 10,
+    take: 5
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>33. ¿Cómo usar orderBy para ordenar resultados en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    orderBy: {
+        createdAt: 'desc'
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>34. ¿Cómo verificar si un registro existe en Prisma?</h2>
+      <pre><code>const exists = await prisma.user.findUnique({
+    where: { email: "test@example.com" }
+}) !== null;</code></pre>
+    </div>
+    <div class="question">
+      <h2>35. ¿Cómo contar registros en Prisma?</h2>
+      <pre><code>const count = await prisma.user.count();</code></pre>
+    </div>
+    <div class="question">
+      <h2>36. ¿Cómo usar raw SQL en Prisma?</h2>
+      <pre><code>const users = await prisma.$queryRaw`SELECT * FROM User WHERE active = true`;</code></pre>
+    </div>
+    <div class="question">
+      <h2>37. ¿Cómo manejar conexiones de base de datos en Prisma?</h2>
+      <pre><code>const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error']
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>38. ¿Cómo definir relaciones entre modelos en Prisma?</h2>
+      <pre><code>model User {
+    id    Int    @id @default(autoincrement())
+    posts Post[]
+}
+
+model Post {
+    id      Int    @id @default(autoincrement())
+    userId  Int
+    user    User   @relation(fields: [userId], references: [id])
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>39. ¿Cómo hacer consultas con relaciones en Prisma?</h2>
+      <pre><code>const userWithPosts = await prisma.user.findUnique({
+    where: { id: 1 },
+    include: { posts: true }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>40. ¿Cómo eliminar un usuario y sus relaciones en Prisma?</h2>
+      <pre><code>await prisma.user.delete({
+    where: { id: 1 }
+});</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas sobre Prisma</h1>
+    <!-- Preguntas 41-50 -->
+    <div class="question">
+      <h2>41. ¿Cómo actualizar múltiples registros en Prisma?</h2>
+      <pre><code>await prisma.user.updateMany({
+    where: { active: false },
+    data: { active: true }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>42. ¿Cómo eliminar múltiples registros en Prisma?</h2>
+      <pre><code>await prisma.user.deleteMany({
+    where: { active: false }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>43. ¿Cómo usar middlewares en Prisma?</h2>
+      <pre><code>prisma.$use(async (params, next) => {
+    console.log(`Ejecutando: ${params.model}.${params.action}`);
+    return next(params);
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>44. ¿Cómo hacer una consulta condicional en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        OR: [
+            { email: { contains: "@gmail.com" } },
+            { name: { startsWith: "A" } }
+        ]
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>45. ¿Cómo manejar errores en Prisma?</h2>
+      <pre><code>try {
+    const user = await prisma.user.create({ data: { email: "invalid" } });
+} catch (error) {
+    console.error("Error al crear usuario", error);
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>46. ¿Cómo usar Prisma con Express.js?</h2>
+      <pre><code>const express = require('express');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+const app = express();
+app.use(express.json());
+
+app.get('/users', async (req, res) => {
+    const users = await prisma.user.findMany();
+    res.json(users);
+});
+
+app.listen(3000, () => console.log("Servidor en ejecución"));</code></pre>
+    </div>
+    <div class="question">
+      <h2>47. ¿Cómo hacer bulk insert en Prisma?</h2>
+      <pre><code>await prisma.user.createMany({
+    data: [
+        { name: "Alice", email: "alice@example.com" },
+        { name: "Bob", email: "bob@example.com" }
+    ]
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>48. ¿Cómo actualizar datos de relaciones en Prisma?</h2>
+      <pre><code>await prisma.post.update({
+    where: { id: 1 },
+    data: { user: { connect: { id: 2 } } }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>49. ¿Cómo hacer una consulta agregada en Prisma?</h2>
+      <pre><code>const total = await prisma.user.aggregate({
+    _count: true,
+    _avg: { age: true }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>50. ¿Cómo usar Prisma con GraphQL?</h2>
+      <pre><code>const { ApolloServer, gql } = require("apollo-server");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
+const typeDefs = gql`
+    type User {
+        id: ID!
+        name: String!
+    }
+    type Query {
+        users: [User]
+    }
+`;
+
+const resolvers = {
+    Query: {
+        users: () => prisma.user.findMany()
+    }
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
+server.listen().then(({ url }) => console.log(`Servidor listo en ${url}`));</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas sobre Prisma</h1>
+    <!-- Preguntas 51-60 -->
+    <div class="question">
+      <h2>52. ¿Cómo usar raw SQL en Prisma?</h2>
+      <pre><code>const result = await prisma.$queryRaw`SELECT * FROM User WHERE active = true;`;</code></pre>
+    </div>
+    <div class="question">
+      <h2>53. ¿Cómo ejecutar consultas parametrizadas en Prisma?</h2>
+      <pre><code>const result = await prisma.$queryRaw`SELECT * FROM User WHERE email = ${email};`;</code></pre>
+    </div>
+    <div class="question">
+      <h2>54. ¿Cómo manejar relaciones uno a uno en Prisma?</h2>
+      <pre><code>model User {
+    id    Int    @id @default(autoincrement())
+    profile Profile?
+}
+
+model Profile {
+    id     Int    @id @default(autoincrement())
+    bio    String
+    user   User   @relation(fields: [userId], references: [id])
+    userId Int    @unique
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>55. ¿Cómo definir relaciones muchos a muchos en Prisma?</h2>
+      <pre><code>model User {
+    id     Int     @id @default(autoincrement())
+    name   String
+    posts  Post[]  @relation("UserToPost")
+}
+
+model Post {
+    id     Int     @id @default(autoincrement())
+    title  String
+    users  User[]  @relation("UserToPost")
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>56. ¿Cómo usar índices en Prisma?</h2>
+      <pre><code>model User {
+    id    Int    @id @default(autoincrement())
+    email String @unique
+    name  String @index
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>57. ¿Cómo realizar paginación en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    skip: 10,
+    take: 10,
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>58. ¿Cómo contar registros en Prisma?</h2>
+      <pre><code>const count = await prisma.user.count();</code></pre>
+    </div>
+    <div class="question">
+      <h2>59. ¿Cómo actualizar parcialmente un registro en Prisma?</h2>
+      <pre><code>await prisma.user.update({
+    where: { id: 1 },
+    data: { name: "Nuevo Nombre" }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>60. ¿Cómo eliminar un solo registro en Prisma?</h2>
+      <pre><code>await prisma.user.delete({
+    where: { id: 1 }
+});</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h1>Preguntas y Respuestas sobre Prisma</h1>
+    <!-- Preguntas 61-70 -->
+    <div class="question">
+      <h2>61. ¿Cómo realizar una consulta con múltiples condiciones en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        OR: [
+            { name: "John" },
+            { email: { contains: "@gmail.com" } }
+        ]
+    }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>62. ¿Cómo agrupar resultados en Prisma?</h2>
+      <pre><code>const result = await prisma.user.groupBy({
+    by: ['role'],
+    _count: { id: true }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>63. ¿Cómo utilizar transactions en Prisma?</h2>
+      <pre><code>const result = await prisma.$transaction([
+    prisma.user.create({ data: { name: "Alice" } }),
+    prisma.post.create({ data: { title: "Nuevo Post", userId: 1 } })
+]);</code></pre>
+    </div>
+    <div class="question">
+      <h2>64. ¿Cómo realizar consultas anidadas en Prisma?</h2>
+      <pre><code>const userWithPosts = await prisma.user.findUnique({
+    where: { id: 1 },
+    include: { posts: true }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>65. ¿Cómo manejar errores en Prisma?</h2>
+      <pre><code>try {
+    const user = await prisma.user.create({ data: { email: "invalid-email" } });
+} catch (error) {
+    console.error("Error al crear usuario", error);
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>66. ¿Cómo hacer consultas con rangos en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { age: { gte: 18, lte: 30 } }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>67. ¿Cómo usar Prisma con Next.js?</h2>
+      <pre><code>import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
+export default async function handler(req, res) {
+    const users = await prisma.user.findMany();
+    res.json(users);
+}</code></pre>
+    </div>
+    <div class="question">
+      <h2>68. ¿Cómo actualizar datos relacionados en Prisma?</h2>
+      <pre><code>await prisma.user.update({
+    where: { id: 1 },
+    data: { posts: { update: { where: { id: 2 }, data: { title: "Nuevo Título" } } } }
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>69. ¿Cómo manejar estados de conexión en Prisma?</h2>
+      <pre><code>const prisma = new PrismaClient();
+prisma.$connect();
+
+process.on('beforeExit', async () => {
+    await prisma.$disconnect();
+});</code></pre>
+    </div>
+    <div class="question">
+      <h2>70. ¿Cómo ejecutar consultas sin cache en Prisma?</h2>
+      <pre><code>const freshUser = await prisma.user.findUnique({
+    where: { id: 1 },
+    rejectOnNotFound: true
+});</code></pre>
+    </div>
+    <h1>120 Preguntas sobre Prisma</h1>
+    <!-- Preguntas 71-80 -->
+    <div class="question1">
+      <h2>71. ¿Cómo eliminar múltiples registros en Prisma?</h2>
+      <pre><code>await prisma.user.deleteMany({
+    where: { role: "inactive" }
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>72. ¿Cómo utilizar `findFirst` en Prisma?</h2>
+      <pre><code>const user = await prisma.user.findFirst({
+    where: { email: { endsWith: "@gmail.com" } }
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>73. ¿Cómo ordenar los resultados en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    orderBy: { name: "asc" }
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>74. ¿Cómo hacer un `count` en Prisma?</h2>
+      <pre><code>const totalUsers = await prisma.user.count();</code></pre>
+    </div>
+    <div class="question1">
+      <h2>75. ¿Cómo realizar una consulta `distinct` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    distinct: ["role"]
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>76. ¿Cómo hacer una consulta con `not` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { role: { not: "admin" } }
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>77. ¿Cómo utilizar `upsert` en Prisma?</h2>
+      <pre><code>const user = await prisma.user.upsert({
+    where: { email: "user@example.com" },
+    update: { lastLogin: new Date() },
+    create: { name: "User", email: "user@example.com" }
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>78. ¿Cómo paginar resultados en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    skip: 10,
+    take: 5
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>79. ¿Cómo realizar una consulta anidada con `select` en Prisma?</h2>
+      <pre><code>const user = await prisma.user.findUnique({
+    where: { id: 1 },
+    select: { name: true, posts: { select: { title: true } } }
+});</code></pre>
+    </div>
+    <div class="question1">
+      <h2>80. ¿Cómo verificar si un registro existe en Prisma?</h2>
+      <pre><code>const exists = await prisma.user.findUnique({
+    where: { email: "test@example.com" }
+}) !== null;</code></pre>
+    </div>
+    <h1>120 Preguntas sobre Prisma</h1>
+    <!-- Preguntas 81-90 -->
+    <div class="question2">
+      <h2>81. ¿Cómo actualizar múltiples registros en Prisma?</h2>
+      <pre><code>await prisma.user.updateMany({
+    where: { active: false },
+    data: { active: true }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>82. ¿Cómo eliminar todos los registros de una tabla en Prisma?</h2>
+      <pre><code>await prisma.user.deleteMany({});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>83. ¿Cómo hacer una consulta con `in` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { id: { in: [1, 2, 3] } }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>84. ¿Cómo hacer una consulta con `contains` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { name: { contains: "John" } }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>85. ¿Cómo realizar una consulta con `startsWith` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { email: { startsWith: "admin@" } }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>86. ¿Cómo hacer una consulta con `endsWith` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { email: { endsWith: "@gmail.com" } }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>87. ¿Cómo hacer una consulta con múltiples condiciones en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        AND: [
+            { role: "admin" },
+            { active: true }
+        ]
+    }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>88. ¿Cómo usar `OR` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: {
+        OR: [
+            { role: "admin" },
+            { role: "editor" }
+        ]
+    }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>89. ¿Cómo excluir registros con `NOT` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    where: { NOT: { role: "guest" } }
+});</code></pre>
+    </div>
+    <div class="question2">
+      <h2>90. ¿Cómo contar registros con condiciones en Prisma?</h2>
+      <pre><code>const activeUsers = await prisma.user.count({
+    where: { active: true }
+});</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <h1>120 Preguntas sobre Prisma</h1>
+    <!-- Preguntas 91-100 -->
+    <div class="question3">
+      <h2>91. ¿Cómo realizar una transacción en Prisma?</h2>
+      <pre><code>await prisma.$transaction([
+    prisma.user.create({ data: { name: "John" } }),
+    prisma.post.create({ data: { title: "Post de John", authorId: 1 } })
+]);</code></pre>
+    </div>
+    <div class="question3">
+      <h2>92. ¿Cómo hacer una consulta con `distinct` en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    distinct: ["email"]
+});</code></pre>
+    </div>
+    <div class="question3">
+      <h2>93. ¿Cómo usar `groupBy` en Prisma?</h2>
+      <pre><code>const groupedUsers = await prisma.user.groupBy({
+    by: ["role"],
+    _count: { id: true }
+});</code></pre>
+    </div>
+    <div class="question3">
+      <h2>94. ¿Cómo actualizar un campo solo si cumple una condición en Prisma?</h2>
+      <pre><code>await prisma.user.updateMany({
+    where: { active: false },
+    data: { active: true }
+});</code></pre>
+    </div>
+    <div class="question3">
+      <h2>95. ¿Cómo realizar una consulta `aggregate` en Prisma?</h2>
+      <pre><code>const stats = await prisma.user.aggregate({
+    _avg: { age: true },
+    _sum: { age: true },
+    _max: { age: true }
+});</code></pre>
+    </div>
+    <div class="question3">
+      <h2>96. ¿Cómo validar datos antes de insertarlos en Prisma?</h2>
+      <pre><code>if (!email.includes("@")) {
+    throw new Error("Email inválido");
+}
+const user = await prisma.user.create({ data: { email } });</code></pre>
+    </div>
+    <div class="question3">
+      <h2>97. ¿Cómo manejar errores en Prisma?</h2>
+      <pre><code>try {
+    const user = await prisma.user.create({ data: { email: "invalid" } });
+} catch (error) {
+    console.error("Error al crear usuario", error);
+}</code></pre>
+    </div>
+    <div class="question3">
+      <h2>98. ¿Cómo realizar una consulta con `select` en Prisma?</h2>
+      <pre><code>const user = await prisma.user.findUnique({
+    where: { id: 1 },
+    select: { name: true, email: true }
+});</code></pre>
+    </div>
+    <div class="question3">
+      <h2>99. ¿Cómo obtener solo ciertos campos de una consulta en Prisma?</h2>
+      <pre><code>const users = await prisma.user.findMany({
+    select: { name: true, email: true }
+});</code></pre>
+    </div>
+    <div class="question3">
+      <h2>100. ¿Cómo manejar conexiones de base de datos en Prisma?</h2>
+      <pre><code>const prisma = new PrismaClient();
+
+async function main() {
+    const users = await prisma.user.findMany();
+    console.log(users);
+}
+
+main()
+    .catch(e => console.error(e))
+    .finally(async () => await prisma.$disconnect());</code></pre>
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+</body>
+</html>
