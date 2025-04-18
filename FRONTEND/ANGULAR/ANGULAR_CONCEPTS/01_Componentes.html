@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angular Components Questions - Set 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007acc;
+    }
+    ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: #f8f8f2;
+    }
+  </style>
+</head>
+<body>
+  <!-- Set 1 -->
+  <section>
+    <h2>Set 1: Angular Components - Basics</h2>
+    <ol>
+      <li>
+        <strong>What is an Angular component?</strong>
+        <p>An Angular component is a TypeScript class with a decorator <code>@Component</code> that controls a portion of the view and associated logic.</p>
+        <pre><code>@Component({
+  selector: 'app-example',
+  template: '<p>Hello from component!</p>'
+})
+export class ExampleComponent {}</code></pre>
+      </li>
+      <li>
+        <strong>How do you define a component selector?</strong>
+        <p>The selector is defined in the <code>@Component</code> decorator and is used as a custom HTML tag to render the component.</p>
+        <pre><code>@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html'
+})</code></pre>
+      </li>
+      <li>
+        <strong>What does the <code>templateUrl</code> property do?</strong>
+        <p>It defines the path to an external HTML file that represents the component's template.</p>
+        <pre><code>@Component({
+  selector: 'app-main',
+  templateUrl: './main.component.html'
+})</code></pre>
+      </li>
+      <li>
+        <strong>What does the <code>template</code> property do?</strong>
+        <p>It allows you to define the component's template inline within the decorator.</p>
+        <pre><code>@Component({
+  selector: 'app-inline',
+  template: '<h1>Inline Template</h1>'
+})</code></pre>
+      </li>
+      <li>
+        <strong>What is the purpose of the <code>styleUrls</code> property?</strong>
+        <p>It allows linking to external CSS files to style the component.</p>
+        <pre><code>@Component({
+  selector: 'app-styled',
+  templateUrl: './styled.component.html',
+  styleUrls: ['./styled.component.css']
+})</code></pre>
+      </li>
+      <li>
+        <strong>Can you use both <code>template</code> and <code>templateUrl</code> in a component?</strong>
+        <p>No, you should use either <code>template</code> or <code>templateUrl</code>, not both.</p>
+      </li>
+      <li>
+        <strong>How do you register a component in a module?</strong>
+        <p>You add it to the <code>declarations</code> array of the module.</p>
+        <pre><code>@NgModule({
+  declarations: [ExampleComponent],
+  imports: [CommonModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}</code></pre>
+      </li>
+      <li>
+        <strong>How do you render a component in HTML?</strong>
+        <p>By using its selector as a tag in the template: <code>&lt;app-example&gt;&lt;/app-example&gt;</code>.</p>
+      </li>
+      <li>
+        <strong>How do you create a component using Angular CLI?</strong>
+        <p>Run the command: <code>ng generate component component-name</code>.</p>
+      </li>
+      <li>
+        <strong>Can components be nested in Angular?</strong>
+        <p>Yes, you can nest components by including a child component's selector in a parent component's template.</p>
+        <pre><code>&lt;app-child&gt;&lt;/app-child&gt;</code></pre>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 2: Component Lifecycle</h2>
+    <ol start="11">
+      <li>
+        <strong>What is the lifecycle of an Angular component?</strong>
+        <p>The lifecycle includes creation, rendering, updating, and destruction. Angular provides hooks at each stage.</p>
+      </li>
+      <li>
+        <strong>What is the purpose of <code>ngOnInit</code>?</strong>
+        <p>It is called once after the first <code>ngOnChanges</code> and is used for component initialization.</p>
+        <pre><code>ngOnInit() {
+  console.log('Component initialized');
+}</code></pre>
+      </li>
+      <li>
+        <strong>What does <code>ngOnChanges</code> do?</strong>
+        <p>It is called when any data-bound input property changes.</p>
+        <pre><code>ngOnChanges(changes: SimpleChanges) {
+  console.log('Changes:', changes);
+}</code></pre>
+      </li>
+      <li>
+        <strong>When is <code>ngOnDestroy</code> triggered?</strong>
+        <p>When Angular destroys the component, typically used for cleanup like unsubscribing.</p>
+        <pre><code>ngOnDestroy() {
+  console.log('Component destroyed');
+}</code></pre>
+      </li>
+      <li>
+        <strong>What is <code>ngAfterViewInit</code> used for?</strong>
+        <p>It is called after component’s view (and child views) has been initialized.</p>
+        <pre><code>ngAfterViewInit() {
+  console.log('View initialized');
+}</code></pre>
+      </li>
+      <li>
+        <strong>What lifecycle hook is called before <code>ngAfterViewInit</code>?</strong>
+        <p><code>ngAfterContentInit</code> is called before <code>ngAfterViewInit</code>.</p>
+      </li>
+      <li>
+        <strong>Can you implement multiple lifecycle hooks in one component?</strong>
+        <p>Yes, you can implement any combination of hooks based on your needs.</p>
+      </li>
+      <li>
+        <strong>How do you implement lifecycle hooks?</strong>
+        <p>By importing interfaces from <code>@angular/core</code> and implementing them in your class.</p>
+        <pre><code>export class MyComponent implements OnInit, OnDestroy {
+  ngOnInit() {}
+  ngOnDestroy() {}
+}</code></pre>
+      </li>
+      <li>
+        <strong>Why is <code>ngOnInit</code> preferred over the constructor for initialization?</strong>
+        <p>Because Angular has fully initialized inputs by the time <code>ngOnInit</code> runs, unlike the constructor.</p>
+      </li>
+      <li>
+        <strong>What is the execution order of lifecycle hooks?</strong>
+        <p>Constructor → <code>ngOnChanges</code> → <code>ngOnInit</code> → <code>ngDoCheck</code> → <code>ngAfterContentInit</code> → <code>ngAfterContentChecked</code> → <code>ngAfterViewInit</code> → <code>ngAfterViewChecked</code> → <code>ngOnDestroy</code></p>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 3: @Input and @Output</h2>
+    <ol start="21">
+      <li>
+        <strong>What is <code>@Input()</code> in Angular?</strong>
+        <p>It allows data to be passed from a parent component to a child component.</p>
+        <pre><code>@Input() title: string;</code></pre>
+      </li>
+      <li>
+        <strong>What is <code>@Output()</code> in Angular?</strong>
+        <p>It is used to emit events from a child component to its parent.</p>
+        <pre><code>@Output() clicked = new EventEmitter&lt;void&gt;();</code></pre>
+      </li>
+      <li>
+        <strong>How do you bind a value using <code>@Input</code>?</strong>
+        <p>Use property binding syntax in the parent component template.</p>
+        <pre><code>&lt;app-child [title]="parentTitle"&gt;&lt;/app-child&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How do you handle an event using <code>@Output</code>?</strong>
+        <p>Bind the event in the parent component template using event binding syntax.</p>
+        <pre><code>&lt;app-child (clicked)="onChildClicked()"&gt;&lt;/app-child&gt;</code></pre>
+      </li>
+      <li>
+        <strong>Can <code>@Input</code> and <code>@Output</code> be renamed?</strong>
+        <p>Yes, you can alias them using the decorator syntax.</p>
+        <pre><code>@Input('aliasName') propName: string;
+@Output('aliasEvent') event = new EventEmitter();</code></pre>
+      </li>
+      <li>
+        <strong>What is <code>EventEmitter</code>?</strong>
+        <p>A class that helps emit custom events in Angular using <code>@Output</code>.</p>
+        <pre><code>this.clicked.emit();</code></pre>
+      </li>
+      <li>
+        <strong>Can you use <code>@Input</code> in a service?</strong>
+        <p>No, <code>@Input</code> is used only in components or directives.</p>
+      </li>
+      <li>
+        <strong>Is it mandatory to initialize <code>@Output</code>?</strong>
+        <p>Yes, it should be initialized with a new <code>EventEmitter</code> to emit events.</p>
+      </li>
+      <li>
+        <strong>Can you bind a method to <code>@Output</code>?</strong>
+        <p>No, you handle events with a method but cannot directly bind a method reference to <code>@Output</code>.</p>
+      </li>
+      <li>
+        <strong>Can a component have multiple <code>@Input</code> and <code>@Output</code>?</strong>
+        <p>Yes, you can define as many <code>@Input</code> and <code>@Output</code> properties as needed.</p>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 4: @ViewChild</h2>
+    <ol start="31">
+      <li>
+        <strong>What is <code>@ViewChild</code> in Angular?</strong>
+        <p>It allows you to access a child component, directive, or DOM element from a parent component class.</p>
+        <pre><code>@ViewChild(ChildComponent) child: ChildComponent;</code></pre>
+      </li>
+      <li>
+        <strong>When is <code>@ViewChild</code> available in the lifecycle?</strong>
+        <p>It is set after <code>ngAfterViewInit()</code> lifecycle hook.</p>
+        <pre><code>ngAfterViewInit() {
+  console.log(this.child);
+}</code></pre>
+      </li>
+      <li>
+        <strong>How do you use <code>@ViewChild</code> to access a DOM element?</strong>
+        <p>Use a template reference variable with <code>@ViewChild</code>.</p>
+        <pre><code>@ViewChild('myDiv') divRef: ElementRef;
+...
+&lt;div #myDiv&gt;Hello&lt;/div&gt;</code></pre>
+      </li>
+      <li>
+        <strong>What is <code>ElementRef</code> in Angular?</strong>
+        <p>It is a wrapper around a native DOM element that gives direct access to it.</p>
+        <pre><code>this.divRef.nativeElement.style.backgroundColor = 'yellow';</code></pre>
+      </li>
+      <li>
+        <strong>What happens if the queried element isn't found with <code>@ViewChild</code>?</strong>
+        <p>The reference will be <code>undefined</code>.</p>
+      </li>
+      <li>
+        <strong>Can you access a child directive using <code>@ViewChild</code>?</strong>
+        <p>Yes, you can access directives as long as they are in the template.</p>
+      </li>
+      <li>
+        <strong>Can <code>@ViewChild</code> be used with dynamic components?</strong>
+        <p>No, use <code>ViewContainerRef</code> and <code>ComponentFactoryResolver</code> for dynamic components.</p>
+      </li>
+      <li>
+        <strong>How do you make sure <code>@ViewChild</code> updates when the view changes?</strong>
+        <p>Use <code>{ static: false }</code> for dynamically created elements.</p>
+        <pre><code>@ViewChild('someRef', { static: false }) ref;</code></pre>
+      </li>
+      <li>
+        <strong>What is the default value for the <code>static</code> option in <code>@ViewChild</code>?</strong>
+        <p>It is <code>false</code> in most cases.</p>
+      </li>
+      <li>
+        <strong>Can you use <code>@ViewChild</code> with multiple elements?</strong>
+        <p>Use <code>@ViewChildren</code> to access multiple elements or components.</p>
+        <pre><code>@ViewChildren('myRefs') divs: QueryList&lt;ElementRef&gt;;</code></pre>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 5: Component Communication</h2>
+    <ol start="41">
+      <li>
+        <strong>How do Angular components communicate?</strong>
+        <p>They communicate using <code>@Input</code>, <code>@Output</code>, services, and shared state.</p>
+      </li>
+      <li>
+        <strong>What is parent to child communication?</strong>
+        <p>Passing data from parent to child using <code>@Input</code>.</p>
+        <pre><code>&lt;child [data]="parentData"&gt;&lt;/child&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How does child to parent communication work?</strong>
+        <p>Using <code>@Output</code> with <code>EventEmitter</code>.</p>
+        <pre><code>@Output() notify = new EventEmitter&lt;string&gt;();
+this.notify.emit('message');</code></pre>
+      </li>
+      <li>
+        <strong>How can siblings communicate in Angular?</strong>
+        <p>Use a shared service with <code>BehaviorSubject</code> or <code>Subject</code>.</p>
+        <pre><code>subject.next(value);
+subject.subscribe(data => { ... });</code></pre>
+      </li>
+      <li>
+        <strong>Can services be used for component interaction?</strong>
+        <p>Yes, services can manage shared state or emit data using observables.</p>
+      </li>
+      <li>
+        <strong>What is a shared service?</strong>
+        <p>A service injected into multiple components to share data or logic.</p>
+      </li>
+      <li>
+        <strong>What is the role of observables in communication?</strong>
+        <p>They allow components to reactively respond to changes in shared data.</p>
+      </li>
+      <li>
+        <strong>How can you unsubscribe from an observable?</strong>
+        <p>Store the subscription and call <code>unsubscribe()</code> in <code>ngOnDestroy()</code>.</p>
+        <pre><code>subscription = observable.subscribe(...);
+ngOnDestroy() {
+  subscription.unsubscribe();
+}</code></pre>
+      </li>
+      <li>
+        <strong>How do template reference variables help in communication?</strong>
+        <p>They let parent access child component methods or properties via <code>@ViewChild</code>.</p>
+        <pre><code>&lt;child #childComp&gt;&lt;/child&gt;
+@ViewChild('childComp') child;</code></pre>
+      </li>
+      <li>
+        <strong>Can router parameters be used for communication?</strong>
+        <p>Yes, you can pass data through query or route parameters.</p>
+        <pre><code>this.route.snapshot.paramMap.get('id');</code></pre>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 6: Component Interaction Patterns</h2>
+    <ol start="51">
+      <li>
+        <strong>What is a smart component?</strong>
+        <p>A component that handles business logic and interacts with services.</p>
+      </li>
+      <li>
+        <strong>What is a dumb component?</strong>
+        <p>A component focused only on UI; it receives inputs and emits outputs.</p>
+      </li>
+      <li>
+        <strong>When to use a shared module?</strong>
+        <p>To consolidate reusable components, directives, and pipes across the app.</p>
+      </li>
+      <li>
+        <strong>What are feature modules?</strong>
+        <p>Modules used to group components logically by functionality or features.</p>
+      </li>
+      <li>
+        <strong>Can one component use another component’s method?</strong>
+        <p>Yes, using <code>@ViewChild</code> to get a reference and call its method.</p>
+        <pre><code>@ViewChild(ChildComponent) child!: ChildComponent;
+this.child.someMethod();</code></pre>
+      </li>
+      <li>
+        <strong>How to share constants across components?</strong>
+        <p>Define constants in a separate TypeScript file and import them where needed.</p>
+      </li>
+      <li>
+        <strong>What is a singleton service?</strong>
+        <p>A service provided in root that has a single instance across the app.</p>
+      </li>
+      <li>
+        <strong>How does Angular DI (Dependency Injection) work?</strong>
+        <p>It injects services into components via constructors based on providers.</p>
+      </li>
+      <li>
+        <strong>Can two components share the same service?</strong>
+        <p>Yes, if the service is provided in root or in a shared module.</p>
+      </li>
+      <li>
+        <strong>What is an example of a reusable component?</strong>
+        <p>A button component with <code>@Input</code> for label and <code>@Output</code> for click.</p>
+        <pre><code>&lt;app-button [label]="'Save'" (clicked)="saveHandler()"&gt;&lt;/app-button&gt;</code></pre>
+      </li>
+    </ol>
+    
+      <section>
+    <h2>Set 7: View Encapsulation</h2>
+    <ol start="61">
+      <li>
+        <strong>What is View Encapsulation in Angular?</strong>
+        <p>It determines whether styles defined in a component affect the entire application or only the component.</p>
+      </li>
+      <li>
+        <strong>What are the types of View Encapsulation?</strong>
+        <p><code>Emulated</code>, <code>ShadowDom</code>, and <code>None</code>.</p>
+      </li>
+      <li>
+        <strong>Which is the default View Encapsulation mode?</strong>
+        <p><code>Emulated</code> is the default.</p>
+      </li>
+      <li>
+        <strong>How to set View Encapsulation in a component?</strong>
+        <pre><code>@Component({
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+      </li>
+      <li>
+        <strong>What is Emulated encapsulation?</strong>
+        <p>Angular adds scoped attributes to styles to apply them only to the component.</p>
+      </li>
+      <li>
+        <strong>What is None encapsulation?</strong>
+        <p>No encapsulation; styles can affect the entire application.</p>
+      </li>
+      <li>
+        <strong>What is ShadowDom encapsulation?</strong>
+        <p>Uses native Shadow DOM for true style encapsulation.</p>
+      </li>
+      <li>
+        <strong>Can we use global styles with encapsulated components?</strong>
+        <p>Yes, global stylesheets like <code>styles.css</code> can apply styles globally.</p>
+      </li>
+      <li>
+        <strong>Can encapsulated styles be overridden?</strong>
+        <p>Only with deep selectors like <code>::ng-deep</code> or <code>/deep/</code>, though they are deprecated.</p>
+      </li>
+      <li>
+        <strong>When should we use ViewEncapsulation.None?</strong>
+        <p>When we need styles to be shared globally or when integrating third-party styles.</p>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 8: Dynamic Components</h2>
+    <ol start="71">
+      <li>
+        <strong>What are dynamic components in Angular?</strong>
+        <p>Components that are created and inserted into the DOM at runtime.</p>
+      </li>
+      <li>
+        <strong>How do you load a dynamic component?</strong>
+        <p>Using <code>ViewContainerRef.createComponent()</code>.</p>
+      </li>
+      <li>
+        <strong>What is a ComponentFactoryResolver?</strong>
+        <p>A service used to create a component factory for a component (deprecated in Angular 13+).</p>
+      </li>
+      <li>
+        <strong>How to define an anchor for a dynamic component?</strong>
+        <p>Use <code>@ViewChild</code> with <code>ViewContainerRef</code>.</p>
+      </li>
+      <li>
+        <strong>Can you pass data to dynamic components?</strong>
+        <p>Yes, by accessing and assigning to the instance's input properties.</p>
+      </li>
+      <li>
+        <strong>How to destroy a dynamically created component?</strong>
+        <p>Use <code>componentRef.destroy()</code>.</p>
+      </li>
+      <li>
+        <strong>Is it possible to insert multiple dynamic components?</strong>
+        <p>Yes, by calling <code>createComponent()</code> multiple times on the container.</p>
+      </li>
+      <li>
+        <strong>Do dynamic components participate in change detection?</strong>
+        <p>Yes, they are part of the Angular component tree once inserted.</p>
+      </li>
+      <li>
+        <strong>Can a dynamic component emit events?</strong>
+        <p>Yes, you can subscribe to its <code>@Output</code> events from the host.</p>
+      </li>
+      <li>
+        <strong>Why use dynamic components?</strong>
+        <p>They provide flexibility for rendering components based on user actions or configurations.</p>
+      </li>
+    </ol>
+  </section>
+    <section>
+    <h2>Set 9: Dynamic Components - Source Code Examples</h2>
+    <ol start="81">
+      <li>
+        <strong>What are dynamic components in Angular?</strong>
+        <p>Components created and inserted at runtime using <code>createComponent</code>.</p>
+        <pre><code>// component-loader.component.ts
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { HelloComponent } from './hello.component';
+
+@Component({
+  selector: 'app-component-loader',
+  template: '<ng-template #container></ng-template>'
+})
+export class ComponentLoaderComponent {
+  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
+
+  ngAfterViewInit() {
+    this.container.createComponent(HelloComponent);
+  }
+}</code></pre>
+      </li>
+      <li>
+        <strong>How do you load a dynamic component?</strong>
+        <p>By referencing <code>ViewContainerRef</code> and using <code>createComponent</code>.</p>
+        <pre><code>this.container.createComponent(HelloComponent);</code></pre>
+      </li>
+      <li>
+        <strong>What is a ComponentFactoryResolver?</strong>
+        <p>A resolver for older Angular versions (deprecated in Angular 13+).</p>
+        <pre><code>// Angular <13 example
+constructor(private resolver: ComponentFactoryResolver) {}
+
+ngAfterViewInit() {
+  const factory = this.resolver.resolveComponentFactory(HelloComponent);
+  this.container.createComponent(factory);
+}</code></pre>
+      </li>
+      <li>
+        <strong>How to define an anchor for a dynamic component?</strong>
+        <p>Using <code>@ViewChild</code> to access the <code>ng-template</code>.</p>
+        <pre><code>// HTML template
+<ng-template #dynamicAnchor></ng-template>
+
+// Component
+@ViewChild('dynamicAnchor', { read: ViewContainerRef }) anchor!: ViewContainerRef;</code></pre>
+      </li>
+      <li>
+        <strong>Can you pass data to dynamic components?</strong>
+        <p>Yes, by setting input properties on the created component instance.</p>
+        <pre><code>const ref = this.container.createComponent(HelloComponent);
+ref.instance.name = 'Manuela';</code></pre>
+      </li>
+      <li>
+        <strong>How to destroy a dynamically created component?</strong>
+        <p>Call <code>destroy()</code> on the ComponentRef instance.</p>
+        <pre><code>const ref = this.container.createComponent(HelloComponent);
+ref.destroy();</code></pre>
+      </li>
+      <li>
+        <strong>Is it possible to insert multiple dynamic components?</strong>
+        <p>Yes, each call to <code>createComponent()</code> adds a new one.</p>
+        <pre><code>this.container.createComponent(HelloComponent);
+this.container.createComponent(HelloComponent);</code></pre>
+      </li>
+      <li>
+        <strong>Do dynamic components participate in change detection?</strong>
+        <p>Yes, once added to the view, they are managed by Angular's change detection.</p>
+        <pre><code>const ref = this.container.createComponent(HelloComponent);
+ref.instance.name = 'Live Change';</code></pre>
+      </li>
+      <li>
+        <strong>Can a dynamic component emit events?</strong>
+        <p>Yes. You can subscribe to its <code>@Output</code> emitters.</p>
+        <pre><code>ref.instance.clicked.subscribe(() => console.log('Clicked!'));</code></pre>
+      </li>
+      <li>
+        <strong>Why use dynamic components?</strong>
+        <p>To load content conditionally or based on runtime logic.</p>
+        <pre><code>if (this.isLoggedIn) {
+  this.container.createComponent(ProfileComponent);
+} else {
+  this.container.createComponent(LoginComponent);
+}</code></pre>
+      </li>
+    </ol>
+    <!-- Set 10 -->
+  <section>
+    <h2>Set 10: Content Projection & ng-content - Source Code Examples</h2>
+    <ol start="91">
+      <li>
+        <strong>What is content projection in Angular?</strong>
+        <p>It is a pattern to insert external content into a component using <code>&lt;ng-content&gt;</code>.</p>
+        <pre><code>// card.component.html
+&lt;div class="card"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How do you project content into a component?</strong>
+        <p>Using <code>&lt;ng-content&gt;</code> in the component template.</p>
+        <pre><code>// usage
+&lt;app-card&gt;
+  &lt;p&gt;This is projected&lt;/p&gt;
+&lt;/app-card&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to use multiple slots in content projection?</strong>
+        <p>Use the <code>select</code> attribute on <code>&lt;ng-content&gt;</code>.</p>
+        <pre><code>// component.html
+&lt;ng-content select=".header"&gt;&lt;/ng-content&gt;
+&lt;ng-content select=".body"&gt;&lt;/ng-content&gt;</code></pre>
+      </li>
+      <li>
+        <strong>What happens if no content is projected?</strong>
+        <p>The component still renders but with no inserted content.</p>
+        <pre><code>// still renders
+&lt;app-card&gt;&lt;/app-card&gt;</code></pre>
+      </li>
+      <li>
+        <strong>Can you combine content projection and inputs?</strong>
+        <p>Yes, you can use <code>@Input</code> and <code>&lt;ng-content&gt;</code> together.</p>
+        <pre><code>// card.component.ts
+@Input() title: string = '';</code></pre>
+      </li>
+      <li>
+        <strong>Is <code>&lt;ng-content&gt;</code> compiled statically or dynamically?</strong>
+        <p>It is compiled statically during render.</p>
+        <pre><code>// included at render time
+&lt;ng-content&gt;&lt;/ng-content&gt;</code></pre>
+      </li>
+      <li>
+        <strong>Can projected content have its own components?</strong>
+        <p>Yes, Angular will render them inside the host component.</p>
+        <pre><code>&lt;app-card&gt;
+  &lt;app-user-profile&gt;&lt;/app-user-profile&gt;
+&lt;/app-card&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to project content conditionally?</strong>
+        <p>Use <code>*ngIf</code> inside projected slots or on content tags.</p>
+        <pre><code>// parent component
+&lt;app-card&gt;
+  &lt;p *ngIf="show"&gt;Conditional&lt;/p&gt;
+&lt;/app-card&gt;</code></pre>
+      </li>
+      <li>
+        <strong>Can you nest <code>&lt;ng-content&gt;</code>?</strong>
+        <p>No, Angular does not support nested <code>&lt;ng-content&gt;</code> tags directly.</p>
+        <pre><code>// Not supported
+&lt;ng-content&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/ng-content&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to style projected content?</strong>
+        <p>Use ::ng-deep or expose slots with known class names.</p>
+        <pre><code>::ng-deep .header {
+  color: red;
+}</code></pre>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Set 11 -->
+  <section>
+    <h2>Set 11: Angular Component Communication - Source Code Examples</h2>
+    <ol start="101">
+      <li>
+        <strong>What are the primary ways components communicate in Angular?</strong>
+        <p>Via <code>@Input()</code>, <code>@Output()</code>, shared services, and <code>ViewChild</code>.</p>
+        <pre><code>// @Input example
+@Input() data: string;
+
+// @Output example
+@Output() clicked = new EventEmitter();</code></pre>
+      </li>
+      <li>
+        <strong>How does <code>@Input()</code> help with component communication?</strong>
+        <p>It allows data to flow from parent to child component.</p>
+        <pre><code>// parent.html
+&lt;child [data]="parentData"&gt;&lt;/child&gt;
+
+// child.ts
+@Input() data: string;</code></pre>
+      </li>
+      <li>
+        <strong>How does <code>@Output()</code> facilitate communication?</strong>
+        <p>It lets the child send data to the parent through events.</p>
+        <pre><code>// child.ts
+@Output() notify = new EventEmitter&lt;string&gt;();
+notify.emit('Hi parent!');</code></pre>
+      </li>
+      <li>
+        <strong>What is a shared service for component communication?</strong>
+        <p>A singleton service shared across components to exchange data.</p>
+        <pre><code>// shared.service.ts
+@Injectable({ providedIn: 'root' })
+export class SharedService {
+  message = new BehaviorSubject('default');
+}</code></pre>
+      </li>
+      <li>
+        <strong>How does a parent access a child method using <code>@ViewChild</code>?</strong>
+        <p>By referencing the child component and calling its public method.</p>
+        <pre><code>// parent.ts
+@ViewChild(ChildComponent) child!: ChildComponent;
+ngAfterViewInit() {
+  this.child.sayHello();
+}</code></pre>
+      </li>
+      <li>
+        <strong>Can sibling components communicate directly?</strong>
+        <p>Not directly; they must use a shared parent or a shared service.</p>
+        <pre><code>// Sibling communication via service
+sharedService.message.next('new data');</code></pre>
+      </li>
+      <li>
+        <strong>What is <code>EventEmitter</code> in Angular?</strong>
+        <p>A class used by <code>@Output()</code> to emit custom events.</p>
+        <pre><code>@Output() customEvent = new EventEmitter&lt;string&gt;();</code></pre>
+      </li>
+      <li>
+        <strong>How to use a service with observables for communication?</strong>
+        <p>By subscribing and pushing data via a Subject or BehaviorSubject.</p>
+        <pre><code>// in service
+message = new BehaviorSubject('');
+
+// in component
+this.service.message.subscribe(msg =&gt; this.msg = msg);</code></pre>
+      </li>
+      <li>
+        <strong>What is two-way binding in Angular?</strong>
+        <p>A combination of <code>@Input()</code> and <code>@Output()</code> with <code>[(ngModel)]</code>.</p>
+        <pre><code>// component.html
+&lt;input [(ngModel)]="name" /&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to handle complex data transfer between components?</strong>
+        <p>Use services with Subjects or strong-typed events.</p>
+        <pre><code>this.sharedService.updateData({ user: 'Manuela', role: 'admin' });</code></pre>
+      </li>
+    </ol>
+  </section>
+  
+    <!-- Set 12 -->
+  <section>
+    <h2>Set 12: Angular Pipes - Source Code Examples</h2>
+    <ol start="111">
+      <li>
+        <strong>What is a pipe in Angular?</strong>
+        <p>A pipe is used to transform data in templates.</p>
+        <pre><code>{{ 1234.56 | currency:'USD' }}</code></pre>
+      </li>
+      <li>
+        <strong>How do you create a custom pipe?</strong>
+        <p>Implement PipeTransform and use the <code>@Pipe</code> decorator.</p>
+        <pre><code>// capitalize.pipe.ts
+@Pipe({ name: 'capitalize' })
+export class CapitalizePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+}</code></pre>
+      </li>
+      <li>
+        <strong>How to use a custom pipe in a template?</strong>
+        <p>Declare it in the module and use like built-in pipes.</p>
+        <pre><code>{{ 'manuela' | capitalize }}</code></pre>
+      </li>
+      <li>
+        <strong>Can pipes accept parameters?</strong>
+        <p>Yes, parameters are passed using colon syntax.</p>
+        <pre><code>{{ 1234.56 | currency:'EUR':'symbol' }}</code></pre>
+      </li>
+      <li>
+        <strong>What is a pure pipe?</strong>
+        <p>A pipe that Angular executes only when input data changes.</p>
+        <pre><code>@Pipe({ name: 'filterList', pure: true })</code></pre>
+      </li>
+      <li>
+        <strong>What is an impure pipe?</strong>
+        <p>A pipe that runs every change detection cycle.</p>
+        <pre><code>@Pipe({ name: 'impureExample', pure: false })</code></pre>
+      </li>
+      <li>
+        <strong>How to debug a custom pipe?</strong>
+        <p>Use console.log inside the <code>transform</code> method.</p>
+        <pre><code>console.log('Transforming:', value);</code></pre>
+      </li>
+      <li>
+        <strong>Can you chain multiple pipes?</strong>
+        <p>Yes, use the pipe operator multiple times in a template.</p>
+        <pre><code>{{ birthday | date:'fullDate' | uppercase }}</code></pre>
+      </li>
+      <li>
+        <strong>How does a pipe differ from a function?</strong>
+        <p>Pipes are optimized for use in templates and integrate with change detection.</p>
+        <pre><code>// Function version not reactive:
+transform(value: string): string</code></pre>
+      </li>
+      <li>
+        <strong>What is a common use case for the async pipe?</strong>
+        <p>To subscribe to Observables in templates automatically.</p>
+        <pre><code>{{ user$ | async }}</code></pre>
+      </li>
+    </ol>
+  </section>
+  
+    <!-- Set 13 -->
+  <section>
+    <h2>Set 13: Angular Change Detection - Source Code Examples</h2>
+    <ol start="121">
+      <li>
+        <strong>What is change detection in Angular?</strong>
+        <p>It's the mechanism that updates the DOM when component data changes.</p>
+        <pre><code>// Triggered automatically after data change
+this.title = 'New Title';</code></pre>
+      </li>
+      <li>
+        <strong>How does Angular detect changes?</strong>
+        <p>It runs the change detection tree to compare old and new values.</p>
+        <pre><code>// Angular runs change detection on events, async ops, etc.</code></pre>
+      </li>
+      <li>
+        <strong>What is the default change detection strategy?</strong>
+        <p>CheckAlways - Angular checks all components in the tree.</p>
+        <pre><code>@Component({ changeDetection: ChangeDetectionStrategy.Default })</code></pre>
+      </li>
+      <li>
+        <strong>How can you optimize change detection?</strong>
+        <p>Use OnPush strategy and immutable data.</p>
+        <pre><code>@Component({ changeDetection: ChangeDetectionStrategy.OnPush })</code></pre>
+      </li>
+      <li>
+        <strong>When should OnPush be used?</strong>
+        <p>When inputs are immutable and changes come via inputs or observables.</p>
+        <pre><code>@Input() user: User;</code></pre>
+      </li>
+      <li>
+        <strong>How do you manually trigger change detection?</strong>
+        <p>Inject ChangeDetectorRef and call detectChanges().</p>
+        <pre><code>constructor(private cd: ChangeDetectorRef) {}
+this.cd.detectChanges();</code></pre>
+      </li>
+      <li>
+        <strong>What is markForCheck()?</strong>
+        <p>It tells Angular to re-check an OnPush component on the next tick.</p>
+        <pre><code>this.cd.markForCheck();</code></pre>
+      </li>
+      <li>
+        <strong>How do Observables work with OnPush?</strong>
+        <p>Async pipe automatically triggers change detection when emitting new values.</p>
+        <pre><code>{{ data$ | async }}</code></pre>
+      </li>
+      <li>
+        <strong>How does Angular handle events in OnPush strategy?</strong>
+        <p>Event handlers still trigger change detection in OnPush components.</p>
+        <pre><code>(click)="handleClick()"</code></pre>
+      </li>
+      <li>
+        <strong>Why use immutable objects with OnPush?</strong>
+        <p>They help Angular detect changes by reference comparison.</p>
+        <pre><code>this.user = { ...this.user, name: 'Updated' };</code></pre>
+      </li>
+    </ol>
+  </section>
+    
+  <!-- Set 14 -->
+  <section>
+    <h2>Set 14: Angular Directives - Source Code Examples</h2>
+    <ol start="131">
+      <li>
+        <strong>What are Angular directives?</strong>
+        <p>Directives are classes that add behavior to elements in Angular applications.</p>
+        <pre><code>@Directive({ selector: '[appHighlight]' })</code></pre>
+      </li>
+      <li>
+        <strong>What are structural directives?</strong>
+        <p>They change the DOM layout by adding or removing elements.</p>
+        <pre><code>*ngIf, *ngFor, *ngSwitch</code></pre>
+      </li>
+      <li>
+        <strong>How do attribute directives work?</strong>
+        <p>They change the appearance or behavior of DOM elements.</p>
+        <pre><code>@HostBinding('style.backgroundColor') bgColor;</code></pre>
+      </li>
+      <li>
+        <strong>How to create a custom attribute directive?</strong>
+        <p>Use the @Directive decorator and implement logic in the class.</p>
+        <pre><code>@Directive({ selector: '[appCustom]' })
+export class CustomDirective {
+  constructor(el: ElementRef) {
+    el.nativeElement.style.color = 'blue';
+  }
+}</code></pre>
+      </li>
+      <li>
+        <strong>How to use a structural directive in a template?</strong>
+        <p>Use an asterisk before the directive name.</p>
+        <pre><code><div *ngIf="show">Visible</div></code></pre>
+      </li>
+      <li>
+        <strong>Can you pass values to directives?</strong>
+        <p>Yes, use input properties with the @Input decorator.</p>
+        <pre><code>@Input() set appHighlight(color: string) { ... }</code></pre>
+      </li>
+      <li>
+        <strong>What is the purpose of HostListener?</strong>
+        <p>It listens to events on the host element.</p>
+        <pre><code>@HostListener('mouseenter') onMouseEnter() { ... }</code></pre>
+      </li>
+      <li>
+        <strong>What is the difference between ngClass and [class] binding?</strong>
+        <p>ngClass allows dynamic multiple class bindings.</p>
+        <pre><code><div [ngClass]="{ active: isActive }"></code></pre>
+      </li>
+      <li>
+        <strong>How can you debug a directive?</strong>
+        <p>Use console.log inside lifecycle hooks like ngOnInit.</p>
+        <pre><code>ngOnInit() { console.log('Directive loaded'); }</code></pre>
+      </li>
+      <li>
+        <strong>Can a directive manipulate the DOM directly?</strong>
+        <p>Yes, using ElementRef, but use Renderer2 for better practice.</p>
+        <pre><code>constructor(private el: ElementRef, private renderer: Renderer2) {
+  renderer.setStyle(el.nativeElement, 'fontWeight', 'bold');
+}</code></pre>
+      </li>
+    </ol>
+  </section>
+  
+    <!-- Set 15 -->
+  <section>
+    <h2>Set 15: Angular Dependency Injection - Source Code Examples</h2>
+    <ol start="141">
+      <li>
+        <strong>What is dependency injection in Angular?</strong>
+        <p>It is a design pattern where objects are passed to a class rather than being created by the class itself.</p>
+        <pre><code>constructor(private service: MyService) {}</code></pre>
+      </li>
+      <li>
+        <strong>How do you define a service in Angular?</strong>
+        <p>Use the @Injectable decorator on the class.</p>
+        <pre><code>@Injectable({ providedIn: 'root' })
+export class MyService {}</code></pre>
+      </li>
+      <li>
+        <strong>What is providedIn: 'root'?</strong>
+        <p>It registers the service with the root injector, making it a singleton across the app.</p>
+        <pre><code>@Injectable({ providedIn: 'root' })</code></pre>
+      </li>
+      <li>
+        <strong>How to inject a service into a component?</strong>
+        <p>Use the constructor to declare it as a dependency.</p>
+        <pre><code>constructor(private myService: MyService) {}</code></pre>
+      </li>
+      <li>
+        <strong>Can services be provided at component level?</strong>
+        <p>Yes, using the providers array in the component metadata.</p>
+        <pre><code>@Component({
+  providers: [MyService]
+})</code></pre>
+      </li>
+      <li>
+        <strong>What is the Injector class?</strong>
+        <p>It's a low-level API for manual injection of dependencies.</p>
+        <pre><code>constructor(private injector: Injector) {
+  const service = this.injector.get(MyService);
+}</code></pre>
+      </li>
+      <li>
+        <strong>How can you provide different implementations?</strong>
+        <p>Use the useClass or useValue providers in a module or component.</p>
+        <pre><code>providers: [{ provide: MyService, useClass: MyMockService }]</code></pre>
+      </li>
+      <li>
+        <strong>What is the useFactory provider?</strong>
+        <p>It creates a service using a factory function.</p>
+        <pre><code>providers: [{ provide: MyService, useFactory: () => new MyService() }]</code></pre>
+      </li>
+      <li>
+        <strong>What is the difference between a singleton and multiple instance service?</strong>
+        <p>Singletons are created once (e.g., with providedIn: 'root'), multiple instances can be created per component.</p>
+        <pre><code>// Singleton: providedIn: 'root'
+// Multi-instance: provided in component</code></pre>
+      </li>
+      <li>
+        <strong>How to inject a built-in Angular service?</strong>
+        <p>Same as custom services, e.g., Router, HttpClient.</p>
+        <pre><code>constructor(private router: Router, private http: HttpClient) {}</code></pre>
+      </li>
+    </ol>
+  </section>
+  
+</body>
+</html>

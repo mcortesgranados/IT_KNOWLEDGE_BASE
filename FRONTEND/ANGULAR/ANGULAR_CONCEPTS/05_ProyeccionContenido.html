@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Angular Components Questions - Set 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007acc;
+    }
+    ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: #f8f8f2;
+    }
+  </style>
+</head>
+<body>
+
+<section>
+  <h2>1. What is content projection in Angular?</h2>
+  <p>Content projection allows you to insert dynamic content into a component from its parent using <code>&lt;ng-content&gt;</code>.</p>
+  <pre><code>&lt;app-card&gt;
+  &lt;p&gt;This paragraph is projected into the card component.&lt;/p&gt;
+&lt;/app-card&gt;</code></pre>
+</section>
+
+<section>
+  <h2>2. How do you project content in a component?</h2>
+  <p>You use the <code>&lt;ng-content&gt;</code> tag inside the component's template where you want the projected content to appear.</p>
+  <pre><code>&lt;div class="card"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>3. How do you create a simple component with content projection?</h2>
+  <p>Use <code>&lt;ng-content&gt;</code> inside the component’s template and insert content in the parent component.</p>
+  <pre><code>// card.component.html
+&lt;div class="card"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+  <pre><code>// app.component.html
+&lt;app-card&gt;
+  &lt;p&gt;Hello from parent!&lt;/p&gt;
+&lt;/app-card&gt;</code></pre>
+</section>
+
+<section>
+  <h2>4. How do you use multiple slots with content projection?</h2>
+  <p>Use <code>select</code> in <code>&lt;ng-content&gt;</code> to project content into multiple slots.</p>
+  <pre><code>&lt;div class="card"&gt;
+  &lt;ng-content select="[card-title]"&gt;&lt;/ng-content&gt;
+  &lt;ng-content select="[card-body]"&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+  <pre><code>&lt;app-card&gt;
+  &lt;h3 card-title&gt;Title&lt;/h3&gt;
+  &lt;p card-body&gt;This is body content&lt;/p&gt;
+&lt;/app-card&gt;</code></pre>
+</section>
+
+<section>
+  <h2>5. What is @ContentChild in Angular?</h2>
+  <p><code>@ContentChild</code> allows you to get a reference to a single projected content element or directive.</p>
+  <pre><code>@ContentChild('contentRef') content: ElementRef;
+
+ngAfterContentInit() {
+  console.log(this.content.nativeElement.textContent);
+}</code></pre>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;p #contentRef&gt;Projected Content&lt;/p&gt;
+&lt;/app-wrapper&gt;</code></pre>
+</section>
+
+<section>
+  <h2>6. What is @ContentChildren used for?</h2>
+  <p><code>@ContentChildren</code> allows access to multiple projected content elements or directives as a <code>QueryList</code>.</p>
+  <pre><code>@ContentChildren('section') sections: QueryList&lt;ElementRef&gt;;
+
+ngAfterContentInit() {
+  this.sections.forEach(el =&gt; console.log(el.nativeElement.textContent));
+}</code></pre>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;div #section&gt;Section 1&lt;/div&gt;
+  &lt;div #section&gt;Section 2&lt;/div&gt;
+&lt;/app-wrapper&gt;</code></pre>
+</section>
+
+<section>
+  <h2>7. Can you use ng-content with Angular forms?</h2>
+  <p>Yes, you can project form elements and bind to them normally inside the projected slot.</p>
+  <pre><code>&lt;app-form-wrapper&gt;
+  &lt;input [(ngModel)]="username" placeholder="Username" /&gt;
+&lt;/app-form-wrapper&gt;</code></pre>
+  <pre><code>&lt;div&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>8. How does <ng-content> differ from property binding?</h2>
+  <p><code>&lt;ng-content&gt;</code> injects DOM content, while property binding transfers data into a component class property.</p>
+  <pre><code>&lt;app-banner&gt;
+  &lt;h2&gt;Title inside projection&lt;/h2&gt;
+&lt;/app-banner&gt;</code></pre>
+  <pre><code>@Input() title: string; // ← This is not projection, it's binding</code></pre>
+</section>
+
+<section>
+  <h2>9. Can you nest content projection?</h2>
+  <p>Yes. You can project content into a component that itself projects it into another component.</p>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;app-card&gt;
+    &lt;p&gt;Nested content&lt;/p&gt;
+  &lt;/app-card&gt;
+&lt;/app-wrapper&gt;</code></pre>
+  <pre><code>// wrapper.component.html
+&lt;div&gt;&lt;ng-content&gt;&lt;/ng-content&gt;&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>10. Can you apply styles to projected content?</h2>
+  <p>Yes, projected content can be styled just like regular content in the parent or child component, depending on encapsulation.</p>
+  <pre><code>// app.component.css
+::ng-deep app-card p {
+  color: red;
+}</code></pre>
+  <pre><code>&lt;app-card&gt;
+  &lt;p&gt;Styled content&lt;/p&gt;
+&lt;/app-card&gt;</code></pre>
+</section>
+
+<section>
+  <h2>11. What lifecycle hook is best to access projected content?</h2>
+  <p>You should use <code>ngAfterContentInit()</code> to safely access projected content using <code>@ContentChild</code> or <code>@ContentChildren</code>.</p>
+  <pre><code>ngAfterContentInit() {
+  console.log('Projected content available');
+}</code></pre>
+</section>
+
+<section>
+  <h2>12. Can you project content into different parts of a component?</h2>
+  <p>Yes, using multiple <code>&lt;ng-content select="..."&gt;</code> blocks with different selectors.</p>
+  <pre><code>&lt;ng-content select="[header]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[body]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[footer]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>13. How does Angular decide what content goes where with multiple ng-content?</h2>
+  <p>Angular uses the CSS selector in <code>select</code> to match projected elements to the appropriate <code>&lt;ng-content&gt;</code> slot.</p>
+  <pre><code>&lt;ng-content select=".title"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>14. Can you use content projection inside structural directives?</h2>
+  <p>Yes, you can place <code>&lt;ng-content&gt;</code> inside elements using <code>*ngIf</code>, <code>*ngFor</code>, etc.</p>
+  <pre><code>&lt;div *ngIf="showContent"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>15. How can you detect changes in projected content?</h2>
+  <p>You can implement <code>AfterContentChecked</code> to track changes, or use <code>Observable</code> patterns for custom logic.</p>
+  <pre><code>ngAfterContentChecked() {
+  console.log('Projected content checked');
+}</code></pre>
+</section>
+
+<section>
+  <h2>16. Can you use @ContentChild to get a reference to a directive?</h2>
+  <p>Yes. <code>@ContentChild</code> can be used with custom directives projected into a component.</p>
+  <pre><code>@ContentChild(MyDirective) myDirective!: MyDirective;</code></pre>
+</section>
+
+<section>
+  <h2>17. What’s the difference between @ViewChild and @ContentChild?</h2>
+  <p><code>@ViewChild</code> queries elements inside the component’s own template. <code>@ContentChild</code> queries elements projected into the component.</p>
+</section>
+
+<section>
+  <h2>18. Can projected content use local template variables?</h2>
+  <p>Yes, local variables in the projected content behave like they do normally.</p>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;input #username&gt;
+  &lt;button (click)="alert(username.value)"&gt;Show&lt;/button&gt;
+&lt;/app-wrapper&gt;</code></pre>
+</section>
+
+<section>
+  <h2>19. How do you access a DOM element in projected content?</h2>
+  <p>Use <code>@ContentChild</code> with <code>ElementRef</code> to access DOM elements.</p>
+  <pre><code>@ContentChild('projected') content: ElementRef;
+
+ngAfterContentInit() {
+  console.log(this.content.nativeElement.innerText);
+}</code></pre>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;p #projected&gt;Hello projected DOM&lt;/p&gt;
+&lt;/app-wrapper&gt;</code></pre>
+</section>
+
+<section>
+  <h2>20. Can you reproject content in Angular?</h2>
+  <p>Yes, content can be projected multiple levels deep (from grandparent to child, to grandchild).</p>
+  <pre><code>// Grandparent
+&lt;app-grandparent&gt;
+  &lt;p&gt;Deep content&lt;/p&gt;
+&lt;/app-grandparent&gt;
+
+// Grandparent template
+&lt;app-parent&gt;&lt;ng-content&gt;&lt;/ng-content&gt;&lt;/app-parent&gt;
+
+// Parent template
+&lt;div class="box"&gt;&lt;ng-content&gt;&lt;/ng-content&gt;&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>21. Can you pass content with Angular bindings to ng-content?</h2>
+  <p>Yes, Angular expressions and bindings in projected content are evaluated in the context of the parent component.</p>
+  <pre><code>// Parent component
+&lt;app-display&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+&lt;/app-display&gt;</code></pre>
+  <pre><code>// app.component.ts
+message = 'Hello from parent';</code></pre>
+</section>
+
+<section>
+  <h2>22. Can ng-content accept components as content?</h2>
+  <p>Yes, you can project child components into another component using <code>&lt;ng-content&gt;</code>.</p>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;app-child&gt;&lt;/app-child&gt;
+&lt;/app-wrapper&gt;</code></pre>
+  <pre><code>// wrapper.component.html
+&lt;ng-content&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>23. How to style projected content selectively?</h2>
+  <p>You can apply styles to projected content using deep selectors or apply classes to parent elements.</p>
+  <pre><code>::ng-deep .projected-style {
+  color: blue;
+  font-weight: bold;
+}</code></pre>
+</section>
+
+<section>
+  <h2>24. Can projected content access data from the child component?</h2>
+  <p>No, projected content runs in the parent’s context, so it can’t access child component variables directly.</p>
+</section>
+
+<section>
+  <h2>25. Can the child component control what is projected?</h2>
+  <p>No, the child component only defines <code>&lt;ng-content&gt;</code> placeholders. It doesn't control the content.</p>
+</section>
+
+<section>
+  <h2>26. How do you access a specific DOM element inside projected content?</h2>
+  <p>Use <code>@ContentChild</code> with a template reference variable.</p>
+  <pre><code>@ContentChild('myDiv') myDiv!: ElementRef;
+
+ngAfterContentInit() {
+  this.myDiv.nativeElement.style.color = 'red';
+}</code></pre>
+  <pre><code>&lt;app-box&gt;
+  &lt;div #myDiv&gt;Important&lt;/div&gt;
+&lt;/app-box&gt;</code></pre>
+</section>
+
+<section>
+  <h2>27. How to project default content when nothing is passed?</h2>
+  <p>Use <code>*ngIf</code> or conditional rendering to show default content if nothing is projected.</p>
+  <pre><code>&lt;div *ngIf="hasContent; else defaultTpl"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;
+&lt;ng-template #defaultTpl&gt;
+  &lt;p&gt;Default content&lt;/p&gt;
+&lt;/ng-template&gt;</code></pre>
+</section>
+
+<section>
+  <h2>28. Can I access dynamic components through content projection?</h2>
+  <p>Yes, but you must use <code>@ContentChild</code> with the component class or directive to interact with it.</p>
+  <pre><code>@ContentChild(MyDynamicComponent) cmp!: MyDynamicComponent;</code></pre>
+</section>
+
+<section>
+  <h2>29. Is ng-content reactive to parent changes?</h2>
+  <p>Yes, the projected content updates automatically when data in the parent changes.</p>
+  <pre><code>// Parent component template
+&lt;app-box&gt;
+  &lt;p&gt;{{ counter }}&lt;/p&gt;
+&lt;/app-box&gt;</code></pre>
+  <pre><code>// app.component.ts
+counter = 0;
+setInterval(() =&gt; this.counter++, 1000);</code></pre>
+</section>
+
+<section>
+  <h2>30. What happens if multiple elements match a single select in ng-content?</h2>
+  <p>All matching elements are projected into that <code>&lt;ng-content&gt;</code> slot.</p>
+  <pre><code>&lt;ng-content select="div"&gt;&lt;/ng-content&gt;</code></pre>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;div&gt;One&lt;/div&gt;
+  &lt;div&gt;Two&lt;/div&gt;
+&lt;/app-wrapper&gt;</code></pre>
+</section>
+
+
+<section>
+  <h2>31. Can I use ng-content inside an *ngFor loop?</h2>
+  <p>Yes, you can wrap <code>&lt;ng-content&gt;</code> in a container and repeat it using <code>*ngFor</code>, although the projected content itself won’t be duplicated.</p>
+  <pre><code>&lt;div *ngFor="let item of items"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>32. How to check if any content was projected?</h2>
+  <p>You can use <code>@ContentChild</code> with a template reference and conditionally render based on its presence.</p>
+  <pre><code>@ContentChild('content') content?: ElementRef;
+hasContent = false;
+
+ngAfterContentInit() {
+  this.hasContent = !!this.content;
+}</code></pre>
+</section>
+
+<section>
+  <h2>33. Can I use ViewEncapsulation with ng-content?</h2>
+  <p>Yes, but remember that <code>&lt;ng-content&gt;</code> content is styled by the parent, not the child.</p>
+  <pre><code>@Component({
+  selector: 'app-card',
+  template: '&lt;ng-content&gt;&lt;/ng-content&gt;',
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+</section>
+
+<section>
+  <h2>34. How do I pass multiple content sections to a component?</h2>
+  <p>Use multiple <code>&lt;ng-content select="..."&gt;</code> blocks with different selectors in your template.</p>
+  <pre><code>&lt;app-layout&gt;
+  &lt;div header&gt;Header content&lt;/div&gt;
+  &lt;p body&gt;Main content&lt;/p&gt;
+&lt;/app-layout&gt;</code></pre>
+  <pre><code>&lt;ng-content select="[header]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[body]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>35. Can you use a directive with projected content?</h2>
+  <p>Yes, directives can be added to projected elements and queried via <code>@ContentChild</code> or <code>@ContentChildren</code>.</p>
+  <pre><code>&lt;app-box&gt;
+  &lt;div myDirective&gt;Test&lt;/div&gt;
+&lt;/app-box&gt;</code></pre>
+  <pre><code>@ContentChild(MyDirective) dir!: MyDirective;</code></pre>
+</section>
+
+<section>
+  <h2>36. What happens if no content is projected into ng-content?</h2>
+  <p>The <code>&lt;ng-content&gt;</code> slot remains empty. You can provide fallback content using templates.</p>
+  <pre><code>&lt;ng-content *ngIf="hasContent; else fallback"&gt;&lt;/ng-content&gt;
+&lt;ng-template #fallback&gt;&lt;p&gt;No content available&lt;/p&gt;&lt;/ng-template&gt;</code></pre>
+</section>
+
+<section>
+  <h2>37. Can I reproject ng-content into another component?</h2>
+  <p>Yes, nested components can pass projected content further down the hierarchy using <code>&lt;ng-content&gt;</code>.</p>
+</section>
+
+<section>
+  <h2>38. What’s the best use case for ng-content?</h2>
+  <p>Reusable layout components (cards, modals, panels) where dynamic content needs to be inserted by the parent.</p>
+</section>
+
+<section>
+  <h2>39. Is ng-content required for every component?</h2>
+  <p>No, only components that are designed to receive dynamic content need <code>&lt;ng-content&gt;</code>.</p>
+</section>
+
+<section>
+  <h2>40. What’s the difference between transclusion in AngularJS and content projection in Angular?</h2>
+  <p>Angular’s content projection replaces AngularJS transclusion and uses <code>&lt;ng-content&gt;</code> instead of special directives.</p>
+</section>
+
+
+<section>
+  <h2>41. Can I conditionally render projected content in Angular?</h2>
+  <p>Yes, by wrapping <code>&lt;ng-content&gt;</code> in a container element and using structural directives like <code>*ngIf</code>.</p>
+  <pre><code>&lt;div *ngIf="shouldDisplay"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>42. How do I apply styles only to projected content?</h2>
+  <p>You can use a wrapper around <code>&lt;ng-content&gt;</code> and target it with CSS classes.</p>
+  <pre><code>&lt;div class="projected-wrapper"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+  <pre><code>.projected-wrapper &gt; * {
+  font-style: italic;
+}</code></pre>
+</section>
+
+<section>
+  <h2>43. What is the difference between @ContentChild and @ContentChildren?</h2>
+  <p><code>@ContentChild</code> gets the first matching projected element. <code>@ContentChildren</code> returns a QueryList of all matching elements.</p>
+</section>
+
+<section>
+  <h2>44. How to project content into a modal component?</h2>
+  <p>Use <code>&lt;ng-content&gt;</code> inside the modal’s template to allow dynamic inner content.</p>
+  <pre><code>&lt;app-modal&gt;
+  &lt;p&gt;This is the modal content&lt;/p&gt;
+&lt;/app-modal&gt;</code></pre>
+  <pre><code>// app-modal.component.html
+&lt;div class="modal"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>45. Can I nest multiple ng-content inside a component?</h2>
+  <p>Yes, multiple <code>&lt;ng-content&gt;</code> blocks can exist, especially with different selectors.</p>
+  <pre><code>&lt;ng-content select="[title]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[content]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>46. Can content projection be used in standalone components?</h2>
+  <p>Yes, standalone components in Angular 14+ support content projection the same way as module-based components.</p>
+</section>
+
+<section>
+  <h2>47. Can I project an ng-template?</h2>
+  <p>You can pass <code>&lt;ng-template&gt;</code> into components using <code>ngTemplateOutlet</code>, not <code>&lt;ng-content&gt;</code>.</p>
+  <pre><code>// Parent
+&lt;ng-template #myTpl&gt;&lt;p&gt;Hello Template&lt;/p&gt;&lt;/ng-template&gt;
+&lt;app-viewer [template]="myTpl"&gt;&lt;/app-viewer&gt;</code></pre>
+  <pre><code>// Viewer
+&lt;ng-container *ngTemplateOutlet="template"&gt;&lt;/ng-container&gt;</code></pre>
+</section>
+
+<section>
+  <h2>48. Can I use projected content in reactive forms?</h2>
+  <p>Yes, you can project form fields and bind them using <code>formControlName</code> from the parent context.</p>
+  <pre><code>// Parent
+&lt;form [formGroup]="form"&gt;
+  &lt;app-form-wrapper&gt;
+    &lt;input formControlName="name"&gt;
+  &lt;/app-form-wrapper&gt;
+&lt;/form&gt;</code></pre>
+</section>
+
+<section>
+  <h2>49. Can I query a projected component’s input value?</h2>
+  <p>Yes, if the projected component has an input, use <code>@ContentChild</code> and read its property in <code>ngAfterContentInit</code>.</p>
+  <pre><code>@ContentChild(ChildComponent) child!: ChildComponent;
+
+ngAfterContentInit() {
+  console.log(this.child.inputValue);
+}</code></pre>
+</section>
+
+<section>
+  <h2>50. Can projected elements trigger child component events?</h2>
+  <p>Yes, events inside projected content bubble to the component and can be handled with standard Angular event bindings.</p>
+  <pre><code>&lt;app-panel (click)="handleClick()"&gt;
+  &lt;button&gt;Click me&lt;/button&gt;
+&lt;/app-panel&gt;</code></pre>
+</section>
+
+<section>
+  <h2>51. Can you animate projected content?</h2>
+  <p>Yes, you can apply Angular animations to containers wrapping <code>&lt;ng-content&gt;</code>, or to the projected content itself.</p>
+  <pre><code>&lt;div [@fadeIn]&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>52. How does lifecycle timing work with projected content?</h2>
+  <p><code>@ContentChild</code> and <code>@ContentChildren</code> become available after <code>ngAfterContentInit</code>.</p>
+  <pre><code>ngAfterContentInit() {
+  console.log(this.projectedElement);
+}</code></pre>
+</section>
+
+<section>
+  <h2>53. How do I project SVG elements?</h2>
+  <p>SVGs can be projected like normal HTML content.</p>
+  <pre><code>&lt;app-graphic&gt;
+  &lt;svg&gt;&lt;circle cx="50" cy="50" r="40" /&gt;&lt;/svg&gt;
+&lt;/app-graphic&gt;</code></pre>
+  <pre><code>&lt;ng-content&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>54. Can I project deeply nested content?</h2>
+  <p>Yes, deeply nested HTML or component trees are fully supported with <code>&lt;ng-content&gt;</code>.</p>
+  <pre><code>&lt;app-wrapper&gt;
+  &lt;section&gt;&lt;div&gt;&lt;p&gt;Nested!&lt;/p&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;/app-wrapper&gt;</code></pre>
+</section>
+
+<section>
+  <h2>55. How to apply a directive only to projected content?</h2>
+  <p>You can apply the directive in the parent component and read it with <code>@ContentChild</code>.</p>
+  <pre><code>// Parent
+&lt;div highlight&gt;Project me&lt;/div&gt;</code></pre>
+  <pre><code>@ContentChild(HighlightDirective) highlight!: HighlightDirective;</code></pre>
+</section>
+
+<section>
+  <h2>56. Can ng-content project content based on component input?</h2>
+  <p>Not directly. Use conditions and selectors with multiple <code>&lt;ng-content&gt;</code> blocks and toggle visibility.</p>
+  <pre><code>&lt;ng-content *ngIf="showHeader" select="[header]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>57. Can a component with content projection be standalone?</h2>
+  <p>Yes, starting with Angular 14+, standalone components fully support content projection.</p>
+</section>
+
+<section>
+  <h2>58. How do I restrict what kind of content can be projected?</h2>
+  <p>Angular does not restrict projected content types, but you can use selectors and validations in the component logic.</p>
+</section>
+
+<section>
+  <h2>59. How to remove projected content conditionally?</h2>
+  <p>Use <code>*ngIf</code> to conditionally hide projected slots based on inputs or logic.</p>
+  <pre><code>&lt;div *ngIf="showContent"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>60. Can I project content into a directive instead of a component?</h2>
+  <p>No, content projection works only inside component templates, not directive templates.</p>
+</section>
+
+
+<section>
+  <h2>61. Can I combine ng-content with ng-template?</h2>
+  <p>Yes, but they serve different purposes. Use <code>&lt;ng-template&gt;</code> for structural control, and <code>&lt;ng-content&gt;</code> for projection.</p>
+  <pre><code>&lt;ng-template [ngIf]="show"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/ng-template&gt;</code></pre>
+</section>
+
+<section>
+  <h2>62. How to project multiple types of content in a layout component?</h2>
+  <p>Use multiple <code>&lt;ng-content&gt;</code> slots with CSS selectors to separate header, body, and footer sections.</p>
+  <pre><code>&lt;ng-content select="[header]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[body]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[footer]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>63. What happens if content matches multiple ng-content selectors?</h2>
+  <p>It will only be projected into the first matching <code>&lt;ng-content&gt;</code> in the template.</p>
+</section>
+
+<section>
+  <h2>64. How can I project a button into a custom dialog footer?</h2>
+  <p>Use attribute selectors like <code>[footer]</code> for <code>&lt;ng-content&gt;</code> to isolate footer-specific projections.</p>
+  <pre><code>&lt;app-dialog&gt;
+  &lt;button footer&gt;Close&lt;/button&gt;
+&lt;/app-dialog&gt;</code></pre>
+  <pre><code>&lt;ng-content select="[footer]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>65. Can projected content use ViewChild or local template references?</h2>
+  <p>No, projected content cannot be accessed by <code>@ViewChild</code>. Use <code>@ContentChild</code> instead.</p>
+</section>
+
+<section>
+  <h2>66. Can I dynamically load projected content?</h2>
+  <p>To insert dynamic content, use <code>ngTemplateOutlet</code> or create the component programmatically using <code>ViewContainerRef</code>.</p>
+</section>
+
+<section>
+  <h2>67. Can a directive be aware it's inside projected content?</h2>
+  <p>Yes, using Angular's DI system, the directive can check its parent or be queried by <code>@ContentChild</code>.</p>
+</section>
+
+<section>
+  <h2>68. Can I project content into a tab component?</h2>
+  <p>Yes, content for each tab can be projected and selected based on the active tab index.</p>
+  <pre><code>&lt;app-tabs&gt;
+  &lt;div tab&gt;Tab 1 content&lt;/div&gt;
+  &lt;div tab&gt;Tab 2 content&lt;/div&gt;
+&lt;/app-tabs&gt;</code></pre>
+</section>
+
+<section>
+  <h2>69. How to hide unused projected content?</h2>
+  <p>Use <code>*ngIf</code> to control visibility based on context (like current tab or step).</p>
+</section>
+
+<section>
+  <h2>70. Can projected content be reactive?</h2>
+  <p>Yes, forms, observables, and reactive components can be used in projected content just like in regular Angular templates.</p>
+</section>
+
+<section>
+  <h2>71. Can I project a component multiple times in different places?</h2>
+  <p>No, a DOM element or component can only exist in one place in the DOM tree. To render it in multiple places, use templates or duplication.</p>
+</section>
+
+<section>
+  <h2>72. What is the role of ViewContainerRef in dynamic content projection?</h2>
+  <p><code>ViewContainerRef</code> allows you to insert components or templates dynamically, often used alongside <code>ngTemplateOutlet</code>.</p>
+</section>
+
+<section>
+  <h2>73. Can projected content include event bindings?</h2>
+  <p>Yes, events defined in projected content behave normally and can be handled by parent or child components.</p>
+  <pre><code>&lt;app-box&gt;
+  &lt;button (click)="handleClick()"&gt;Click Me&lt;/button&gt;
+&lt;/app-box&gt;</code></pre>
+</section>
+
+<section>
+  <h2>74. What happens if ng-content is not provided in a component?</h2>
+  <p>If the component does not include <code>&lt;ng-content&gt;</code>, any inner content passed to it is ignored.</p>
+</section>
+
+<section>
+  <h2>75. Can I use pipes inside projected content?</h2>
+  <p>Yes, you can use Angular pipes just like in any normal template.</p>
+  <pre><code>&lt;app-panel&gt;
+  &lt;p&gt;{{ user.name | uppercase }}&lt;/p&gt;
+&lt;/app-panel&gt;</code></pre>
+</section>
+
+<section>
+  <h2>76. How do I pass dynamic data into projected content?</h2>
+  <p>You can pass data from the parent using interpolation or inputs in projected components.</p>
+</section>
+
+<section>
+  <h2>77. What’s a real-world use case for content projection?</h2>
+  <p>Creating reusable UI components like modals, tabs, cards, or tooltips where the content varies.</p>
+</section>
+
+<section>
+  <h2>78. Can ng-content be used inside a directive?</h2>
+  <p>No, <code>&lt;ng-content&gt;</code> is a component-level feature, not available inside directives.</p>
+</section>
+
+<section>
+  <h2>79. What is the difference between <code>&lt;ng-content&gt;</code> and <code>ng-template</code>?</h2>
+  <p><code>&lt;ng-content&gt;</code> is used to project static content. <code>&lt;ng-template&gt;</code> is used to define reusable template blocks.</p>
+</section>
+
+<section>
+  <h2>80. Can ng-content be nested inside ngIf or ngFor?</h2>
+  <p>Yes, wrap <code>&lt;ng-content&gt;</code> in a container element and apply structural directives on that container.</p>
+  <pre><code>&lt;div *ngIf="isVisible"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section>
+  <h2>81. Can I pass content with *ngFor into ng-content?</h2>
+  <p>Yes, the parent component can use <code>*ngFor</code> to generate content that is then projected into the child component.</p>
+  <pre><code>&lt;app-list&gt;
+  &lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;
+&lt;/app-list&gt;</code></pre>
+</section>
+
+<section>
+  <h2>82. How do I validate projected form fields?</h2>
+  <p>You can define form controls in the parent and use Angular reactive form features to validate the projected fields.</p>
+  <pre><code>&lt;form [formGroup]="form"&gt;
+  &lt;app-field-wrapper&gt;
+    &lt;input formControlName="email"&gt;
+  &lt;/app-field-wrapper&gt;
+&lt;/form&gt;</code></pre>
+</section>
+
+<section>
+  <h2>83. Can I use input/output bindings on projected components?</h2>
+  <p>Yes, projected components can use <code>@Input</code> and <code>@Output</code> like any other Angular component.</p>
+</section>
+
+<section>
+  <h2>84. Can I use multiple named slots in one component?</h2>
+  <p>Yes, by using <code>&lt;ng-content select="..."&gt;</code> you can create multiple named slots for organized content.</p>
+  <pre><code>&lt;ng-content select="[title]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[body]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>85. How can I track changes in projected content?</h2>
+  <p>Use <code>@ContentChildren</code> and subscribe to the <code>changes</code> Observable of the <code>QueryList</code>.</p>
+  <pre><code>@ContentChildren(MyDirective) items!: QueryList&lt;MyDirective&gt;;
+
+ngAfterContentInit() {
+  this.items.changes.subscribe(() =&gt; this.updateView());
+}</code></pre>
+</section>
+
+<section>
+  <h2>86. Can projected content contain another component with ng-content?</h2>
+  <p>Yes, nested content projection works. Content can be passed down through multiple layers of components.</p>
+</section>
+
+<section>
+  <h2>87. Can I create tabs using content projection?</h2>
+  <p>Yes, each tab’s content can be projected into a component and displayed conditionally based on active index.</p>
+</section>
+
+<section>
+  <h2>88. Can I project content dynamically using a service?</h2>
+  <p>You can dynamically create and inject components using Angular’s ComponentFactoryResolver and ViewContainerRef.</p>
+</section>
+
+<section>
+  <h2>89. Is ng-content supported in Angular standalone components?</h2>
+  <p>Yes, Angular standalone components (v14+) support full content projection features.</p>
+</section>
+
+<section>
+  <h2>90. Can I use content projection with lazy-loaded modules?</h2>
+  <p>Yes, as long as the projected content is passed from the parent into the component, it will be rendered correctly even across module boundaries.</p>
+</section>
+
+<section>
+  <h2>91. Can I use ng-content inside a modal component?</h2>
+  <p>Yes, content projection is ideal for modals, where the content of the modal can be projected from the parent component.</p>
+  <pre><code>&lt;app-modal&gt;
+  &lt;div class="modal-content"&gt;This is dynamic content&lt;/div&gt;
+&lt;/app-modal&gt;</code></pre>
+</section>
+
+<section>
+  <h2>92. How can I handle multiple projections for a card component?</h2>
+  <p>Use multiple <code>&lt;ng-content&gt;</code> tags with selectors to separate header, content, and footer.</p>
+  <pre><code>&lt;app-card&gt;
+  &lt;div header&gt;Card Header&lt;/div&gt;
+  &lt;div content&gt;Card Content&lt;/div&gt;
+  &lt;div footer&gt;Card Footer&lt;/div&gt;
+&lt;/app-card&gt;</code></pre>
+  <pre><code>&lt;ng-content select="[header]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[content]"&gt;&lt;/ng-content&gt;
+&lt;ng-content select="[footer]"&gt;&lt;/ng-content&gt;</code></pre>
+</section>
+
+<section>
+  <h2>93. Can ng-content be conditionally rendered?</h2>
+  <p>You can conditionally render projected content by wrapping <code>&lt;ng-content&gt;</code> in an <code>*ngIf</code> or other structural directive.</p>
+  <pre><code>&lt;div *ngIf="isVisible"&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>94. How can I project a component’s content into a dynamic list?</h2>
+  <p>Use <code>ngFor</code> in the parent and pass the dynamically created content into the child component using <code>&lt;ng-content&gt;</code>.</p>
+  <pre><code>&lt;app-item *ngFor="let item of items"&gt;
+  &lt;ng-content&gt;{{ item.name }}&lt;/ng-content&gt;
+&lt;/app-item&gt;</code></pre>
+</section>
+
+<section>
+  <h2>95. How does content projection impact performance?</h2>
+  <p>Content projection doesn't have a significant performance overhead, but be mindful of complex projections with many nested components.</p>
+</section>
+
+<section>
+  <h2>96. Can I project Angular directives into child components?</h2>
+  <p>Yes, you can project elements with directives applied, and the directives will work as expected in the child component.</p>
+  <pre><code>&lt;app-my-component&gt;
+  &lt;div myDirective&gt;This is projected content&lt;/div&gt;
+&lt;/app-my-component&gt;</code></pre>
+</section>
+
+<section>
+  <h2>97. Can I project content dynamically from a service?</h2>
+  <p>While you can't directly project content from a service, you can use a service to change the content dynamically by updating a component's input properties or using dynamic component loading techniques.</p>
+</section>
+
+<section>
+  <h2>98. Can I use <code>&lt;ng-content&gt;</code> to project content in Angular animations?</h2>
+  <p>Yes, you can use <code>&lt;ng-content&gt;</code> with Angular animations, but ensure you target the correct elements within the content projection.</p>
+</section>
+
+<section>
+  <h2>99. How can I add validation to projected form fields?</h2>
+  <p>Use Angular's form validation features. If you're projecting form fields, you can manage validations by passing <code>FormControl</code> via input bindings.</p>
+</section>
+
+<section>
+  <h2>100. Can projected content be a component with a lifecycle hook?</h2>
+  <p>Yes, the projected content can be any Angular component, and its lifecycle hooks will be triggered as expected.</p>
+</section>
+
+
+
+
+</body>
+</html>

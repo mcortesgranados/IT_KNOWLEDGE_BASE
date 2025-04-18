@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Angular Components Questions - Set 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007acc;
+    }
+    ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: #f8f8f2;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Set 1: Angular Style Encapsulation - Source Code Examples -->
+  <section>
+    <h2>Set 1: Angular Style Encapsulation - Source Code Examples</h2>
+    <ol start="1">
+      <li>
+        <strong>What is style encapsulation in Angular?</strong>
+        <p>It controls how styles defined in a component affect the component’s template and other parts of the app.</p>
+        <pre><code>@Component({
+  styleUrls: ['./my.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+      </li>
+      <li>
+        <strong>What are the ViewEncapsulation options?</strong>
+        <p>Emulated, None, and ShadowDom.</p>
+        <pre><code>import { ViewEncapsulation } from '@angular/core';</code></pre>
+      </li>
+      <li>
+        <strong>What does Emulated encapsulation mean?</strong>
+        <p>Styles are scoped to the component using generated attributes (default).</p>
+        <pre><code>encapsulation: ViewEncapsulation.Emulated</code></pre>
+      </li>
+      <li>
+        <strong>What does None encapsulation mean?</strong>
+        <p>Styles are global and not scoped to the component.</p>
+        <pre><code>encapsulation: ViewEncapsulation.None</code></pre>
+      </li>
+      <li>
+        <strong>What does ShadowDom encapsulation mean?</strong>
+        <p>Uses native Shadow DOM for real encapsulation.</p>
+        <pre><code>encapsulation: ViewEncapsulation.ShadowDom</code></pre>
+      </li>
+      <li>
+        <strong>How to scope styles to a component?</strong>
+        <p>Use Emulated or ShadowDom encapsulation and styleUrls/styles.</p>
+        <pre><code>@Component({
+  selector: 'app-sample',
+  styleUrls: ['./sample.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+      </li>
+      <li>
+        <strong>Can styles leak with ViewEncapsulation.None?</strong>
+        <p>Yes, styles will affect other components globally.</p>
+        <pre><code>// Use caution with ViewEncapsulation.None</code></pre>
+      </li>
+      <li>
+        <strong>How to style elements from parent to child component?</strong>
+        <p>Use global styles or None encapsulation if needed.</p>
+        <pre><code>/* styles.css */
+app-child h1 { color: red; }</code></pre>
+      </li>
+      <li>
+        <strong>Is Shadow DOM supported in all browsers?</strong>
+        <p>Modern browsers support it; fallback to Emulated if not available.</p>
+        <pre><code>encapsulation: ViewEncapsulation.ShadowDom</code></pre>
+      </li>
+      <li>
+        <strong>Can you combine global and scoped styles?</strong>
+        <p>Yes, use global styles in styles.css and scoped in component files.</p>
+        <pre><code>/* styles.css */
+body { margin: 0; }
+/* my.component.css */
+h1 { color: green; }</code></pre>
+      </li>
+    </ol>
+  </section>
+  <!-- Set 2: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 2: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How do you use ViewEncapsulation.None to disable style encapsulation?</strong>
+      <p>ViewEncapsulation.None removes any encapsulation, allowing styles to apply globally.</p>
+      <pre><code>@Component({
+  selector: 'app-no-encapsulation',
+  templateUrl: './no-encapsulation.component.html',
+  styleUrls: ['./no-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens when you use Shadow DOM encapsulation in Angular?</strong>
+      <p>Shadow DOM creates a real encapsulation boundary, which is isolated from the rest of the document.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom',
+  templateUrl: './shadow-dom.component.html',
+  styleUrls: ['./shadow-dom.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the default encapsulation mode in Angular?</strong>
+      <p>The default mode is <strong>Emulated</strong>, where Angular uses attributes to emulate Shadow DOM behavior.</p>
+      <pre><code>@Component({
+  selector: 'app-default-encapsulation',
+  templateUrl: './default-encapsulation.component.html',
+  styleUrls: ['./default-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can ViewEncapsulation be used without defining a style file?</strong>
+      <p>Yes, you can use inline styles with ViewEncapsulation.</p>
+      <pre><code>@Component({
+  selector: 'app-inline-styles',
+  template: '&lt;h1&gt;Inline Styled Component&lt;/h1&gt;',
+  styles: ['h1 { color: blue; }'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the impact of encapsulation on child components?</strong>
+      <p>Encapsulation ensures that child components are not affected by styles of the parent component unless explicitly styled.</p>
+      <pre><code>@Component({
+  selector: 'app-parent',
+  template: '&lt;app-child&gt;&lt;/app-child&gt;',
+  styles: ['app-child { background: lightblue; }'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply global styles to components in Angular?</strong>
+      <p>Use the global <code>styles.css</code> file or set <code>ViewEncapsulation.None</code> to allow styles to be applied globally across all components.</p>
+      <pre><code>/* styles.css */
+app-child h1 { color: red; }</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 3: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 3: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How can you use global styles in combination with scoped styles?</strong>
+      <p>You can define global styles in <code>styles.css</code> and scoped styles within the component-specific CSS files.</p>
+      <pre><code>/* styles.css */
+body { margin: 0; }
+/* my.component.css */
+h1 { color: green; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you scope styles using Shadow DOM?</strong>
+      <p>With <code>ViewEncapsulation.ShadowDom</code>, styles are encapsulated within the shadow tree of the component, ensuring they don't affect the rest of the document.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-component',
+  templateUrl: './shadow-dom-component.html',
+  styleUrls: ['./shadow-dom-component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the difference between Emulated and None encapsulation?</strong>
+      <p>Emulated encapsulation scopes styles using generated attributes, while None makes styles global across the entire application.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated',
+  templateUrl: './emulated.component.html',
+  styleUrls: ['./emulated.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+      <pre><code>@Component({
+  selector: 'app-none',
+  templateUrl: './none.component.html',
+  styleUrls: ['./none.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you override styles in a child component?</strong>
+      <p>Use <code>ViewEncapsulation.None</code> in the parent component or apply global styles in <code>styles.css</code> to override child component styles.</p>
+      <pre><code>/* global styles.css */
+app-child h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>What is the behavior of styles in Angular with ViewEncapsulation.Emulated?</strong>
+      <p>Styles are scoped to the component using generated attributes, preventing them from affecting other components.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  templateUrl: './emulated-component.html',
+  styleUrls: ['./emulated-component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How to style a component globally using ViewEncapsulation.None?</strong>
+      <p>Use <code>ViewEncapsulation.None</code> to apply styles globally to all instances of the component.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+Here is **Set 4: Angular Style Encapsulation** in HTML format with unique questions:
+
+```html
+<!-- Set 4: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 4: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How do you ensure that styles do not leak outside the component?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to prevent styles from leaking to other components.</p>
+      <pre><code>@Component({
+  selector: 'app-no-leak',
+  templateUrl: './no-leak.component.html',
+  styleUrls: ['./no-leak.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the purpose of using ViewEncapsulation.ShadowDom?</strong>
+      <p>It creates a true shadow DOM boundary for styles and DOM structure, isolating the component completely from the rest of the document.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-boundary',
+  templateUrl: './shadow-dom-boundary.component.html',
+  styleUrls: ['./shadow-dom-boundary.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you combine scoped and global styles in Angular?</strong>
+      <p>You can combine global styles in <code>styles.css</code> and scoped styles in component-specific CSS files.</p>
+      <pre><code>/* styles.css */
+body { font-family: Arial, sans-serif; }
+
+/* app.component.css */
+h1 { color: blue; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you define global styles for components in Angular?</strong>
+      <p>Define global styles in <code>styles.css</code>, which is automatically included by Angular in all components.</p>
+      <pre><code>/* styles.css */
+app-header { background-color: gray; }</code></pre>
+    </li>
+    <li>
+      <strong>Can you mix ViewEncapsulation modes within the same application?</strong>
+      <p>Yes, different components in the same application can use different encapsulation modes.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  templateUrl: './emulated-component.html',
+  styleUrls: ['./emulated-component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-component',
+  templateUrl: './shadow-dom-component.html',
+  styleUrls: ['./shadow-dom-component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens when you apply ViewEncapsulation.None in Angular?</strong>
+      <p>Styles are global and can affect all components across the application, potentially causing style conflicts.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How does the Emulated encapsulation affect child components?</strong>
+      <p>Emulated encapsulation scopes styles to the component and does not allow child components to inherit those styles unless explicitly defined.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-child',
+  templateUrl: './emulated-child.component.html',
+  styleUrls: ['./emulated-child.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you make sure a component's styles don’t bleed into other components?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to scope the styles to the component.</p>
+      <pre><code>@Component({
+  selector: 'app-scoped-styles',
+  templateUrl: './scoped-styles.component.html',
+  styleUrls: ['./scoped-styles.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can styles from a child component affect its parent?</strong>
+      <p>No, with <code>ViewEncapsulation.Emulated</code>, styles are scoped to the component itself and do not affect the parent component.</p>
+      <pre><code>@Component({
+  selector: 'app-child-component',
+  templateUrl: './child-component.html',
+  styleUrls: ['./child-component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you ensure that child components are styled differently from their parent components?</strong>
+      <p>Use separate style files for child and parent components and define different styles for each one.</p>
+      <pre><code>@Component({
+  selector: 'app-parent',
+  templateUrl: './parent.component.html',
+  styleUrls: ['./parent.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+      <pre><code>@Component({
+  selector: 'app-child',
+  templateUrl: './child.component.html',
+  styleUrls: ['./child.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 5: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 5: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How do you disable style encapsulation in Angular components?</strong>
+      <p>You can disable style encapsulation by setting <code>encapsulation: ViewEncapsulation.None</code> in the component's metadata.</p>
+      <pre><code>@Component({
+  selector: 'app-no-encapsulation',
+  templateUrl: './no-encapsulation.component.html',
+  styleUrls: ['./no-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens when you use Shadow DOM in Angular components?</strong>
+      <p>Using <code>ViewEncapsulation.ShadowDom</code> creates a shadow DOM, isolating the styles and DOM of the component from the global scope.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-example',
+  templateUrl: './shadow-dom-example.component.html',
+  styleUrls: ['./shadow-dom-example.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How does the Emulated encapsulation work in Angular?</strong>
+      <p>With <code>ViewEncapsulation.Emulated</code>, Angular adds unique attributes to DOM elements to scope the styles to the component, ensuring no global leakage.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  templateUrl: './emulated-component.html',
+  styleUrls: ['./emulated-component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the purpose of <code>ViewEncapsulation.None</code> in Angular?</strong>
+      <p>It applies global styles to all components in the application, meaning styles are no longer scoped to individual components.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply scoped styles in an Angular component?</strong>
+      <p>By using <code>ViewEncapsulation.Emulated</code>, the styles are scoped to the component and do not leak to other parts of the application.</p>
+      <pre><code>@Component({
+  selector: 'app-scoped-style',
+  templateUrl: './scoped-style.component.html',
+  styleUrls: ['./scoped-style.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can global styles affect encapsulated components?</strong>
+      <p>Yes, if <code>ViewEncapsulation.None</code> is used, global styles will apply to all components, including those that use encapsulation.</p>
+      <pre><code>/* styles.css */
+app-header { background-color: gray; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply component-specific styles without affecting other components?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to scope the styles specifically to the component.</p>
+      <pre><code>@Component({
+  selector: 'app-specific-style',
+  templateUrl: './specific-style.component.html',
+  styleUrls: ['./specific-style.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the benefit of using Shadow DOM in Angular?</strong>
+      <p>Shadow DOM ensures complete style isolation, preventing any external styles from affecting the component's DOM.</p>
+      <pre><code>@Component({
+  selector: 'app-isolated-component',
+  templateUrl: './isolated-component.html',
+  styleUrls: ['./isolated-component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you ensure that component styles do not conflict with others?</strong>
+      <p>By using <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code>, each component's styles are scoped and isolated from others.</p>
+      <pre><code>@Component({
+  selector: 'app-isolated-styles',
+  templateUrl: './isolated-styles.component.html',
+  styleUrls: ['./isolated-styles.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 6: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 6: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What is the default style encapsulation method in Angular?</strong>
+      <p>The default style encapsulation method in Angular is <code>ViewEncapsulation.Emulated</code>, which scopes styles to the component using a generated attribute.</p>
+      <pre><code>@Component({
+  selector: 'app-default-encapsulation',
+  templateUrl: './default-encapsulation.component.html',
+  styleUrls: ['./default-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you override the default style encapsulation in Angular?</strong>
+      <p>You can override the default encapsulation by setting the <code>encapsulation</code> property to <code>ViewEncapsulation.None</code> or <code>ViewEncapsulation.ShadowDom</code> in the component's metadata.</p>
+      <pre><code>@Component({
+  selector: 'app-no-style-encapsulation',
+  templateUrl: './no-style-encapsulation.component.html',
+  styleUrls: ['./no-style-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you use Shadow DOM for encapsulation in Angular?</strong>
+      <p>Yes, you can use <code>ViewEncapsulation.ShadowDom</code> for true encapsulation using the browser's native shadow DOM.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom',
+  templateUrl: './shadow-dom.component.html',
+  styleUrls: ['./shadow-dom.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What does <code>ViewEncapsulation.None</code> do to component styles?</strong>
+      <p>With <code>ViewEncapsulation.None</code>, styles defined in the component are applied globally, affecting all components in the application.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How does Angular apply encapsulated styles using <code>ViewEncapsulation.Emulated</code>?</strong>
+      <p>Angular emulates the shadow DOM by adding unique attributes to elements in the component's DOM to scope the styles to that component only.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  templateUrl: './emulated-component.component.html',
+  styleUrls: ['./emulated-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the benefit of using <code>ViewEncapsulation.ShadowDom</code>?</strong>
+      <p>Using <code>ViewEncapsulation.ShadowDom</code> provides real style encapsulation by leveraging the browser's native Shadow DOM, ensuring complete isolation.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-example',
+  templateUrl: './shadow-dom-example.component.html',
+  styleUrls: ['./shadow-dom-example.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you ensure that styles are isolated within a component?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to ensure that styles are scoped to the component.</p>
+      <pre><code>@Component({
+  selector: 'app-isolated-styles',
+  templateUrl: './isolated-styles.component.html',
+  styleUrls: ['./isolated-styles.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens when you use <code>ViewEncapsulation.None</code> for a component’s styles?</strong>
+      <p>All styles defined in the component will be global, and they will apply to all other components in the application.</p>
+      <pre><code>@Component({
+  selector: 'app-global-component',
+  templateUrl: './global-component.component.html',
+  styleUrls: ['./global-component.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you prevent styles from affecting a component’s parent?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to scope styles only to the component and avoid affecting its parent.</p>
+      <pre><code>@Component({
+  selector: 'app-child-component',
+  templateUrl: './child-component.component.html',
+  styleUrls: ['./child-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 7: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 7: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How can you style elements in child components from a parent component?</strong>
+      <p>You can style child components by using global styles or setting <code>ViewEncapsulation.None</code> in the parent or child component.</p>
+      <pre><code>/* global styles.css */
+app-child { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>What is the main difference between <code>ViewEncapsulation.Emulated</code> and <code>ViewEncapsulation.None</code>?</strong>
+      <p><code>ViewEncapsulation.Emulated</code> scopes styles to the component, while <code>ViewEncapsulation.None</code> applies global styles affecting the entire application.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-style',
+  styleUrls: ['./emulated-style.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you use both global and scoped styles in an Angular app?</strong>
+      <p>You can use <code>ViewEncapsulation.None</code> for global styles and <code>ViewEncapsulation.Emulated</code> for scoped component styles to combine both.</p>
+      <pre><code>/* global styles.css */
+body { margin: 0; }
+/* component styles */
+h1 { color: green; }</code></pre>
+    </li>
+    <li>
+      <strong>Can you use custom attributes to apply styles in Angular components?</strong>
+      <p>Yes, when using <code>ViewEncapsulation.Emulated</code>, Angular automatically adds custom attributes to elements for style scoping.</p>
+      <pre><code>@Component({
+  selector: 'app-custom-attributes',
+  templateUrl: './custom-attributes.component.html',
+  styleUrls: ['./custom-attributes.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you ensure that styles from child components don't affect the parent component?</strong>
+      <p>Ensure the parent uses <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to isolate styles within the child component.</p>
+      <pre><code>@Component({
+  selector: 'app-child-component',
+  styleUrls: ['./child-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Is it possible to apply Shadow DOM encapsulation in Angular without affecting the entire application?</strong>
+      <p>Yes, Shadow DOM encapsulation only affects the component where it is applied, leaving the rest of the application unaffected.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-example',
+  templateUrl: './shadow-dom-example.component.html',
+  styleUrls: ['./shadow-dom-example.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you mix Shadow DOM with other encapsulation methods in Angular?</strong>
+      <p>No, each component can only use one encapsulation method, either <code>ViewEncapsulation.Emulated</code>, <code>ViewEncapsulation.None</code>, or <code>ViewEncapsulation.ShadowDom</code>.</p>
+      <pre><code>// Choose only one encapsulation method for each component
+@ViewChild('childComponent', { static: false }) child; </code></pre>
+    </li>
+    <li>
+      <strong>How do you apply specific styles to the host element of a component?</strong>
+      <p>Use <code>:host</code> selector in the component's style file to target the host element directly.</p>
+      <pre><code>:host {
+  display: block;
+  background-color: blue;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What is the impact of <code>ViewEncapsulation.None</code> on external CSS files?</strong>
+      <p>External CSS files will also affect the component, making all styles global across the application.</p>
+      <pre><code>// external styles.css
+h1 { color: blue; }</code></pre>
+    </li>
+    <li>
+      <strong>How does <code>ViewEncapsulation.ShadowDom</code> improve the performance of Angular applications?</strong>
+      <p><code>ViewEncapsulation.ShadowDom</code> uses the browser's native Shadow DOM, which is more efficient for style isolation, resulting in better performance.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-performance',
+  templateUrl: './shadow-dom-performance.component.html',
+  styleUrls: ['./shadow-dom-performance.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 8: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 8: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What happens when you apply <code>ViewEncapsulation.None</code> to a component?</strong>
+      <p>Applying <code>ViewEncapsulation.None</code> causes the styles to be applied globally across the entire application, making them not scoped to the component.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style-component',
+  templateUrl: './global-style-component.component.html',
+  styleUrls: ['./global-style-component.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you style elements inside a component using Shadow DOM?</strong>
+      <p>Use <code>ViewEncapsulation.ShadowDom</code> to apply native Shadow DOM for complete encapsulation, isolating the styles of that component from the rest of the app.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-component',
+  templateUrl: './shadow-dom-component.component.html',
+  styleUrls: ['./shadow-dom-component.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the benefit of using <code>ViewEncapsulation.Emulated</code>?</strong>
+      <p>Using <code>ViewEncapsulation.Emulated</code> allows for style scoping by adding unique attributes to the component's elements, preventing styles from leaking into other components.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  templateUrl: './emulated-component.component.html',
+  styleUrls: ['./emulated-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you override the encapsulation for a component in Angular?</strong>
+      <p>You can override the default encapsulation by setting the <code>encapsulation</code> property in the component metadata to <code>ViewEncapsulation.None</code>, <code>ViewEncapsulation.Emulated</code>, or <code>ViewEncapsulation.ShadowDom</code>.</p>
+      <pre><code>@Component({
+  selector: 'app-override-encapsulation',
+  templateUrl: './override-encapsulation.component.html',
+  styleUrls: ['./override-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you have multiple components using different style encapsulation methods?</strong>
+      <p>Yes, you can use different encapsulation methods for each component in an Angular application, such as <code>ViewEncapsulation.Emulated</code>, <code>ViewEncapsulation.None</code>, or <code>ViewEncapsulation.ShadowDom</code>.</p>
+      <pre><code>@Component({
+  selector: 'app-component1',
+  encapsulation: ViewEncapsulation.Emulated
+})
+@Component({
+  selector: 'app-component2',
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How does Shadow DOM encapsulation affect accessibility in Angular?</strong>
+      <p>While Shadow DOM encapsulation provides style isolation, it may affect accessibility tools that rely on the global DOM tree. Careful testing should be done to ensure accessibility is not compromised.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-accessibility',
+  templateUrl: './shadow-dom-accessibility.component.html',
+  styleUrls: ['./shadow-dom-accessibility.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you share styles between components in Angular?</strong>
+      <p>You can share styles between components by placing common styles in a global stylesheet or importing the same style files into different components.</p>
+      <pre><code>/* global styles.css */
+h1 { color: blue; }
+/* component-specific styles */
+h1 { color: green; }</code></pre>
+    </li>
+    <li>
+      <strong>What is the impact of using global styles with <code>ViewEncapsulation.None</code>?</strong>
+      <p>Global styles will apply universally to all components, even those that are supposed to have isolated styles, potentially causing unwanted side effects.</p>
+      <pre><code>/* styles.css */
+h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you use Angular's <code>:host</code> selector for styling?</strong>
+      <p>The <code>:host</code> selector can be used to style the component's host element, which is the element representing the component in the DOM.</p>
+      <pre><code>:host {
+  display: block;
+  background-color: lightblue;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What happens when you mix <code>ViewEncapsulation.None</code> with scoped styles?</strong>
+      <p>If you use <code>ViewEncapsulation.None</code>, all styles, even scoped ones, will become global, potentially affecting other components in the application.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 9: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 9: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How do you apply different styles for different components in Angular?</strong>
+      <p>Each component can have its own styles by specifying the <code>styleUrls</code> property in the component's metadata.</p>
+      <pre><code>@Component({
+  selector: 'app-component1',
+  templateUrl: './component1.component.html',
+  styleUrls: ['./component1.component.css']
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens to component styles when <code>ViewEncapsulation.None</code> is used?</strong>
+      <p>The styles will not be scoped to the component and will be global across the entire application, potentially affecting other components.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style-component',
+  styleUrls: ['./global-style-component.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply global styles without affecting scoped component styles?</strong>
+      <p>Use global styles in the <code>styles.css</code> file, and scope styles for individual components using <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code>.</p>
+      <pre><code>/* styles.css */
+body { margin: 0; }
+/* component-specific styles */
+h1 { color: green; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you control the encapsulation of styles for a component?</strong>
+      <p>Control the encapsulation by setting the <code>encapsulation</code> property in the component’s metadata, choosing between <code>Emulated</code>, <code>None</code>, or <code>ShadowDom</code>.</p>
+      <pre><code>@Component({
+  selector: 'app-component',
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you use external libraries for styling with <code>ViewEncapsulation.None</code>?</strong>
+      <p>Yes, using <code>ViewEncapsulation.None</code> allows external libraries like Bootstrap to apply global styles to all components.</p>
+      <pre><code>/* global styles.css */
+@import 'bootstrap/dist/css/bootstrap.min.css';</code></pre>
+    </li>
+    <li>
+      <strong>What is the benefit of using Shadow DOM in Angular components?</strong>
+      <p>Shadow DOM provides true encapsulation, isolating the styles and preventing them from leaking into other components.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom',
+  templateUrl: './shadow-dom.component.html',
+  styleUrls: ['./shadow-dom.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>:host</code> selector in component styles?</strong>
+      <p>The <code>:host</code> selector can be used to apply styles to the host element of the component.</p>
+      <pre><code>:host {
+  display: block;
+  background-color: lightyellow;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ViewEncapsulation.ShadowDom</code> and global styles together?</strong>
+      <p>Yes, you can combine global styles with <code>ViewEncapsulation.ShadowDom</code> by including global styles in the <code>styles.css</code> file.</p>
+      <pre><code>/* global styles.css */
+body { background: lightgray; }
+/* shadow DOM component styles */
+h1 { color: blue; }</code></pre>
+    </li>
+    <li>
+      <strong>What effect does <code>ViewEncapsulation.None</code> have on style precedence?</strong>
+      <p>With <code>ViewEncapsulation.None</code>, all styles are global, and their precedence will depend on the order they are loaded and the specificity of the selectors.</p>
+      <pre><code>/* styles.css */
+h1 { color: green; }
+/* component styles */
+h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>How can you ensure that styles are scoped only to the component?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code> to scope styles only to the component's elements, preventing them from affecting other components.</p>
+      <pre><code>@Component({
+  selector: 'app-scoped-component',
+  styleUrls: ['./scoped-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+<!-- Set 10: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 10: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What is the default behavior for style encapsulation in Angular components?</strong>
+      <p>The default behavior is <code>ViewEncapsulation.Emulated</code>, where styles are scoped to the component using generated attributes to isolate them.</p>
+      <pre><code>@Component({
+  selector: 'app-default-component',
+  templateUrl: './default-component.component.html',
+  styleUrls: ['./default-component.component.css']
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply scoped styles in Angular without using <code>ViewEncapsulation</code>?</strong>
+      <p>You cannot achieve scoped styles without using <code>ViewEncapsulation</code>. You must either use <code>ViewEncapsulation.Emulated</code> or <code>ViewEncapsulation.ShadowDom</code>.</p>
+      <pre><code>@Component({
+  selector: 'app-scoped-component',
+  styleUrls: ['./scoped-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the difference between <code>ViewEncapsulation.Emulated</code> and <code>ViewEncapsulation.None</code>?</strong>
+      <p><code>ViewEncapsulation.Emulated</code> scopes styles to the component, while <code>ViewEncapsulation.None</code> makes styles global and applies them to the entire application.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  styleUrls: ['./emulated.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you use Shadow DOM encapsulation in Angular?</strong>
+      <p>Use <code>ViewEncapsulation.ShadowDom</code> to apply true encapsulation using the native Shadow DOM API.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom',
+  templateUrl: './shadow-dom.component.html',
+  styleUrls: ['./shadow-dom.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you define global styles that apply to all components?</strong>
+      <p>Global styles can be added in the <code>styles.css</code> file, which is included in the root of the Angular project.</p>
+      <pre><code>/* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use both scoped and global styles together in Angular?</strong>
+      <p>Yes, you can combine both by defining global styles in <code>styles.css</code> and component-specific styles using <code>styleUrls</code>.</p>
+      <pre><code>/* styles.css */
+body { background-color: #fff; }
+
+/* scoped-component.component.css */
+h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>What is the purpose of the <code>:host</code> selector in component styles?</strong>
+      <p>The <code>:host</code> selector is used to apply styles to the host element of the component, which is the element that represents the component in the DOM.</p>
+      <pre><code>:host {
+  display: block;
+  background-color: lightblue;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you target the child elements inside the Shadow DOM component?</strong>
+      <p>Yes, you can target child elements inside the Shadow DOM, but they are isolated from global styles. You'll need to write specific styles for them within the component.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-child',
+  templateUrl: './shadow-dom-child.component.html',
+  styleUrls: ['./shadow-dom-child.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you isolate styles using <code>ViewEncapsulation.Emulated</code>?</strong>
+      <p><code>ViewEncapsulation.Emulated</code> isolates styles by adding unique attributes to the component’s HTML elements, making them scoped and preventing external styles from affecting them.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-component',
+  templateUrl: './emulated.component.html',
+  styleUrls: ['./emulated.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What are the trade-offs of using <code>ViewEncapsulation.None</code>?</strong>
+      <p><code>ViewEncapsulation.None</code> may cause styles to leak into other components and override their styles, which can lead to unintended styling changes across the application.</p>
+      <pre><code>@Component({
+  selector: 'app-none-component',
+  styleUrls: ['./none-component.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 11: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 11: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How does <code>ViewEncapsulation.Emulated</code> help prevent style conflicts in Angular?</strong>
+      <p>It ensures that styles defined in a component are scoped to the component's template and do not affect other components.</p>
+      <pre><code>@Component({
+  selector: 'app-scoped-styles',
+  templateUrl: './scoped-styles.component.html',
+  styleUrls: ['./scoped-styles.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens if <code>ViewEncapsulation.ShadowDom</code> is used in an older browser?</strong>
+      <p>In older browsers that do not support the Shadow DOM, Angular falls back to <code>ViewEncapsulation.Emulated</code>.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-fallback',
+  templateUrl: './shadow-dom-fallback.component.html',
+  styleUrls: ['./shadow-dom-fallback.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you handle dynamic styling within a component?</strong>
+      <p>You can dynamically change styles by using Angular's <code>ngStyle</code> or <code>ngClass</code> directives based on component data.</p>
+      <pre><code>@Component({
+  selector: 'app-dynamic-styles',
+  template: `<div [ngStyle]="{ 'color': color }">Dynamic Style</div>`,
+  styleUrls: ['./dynamic-styles.component.css']
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the advantage of using <code>ViewEncapsulation.None</code> in global styling?</strong>
+      <p>It allows the use of global styles in all components, making it easier to apply universal design changes across the application.</p>
+      <pre><code>/* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply different styles to the same element in a component depending on the state?</strong>
+      <p>Use conditional logic in your component's class to toggle between different styles or classes.</p>
+      <pre><code>@Component({
+  selector: 'app-toggle-styles',
+  template: `<button [ngClass]="{ 'active': isActive }">Toggle</button>`,
+  styleUrls: ['./toggle-styles.component.css']
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you style components from an external stylesheet using <code>ViewEncapsulation.None</code>?</strong>
+      <p>Yes, global styles defined in an external stylesheet will affect all components when <code>ViewEncapsulation.None</code> is used.</p>
+      <pre><code>/* external-styles.css */
+button {
+  background-color: blue;
+  color: white;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you prevent styles from leaking into child components when using <code>ViewEncapsulation.None</code>?</strong>
+      <p>You can't prevent style leakage with <code>ViewEncapsulation.None</code>; styles will affect all components. For scoped styles, use <code>ViewEncapsulation.Emulated</code> or <code>ShadowDom</code>.</p>
+      <pre><code>/* styles.css */
+app-child h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>How can you include external CSS libraries like Bootstrap in an Angular component?</strong>
+      <p>Include the library in the <code>angular.json</code> file under <code>styles</</code>, and it will be globally applied across the app.</p>
+      <pre><code>"styles": [
+  "src/styles.css",
+  "node_modules/bootstrap/dist/css/bootstrap.min.css"
+]</code></pre>
+    </li>
+    <li>
+      <strong>What role does <code>:host-context</code> play in component styles?</strong>
+      <p><code>:host-context</code> allows you to target a component based on a condition in the DOM, such as parent class or attribute.</p>
+      <pre><code>:host-context(.theme-dark) h1 {
+  color: white;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply styles to a component’s shadow host element using <code>:host</code>?</strong>
+      <p>The <code>:host</code> selector targets the component's host element, allowing you to apply styles to the element representing the component.</p>
+      <pre><code>:host {
+  display: block;
+  border: 2px solid #ccc;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 12: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 12: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What is the effect of using <code>ViewEncapsulation.Emulated</code> on styles in Angular?</strong>
+      <p>Styles are scoped to the component, with Angular generating unique attributes to isolate the component's styles from the rest of the application.</p>
+      <pre><code>@Component({
+  selector: 'app-emulated-scope',
+  templateUrl: './emulated-scope.component.html',
+  styleUrls: ['./emulated-scope.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>When would you prefer <code>ViewEncapsulation.None</code> over other encapsulation methods?</strong>
+      <p>Use <code>ViewEncapsulation.None</code> when you need global styles that affect all components, such as in a large-scale application or when using external libraries.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you modify styles within a component dynamically using Angular?</strong>
+      <p>Yes, you can modify styles dynamically using Angular's <code>ngStyle</code> or <code>ngClass</code> directives based on component logic.</p>
+      <pre><code>@Component({
+  selector: 'app-dynamic-style',
+  template: `<div [ngStyle]="{ 'font-size': fontSize }">Dynamic Styling</div>`,
+  styleUrls: ['./dynamic-style.component.css']
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the impact of <code>ViewEncapsulation.ShadowDom</code> on your component's style?</strong>
+      <p><code>ViewEncapsulation.ShadowDom</code> uses the native Shadow DOM API to encapsulate styles, preventing them from leaking outside the component and ensuring true style isolation.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom',
+  templateUrl: './shadow-dom.component.html',
+  styleUrls: ['./shadow-dom.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you define a global style that affects all child components in Angular?</strong>
+      <p>Global styles can be placed in the <code>styles.css</code> file, and they will affect all components throughout the application.</p>
+      <pre><code>/* styles.css */
+h1 {
+  color: green;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you avoid conflicts between global styles and component-specific styles?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ShadowDom</code> to isolate component styles from the global styles and prevent conflicts.</p>
+      <pre><code>@Component({
+  selector: 'app-isolated-style',
+  templateUrl: './isolated-style.component.html',
+  styleUrls: ['./isolated-style.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you override Angular's default encapsulation behavior?</strong>
+      <p>Yes, by specifying the <code>encapsulation</code> property in the <code>@Component</code> decorator, you can switch between <code>Emulated</code>, <code>None</code>, or <code>ShadowDom</code>.</p>
+      <pre><code>@Component({
+  selector: 'app-custom-encapsulation',
+  templateUrl: './custom-encapsulation.component.html',
+  styleUrls: ['./custom-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the advantage of using the Shadow DOM for encapsulation?</strong>
+      <p>The Shadow DOM provides true style encapsulation, where styles are completely isolated within the component, ensuring no leakage to other parts of the application.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom-example',
+  templateUrl: './shadow-dom-example.component.html',
+  styleUrls: ['./shadow-dom-example.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply a style to the component's host element using <code>:host</code>?</strong>
+      <p>The <code>:host</code> selector targets the component's host element, allowing you to apply styles directly to the wrapper element of the component.</p>
+      <pre><code>:host {
+  display: block;
+  border: 1px solid #ccc;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What are the potential issues with using <code>ViewEncapsulation.None</code>?</strong>
+      <p>Using <code>ViewEncapsulation.None</code> can result in global style conflicts, where one component's styles may unintentionally affect others.</p>
+      <pre><code>// styles.css
+app-child h1 { color: red; }</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 13: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 13: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>How does <code>ViewEncapsulation.Emulated</code> ensure style isolation?</strong>
+      <p>Angular generates unique attributes in the component’s DOM to scope the styles to the component, ensuring that styles do not leak into other components.</p>
+      <pre><code>@Component({
+  selector: 'app-style-scope',
+  templateUrl: './style-scope.component.html',
+  styleUrls: ['./style-scope.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What are the main use cases for <code>ViewEncapsulation.ShadowDom</code>?</strong>
+      <p><code>ViewEncapsulation.ShadowDom</code> is used when you want true encapsulation of styles using the native Shadow DOM, ensuring that styles are isolated and cannot affect the rest of the application.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-example',
+  templateUrl: './shadow-example.component.html',
+  styleUrls: ['./shadow-example.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you dynamically modify the style of a component in Angular?</strong>
+      <p>Yes, you can dynamically modify the styles of a component by using the <code>ngStyle</code> or <code>ngClass</code> directives.</p>
+      <pre><code>@Component({
+  selector: 'app-dynamic-style',
+  template: `<div [ngStyle]="{ 'color': color }">Dynamic Style</div>`,
+  styleUrls: ['./dynamic-style.component.css']
+})</code></pre>
+    </li>
+    <li>
+      <strong>When should you use <code>ViewEncapsulation.None</code> in an Angular project?</strong>
+      <p>Use <code>ViewEncapsulation.None</code> when you want global styles to apply to all components and do not need style isolation.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you define a global stylesheet in Angular?</strong>
+      <p>Define a global stylesheet in the <code>angular.json</code> file under the <code>styles</code> array, which will apply globally across the app.</p>
+      <pre><code>"styles": [
+  "src/styles.css",
+  "node_modules/bootstrap/dist/css/bootstrap.min.css"
+]</code></pre>
+    </li>
+    <li>
+      <strong>How do you prevent styles from affecting elements outside a component?</strong>
+      <p>Use <code>ViewEncapsulation.Emulated</code> or <code>ShadowDom</code> to scope styles to a component and prevent them from leaking into other components.</p>
+      <pre><code>@Component({
+  selector: 'app-isolated-component',
+  templateUrl: './isolated-component.component.html',
+  styleUrls: ['./isolated-component.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply a style to the component’s root element using <code>:host</code>?</strong>
+      <p><code>:host</code> allows you to style the root element of the component, for example, to adjust its display or add a border.</p>
+      <pre><code>:host {
+  display: block;
+  border: 1px solid black;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can styles in the Shadow DOM affect other components?</strong>
+      <p>No, styles within the Shadow DOM are completely isolated, ensuring that they do not affect any other component outside of it.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-isolated',
+  templateUrl: './shadow-isolated.component.html',
+  styleUrls: ['./shadow-isolated.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What should you consider when using <code>ViewEncapsulation.None</code> in large projects?</strong>
+      <p>When using <code>ViewEncapsulation.None</code>, be cautious of potential style conflicts across components as all styles are global.</p>
+      <pre><code>/* styles.css */
+app-child h1 {
+  color: red;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you make styles in Angular components respond to the parent component’s state?</strong>
+      <p>You can use <code>:host-context</code> to apply styles to the component based on the parent's class or state.</p>
+      <pre><code>:host-context(.theme-dark) h1 {
+  color: white;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 14: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 14: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What is the default encapsulation behavior in Angular?</strong>
+      <p>The default encapsulation behavior in Angular is <code>ViewEncapsulation.Emulated</code>, where styles are scoped to the component using attributes.</p>
+      <pre><code>@Component({
+  selector: 'app-default-encapsulation',
+  templateUrl: './default-encapsulation.component.html',
+  styleUrls: ['./default-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you mix global and scoped styles in Angular?</strong>
+      <p>Yes, you can combine global styles (defined in <code>styles.css</code>) and scoped styles (defined in component CSS files) in the same project.</p>
+      <pre><code>/* global styles.css */
+body { background-color: #f4f4f4; }
+/* component styles */
+h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you disable style encapsulation entirely in Angular?</strong>
+      <p>Set <code>ViewEncapsulation.None</code> to disable style encapsulation, making the component styles global.</p>
+      <pre><code>@Component({
+  selector: 'app-no-encapsulation',
+  templateUrl: './no-encapsulation.component.html',
+  styleUrls: ['./no-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ViewEncapsulation.None</code> with external libraries?</strong>
+      <p>Yes, using <code>ViewEncapsulation.None</code> can be helpful when integrating third-party libraries or frameworks that rely on global styles.</p>
+      <pre><code>@Component({
+  selector: 'app-library-usage',
+  templateUrl: './library-usage.component.html',
+  styleUrls: ['./library-usage.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the difference between <code>ViewEncapsulation.Emulated</code> and <code>ViewEncapsulation.ShadowDom</code>?</strong>
+      <p><code>ViewEncapsulation.Emulated</code> generates attributes to isolate styles, whereas <code>ViewEncapsulation.ShadowDom</code> uses the native Shadow DOM to encapsulate styles and DOM structure.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-dom',
+  templateUrl: './shadow-dom.component.html',
+  styleUrls: ['./shadow-dom.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you style a child component from the parent component?</strong>
+      <p>You can style a child component by either applying global styles or using <code>:host</code> to affect the child element.</p>
+      <pre><code>/* styles.css */
+app-child h1 { color: green; }</code></pre>
+    </li>
+    <li>
+      <strong>What is the role of <code>:host-context</code> in styling Angular components?</strong>
+      <p><code>:host-context</code> allows you to apply styles to the host element of the component when the parent element matches a specific selector.</p>
+      <pre><code>:host-context(.theme-dark) h1 {
+  color: white;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you inspect the component's encapsulated styles in the browser?</strong>
+      <p>Inspect the component using browser developer tools to view the generated styles and identify how Angular isolates the component styles using attributes.</p>
+      <pre><code>/* Example of browser's generated styles */
+app-root[ng-version] h1 { color: red; }</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply a style to the component's shadow root element?</strong>
+      <p>Use the <code>:host</code> selector to target the shadow root element, applying styles to the component's host.</p>
+      <pre><code>:host {
+  display: block;
+  border: 1px solid black;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How does the Shadow DOM improve encapsulation compared to emulated styles?</strong>
+      <p>The Shadow DOM provides true style isolation, whereas emulated styles in Angular rely on attribute-based scoping to prevent style leakage.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-encapsulation',
+  templateUrl: './shadow-encapsulation.component.html',
+  styleUrls: ['./shadow-encapsulation.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 15: Angular Style Encapsulation - Source Code Examples -->
+<section>
+  <h2>Set 15: Angular Style Encapsulation - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What happens when you use both <code>ViewEncapsulation.Emulated</code> and <code>:host</code> together?</strong>
+      <p>The <code>:host</code> selector will target the component’s root element while keeping the styles scoped to the component using the Emulated encapsulation.</p>
+      <pre><code>:host {
+  display: block;
+  border: 1px solid blue;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you ensure that styles in the Shadow DOM do not leak outside the component?</strong>
+      <p>By using <code>ViewEncapsulation.ShadowDom</code>, Angular ensures that the styles are isolated within the Shadow DOM and cannot leak to other parts of the application.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-component',
+  templateUrl: './shadow-component.component.html',
+  styleUrls: ['./shadow-component.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the purpose of <code>ng-deep</code> and how does it interact with style encapsulation?</strong>
+      <p><code>ng-deep</code> allows you to apply styles to child components from the parent component, but it is deprecated and should be avoided in favor of more modern approaches like <code>:host</code> or global styles.</p>
+      <pre><code>/* Deprecated method */
+::ng-deep app-child h1 {
+  color: red;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you include external stylesheets in an Angular component while maintaining encapsulation?</strong>
+      <p>You can include external stylesheets by adding the <code>styleUrls</code> property to the component metadata while keeping the encapsulation intact.</p>
+      <pre><code>@Component({
+  selector: 'app-external-styles',
+  templateUrl: './external-styles.component.html',
+  styleUrls: ['./external-styles.component.css', 'src/assets/styles/global-styles.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+    <li>
+      <strong>What are some best practices for managing styles in large Angular applications?</strong>
+      <p>For large applications, it is best to use global styles for common elements and use component-level encapsulation to scope styles to the component. Avoid global styles that may cause conflicts.</p>
+      <pre><code>/* global styles */
+h1 { font-size: 2em; }
+</code></pre>
+    </li>
+    <li>
+      <strong>Can you mix component styles with CSS frameworks like Bootstrap?</strong>
+      <p>Yes, you can include CSS frameworks like Bootstrap globally or locally, but be cautious with <code>ViewEncapsulation.None</code>, as it may cause conflicts between component styles and global styles.</p>
+      <pre><code>@Component({
+  selector: 'app-bootstrap-style',
+  templateUrl: './bootstrap-style.component.html',
+  styleUrls: ['./bootstrap-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you scope styles to a specific component without affecting its children in Angular?</strong>
+      <p>By using <code>ViewEncapsulation.ShadowDom</code>, styles are scoped to the component without affecting its child components, ensuring better encapsulation.</p>
+      <pre><code>@Component({
+  selector: 'app-shadow-scoped',
+  templateUrl: './shadow-scoped.component.html',
+  styleUrls: ['./shadow-scoped.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom
+})</code></pre>
+    </li>
+    <li>
+      <strong>What is the impact of <code>ViewEncapsulation.None</code> on Angular’s change detection?</strong>
+      <p>Using <code>ViewEncapsulation.None</code> does not affect Angular's change detection directly but can cause style conflicts between components, requiring extra care in managing global styles.</p>
+      <pre><code>@Component({
+  selector: 'app-no-encapsulation-change-detection',
+  templateUrl: './no-encapsulation-change-detection.component.html',
+  styleUrls: ['./no-encapsulation-change-detection.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>What happens to component styles when you disable encapsulation in Angular?</strong>
+      <p>When you disable encapsulation (using <code>ViewEncapsulation.None</code>), all styles in the component become global, which can cause unexpected style conflicts in other components.</p>
+      <pre><code>@Component({
+  selector: 'app-global-style',
+  templateUrl: './global-style.component.html',
+  styleUrls: ['./global-style.component.css'],
+  encapsulation: ViewEncapsulation.None
+})</code></pre>
+    </li>
+    <li>
+      <strong>How can you improve performance when using component-level styles in Angular?</strong>
+      <p>To improve performance, use <code>ViewEncapsulation.Emulated</code> for component-level styles and minimize the use of <code>:host</code> selectors. Additionally, use lazy loading for components to optimize rendering times.</p>
+      <pre><code>@Component({
+  selector: 'app-lazy-loaded',
+  templateUrl: './lazy-loaded.component.html',
+  styleUrls: ['./lazy-loaded.component.css'],
+  encapsulation: ViewEncapsulation.Emulated
+})</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+
+
+</body>
+</html>

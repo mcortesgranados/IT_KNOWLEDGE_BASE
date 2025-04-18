@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dependency Injection - Questions and Answers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007acc;
+    }
+    ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: #f8f8f2;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h2>1. What is Dependency Injection?</h2>
+    <p>Dependency Injection is a design pattern that allows separation of concerns, where objects do not create their own dependencies but instead have them provided externally.</p>
+    <pre><code>class Service {
+  constructor(private logService: LogService) {}
+  
+  execute() {
+    this.logService.write('Executing service...');
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>2. What does the @Injectable decorator do in Angular?</h2>
+    <p>The @Injectable decorator in Angular marks a class as available for dependency injection. It tells Angular that this class should be injectable as a dependency in other components, services, etc.</p>
+    <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class LogService {
+  write(message: string) {
+    console.log(message);
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>3. What is the purpose of the 'providedIn' parameter in @Injectable?</h2>
+    <p>The 'providedIn' parameter defines the scope of availability for the service. When set to 'root', Angular makes the service available throughout the entire application.</p>
+    <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class LogService { }</code></pre>
+  </section>
+
+  <section>
+    <h2>4. How does Angular handle services with dependency injection?</h2>
+    <p>Angular handles services with dependency injection by creating instances of services and injecting them where needed. Angular takes care of the lifecycle and ensures the correct instance is used across components and services.</p>
+    <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  constructor(private http: HttpClient) {}
+  login() {
+    return this.http.post('/login', { username: 'admin', password: 'admin' });
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>5. What is the role of the Injector in Angular?</h2>
+    <p>The Injector is the mechanism that Angular uses to maintain and provide instances of services. It resolves dependencies and injects them into the component or service that requests them.</p>
+    <pre><code>export class AppComponent {
+  constructor(private authService: AuthService) {}
+
+  login() {
+    this.authService.login().subscribe(response => {
+      console.log('Login successful');
+    });
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>6. How do you use the @Inject decorator in Angular?</h2>
+    <p>The @Inject decorator is used when Angular cannot automatically infer the type of the dependency. It is used to explicitly define what to inject, typically when working with non-class dependencies.</p>
+    <pre><code>import { Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+
+export class MyComponent {
+  constructor(@Inject(DOCUMENT) private document: Document) {}
+  
+  changeTitle() {
+    this.document.title = 'New Title';
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>7. What are the benefits of using Dependency Injection?</h2>
+    <p>Dependency Injection promotes loose coupling, making your application more modular, testable, and maintainable. It also reduces the complexity of managing dependencies manually.</p>
+    <pre><code>class UserService {
+  constructor(private http: HttpClient) {}
+
+  getUser() {
+    return this.http.get('/user');
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>8. What is the difference between @Injectable and @Component in Angular?</h2>
+    <p>The @Injectable decorator is used to mark a service class that can be injected into other components or services, while @Component is used to define a component in Angular.</p>
+    <pre><code>@Injectable({ providedIn: 'root' }) 
+export class MyService { }
+
+@Component({
+  selector: 'app-root',
+  template: '<h1>Hello World</h1>',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent { }</code></pre>
+  </section>
+
+  <section>
+    <h2>9. What is the significance of the providedIn: 'root' value in @Injectable?</h2>
+    <p>When providedIn is set to 'root', Angular registers the service at the root level, meaning it will be available globally in the application as a singleton.</p>
+    <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class GlobalService { }</code></pre>
+  </section>
+
+  <section>
+    <h2>10. How can you manage multiple instances of a service in Angular?</h2>
+    <p>You can manage multiple instances of a service by specifying a different provider scope, such as using a module or component level provider.</p>
+    <pre><code>@NgModule({
+  providers: [
+    { provide: UserService, useClass: UserService } // Root level provider
+  ]
+})
+export class AppModule { }
+</code></pre>
+  </section>
+  
+  <section>
+  <h2>11. What is the difference between constructor injection and property injection in Angular?</h2>
+  <p>Constructor injection is when dependencies are injected into a class through the constructor, while property injection allows dependencies to be injected via class properties using decorators like @Input() or @Injectable() in Angular.</p>
+  <pre><code>class MyService {
+  constructor(private http: HttpClient) {}
+}</code></pre>
+</section>
+
+<section>
+  <h2>12. Can you provide an example of using Dependency Injection with an HTTP client in Angular?</h2>
+  <p>Yes! You can inject the HttpClient service into your component or service to perform HTTP requests.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  constructor(private http: HttpClient) {}
+
+  getData() {
+    return this.http.get('https://api.example.com/data');
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>13. How can you inject a service into a component in Angular?</h2>
+  <p>You can inject a service into a component by adding it to the constructor of the component. Angular will automatically provide the service instance when the component is instantiated.</p>
+  <pre><code>@Component({
+  selector: 'app-example',
+  templateUrl: './example.component.html',
+  styleUrls: ['./example.component.css']
+})
+export class ExampleComponent {
+  constructor(private dataService: DataService) {}
+
+  ngOnInit() {
+    this.dataService.getData().subscribe(data => {
+      console.log(data);
+    });
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>14. What is the role of the 'root' scope in providedIn: 'root'?</h2>
+  <p>When 'providedIn' is set to 'root', Angular ensures that only one instance of the service is created for the entire application. This instance will be shared across components, services, and modules.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class LoggingService { }</code></pre>
+</section>
+
+<section>
+  <h2>15. How does Angular handle singleton services?</h2>
+  <p>Angular handles singleton services by using the providedIn: 'root' option or by defining the provider at the module level. This ensures that only a single instance of the service exists across the entire application.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class SingletonService { }</code></pre>
+</section>
+
+<section>
+  <h2>16. How can you create a service with multiple dependencies in Angular?</h2>
+  <p>You can inject multiple services into a single service by listing them in the constructor. Angular will handle the injection automatically.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class MyService {
+  constructor(private logService: LogService, private dataService: DataService) {}
+
+  performAction() {
+    this.logService.write('Action performed!');
+    this.dataService.getData().subscribe(data => console.log(data));
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>17. What is the importance of the @Injectable decorator when using services in Angular?</h2>
+  <p>The @Injectable decorator tells Angular that a class can be injected as a dependency into other classes or components. It is essential for Angular's dependency injection mechanism.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class NotificationService {
+  sendMessage(message: string) {
+    console.log(`Sending message: ${message}`);
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>18. How do you inject a service into another service?</h2>
+  <p>You can inject a service into another service by adding it to the constructor of the second service. Angular will resolve the dependencies automatically.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  constructor(private http: HttpClient) {}
+
+  authenticate() {
+    return this.http.post('/api/login', { username: 'admin', password: 'password' });
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProfileService {
+  constructor(private authService: AuthService) {}
+
+  getUserProfile() {
+    return this.authService.authenticate().pipe(map(response => response.data));
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>19. What is the advantage of using providedIn: 'root' over manually configuring providers in NgModule?</h2>
+  <p>Using providedIn: 'root' allows Angular to automatically register the service globally, without needing to manually configure it in the providers array of an NgModule. This reduces boilerplate code and makes the service available across the entire app.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class LoggerService { }</code></pre>
+</section>
+
+<section>
+  <h2>20. Can you have multiple providers for the same service in Angular?</h2>
+  <p>Yes, you can provide multiple instances of the same service in different scopes, such as module-level or component-level providers. Angular will use the appropriate instance based on the scope.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: AuthService, useClass: MockAuthService }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>21. How can you use factory providers in Angular?</h2>
+  <p>Factory providers allow you to provide a service using a function that returns the service instance. This is useful when you need to dynamically configure the service or provide different instances based on conditions.</p>
+  <pre><code>export function loggingServiceFactory() {
+  return new LoggingService('Custom Message');
+}
+
+@NgModule({
+  providers: [
+    { provide: LoggingService, useFactory: loggingServiceFactory }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>22. What is the purpose of the @Optional decorator in Angular?</h2>
+  <p>The @Optional decorator allows Angular to inject a dependency if it exists. If the dependency is not available, Angular will not throw an error and will simply pass <code>null</code> to the class constructor.</p>
+  <pre><code>import { Optional } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Optional() private loggingService: LoggingService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>23. Can you inject a service with a specific configuration in Angular?</h2>
+  <p>Yes, you can inject a service with a specific configuration by providing a factory that configures the service instance dynamically based on inputs or conditions.</p>
+  <pre><code>export function configFactory() {
+  return { apiUrl: 'https://api.example.com' };
+}
+
+@NgModule({
+  providers: [
+    { provide: 'config', useFactory: configFactory }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>24. How do you implement Dependency Injection in a module in Angular?</h2>
+  <p>You can implement Dependency Injection in an Angular module by registering services in the module's <code>providers</code> array. The services will then be available for injection within the components or other services that belong to that module.</p>
+  <pre><code>@NgModule({
+  declarations: [AppComponent],
+  providers: [MyService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>25. What is the difference between @Injectable and @Component in terms of Dependency Injection?</h2>
+  <p>The @Injectable decorator is used to create services that can be injected into other classes. On the other hand, @Component is used to create components that may also request services via dependency injection in their constructors.</p>
+  <pre><code>@Injectable({ providedIn: 'root' }) 
+export class MyService { }
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent { }</code></pre>
+</section>
+
+<section>
+  <h2>26. How can you override a service in Angular?</h2>
+  <p>You can override a service in Angular by using the <code>useClass</code>, <code>useValue</code>, or <code>useFactory</code> provider options in the <code>providers</code> array. This allows you to provide a different implementation or mock version of the service.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: MyService, useClass: MockService }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>27. How does Angular handle circular dependencies in services?</h2>
+  <p>Angular prevents circular dependencies by resolving them before injecting the services. If a circular dependency occurs, Angular will throw an error and ask you to resolve the issue, usually by restructuring the services or using factory providers.</p>
+  <pre><code>export class ServiceA {
+  constructor(private serviceB: ServiceB) {}
+}
+
+export class ServiceB {
+  constructor(private serviceA: ServiceA) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>28. Can you inject an Angular service into a plain JavaScript class?</h2>
+  <p>No, you cannot inject an Angular service directly into a plain JavaScript class. The class must be part of the Angular framework, and you must use Angular's dependency injection system.</p>
+  <pre><code>class PlainService {
+  constructor(private http: HttpClient) {} // Will not work
+}</code></pre>
+</section>
+
+<section>
+  <h2>29. What is the purpose of multi-provider in Angular?</h2>
+  <p>A multi-provider allows you to provide multiple instances of the same service. It is useful when you need to inject a list of services or handle cases where multiple providers need to contribute to the same functionality.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: LoggerService, useClass: ConsoleLoggerService, multi: true },
+    { provide: LoggerService, useClass: FileLoggerService, multi: true }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>30. How can you inject a service dynamically in Angular?</h2>
+  <p>You can inject a service dynamically by using the <code>Injector</code> API, which allows you to get a service instance at runtime, or by using the <code>inject</code> function in Angular 14 and later.</p>
+  <pre><code>import { Injector } from '@angular/core';
+
+export class MyComponent {
+  constructor(private injector: Injector) {}
+
+  ngOnInit() {
+    const dynamicService = this.injector.get(MyService);
+    dynamicService.doSomething();
+  }
+}
+</code></pre>
+</section>
+
+
+<section>
+  <h2>31. How do you use Angular Dependency Injection with lazy-loaded modules?</h2>
+  <p>In lazy-loaded modules, the services provided in those modules are scoped to the module itself. This ensures that the service is instantiated only when the module is loaded, allowing for better memory management.</p>
+  <pre><code>@NgModule({
+  imports: [CommonModule],
+  providers: [LazyLoadedService],
+  declarations: [LazyLoadedComponent]
+})
+export class LazyModule { }</code></pre>
+</section>
+
+<section>
+  <h2>32. What is the purpose of the 'providedIn' option in Angular services?</h2>
+  <p>The 'providedIn' option determines where the service should be provided. By setting 'providedIn: root', the service is provided globally, ensuring a single instance throughout the application. You can also scope it to a specific module using 'providedIn: 'anyModule''.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class DataService { }</code></pre>
+</section>
+
+<section>
+  <h2>33. How can you use a service in an Angular directive?</h2>
+  <p>You can inject a service into a directive by adding it to the constructor of the directive. Angular will automatically handle the injection when the directive is used in the template.</p>
+  <pre><code>@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(private loggingService: LoggingService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>34. How does Angular ensure that services are singletons?</h2>
+  <p>Angular ensures that services are singletons by providing them in the root injector or by registering them at the module or component level. This ensures that a single instance of the service is created and shared across the application.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class SingletonService { }</code></pre>
+</section>
+
+<section>
+  <h2>35. What is the role of the Injector in Angular's Dependency Injection system?</h2>
+  <p>The Injector in Angular is responsible for resolving and instantiating services. It tracks the lifecycle of services and ensures that dependencies are injected into components, directives, and services as required.</p>
+  <pre><code>import { Injector } from '@angular/core';
+
+export class MyComponent {
+  constructor(private injector: Injector) {}
+  
+  ngOnInit() {
+    const serviceInstance = this.injector.get(MyService);
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>36. How do you handle dependency injection in Angular testing?</h2>
+  <p>In Angular testing, you can provide mock services using the <code>TestBed</code> configuration. This allows you to inject dependencies into components or services during unit tests and verify their behavior.</p>
+  <pre><code>TestBed.configureTestingModule({
+  providers: [
+    { provide: MyService, useClass: MockMyService }
+  ]
+});
+
+const service = TestBed.inject(MyService);
+</code></pre>
+</section>
+
+<section>
+  <h2>37. What is the difference between a service provided at the root level and one provided at the module level?</h2>
+  <p>A service provided at the root level is available throughout the entire application, ensuring a singleton instance. A service provided at the module level is scoped to that module and its components, potentially having a different instance for each lazy-loaded module.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class RootService { }</code></pre>
+</section>
+
+<section>
+  <h2>38. How can you provide a service only to a component and its descendants?</h2>
+  <p>You can provide a service in the providers array of a component’s metadata. This ensures that the service is available only within that component and its child components, but not outside of them.</p>
+  <pre><code>@Component({
+  selector: 'app-parent',
+  providers: [ParentService]
+})
+export class ParentComponent { }</code></pre>
+</section>
+
+<section>
+  <h2>39. How do you inject a value instead of a service in Angular?</h2>
+  <p>You can inject a specific value by using the <code>useValue</code> provider. This is useful when you need to inject constants or predefined objects into your components or services.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: 'apiUrl', useValue: 'https://api.example.com' }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>40. How do you handle lifecycle hooks when using dependency injection in Angular?</h2>
+  <p>When using dependency injection, Angular will inject the dependencies into the component or service before the <code>ngOnInit</code> lifecycle hook is called. You can use lifecycle hooks such as <code>ngOnInit</code>, <code>ngOnChanges</code>, or <code>ngOnDestroy</code> to manage the state or cleanup of services injected into the component.</p>
+  <pre><code>@Component({
+  selector: 'app-lifecycle',
+  templateUrl: './lifecycle.component.html'
+})
+export class LifecycleComponent implements OnInit {
+  constructor(private myService: MyService) {}
+
+  ngOnInit() {
+    this.myService.getData().subscribe(data => console.log(data));
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>41. How do you inject services in Angular modules with multiple providers?</h2>
+  <p>You can inject services in Angular modules by specifying multiple providers in the module’s <code>providers</code> array. This is useful when you want to register several services or different implementations of the same service.</p>
+  <pre><code>@NgModule({
+  providers: [
+    MyService,
+    AnotherService
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>42. How does Angular handle service instantiation?</h2>
+  <p>Angular uses a hierarchical injection system to instantiate services. The injector resolves the dependencies by checking the component, module, and root level to ensure the correct service instance is provided.</p>
+  <pre><code>class MyService {
+  constructor(private logger: LoggerService) {}
+}</code></pre>
+</section>
+
+<section>
+  <h2>43. Can you inject a service in Angular without using the constructor?</h2>
+  <p>Yes, Angular 14 and later allow you to inject services using the <code>inject()</code> function, which can be used in lifecycle hooks like <code>ngOnInit()</code> or anywhere within the component or service.</p>
+  <pre><code>import { inject } from '@angular/core';
+
+export class MyComponent {
+  private service = inject(MyService);
+
+  ngOnInit() {
+    this.service.getData().subscribe(data => console.log(data));
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>44. How do you use the @Inject decorator in Angular?</h2>
+  <p>The @Inject decorator is used to explicitly specify which dependency Angular should inject when there are multiple dependencies or when the dependency is not automatically inferred by the type of the class.</p>
+  <pre><code>import { Inject } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Inject('config') private config: Config) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>45. What is the purpose of providedIn in Angular Dependency Injection?</h2>
+  <p>By using the <code>providedIn</code> property, you can specify where and how the service should be provided. For example, <code>providedIn: 'root'</code> provides the service at the application level, while <code>providedIn: 'anyModule'</code> limits the scope to a specific module.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class MyService { }</code></pre>
+</section>
+
+<section>
+  <h2>46. How can you configure a service to be injected in a specific module only?</h2>
+  <p>You can configure a service to be injected only in a specific module by including the service in the <code>providers</code> array of the module’s metadata. The service will only be available in that module and its components.</p>
+  <pre><code>@NgModule({
+  providers: [MyService],
+  declarations: [MyComponent],
+  imports: [CommonModule]
+})
+export class MyModule { }</code></pre>
+</section>
+
+<section>
+  <h2>47. Can a service be injected into a non-Angular class?</h2>
+  <p>No, services can only be injected into Angular components, directives, services, or modules. They cannot be injected into plain JavaScript or non-Angular classes.</p>
+  <pre><code>class NonAngularClass {
+  constructor(private service: MyService) {} // This will throw an error
+}</code></pre>
+</section>
+
+<section>
+  <h2>48. How do you provide a service in a feature module in Angular?</h2>
+  <p>To provide a service in a feature module, add the service to the <code>providers</code> array of the module’s metadata. This makes the service available to all components within the feature module.</p>
+  <pre><code>@NgModule({
+  imports: [CommonModule],
+  providers: [FeatureService],
+  declarations: [FeatureComponent]
+})
+export class FeatureModule { }</code></pre>
+</section>
+
+<section>
+  <h2>49. Can you inject a service with a specific scope or lifetime in Angular?</h2>
+  <p>Yes, you can control the scope and lifetime of a service in Angular by providing it at different levels, such as component, module, or root level. By providing it in the root, Angular ensures a singleton instance; by providing it at the component or module level, a new instance is created for each.</p>
+  <pre><code>@Component({
+  selector: 'app-example',
+  providers: [ScopedService]
+})
+export class ExampleComponent { }</code></pre>
+</section>
+
+<section>
+  <h2>50. What is the purpose of the useClass provider in Angular?</h2>
+  <p>The <code>useClass</code> provider allows you to configure Angular to inject a specific class as a service. This is useful for overriding a default implementation or providing a mock service in tests.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: AuthService, useClass: MockAuthService }
+  ]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>51. How do you use a service that is provided at the component level in Angular?</h2>
+  <p>To use a service provided at the component level, simply inject it into the component's constructor. The service will be scoped to that component and its child components, allowing for a unique instance in each component.</p>
+  <pre><code>@Component({
+  selector: 'app-my-component',
+  providers: [MyService]
+})
+export class MyComponent {
+  constructor(private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>52. What is the difference between a service and a factory in Angular?</h2>
+  <p>A service in Angular is typically a class that provides functionality to components, while a factory is a function that returns a service instance. A factory can be used when you need more control over the instantiation of a service.</p>
+  <pre><code>export function serviceFactory() {
+  return new MyService('Custom Configuration');
+}
+
+@NgModule({
+  providers: [{ provide: MyService, useFactory: serviceFactory }]
+})
+export class AppModule { }</code></pre>
+</section>
+
+<section>
+  <h2>53. What are the benefits of using Dependency Injection in Angular?</h2>
+  <p>Dependency Injection in Angular provides several benefits, including improved testability, better separation of concerns, easier maintenance, and enhanced reusability of services and components.</p>
+  <pre><code>class SomeComponent {
+  constructor(private service: MyService) {}
+}</code></pre>
+</section>
+
+<section>
+  <h2>54. How can you provide a mock service in Angular testing?</h2>
+  <p>In Angular testing, you can use the <code>TestBed</code> to provide mock services. You can either use a class that mimics the service's behavior or provide a value using <code>useValue</code> for more control.</p>
+  <pre><code>TestBed.configureTestingModule({
+  providers: [{ provide: MyService, useClass: MockService }]
+});
+
+const service = TestBed.inject(MyService);
+</code></pre>
+</section>
+
+<section>
+  <h2>55. How does Angular inject dependencies into a service's constructor?</h2>
+  <p>Angular uses its injector to instantiate the service and resolve the dependencies by matching constructor parameters to services registered in the injector. The services are then injected when the service is instantiated.</p>
+  <pre><code>export class MyService {
+  constructor(private http: HttpClient) {}
+}</code></pre>
+</section>
+
+<section>
+  <h2>56. Can you inject a service into a component using a setter?</h2>
+  <p>Yes, you can inject a service into a component using a setter method. This approach can be useful for cases where the service needs to be injected or updated after the component is initialized.</p>
+  <pre><code>export class MyComponent {
+  private _myService: MyService;
+
+  @Input()
+  set myService(service: MyService) {
+    this._myService = service;
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>57. What is the role of the @Self decorator in Angular Dependency Injection?</h2>
+  <p>The @Self decorator tells Angular to only inject dependencies from the current injector. It will not look at parent injectors, which is useful when you want to enforce the injection of a service from the component's own injector.</p>
+  <pre><code>import { Self } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Self() private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>58. What is the purpose of @SkipSelf in Angular Dependency Injection?</h2>
+  <p>The @SkipSelf decorator tells Angular to look for a dependency in the parent injector, skipping the current injector. This is useful when you want to retrieve a dependency that was provided higher in the component tree.</p>
+  <pre><code>import { SkipSelf } from '@angular/core';
+
+export class MyComponent {
+  constructor(@SkipSelf() private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>59. How does Angular prevent service instantiation during circular dependency?</h2>
+  <p>Angular prevents service instantiation in case of circular dependencies by using a token registry. If it detects a circular reference during service resolution, it will throw an error to prevent an infinite loop and guide the developer to refactor the services.</p>
+  <pre><code>class ServiceA {
+  constructor(private serviceB: ServiceB) {}
+}
+
+class ServiceB {
+  constructor(private serviceA: ServiceA) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>60. Can you inject a service into a service in Angular?</h2>
+  <p>Yes, Angular allows you to inject a service into another service. This is commonly used to share logic or data between services and is part of the modular design in Angular applications.</p>
+  <pre><code>export class MyService {
+  constructor(private anotherService: AnotherService) {}
+
+  someMethod() {
+    this.anotherService.doSomething();
+  }
+}
+</code></pre>
+</section>
+
+
+<section>
+  <h2>61. How can you provide a service with specific configurations in Angular?</h2>
+  <p>You can provide a service with specific configurations using the <code>useFactory</code> provider. This allows you to inject dependencies into the factory function and configure the service before it is injected into the component or other services.</p>
+  <pre><code>export function myServiceFactory(config: Config) {
+  return new MyService(config.apiUrl);
+}
+
+@NgModule({
+  providers: [
+    { provide: MyService, useFactory: myServiceFactory, deps: [Config] }
+  ]
+})
+export class AppModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>62. How do you create a service that uses another service in Angular?</h2>
+  <p>You can inject a service into another service by specifying the dependency in the constructor of the service. Angular will automatically inject the required service when instantiating the dependent service.</p>
+  <pre><code>export class MyService {
+  constructor(private dependencyService: DependencyService) {}
+
+  useDependency() {
+    this.dependencyService.doSomething();
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>63. What are hierarchical injectors in Angular?</h2>
+  <p>Hierarchical injectors are a feature of Angular's dependency injection system that allows different levels of injectors to be created. Each component, directive, or module can have its own injector that can override or share services with its parent injectors.</p>
+  <pre><code>@Component({
+  selector: 'app-child',
+  providers: [ChildService]
+})
+export class ChildComponent {}
+</code></pre>
+</section>
+
+<section>
+  <h2>64. What is the advantage of using 'providedIn: 'root' in Angular services?</h2>
+  <p>Using <code>providedIn: 'root'</code> ensures that the service is a singleton and is provided globally across the entire application. This simplifies the service management, as Angular takes care of instantiating and managing its lifecycle.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class MyService { }
+</code></pre>
+</section>
+
+<section>
+  <h2>65. Can you inject a service into a constructor with multiple parameters?</h2>
+  <p>Yes, Angular allows injecting multiple services into a constructor. The services are injected in the order of the constructor parameters.</p>
+  <pre><code>export class MyComponent {
+  constructor(
+    private service1: Service1,
+    private service2: Service2
+  ) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>66. How do you handle asynchronous services in Angular Dependency Injection?</h2>
+  <p>Angular allows you to inject services that return observables or promises. You can handle asynchronous services using Angular's async pipe or by subscribing to the observable within your component.</p>
+  <pre><code>export class MyComponent {
+  constructor(private asyncService: AsyncService) {}
+
+  ngOnInit() {
+    this.asyncService.getData().subscribe(data => {
+      console.log(data);
+    });
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>67. How do you define a service at the module level?</h2>
+  <p>To define a service at the module level, you add the service to the <code>providers</code> array of the module’s metadata. This ensures that the service is scoped to the module and its components.</p>
+  <pre><code>@NgModule({
+  imports: [CommonModule],
+  providers: [MyService],
+  declarations: [MyComponent]
+})
+export class MyModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>68. Can you provide a service at the component level in Angular?</h2>
+  <p>Yes, you can provide a service at the component level by adding it to the <code>providers</code> array of the component’s metadata. This ensures that a new instance of the service is created for each instance of the component.</p>
+  <pre><code>@Component({
+  selector: 'app-component',
+  providers: [MyService]
+})
+export class MyComponent {}
+</code></pre>
+</section>
+
+<section>
+  <h2>69. What is the role of @Optional decorator in Angular Dependency Injection?</h2>
+  <p>The <code>@Optional</code> decorator tells Angular to inject a service only if it is available in the injector. If the service is not provided, it will inject <code>null</code> instead of throwing an error.</p>
+  <pre><code>import { Optional } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Optional() private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>70. How do you inject services into an Angular form control?</h2>
+  <p>You can inject services into form controls in Angular by using Angular's reactive form API and injecting the required service into the component. For example, a service might be used to validate a form control.</p>
+  <pre><code>import { FormBuilder, FormGroup } from '@angular/forms';
+
+export class MyComponent {
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder, private validationService: ValidationService) {
+    this.form = this.fb.group({
+      email: ['', this.validationService.emailValidator]
+    });
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>71. What is the role of @Injectable in Angular Dependency Injection?</h2>
+  <p>The @Injectable decorator marks a class as available for dependency injection. It allows Angular to create an instance of the class and inject it into components or services that require it.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class MyService { }
+</code></pre>
+</section>
+
+<section>
+  <h2>72. What is the difference between 'useClass' and 'useValue' in Angular providers?</h2>
+  <p>In Angular, <code>useClass</code> is used when you want to provide a service by specifying a class that will be used to create the instance, while <code>useValue</code> is used when you want to provide a predefined value (like a string or object) instead of a class.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: MyService, useClass: MockService }
+  ]
+})
+export class AppModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>73. Can you inject a service in a constructor method with a different name?</h2>
+  <p>Yes, you can inject a service with a different name using the <code>@Inject</code> decorator. This allows you to specify a dependency with a different name or token.</p>
+  <pre><code>import { Inject } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Inject('myServiceToken') private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>74. What is a service provider in Angular?</h2>
+  <p>A service provider in Angular is an object that determines how to create and deliver an instance of a service. It can be a class, value, or factory function used in the <code>providers</code> array in the module or component metadata.</p>
+  <pre><code>@NgModule({
+  providers: [{ provide: MyService, useClass: MockService }]
+})
+export class AppModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>75. How do you inject multiple instances of a service in Angular?</h2>
+  <p>To inject multiple instances of a service in Angular, you can provide the service in different components or modules using the <code>providers</code> array. This allows each component to have its own instance of the service.</p>
+  <pre><code>@Component({
+  selector: 'app-component1',
+  providers: [MyService]
+})
+export class Component1 {}
+
+@Component({
+  selector: 'app-component2',
+  providers: [MyService]
+})
+export class Component2 {}
+</code></pre>
+</section>
+
+<section>
+  <h2>76. How do you handle nested services in Angular Dependency Injection?</h2>
+  <p>Nested services in Angular Dependency Injection can be handled by defining the service at different levels in the injector hierarchy. A parent component can provide a service, and child components can inject it either from their own scope or from a parent scope.</p>
+  <pre><code>@Component({
+  selector: 'app-parent',
+  providers: [ParentService]
+})
+export class ParentComponent {}
+
+@Component({
+  selector: 'app-child',
+  providers: [ChildService]
+})
+export class ChildComponent {}
+</code></pre>
+</section>
+
+<section>
+  <h2>77. What happens if a service is provided at both the root and component level?</h2>
+  <p>If a service is provided at both the root and component level, Angular will instantiate a separate instance of the service for the component, and the root instance will remain separate. The component-level instance takes precedence within that component and its children.</p>
+  <pre><code>@Component({
+  selector: 'app-component',
+  providers: [MyService]
+})
+export class MyComponent {}
+</code></pre>
+</section>
+
+<section>
+  <h2>78. How do you provide a service globally in Angular?</h2>
+  <p>You can provide a service globally by adding it to the <code>providedIn: 'root'</code> metadata in the @Injectable decorator. This ensures that the service is available globally across the entire application as a singleton.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class MyService { }
+</code></pre>
+</section>
+
+<section>
+  <h2>79. How do you use the @Optional decorator in a service constructor?</h2>
+  <p>The <code>@Optional</code> decorator is used to tell Angular that a dependency is not mandatory. If the dependency is not provided in the injector, Angular will inject <code>null</code> instead of throwing an error.</p>
+  <pre><code>import { Optional } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Optional() private optionalService: OptionalService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>80. Can services be shared between multiple Angular modules?</h2>
+  <p>Yes, services can be shared between multiple Angular modules if they are provided in the root or a shared module. This allows you to reuse the same service across different modules without creating multiple instances.</p>
+  <pre><code>@NgModule({
+  imports: [SharedModule],
+  providers: [MyService],
+  declarations: [MyComponent]
+})
+export class FeatureModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>81. How do you access a service outside of Angular's DI system?</h2>
+  <p>To access a service outside of Angular's DI system, you can use Angular’s <code>Injector</code> class to manually retrieve an instance of a service.</p>
+  <pre><code>import { Injector } from '@angular/core';
+
+export class MyComponent {
+  private myService: MyService;
+
+  constructor(private injector: Injector) {
+    this.myService = this.injector.get(MyService);
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>82. How do you configure a service to be available in a lazy-loaded module in Angular?</h2>
+  <p>To configure a service for a lazy-loaded module, you provide it in the <code>providers</code> array within the lazy-loaded module. This ensures that the service is available only when the module is loaded.</p>
+  <pre><code>@NgModule({
+  imports: [CommonModule],
+  providers: [MyService],
+  declarations: [LazyComponent]
+})
+export class LazyModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>83. Can you provide a service in a directive?</h2>
+  <p>Yes, you can provide a service in a directive by adding it to the <code>providers</code> array in the directive's metadata. This will make the service available to the directive's host component and its descendants.</p>
+  <pre><code>@Directive({
+  selector: '[appMyDirective]',
+  providers: [MyService]
+})
+export class MyDirective {
+  constructor(private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>84. How do you prevent a service from being shared in Angular?</h2>
+  <p>You can prevent a service from being shared by providing it at the component level. This will ensure that each component gets its own instance of the service rather than a singleton shared across the application.</p>
+  <pre><code>@Component({
+  selector: 'app-my-component',
+  providers: [MyService]
+})
+export class MyComponent {}
+</code></pre>
+</section>
+
+<section>
+  <h2>85. How do you provide a service with an alternative implementation in Angular?</h2>
+  <p>You can provide a service with an alternative implementation by using the <code>useClass</code> or <code>useValue</code> options in the providers array. This allows you to replace the default service with a different class or value.</p>
+  <pre><code>@NgModule({
+  providers: [
+    { provide: MyService, useClass: AlternativeService }
+  ]
+})
+export class AppModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>86. What is the difference between 'providedIn' and the 'providers' array?</h2>
+  <p>The <code>providedIn</code> property is used in the @Injectable decorator to specify the scope of a service (e.g., 'root', 'platform'). The <code>providers</code> array, on the other hand, is used to provide services locally to specific components or modules.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class MyService { }
+
+@NgModule({
+  providers: [MyService]
+})
+export class AppModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>87. How do you handle global state with Angular Dependency Injection?</h2>
+  <p>To handle global state, you can create a service that holds the state and provide it at the root level. This will ensure that the state is shared across components and modules within the application.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class StateService {
+  private state: any;
+
+  setState(state: any) {
+    this.state = state;
+  }
+
+  getState() {
+    return this.state;
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>88. How do you optimize service injection in Angular?</h2>
+  <p>To optimize service injection, consider providing services at the root level to avoid multiple instances across components. Also, avoid heavy computation or side effects inside service constructors to ensure fast initialization.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class OptimizedService { }
+</code></pre>
+</section>
+
+<section>
+  <h2>89. How do you use an Angular service with a component that uses the OnPush change detection strategy?</h2>
+  <p>If a component uses the OnPush change detection strategy, Angular will check for changes only when specific inputs change. If your service provides data that might change, you can trigger change detection manually using <code>ChangeDetectorRef</code> to ensure the view updates.</p>
+  <pre><code>import { ChangeDetectorRef } from '@angular/core';
+
+export class MyComponent {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private myService: MyService) {}
+
+  updateView() {
+    this.changeDetectorRef.detectChanges();
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>90. How do you ensure that a service is only created once in Angular?</h2>
+  <p>To ensure a service is only created once, you can provide it at the root level using <code>providedIn: 'root'</code>. This will ensure that the service is a singleton and only one instance of the service is created during the lifecycle of the application.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class SingletonService { }
+</code></pre>
+</section>
+
+<section>
+  <h2>91. How do you handle circular dependencies in Angular services?</h2>
+  <p>Circular dependencies can be resolved by using Angular's <code>Injector</code> to manually resolve the dependencies or by refactoring the services to break the circular reference, often by moving shared logic into another service.</p>
+  <pre><code>import { Injector } from '@angular/core';
+
+export class ServiceA {
+  constructor(private injector: Injector) {}
+
+  resolveB() {
+    return this.injector.get(ServiceB);
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>92. How do you use Angular services to manage application configuration?</h2>
+  <p>Angular services can be used to manage application configuration by storing configuration values or settings in a service and making them accessible across components via dependency injection.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class ConfigService {
+  private config = {
+    apiUrl: 'https://api.example.com'
+  };
+
+  getConfig() {
+    return this.config;
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>93. How do you use an injectable service to manage authentication in Angular?</h2>
+  <p>An injectable authentication service can manage user authentication by storing tokens or session data and providing methods to log in, log out, and check authentication status.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private isAuthenticated = false;
+
+  login() {
+    this.isAuthenticated = true;
+  }
+
+  logout() {
+    this.isAuthenticated = false;
+  }
+
+  isLoggedIn() {
+    return this.isAuthenticated;
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>94. How can you make a service available only within a certain scope in Angular?</h2>
+  <p>You can make a service available only within a certain scope by providing it at the component or module level, rather than globally in the root injector.</p>
+  <pre><code>@Component({
+  selector: 'app-child',
+  providers: [ChildService]
+})
+export class ChildComponent {}
+</code></pre>
+</section>
+
+<section>
+  <h2>95. How do you use the @Self decorator in Angular Dependency Injection?</h2>
+  <p>The <code>@Self</code> decorator tells Angular to look for the service only in the current injector, not in parent injectors. This is useful when you want to limit the scope of a dependency to a component or directive.</p>
+  <pre><code>import { Self } from '@angular/core';
+
+export class MyComponent {
+  constructor(@Self() private myService: MyService) {}
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>96. How do you create a service that communicates with a REST API in Angular?</h2>
+  <p>You can create a service that communicates with a REST API by using Angular's HttpClient module. The service will use <code>HttpClient</code> methods to send HTTP requests and handle responses.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  constructor(private http: HttpClient) {}
+
+  getData() {
+    return this.http.get('https://api.example.com/data');
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>97. How do you use a service to manage application state in Angular?</h2>
+  <p>You can use a service to manage application state by storing the state in the service and providing methods to update and retrieve the state. This ensures a centralized approach to managing state across components.</p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class StateService {
+  private state = { user: null };
+
+  setUser(user) {
+    this.state.user = user;
+  }
+
+  getUser() {
+    return this.state.user;
+  }
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>98. How do you test a service in Angular?</h2>
+  <p>To test a service in Angular, you use Angular's <code>TestBed</code> to configure the testing environment and create an instance of the service. You can then call the service's methods and check the results using Jasmine or any other testing framework.</p>
+  <pre><code>import { TestBed } from '@angular/core/testing';
+import { MyService } from './my-service';
+
+describe('MyService', () => {
+  let service: MyService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(MyService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+</code></pre>
+</section>
+
+<section>
+  <h2>99. How do you inject a service into a lazy-loaded component in Angular?</h2>
+  <p>To inject a service into a lazy-loaded component, you provide the service in the lazy-loaded module's <code>providers</code> array or at the component level.</p>
+  <pre><code>@NgModule({
+  imports: [CommonModule],
+  providers: [MyService],
+  declarations: [LazyComponent]
+})
+export class LazyModule { }
+</code></pre>
+</section>
+
+<section>
+  <h2>100. How do you use a factory function to create a service in Angular?</h2>
+  <p>A factory function can be used to create a service in Angular by providing it in the <code>providers</code> array with a factory function that returns an instance of the service.</p>
+  <pre><code>export function myServiceFactory() {
+  return new MyService('someValue');
+}
+
+@NgModule({
+  providers: [
+    { provide: MyService, useFactory: myServiceFactory }
+  ]
+})
+export class AppModule { }
+</code></pre>
+</section>
+
+
+
+</body>
+</html>

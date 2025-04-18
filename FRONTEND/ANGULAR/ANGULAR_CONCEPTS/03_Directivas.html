@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Angular Components Questions - Set 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007acc;
+    }
+    ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: #f8f8f2;
+    }
+  </style>
+</head>
+<body>	
+<!-- Set 1: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 1: Angular Directives - Source Code Examples</h2>
+  <ol start="1">
+    <li>
+      <strong>What is the purpose of the <code>ngIf</code> directive in Angular?</strong>
+      <p>The <code>ngIf</code> directive is used to conditionally include or remove an element from the DOM based on the value of an expression.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;This is visible when 'isVisible' is true&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How does <code>ngFor</code> work in Angular?</strong>
+      <p>The <code>ngFor</code> directive is used to iterate over an array or a list and generate a view for each item in the collection.</p>
+      <pre><code>&lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Item 1', 'Item 2', 'Item 3'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply classes dynamically using <code>ngClass</code>?</strong>
+      <p>The <code>ngClass</code> directive allows you to add or remove CSS classes dynamically based on the value of an expression.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;This element changes class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What does <code>ngStyle</code> do in Angular?</strong>
+      <p>The <code>ngStyle</code> directive allows you to dynamically apply inline styles to an element based on the value of an expression.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'font-size': fontSize + 'px' }"&gt;Styled dynamically&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'red';
+  fontSize = 16;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ngIf</code> and <code>ngFor</code> together in a single element?</strong>
+      <p>Yes, you can use both directives together to iterate over a collection conditionally.</p>
+      <pre><code>&lt;div *ngIf="isVisible" *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;</code></pre>
+      <p><strong>Note:</strong> You need to wrap them in a <code>&lt;ng-container&gt;</code> if using them together on the same element.</p>
+      <pre><code>&lt;ng-container *ngIf="isVisible"&gt;
+  &lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;
+&lt;/ng-container&gt;</code></pre>
+    </li>
+    <li>
+      <strong>How can you conditionally apply multiple CSS classes using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> with an object that maps class names to boolean expressions to conditionally apply multiple classes.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlight': isHighlighted, 'bold': isBold }"&gt;Text with conditional classes&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+  isBold = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngStyle</code> be used to dynamically set properties like width and height?</strong>
+      <p>Yes, you can use <code>ngStyle</code> to dynamically set inline styles such as width, height, and others.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'width': width + 'px', 'height': height + 'px' }"&gt;Resizable div&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  width = 200;
+  height = 100;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you toggle visibility of an element using <code>ngIf</code>?</strong>
+      <p>Toggle the value of the expression bound to <code>ngIf</code> to show or hide the element.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;This element is visible&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+
+  toggleVisibility() {
+    this.isVisible = !this.isVisible;
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you bind inline styles conditionally with <code>ngStyle</code>?</strong>
+      <p>Yes, you can conditionally apply inline styles based on the value of an expression.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': isRed ? 'red' : 'blue' }"&gt;Color changes based on condition&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isRed = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What is the syntax for using <code>ngClass</code> with an array of class names?</strong>
+      <p>Use <code>ngClass</code> with an array to apply multiple classes to an element.</p>
+      <pre><code>&lt;div [ngClass]="['class1', 'class2']"&gt;Multiple classes applied&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 2: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 2: Angular Directives - Source Code Examples</h2>
+  <ol start="11">
+    <li>
+      <strong>How can you prevent unwanted elements from rendering in Angular with <code>ngIf</code>?</strong>
+      <p>Use the <code>ngIf</code> directive to conditionally render elements based on a boolean condition, preventing unnecessary rendering.</p>
+      <pre><code>&lt;div *ngIf="isUserLoggedIn"&gt;Welcome, user!&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isUserLoggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you track the index of items when using <code>ngFor</code>?</strong>
+      <p>Yes, you can track the index of items in the loop by using the <code>index</code> variable provided by <code>ngFor</code>.</p>
+      <pre><code>&lt;div *ngFor="let item of items; let i = index"&gt;Index: {{ i }} - Item: {{ item }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Item A', 'Item B', 'Item C'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply different classes conditionally with <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to dynamically apply different classes based on certain conditions.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlight': isActive, 'disabled': !isActive }"&gt;Conditional classes applied&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What happens if you use <code>ngFor</code> on a non-iterable object?</strong>
+      <p>Using <code>ngFor</code> on a non-iterable object will result in an error. Ensure the object is iterable (like an array).</p>
+      <pre><code>&lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Item A', 'Item B', 'Item C']; // Valid iterable object
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you dynamically change the styles of an element using <code>ngStyle</code>?</strong>
+      <p>You can dynamically change styles like background color, font size, etc., using the <code>ngStyle</code> directive with an object binding.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': backgroundColor, 'font-size': fontSize + 'px' }"&gt;Styled element&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  backgroundColor = 'lightblue';
+  fontSize = 18;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you display a default message when a list is empty with <code>ngIf</code>?</strong>
+      <p>You can use <code>ngIf</code> to check if the list is empty and display a default message accordingly.</p>
+      <pre><code>&lt;div *ngIf="items.length === 0"&gt;No items available&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [];
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ngIf</code> with an else clause in Angular?</strong>
+      <p>Yes, <code>ngIf</code> can be used with an <code>else</code> clause to display an alternate template if the condition is false.</p>
+      <pre><code>&lt;div *ngIf="isVisible; else elseBlock"&gt;Visible Content&lt;/div&gt;
+&lt;ng-template #elseBlock&gt;Not Visible&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngFor</code> with trackBy for performance optimization?</strong>
+      <p>You can use <code>trackBy</code> with <code>ngFor</code> to improve performance by tracking the identity of items in the loop.</p>
+      <pre><code>&lt;div *ngFor="let item of items; trackBy: trackById"&gt;{{ item.name }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
+  
+  trackById(index: number, item: any): number {
+    return item.id;
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you bind multiple styles using <code>ngStyle</code>?</strong>
+      <p>Yes, you can bind multiple styles using an object with key-value pairs in the <code>ngStyle</code> directive.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'padding': padding + 'px' }"&gt;Styled Element&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'blue';
+  padding = 10;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you conditionally add or remove a class using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> with a ternary operator or a conditional expression to conditionally add or remove a class.</p>
+      <pre><code>&lt;div [ngClass]="isActive ? 'active' : 'inactive'"&gt;Class toggles based on condition&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = false;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 3: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 3: Angular Directives - Source Code Examples</h2>
+  <ol start="21">
+    <li>
+      <strong>How can you dynamically add or remove classes with <code>ngClass</code>?</strong>
+      <p>By using a boolean expression, you can conditionally add or remove classes using <code>ngClass</code>.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Dynamic class based on condition&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngIf</code> with <code>else</code> for conditional templates?</strong>
+      <p>Using <code>ngIf</code> with an <code>else</code> template allows you to display alternative content.</p>
+      <pre><code>&lt;div *ngIf="isVisible; else hiddenContent"&gt;Content is visible&lt;/div&gt;
+&lt;ng-template #hiddenContent&gt;Content is hidden&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngStyle</code> be used for dynamic font styling?</strong>
+      <p>Yes, <code>ngStyle</code> allows you to dynamically change font styles such as <code>font-size</code> or <code>font-family</code>.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'font-size': fontSize + 'px', 'font-family': fontFamily }"&gt;Dynamic Font Styling&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  fontSize = 16;
+  fontFamily = 'Arial';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you iterate through an array and display elements using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to loop through an array and display each element.</p>
+      <pre><code>&lt;div *ngFor="let fruit of fruits"&gt;{{ fruit }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  fruits = ['Apple', 'Banana', 'Orange'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>ngClass</code> to toggle between multiple classes?</strong>
+      <p>By binding <code>ngClass</code> to an object, you can toggle multiple classes based on different conditions.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlight': isActive, 'disabled': !isActive }"&gt;Class toggling&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What is the syntax for applying <code>ngStyle</code> for multiple styles at once?</strong>
+      <p>You can pass an object to <code>ngStyle</code> to apply multiple styles in one go.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': 'red', 'background-color': 'yellow' }"&gt;Multiple styles&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent { }</code></pre>
+    </li>
+    <li>
+      <strong>How can you control the order of rendered items when using <code>ngFor</code>?</strong>
+      <p>You can reorder the items before passing them to <code>ngFor</code> or use <code>trackBy</code> for better performance with sorting.</p>
+      <pre><code>&lt;div *ngFor="let item of items; trackBy: trackById"&gt;{{ item.name }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
+  
+  trackById(index: number, item: any): number {
+    return item.id;
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you pass dynamic styles to a component using <code>ngStyle</code>?</strong>
+      <p>Yes, you can pass dynamic styles such as colors, heights, or widths using <code>ngStyle</code>.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'width': width + 'px' }"&gt;Dynamic Styles&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'blue';
+  width = 200;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you check if an array is empty and display a message using <code>ngIf</code>?</strong>
+      <p>Use <code>ngIf</code> to check if an array is empty and display a default message when it is.</p>
+      <pre><code>&lt;div *ngIf="items.length === 0"&gt;No items available&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you hide elements dynamically using <code>ngIf</code>?</strong>
+      <p>To hide an element dynamically, set the expression in <code>ngIf</code> to <code>false</code>.</p>
+      <pre><code>&lt;div *ngIf="isHidden"&gt;This element is hidden&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHidden = true;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 4: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 4: Angular Directives - Source Code Examples</h2>
+  <ol start="31">
+    <li>
+      <strong>How can you use <code>ngFor</code> to display items from an object array?</strong>
+      <p>You can use <code>ngFor</code> to iterate over objects in an array and display each property.</p>
+      <pre><code>&lt;div *ngFor="let person of people"&gt;
+  &lt;h3&gt;{{ person.name }}&lt;/h3&gt;
+  &lt;p&gt;{{ person.age }} years old&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  people = [{ name: 'John', age: 28 }, { name: 'Jane', age: 34 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>What is the purpose of <code>ngIf</code> in conditionally rendering elements?</strong>
+      <p><code>ngIf</code> helps to render or remove elements from the DOM based on a condition.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;This content will only appear when isVisible is true&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you style a component using <code>ngClass</code> based on a condition?</strong>
+      <p>Use <code>ngClass</code> to toggle CSS classes based on a boolean condition.</p>
+      <pre><code>&lt;div [ngClass]="{'highlight': isHighlighted}"&gt;Conditional Styling&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ngIf</code> with an <code>else</code> template for alternative content?</strong>
+      <p>Yes, you can use <code>ngIf</code> with <code>else</code> to display an alternative content when the condition is false.</p>
+      <pre><code>&lt;div *ngIf="isVisible; else noContent"&gt;Visible Content&lt;/div&gt;
+&lt;ng-template #noContent&gt;No content to display&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you dynamically change the background color of an element using <code>ngStyle</code>?</strong>
+      <p>You can bind <code>ngStyle</code> to a dynamic object to modify the background color.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': backgroundColor }"&gt;Styled div&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  backgroundColor = 'lightblue';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you iterate over a list and display each item’s property using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to iterate over each item in an array and display a specific property.</p>
+      <pre><code>&lt;div *ngFor="let product of products"&gt;
+  &lt;h4&gt;{{ product.name }}&lt;/h4&gt;
+  &lt;p&gt;{{ product.price }}&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  products = [{ name: 'Laptop', price: 1200 }, { name: 'Phone', price: 800 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you change the visibility of an element based on a variable using <code>ngIf</code>?</strong>
+      <p>Set a boolean variable and use it with <code>ngIf</code> to control the visibility of an element.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;This content will be displayed when isVisible is true&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you dynamically apply multiple styles using <code>ngStyle</code>?</strong>
+      <p>Pass an object containing key-value pairs for multiple styles in <code>ngStyle</code>.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': textColor, 'font-size': fontSize + 'px' }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  textColor = 'red';
+  fontSize = 18;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply a CSS class to an element based on a dynamic condition with <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to apply or remove CSS classes dynamically based on a condition.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Status based class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you toggle the visibility of an element using <code>ngIf</code> and a button click?</strong>
+      <p>Bind <code>ngIf</code> to a boolean and toggle it using a button.</p>
+      <pre><code>&lt;button (click)="toggleVisibility()"&gt;Toggle Visibility&lt;/button&gt;
+&lt;div *ngIf="isVisible"&gt;Visible Content&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+  
+  toggleVisibility() {
+    this.isVisible = !this.isVisible;
+  }
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+<!-- Set 5: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 5: Angular Directives - Source Code Examples</h2>
+  <ol start="41">
+    <li>
+      <strong>How can you use <code>ngIf</code> to display content conditionally?</strong>
+      <p>Use <code>ngIf</code> to conditionally include content in the DOM based on a boolean value.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;Content that will be displayed when isVisible is true&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you display a list of items using <code>ngFor</code>?</strong>
+      <p><code>ngFor</code> is used to iterate over an array and display its items.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Apple', 'Banana', 'Cherry'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply a dynamic CSS class using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to conditionally apply or remove CSS classes based on a boolean or expression.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlighted': isHighlighted }"&gt;Text with dynamic class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you add inline styles dynamically using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to dynamically change inline styles of an element based on expressions.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'font-size': fontSize + 'px' }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'blue';
+  fontSize = 16;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you iterate over a list of objects and display specific properties using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to loop over an array of objects and display properties.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let person of people"&gt;
+    {{ person.name }} is {{ person.age }} years old
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  people = [{ name: 'Alice', age: 30 }, { name: 'Bob', age: 25 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you conditionally hide content using <code>ngIf</code> with <code>else</code>?</strong>
+      <p>Yes, you can use <code>ngIf</code> with the <code>else</code> clause to show alternate content when the condition is false.</p>
+      <pre><code>&lt;div *ngIf="isVisible; else noContent"&gt;Content is visible&lt;/div&gt;
+&lt;ng-template #noContent&gt;Alternate content&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you toggle a class on an element using <code>ngClass</code>?</strong>
+      <p>You can toggle a class dynamically based on a boolean condition.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Toggle Class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you display a list of objects with <code>ngFor</code> while using object keys?</strong>
+      <p>You can display both the key and value from an object using <code>ngFor</code>.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let key of objectKeys(someObject)"&gt;
+    {{ key }}: {{ someObject[key] }}
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  someObject = { name: 'John', age: 30 };
+  objectKeys = Object.keys;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply multiple styles dynamically using <code>ngStyle</code>?</strong>
+      <p>You can bind <code>ngStyle</code> to an object that contains multiple style properties.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': textColor, 'font-size': fontSize + 'px' }"&gt;Text with Multiple Styles&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  textColor = 'green';
+  fontSize = 20;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you create a dynamic button that toggles content visibility using <code>ngIf</code>?</strong>
+      <p>Bind <code>ngIf</code> to a condition and change the condition on button click.</p>
+      <pre><code>&lt;button (click)="toggleContent()"&gt;Toggle Content&lt;/button&gt;
+&lt;div *ngIf="isContentVisible"&gt;This content is conditionally rendered&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isContentVisible = false;
+  
+  toggleContent() {
+    this.isContentVisible = !this.isContentVisible;
+  }
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 6: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 6: Angular Directives - Source Code Examples</h2>
+  <ol start="51">
+    <li>
+      <strong>How can you use <code>ngIf</code> with an else clause to handle conditional rendering?</strong>
+      <p>Use <code>ngIf</code> with the <code>else</code> clause to specify content that should be shown when the condition is false.</p>
+      <pre><code>&lt;div *ngIf="isVisible; else noContent"&gt;Content to show when isVisible is true&lt;/div&gt;
+&lt;ng-template #noContent&gt;Content to show when isVisible is false&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you iterate over an array of numbers with <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to loop through an array of numbers and display each one.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let number of numbers"&gt;{{ number }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  numbers = [1, 2, 3, 4, 5];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you conditionally apply a class with <code>ngClass</code> based on a boolean variable?</strong>
+      <p>Use <code>ngClass</code> to conditionally add or remove CSS classes based on a condition.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlight': isHighlighted }"&gt;Conditional Class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you set multiple inline styles using <code>ngStyle</code>?</strong>
+      <p>You can bind multiple styles to an element using <code>ngStyle</code> with an object.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'font-size': fontSize + 'px' }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'red';
+  fontSize = 18;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngFor</code> to display even numbers only from an array?</strong>
+      <p>Use <code>ngFor</code> with a condition to filter the array for even numbers.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let number of numbers" [hidden]="number % 2 !== 0"&gt;{{ number }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  numbers = [1, 2, 3, 4, 5, 6];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you dynamically add/remove multiple classes using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to bind an object containing multiple classes with conditions.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Class Toggle&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngIf</code> with multiple conditions?</strong>
+      <p>Combine multiple conditions within the <code>ngIf</code> directive using logical operators.</p>
+      <pre><code>&lt;div *ngIf="isVisible && isActive"&gt;Visible and Active Content&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply a style to an element based on a condition using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to dynamically apply styles based on a condition.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': isActive ? 'green' : 'red' }"&gt;Background Color Change&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you display a list of items with <code>ngFor</code> and index?</strong>
+      <p>Use the <code>index</code> variable with <code>ngFor</code> to display the index of each item.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items; let i = index"&gt;{{ i + 1 }}. {{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Item 1', 'Item 2', 'Item 3'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>ngIf</code> with a negation condition?</strong>
+      <p>Use the negation operator <code>!</code> to negate the condition in <code>ngIf</code>.</p>
+      <pre><code>&lt;div *ngIf="!isVisible"&gt;Content when isVisible is false&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 7: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 7: Angular Directives - Source Code Examples</h2>
+  <ol start="61">
+    <li>
+      <strong>How do you hide an element using <code>ngIf</code> in Angular?</strong>
+      <p>Use <code>ngIf</code> to conditionally include or remove an element from the DOM.</p>
+      <pre><code>&lt;div *ngIf="isHidden; else visibleContent"&gt;Hidden Content&lt;/div&gt;
+&lt;ng-template #visibleContent&gt;Visible Content&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHidden = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>ngFor</code> to loop over a list of objects?</strong>
+      <p>Use <code>ngFor</code> to iterate over an array of objects and access their properties.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let person of people"&gt;{{ person.name }} - {{ person.age }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  people = [{ name: 'John', age: 25 }, { name: 'Jane', age: 28 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you dynamically apply multiple CSS classes using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to apply one or more classes conditionally.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlight': isHighlighted, 'error': hasError }"&gt;Dynamically Applied Classes&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+  hasError = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply multiple inline styles using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to bind an object containing multiple styles.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'font-weight': fontWeight }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'blue';
+  fontWeight = 'bold';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply styles conditionally using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to apply styles based on conditions, such as variables or expressions.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': isRed ? 'red' : 'green' }"&gt;Color Change&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isRed = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you dynamically loop through a range of numbers with <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> with a range of numbers to create a loop.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let i of [].constructor(5); let index = index"&gt;{{ index + 1 }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>ngClass</code> with an object for dynamic class binding?</strong>
+      <p>Use <code>ngClass</code> with an object to conditionally apply classes based on variable values.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Status&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you conditionally render an element based on a variable using <code>ngIf</code>?</strong>
+      <p>Use <code>ngIf</code> to include or exclude an element based on a boolean variable.</p>
+      <pre><code>&lt;div *ngIf="isLoggedIn"&gt;Welcome User!&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoggedIn = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you implement an else condition in <code>ngIf</code> with a template?</strong>
+      <p>Use <code>ngIf</code> along with an <code>else</code> clause to render an alternative template.</p>
+      <pre><code>&lt;div *ngIf="isLoggedIn; else loginMessage"&gt;Welcome User!&lt;/div&gt;
+&lt;ng-template #loginMessage&gt;Please log in.&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>ngFor</code> to iterate through an array of strings?</strong>
+      <p>Use <code>ngFor</code> to loop through an array of strings and display them.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Item A', 'Item B', 'Item C'];
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+
+<!-- Set 8: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 8: Angular Directives - Source Code Examples</h2>
+  <ol start="71">
+    <li>
+      <strong>How do you conditionally add or remove a CSS class with <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> with a condition to dynamically apply or remove CSS classes.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlight': isHighlighted }"&gt;Text with dynamic class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngIf</code> to show or hide content based on a condition?</strong>
+      <p>Use <code>ngIf</code> to conditionally display or hide elements based on a boolean variable.</p>
+      <pre><code>&lt;div *ngIf="showContent"&gt;This is conditionally displayed content&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  showContent = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply inline styles conditionally with <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to apply inline styles based on conditions.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'font-size': fontSize }"&gt;Text with conditional styles&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'blue';
+  fontSize = '16px';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you iterate over an array of numbers using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to loop through an array and display its contents.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let number of numbers"&gt;{{ number }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  numbers = [1, 2, 3, 4, 5];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you add a class conditionally in <code>ngClass</code> with an array of class names?</strong>
+      <p>Use <code>ngClass</code> with an array to conditionally apply multiple classes.</p>
+      <pre><code>&lt;div [ngClass]="['class1', 'class2']"&gt;Text with multiple classes&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  // You can add conditions to dynamically include classes
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngIf</code> with an else condition and an inline template?</strong>
+      <p>Use the <code>else</code> keyword with an inline template to render alternative content.</p>
+      <pre><code>&lt;div *ngIf="isLoggedIn; else loginPage"&gt;Welcome User!&lt;/div&gt;
+&lt;ng-template #loginPage&gt;Please log in.&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you loop through a list of objects and access their properties using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to iterate over an array of objects and display their properties.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let person of people"&gt;{{ person.name }} - {{ person.age }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  people = [{ name: 'John', age: 30 }, { name: 'Jane', age: 25 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>ngStyle</code> to apply background color conditionally?</strong>
+      <p>Use <code>ngStyle</code> to apply conditional styles like background color based on a variable.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': isRed ? 'red' : 'green' }"&gt;Text with dynamic background&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isRed = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you bind multiple styles to a component using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to bind multiple CSS properties dynamically.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': 'blue', 'font-size': '18px' }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {}</code></pre>
+    </li>
+    <li>
+      <strong>How do you conditionally apply classes based on the properties of an object using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to conditionally apply CSS classes based on an object's properties.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'disabled': !isActive }"&gt;Button&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 9: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 9: Angular Directives - Source Code Examples</h2>
+  <ol start="81">
+    <li>
+      <strong>How can you use <code>ngIf</code> to display an element when a variable is true and hide it when false?</strong>
+      <p>Use <code>ngIf</code> to conditionally show or hide elements based on the truthiness of a variable.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;This content is conditionally visible&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you iterate through an array of objects using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to iterate through an array of objects and access each object’s properties.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item.name }} - {{ item.price }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ name: 'Item 1', price: 10 }, { name: 'Item 2', price: 20 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you conditionally apply multiple classes using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to conditionally apply multiple CSS classes based on conditions.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Status Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you dynamically set styles using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to dynamically set styles like color or font size.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': textColor, 'font-size': fontSize }"&gt;Text with dynamic styles&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  textColor = 'blue';
+  fontSize = '18px';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you add a default value in <code>ngIf</code> with <code>else</code>?</strong>
+      <p>Use <code>ngIf</code> with an <code>else</code> block to show alternative content when the condition is false.</p>
+      <pre><code>&lt;div *ngIf="isLoggedIn; else loginPage"&gt;Welcome, User!&lt;/div&gt;
+&lt;ng-template #loginPage&gt;Please log in.&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngFor</code> to display an array of numbers?</strong>
+      <p>Use <code>ngFor</code> to loop through an array of numbers and display them.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let num of numbers"&gt;{{ num }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  numbers = [1, 2, 3, 4, 5];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you change the background color dynamically using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to change the background color of an element based on a condition.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': isRed ? 'red' : 'green' }"&gt;This is a color-changing div&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isRed = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngClass</code> to add dynamic CSS classes based on an object?</strong>
+      <p>Use <code>ngClass</code> with an object to dynamically assign CSS classes based on properties.</p>
+      <pre><code>&lt;div [ngClass]="{ 'highlighted': isHighlighted, 'active': isActive }"&gt;Text with dynamic classes&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHighlighted = true;
+  isActive = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you loop through an array of objects and display a list using <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to loop through an array of objects and display their properties in a list.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let person of people"&gt;{{ person.name }} - {{ person.age }} years old&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  people = [{ name: 'John', age: 30 }, { name: 'Jane', age: 25 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you toggle an element's visibility using <code>ngIf</code>?</strong>
+      <p>Use <code>ngIf</code> to conditionally display or hide an element based on a boolean value.</p>
+      <pre><code>&lt;div *ngIf="isVisible"&gt;This content is toggled&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isVisible = false;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+<!-- Set 10: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 10: Angular Directives - Source Code Examples</h2>
+  <ol start="91">
+    <li>
+      <strong>How do you use <code>ngIf</code> with an <code>else</code> block?</strong>
+      <p>Use <code>ngIf</code> to display content conditionally and <code>else</code> to show an alternative view.</p>
+      <pre><code>&lt;div *ngIf="isLoggedIn; else login"&gt;Welcome, User!&lt;/div&gt;
+&lt;ng-template #login&gt;Please log in&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you display a list of items with <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to iterate over a list and display each item dynamically.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Item 1', 'Item 2', 'Item 3'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply styles dynamically using <code>ngStyle</code>?</strong>
+      <p>Use <code>ngStyle</code> to apply inline styles based on component data.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'background-color': color }"&gt;Styled text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'lightblue';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you toggle a class using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to conditionally apply CSS classes based on boolean conditions.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive }"&gt;This div can be active&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>What is the syntax for iterating through an array of objects in <code>ngFor</code>?</strong>
+      <p>Use <code>ngFor</code> to loop through objects in an array and access their properties.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let person of people"&gt;{{ person.name }} - {{ person.age }} years old&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  people = [{ name: 'John', age: 30 }, { name: 'Jane', age: 25 }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply multiple CSS classes using <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> with an object to conditionally apply multiple classes.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'highlighted': isHighlighted }"&gt;Styled content&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+  isHighlighted = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you create a loop that displays elements only if they meet a condition with <code>ngIf</code>?</strong>
+      <p>Use <code>ngIf</code> with a condition to display elements dynamically.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let num of numbers" *ngIf="num &gt; 2"&gt;{{ num }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  numbers = [1, 2, 3, 4, 5];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngStyle</code> to change the font size dynamically?</strong>
+      <p>Use <code>ngStyle</code> to dynamically change the font size of an element.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'font-size': fontSize }"&gt;Text with dynamic font size&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  fontSize = '20px';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you conditionally apply a background color with <code>ngClass</code>?</strong>
+      <p>Use <code>ngClass</code> to apply a background color class conditionally.</p>
+      <pre><code>&lt;div [ngClass]="{ 'bg-red': isError, 'bg-green': !isError }"&gt;This is a colored div&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isError = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you show a loading spinner while data is being fetched with <code>ngIf</code>?</strong>
+      <p>Use <code>ngIf</code> to display a loading spinner while the data is being fetched.</p>
+      <pre><code>&lt;div *ngIf="isLoading"&gt;Loading...&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoading = true;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 11: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 11: Angular Directives - Source Code Examples</h2>
+  <ol start="101">
+    <li>
+      <strong>How can you use <code>ngFor</code> with index?</strong>
+      <p>Use the <code>index</code> variable provided by <code>ngFor</code> to display the current iteration number.</p>
+      <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items; let i = index"&gt;{{ i + 1 }} - {{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['Apple', 'Banana', 'Cherry'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngIf</code> with a boolean expression?</strong>
+      <p>You can bind <code>ngIf</code> to any valid boolean expression.</p>
+      <pre><code>&lt;p *ngIf="user.age &gt;= 18"&gt;User is an adult.&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  user = { age: 20 };
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you apply multiple styles using <code>ngStyle</code>?</strong>
+      <p>Pass an object with multiple key-value pairs for different styles.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': color, 'font-weight': weight }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  color = 'blue';
+  weight = 'bold';
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to disable a button conditionally using <code>ngClass</code>?</strong>
+      <p>Apply a disabled class based on a condition using <code>ngClass</code>.</p>
+      <pre><code>&lt;button [ngClass]="{ 'disabled-btn': isDisabled }"&gt;Click me&lt;/button&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isDisabled = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you combine <code>ngIf</code> and <code>ngFor</code> on the same element?</strong>
+      <p>You must use a container element like <code>ng-container</code>.</p>
+      <pre><code>&lt;ng-container *ngIf="items.length &gt; 0"&gt;
+  &lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;
+&lt;/ng-container&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['One', 'Two', 'Three'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you style a component based on user interaction with <code>ngClass</code>?</strong>
+      <p>Use a condition that changes on interaction like mouse events or form inputs.</p>
+      <pre><code>&lt;div [ngClass]="{ 'hovered': isHovered }" 
+     (mouseenter)="isHovered = true" 
+     (mouseleave)="isHovered = false"&gt;Hover me&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isHovered = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you apply inline conditional styles using <code>ngStyle</code>?</strong>
+      <p>Yes, you can use a ternary expression to apply styles dynamically.</p>
+      <pre><code>&lt;div [ngStyle]="{ 'color': isDark ? 'white' : 'black' }"&gt;Mode Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isDark = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you disable rendering of a component completely using <code>ngIf</code>?</strong>
+      <p><code>ngIf</code> removes the element from the DOM entirely when false.</p>
+      <pre><code>&lt;app-profile *ngIf="showProfile"&gt;&lt;/app-profile&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  showProfile = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you loop through a string array using <code>ngFor</code> and display uppercase values?</strong>
+      <p>Use <code>ngFor</code> and Angular pipes to transform text.</p>
+      <pre><code>&lt;li *ngFor="let name of names"&gt;{{ name | uppercase }}&lt;/li&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  names = ['alice', 'bob', 'carol'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to use <code>trackBy</code> with <code>ngFor</code> for performance?</strong>
+      <p>Use <code>trackBy</code> to optimize rendering by identifying items uniquely.</p>
+      <pre><code>&lt;div *ngFor="let item of items; trackBy: trackById"&gt;{{ item.name }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ id: 1, name: 'One' }, { id: 2, name: 'Two' }];
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+<!-- Set 12: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 12: Angular Directives - Source Code Examples</h2>
+  <ol start="111">
+    <li>
+      <strong>How can you apply a conditional class with <code>ngClass</code> based on multiple conditions?</strong>
+      <p>Use an object literal with multiple expressions as values.</p>
+      <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'error': hasError }"&gt;Status&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+  hasError = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngFor</code> with an object?</strong>
+      <p>You need to transform the object into an iterable (e.g. using <code>keyvalue</code> pipe).</p>
+      <pre><code>&lt;div *ngFor="let entry of data | keyvalue"&gt;
+  {{ entry.key }}: {{ entry.value }}
+&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  data = { name: 'Alice', age: 30 };
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you apply different styles based on a boolean flag using <code>ngStyle</code>?</strong>
+      <p>Use ternary operators to return different style values.</p>
+      <pre><code>&lt;p [ngStyle]="{ 'background-color': isWarning ? 'yellow' : 'white' }"&gt;
+  Warning message
+&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isWarning = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to show an alternative template with <code>ngIf</code>?</strong>
+      <p>Use the <code>else</code> syntax with a reference to an <code>ng-template</code>.</p>
+      <pre><code>&lt;p *ngIf="isLoggedIn; else loginBlock"&gt;Welcome back!&lt;/p&gt;
+&lt;ng-template #loginBlock&gt;
+  &lt;p&gt;Please log in.&lt;/p&gt;
+&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLoggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngClass</code> with an array of class names?</strong>
+      <p>You can bind an array of class names directly.</p>
+      <pre><code>&lt;div [ngClass]="['box', condition ? 'highlight' : 'normal']"&gt;Box&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  condition = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ngFor</code> on <code>&lt;ng-container&gt;</code>?</strong>
+      <p>Yes, <code>ng-container</code> can hold structural directives like <code>ngFor</code>.</p>
+      <pre><code>&lt;ng-container *ngFor="let item of items"&gt;
+  &lt;p&gt;{{ item }}&lt;/p&gt;
+&lt;/ng-container&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['A', 'B', 'C'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to use <code>ngIf</code> to toggle an element on button click?</strong>
+      <p>Toggle a flag in your component and bind it to <code>ngIf</code>.</p>
+      <pre><code>&lt;button (click)="visible = !visible"&gt;Toggle&lt;/button&gt;
+&lt;p *ngIf="visible"&gt;Now you see me&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  visible = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngStyle</code> apply computed styles?</strong>
+      <p>Yes, just return the computed styles from a method.</p>
+      <pre><code>&lt;div [ngStyle]="getStyles()"&gt;Dynamic Styles&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  getStyles() {
+    return {
+      'color': 'green',
+      'font-size': '20px'
+    };
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you use <code>ngClass</code> with class bindings from a method?</strong>
+      <p>Return an object of classes from a method.</p>
+      <pre><code>&lt;div [ngClass]="getClasses()"&gt;Styled Div&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+  getClasses() {
+    return {
+      'active': this.isActive,
+      'inactive': !this.isActive
+    };
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>What happens when <code>ngIf</code> removes an element from the DOM?</strong>
+      <p>Angular destroys the component or element completely, including its state.</p>
+      <pre><code>&lt;p *ngIf="showMessage"&gt;This disappears with state&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  showMessage = true;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 13: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 13: Angular Directives - Source Code Examples</h2>
+  <ol start="121">
+    <li>
+      <strong>How can you use <code>ngIf</code> with <code>as</code> syntax?</strong>
+      <p>It allows aliasing the condition result for reuse in the template.</p>
+      <pre><code>&lt;div *ngIf="user as u"&gt;
+  Welcome {{ u.name }}!
+&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  user = { name: 'Ana' };
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to access index in <code>ngFor</code>?</strong>
+      <p>Use <code>let i = index</code> in the loop declaration.</p>
+      <pre><code>&lt;li *ngFor="let item of items; let i = index"&gt;{{ i }} - {{ item }}&lt;/li&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['a', 'b', 'c'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to conditionally style an element using <code>ngStyle</code> and multiple properties?</strong>
+      <p>Bind an object with multiple style properties.</p>
+      <pre><code>&lt;div [ngStyle]="{ color: isError ? 'red' : 'black', 'font-weight': 'bold' }"&gt;Styled Text&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isError = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you apply a single class conditionally using <code>ngClass</code>?</strong>
+      <p>Yes, use a boolean expression in an object literal.</p>
+      <pre><code>&lt;div [ngClass]="{ 'error': hasError }"&gt;Error Status&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  hasError = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you use <code>trackBy</code> in <code>ngFor</code> for better performance?</strong>
+      <p>Bind a method to <code>trackBy</code> to identify each item uniquely.</p>
+      <pre><code>&lt;li *ngFor="let item of items; trackBy: trackById"&gt;{{ item.name }}&lt;/li&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ id: 1, name: 'One' }, { id: 2, name: 'Two' }];
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you nest <code>ngIf</code> and <code>ngFor</code> in the same element?</strong>
+      <p>No, wrap one in an <code>ng-container</code> or template.</p>
+      <pre><code>&lt;ng-container *ngIf="items.length"&gt;
+  &lt;div *ngFor="let item of items"&gt;{{ item }}&lt;/div&gt;
+&lt;/ng-container&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = ['X', 'Y'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you use <code>ngIf</code> inside <code>ngFor</code>?</strong>
+      <p>Yes, for filtering display without modifying the array.</p>
+      <pre><code>&lt;div *ngFor="let item of items"&gt;
+  &lt;p *ngIf="item.visible"&gt;{{ item.name }}&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ name: 'A', visible: true }, { name: 'B', visible: false }];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to bind dynamic style values in <code>ngStyle</code> using functions?</strong>
+      <p>Return a style object from a method based on component logic.</p>
+      <pre><code>&lt;p [ngStyle]="getDynamicStyles()"&gt;Dynamic&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  danger = true;
+  getDynamicStyles() {
+    return {
+      'color': this.danger ? 'red' : 'green',
+      'font-style': 'italic'
+    };
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngClass</code> be used with class expressions in string format?</strong>
+      <p>Yes, you can pass a string with space-separated class names.</p>
+      <pre><code>&lt;div [ngClass]="isPrimary ? 'primary-class highlight' : 'secondary-class'"&gt;Styled Box&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isPrimary = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How does <code>ngIf</code> differ from using CSS to hide an element?</strong>
+      <p><code>ngIf</code> removes the element from the DOM, while CSS only hides it visually.</p>
+      <pre><code>&lt;div *ngIf="showBlock"&gt;Visible or not&lt;/div&gt;
+&lt;div [style.display]="showBlock ? 'block' : 'none'"&gt;CSS Hidden&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  showBlock = true;
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 14: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 14: Angular Directives - Source Code Examples</h2>
+  <ol start="131">
+    <li>
+      <strong>Can you toggle an element visibility using a button with <code>ngIf</code>?</strong>
+      <p>Yes, bind a boolean and toggle it with an event.</p>
+      <pre><code>&lt;button (click)="toggle()"&gt;Toggle Text&lt;/button&gt;
+&lt;p *ngIf="showText"&gt;Now you see me!&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  showText = false;
+  toggle() {
+    this.showText = !this.showText;
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngFor</code> be used with <code>Object.keys</code>?</strong>
+      <p>You must convert the object into an iterable format like an array of keys.</p>
+      <pre><code>&lt;li *ngFor="let key of objectKeys(data)"&gt;{{ key }}: {{ data[key] }}&lt;/li&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  data = { a: 1, b: 2 };
+  objectKeys = Object.keys;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngClass</code> be used with an array of class names?</strong>
+      <p>Yes, Angular supports array syntax for applying multiple classes.</p>
+      <pre><code>&lt;div [ngClass]="['blue', 'rounded']"&gt;Box&lt;/div&gt;</code></pre>
+      <pre><code>/* CSS */
+.blue { color: blue; }
+.rounded { border-radius: 10px; }</code></pre>
+    </li>
+    <li>
+      <strong>How to apply conditional styles using ternary operator in <code>ngStyle</code>?</strong>
+      <p>Use ternary inside the binding expression for each property.</p>
+      <pre><code>&lt;p [ngStyle]="{ 'font-size': isLarge ? '24px' : '12px' }"&gt;Text Size&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isLarge = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How can you show a fallback text when <code>ngIf</code> condition is false?</strong>
+      <p>Use <code>ng-template</code> with <code>else</code> keyword.</p>
+      <pre><code>&lt;div *ngIf="hasAccess; else noAccess"&gt;Welcome!&lt;/div&gt;
+&lt;ng-template #noAccess&gt;Access Denied&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  hasAccess = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you disable HTML elements dynamically using <code>[disabled]</code> binding with <code>ngIf</code>?</strong>
+      <p>Yes, bind to a condition or a component variable.</p>
+      <pre><code>&lt;button [disabled]="!canClick"&gt;Submit&lt;/button&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  canClick = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngFor</code> generate form inputs dynamically?</strong>
+      <p>Yes, it can loop through fields and generate input elements.</p>
+      <pre><code>&lt;div *ngFor="let field of fields"&gt;
+  &lt;label&gt;{{ field.label }}&lt;/label&gt;
+  &lt;input [type]="field.type"&gt;
+&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  fields = [
+    { label: 'Name', type: 'text' },
+    { label: 'Age', type: 'number' }
+  ];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to combine <code>ngClass</code> object and string in the same binding?</strong>
+      <p>Use array syntax with mixed types.</p>
+      <pre><code>&lt;div [ngClass]="['fixed', { error: hasError }]"&gt;Status&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  hasError = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can you define <code>ngStyle</code> in component class?</strong>
+      <p>Yes, define a style object and bind it directly.</p>
+      <pre><code>&lt;p [ngStyle]="textStyles"&gt;Styled from class&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  textStyles = {
+    color: 'navy',
+    'font-weight': 'bold'
+  };
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngIf</code> be used with a method?</strong>
+      <p>It works but avoid it in performance-sensitive areas since it triggers on every change detection.</p>
+      <pre><code>&lt;div *ngIf="isLoggedIn()"&gt;Welcome back!&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  user = { loggedIn: true };
+  isLoggedIn() {
+    return this.user.loggedIn;
+  }
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+<!-- Set 15: Angular Directives - Source Code Examples -->
+<section>
+  <h2>Set 15: Angular Directives - Source Code Examples</h2>
+  <ol start="141">
+    <li>
+      <strong>How do you apply <code>ngClass</code> conditionally using an object?</strong>
+      <p>Use an object where keys are class names and values are boolean expressions.</p>
+      <pre><code>&lt;div [ngClass]="{ active: isActive, disabled: isDisabled }"&gt;Status&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isActive = true;
+  isDisabled = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to track <code>ngFor</code> iterations with <code>index</code>?</strong>
+      <p>Use <code>let i = index</code> to get the current iteration index.</p>
+      <pre><code>&lt;div *ngFor="let name of names; let i = index"&gt;{{ i + 1 }}. {{ name }}&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  names = ['Alice', 'Bob', 'Carol'];
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to style a component dynamically using <code>ngStyle</code> and a function?</strong>
+      <p>Return an object of styles from a function in the component.</p>
+      <pre><code>&lt;p [ngStyle]="getStyles()"&gt;Styled Paragraph&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  getStyles() {
+    return {
+      color: 'purple',
+      'font-size': '20px'
+    };
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to use <code>ngIf</code> with <code>as</code> syntax for context variable?</strong>
+      <p>Use <code>ngIf</code> with <code>as</code> to create a local template variable.</p>
+      <pre><code>&lt;div *ngIf="user as u"&gt;Welcome, {{ u.name }}!&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  user = { name: 'Maria' };
+}</code></pre>
+    </li>
+    <li>
+      <strong>How do you toggle a class with a click using <code>ngClass</code>?</strong>
+      <p>Bind a class to a boolean and toggle it in an event.</p>
+      <pre><code>&lt;div [ngClass]="{ highlight: isHighlighted }" (click)="isHighlighted = !isHighlighted"&gt;Click Me&lt;/div&gt;</code></pre>
+      <pre><code>.highlight { background-color: yellow; }</code></pre>
+    </li>
+    <li>
+      <strong>How to apply <code>ngStyle</code> with multiple properties?</strong>
+      <p>Pass multiple key-value pairs in an object to <code>ngStyle</code>.</p>
+      <pre><code>&lt;div [ngStyle]="{ color: 'white', backgroundColor: 'black', padding: '10px' }"&gt;Styled Box&lt;/div&gt;</code></pre>
+    </li>
+    <li>
+      <strong>How to use <code>ngIf</code> without <code>else</code>?</strong>
+      <p>Simply include the content that should only be shown when the condition is true.</p>
+      <pre><code>&lt;p *ngIf="isOnline"&gt;You are online&lt;/p&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isOnline = true;
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to use <code>ngFor</code> with trackBy for performance?</strong>
+      <p>Use a trackBy function to optimize rendering of repeated elements.</p>
+      <pre><code>&lt;li *ngFor="let item of items; trackBy: trackById"&gt;{{ item.name }}&lt;/li&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  items = [{ id: 1, name: 'One' }, { id: 2, name: 'Two' }];
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+}</code></pre>
+    </li>
+    <li>
+      <strong>How to show one element and hide another using <code>ngIf</code> and <code>else</code>?</strong>
+      <p>Use <code>ng-template</code> for the fallback case.</p>
+      <pre><code>&lt;div *ngIf="loggedIn; else notLoggedIn"&gt;Welcome!&lt;/div&gt;
+&lt;ng-template #notLoggedIn&gt;Please log in.&lt;/ng-template&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  loggedIn = false;
+}</code></pre>
+    </li>
+    <li>
+      <strong>Can <code>ngClass</code> take a function?</strong>
+      <p>Yes, the function should return a string or an object.</p>
+      <pre><code>&lt;div [ngClass]="getClass()"&gt;Dynamic Class&lt;/div&gt;</code></pre>
+      <pre><code>export class AppComponent {
+  isValid = true;
+  getClass() {
+    return {
+      valid: this.isValid,
+      invalid: !this.isValid
+    };
+  }
+}</code></pre>
+    </li>
+  </ol>
+</section>
+
+
+
+
+
+
+</body>
+</html>

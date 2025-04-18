@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Data Binding Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    section {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #007acc;
+    }
+    ol {
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 20px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: #f8f8f2;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h2>Set 1: Angular Data Binding Questions (1-10)</h2>
+    <ol>
+      <li>
+        <strong>What is property binding in Angular?</strong><br>
+        Property binding sets a property of an element to the value of a component property.<br>
+        <code>[property]="expression"</code>
+        <pre><code>&lt;img [src]="imageUrl" /&gt;</code></pre>
+      </li>
+      <li>
+        <strong>What is event binding in Angular?</strong><br>
+        Event binding allows you to listen to events and call methods in the component.<br>
+        <code>(event)="handler"</code>
+        <pre><code>&lt;button (click)="handleClick()"&gt;Click Me&lt;/button&gt;</code></pre>
+      </li>
+      <li>
+        <strong>What is two-way binding?</strong><br>
+        Two-way binding synchronizes data between input and component using ngModel.<br>
+        <code>[(ngModel)]="property"</code>
+        <pre><code>&lt;input [(ngModel)]="username" /&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How do you bind an input's value to a variable?</strong><br>
+        Use property binding or two-way binding.<br>
+        <pre><code>&lt;input [value]="userInput" /&gt;
+&lt;input [(ngModel)]="userInput" /&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to bind a button's disabled attribute?</strong><br>
+        <pre><code>&lt;button [disabled]="isDisabled"&gt;Submit&lt;/button&gt;</code></pre>
+      </li>
+      <li>
+        <strong>Can you bind to custom properties in components?</strong><br>
+        Yes, using <code>@Input()</code> in the child component.
+        <pre><code>// Parent
+&lt;app-child [title]="parentTitle"&gt;&lt;/app-child&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How do you handle a custom event?</strong><br>
+        Use <code>@Output()</code> in child and bind in parent.
+        <pre><code>// Parent
+&lt;app-child (notify)="onNotify()"&gt;&lt;/app-child&gt;</code></pre>
+      </li>
+      <li>
+        <strong>What is one-way data binding?</strong><br>
+        Data flows from component to view only.
+        <pre><code>&lt;p&gt;{{ message }}&lt;/p&gt;
+&lt;p [innerText]="message"&gt;&lt;/p&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to display dynamic class?</strong><br>
+        <pre><code>&lt;div [class.active]="isActive"&gt;Box&lt;/div&gt;</code></pre>
+      </li>
+      <li>
+        <strong>How to bind a style property?</strong><br>
+        <pre><code>&lt;div [style.backgroundColor]="bgColor"&gt;Color Box&lt;/div&gt;</code></pre>
+      </li>
+    </ol>
+  </section>
+  
+  <section>
+  <h2>11. What is Property Binding in Angular?</h2>
+  <p>Property binding is a one-way binding that allows values from the component to be reflected in the view.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;img [src]="imageUrl" alt="Image"&gt;</code></pre>
+  <pre><code>imageUrl = 'https://example.com/image.jpg';</code></pre>
+</section>
+
+<section>
+  <h2>12. How do you use Event Binding in Angular?</h2>
+  <p>Event binding allows methods in the component to be triggered when a DOM event occurs, such as a click or keyboard entry.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (click)="showAlert()"&gt;Click me&lt;/button&gt;</code></pre>
+  <pre><code>showAlert() {
+    alert('Click event triggered!');
+  }</code></pre>
+</section>
+
+<section>
+  <h2>13. What is Two-Way Binding in Angular?</h2>
+  <p>Two-way binding allows changes in the view to reflect in the model and vice versa. It is typically used with <code>ngModel</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName" placeholder="Enter your name"&gt;</code></pre>
+  <pre><code>&lt;p&gt;Hello, {{userName}}!&lt;/p&gt;</code></pre>
+  <pre><code>userName = '';</code></pre>
+</section>
+
+<section>
+  <h2>14. What is the difference between one-way and two-way data binding?</h2>
+  <p>One-way binding only reflects changes from the model to the view or vice versa, while two-way binding keeps both synchronized automatically.</p>
+  <p><strong>One-way binding example:</strong></p>
+  <pre><code>&lt;p&gt;{{userName}}&lt;/p&gt;</code></pre>
+  <pre><code>userName = 'John';</code></pre>
+  <p><strong>Two-way binding example:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName"&gt;</code></pre>
+  <pre><code>userName = 'John';</code></pre>
+</section>
+
+<section>
+  <h2>15. How do you bind to an input element's value in Angular?</h2>
+  <p>You can use property binding to bind to an input element’s <code>value</code> property or use two-way binding for synchronizing input and model values.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [value]="userName"&gt;</code></pre>
+  <pre><code>userName = 'Alice';</code></pre>
+</section>
+
+<section>
+  <h2>16. How can you bind an event to a button in Angular?</h2>
+  <p>You can bind an event, such as a click, to a method in the component using event binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (click)="handleClick()"&gt;Click me&lt;/button&gt;</code></pre>
+  <pre><code>handleClick() {
+    console.log('Button clicked!');
+  }</code></pre>
+</section>
+
+<section>
+  <h2>17. What is the role of ngModel in two-way data binding?</h2>
+  <p><code>ngModel</code> is used to bind input elements to component properties, allowing both model and view to be updated automatically.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName"&gt;</code></pre>
+  <pre><code>userName = 'Emma';</code></pre>
+</section>
+
+<section>
+  <h2>18. How can you use Property Binding with CSS classes in Angular?</h2>
+  <p>You can dynamically add or remove CSS classes based on the component's state by using property binding with <code>ngClass</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive }"&gt;Content&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+</section>
+
+<section>
+  <h2>19. Can you bind to custom events in Angular?</h2>
+  <p>Yes, you can create and bind to custom events using event binding, and emit them from a component to notify the parent component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (customEvent)="handleCustomEvent()"&gt;Trigger Custom Event&lt;/button&gt;</code></pre>
+  <pre><code>handleCustomEvent() {
+    console.log('Custom event triggered!');
+  }</code></pre>
+</section>
+
+<section>
+  <h2>20. How do you use one-way data binding in Angular?</h2>
+  <p>One-way data binding can be used to pass data from the component to the view, or vice versa, by using property binding or event binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;p&gt;{{userName}}&lt;/p&gt;</code></pre>
+  <pre><code>userName = 'Lucas';</code></pre>
+</section>
+
+<section>
+  <h2>21. How do you use Property Binding to set an element's attribute?</h2>
+  <p>Property binding can be used to bind an element's attribute, such as <code>href</code>, <code>src</code>, or <code>disabled</code>, to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;a [href]="url"&gt;Go to website&lt;/a&gt;</code></pre>
+  <pre><code>url = 'https://www.example.com';</code></pre>
+</section>
+
+<section>
+  <h2>22. Can you use ngModel without two-way binding?</h2>
+  <p>Yes, <code>ngModel</code> can be used for one-way data binding, for example, to read a value from an input field without updating the model.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [ngModel]="userName"&gt;</code></pre>
+  <pre><code>userName = 'Michael';</code></pre>
+</section>
+
+<section>
+  <h2>23. How do you bind a value to a checkbox using two-way binding?</h2>
+  <p>Two-way binding allows you to bind a checkbox's checked state to a boolean property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input type="checkbox" [(ngModel)]="isChecked"&gt;</code></pre>
+  <pre><code>isChecked = true;</code></pre>
+</section>
+
+<section>
+  <h2>24. How do you bind a value to a select element in Angular?</h2>
+  <p>You can use two-way binding with <code>ngModel</code> to bind a select element's value to a property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;select [(ngModel)]="selectedColor"&gt;</code></pre>
+  <pre><code>&lt;option value="red"&gt;Red&lt;/option&gt;</code></pre>
+  <pre><code>&lt;option value="blue"&gt;Blue&lt;/option&gt;</code></pre>
+  <pre><code>selectedColor = 'blue';</code></pre>
+</section>
+
+<section>
+  <h2>25. How can you disable a button based on a condition using Property Binding?</h2>
+  <p>You can use property binding to conditionally disable an element such as a button by binding the <code>disabled</code> attribute to a property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [disabled]="isButtonDisabled"&gt;Submit&lt;/button&gt;</code></pre>
+  <pre><code>isButtonDisabled = true;</code></pre>
+</section>
+
+<section>
+  <h2>26. How do you bind an element’s style in Angular?</h2>
+  <p>You can use <code>ngStyle</code> to dynamically bind inline styles to an element based on the component’s properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'color': color, 'font-size': fontSize}"&gt;Styled text&lt;/div&gt;</code></pre>
+  <pre><code>color = 'red';</code></pre>
+  <pre><code>fontSize = '20px';</code></pre>
+</section>
+
+<section>
+  <h2>27. How do you bind a class to an element using ngClass?</h2>
+  <p>You can use <code>ngClass</code> to dynamically add or remove CSS classes from an element based on component conditions.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'disabled': isDisabled }"&gt;Class Binding&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+  <pre><code>isDisabled = false;</code></pre>
+</section>
+
+<section>
+  <h2>28. How do you bind a value to an input element’s placeholder in Angular?</h2>
+  <p>You can use property binding to set an input element’s placeholder dynamically based on the component’s properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [placeholder]="inputPlaceholder"&gt;</code></pre>
+  <pre><code>inputPlaceholder = 'Enter your name';</code></pre>
+</section>
+
+<section>
+  <h2>29. How do you use Event Binding with a form submission?</h2>
+  <p>Event binding can be used to bind a form submission event to a method in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;form (ngSubmit)="onSubmit()"&gt;</code></pre>
+  <pre><code>&lt;button type="submit"&gt;Submit&lt;/button&gt;</code></pre>
+  <pre><code>onSubmit() {
+    console.log('Form submitted!');
+  }</code></pre>
+</section>
+
+<section>
+  <h2>30. How do you bind an element's text content to a component property?</h2>
+  <p>You can use string interpolation to bind an element’s text content to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;p&gt;{{message}}&lt;/p&gt;</code></pre>
+  <pre><code>message = 'Hello, Angular!';</code></pre>
+</section>
+
+<section>
+  <h2>31. How do you use Property Binding with the `disabled` attribute in Angular?</h2>
+  <p>You can bind the <code>disabled</code> attribute to a boolean property in the component, disabling or enabling the element dynamically.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [disabled]="isDisabled"&gt;Submit&lt;/button&gt;</code></pre>
+  <pre><code>isDisabled = true;</code></pre>
+</section>
+
+<section>
+  <h2>32. How do you bind to an element’s class using ngClass in Angular?</h2>
+  <p>You can use <code>ngClass</code> to conditionally apply classes to an element based on component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'highlighted': isHighlighted }"&gt;Styled div&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+  <pre><code>isHighlighted = false;</code></pre>
+</section>
+
+<section>
+  <h2>33. What is Event Binding used for in Angular?</h2>
+  <p>Event binding in Angular is used to listen to DOM events such as clicks, input changes, or key presses and call a method in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (click)="showMessage()"&gt;Click Me&lt;/button&gt;</code></pre>
+  <pre><code>showMessage() {
+    console.log('Button clicked!');
+  }</code></pre>
+</section>
+
+<section>
+  <h2>34. How do you bind an input element’s value to a component property?</h2>
+  <p>You can use property binding to bind the value of an input field to a property in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [value]="inputValue"&gt;</code></pre>
+  <pre><code>inputValue = 'Some text';</code></pre>
+</section>
+
+<section>
+  <h2>35. How do you bind to a form input’s value using ngModel?</h2>
+  <p>You can bind a form input’s value to a property in your component using two-way binding with <code>ngModel</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userInput"&gt;</code></pre>
+  <pre><code>userInput = 'Hello, world!';</code></pre>
+</section>
+
+<section>
+  <h2>36. How do you update the model when the view changes in Angular?</h2>
+  <p>In two-way binding, when the view changes, the model is automatically updated, typically using <code>ngModel</code> with input elements.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName"&gt;</code></pre>
+  <pre><code>userName = 'John';</code></pre>
+</section>
+
+<section>
+  <h2>37. How do you bind an input’s value in Angular using one-way binding?</h2>
+  <p>You can use property binding to set an input’s value based on a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [value]="userName"&gt;</code></pre>
+  <pre><code>userName = 'Jane';</code></pre>
+</section>
+
+<section>
+  <h2>38. How can you create a custom event with EventEmitter in Angular?</h2>
+  <p>You can use the <code>EventEmitter</code> class to create and emit custom events from a component, allowing communication with parent components.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { EventEmitter } from '@angular/core';</code></pre>
+  <pre><code>customEvent = new EventEmitter();</code></pre>
+  <pre><code>this.customEvent.emit('Hello from child!');</code></pre>
+</section>
+
+<section>
+  <h2>39. How do you bind a CSS style to an element’s style property?</h2>
+  <p>You can use <code>ngStyle</code> to dynamically set inline styles on an element based on component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'background-color': backgroundColor}"&gt;Styled div&lt;/div&gt;</code></pre>
+  <pre><code>backgroundColor = 'blue';</code></pre>
+</section>
+
+<section>
+  <h2>40. How do you use the ngModel directive in Angular?</h2>
+  <p>The <code>ngModel</code> directive is used for two-way data binding, typically to bind form inputs to component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName"&gt;</code></pre>
+  <pre><code>userName = 'Alice';</code></pre>
+</section>
+
+
+
+<section>
+  <h2>41. How do you bind an input’s placeholder to a component property?</h2>
+  <p>You can use property binding to bind an input element’s <code>placeholder</code> attribute to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [placeholder]="inputPlaceholder"&gt;</code></pre>
+  <pre><code>inputPlaceholder = 'Enter your name';</code></pre>
+</section>
+
+<section>
+  <h2>42. What is the purpose of the `ngModel` directive in Angular forms?</h2>
+  <p>The <code>ngModel</code> directive is used to bind form input elements to a component property, enabling two-way data binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName"&gt;</code></pre>
+  <pre><code>userName = 'Paul';</code></pre>
+</section>
+
+<section>
+  <h2>43. How can you bind to the input element’s value using Event Binding in Angular?</h2>
+  <p>You can use event binding to capture user input in an event handler and update the model accordingly.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input (input)="onInputChange($event)"&gt;</code></pre>
+  <pre><code>onInputChange(event) {
+    console.log(event.target.value);
+  }</code></pre>
+</section>
+
+<section>
+  <h2>44. How do you bind an element’s background color dynamically in Angular?</h2>
+  <p>You can use <code>ngStyle</code> to bind an element's background color to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'background-color': backgroundColor}"&gt;Styled div&lt;/div&gt;</code></pre>
+  <pre><code>backgroundColor = 'green';</code></pre>
+</section>
+
+<section>
+  <h2>45. How do you use ngClass to add multiple classes to an element?</h2>
+  <p>You can use <code>ngClass</code> to dynamically add multiple CSS classes based on conditions in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'highlighted': isHighlighted }"&gt;Text&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+  <pre><code>isHighlighted = false;</code></pre>
+</section>
+
+<section>
+  <h2>46. How do you bind a button's disabled property in Angular?</h2>
+  <p>Property binding can be used to dynamically enable or disable a button based on the value of a property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [disabled]="isButtonDisabled"&gt;Submit&lt;/button&gt;</code></pre>
+  <pre><code>isButtonDisabled = true;</code></pre>
+</section>
+
+<section>
+  <h2>47. How can you bind to the visibility of an element in Angular?</h2>
+  <p>You can conditionally show or hide elements using property binding with the <code>ngIf</code> directive or <code>[hidden]</code> attribute.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isVisible"&gt;This content is visible&lt;/div&gt;</code></pre>
+  <pre><code>isVisible = true;</code></pre>
+</section>
+
+<section>
+  <h2>48. How do you bind a component’s property to a custom event in Angular?</h2>
+  <p>You can use <code>EventEmitter</code> and <code>@Output</code> to create custom events and bind them to DOM elements.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Component, EventEmitter, Output } from '@angular/core';</code></pre>
+  <pre><code>export class CustomComponent {
+    @Output() customEvent = new EventEmitter<string>();
+    
+    triggerEvent() {
+      this.customEvent.emit('Event triggered');
+    }
+  }</code></pre>
+  <pre><code>&lt;button (click)="triggerEvent()"&gt;Trigger Custom Event&lt;/button&gt;</code></pre>
+</section>
+
+<section>
+  <h2>49. How do you bind a text input’s value in Angular using one-way binding?</h2>
+  <p>You can use property binding to bind the value of a text input to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [value]="userInput"&gt;</code></pre>
+  <pre><code>userInput = 'Angular';</code></pre>
+</section>
+
+<section>
+  <h2>50. How can you make a select dropdown element’s value two-way bound in Angular?</h2>
+  <p>You can use two-way binding with <code>ngModel</code> to bind the selected option of a dropdown to a property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;select [(ngModel)]="selectedOption"&gt;</code></pre>
+  <pre><code>&lt;option value="option1"&gt;Option 1&lt;/option&gt;</code></pre>
+  <pre><code>&lt;option value="option2"&gt;Option 2&lt;/option&gt;</code></pre>
+  <pre><code>selectedOption = 'option2';</code></pre>
+</section>
+
+<section>
+  <h2>51. How do you bind a background color dynamically using ngStyle in Angular?</h2>
+  <p>You can use <code>ngStyle</code> to bind the background color of an element to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'background-color': backgroundColor}"&gt;Content&lt;/div&gt;</code></pre>
+  <pre><code>backgroundColor = 'orange';</code></pre>
+</section>
+
+<section>
+  <h2>52. How do you use Property Binding to set an image source dynamically?</h2>
+  <p>With property binding, you can dynamically bind the <code>src</code> attribute of an <code>img</code> element to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;img [src]="imageSource"&gt;</code></pre>
+  <pre><code>imageSource = 'https://www.example.com/image.jpg';</code></pre>
+</section>
+
+<section>
+  <h2>53. How do you bind a class to an element conditionally using ngClass in Angular?</h2>
+  <p>You can use <code>ngClass</code> to conditionally apply a class to an element based on the value of a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'highlight': isHighlighted }"&gt;Styled text&lt;/div&gt;</code></pre>
+  <pre><code>isHighlighted = true;</code></pre>
+</section>
+
+<section>
+  <h2>54. How do you bind a form input’s value to a model using two-way binding?</h2>
+  <p>You can bind a form input’s value to a component property using two-way binding with <code>ngModel</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="username"&gt;</code></pre>
+  <pre><code>username = 'Michael';</code></pre>
+</section>
+
+<section>
+  <h2>55. How do you use ngIf to conditionally render an element in Angular?</h2>
+  <p>The <code>*ngIf</code> directive allows you to conditionally render an element based on the value of a boolean property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isVisible"&gt;This will be shown&lt;/div&gt;</code></pre>
+  <pre><code>isVisible = true;</code></pre>
+</section>
+
+<section>
+  <h2>56. How can you use Event Binding to handle a user input event in Angular?</h2>
+  <p>You can use event binding to listen for a user input event, such as when the user types in an input field.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input (input)="onInputChange($event)"&gt;</code></pre>
+  <pre><code>onInputChange(event) {
+    console.log(event.target.value);
+  }</code></pre>
+</section>
+
+<section>
+  <h2>57. How do you bind to the disabled property of a button in Angular?</h2>
+  <p>You can use property binding to bind the <code>disabled</code> attribute of a button to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [disabled]="isDisabled"&gt;Click me&lt;/button&gt;</code></pre>
+  <pre><code>isDisabled = false;</code></pre>
+</section>
+
+<section>
+  <h2>58. How do you conditionally disable a button using property binding in Angular?</h2>
+  <p>You can use property binding to disable a button based on a boolean condition in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [disabled]="isButtonDisabled"&gt;Submit&lt;/button&gt;</code></pre>
+  <pre><code>isButtonDisabled = true;</code></pre>
+</section>
+
+<section>
+  <h2>59. How do you bind a div's background color to a property using ngStyle?</h2>
+  <p>You can bind a div’s background color dynamically using the <code>ngStyle</code> directive.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'background-color': bgColor}"&gt;Content&lt;/div&gt;</code></pre>
+  <pre><code>bgColor = 'red';</code></pre>
+</section>
+
+<section>
+  <h2>60. How do you use ngClass to dynamically assign classes based on component properties?</h2>
+  <p>You can use <code>ngClass</code> to conditionally add or remove CSS classes based on the component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Text&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+</section>
+
+<section>
+  <h2>61. How do you bind a list of items to an HTML list using *ngFor?</h2>
+  <p>You can use <code>*ngFor</code> to loop through an array and bind the items to a list.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  <pre><code>items = ['Apple', 'Banana', 'Cherry'];</code></pre>
+</section>
+
+<section>
+  <h2>62. How do you conditionally apply classes with ngClass in Angular?</h2>
+  <p>You can use <code>ngClass</code> to conditionally apply CSS classes to an element based on component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'highlighted': isHighlighted, 'selected': isSelected }"&gt;Text&lt;/div&gt;</code></pre>
+  <pre><code>isHighlighted = true;
+isSelected = false;</code></pre>
+</section>
+
+<section>
+  <h2>63. How do you bind to the href attribute of a link in Angular?</h2>
+  <p>You can use property binding to dynamically set the <code>href</code> attribute of a link element.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;a [href]="linkUrl"&gt;Click me&lt;/a&gt;</code></pre>
+  <pre><code>linkUrl = 'https://www.example.com';</code></pre>
+</section>
+
+<section>
+  <h2>64. How do you use two-way binding with ngModel to bind a select dropdown value?</h2>
+  <p>You can use two-way binding with <code>ngModel</code> to bind the selected value of a dropdown to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;select [(ngModel)]="selectedOption"&gt;
+  &lt;option value="1"&gt;Option 1&lt;/option&gt;
+  &lt;option value="2"&gt;Option 2&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+  <pre><code>selectedOption = '1';</code></pre>
+</section>
+
+<section>
+  <h2>65. How do you update an input element’s value using two-way data binding?</h2>
+  <p>You can use <code>ngModel</code> for two-way binding to update the input value dynamically based on a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="userName"&gt;</code></pre>
+  <pre><code>userName = 'John Doe';</code></pre>
+</section>
+
+<section>
+  <h2>66. How do you bind a style property dynamically in Angular?</h2>
+  <p>You can use <code>ngStyle</code> to bind the style properties of an element to component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'font-size': fontSize}"&gt;Styled Text&lt;/div&gt;</code></pre>
+  <pre><code>fontSize = '16px';</code></pre>
+</section>
+
+<section>
+  <h2>67. How do you bind a checkbox’s checked state to a property in Angular?</h2>
+  <p>You can use <code>ngModel</code> to bind a checkbox’s checked state to a property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input type="checkbox" [(ngModel)]="isChecked"&gt;</code></pre>
+  <pre><code>isChecked = true;</code></pre>
+</section>
+
+<section>
+  <h2>68. How do you bind a list of options to a select dropdown using ngFor in Angular?</h2>
+  <p>You can use <code>*ngFor</code> to loop through an array of options and bind them to a <code>select</code> dropdown.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;select [(ngModel)]="selectedOption"&gt;
+  &lt;option *ngFor="let option of options" [value]="option"&gt;{{ option }}&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+  <pre><code>options = ['Option 1', 'Option 2', 'Option 3'];</code></pre>
+  <pre><code>selectedOption = 'Option 1';</code></pre>
+</section>
+
+<section>
+  <h2>69. How do you listen for a button click event in Angular?</h2>
+  <p>You can use event binding to listen for the <code>click</code> event and trigger a method in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (click)="onButtonClick()"&gt;Click Me&lt;/button&gt;</code></pre>
+  <pre><code>onButtonClick() {
+    console.log('Button clicked!');
+  }</code></pre>
+</section>
+
+<section>
+  <h2>70. How do you bind the input element’s placeholder to a property in Angular?</h2>
+  <p>You can use property binding to bind the <code>placeholder</code> attribute of an input field to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [placeholder]="inputPlaceholder"&gt;</code></pre>
+  <pre><code>inputPlaceholder = 'Enter your name';</code></pre>
+</section>
+
+<section>
+  <h2>71. How do you bind an image’s width dynamically using ngStyle in Angular?</h2>
+  <p>You can use <code>ngStyle</code> to bind the <code>width</code> of an image to a property in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;img [ngStyle]="{'width': imageWidth}" [src]="imageSource"&gt;</code></pre>
+  <pre><code>imageWidth = '300px';</code></pre>
+</section>
+
+<section>
+  <h2>72. How do you bind an element’s visibility in Angular using ngIf?</h2>
+  <p>You can use the <code>*ngIf</code> directive to conditionally render an element based on a boolean property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isVisible"&gt;This content is visible&lt;/div&gt;</code></pre>
+  <pre><code>isVisible = false;</code></pre>
+</section>
+
+<section>
+  <h2>73. How do you dynamically add a class to an element based on a condition?</h2>
+  <p>You can use <code>ngClass</code> to conditionally apply one or more CSS classes to an element based on a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'disabled': !isActive }"&gt;Text&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+</section>
+
+<section>
+  <h2>74. How do you bind a button’s class conditionally using ngClass?</h2>
+  <p>You can use <code>ngClass</code> to conditionally apply a class to a button based on the component properties.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [ngClass]="{ 'btn-primary': isPrimary, 'btn-secondary': !isPrimary }"&gt;Click Me&lt;/button&gt;</code></pre>
+  <pre><code>isPrimary = true;</code></pre>
+</section>
+
+<section>
+  <h2>75. How do you use ngIf to show or hide a section of content in Angular?</h2>
+  <p>The <code>*ngIf</code> directive is used to conditionally include or exclude a section of content based on a boolean property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isContentVisible"&gt;This content is conditionally visible&lt;/div&gt;</code></pre>
+  <pre><code>isContentVisible = true;</code></pre>
+</section>
+
+<section>
+  <h2>76. How do you dynamically bind an anchor tag’s href in Angular?</h2>
+  <p>You can bind the <code>href</code> attribute of an anchor tag dynamically using property binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;a [href]="dynamicUrl"&gt;Go to Link&lt;/a&gt;</code></pre>
+  <pre><code>dynamicUrl = 'https://www.angular.io';</code></pre>
+</section>
+
+<section>
+  <h2>77. How do you bind a dropdown’s selected value in Angular using ngModel?</h2>
+  <p>You can use two-way binding with <code>ngModel</code> to bind the selected value of a dropdown to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;select [(ngModel)]="selectedOption"&gt;
+  &lt;option value="1"&gt;Option 1&lt;/option&gt;
+  &lt;option value="2"&gt;Option 2&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+  <pre><code>selectedOption = '1';</code></pre>
+</section>
+
+<section>
+  <h2>78. How do you bind a property to a CSS class in Angular?</h2>
+  <p>You can use <code>ngClass</code> to conditionally bind a CSS class to an element based on a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="className"&gt;Content&lt;/div&gt;</code></pre>
+  <pre><code>className = 'highlight';</code></pre>
+</section>
+
+<section>
+  <h2>79. How do you bind a form input’s value to a property with two-way binding?</h2>
+  <p>You can use <code>ngModel</code> for two-way data binding to bind the value of a form input to a property in your component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="inputValue"&gt;</code></pre>
+  <pre><code>inputValue = 'Angular';</code></pre>
+</section>
+
+<section>
+  <h2>80. How do you handle form validation in Angular with ngModel?</h2>
+  <p>You can use <code>ngModel</code> along with Angular’s form validation features to handle input validation in forms.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;form #myForm="ngForm"&gt;
+  &lt;input name="username" [(ngModel)]="userName" required&gt;
+  &lt;button [disabled]="myForm.invalid"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <pre><code>userName = '';</code></pre>
+</section>
+
+<section>
+  <h2>81. How do you bind the title attribute of an element in Angular?</h2>
+  <p>You can use property binding to bind the <code>title</code> attribute of an element to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [title]="toolTip"&gt;Hover over me&lt;/div&gt;</code></pre>
+  <pre><code>toolTip = 'This is a tooltip!';</code></pre>
+</section>
+
+<section>
+  <h2>82. How do you bind the value of a radio button in Angular?</h2>
+  <p>You can use two-way binding with <code>ngModel</code> to bind the selected value of a radio button to a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input type="radio" [(ngModel)]="selectedOption" value="option1"&gt; Option 1</code></pre>
+  <pre><code>&lt;input type="radio" [(ngModel)]="selectedOption" value="option2"&gt; Option 2</code></pre>
+  <pre><code>selectedOption = 'option1';</code></pre>
+</section>
+
+<section>
+  <h2>83. How do you use ngFor to loop through an array of objects?</h2>
+  <p>You can use <code>*ngFor</code> to iterate over an array of objects and bind the values to HTML elements.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item.name }} - {{ item.age }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  <pre><code>items = [{name: 'John', age: 25}, {name: 'Jane', age: 30}];</code></pre>
+</section>
+
+<section>
+  <h2>84. How do you disable a button dynamically in Angular?</h2>
+  <p>You can disable a button dynamically using property binding on the <code>disabled</code> attribute.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button [disabled]="isDisabled"&gt;Submit&lt;/button&gt;</code></pre>
+  <pre><code>isDisabled = true;</code></pre>
+</section>
+
+<section>
+  <h2>85. How do you use ngIf to display a loading spinner in Angular?</h2>
+  <p>You can use <code>*ngIf</code> to conditionally show a loading spinner based on a component property.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isLoading"&gt;Loading...&lt;/div&gt;</code></pre>
+  <pre><code>isLoading = true;</code></pre>
+</section>
+
+<section>
+  <h2>86. How do you use ngSwitch to conditionally render multiple templates?</h2>
+  <p>You can use <code>*ngSwitch</code> along with <code>*ngSwitchCase</code> to display different templates based on a condition.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngSwitch]="color"&gt;
+  &lt;div *ngSwitchCase="'red'"&gt;Red&lt;/div&gt;
+  &lt;div *ngSwitchCase="'green'"&gt;Green&lt;/div&gt;
+  &lt;div *ngSwitchDefault&gt;Default&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <pre><code>color = 'red';</code></pre>
+</section>
+
+<section>
+  <h2>87. How do you bind a date to a datepicker input element in Angular?</h2>
+  <p>You can bind a date value to a datepicker input element using <code>ngModel</code> for two-way data binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="selectedDate" type="date"&gt;</code></pre>
+  <pre><code>selectedDate = '2025-04-13';</code></pre>
+</section>
+
+<section>
+  <h2>88. How do you prevent the default action for an event in Angular?</h2>
+  <p>You can prevent the default action of an event using <code>$event.preventDefault()</code> inside the event handler.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (click)="preventDefaultAction($event)"&gt;Click Me&lt;/button&gt;</code></pre>
+  <pre><code>preventDefaultAction(event: Event) {
+  event.preventDefault();
+  console.log('Default action prevented!');
+}</code></pre>
+</section>
+
+<section>
+  <h2>89. How do you create a custom pipe in Angular?</h2>
+  <p>You can create a custom pipe by implementing the <code>PipeTransform</code> interface and decorating the class with <code>@Pipe</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Pipe({name: 'reverse'})
+export class ReversePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.split('').reverse().join('');
+  }
+}</code></pre>
+  <pre><code>&lt;p&gt;{{ 'Angular' | reverse }}&lt;/p&gt;</code></pre>
+</section>
+
+<section>
+  <h2>90. How do you pass data to a child component in Angular?</h2>
+  <p>You can pass data to a child component by binding to the input property of the child component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;app-child [childData]="parentData"&gt;&lt;/app-child&gt;</code></pre>
+  <pre><code>parentData = 'Data from parent';</code></pre>
+</section>
+
+
+<section>
+  <h2>91. How do you emit an event from a child component to a parent component in Angular?</h2>
+  <p>You can emit an event from a child component to a parent component by using the <code>EventEmitter</code> and the <code>@Output</code> decorator.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Component({
+  selector: 'app-child',
+  template: '&lt;button (click)="sendData()"&gt;Send Data&lt;/button&gt;'
+})
+export class ChildComponent {
+  @Output() dataSent = new EventEmitter<string>();
+  
+  sendData() {
+    this.dataSent.emit('Hello Parent');
+  }
+}</code></pre>
+  <pre><code>&lt;app-child (dataSent)="receiveData($event)"&gt;&lt;/app-child&gt;</code></pre>
+  <pre><code>receiveData(message: string) {
+    console.log('Received from child:', message);
+  }</code></pre>
+</section>
+
+<section>
+  <h2>92. How do you pass data between sibling components in Angular?</h2>
+  <p>You can pass data between sibling components through a shared parent component by using event binding and property binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>ParentComponent:
+  &lt;app-sibling1 (sendData)="receiveData($event)"&gt;&lt;/app-sibling1&gt;
+  &lt;app-sibling2 [data]="receivedData"&gt;&lt;/app-sibling2&gt;
+
+Sibling1Component:
+@Output() sendData = new EventEmitter<string>();
+sendDataToParent() {
+  this.sendData.emit('Data from Sibling1');
+}
+
+Sibling2Component:
+@Input() data: string;</code></pre>
+</section>
+
+<section>
+  <h2>93. How do you conditionally apply a CSS class with ngClass in Angular?</h2>
+  <p>You can use the <code>[ngClass]</code> directive to conditionally apply a CSS class based on a component property or expression.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'highlight': isHighlighted, 'inactive': !isHighlighted }"&gt;Text&lt;/div&gt;</code></pre>
+  <pre><code>isHighlighted = true;</code></pre>
+</section>
+
+<section>
+  <h2>94. How do you perform a pipe transformation in Angular?</h2>
+  <p>You can apply a pipe transformation to data in the template by using the pipe symbol <code>|</code> followed by the pipe name.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;p&gt;{{ value | uppercase }}&lt;/p&gt;</code></pre>
+  <pre><code>value = 'angular';</code></pre>
+</section>
+
+<section>
+  <h2>95. How do you bind an input field to a property with ngModel in Angular?</h2>
+  <p>You can bind the value of an input field to a property in the component using two-way binding with <code>ngModel</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="inputValue"&gt;</code></pre>
+  <pre><code>inputValue = 'Hello';</code></pre>
+</section>
+
+<section>
+  <h2>96. How do you prevent a form from being submitted in Angular?</h2>
+  <p>You can prevent a form from being submitted by calling <code>event.preventDefault()</code> within the form submission handler.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;form (submit)="onSubmit($event)"&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <pre><code>onSubmit(event: Event) {
+  event.preventDefault();
+  console.log('Form submission prevented');
+}</code></pre>
+</section>
+
+<section>
+  <h2>97. How do you create a dropdown in Angular using ngModel?</h2>
+  <p>You can use <code>ngModel</code> to bind the selected option in a dropdown to a property in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;select [(ngModel)]="selectedOption"&gt;
+  &lt;option value="option1"&gt;Option 1&lt;/option&gt;
+  &lt;option value="option2"&gt;Option 2&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+  <pre><code>selectedOption = 'option1';</code></pre>
+</section>
+
+<section>
+  <h2>98. How do you enable/disable form fields dynamically in Angular?</h2>
+  <p>You can enable or disable form fields dynamically by using the <code>disabled</code> property in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [disabled]="isDisabled"&gt;</code></pre>
+  <pre><code>isDisabled = false;</code></pre>
+</section>
+
+<section>
+  <h2>99. How do you set a default value for an input field in Angular?</h2>
+  <p>You can set a default value for an input field by initializing the bound property in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="inputValue"&gt;</code></pre>
+  <pre><code>inputValue = 'Default Value';</code></pre>
+</section>
+
+<section>
+  <h2>100. How do you listen to an input event in Angular?</h2>
+  <p>You can listen to an input event by binding to the <code>(input)</code> event in the template.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input (input)="onInputChange($event)"&gt;</code></pre>
+  <pre><code>onInputChange(event: Event) {
+  console.log('Input changed:', event);
+}</code></pre>
+</section>
+
+<section>
+  <h2>101. How do you add a class dynamically using ngClass in Angular?</h2>
+  <p>You can add or remove a class dynamically using the <code>[ngClass]</code> directive and passing an object or array of class names based on conditions.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'inactive': !isActive }"&gt;Status&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+</section>
+
+<section>
+  <h2>102. How do you create a custom directive in Angular?</h2>
+  <p>You can create a custom directive by using the <code>@Directive</code> decorator and providing a selector to target the DOM elements.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(private el: ElementRef) {
+    this.el.nativeElement.style.backgroundColor = 'yellow';
+  }
+}</code></pre>
+  <pre><code>&lt;p appHighlight&gt;Highlighted text&lt;/p&gt;</code></pre>
+</section>
+
+<section>
+  <h2>103. How do you bind the style attribute dynamically in Angular?</h2>
+  <p>You can bind the <code>style</code> attribute dynamically using property binding with the <code>[style]</code> directive.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [style.background-color]="bgColor"&gt;Styled Div&lt;/div&gt;</code></pre>
+  <pre><code>bgColor = 'blue';</code></pre>
+</section>
+
+<section>
+  <h2>104. How do you use ngModel with a checkbox in Angular?</h2>
+  <p>You can use <code>ngModel</code> for two-way data binding with checkboxes to capture the checked value.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input type="checkbox" [(ngModel)]="isChecked"&gt; Check me&lt;/input&gt;</code></pre>
+  <pre><code>isChecked = true;</code></pre>
+</section>
+
+<section>
+  <h2>105. How do you validate a form field in Angular?</h2>
+  <p>You can validate a form field using Angular's built-in validators like <code>required</code>, <code>minlength</code>, etc., and check the form control's status.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;form #form="ngForm"&gt;
+  &lt;input name="name" ngModel required&gt;
+  &lt;button [disabled]="form.invalid"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+</section>
+
+<section>
+  <h2>106. How do you implement an HTTP GET request in Angular?</h2>
+  <p>You can make an HTTP GET request by importing <code>HttpClient</code> and using the <code>get</code> method.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  constructor(private http: HttpClient) {}
+
+  getData() {
+    return this.http.get('https://api.example.com/data');
+  }
+}</code></pre>
+  <pre><code>this.dataService.getData().subscribe(data => console.log(data));</code></pre>
+</section>
+
+<section>
+  <h2>107. How do you implement pagination in Angular?</h2>
+  <p>You can implement pagination by creating an array of data and dividing it into pages, displaying one page at a time.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of paginatedData"&gt;{{ item.name }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  <pre><code>paginatedData = this.data.slice(0, 10);</code></pre>
+</section>
+
+<section>
+  <h2>108. How do you create a form group in Angular?</h2>
+  <p>You can create a form group using the <code>FormGroup</code> class in Angular's reactive forms.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { FormGroup, FormControl } from '@angular/forms';
+
+this.form = new FormGroup({
+  username: new FormControl(''),
+  password: new FormControl('')
+});</code></pre>
+</section>
+
+<section>
+  <h2>109. How do you handle errors in Angular HTTP requests?</h2>
+  <p>You can handle errors in Angular HTTP requests using the <code>catchError</code> operator from RxJS to catch and handle errors.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { catchError } from 'rxjs/operators';
+
+this.http.get('https://api.example.com/data')
+  .pipe(catchError(error => {
+    console.error('Error occurred:', error);
+    return of([]);  // Return an empty array or other fallback value
+  }))
+  .subscribe(data => console.log(data));</code></pre>
+</section>
+
+<section>
+  <h2>110. How do you create a form control in Angular?</h2>
+  <p>You can create a form control using the <code>FormControl</code> class in Angular's reactive forms.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { FormControl } from '@angular/forms';
+
+this.username = new FormControl('');
+this.password = new FormControl('');</code></pre>
+</section>
+
+<section>
+  <h2>111. How do you use a for loop in Angular templates?</h2>
+  <p>You can iterate over an array or a list using the <code>*ngFor</code> directive in Angular templates.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  <pre><code>items = ['Angular', 'React', 'Vue'];</code></pre>
+</section>
+
+<section>
+  <h2>112. How do you use a service in Angular?</h2>
+  <p>You can use a service in Angular by injecting it into a component or another service using the <code>constructor</code> and <code>@Injectable</code> decorator.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  getData() {
+    return ['Data1', 'Data2'];
+  }
+}</code></pre>
+  <pre><code>constructor(private dataService: DataService) {}
+  
+ngOnInit() {
+  console.log(this.dataService.getData());
+}</code></pre>
+</section>
+
+<section>
+  <h2>113. How do you create a model in Angular for form validation?</h2>
+  <p>You can create a model using the <code>FormGroup</code> and <code>FormControl</code> classes for form validation in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+this.form = new FormGroup({
+  username: new FormControl('', [Validators.required, Validators.minLength(5)]),
+  email: new FormControl('', [Validators.required, Validators.email])
+});</code></pre>
+</section>
+
+<section>
+  <h2>114. How do you use an Observable in Angular?</h2>
+  <p>You can use an Observable by subscribing to it to get asynchronous data in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Observable } from 'rxjs';
+
+const observable = new Observable(observer =&gt; {
+  observer.next('Hello');
+  observer.complete();
+});
+
+observable.subscribe(data =&gt; {
+  console.log(data); // Output: Hello
+});</code></pre>
+</section>
+
+<section>
+  <h2>115. How do you add a custom pipe in Angular?</h2>
+  <p>You can add a custom pipe by creating a class decorated with the <code>@Pipe</code> decorator and implementing the <code>transform</code> method.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Pipe({
+  name: 'reverse'
+})
+export class ReversePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.split('').reverse().join('');
+  }
+}</code></pre>
+  <pre><code>{{ 'Angular' | reverse }}</code></pre>
+</section>
+
+<section>
+  <h2>116. How do you make a component reusable in Angular?</h2>
+  <p>You can make a component reusable by passing dynamic inputs using <code>@Input</code> and emitting events using <code>@Output</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Component({
+  selector: 'app-custom',
+  template: '&lt;div&gt;{{ data }}&lt;/div&gt;'
+})
+export class CustomComponent {
+  @Input() data: string;
+}</code></pre>
+  <pre><code>&lt;app-custom [data]="'Dynamic Data'"&gt;&lt;/app-custom&gt;</code></pre>
+</section>
+
+<section>
+  <h2>117. How do you bind to a specific property in Angular?</h2>
+  <p>You can bind to a specific property in Angular using property binding by wrapping the property in square brackets.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;img [src]="imageUrl" alt="Dynamic Image"&gt;</code></pre>
+  <pre><code>imageUrl = 'https://example.com/image.jpg';</code></pre>
+</section>
+
+<section>
+  <h2>118. How do you handle click events in Angular?</h2>
+  <p>You can handle click events in Angular by binding to the <code>(click)</code> event in the template.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;button (click)="onClick()"&gt;Click Me&lt;/button&gt;</code></pre>
+  <pre><code>onClick() {
+  console.log('Button clicked!');
+}</code></pre>
+</section>
+
+<section>
+  <h2>119. How do you use an Angular router for navigation?</h2>
+  <p>You can use the Angular router to navigate between different views by configuring routes and using the <code>RouterLink</code> directive.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@NgModule({
+  imports: [RouterModule.forRoot([{ path: 'home', component: HomeComponent }])],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}</code></pre>
+  <pre><code>&lt;a routerLink="/home"&gt;Go to Home&lt;/a&gt;</code></pre>
+</section>
+
+<section>
+  <h2>120. How do you prevent a default event in Angular?</h2>
+  <p>You can prevent the default event behavior by using <code>event.preventDefault()</code> in the event handler.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;a href="#" (click)="onLinkClick($event)"&gt;Click Me&lt;/a&gt;</code></pre>
+  <pre><code>onLinkClick(event: Event) {
+  event.preventDefault();
+  console.log('Link click prevented');
+}</code></pre>
+</section>
+
+<section>
+  <h2>121. How do you use the ngIf directive in Angular?</h2>
+  <p>You can conditionally include or exclude elements from the DOM using the <code>*ngIf</code> directive in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isVisible"&gt;This content is visible if isVisible is true&lt;/div&gt;</code></pre>
+  <pre><code>isVisible = true;</code></pre>
+</section>
+
+<section>
+  <h2>122. How do you use ngFor with index in Angular?</h2>
+  <p>You can iterate over an array and also access the index of each element using the <code>*ngFor; let i = index</code> syntax.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let item of items; let i = index"&gt;{{ i }} - {{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+  <pre><code>items = ['Apple', 'Banana', 'Orange'];</code></pre>
+</section>
+
+<section>
+  <h2>123. How do you use the async pipe in Angular?</h2>
+  <p>The <code>async</code> pipe is used to subscribe to an Observable or Promise and get its value.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ data$ | async }}&lt;/div&gt;</code></pre>
+  <pre><code>data$ = this.dataService.getData();</code></pre>
+</section>
+
+<section>
+  <h2>124. How do you set the title of a page dynamically in Angular?</h2>
+  <p>You can set the title of a page dynamically using the <code>Title</code> service from <code>@angular/platform-browser</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Title } from '@angular/platform-browser';
+
+constructor(private titleService: Title) {
+  this.titleService.setTitle('New Page Title');
+}</code></pre>
+</section>
+
+<section>
+  <h2>125. How do you use input and output decorators in Angular?</h2>
+  <p>You can use <code>@Input</code> to pass data into a component and <code>@Output</code> to emit data from a component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Input() childData: string;</code></pre>
+  <pre><code>@Output() dataEmitter = new EventEmitter<string>();
+
+sendData() {
+  this.dataEmitter.emit('Data from child');
+}</code></pre>
+</section>
+
+<section>
+  <h2>126. How do you manage state in Angular using services?</h2>
+  <p>You can use services to manage application state by creating shared services with state variables and methods to modify them.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class StateService {
+  private state = { count: 0 };
+
+  getState() {
+    return this.state;
+  }
+
+  setState(newState: any) {
+    this.state = newState;
+  }
+}</code></pre>
+  <pre><code>constructor(private stateService: StateService) {
+  console.log(this.stateService.getState()); // { count: 0 }
+}</code></pre>
+</section>
+
+<section>
+  <h2>127. How do you use a RouterLinkActive directive in Angular?</h2>
+  <p>You can use the <code>RouterLinkActive</code> directive to add a class when the associated <code>routerLink</code> is active.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;a routerLink="/home" routerLinkActive="active"&gt;Home&lt;/a&gt;</code></pre>
+  <pre><code>/* In styles.css */
+.active {
+  color: red;
+}</code></pre>
+</section>
+
+<section>
+  <h2>128. How do you use Angular CLI to generate a component?</h2>
+  <p>You can use the Angular CLI command <code>ng generate component</code> or <code>ng g c</code> to generate a new component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>ng generate component my-component</code></pre>
+</section>
+
+<section>
+  <h2>129. How do you prevent memory leaks in Angular?</h2>
+  <p>You can prevent memory leaks by unsubscribing from Observables in Angular using the <code>ngOnDestroy</code> lifecycle hook or the <code>takeUntil</code> operator.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+private destroy$ = new Subject<void>();
+
+ngOnInit() {
+  this.dataService.getData()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(data => console.log(data));
+}
+
+ngOnDestroy() {
+  this.destroy$.next();
+  this.destroy$.complete();
+}</code></pre>
+</section>
+
+<section>
+  <h2>130. How do you implement lazy loading in Angular?</h2>
+  <p>You can implement lazy loading in Angular by configuring child routes in your routing module using <code>loadChildren</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@NgModule({
+  imports: [RouterModule.forRoot([
+    { path: 'feature', loadChildren: () => import('./feature/feature.module').then(m => m.FeatureModule) }
+  ])],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}</code></pre>
+</section>
+
+
+
+<section>
+  <h2>131. How do you use Angular's FormBuilder to create a form?</h2>
+  <p>You can use Angular's <code>FormBuilder</code> service to simplify the creation of reactive forms.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+constructor(private fb: FormBuilder) {
+  this.form = this.fb.group({
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+  });
+}</code></pre>
+</section>
+
+<section>
+  <h2>132. How do you use the RouterOutlet in Angular?</h2>
+  <p>The <code>RouterOutlet</code> directive is used to mark where the routed component will be displayed in your Angular application.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+</section>
+
+<section>
+  <h2>133. How do you handle form submission in Angular?</h2>
+  <p>You can handle form submission by binding to the <code>(ngSubmit)</code> event in the template.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;form (ngSubmit)="onSubmit()" [formGroup]="form"&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <pre><code>onSubmit() {
+  if (this.form.valid) {
+    console.log(this.form.value);
+  }
+}</code></pre>
+</section>
+
+<section>
+  <h2>134. How do you implement custom validators in Angular forms?</h2>
+  <p>You can implement custom validators by creating a function that returns either <code>null</code> if valid or an error object if invalid.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { AbstractControl, ValidationErrors } from '@angular/forms';
+
+function passwordValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (value && value.length < 6) {
+    return { weakPassword: true };
+  }
+  return null;
+}</code></pre>
+  <pre><code>this.form = this.fb.group({
+  password: ['', [passwordValidator]],
+});</code></pre>
+</section>
+
+<section>
+  <h2>135. How do you use Angular's HttpClient to make a GET request?</h2>
+  <p>You can use the <code>HttpClient</code> service to make a GET request and retrieve data from an API.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { HttpClient } from '@angular/common/http';
+
+constructor(private http: HttpClient) {}
+
+ngOnInit() {
+  this.http.get('https://api.example.com/data').subscribe(data => {
+    console.log(data);
+  });
+}</code></pre>
+</section>
+
+<section>
+  <h2>136. How do you create a service in Angular?</h2>
+  <p>You can create a service in Angular using the <code>@Injectable</code> decorator and providing it in the root or in specific modules.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  getData() {
+    return ['Item1', 'Item2'];
+  }
+}</code></pre>
+</section>
+
+<section>
+  <h2>137. How do you use the ngClass directive in Angular?</h2>
+  <p>You can dynamically add or remove classes using the <code>ngClass</code> directive in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive }"&gt;Content&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;</code></pre>
+</section>
+
+<section>
+  <h2>138. How do you use Angular's ngModel for two-way data binding?</h2>
+  <p>You can use <code>ngModel</code> for two-way data binding between the model and the view in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="name" /&gt;</code></pre>
+  <pre><code>name = 'Angular';</code></pre>
+</section>
+
+<section>
+  <h2>139. How do you pass data from a parent component to a child component in Angular?</h2>
+  <p>You can pass data to a child component using the <code>@Input</code> decorator in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Component({
+  selector: 'app-child',
+  template: '&lt;div&gt;{{ data }}&lt;/div&gt;'
+})
+export class ChildComponent {
+  @Input() data: string;
+}</code></pre>
+  <pre><code>&lt;app-child [data]="'Hello from parent'"&gt;&lt;/app-child&gt;</code></pre>
+</section>
+
+<section>
+  <h2>140. How do you prevent a form from being submitted in Angular?</h2>
+  <p>You can prevent a form from being submitted by using the <code>preventDefault()</code> method inside the <code>(ngSubmit)</code> event handler.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;form (ngSubmit)="onSubmit($event)"&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <pre><code>onSubmit(event: Event) {
+  event.preventDefault();
+  console.log('Form submission prevented');
+}</code></pre>
+</section>
+
+<section>
+  <h2>141. How do you handle errors in Angular's HttpClient?</h2>
+  <p>You can handle errors by using the <code>catchError</code> operator from RxJS in the <code>HttpClient</code> service.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+this.http.get('https://api.example.com/data')
+  .pipe(catchError(error => {
+    console.error(error);
+    return of([]); // Return a default value in case of error
+  }))
+  .subscribe(data => {
+    console.log(data);
+  });</code></pre>
+</section>
+
+<section>
+  <h2>142. How do you use Angular's ngFor with trackBy function?</h2>
+  <p>You can optimize the rendering performance of <code>ngFor</code> by using the <code>trackBy</code> function to track elements by their unique identifiers.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngFor="let item of items; trackBy: trackById"&gt;{{ item.name }}&lt;/div&gt;</code></pre>
+  <pre><code>trackById(index: number, item: any): number {
+  return item.id;
+}</code></pre>
+</section>
+
+<section>
+  <h2>143. How do you use Angular's built-in date pipe?</h2>
+  <p>You can format dates in Angular using the built-in <code>date</code> pipe.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ currentDate | date: 'shortDate' }}&lt;/div&gt;</code></pre>
+  <pre><code>currentDate = new Date();</code></pre>
+</section>
+
+<section>
+  <h2>144. How do you implement routing with parameters in Angular?</h2>
+  <p>You can implement routing with parameters by defining the parameters in the route path and accessing them in the component.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>const routes: Routes = [
+  { path: 'user/:id', component: UserComponent }
+];</code></pre>
+  <pre><code>constructor(private route: ActivatedRoute) {
+  this.route.params.subscribe(params => {
+    this.userId = params['id'];
+  });
+}</code></pre>
+</section>
+
+<section>
+  <h2>145. How do you use Angular's dependency injection?</h2>
+  <p>Angular's dependency injection allows you to inject services into your components, directives, or other services.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  getData() {
+    return ['Apple', 'Banana', 'Orange'];
+  }
+}</code></pre>
+  <pre><code>constructor(private dataService: DataService) {
+  console.log(this.dataService.getData());
+}</code></pre>
+</section>
+
+<section>
+  <h2>146. How do you use Angular's ngIf else syntax?</h2>
+  <p>You can use the <code>else</code> keyword with <code>ngIf</code> to conditionally render alternative content.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngIf="isLoggedIn; else loggedOut"&gt;Welcome back!&lt;/div&gt;
+&lt;ng-template #loggedOut&gt;Please log in&lt;/ng-template&gt;</code></pre>
+  <pre><code>isLoggedIn = false;</code></pre>
+</section>
+
+<section>
+  <h2>147. How do you create a custom Angular pipe?</h2>
+  <p>You can create a custom pipe by implementing the <code>PipeTransform</code> interface and using the <code>@Pipe</code> decorator.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({name: 'reverse'})
+export class ReversePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.split('').reverse().join('');
+  }
+}</code></pre>
+  <pre><code>&lt;div&gt;{{ 'hello' | reverse }}&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>148. How do you handle a form field change event in Angular?</h2>
+  <p>You can handle form field change events using the <code>(ngModelChange)</code> event in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="username" (ngModelChange)="onUsernameChange($event)" /&gt;</code></pre>
+  <pre><code>onUsernameChange(value: string) {
+  console.log('Username changed:', value);
+}</code></pre>
+</section>
+
+<section>
+  <h2>149. How do you use Angular's ngSwitch directive?</h2>
+  <p>The <code>ngSwitch</code> directive allows you to conditionally display content based on an expression's value.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngSwitch]="color"&gt;
+  &lt;div *ngSwitchCase="'red'"&gt;Red&lt;/div&gt;
+  &lt;div *ngSwitchCase="'blue'"&gt;Blue&lt;/div&gt;
+  &lt;div *ngSwitchDefault&gt;Unknown color&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  <pre><code>color = 'red';</code></pre>
+</section>
+
+<section>
+  <h2>150. How do you use Angular's built-in currency pipe?</h2>
+  <p>You can format numbers as currency using the built-in <code>currency</code> pipe in Angular.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ amount | currency:'USD' }}&lt;/div&gt;</code></pre>
+  <pre><code>amount = 1234.56;</code></pre>
+</section>
+
+<section>
+  <h2>151. How do you create a reactive form in Angular?</h2>
+  <p>You can create a reactive form by using Angular's <code>FormGroup</code> and <code>FormControl</code> classes, along with <code>ReactiveFormsModule</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { FormGroup, FormControl } from '@angular/forms';
+
+this.form = new FormGroup({
+  name: new FormControl('', Validators.required),
+  email: new FormControl('', [Validators.required, Validators.email]),
+});</code></pre>
+  <pre><code>&lt;form [formGroup]="form" (ngSubmit)="onSubmit()"&gt;
+  &lt;input formControlName="name" /&gt;
+  &lt;input formControlName="email" /&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+</section>
+
+<section>
+  <h2>152. How do you handle route guards in Angular?</h2>
+  <p>You can use Angular route guards to prevent navigation to a route based on certain conditions.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { CanActivate } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthGuard implements CanActivate {
+  canActivate(): boolean {
+    return this.authService.isAuthenticated();
+  }
+}</code></pre>
+  <pre><code>const routes: Routes = [
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
+];</code></pre>
+</section>
+
+<section>
+  <h2>153. How do you use Angular's built-in slice pipe?</h2>
+  <p>You can use the <code>slice</code> pipe to slice a string or an array.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ 'Angular' | slice: 0: 3 }}&lt;/div&gt;</code></pre>
+  <pre><code>&lt;div&gt;{{ ['apple', 'banana', 'cherry'] | slice: 1: 2 }}&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>154. How do you use Angular's built-in async pipe?</h2>
+  <p>The <code>async</code> pipe automatically subscribes to an observable and renders its latest value.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ data$ | async }}&lt;/div&gt;</code></pre>
+  <pre><code>data$ = this.dataService.getData();</code></pre>
+</section>
+
+<section>
+  <h2>155. How do you use Angular's built-in json pipe?</h2>
+  <p>The <code>json</code> pipe transforms an object or array into a JSON string for display.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ user | json }}&lt;/div&gt;</code></pre>
+  <pre><code>user = { name: 'John', age: 30 };</code></pre>
+</section>
+
+<section>
+  <h2>156. How do you implement lazy loading in Angular?</h2>
+  <p>You can implement lazy loading by using Angular's <code>loadChildren</code> property in the route definition to load modules only when they are needed.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>const routes: Routes = [
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) }
+];</code></pre>
+</section>
+
+<section>
+  <h2>157. How do you pass data through routes in Angular?</h2>
+  <p>You can pass data through routes using the <code>data</</code> property in the route configuration and access it with the <code>ActivatedRoute</code> service.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>const routes: Routes = [
+  { path: 'user/:id', component: UserComponent, data: { title: 'User Profile' } }
+];</code></pre>
+  <pre><code>constructor(private route: ActivatedRoute) {
+  this.title = this.route.snapshot.data['title'];
+}</code></pre>
+</section>
+
+<section>
+  <h2>158. How do you navigate programmatically in Angular?</h2>
+  <p>You can navigate programmatically by using Angular's <code>Router</code> service and its <code>navigate</code> method.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>constructor(private router: Router) {}
+
+goToProfile() {
+  this.router.navigate(['/profile']);
+}</code></pre>
+  <pre><code>&lt;button (click)="goToProfile()"&gt;Go to Profile&lt;/button&gt;</code></pre>
+</section>
+
+<section>
+  <h2>159. How do you use Angular's ngModel with a checkbox?</h2>
+  <p>You can bind a checkbox to a boolean value using <code>ngModel</code>.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input type="checkbox" [(ngModel)]="isChecked" /&gt;</code></pre>
+  <pre><code>isChecked = true;</code></pre>
+</section>
+
+<section>
+  <h2>160. How do you use Angular's ngClass with multiple classes?</h2>
+  <p>You can use <code>ngClass</code> to bind multiple classes based on conditions.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngClass]="{ 'active': isActive, 'highlighted': isHighlighted }"&gt;Content&lt;/div&gt;</code></pre>
+  <pre><code>isActive = true;
+isHighlighted = false;</code></pre>
+</section>
+
+<section>
+  <h2>161. How do you use Angular's ngStyle to apply styles dynamically?</h2>
+  <p>You can use <code>ngStyle</code> to apply styles dynamically to an element based on expressions.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div [ngStyle]="{'color': color, 'font-size': fontSize}"&gt;Styled Content&lt;/div&gt;</code></pre>
+  <pre><code>color = 'blue';
+fontSize = '16px';</code></pre>
+</section>
+
+<section>
+  <h2>162. How do you create a custom Angular directive?</h2>
+  <p>You can create a custom directive by using the <code>@Directive</code> decorator and providing the directive's logic.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Directive, ElementRef, Renderer2 } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+    this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', 'yellow');
+  }
+}</code></pre>
+  <pre><code>&lt;p appHighlight&gt;This text will be highlighted&lt;/p&gt;</code></pre>
+</section>
+
+<section>
+  <h2>163. How do you perform an HTTP POST request in Angular?</h2>
+  <p>You can use Angular's <code>HttpClient</code> to perform HTTP POST requests.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>this.http.post('https://api.example.com/submit', { data: 'value' })
+  .subscribe(response => {
+    console.log(response);
+  });</code></pre>
+</section>
+
+<section>
+  <h2>164. How do you use Angular's ngFor with an object?</h2>
+  <p>You can use <code>ngFor</code> with an object by converting its properties into an array of keys or values.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div *ngFor="let key of objectKeys(obj)"&gt;
+  {{ key }}: {{ obj[key] }}
+&lt;/div&gt;</code></pre>
+  <pre><code>objectKeys(obj) {
+  return Object.keys(obj);
+}
+
+obj = { name: 'John', age: 30 };</code></pre>
+</section>
+
+<section>
+  <h2>165. How do you use Angular's build-in upperCase and lowerCase pipes?</h2>
+  <p>You can use the <code>uppercase</code> and <code>lowercase</code> pipes to transform text to uppercase or lowercase.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ 'angular' | uppercase }}&lt;/div&gt;
+&lt;div&gt;{{ 'ANGULAR' | lowercase }}&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>166. How do you create an Angular service?</h2>
+  <p>You can create a service in Angular by using the <code>@Injectable</code> decorator and providing it in the root or specific module.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  getData() {
+    return ['item1', 'item2', 'item3'];
+  }
+}</code></pre>
+</section>
+
+<section>
+  <h2>167. How do you bind a form field to a model in Angular?</h2>
+  <p>You can bind form fields to a model using <code>ngModel</code> for two-way data binding.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;input [(ngModel)]="username" /&gt;</code></pre>
+  <pre><code>username = 'John';</code></pre>
+</section>
+
+<section>
+  <h2>168. How do you use Angular's built-in percent pipe?</h2>
+  <p>You can use the <code>percent</code> pipe to format numbers as percentages.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>&lt;div&gt;{{ 0.25 | percent }}&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+  <h2>169. How do you set up Angular's Router for lazy loading?</h2>
+  <p>You can set up lazy loading in Angular by configuring the <code>loadChildren</code> property in your routes.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>const routes: Routes = [
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) }
+];</code></pre>
+</section>
+
+<section>
+  <h2>170. How do you pass data between components using Angular's input and output decorators?</h2>
+  <p>You can pass data between components using the <code>@Input</code> decorator for the child component and the <code>@Output</code> decorator for emitting events to the parent.</p>
+  <p><strong>Code:</strong></p>
+  <pre><code>import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: '&lt;button (click)="sendData()"&gt;Send Data&lt;/button&gt;',
+})
+export class ChildComponent {
+  @Input() data: string;
+  @Output() dataChanged = new EventEmitter<string>();
+
+  sendData() {
+    this.dataChanged.emit('New data');
+  }
+}</code></pre>
+  <pre><code>&lt;app-child [data]="parentData" (dataChanged)="onDataChanged($event)"&gt;&lt;/app-child&gt;</code></pre>
+</section>
+
+
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>
