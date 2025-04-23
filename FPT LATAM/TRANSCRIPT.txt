@@ -1,0 +1,1357 @@
+1. What is Spring Boot and what are its advantages?
+Spring Boot is a framework built on top of the Spring Framework that simplifies the development of stand-alone, production-grade Spring-based applications. It eliminates boilerplate configurations and supports embedded servers like Tomcat.
+Advantages:
+Auto-configuration of Spring application
+Standalone – no need to deploy on external servers
+Production-ready with embedded metrics and monitoring
+Starter dependencies simplify Maven/Gradle setup
+2. What is the use of @SpringBootApplication annotation?
+@SpringBootApplication is a convenience annotation that combines:
+@Configuration – Marks the class as a source of bean definitions
+@EnableAutoConfiguration – Enables Spring Boot's auto-configuration
+@ComponentScan – Enables component scanning
+3. How do you create a basic REST API in Spring Boot?
+A basic REST API can be created using @RestController and mapping annotations like @GetMapping, @PostMapping, etc.
+4. What is Dependency Injection in Spring?
+Dependency Injection (DI) is a design pattern used to reduce the coupling between components. In Spring, objects are injected using annotations like @Autowired. Spring manages the lifecycle and dependencies of beans defined in the application context.
+5. What are Spring Boot Starters?
+Starters are a set of convenient dependency descriptors you can include in your application. They aggregate commonly used libraries, reducing the need to define individual dependencies.
+Example: spring-boot-starter-web includes Spring MVC, Jackson, validation API, etc.
+6. How does Spring Boot handle application properties?
+Spring Boot uses application.properties or application.yml files to define configuration values. These files allow easy customization of environment-specific settings.
+7. What is the role of @RestController in Spring Boot?
+@RestController is a convenience annotation that combines @Controller and @ResponseBody, simplifying the development of RESTful web services by directly returning objects as JSON/XML.
+8. How do you define a custom error response in Spring Boot?
+You can define a global error handler using @ControllerAdvice and @ExceptionHandler.
+9. What is Spring Data JPA?
+Spring Data JPA simplifies database access using JPA-based repositories. It eliminates boilerplate code and allows you to define queries using method names or JPQL.
+10. How do you connect a Spring Boot application to a MySQL database?
+By adding the JDBC driver dependency and specifying database properties in application.properties:
+11. What is the purpose of application.properties or application.yml in Spring Boot?
+These files allow external configuration of the application. You can define server ports, database connections, logging levels, and custom application-specific values. Spring Boot automatically loads these at startup and makes the properties accessible via @Value, @ConfigurationProperties, or Environment.
+custom.property.greeting=Hello from properties
+12. What is the use of @ConfigurationProperties in Spring Boot?
+13. What is Spring Boot DevTools?
+Spring Boot DevTools provides development-time features such as automatic restarts, live reload, and property overrides to improve developer productivity.
+14. How can you validate request data in Spring Boot?
+Spring Boot supports bean validation using annotations like @NotNull, @Size, and more from JSR-303. Use @Valid in controllers to enable validation.
+15. What is the purpose of @EnableAutoConfiguration?
+16. How do you implement pagination with Spring Data JPA?
+Use Spring Data’s PagingAndSortingRepository or JpaRepository with Pageable to enable pagination.
+Page<User> users = userRepository.findAll(PageRequest.of(0, 10));
+17. How do you enable CORS in Spring Boot?
+CORS can be enabled using annotations or by creating a global configuration.
+18. What is the difference between @Component, @Service, @Repository, and @Controller?
+All are Spring stereotypes used for component scanning. The main difference lies in their intended usage:
+@Component: Generic stereotype for any Spring-managed bean.
+@Service: Indicates business logic components.
+@Repository: Indicates DAO components and provides exception translation.
+@Controller: Indicates web controller.
+19. What is the role of CommandLineRunner in Spring Boot?
+CommandLineRunner is used to execute code after the Spring Boot application starts.
+20. How do you define custom configuration classes in Spring Boot?
+Use @Configuration to define custom configuration classes. Beans declared in these classes are managed by Spring's IoC container.
+21. What is the difference between @Value and @ConfigurationProperties?
+@Value is used to inject individual property values, while @ConfigurationProperties binds an entire group of properties into a POJO. @ConfigurationProperties is preferred for structured and grouped configuration.
+22. How can you create a custom Spring Boot starter?
+A custom starter is a dependency that encapsulates auto-configuration and required libraries. Create a module with dependencies and an autoconfigure class, then expose it via spring.factories.
+23. What is the use of SpringApplicationBuilder?
+SpringApplicationBuilder is a fluent API used to build and run a Spring application with customized settings (profiles, sources, etc.).
+24. How do you externalize configuration in Spring Boot?
+Configuration can be externalized via application.properties, YAML files, environment variables, command-line arguments, or config servers (Spring Cloud Config).
+25. How does Spring Boot handle error responses by default?
+Spring Boot provides a default error handling mechanism that returns a JSON error response with fields like timestamp, status, error, and message. You can customize it using @ControllerAdvice or ErrorController.
+26. What is the role of @SpringBootApplication annotation?
+It combines @Configuration, @EnableAutoConfiguration, and @ComponentScan annotations to set up a Spring Boot application.
+27. How do you access command-line arguments in Spring Boot?
+You can access arguments using ApplicationArguments or from the String[] args parameter in the main() method.
+28. What is the use of @RequestParam annotation?
+29. How do you upload a file in Spring Boot?
+Spring Boot supports file uploads using MultipartFile. Ensure multipart is enabled in the properties file.
+30. How do you schedule tasks in Spring Boot?
+Use @EnableScheduling and @Scheduled annotations to run tasks at fixed intervals.
+31. How do you create a custom Spring Boot banner?
+Place a text file named banner.txt in the classpath. You can also use banner.image.location for an image.
+32. What is a profile in Spring Boot?
+Profiles allow environment-specific configuration. Use @Profile to conditionally load beans and application-{profile}.properties for different environments.
+33. What is Spring Boot Actuator?
+Spring Boot Actuator exposes production-ready endpoints to monitor and manage your app (e.g., health, metrics, env).
+34. How do you consume REST APIs in Spring Boot?
+Use RestTemplate (legacy) or WebClient (reactive) to consume REST APIs.
+35. How do you secure Spring Boot applications?
+Use Spring Security for authentication and authorization. Customize it via a SecurityFilterChain or WebSecurityConfigurerAdapter (deprecated).
+36. How do you define global CORS policy in Spring Boot?
+Create a WebMvcConfigurer bean and override addCorsMappings.
+37. How do you test Spring Boot applications?
+Use @SpringBootTest for integration tests, MockMvc for controller tests, and JUnit/Mockito for unit testing.
+38. How do you define and use profiles programmatically?
+Set the active profile using SpringApplication.setAdditionalProfiles().
+39. How do you connect a Spring Boot app to MySQL?
+Add the JDBC driver and configure the datasource in application.properties.
+40. What is the default embedded server in Spring Boot?
+Spring Boot uses Tomcat as the default embedded server. You can switch to Jetty or Undertow by changing dependencies.
+41. How do you change the default port in Spring Boot?
+You can change the default port by setting server.port in application.properties or using command-line arguments.
+42. How do you exclude auto-configuration classes in Spring Boot?
+Use the exclude attribute in @SpringBootApplication or @EnableAutoConfiguration.
+43. What is the purpose of the Spring Boot DevTools?
+DevTools provides hot reloading, automatic restart, and live reload during development to improve productivity.
+44. What is @ResponseStatus used for?
+@ResponseStatus is used to mark a method or exception class with the HTTP status code that should be returned.
+45. How do you load initial data in Spring Boot?
+Use data.sql or schema.sql in resources or implement CommandLineRunner or ApplicationRunner.
+46. How does Spring Boot support internationalization (i18n)?
+Define locale-specific message files (e.g., messages_en.properties, messages_es.properties) and configure a LocaleResolver.
+47. What is the use of @Valid and @Validated?
+@Valid is a JSR-303 annotation used with Java Bean Validation, and @Validated is a Spring-specific alternative that allows grouping constraints.
+48. How do you configure HTTPS in Spring Boot?
+You need a keystore and appropriate HTTPS properties in application.properties.
+49. What is the difference between CrudRepository and JpaRepository?
+JpaRepository extends CrudRepository and provides more JPA-specific methods like batch operations and pagination.
+public interface UserRepository extends JpaRepository<User, Long> { }
+50. How do you enable method-level security?
+Add @EnableGlobalMethodSecurity and use @PreAuthorize or @Secured annotations.
+51. How do you log events in Spring Boot?
+Use SLF4J with Logback (default) or switch to Log4j2. Use LoggerFactory to create loggers.
+52. How do you handle form submissions in Spring Boot?
+Bind form fields to a model object with @ModelAttribute or @RequestParam and return a view.
+53. How do you customize JSON serialization in Spring Boot?
+Customize Jackson with annotations like @JsonIgnore, @JsonProperty, or register a custom ObjectMapper bean.
+54. What are actuator custom endpoints?
+You can create custom actuator endpoints using @Endpoint, @ReadOperation, @WriteOperation.
+55. How do you disable a specific Spring Boot auto-configuration?
+Use the @EnableAutoConfiguration(exclude = ...) or use spring.autoconfigure.exclude in properties.
+spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+56. What is Flyway and how do you use it in Spring Boot?
+Flyway is a database migration tool. Place SQL scripts in db/migration and Spring Boot will run them automatically.
+57. How do you use pagination with Spring Data JPA?
+Use the Pageable interface to paginate query results.
+58. What is @RepositoryRestResource?
+Used in Spring Data REST to expose repository interfaces as RESTful endpoints automatically.
+59. How do you enable caching in Spring Boot?
+Use @EnableCaching and annotate methods with @Cacheable, @CacheEvict, etc.
+60. What is Spring Boot Admin?
+Spring Boot Admin is a community project to manage and monitor Spring Boot apps using a web UI.
+61. How do you use Lombok in a Spring Boot project?
+Lombok reduces boilerplate code like getters/setters. Add the Lombok dependency and annotate classes with @Data, @Getter, @Setter, etc.
+62. How do you integrate Spring Boot with Swagger?
+Use springdoc-openapi-ui dependency and access Swagger UI at /swagger-ui.html.
+63. How do you inject a list of beans into a Spring component?
+You can autowire a List<T> or Map<String, T> to inject multiple beans of the same type.
+64. What is Spring Boot CLI?
+It's a command-line interface to run Spring Boot applications written in Groovy without boilerplate code.
+$ spring run app.groovy
+65. How can you reload properties without restarting the application?
+Use Spring Cloud Config or libraries like spring-boot-refresh for dynamic property reloading.
+66. How do you configure a custom login page in Spring Security?
+Override the configure(HttpSecurity http) method and use loginPage().
+67. What is the use of @ControllerAdvice?
+@ControllerAdvice allows centralized exception handling across all controllers.
+68. How do you add filters in Spring Boot?
+Implement javax.servlet.Filter and register it using @Component or FilterRegistrationBean.
+69. What is the difference between @RestController and @Controller?
+@RestController = @Controller + @ResponseBody. It returns JSON/XML directly, not views.
+70. How do you inject application properties into a Spring bean?
+Use @Value or bind a @ConfigurationProperties class.
+71. How do you send scheduled emails in Spring Boot?
+Use @Scheduled with JavaMailSender.
+72. What is @PostConstruct used for?
+Runs a method once after dependency injection is complete.
+73. What is @Scheduled and how do you enable it?
+74. What is Spring Boot Starter?
+Starters are convenient dependency descriptors for common functionalities (e.g., web, JPA).
+75. How do you run SQL scripts at application startup?
+Put schema.sql and data.sql files in resources.
+76. What are the different scopes for Spring beans?
+Common scopes: singleton, prototype, request, session, application, websocket.
+77. What is @ComponentScan used for?
+Tells Spring where to search for annotated components to register as beans.
+78. How do you customize error responses globally?
+Extend ResponseEntityExceptionHandler or use @ControllerAdvice.
+79. How do you use profiles in Spring Boot?
+Use @Profile annotation and create separate application-{profile}.properties files.
+80. How do you call external REST APIs in Spring Boot?
+Use RestTemplate or WebClient for non-blocking calls.
+81. What is the difference between @Primary and @Qualifier?
+@Primary marks a bean as the default when multiple candidates are available. @Qualifier explicitly selects a bean when ambiguity exists.
+82. How do you set active profiles in Spring Boot?
+You can set active profiles via application.properties, environment variables, or command-line arguments.
+83. What is a Spring Boot actuator?
+Spring Boot Actuator provides production-ready endpoints like health, metrics, info, etc., for monitoring and management.
+84. How do you secure Actuator endpoints?
+You can restrict access to Actuator endpoints using Spring Security and application properties.
+85. How do you implement custom validation in Spring Boot?
+Use @Constraint to create a custom annotation and a corresponding validator class.
+86. What is Spring's Environment abstraction?
+It's an abstraction to access profiles and properties. You can inject it using @Autowired.
+87. How do you create a multipart file upload endpoint?
+Use @RequestParam("file") MultipartFile file in your controller.
+88. What is the use of the @RequestBody annotation?
+89. What is the use of @ResponseStatus?
+It allows you to define the HTTP status code for a controller method or exception handler.
+90. How do you customize Jackson ObjectMapper globally?
+You can create a @Bean of type ObjectMapper and configure it.
+91. How do you implement versioning in REST APIs?
+Versioning can be done via URI, query parameters, or headers.
+92. What is a configuration class in Spring?
+A class annotated with @Configuration defines beans using @Bean methods.
+93. What is the difference between @Bean and @Component?
+94. How do you use interceptors in Spring Boot?
+Implement HandlerInterceptor and register it in a WebMvcConfigurer.
+95. What is the use of @RequestHeader?
+It binds HTTP headers to method parameters in controller methods.
+96. How do you log in Spring Boot?
+Use the built-in logging (Logback) and LoggerFactory.
+97. What is Flyway and how is it used in Spring Boot?
+Flyway handles database migrations via versioned SQL files placed in resources/db/migration.
+98. What is the role of @EnableAutoConfiguration?
+Enables Spring Boot's auto-configuration mechanism based on classpath settings and properties.
+99. How do you exclude auto-configuration classes?
+Use @SpringBootApplication(exclude = ...) to disable specific auto-configs.
+100. How do you configure logging levels in Spring Boot?
+Set levels in application.properties using logging.level prefix.
+101. How do you load YAML configuration files in Spring Boot?
+Spring Boot automatically loads application.yml or application-{profile}.yml.
+102. How do you override properties at runtime?
+You can override using command-line args, environment variables, or system properties.
+103. What is a Filter in Spring Boot?
+A Filter intercepts HTTP requests before they reach a servlet. Useful for logging, auth, etc.
+104. What is the use of Spring Boot DevTools?
+DevTools enables automatic restarts, live reload, and configurations for easier development.
+105. How do you exclude a class from component scanning?
+Use @ComponentScan(excludeFilters = ...) or mark the class with a custom condition.
+106. How do you handle global exceptions?
+Create a class with @ControllerAdvice and define methods with @ExceptionHandler.
+107. What is the use of the ApplicationRunner interface?
+It lets you run code after the application starts, receiving ApplicationArguments.
+108. How do you access static resources in Spring Boot?
+Place static files in src/main/resources/static and access via HTTP.
+109. What is the role of @RequestMapping?
+It maps HTTP requests to controller methods and can handle multiple HTTP methods.
+110. What are profiles in Spring Boot?
+Profiles allow defining environment-specific configurations using @Profile or properties files.
+111. How do you configure multiple datasources?
+Define two DataSource beans and qualify them using @Primary and @Qualifier.
+112. What is Spring Boot CLI?
+It's a command-line tool that allows rapid prototyping using Groovy scripts.
+113. What is @Conditional?
+It conditionally loads a bean based on runtime conditions, evaluated by a class implementing Condition.
+114. What is Spring Boot Starter Test?
+A dependency that includes testing libraries like JUnit, Mockito, Hamcrest, etc.
+115. What is the difference between Mono and Flux in Spring WebFlux?
+Mono represents 0 or 1 value, while Flux represents 0 to N values asynchronously.
+116. How do you use WebClient in Spring WebFlux?
+WebClient is the reactive alternative to RestTemplate for async HTTP calls.
+117. How do you disable auto-restart in DevTools?
+118. What is @EnableConfigurationProperties?
+It binds external configuration to a Java class annotated with @ConfigurationProperties.
+@EnableConfigurationProperties(MyProps.class)
+119. How do you define nested configuration properties?
+Use nested POJOs inside @ConfigurationProperties classes.
+120. What is the role of @JsonIgnore and @JsonProperty in Spring Boot?
+@JsonIgnore skips a field during serialization. @JsonProperty changes the field name.
+121. How does Spring Boot ensure scalability in large applications?
+Spring Boot ensures scalability through its simplified configuration, embedded web servers (e.g., Tomcat, Jetty), and microservice architecture. By enabling the easy creation of independent services that can be scaled separately, Spring Boot supports horizontal and vertical scaling.
+122. How do you implement GraphQL in a Spring Boot application?
+To implement GraphQL in Spring Boot, you need to add dependencies such as spring-boot-starter-graphql, create a schema file, and define resolvers to handle queries and mutations. Spring Boot also integrates with GraphQL tools to help define the GraphQL schema programmatically.
+123. How would you integrate AWS S3 for file storage in a Spring Boot application?
+To integrate AWS S3, you can use the AWS SDK for Java. By including dependencies such as aws-java-sdk-s3, you can configure access keys and bucket details in application.properties and use the AmazonS3 client to upload and retrieve files.
+124. What is the role of API Gateway in microservice architectures, especially in Spring Boot?
+An API Gateway acts as a reverse proxy to route requests to the appropriate microservices in a distributed system. In Spring Boot, you can use Spring Cloud Gateway or Zuul to handle request routing, load balancing, and security, simplifying the communication between clients and microservices.
+125. How do you handle authentication and authorization in Spring Boot with OAuth2?
+In Spring Boot, OAuth2 is used to secure applications by delegating authentication to an identity provider (e.g., Google, Facebook). By using spring-boot-starter-oauth2-client, you can integrate OAuth2 login. To implement server-side OAuth2, you can use Spring Security to manage authorization and token validation.
+126. How do you implement continuous integration and continuous deployment (CI/CD) with Bitbucket and Bamboo?
+CI/CD pipelines are established by connecting Bitbucket repositories with Bamboo. Bamboo will detect changes in the repository, automatically trigger builds, run tests, and deploy the application to different environments. Bamboo’s integration with Bitbucket ensures smooth version control and continuous delivery to production.
+127. What is the purpose of using Swagger in Spring Boot applications?
+Swagger is used to generate interactive API documentation. In Spring Boot, you can integrate Swagger using springfox-swagger2 to auto-generate and expose a RESTful API documentation. This helps developers understand the endpoints and test the APIs directly from the browser.
+128. What are Spring Boot Actuators and how are they useful?
+Spring Boot Actuators provide built-in endpoints for monitoring and managing a Spring Boot application in production. These endpoints expose application health, metrics, environment details, and more. They help developers ensure that applications are running smoothly and can be monitored without extra configuration.
+129. How do you handle versioning for RESTful APIs in Spring Boot?
+Versioning in RESTful APIs can be achieved in Spring Boot through different methods:
+130. How does Spring Boot support unit and integration testing?
+Spring Boot supports unit and integration testing using libraries like JUnit and TestNG. By using @SpringBootTest, you can load the application context and run integration tests. @WebMvcTest is used for testing the web layer, while @DataJpaTest is for testing JPA components.
+131. How do you configure Spring Boot to work with AWS EC2?
+To configure AWS EC2 with Spring Boot, you need to configure security settings, such as opening ports for HTTP and SSH access. After deploying your Spring Boot application on EC2, you can integrate the AWS SDK for Java to interact with other AWS services (like S3, RDS, etc.). Use EC2 instance metadata for dynamic configuration management.
+132. Explain how AWS SQS can be integrated into a Spring Boot application for asynchronous processing.
+AWS SQS (Simple Queue Service) is integrated with Spring Boot using the spring-cloud-aws-messaging library. You can configure SQS by setting access credentials, region, and queue names in your application.properties. A Spring listener, using the @SqsListener annotation, can process messages from the queue asynchronously.
+133. How would you implement GraphQL mutations in a Spring Boot application?
+To implement GraphQL mutations in Spring Boot, first, define the mutation in the GraphQL schema. Then, create a corresponding resolver class using the GraphQLMutationResolver interface. Implement methods to handle the mutation logic, such as creating or updating data in the database.
+134. What is the importance of using Spring Boot DevTools during development?
+Spring Boot DevTools offers features like automatic restarts, live reload, and enhanced debugging that help improve the development experience. It speeds up the development process by automatically restarting the application when code changes, and enables faster feedback during development.
+135. How would you implement a simple rate-limiting mechanism in Spring Boot?
+Rate limiting in Spring Boot can be achieved by using libraries like Bucket4j or Resilience4j. These libraries allow you to configure rate limits based on the number of requests per second/minute. By using annotations like @RateLimit or creating custom filters, you can restrict the number of requests a user can make.
+136. How do you use Spring Boot with a relational database, like MySQL or PostgreSQL?
+To integrate a relational database with Spring Boot, add the appropriate JDBC or JPA dependencies (e.g., spring-boot-starter-data-jpa) and configure the database connection in application.properties. You can then create entities and repositories for database interaction, and Spring Boot will automatically configure the connection pool.
+137. What is the purpose of using Spring Data JPA in Spring Boot applications?
+Spring Data JPA simplifies data access by eliminating the need for boilerplate code. It provides a powerful abstraction layer for managing entities in the database. Using JPA repositories, you can perform CRUD operations and execute complex queries with minimal code, making it easier to interact with databases.
+138. Explain how Spring Boot uses profiles for environment-specific configuration.
+Spring Boot profiles allow you to define different configurations for different environments (e.g., development, testing, production). You can create environment-specific application-{profile}.properties or application.yml files and specify the active profile using the spring.profiles.active property. This way, your application can load configurations specific to each environment.
+139. What are Spring Boot’s advantages over traditional Spring MVC applications?
+Spring Boot offers several advantages over traditional Spring MVC applications:
+Autoconfiguration: Automatically configures necessary beans and services based on classpath settings.
+Embedded Servers: It comes with embedded servers (e.g., Tomcat, Jetty) so you don't need to deploy the application to an external web server.
+Production-Ready: Includes built-in production-ready features like health checks and metrics with minimal configuration.
+Simplicity: Reduces boilerplate code, making it easier and faster to develop and deploy applications.
+140. How do you handle custom exceptions in Spring Boot?
+Custom exceptions in Spring Boot can be handled using @ControllerAdvice to globally handle exceptions or using @ExceptionHandler within a controller to handle exceptions locally. You can create custom exception classes and return appropriate HTTP responses with error messages.
+141. How do you implement CORS in a Spring Boot application?
+CORS (Cross-Origin Resource Sharing) can be configured in Spring Boot using a global configuration or at the controller level. To apply it globally, you can define a WebMvcConfigurer bean and override the addCorsMappings method. You can also use @CrossOrigin annotations on specific methods or controllers to handle CORS for those endpoints.
+142. What is Spring Boot’s Actuator module, and how can it be used for monitoring and managing applications?
+Spring Boot Actuator provides built-in endpoints that expose application health, metrics, environment properties, and more. To use it, add the spring-boot-starter-actuator dependency. You can access endpoints like /actuator/health and /actuator/metrics to monitor the application’s status and performance. It also integrates well with monitoring tools like Prometheus.
+143. How would you integrate OAuth2 authentication in a Spring Boot application?
+To integrate OAuth2 authentication, you can use Spring Security’s OAuth2 login functionality. First, add the spring-boot-starter-oauth2-client dependency and configure OAuth2 properties in the application.properties file for the OAuth provider. Spring Security will automatically manage the OAuth flow, and you can customize it with a custom authentication success handler or token management logic.
+144. How do you implement role-based access control (RBAC) in a Spring Boot application?
+Role-based access control (RBAC) can be implemented using Spring Security. First, define roles and authorities in your application, then configure the security context to restrict access to certain endpoints based on the user's role. Use @PreAuthorize or @Secured annotations to secure methods based on roles.
+145. What are the benefits of using Spring Boot’s embedded servers, and how do you configure them?
+Spring Boot's embedded servers (e.g., Tomcat, Jetty, Undertow) allow the application to run independently without needing an external server. This simplifies deployment and configuration. To configure an embedded server, you can set properties in application.properties or application.yml, such as the server port or context path. The server is started automatically when the application runs.
+146. How do you manage database migrations in a Spring Boot application?
+Database migrations in Spring Boot are typically managed using tools like Flyway or Liquibase. These tools allow you to version control database schemas and automate the migration process. To integrate Flyway, add the spring-boot-starter-data-jpa dependency and configure Flyway settings in application.properties. Flyway will automatically run migration scripts on application startup.
+147. Explain the use of the @Entity annotation in Spring Boot.
+The @Entity annotation is used to mark a class as a JPA entity, which means it will be mapped to a database table. The class must have a primary key, which is annotated with @Id. Spring Data JPA will automatically generate SQL queries for basic CRUD operations.
+148. What is the difference between @Component, @Service, and @Repository in Spring?
+These are all specialization annotations of @Component, which marks a class as a Spring bean for dependency injection:
+@Component: A generic annotation used to define any Spring-managed bean.
+@Service: A specialization of @Component used for service classes that contain business logic.
+@Repository: A specialization of @Component used for DAO classes, typically interacting with the database.
+149. How would you implement a custom health check in Spring Boot?
+To implement a custom health check, you can create a class that implements HealthIndicator. This class will check the health of the application and return an appropriate health status. You can then register it as a bean, and the health check will be exposed via the /actuator/health endpoint.
+150. How would you manage application configuration in Spring Boot using application.properties?
+Spring Boot allows you to manage application configuration using application.properties or application.yml files. These files store various settings like database configurations, server port, logging level, etc. You can inject properties into your Spring beans using the @Value annotation or by binding them to configuration classes using @ConfigurationProperties.
+151. What is the difference between @RequestMapping and @GetMapping in Spring MVC?
+@RequestMapping is a general-purpose annotation used to map HTTP requests to handler methods of MVC controllers. It supports all HTTP methods (GET, POST, PUT, DELETE, etc.) by default. On the other hand, @GetMapping is a shortcut annotation for @RequestMapping(method = RequestMethod.GET), specifically for handling GET requests. It's more concise and clear when you only want to handle GET requests.
+152. How do you configure security in a Spring Boot application?
+Security in a Spring Boot application is configured using Spring Security. You can extend WebSecurityConfigurerAdapter to customize the security settings. You can configure authentication, authorization, CSRF protection, and other security features. For example, you can configure HTTP basic authentication or form-based authentication and define which roles can access certain endpoints.
+153. How do you handle exceptions globally in a Spring Boot application?
+In Spring Boot, you can handle exceptions globally using the @ControllerAdvice annotation. This allows you to define centralized exception handling logic that applies to all controllers. You can use @ExceptionHandler methods within @ControllerAdvice to handle specific exceptions globally, returning appropriate responses for different types of errors.
+154. What is the @EnableAutoConfiguration annotation in Spring Boot?
+The @EnableAutoConfiguration annotation is a core feature of Spring Boot that automatically configures beans based on the application's classpath and other settings. It attempts to automatically configure components like data sources, JPA, and security without requiring manual configuration. This allows developers to focus on building features rather than boilerplate configuration.
+155. How do you define and use custom Spring Boot starters?
+A Spring Boot starter is a reusable set of dependencies and configurations that can be included in any Spring Boot project. To create a custom starter, you can define a new project containing the necessary dependencies, properties, and auto-configuration classes. This starter can then be shared across multiple Spring Boot applications by adding it as a dependency in the pom.xml or build.gradle file.
+156. How do you implement database connection pooling in Spring Boot?
+Spring Boot supports database connection pooling out of the box with popular libraries like HikariCP. To implement connection pooling, configure the connection pool properties in the application.properties file. HikariCP is the default connection pool in Spring Boot 2.x, but you can also use other connection pool libraries such as Tomcat or Apache DBCP2 if needed.
+157. What is the purpose of the @RequestParam annotation in Spring MVC?
+The @RequestParam annotation is used to bind request parameters to method parameters in Spring MVC. It is commonly used in GET requests to capture query parameters from the URL. You can also provide default values and mark parameters as optional using the required and defaultValue attributes.
+158. What is the difference between @PathVariable and @RequestParam in Spring MVC?
+@PathVariable is used to extract values from the URI path, while @RequestParam is used to extract values from the query string or form parameters in the request. Typically, @PathVariable is used for RESTful API routes, while @RequestParam is used for traditional form submission or query parameters.
+159. How do you implement asynchronous processing in Spring Boot?
+Asynchronous processing can be achieved in Spring Boot using the @Async annotation. You need to enable asynchronous processing by adding @EnableAsync in your configuration class. The method marked with @Async will then be executed asynchronously in a separate thread. You can also use Executor beans for more control over threading.
+160. What is the role of Spring Boot’s @SpringBootApplication annotation?
+The @SpringBootApplication annotation is a convenience annotation that combines three essential annotations:
+@EnableAutoConfiguration: Enables Spring Boot’s auto-configuration mechanism.
+@ComponentScan: Enables component scanning to discover Spring beans.
+@Configuration: Marks the class as a source of bean definitions for the application context.
+It is typically placed on the main class of a Spring Boot application to bootstrap the application.
+161. How do you handle file uploads in Spring Boot?
+In Spring Boot, file uploads are handled using the MultipartFile class, which represents the uploaded file. You can map the file parameter in the controller method using the @RequestParam annotation. To handle file uploads, configure spring.servlet.multipart.enabled in the application.properties file.
+162. What is the use of @Bean annotation in Spring Boot?
+The @Bean annotation is used to define a bean in Spring’s application context. It is typically placed on a method within a @Configuration class to instantiate and configure a Spring-managed bean. The method annotated with @Bean will return the bean instance, and Spring will manage its lifecycle and dependencies.
+163. How do you implement caching in Spring Boot?
+Spring Boot provides caching support using the @Cacheable annotation to cache the result of a method. To enable caching, you need to add the @EnableCaching annotation to your configuration class. Spring supports various caching providers like EHCache, Redis, and SimpleMap.
+164. How do you enable Swagger for API documentation in Spring Boot?
+Swagger can be enabled in Spring Boot applications using the Springfox library. First, you need to add the dependency to your pom.xml file. Then, use the @EnableSwagger2 annotation in your configuration class and configure Docket beans to define the API documentation properties.
+165. What is Spring Boot’s actuator and how is it used?
+Spring Boot Actuator is a set of production-ready features to help you monitor and manage your application. It exposes several useful endpoints, such as health checks, metrics, and environment information. You can enable actuator endpoints by adding the dependency spring-boot-starter-actuator and configuring the endpoints in the application.properties file.
+spring.boot.admin.client.url=http://localhost:8080/actuator
+management.endpoints.web.exposure.include=health,info
+166. What is the @Primary annotation in Spring?
+The @Primary annotation is used to indicate which bean should be given priority when multiple beans of the same type are available in the application context. This is useful when Spring encounters ambiguity in autowiring and does not know which bean to inject.
+167. What is the difference between @Component, @Service, and @Repository annotations?
+All three annotations are used to mark Spring beans, but they have different semantic meanings:
+@Component: A general-purpose annotation used to mark any class as a Spring bean.
+@Service: Typically used for service layer classes, which hold business logic.
+@Repository: Used for DAO (Data Access Object) classes, which encapsulate database operations and handle persistence logic.
+These annotations are part of Spring’s stereotype annotations, and each has a specific role in the application’s architecture.
+168. How do you implement logging in Spring Boot?
+Logging in Spring Boot is usually done using SLF4J with Logback as the default logging framework. You can configure logging levels (e.g., DEBUG, INFO, ERROR) in the application.properties file or by using annotations such as @Slf4j in your classes. Spring Boot automatically configures logging for you.
+169. How can you secure REST APIs in Spring Boot?
+You can secure REST APIs in Spring Boot using Spring Security. Common approaches include using HTTP Basic Authentication, OAuth2, or JWT (JSON Web Tokens). You can configure Spring Security to protect your API endpoints and control which users have access to which resources by using role-based access control or other security mechanisms.
+170. What is the @ConfigurationProperties annotation in Spring Boot?
+The @ConfigurationProperties annotation is used to bind external configuration properties (like those in application.properties or application.yml) to a Spring bean. It allows you to easily access and manage configuration properties in your application. You can use it to automatically inject values into your configuration class fields.
+171. How do you implement GraphQL in a Spring Boot application?
+To implement GraphQL in a Spring Boot application, you need to add the spring-boot-starter-graphql dependency. Then, define GraphQL schemas using the .graphql files and create resolvers to handle queries and mutations. Spring Boot will automatically configure the GraphQL endpoint at /graphql.
+172. How does Spring Boot support continuous integration and deployment (CI/CD)?
+Spring Boot supports CI/CD by allowing integration with CI/CD tools like Jenkins, Bamboo, and Bitbucket. You can automate the build, testing, and deployment process by setting up pipelines that use mvn clean install or Gradle commands. Additionally, Spring Boot's cloud-native features make it easy to integrate with platforms like AWS or Kubernetes for deployment.
+173. What are AWS SQS and how do you integrate it with a Spring Boot application?
+AWS Simple Queue Service (SQS) is a fully managed message queuing service that allows decoupled communication between distributed systems. To integrate SQS with a Spring Boot application, you can use the spring-cloud-aws-messaging dependency and configure an AmazonSQS client to send and receive messages. You can also use @SqsListener to process messages from a queue asynchronously.
+174. How do you ensure that your Spring Boot application is highly scalable?
+To ensure scalability in a Spring Boot application, you should:
+Design stateless services that can scale horizontally by adding more instances.
+Leverage caching (e.g., using @Cacheable) to reduce load on your database.
+Use asynchronous processing with @Async to handle long-running tasks.
+Utilize cloud services (e.g., AWS EC2, S3) and orchestrators like Kubernetes for load balancing and auto-scaling.
+Ensure that your database can scale by using partitioning, replication, and sharding strategies.
+175. What are the advantages of using OAuth for authentication in a Spring Boot application?
+OAuth provides a secure way of authenticating users by delegating the authentication process to a trusted authorization server, allowing for Single Sign-On (SSO) and third-party logins (e.g., Google, Facebook). It enhances security by avoiding the need for storing user credentials in the application. In Spring Boot, OAuth can be easily implemented using Spring Security OAuth2 and can support authorization code flow, client credentials flow, and implicit flow.
+176. How do you handle multiple profiles in Spring Boot?
+Spring Boot allows you to define multiple profiles for different environments (e.g., dev, test, prod). You can specify which profile is active by setting the spring.profiles.active property in the application.properties file or by passing the --spring.profiles.active argument at runtime. Additionally, you can use @Profile annotations to define beans for specific profiles.
+177. What is the difference between REST and GraphQL in terms of performance and flexibility?
+REST and GraphQL differ in performance and flexibility:
+Performance: GraphQL allows clients to fetch only the required data, reducing over-fetching and under-fetching of data. REST typically returns a fixed set of data, which can lead to inefficiency.
+Flexibility: GraphQL allows clients to specify the exact structure of the response, whereas REST requires predefined endpoints for each resource.
+Efficiency: In REST, multiple round-trips might be necessary to fetch related data, while GraphQL can fetch all necessary data in a single request.
+178. How do you test a Spring Boot API?
+Testing Spring Boot APIs can be done using various tools such as JUnit and MockMvc. JUnit is used for unit testing, while MockMvc allows you to perform integration testing of RESTful endpoints without running the actual server. You can use @WebMvcTest for controller testing and @DataJpaTest for testing JPA repositories.
+179. How do you deploy a Spring Boot application to AWS EC2?
+To deploy a Spring Boot application to AWS EC2, follow these steps:
+Package your application as a JAR or WAR file using Maven or Gradle.
+Create an EC2 instance and configure security groups to allow inbound traffic on port 8080 (or the port your app uses).
+SSH into the EC2 instance, install Java, and transfer the JAR file.
+Run the application with java -jar your-application.jar.
+Optionally, use AWS Elastic Beanstalk for simplified deployment and scaling.
+180. How do you ensure code quality and maintainability in a Spring Boot application?
+Ensuring code quality and maintainability in a Spring Boot application can be achieved by:
+Writing unit tests and integration tests with JUnit and MockMvc.
+Following SOLID principles and writing modular, reusable code.
+Using static code analysis tools like SonarQube or Checkstyle to enforce coding standards.
+Implementing proper logging with SLF4J and Logback to ensure maintainability.
+Applying clean architecture and separating concerns between layers (e.g., service, repository, controller).
+181. What are the main benefits of using Spring Boot for developing scalable applications?
+Spring Boot simplifies the development of scalable applications by providing built-in support for embedded servers (like Tomcat, Jetty, or Undertow), which eliminates the need for complex server configurations. Additionally, it has built-in support for asynchronous processing, caching, and auto-scaling when integrated with cloud services like AWS. With Spring Boot, developers can focus more on writing business logic and less on infrastructure setup.
+182. How can you implement versioning in a RESTful API built with Spring Boot?
+Versioning can be implemented in Spring Boot by using different approaches:
+URI Path Versioning: The version is specified in the URL path (e.g., /api/v1/resource).
+Header Versioning: The version is specified in the request header (e.g., Accept: application/vnd.myapp.v1+json).
+Parameter Versioning: The version is specified as a query parameter (e.g., /api/resource?version=1).
+Each version can be handled by creating different controller methods or classes for each version.
+183. How do you configure and use AWS S3 to store and retrieve files in a Spring Boot application?
+To use AWS S3 in a Spring Boot application:
+Include the spring-cloud-starter-aws dependency.
+Configure the S3 client in the application.properties with your AWS credentials and S3 bucket name.
+Use the AmazonS3 client to upload, download, or delete files from the S3 bucket.
+Example of uploading a file to S3:
+184. What is the difference between SQS and SNS in AWS, and when would you use each?
+AWS Simple Queue Service (SQS) and Simple Notification Service (SNS) are both messaging services but serve different purposes:
+SQS: A message queue service that stores messages until they are processed. It is best used for decoupling services in a distributed system, where the sender and receiver are asynchronous.
+SNS: A pub/sub service that sends messages to multiple subscribers at once. It is best used for fan-out scenarios, where a single message needs to be delivered to multiple recipients (e.g., sending an alert to a list of services).
+185. How do you handle security in a Spring Boot application?
+Security in Spring Boot applications is typically handled using Spring Security. It provides comprehensive security services such as authentication, authorization, and CSRF protection. You can use OAuth2, JWT (JSON Web Tokens), and basic authentication for securing your application. Additionally, you can configure role-based access control (RBAC) and integrate with third-party identity providers.
+186. What is the difference between a REST API and GraphQL API in terms of data fetching?
+In a REST API, clients make requests to fixed endpoints and receive predetermined sets of data, which may include unnecessary information (over-fetching) or require additional requests (under-fetching). GraphQL allows clients to specify exactly what data they need, reducing over-fetching and under-fetching. This makes GraphQL more flexible and efficient, especially when dealing with complex or nested data structures.
+187. How do you implement exception handling in a Spring Boot application?
+In Spring Boot, you can handle exceptions globally using @ControllerAdvice or locally within controllers using @ExceptionHandler. Global exception handling allows you to centralize your exception handling logic and return custom error responses.
+188. How do you use AWS EC2 for hosting a Spring Boot application?
+To host a Spring Boot application on AWS EC2, follow these steps:
+Launch an EC2 instance with a suitable operating system.
+Install Java and any necessary dependencies on the instance.
+Upload the packaged Spring Boot JAR or WAR file to the instance using SCP or an SFTP client.
+Run the application with the command java -jar myapp.jar or deploy it through an AWS Elastic Beanstalk environment for easier management.
+Configure security groups to allow inbound traffic on the port your application uses (e.g., 8080).
+189. How do you handle database migrations in a Spring Boot application?
+Database migrations in Spring Boot can be managed using Flyway or Liquibase. These tools allow you to define database changes in SQL or XML format and apply them automatically to your database on startup. This helps ensure that your database schema stays in sync with your application’s version.
+190. How do you monitor and log a Spring Boot application?
+Spring Boot provides built-in support for logging through SLF4J and Logback. You can configure different log levels (e.g., INFO, DEBUG, ERROR) and log output to various destinations (console, files, or external systems). For monitoring, you can use Spring Boot Actuator to expose metrics, health checks, and application information, which can be integrated with tools like Prometheus or New Relic for further analysis.
+191. What are the best practices for managing environment-specific configurations in a Spring Boot application?
+In Spring Boot, environment-specific configurations can be managed using profiles. You can define different property files for each environment (e.g., application-dev.properties, application-prod.properties) and activate a profile by setting the spring.profiles.active property. You can also use @Value annotations to inject configuration values into your beans.
+spring.profiles.active=dev
+Additionally, Spring Cloud Config Server can be used for centralized configuration management across multiple microservices.
+192. How do you handle CORS in a Spring Boot application?
+Cross-Origin Resource Sharing (CORS) can be configured in Spring Boot using the @CrossOrigin annotation at the controller or method level. You can also configure global CORS settings by defining a WebMvcConfigurer bean in your application:
+This ensures that the specified origins and HTTP methods are allowed when accessing the resources in the Spring Boot application.
+193. How would you implement JWT authentication in a Spring Boot application?
+To implement JWT authentication, you'll need to create an authentication filter to intercept incoming requests, validate the JWT token, and set the authentication context. Here is a simplified approach:
+Generate the JWT token after a successful login.
+Use a filter to intercept each request, validate the JWT, and populate the security context.
+Make sure to implement JwtTokenProvider for creating and validating tokens.
+194. How can you implement pagination in a Spring Boot application with a large database?
+Spring Data JPA provides built-in support for pagination using Pageable and Page objects. The findAll(Pageable pageable) method can be used to retrieve data in a paginated manner. Here's an example of how to implement pagination:
+On the front end, you can use parameters like page and size to request specific pages. This approach reduces the amount of data fetched and improves application performance when working with large datasets.
+195. How do you integrate Spring Boot with AWS SNS for sending notifications?
+To integrate AWS SNS with a Spring Boot application, you need to set up an SNS client using the AWS SDK. After that, you can send notifications by publishing messages to an SNS topic. Here's an example:
+Make sure your application has the necessary AWS IAM permissions to publish messages to SNS.
+196. How can you ensure data consistency in a distributed Spring Boot microservices architecture?
+Data consistency in a distributed microservices architecture can be challenging, especially when using eventual consistency. Some common techniques to ensure data consistency include:
+Two-Phase Commit (2PC): A protocol that ensures all services commit or roll back changes together.
+Event Sourcing: Storing all changes as a series of events, allowing you to reconstruct the state of the system.
+Eventual Consistency: Accepting temporary inconsistency and ensuring that the system converges to a consistent state over time, typically using event-driven communication (e.g., through SNS, SQS).
+In Spring Boot, you can leverage the Spring Cloud suite and tools like Spring Cloud Stream and Spring Cloud Data Flow to implement event-driven architecture for better consistency.
+197. How do you secure API endpoints in a Spring Boot application using OAuth2?
+OAuth2 can be used in Spring Boot to secure API endpoints by integrating Spring Security with OAuth2 login and authorization servers. Here’s how you can configure OAuth2 for your API:
+Configure the authorization server (e.g., using Okta, Google, or another provider).
+Use the @EnableOAuth2Sso annotation to secure endpoints in the Spring Boot application.
+Secure individual endpoints using @PreAuthorize or @Secured annotations to enforce permissions.
+198. What are the advantages of using GraphQL over RESTful APIs?
+GraphQL offers several advantages over traditional REST APIs:
+Efficient Data Fetching: Clients can request only the data they need, reducing over-fetching and under-fetching.
+Single Endpoint: Unlike REST APIs, which may require multiple endpoints for different resources, GraphQL uses a single endpoint for all queries.
+Strongly Typed Schema: GraphQL schemas are strongly typed, allowing automatic validation and introspection.
+Real-time Data: GraphQL supports subscriptions for real-time updates, making it easier to build interactive, live applications.
+199. How do you handle exception handling globally in Spring Boot?
+Spring Boot provides global exception handling via the @ControllerAdvice annotation. This allows you to handle exceptions thrown by controllers in a centralized way. You can create an exception handler that will be applied to all controllers:
+This approach ensures that common exceptions are handled in one place, improving maintainability and consistency across the application.
+200. How do you perform automated testing in a Spring Boot application?
+In Spring Boot, automated testing is supported by tools such as JUnit and Mockito. You can use @SpringBootTest to load the entire application context for integration tests. For unit tests, you can mock dependencies using @MockBean:
+This allows you to test individual components of your Spring Boot application in isolation.
+201. How can you implement GraphQL with Java Spring Boot for handling complex queries?
+Implementing GraphQL in Spring Boot involves using the graphql-spring-boot-starter dependency. You can define a GraphQL schema using SDL (Schema Definition Language), which outlines the types, queries, and mutations. The resolvers are created to fetch data based on the schema.
+Then, you can define GraphQL queries and mutations as Spring beans to resolve data. This enables flexible and efficient querying.
+202. How do you secure AWS S3 buckets in a Spring Boot application?
+To secure AWS S3 buckets in a Spring Boot application, you should implement IAM roles and policies that grant minimal permissions to access the S3 resources. Additionally, you can use signed URLs to provide temporary access to files without exposing public access.
+Ensure your bucket policies restrict public access, and use encryption (server-side or client-side) for sensitive files.
+203. How do you implement CI/CD using Bitbucket and Bamboo for a Java Spring Boot application?
+CI/CD with Bitbucket and Bamboo can be configured to automate the process of testing, building, and deploying your Spring Boot application. Bitbucket is used to host the source code repository, while Bamboo automates the build and deployment pipeline.
+In Bamboo, you can set up a plan that triggers builds based on Bitbucket repository updates, deploys to test/staging environments, and then to production.
+204. How can you create a scalable RESTful API using Spring Boot?
+To create a scalable RESTful API, ensure your API follows best practices such as stateless communication, versioning, and pagination for large datasets. Use Spring Boot’s @RestController to expose endpoints, and implement asynchronous processing for long-running tasks using @Async or Spring’s CompletableFuture.
+To scale efficiently, ensure your API is designed for horizontal scalability, meaning it can handle increases in traffic by adding more instances behind a load balancer.
+205. How do you manage state in an Angular application?
+In Angular, state can be managed using services that act as centralized stores. For complex state management, libraries like NgRx (based on Redux) can be used to manage application state in a predictable and maintainable way.
+By using state management libraries, you ensure that the state is predictable, testable, and easier to debug.
+206. How do you handle asynchronous operations in JavaScript?
+Asynchronous operations in JavaScript are handled using callbacks, Promises, and async/await. The async/await syntax, introduced in ES6, makes it easier to work with asynchronous code by allowing you to write asynchronous code in a more synchronous-looking manner.
+Using async/await improves code readability and error handling compared to traditional callback-based approaches.
+207. What is the difference between a GraphQL query and mutation?
+In GraphQL, a query is used to read or fetch data, while a mutation is used to modify data on the server (i.e., create, update, or delete data). A query is similar to a GET request in REST, and a mutation is similar to POST, PUT, or DELETE requests.
+Mutations are typically used when performing operations that change the state of data in the system.
+208. How do you manage API rate limiting in a Spring Boot application?
+API rate limiting can be managed in Spring Boot by using a combination of libraries like Bucket4j or by implementing custom filters. With Bucket4j, you can limit the number of requests an API can handle per user or IP within a certain time window.
+This ensures that clients can only make a limited number of requests in a given period, preventing abuse and protecting system resources.
+209. How do you implement a RESTful API in Spring Boot?
+A RESTful API in Spring Boot is implemented using @RestController and @RequestMapping annotations. By defining endpoints as methods, you can map HTTP requests (GET, POST, PUT, DELETE) to these methods to handle client requests.
+This allows your application to expose data and services over HTTP in a RESTful manner.
+210. How do you deploy a Java Spring Boot application to AWS EC2?
+To deploy a Java Spring Boot application to AWS EC2, you need to first build your application into a JAR or WAR file using Maven or Gradle. Then, transfer the file to your EC2 instance, configure the EC2 instance to run the application, and ensure you have an appropriate security group for accessing your application.
+Once the file is transferred, SSH into the EC2 instance and run the JAR file using the following command:
+To keep the application running in the background, you can use tools like nohup or set it up as a system service.
+211. How do you integrate OAuth with a Spring Boot application?
+OAuth integration in Spring Boot is typically done using Spring Security's OAuth2 module. You can configure OAuth login by adding dependencies for Spring Security OAuth2 Client and configuring application properties with client details (client ID, client secret, and provider information).
+This setup enables the application to authenticate users using external providers (like Google, GitHub, etc.) through OAuth2.
+212. How can you manage the state of an application in Angular?
+In Angular, state management is done through services, which act as single sources of truth for different components in the application. For more complex state management, Angular provides libraries such as NgRx or Akita, which are based on the Redux pattern, making state predictable and easy to debug.
+By using state management patterns like this, you can handle the application's state in a scalable manner, especially in large Angular applications.
+213. How do you create a secure REST API in Spring Boot?
+To secure a REST API in Spring Boot, you can use Spring Security for authentication and authorization. You can integrate JWT (JSON Web Tokens) for stateless authentication and use HTTPS to ensure secure data transmission.
+Configure Spring Security to authenticate users using JWT tokens and restrict access to certain endpoints based on roles or authorities.
+In this example, JWT authentication is used to secure specific API endpoints.
+214. How do you handle large data sets in a GraphQL API?
+Handling large datasets in a GraphQL API can be done by implementing pagination and efficient data fetching. Using the relay specification for pagination, GraphQL supports cursor-based pagination to ensure that clients can request data in smaller, manageable chunks.
+Implement efficient resolvers that fetch only the required data based on the pagination parameters to improve performance and reduce server load.
+215. How do you manage environment-specific configurations in Spring Boot?
+In Spring Boot, you can manage environment-specific configurations using application.properties or application.yml files, along with Spring Profiles. You can define separate configurations for different environments (dev, prod, test) and use the @Profile annotation to load the appropriate configuration.
+In the application.properties file, you can specify the active profile:
+This allows Spring Boot to load the appropriate configuration based on the active profile.
+216. How do you implement automated testing for a Spring Boot application?
+Automated testing in Spring Boot can be done using tools like JUnit and Mockito for unit testing, and Spring Boot Test for integration testing. Spring Boot's built-in test support enables testing controllers, services, and repositories in isolation.
+Here, a mock of the ProductRepository is used to isolate the ProductService logic for testing.
+217. How do you implement a stateful component in React?
+A stateful component in React can be implemented using the useState hook in functional components or by defining a state in a class-based component using this.state.
+export default Counter;
+In this example, the useState hook is used to maintain the count state in the component, which is updated via the setCount function.
+218. How do you use Git for version control in a team environment?
+In a team environment, Git is used for version control by following best practices like using branches for features or bug fixes, committing frequently with meaningful messages, and using pull requests (PRs) for code review.
+After pushing the branch to the remote repository, you can create a pull request, which allows team members to review and approve the changes before merging them into the main branch.
+219. How does Angular handle dependency injection?
+Angular uses dependency injection (DI) to manage how services and other objects are created and shared within the application. It allows you to declare dependencies in the constructor of your component or service, and Angular's injector automatically resolves and injects the necessary services.
+In this example, DataService is injected into the component or another service where it's needed, and Angular provides the service instance when it resolves the dependency.
+220. How do you implement GraphQL in a Node.js application?
+To implement GraphQL in a Node.js application, you can use the graphql and express-graphql libraries. You define a GraphQL schema, create resolvers for each field, and set up an Express server to handle GraphQL queries.
+This setup creates a simple GraphQL API with one query and a mutation.
+221. What is Continuous Integration (CI) and why is it important?
+Continuous Integration (CI) is the practice of merging all developers' code changes into a central repository frequently, usually several times a day. The code is then automatically tested to detect any issues early. CI ensures that new code does not break existing functionality and speeds up the development cycle.
+CI helps maintain code quality, reduces integration problems, and improves collaboration across teams. It can be implemented using tools like Jenkins, GitHub Actions, or Bitbucket Pipelines.
+222. How do you create a RESTful API in Express.js?
+In Express.js, a RESTful API is created by setting up routes that correspond to HTTP methods (GET, POST, PUT, DELETE). You define route handlers that process incoming requests and send appropriate responses.
+This example shows basic GET and POST routes to interact with product data in a RESTful manner.
+223. How do you handle API rate limiting in a Node.js application?
+API rate limiting can be handled in a Node.js application using middleware like express-rate-limit. This middleware allows you to define the maximum number of requests a client can make to an endpoint within a given time period.
+In this example, clients are limited to 100 requests per 15 minutes, reducing the risk of abuse.
+218. How do you implement a JWT-based authentication system in an Express.js app?
+A JWT-based authentication system can be implemented by generating a JWT token when the user logs in and storing it in a secure manner. For each subsequent request, the JWT is verified using middleware to ensure the user is authenticated.
+In this example, JWT is used to protect the /protected route, which is accessible only to authenticated users.
+219. How do you implement custom middleware in an Express.js app?
+Custom middleware in Express.js can be created by defining a function that takes the req, res, and next parameters. Middleware is then added to the Express app using app.use() or specific routes.
+The custom middleware logs the timestamp whenever a request is made, before passing control to the next function.
+220. What are some strategies for managing state in React?
+In React, state management can be handled through useState for local component state, useReducer for more complex state logic, or external libraries like Redux or Context API for global state management.
+In this example, the useState hook is used for local state management in the Counter component. For global state, you might consider using Redux or Context API depending on the app's complexity.
+221. How can you improve the performance of an Angular application?
+Performance in Angular can be improved by optimizing change detection, using trackBy with ngFor, lazy loading modules, reducing bundle sizes, and using Angular's built-in OnPush change detection strategy.
+In this example, the OnPush change detection strategy is used, which triggers change detection only when an input property changes, improving performance for large apps.
+222. How do you handle API error handling in a Node.js application?
+API error handling in Node.js can be done by using middleware that catches errors and returns a standard error response with the appropriate status code. You can use try-catch blocks or error-handling middleware for this purpose.
+This example demonstrates error handling by throwing an error in a route and then catching it in the errorHandler middleware.
+223. How do you set up a basic WebSocket connection in a Node.js app?
+WebSocket connections can be set up in Node.js using the ws library. This allows bidirectional communication between the client and the server, ideal for real-time features.
+In this example, the WebSocket server listens on port 8080, and messages sent from the client are logged, while the server sends a welcome message to the client.
+224. How do you implement lazy loading in Angular?
+Lazy loading in Angular is implemented by using Angular's RouterModule to load feature modules only when they are needed. This improves the performance of the application by reducing the initial loading time.
+In this example, the FeatureModule is lazily loaded when the user navigates to the '/feature' path.
+225. How do you manage global state in a React app using Context API?
+The Context API in React allows you to manage global state by creating a context and a provider that wraps the components needing access to the state.
+In this example, UserContext is created, and UserProvider wraps the components that need access to the user state. Components can then use useUser to access and update the state.
+226. How do you configure AWS EC2 instances for a Node.js application?
+To configure an AWS EC2 instance for a Node.js application, you need to set up the EC2 instance, install Node.js, deploy the app, and configure a reverse proxy using Nginx or another web server.
+This example outlines the basic steps of installing Node.js on an EC2 instance, uploading the app, and starting it. You can also set up a reverse proxy with Nginx to ensure the app runs on port 80 or 443 for production.
+227. How do you implement OAuth authentication in a Node.js app?
+This example demonstrates OAuth authentication flow in a Node.js application using the passport package and OAuth2 strategy.
+228. How do you implement server-side caching in a Node.js app?
+Server-side caching in Node.js can be implemented using libraries like node-cache or redis. These allow you to store frequently accessed data in memory to improve the performance of the application.
+This example demonstrates caching data in memory using node-cache. If the data is already in the cache, it is returned immediately; otherwise, it is fetched and cached for future requests.
+229. How do you configure continuous integration with Bitbucket Pipelines?
+Continuous integration (CI) with Bitbucket Pipelines can be configured by creating a bitbucket-pipelines.yml file in the root directory of your repository, defining build and deployment steps.
+This example shows a simple Bitbucket Pipelines configuration for a Node.js app, where the first step installs dependencies, runs tests, and lints the code, and the second step is for manual deployment.
+230. How do you set up a CI/CD pipeline with Bamboo for a JavaScript application?
+CI/CD with Bamboo can be set up by creating a bamboo.yml file that defines the build, test, and deploy stages for your JavaScript application.
+This example shows a Bamboo pipeline configuration for a JavaScript application. The build stage installs dependencies and runs tests, and the deploy stage handles deployment.
+231. How do you implement file uploads in an Angular application?
+File uploads in Angular can be done using the HttpClient to send the file to a server endpoint. You need an HTML <input type="file"> element, and you can capture the file data in the component.
+This example shows how to upload a file using Angular's HttpClient and a simple file input. The file is sent as FormData to the server endpoint.
+232. How do you create a custom hook in React?
+A custom hook in React is a JavaScript function that can use React hooks (like useState, useEffect) and is prefixed with "use" to follow React's rules of hooks.
+This custom hook, useWindowWidth, returns the current window width and updates it when the window is resized. It uses useState and useEffect to manage and track the width state.
+233. How do you configure AWS S3 for storing and retrieving files in Node.js?
+To interact with AWS S3 in a Node.js application, you need to install the aws-sdk package, configure the AWS credentials, and use the S3 service to upload or retrieve files.
+This example shows how to upload a file to an AWS S3 bucket using the aws-sdk in Node.js.
+234. How do you implement authentication in a React app with Firebase?
+Firebase Authentication can be used in a React app to handle sign-in, sign-up, and user management. Firebase provides simple SDKs to integrate authentication with Google, Facebook, email/password, etc.
+This example shows how to authenticate users in a React app using Firebase's email/password authentication method. After successful login, the user's information is logged to the console.
+235. How do you implement JWT authentication in Node.js?
+JSON Web Token (JWT) is used to securely transmit information between parties. In a Node.js application, JWT can be implemented by using the jsonwebtoken package to generate and verify tokens for authentication.
+This example demonstrates how to generate and authenticate JWT tokens using the jsonwebtoken library. A token is generated when the user logs in, and it is sent in the request headers to access protected routes.
+236. How do you integrate AWS SQS for messaging in a Node.js app?
+AWS SQS (Simple Queue Service) can be integrated into a Node.js application by using the aws-sdk to send and receive messages from an SQS queue.
+This example shows how to send a message to an SQS queue using the aws-sdk in a Node.js application.
+237. How do you set up CORS in an Express app?
+CORS (Cross-Origin Resource Sharing) is configured in an Express app by using the cors middleware package, which allows you to specify which domains are allowed to access your resources.
+This example shows how to configure CORS for a specific frontend domain in an Express application, enabling only certain HTTP methods and headers.
+238. How do you implement caching in a Node.js application?
+Caching in a Node.js application can be implemented using packages like node-cache or Redis. Caching reduces the load on the database by storing frequently accessed data in memory.
+This example shows how to implement basic caching using node-cache. It stores and retrieves data from memory to avoid repeated database calls.
+239. How do you integrate GraphQL in an Express app?
+To integrate GraphQL in an Express app, you can use the express-graphql middleware to set up a GraphQL endpoint, define a schema, and handle queries.
+This example shows how to integrate GraphQL in an Express app using the express-graphql middleware. It sets up a simple hello query endpoint.
+240. How do you use the useEffect hook in React to fetch data from an API?
+The useEffect hook in React can be used to fetch data from an API when the component mounts. You can use it with fetch or axios to retrieve the data.
+This example demonstrates how to fetch data from an API inside a useEffect hook in React. The hook runs once after the component mounts and updates the component's state with the fetched data.
+241. How do you implement authentication with Firebase in a React app?
+Firebase Authentication can be easily integrated into a React app to handle login, sign-up, and user session management. You can use Firebase's onAuthStateChanged listener to manage user authentication state.
+This example shows how to manage authentication state in React using Firebase. When the user is logged in, their email is displayed; otherwise, a login button is shown.
+242. How do you use Git to manage branches and resolve conflicts?
+Git branches are used to manage different features or versions of your code. When conflicts arise, Git provides commands to merge branches and resolve conflicts.
+This sequence shows how to create a new branch, push changes to a remote repository, and merge branches. If there are any conflicts, Git will require you to manually resolve them and commit the changes.
+243. How do you set up continuous integration (CI) using Bitbucket Pipelines?
+Bitbucket Pipelines allows you to automate the building and testing of your code with a simple configuration file. You define your pipeline in the bitbucket-pipelines.yml file.
+This Bitbucket Pipeline configuration builds, tests, and deploys your Node.js application. It defines a default pipeline with two steps: one for build and test, and another for deployment to production.
+244. How do you deploy a React app to AWS S3?
+To deploy a React app to AWS S3, you need to build the app using npm run build and then upload the build folder to an S3 bucket.
+This process involves building the React app locally and then using AWS CLI to upload the files to an S3 bucket for static hosting.
+245. How do you implement lazy loading in an Angular application?
+Lazy loading in Angular allows you to load modules only when needed. This reduces the initial load time of the application by splitting the application into smaller chunks.
+This example demonstrates lazy loading of a feature module in Angular by using the loadChildren property in the routing configuration.
+246. How do you set up a simple Angular service?
+Angular services are used for data handling and business logic. They can be injected into components or other services to share logic across the application.
+This code shows how to create a simple Angular service with the @Injectable decorator. The service provides a method to get data, which can be injected into components.
+247. How do you handle form validation in Angular using Reactive Forms?
+Reactive Forms in Angular offer a more flexible approach to handling forms and their validations. They use FormGroup and FormControl for managing form data and validations.
+This example demonstrates how to set up a reactive form in Angular, including validation for the username and password fields. The form will only be submitted if it is valid.
+248. How do you use Angular's HttpClient to make a GET request?
+Angular's HttpClient module is used to make HTTP requests to a backend API. The get method is used to fetch data from a server.
+This example shows how to create a service that uses HttpClient to fetch data from an API. The data is returned as an observable, which can be subscribed to in a component.
+249. How do you implement component communication using Input and Output decorators in Angular?
+Angular provides @Input() and @Output() decorators for parent-child communication. @Input() allows data to flow from parent to child, while @Output() enables the child to send data to the parent.
+This example shows how to use @Input() and @Output() decorators for communication between parent and child components. The child component sends data to the parent through an event emitter, and the parent passes data to the child through an input property.
+250. How do you set up routing in an Angular application?
+Angular uses the RouterModule for managing routing in the application. You define routes in a module and associate them with components.
+This code shows how to set up routing in an Angular application. The AppRoutingModule defines routes for the HomeComponent and AboutComponent.
+251. How do you implement a custom directive in Angular?
+Directives in Angular are used to extend HTML functionality by adding behavior to elements. You can create a custom directive by using the @Directive decorator.
+This directive changes the background color of an element when the mouse enters or leaves. It uses the Renderer2 to safely manipulate the DOM.
+252. How do you implement a pipe in Angular?
+Pipes in Angular allow you to transform data in templates. You can create custom pipes by using the @Pipe decorator.
+This custom pipe reverses the input string and can be used in Angular templates like so: {{ 'Hello' | reverse }}.
+253. How do you configure Angular CLI for production build?
+Angular CLI allows you to configure different build environments. For production builds, you can run the ng build --prod command, which optimizes the build by minifying, tree-shaking, and more.
+254. How do you implement an Angular module with lazy-loaded routes?
+Lazy-loaded routes in Angular are defined using the loadChildren property in the route configuration. This feature allows you to load an Angular module only when it is needed, improving performance.
+This setup ensures that the DashboardModule is loaded only when the user navigates to the /dashboard route, reducing the initial load time.
+255. How do you handle HTTP errors in Angular?
+In Angular, you can handle HTTP errors by using the catchError operator from RxJS in the HTTP request observables.
+This example shows how to catch errors using RxJS catchError and return an observable that emits an error message.
+256. How do you set up and use Angular's Dependency Injection?
+Angular's dependency injection system allows you to inject services or other dependencies into components or services.
+In this example, the LoggingService is injected into the AppComponent, allowing it to be used within the component.
+257. How do you implement a custom validator in Angular forms?
+Custom validators in Angular are used to implement custom validation logic on form fields. You can define them by creating a function that returns a validation error object or null.
+This custom validator checks if the form control value contains a forbidden name. If it does, the validator returns an error object; otherwise, it returns null.
+258. How do you implement a subscription in Angular using Observables?
+Angular makes use of observables for handling asynchronous data streams, such as HTTP requests, and you can subscribe to them in components to get updates when data changes.
+This example shows how to subscribe to an observable returned by a service method. The data will be updated when the observable emits a new value.
+261. How do you implement environment-specific configurations in Angular?
+In Angular, you can manage environment-specific configurations by using the angular.json file and the src/environments folder. Angular uses different environment files based on the build environment (e.g., development, production).
+The angular.json file contains configuration settings for different environments, such as environments/environment.ts for development and environments/environment.prod.ts for production.
+262. How do you handle lazy-loaded module routes in Angular with preloading strategy?
+In Angular, you can configure preloading strategies for lazy-loaded modules to preload specific modules after the initial app load. You can use PreloadAllModules to preload all lazy-loaded modules, or implement a custom strategy.
+By using PreloadAllModules, Angular will start preloading lazy-loaded modules after the app is bootstrapped, improving the user experience without slowing down the initial load time.
+263. How do you create and use custom form controls in Angular?
+Angular allows you to create custom form controls by implementing the ControlValueAccessor interface. This enables the integration of your custom control with Angular forms.
+This custom form control can now be used in Angular forms just like any other form control.
+264. How do you implement dynamic form fields in Angular?
+Dynamic form fields can be created by using Angular's reactive forms API. You can create form controls dynamically based on data, allowing you to create complex forms.
+265. How do you integrate authentication with Angular using OAuth2?
+Angular can integrate OAuth2 authentication by using the HttpClient service to send requests to the authentication server. The access token can be stored and sent with subsequent requests for secure API access.
+This service sends a POST request to authenticate the user and stores the received access token. It uses this token for subsequent requests to secure endpoints.
+266. How do you handle nested forms in Angular?
+Nested forms in Angular are created by using FormGroup and FormArray to create a hierarchy of form controls. Each nested form group can contain other groups or arrays of controls.
+This example shows how to create a form with nested groups for personal details and address.
+267. How do you handle authentication with JWT in Angular?
+In Angular, JSON Web Tokens (JWT) are used for secure API authentication. The token is typically sent in the HTTP header using the Authorization field. After the user logs in, the JWT is stored (often in localStorage) and sent with every request.
+After receiving the JWT upon login, you can store it and attach it to the Authorization header in subsequent API requests.
+268. How do you implement custom validators in Angular forms?
+Custom validators in Angular can be implemented by creating a function that returns either null (if the control is valid) or an object containing error information (if invalid). You can then use this function in both template-driven and reactive forms.
+You can use this validator like so:
+This will check that the name field is not equal to "admin".
+269. How do you use HTTP Interceptors in Angular?
+HTTP interceptors allow you to modify requests or responses globally, and are commonly used for adding authentication tokens or handling errors. You implement interceptors by creating a service that implements the HttpInterceptor interface.
+To use this interceptor, you need to provide it in the AppModule:
+This interceptor adds the Authorization header to every HTTP request with the JWT token.
+270. How do you optimize Angular performance with ChangeDetectionStrategy?
+Angular uses ChangeDetectionStrategy to determine how and when to check for changes in component state. The default strategy is ChangeDetectionStrategy.Default, but you can use ChangeDetectionStrategy.OnPush to optimize performance by limiting the change detection checks.
+With ChangeDetectionStrategy.OnPush, Angular will only check the component for changes when its inputs change or when an event triggers it. This reduces unnecessary checks, improving performance.
+271. How do you handle form submission in Angular?
+In Angular, form submission can be handled through the ngSubmit directive in template-driven forms or using reactive forms' submit method. You can capture the form values, validate them, and submit them to an API.
+This captures the form values and calls the onSubmit method when the form is submitted.
+272. How do you handle file uploads in Angular?
+File uploads in Angular can be managed by using the HttpClient to send files to the server. You can use a FileInput element to let users select files, and then send the file in a POST request.
+This handles file selection and upload using Angular's HttpClient.
+273. How do you use Angular's lazy loading feature?
+Lazy loading in Angular allows modules to be loaded only when needed, which improves the application's initial load time. This can be configured using the loadChildren property in the router configuration.
+In this example, the FeatureModule will be loaded only when the user navigates to the '/feature' route.
+274. How do you implement guards in Angular for route protection?
+Angular provides route guards to control navigation. You can use CanActivate, CanActivateChild, or CanDeactivate to guard your routes based on your business logic, such as authentication or permissions.
+In your routing module, you can then apply the guard:
+This will protect the /dashboard route, ensuring only logged-in users can access it.
+275. How do you manage state in Angular using services?
+State management in Angular can be handled through services. A service can hold the state of your application and provide methods to modify it. Services are injectable and can be shared across multiple components.
+In a component, you can inject this service and use the state:
+This component listens to the state and updates whenever the state changes.
+276. What is Angular's ngOnChanges lifecycle hook, and when is it used?
+The ngOnChanges lifecycle hook is called whenever an input property of the component changes. It is used to respond to changes in bound input properties and is useful for scenarios where the component needs to react to those changes.
+This hook will log the current value of value every time it changes.
+277. How do you handle routing in Angular with child routes?
+Angular allows nested (child) routes, where a route's component can have its own child routes. You configure these child routes in the parent route's children array.
+With this configuration, navigating to /parent/child1 will display the Child1Component, and /parent/child2 will display the Child2Component within the ParentComponent's view.
+278. How can you implement infinite scrolling in Angular?
+Infinite scrolling in Angular can be implemented by listening for the scroll event and loading more data when the user reaches the end of the page or container. You can achieve this by detecting the scroll position and triggering an event when needed.
+In this example, more data will be loaded as the user scrolls to the bottom of the page.
+265. How do you implement two-way data binding in Angular?
+Angular provides two-way data binding through the ngModel directive. This allows for automatic synchronization of data between the model and the view.
+In this example, the value of the username property in the component will be automatically updated whenever the input field changes, and vice versa.
+266. What are Angular pipes and how do you create a custom pipe?
+Pipes in Angular are used to transform data in templates. You can create custom pipes by implementing the PipeTransform interface.
+Once defined, the pipe can be used in the template as:
+This will display "HELLO WORLD" in the template.
+267. How can you use Angular forms for validation?
+Angular provides two ways of handling forms: template-driven forms and reactive forms. Validation can be applied in both methods using built-in validators or custom ones.
+In this template-driven form example, the required validator is applied to the username input field, and the submit button is disabled until the form is valid.
+268. What is Angular's ngFor directive and how is it used?
+The ngFor directive is used to loop through a collection and display each item. It is commonly used to display lists or arrays in templates.
+This will render an unordered list of items. Each item in the items array will be displayed as a list item.
+269. What is the purpose of the ngIf directive in Angular?
+The ngIf directive is used to conditionally include or exclude a part of the template based on an expression's truth value.
+In this example, the div will be included in the DOM only if the isVisible variable is true.
+270. How can you implement dynamic routing in Angular?
+Dynamic routing in Angular allows you to dynamically add routes based on application logic or data. This can be achieved using the loadChildren syntax or configuring routes at runtime.
+This example defines a dynamic route /user/:id where :id is a route parameter.
+271. How does Angular handle form validation?
+Angular provides two approaches for handling form validation: Template-driven forms and Reactive forms. Both allow developers to apply built-in validators or custom validators to form controls. In Template-driven forms, validation is applied through directives like required, minlength, and others directly in the HTML template. In Reactive forms, form controls are created in the component class, and validation is defined using built-in validators or custom ones in the form model.
+272. What is the purpose of the ngOnChanges lifecycle hook?
+ngOnChanges is a lifecycle hook in Angular that is called when any input property of a component or directive changes. It allows you to respond to changes in input properties, which are passed from a parent component to a child component. The hook receives a SimpleChanges object containing the current and previous values of the changed properties.
+273. What is an Angular service?
+An Angular service is a class that is responsible for handling logic or data that can be shared across different components. Services are typically used for tasks like data fetching, business logic, or state management. They are often injected into components or other services using Angular's Dependency Injection (DI) system.
+274. What is the purpose of the ngFor directive in Angular?
+The ngFor directive is used to loop through an array or a collection of items in Angular templates. It creates a view for each item in the collection and renders it. The directive takes the syntax *ngFor="let item of items" and can be used to dynamically display lists or iterate over data.
+275. What is the difference between ngIf and ngSwitch in Angular?
+Both ngIf and ngSwitch are structural directives used for conditionally rendering elements in Angular templates, but they differ in their behavior:
+ngIf: Conditionally includes or removes elements from the DOM based on a boolean expression. It is often used for simple conditional rendering.
+ngSwitch: Similar to a switch-case statement in JavaScript, it is used to conditionally display elements based on a matching expression. It can be more efficient when you have multiple conditions to check.
+276. What is a module in Angular?
+An Angular module is a mechanism for grouping related components, directives, pipes, and services into a cohesive block of functionality. Every Angular application has at least one module, the root module, which bootstraps the application. Modules can be used to organize code into features, manage dependencies, and facilitate lazy loading of parts of the application.
+277. What is Angular's two-way data binding?
+Two-way data binding in Angular refers to the synchronization of data between the component class and the HTML template. This means that changes in the component's data will automatically update the view, and changes in the view will reflect in the component's data. Angular achieves two-way binding using the [(ngModel)] syntax.
+278. How do you implement lazy loading in Angular?
+Lazy loading in Angular is implemented by loading modules only when needed, reducing the initial load time of the application. This is done by configuring the Angular router to load modules lazily using the loadChildren property in the route configuration. This way, only the necessary modules are loaded when a user navigates to the corresponding route.
+279. What is the purpose of ngOnDestroy lifecycle hook in Angular?
+ngOnDestroy is a lifecycle hook that is called just before Angular destroys a component or directive. This is the perfect place to clean up resources, such as unsubscribing from observables, canceling HTTP requests, or releasing any resources that were manually allocated in the component.
+280. What is Angular's Dependency Injection (DI) system?
+Angular's Dependency Injection (DI) system is a design pattern that allows Angular to automatically provide dependencies to classes, such as services or other components, at runtime. By using DI, developers can create more modular, testable, and maintainable code. Angular's DI system uses providers and injectors to manage dependencies across the application.
+281. What is the difference between template-driven forms and reactive forms in Angular?
+Template-driven forms are simpler and are defined directly in the HTML template using directives like ngModel for two-way data binding. They are more suited for simple forms. Reactive forms, on the other hand, are defined in the component class using FormGroup, FormControl, and FormBuilder, offering more flexibility and control. Reactive forms are more scalable and suitable for complex forms with custom validation logic.
+282. How does Angular handle routing and navigation?
+Angular uses the @angular/router module for routing and navigation. The router maps URLs to specific components. Routes are defined in the app-routing.module.ts file, where the path is associated with a component. The RouterLink directive is used in templates to navigate, and the RouterOutlet directive acts as a placeholder for dynamically loading routed components.
+283. What are Angular directives?
+Directives are special markers in Angular templates that allow you to manipulate the DOM. There are three types of directives:
+Structural Directives: Modify the structure of the DOM (e.g., *ngFor, *ngIf).
+Attribute Directives: Change the appearance or behavior of DOM elements (e.g., ngClass, ngStyle).
+Component Directives: A directive with a template. Components are technically directives with a view attached to them.
+284. What is the purpose of the ngModel directive in Angular?
+The ngModel directive in Angular is used for two-way data binding. It binds an input element to a property in the component class and allows changes made in the input to update the component class and vice versa. It is commonly used in template-driven forms for binding form controls to data.
+285. What is the purpose of the async pipe in Angular?
+The async pipe in Angular is used to subscribe to an observable or promise directly in the template. It automatically manages the subscription and unsubscription process, simplifying the handling of asynchronous data. When the observable emits new values, the pipe updates the view with the new data.
+286. How do you implement routing with lazy loading in Angular?
+To implement lazy loading, you can define routes with the loadChildren property in the Angular router configuration. This tells Angular to load the module only when the user navigates to the corresponding route. Lazy loading helps improve application performance by reducing the initial load time. Example:
+287. What is the purpose of the HttpClient module in Angular?
+The HttpClient module in Angular is used to make HTTP requests. It provides methods for making GET, POST, PUT, DELETE, and other HTTP operations. It also supports interceptors, request/response transformation, error handling, and works with observables for asynchronous data handling. It is an important service for interacting with RESTful APIs.
+288. How do you handle errors in Angular HTTP requests?
+In Angular, you can handle errors in HTTP requests by using the catchError operator from RxJS. The catchError operator allows you to intercept HTTP errors and return a fallback value or rethrow the error. You can also use Angular's HttpErrorResponse class to handle specific HTTP error responses. Example:
+289. What is a pipe in Angular?
+A pipe in Angular is a way to transform data in templates. It allows you to apply transformations such as formatting dates, filtering arrays, or changing the case of text. Angular comes with several built-in pipes like date, uppercase, and currency, and you can also create custom pipes to meet your specific needs.
+290. What is Angular's Change Detection Mechanism?
+Angular uses a change detection mechanism to monitor changes in the application state and update the view accordingly. When the state of a component or directive changes, Angular checks its view to determine what changes need to be reflected in the DOM. Angular uses a strategy called the "digest cycle" to compare the current and previous states and updates the view when necessary. You can configure the change detection strategy to be either "Default" or "OnPush" to optimize performance.
+291. What are Angular lifecycle hooks, and when do they get triggered?
+Angular lifecycle hooks are methods that allow you to tap into different stages of a component’s lifecycle. Some of the most common lifecycle hooks include:
+ngOnInit: Called once when the component is initialized.
+ngOnChanges: Called when any data-bound input property changes.
+ngDoCheck: Called during every change detection cycle.
+ngAfterContentInit: Called after Angular has projected content into the component’s view.
+ngAfterContentChecked: Called after the content of the component is checked by change detection.
+ngAfterViewInit: Called after Angular initializes the component’s views.
+ngAfterViewChecked: Called after Angular checks the component’s views for changes.
+ngOnDestroy: Called before Angular destroys the component.
+292. How does Angular handle observables and the RxJS library?
+Angular uses observables to handle asynchronous programming, and RxJS (Reactive Extensions for JavaScript) is the underlying library for managing these observables. Observables allow you to represent a stream of asynchronous events, such as HTTP requests, user input, or other event-driven activities. Angular provides several operators like map, filter, switchMap, and catchError to work with observables and compose asynchronous workflows in a declarative manner.
+293. What is a service in Angular, and how is it different from a component?
+A service in Angular is a class that provides functionality and business logic, often responsible for data management, HTTP requests, and other application-wide services. Services are used to share data or functionality across multiple components. Unlike components, which are responsible for the user interface, services focus on the logic and data aspects of the application. Services are typically injected into components via Angular's dependency injection system.
+294. How do you manage state in Angular applications?
+State management in Angular applications can be handled using a variety of approaches:
+Component State: Manage the state of a single component using component properties.
+Service State: Use Angular services to manage shared state across multiple components.
+Store Libraries: Use libraries like @ngrx/store or ngxs for centralized state management, where the state is stored in a global store, and actions are dispatched to modify the state.
+For large applications, using a store library is a good choice to manage complex state and ensure scalability.
+295. What are Angular Modules?
+Angular modules are containers for different parts of an application. They help organize the code and provide a way to group components, services, directives, pipes, and other modules that are related. Each Angular application has at least one module, called the root module, which is defined in app.module.ts. Modules are imported using the imports array and can also export functionality to be used by other modules.
+296. What is the difference between ngIf and ngFor in Angular?
+ngIf: It is a structural directive used to conditionally include or exclude elements in the DOM based on a boolean expression. If the expression evaluates to true, the element is rendered, otherwise, it is removed.
+ngFor: It is a structural directive used to iterate over a collection (array or list) and repeat an element for each item in the collection.
+Example:
+297. What is an Angular interceptor, and how do you use it?
+An Angular interceptor is a service that sits between the client and the server and allows you to modify HTTP requests and responses. Interceptors are useful for tasks such as adding authentication tokens to requests, logging, caching, or handling global HTTP errors. To use an interceptor, you need to implement the HttpInterceptor interface and register it in the app.module.ts file. Example:
+298. What is an Angular pipe, and how do you create a custom pipe?
+An Angular pipe is a way to transform data in templates. Pipes are often used to format data, such as dates, currencies, or other custom formats. Angular provides built-in pipes like date, uppercase, and currency. You can also create custom pipes to meet specific formatting needs. To create a custom pipe, you need to implement the PipeTransform interface and use the @Pipe decorator. Example:
+299. How do you optimize performance in an Angular application?
+Optimizing performance in Angular applications involves several strategies:
+Lazy Loading: Load modules only when they are required to reduce the initial load time.
+Change Detection Strategy: Use the OnPush change detection strategy to limit checks to components whose inputs change.
+TrackBy in ngFor: Use the trackBy function in *ngFor to optimize rendering of large lists.
+Avoid Complex Expressions in Templates: Avoid using complex expressions in templates, as they get evaluated during every change detection cycle.
+Use Web Workers: Offload heavy computations to web workers to keep the UI responsive.
+300. How do you implement authentication and authorization in an Angular application?
+Authentication and authorization in Angular can be implemented using route guards, services, and HTTP interceptors:
+Authentication: Create a login service that manages the login state and token storage (e.g., using localStorage or sessionStorage).
+Authorization: Use route guards to protect routes that require authentication or specific roles.
+HTTP Interceptors: Add the authentication token to outgoing HTTP requests using an HTTP interceptor.
+Example of a route guard:
+301. What is the difference between ngOnInit and ngAfterViewInit lifecycle hooks?
+The difference between ngOnInit and ngAfterViewInit lies in when they are triggered:
+ngOnInit: It is called once the component’s inputs have been initialized, but before the component's view (DOM) is fully rendered. It's primarily used for initialization tasks.
+ngAfterViewInit: It is called after Angular initializes the component’s views and child views. It is typically used for tasks that depend on the rendered view, such as DOM manipulation.
+302. How can you bind a model to an input field in Angular?
+In Angular, you can bind a model to an input field using the ngModel directive for two-way data binding. This allows you to sync the input field with the component's property. Example:
+<input [(ngModel)]="modelValue" />
+In this case, modelValue is a property in the component class that will be updated whenever the user modifies the input field, and vice versa.
+303. What are Angular directives, and how are they different from components?
+Directives are special markers that can be applied to elements in the DOM to change their behavior or appearance. There are three types of directives in Angular:
+Structural Directives: Modify the DOM structure, e.g., *ngIf, *ngFor.
+Attribute Directives: Modify the appearance or behavior of an element, e.g., ngClass, ngStyle.
+Component Directives: Components themselves are technically directives with a template and logic.
+The primary difference between directives and components is that components have a template (UI), whereas directives are usually used to modify the DOM or change the behavior of existing elements.
+304. What is an Angular module, and why is it necessary?
+An Angular module is a class with a @NgModule decorator that organizes an Angular application into cohesive blocks of code. Each module encapsulates components, services, directives, and pipes that are related. Modules help in modularizing the code, promoting reusability, and managing dependencies efficiently. Every Angular application has at least one module, the root module (AppModule), which bootstraps the application. Modules can import other modules to use their functionality, and components from one module can be used in another through exports.
+305. How do you handle errors in Angular HTTP requests?
+In Angular, HTTP errors can be handled using RxJS operators such as catchError in the HTTP request stream. This allows you to intercept and handle errors, such as network failures or server errors, before they propagate further. Example:
+306. What is the purpose of ngOnChanges lifecycle hook in Angular?
+The ngOnChanges lifecycle hook is called whenever an input property of a component changes. It receives a SimpleChanges object that contains the previous and current values of the changed properties. This hook is particularly useful when a component depends on input properties and needs to respond to changes in them. Example:
+307. How does Angular handle forms?
+Angular provides two approaches to handle forms:
+Template-driven forms: These are simpler and use Angular directives in the template (e.g., ngModel) to create forms. It's a more declarative way to create forms, and it's ideal for simple use cases.
+Reactive forms: These are more flexible and scalable, involving form control objects in the component class. Reactive forms give you more control over validation, dynamic form building, and state management.
+Example of a template-driven form:
+308. What is lazy loading in Angular?
+Lazy loading in Angular refers to loading modules only when they are needed, rather than loading the entire application at once. This technique helps reduce the initial loading time and improves the performance of large applications. To implement lazy loading, you use the loadChildren property in the routing configuration. Example:
+309. What is the role of the ngContent directive in Angular?
+The ngContent directive is used for content projection, which allows you to insert dynamic content into a component’s template from the parent component. This is useful when you want to create reusable components where parts of the content are defined by the parent component. Example:
+In the app-card component template:
+<ng-content></ng-content>
+310. How can you make HTTP requests in Angular?
+Angular provides the HttpClient module to make HTTP requests. It supports all standard HTTP methods, including GET, POST, PUT, DELETE, etc. The HttpClient module is imported from @angular/common/http. Example:
+311. What are Angular pipes, and how are they used?
+Angular pipes allow you to transform data in the template. Pipes are used to format, filter, or manipulate data before displaying it in the view. You can use built-in pipes like date, currency, uppercase, or create custom pipes to suit your needs. Example of using a built-in pipe:
+This will display the current date in a short date format.
+312. How can you create a custom pipe in Angular?
+To create a custom pipe, you need to implement the PipeTransform interface and decorate the class with the @Pipe decorator. Example of a custom pipe:
+To use it in a template:
+313. What is the purpose of ngModel in Angular forms?
+The ngModel directive is used for two-way data binding in Angular forms. It binds an input element to a property in the component and allows you to read and update the value of that property automatically. Example:
+This binds the input field to the username property in the component. Any changes made to the input field are reflected in the component, and any updates to the component are automatically displayed in the input.
+314. How do you handle authentication in Angular?
+Authentication in Angular is typically handled by using an authentication service that communicates with a backend server. The service usually stores the authentication token (such as a JWT) in the browser's local storage or session storage, and it adds the token to the HTTP request headers for secured endpoints. Example:
+You would also need route guards to protect certain routes from unauthorized access.
+315. What are Angular route guards and how are they used?
+Route guards are used to control access to specific routes based on certain conditions. They can prevent navigation to a route if a condition is not met. There are several types of route guards in Angular:
+CanActivate: Determines if a route can be activated.
+CanActivateChild: Determines if the child routes of a route can be activated.
+CanDeactivate: Determines if the current route can be deactivated (useful for unsaved changes).
+Resolve: Pre-fetches data before a route is activated.
+CanLoad: Determines if a route can be loaded lazily.
+Example of a CanActivate guard:
+316. What is the Angular HttpInterceptor and how does it work?
+The HttpInterceptor is used to intercept HTTP requests and responses globally in Angular. It allows you to add custom logic to modify requests (e.g., adding authentication tokens) or handle responses (e.g., handling errors). It is implemented by creating a class that implements the HttpInterceptor interface. Example:
+This interceptor adds the authentication token to every HTTP request before it is sent.
+317. What is the Angular ngFor directive and how do you use it?
+The ngFor directive is used to iterate over an array or list and display the items dynamically in the template. It is similar to a loop in programming languages. Example:
+In this example, items is an array in the component, and the *ngFor directive iterates over each item in the array and displays it in an <li> element.
+318. How can you dynamically load components in Angular?
+To dynamically load a component in Angular, you can use the ComponentFactoryResolver service in combination with ViewContainerRef. This allows you to instantiate and insert a component into the view at runtime. Example:
+You can call loadComponent to dynamically load the component into the view.
+319. What is the difference between ViewEncapsulation.Emulated, None, and ShadowDom in Angular?
+Angular provides three encapsulation modes for component styles:
+Emulated (default): Emulates Shadow DOM by adding scoped styles using attribute selectors.
+None: No encapsulation. Styles are global and affect other components.
+ShadowDom: Uses the browser's native Shadow DOM support for true encapsulation.
+320. What are Angular animations and how do you use them?
+Angular animations are built on top of Web Animations API and allow complex transitions between states. Use @angular/animations and define triggers with states and transitions. Example:
+Template usage:
+321. What are content projection and <ng-content> in Angular?
+Content projection allows you to pass markup from a parent component into a child component using <ng-content>. Example:
+It enables flexible and reusable components.
+322. How do you configure routing in Angular?
+Define routes in a module using RouterModule.forRoot() or forChild() for feature modules. Example:
+Then use <router-outlet> in your template to render matched components.
+323. What is RouterLink and RouterLinkActive in Angular?
+RouterLink is a directive to navigate between routes. RouterLinkActive adds a class when the route is active. Example:
+When the route is active, the active class is applied.
+324. How do you implement lazy loading in Angular?
+Lazy loading improves performance by loading modules only when needed. Use loadChildren in routing configuration. Example:
+The AdminModule will be loaded only when navigating to the /admin route.
+325. What is the difference between template-driven and reactive forms in Angular?
+- Template-driven: Simpler syntax, defined in templates using ngModel. Suitable for simple forms.
+- Reactive: More scalable, form logic is defined in the component class using FormGroup and FormControl. Useful for complex validations. Example of reactive form:
+326. How do you detect changes in Angular?
+Angular uses a change detection mechanism that automatically updates the view when data changes. You can manually trigger it using ChangeDetectorRef. Example:
+This is useful when Angular doesn't detect changes automatically, such as inside setTimeout or external library callbacks.
+327. How do Angular lifecycle hooks work and what are the most commonly used ones?
+Angular lifecycle hooks allow you to tap into key events during a component or directive's life. Common hooks include:
+ngOnInit: Called after the constructor and input bindings.
+ngOnChanges: Called when input properties change.
+ngOnDestroy: Called before the component is destroyed (good for cleanup).
+ngAfterViewInit: Called after component’s view (and children) initialized.
+328. What is the purpose of ngOnDestroy and how is it used?
+ngOnDestroy is a lifecycle hook used to perform cleanup like unsubscribing from Observables or detaching event handlers to avoid memory leaks.
+It is automatically called by Angular when the component is about to be destroyed.
+329. What are Angular directives and what types exist?
+Angular directives are classes that add behavior to elements in your templates. There are three types:
+Component: A directive with a template.
+Structural: Change the DOM layout (e.g., *ngIf, *ngFor).
+Attribute: Change appearance or behavior of elements (e.g., custom highlight directive).
+330. How do you create a custom structural directive in Angular?
+You can use TemplateRef and ViewContainerRef to create custom structural directives. Example: *appUnless
+331. What are pipes in Angular and how do you create a custom pipe?
+Pipes transform data in templates. Angular provides built-in pipes like date, uppercase, etc. Custom pipe example:
+332. What is a service in Angular and how do you inject it?
+A service is a reusable class used for logic or data access. Inject it into components using dependency injection. Example:
+333. How do you use HttpClient to perform HTTP requests in Angular?
+Always handle subscriptions and consider error handling using catchError.
+334. How does Angular handle dependency injection?
+Angular uses a hierarchical dependency injection system. Services can be provided in modules, components, or via the providedIn: 'root' metadata. Angular resolves and injects the required services automatically in constructors. Example:
+335. What is the Angular CLI and what are its main benefits?
+Angular CLI is a command-line interface tool that simplifies Angular development. It helps with:
+Generating components, services, modules, etc.
+Running the development server with ng serve
+Building projects for production
+Running unit and e2e tests
+It's ideal for maintaining consistent project structure and applying best practices.
+336. How does Angular handle forms and what are the types of forms available?
+Angular supports two form types:
+Template-driven forms – Simpler, ideal for basic forms using directives like ngModel.
+Reactive forms – More robust and scalable, built with FormGroup, FormControl, and validation logic in the component class.
+337. How do you add form validation in reactive forms?
+You can add synchronous validators like Validators.required, or async validators in the control definition:
+In the template, check control validity with:
+338. How can you create a dynamic form in Angular?
+Use FormArray to manage dynamic controls:
+Add new user controls by pushing to the array:
+339. What is ng-content and when is it used?
+<ng-content> is used for content projection in Angular. It allows you to insert content from the parent component into a child component’s template.
+340. How does Angular routing work?
+Angular uses the RouterModule to configure routes in the application. Define paths and components in a route configuration:
+In the template, use:
+341. What are route guards in Angular?
+Route guards control access to routes. Implement CanActivate, CanDeactivate, etc.
+Register in the route:
+342. How do you pass route parameters in Angular?
+Define parameterized route:
+Navigate with:
+Access in component:
+343. What is Angular Change Detection and how does it work?
+Angular's change detection mechanism checks for updates in component data and refreshes the DOM accordingly. It runs after events like clicks or async operations. By default, it uses the "CheckAlways" strategy unless you optimize it using "OnPush".
+344. How does the OnPush change detection strategy work?
+With ChangeDetectionStrategy.OnPush, Angular skips change detection unless:
+The input reference changes
+An event occurs inside the component
+markForCheck() is explicitly called
+345. What is a custom pipe in Angular?
+A custom pipe transforms data in the template. For example:
+346. What is the purpose of Angular Interceptors?
+Interceptors handle HTTP requests/responses globally—ideal for adding headers, logging, or error handling.
+347. How do you use lazy loading in Angular?
+Lazy loading loads modules only when needed, improving performance. In app-routing.module.ts:
+This ensures the AdminModule is loaded only on demand.
+348. What are Angular lifecycle hooks?
+Lifecycle hooks let you tap into component lifecycle events. Common hooks:
+ngOnInit() – After component initialization
+ngOnChanges() – When input properties change
+ngOnDestroy() – Cleanup before destruction
+349. How do you use services and dependency injection in Angular?
+Define services with @Injectable() and provide them at root level or in modules:
+Inject into components via constructor:
+constructor(private dataService: DataService) {}
+350. What is Angular Universal?
+Angular Universal enables Server-Side Rendering (SSR) for Angular apps, improving SEO and load performance. It pre-renders content on the server and serves static HTML to the client.
+351. How do you share data between components in Angular?
+You can share data using:
+Input/Output decorators between parent and child
+Shared service with observables for sibling or unrelated components
+352. What is a Reactive Form in Angular?
+Reactive Forms use FormControl, FormGroup, and FormBuilder to build dynamic and testable forms.
+353. What is the difference between Reactive and Template-driven forms?
+Reactive Forms: Created in TypeScript, suitable for complex scenarios.
+Template-driven: Created in the template using directives like ngModel, simpler to use but less flexible.
+354. How do you handle form validation in Angular?
+Use built-in or custom validators. Example:
+355. What are Angular directives?
+Directives extend HTML with custom behavior. Types:
+Structural: Change the DOM layout (e.g., *ngIf, *ngFor)
+Attribute: Change the appearance/behavior of elements (e.g., ngClass, custom directives)
+356. What is the purpose of ngOnDestroy?
+ngOnDestroy() is a lifecycle hook used to clean up subscriptions, event listeners, or resources before a component is destroyed.
+357. How does Angular handle routing?
+Angular uses RouterModule to define routes. Example:
+Import with: RouterModule.forRoot(routes)
+358. What is the difference between RouterLink and Router.navigate?
+RouterLink: Used in templates for navigation (e.g., <a [routerLink]="['/home']">)
+Router.navigate(): Used in TypeScript code to programmatically navigate.
+this.router.navigate(['/home']);
+359. How do you create a custom directive in Angular?
+Use @Directive to define it and use ElementRef or Renderer2 for DOM manipulation.
+360. What are Angular Pipes and how do you create one?
+Pipes transform data in templates. Custom pipes are created using @Pipe.
+361. How does Angular handle dependency injection?
+Angular uses a hierarchical injector system. Services are provided via @Injectable and injected into components.
+constructor(private userService: UserService) { }
+362. What is the role of @Injectable in Angular services?
+363. How do you handle lazy loading in Angular?
+Use the loadChildren property in routing configuration to load modules on demand.
+364. What are Angular resolvers and when are they used?
+Resolvers fetch data before a route is activated. Implement Resolve<T> and use in routing.
+365. What are guards in Angular and what types exist?
+Guards control route access. Types include:
+CanActivate
+CanActivateChild
+CanDeactivate
+Resolve
+CanLoad
+366. How do you bind classes and styles in Angular templates?
+Use [ngClass] and [ngStyle] for dynamic binding.
+367. What are Angular modules and how are they structured?
+Modules group components, services, and other modules. They are decorated with @NgModule.
+368. What is Change Detection in Angular?
+Angular uses change detection to update the DOM when component data changes. It runs after every async event.
+369. How do you optimize performance in large Angular apps?
+Use OnPush change detection strategy
+Lazy load feature modules
+Avoid unnecessary subscriptions
+Use trackBy in ngFor
+Precompile with AOT
+370. How do you handle events in Angular templates?
+Use event binding syntax (event)="handler()".
+371. What is the purpose of trackBy in ngFor?
+trackBy improves performance by avoiding re-rendering of unchanged items in *ngFor.
+372. What is the difference between ViewChild and ContentChild?
+@ViewChild accesses elements inside the component's template.
+@ContentChild accesses projected content using <ng-content>.
+373. How do you communicate between sibling components in Angular?
+Use a shared service with Subject or BehaviorSubject for data flow.
+this.dataService.notify.next('updated value');
+374. How do you validate reactive forms in Angular?
+Define validators in the FormGroup and access validation status via form controls.
+375. What is dependency injection in Angular?
+Dependency injection (DI) is a design pattern used by Angular to provide components with their dependencies, such as services, via constructors.
+376. How do you use pipes in Angular?
+Pipes transform data in templates. Built-in pipes include date, uppercase, currency, etc.
+377. What is a custom pipe and how do you create one?
+Custom pipes are user-defined transformations. They implement the PipeTransform interface.
+378. What is ngOnInit and how is it different from the constructor?
+constructor initializes class members.
+ngOnInit is part of Angular’s lifecycle hooks and is called after input properties are set.
+379. How do you create and inject a service in Angular?
+Use the @Injectable decorator and provide the service in a module or with providedIn: 'root'.
+380. What is the difference between template-driven and reactive forms?
+Template-driven forms rely on directives in the template. Reactive forms are defined in the component class using FormBuilder and offer better control and testability.
+381. How do you perform HTTP requests in Angular?
+382. How do you create an Angular route guard?
+Implement the CanActivate interface and return a boolean or observable.
+383. What is the Angular CLI and why is it useful?
+Angular CLI is a command-line tool for initializing, developing, scaffolding, and maintaining Angular apps. It automates configuration and setup tasks.
+384. How do you use ngClass and ngStyle in Angular?
+ngClass and ngStyle are used to conditionally apply CSS classes or inline styles.
+385. What is content projection in Angular?
+Content projection allows you to insert dynamic content into a component using <ng-content>.
+386. How does Angular handle error handling in HTTP requests?
+Use RxJS catchError operator with HttpClient to handle errors gracefully.
+387. What are Angular lifecycle hooks?
+Lifecycle hooks are methods that allow you to tap into key events in a component's life (e.g., ngOnInit, ngOnDestroy).
+388. What is Change Detection in Angular?
+Change detection is the mechanism that Angular uses to track changes and update the DOM. It uses zones to detect changes automatically.
+389. How do you share data between components?
+Options include using input/output bindings, shared services with observables, or route parameters.
+390. What are observables in Angular and how are they used?
+Observables represent streams of data and are used with HttpClient and reactive forms. They support operators like map, filter, and mergeMap.
+391. How do you create a reactive form in Angular?
+Reactive forms are created using FormGroup and FormControl.
+392. What is the role of FormBuilder in Angular reactive forms?
+FormBuilder simplifies the creation of forms using syntactic sugar.
+393. What is the difference between Reactive and Template-driven forms?
+Reactive forms are code-driven and more scalable, while template-driven forms are defined in the HTML and better for simple scenarios.
+394. How do you validate a form field dynamically?
+Use setValidators and updateValueAndValidity methods.
+395. What is dependency injection in Angular?
+Angular's DI system injects services into components or other services, promoting modularity and testability.
+constructor(private myService: MyService) {}
+396. How can you create a singleton service in Angular?
+Add providedIn: 'root' in the service’s decorator.
+@Injectable({ providedIn: 'root' })
+397. What are Angular modules and why are they important?
+Angular modules group components, directives, pipes, and services to organize the app structure.
+398. How do you lazy load a module in Angular?
+Use the loadChildren syntax in the router configuration.
+399. How do you share data between components in Angular?
+You can use Input and Output decorators for parent-child communication or use a service for sibling communication.
+400. How do you handle errors in Angular?
+Angular provides HttpInterceptor for catching and handling errors in HTTP requests.
+401. What is the purpose of the ngOnInit lifecycle hook in Angular?
+The ngOnInit lifecycle hook is used for initialization logic in components after Angular has set up the component's input properties.
+402. How do you create a reusable component in Angular?
+You can create a reusable component by making it modular, passing data through inputs and outputs, and abstracting the logic into services when necessary.
+403. How do you configure routes in Angular?
+Routes are configured using the RouterModule. You define route paths and associate them with components in the routing module.
+404. How can you prevent routing errors in Angular?
+To prevent routing errors, you should define a wildcard route that redirects to a 404 component if the route doesn't match any defined paths.
+405. What is Angular's dependency injection (DI) system?
+Angular's DI system allows you to inject services into components and other services, managing their lifecycle and improving code modularity.
+406. What are Angular directives and how do they work?
+Directives are special markers on elements that tell Angular to do something with the DOM. There are three types: component, structural, and attribute directives.
+407. What is GraphQL?
+GraphQL is a query language for APIs and a runtime for executing those queries by using a type system you define for your data. It enables clients to request only the data they need, reducing over-fetching.
+408. What are the key differences between REST and GraphQL?
+The main differences include:
+REST uses multiple endpoints for different resources, while GraphQL uses a single endpoint.
+In REST, you often over-fetch or under-fetch data, but in GraphQL, you request exactly what you need.
+GraphQL supports real-time updates via subscriptions, whereas REST typically requires polling.
+409. What are the components of a GraphQL operation?
+A GraphQL operation consists of:
+Query: A read-only request for data.
+Mutation: A request to modify data.
+Subscription: A real-time notification for changes to data.
+410. How do you define a GraphQL schema?
+A GraphQL schema defines the types and fields that can be queried, along with the operations available. It is written in Schema Definition Language (SDL).
+411. What are resolvers in GraphQL?
+Resolvers are functions responsible for returning data for a specific field in a GraphQL query. They map the schema's fields to the actual data sources.
+412. How does GraphQL handle pagination?
+GraphQL handles pagination by using arguments like limit and offset for queries. Another common approach is using the cursor-based pagination.
+413. What is the purpose of GraphQL variables?
+GraphQL variables allow you to pass dynamic data to your queries, making them reusable and flexible. This avoids the need to hardcode values in queries.
+414. What is the role of a subscription in GraphQL?
+A subscription in GraphQL enables clients to receive real-time updates whenever data changes. This is often used for live data feeds or notifications.
+415. How do you handle error handling in GraphQL?
+In GraphQL, errors can be handled within the response object. If an error occurs, it is included in the errors array, and the response still includes the data that was successfully fetched.
+416. How do you secure a GraphQL API?
+To secure a GraphQL API, you can implement authentication and authorization strategies like token-based authentication (JWT), role-based access control (RBAC), and rate-limiting.
+417. How do you implement authentication in GraphQL?
+Authentication in GraphQL is typically done using token-based mechanisms like JSON Web Tokens (JWT). You attach the token to the HTTP headers, and the server verifies it before processing the request.
+418. How do you handle authorization in GraphQL?
+Authorization in GraphQL is typically handled in resolvers where you check the user's role or permissions before executing the operation.
+419. What is the difference between query and mutation in GraphQL?
+A query is used to fetch data from the server, and it should be side-effect free. A mutation is used for creating, updating, or deleting data and generally involves side effects.
+420. How do you define fragments in GraphQL?
+Fragments in GraphQL allow you to reuse parts of a query. This is useful when you need to request the same fields from different queries or mutations.
+421. What are subscriptions in GraphQL?
+Subscriptions in GraphQL allow clients to receive real-time updates from the server. They are useful for features like live data feeds or notifications.
+422. How do you implement subscriptions in GraphQL?
+To implement subscriptions, you can use a WebSocket-based server like subscriptions-transport-ws or use Apollo Server's built-in WebSocket support. You define the subscription in the schema and resolve it through a subscription-specific resolver.
+423. How does GraphQL handle batching of requests?
+GraphQL handles batching by sending multiple queries in a single request. This is useful for reducing the number of HTTP requests when fetching related data from multiple sources.
+424. What is the role of Apollo Client in GraphQL?
+Apollo Client is a popular library for managing GraphQL data in a front-end application. It handles data fetching, caching, and state management for GraphQL queries, mutations, and subscriptions.
+425. What are the advantages of using GraphQL over REST?
+The advantages of using GraphQL over REST include:
+Fetching only the data you need.
+Single endpoint for all operations.
+Built-in support for real-time updates through subscriptions.
+Strongly typed schema and introspection capabilities.
+426. What are resolvers in GraphQL?
+Resolvers in GraphQL are functions responsible for returning data for a specific field in a query. They are used to define how to fetch data for the fields defined in the GraphQL schema.
+427. How do you create a custom scalar type in GraphQL?
+A custom scalar type in GraphQL allows you to define your own data type. You need to define the behavior of serializing, parsing, and validating the scalar data.
+428. What are directives in GraphQL?
+Directives in GraphQL allow you to modify the execution of a query or schema dynamically. The two built-in directives are @include and @skip.
+429. What is the purpose of introspection in GraphQL?
+Introspection in GraphQL allows clients to query the GraphQL schema itself, enabling tools to discover the structure of the schema and validate queries.
+430. How do you handle pagination in GraphQL?
+Pagination in GraphQL can be achieved using techniques like limit and offset, or through a more advanced approach like Relay cursor-based pagination.
+431. What is the difference between query variables and arguments in GraphQL?
+Query variables in GraphQL are external inputs passed into the query at runtime, while arguments are values passed directly into the fields of the query.
+432. How can you implement error handling in GraphQL?
+Error handling in GraphQL is typically done using the errors field in the response. You can also create custom error classes and attach them to specific resolvers.
+433. What are the benefits of using GraphQL over REST for API development?
+Some benefits of using GraphQL over REST include:
+Flexible and efficient querying of data
+Single endpoint for all operations
+Strongly typed schema and introspection
+Ability to combine multiple resources into a single request
+Real-time updates with subscriptions
+434. How do you perform a batch request in GraphQL?
+Batch requests in GraphQL allow you to send multiple queries or mutations in a single request. You can use libraries like graphql-request to batch requests.
+435. What is the purpose of subscriptions in GraphQL?
+Subscriptions in GraphQL allow clients to subscribe to real-time updates for specific data. When the data changes on the server, the client automatically receives updated results.
+436. How do you handle authentication in GraphQL?
+Authentication in GraphQL is often handled using middleware that verifies the user's token or credentials before executing the query. This can be done in the server-side GraphQL context.
+437. What is a fragment in GraphQL?
+A fragment in GraphQL allows you to reuse parts of a query or mutation. It lets you define a reusable selection of fields, which can then be used in multiple places.
+438. How do you handle caching in GraphQL?
+Caching in GraphQL can be done at both the client and server sides. On the client side, tools like Apollo Client manage caching automatically. On the server side, caching can be handled by caching the results of specific queries.
+439. How do you handle versioning in GraphQL?
+Versioning in GraphQL is typically avoided by using a flexible schema that can evolve without breaking existing clients. You can achieve this by adding new fields or deprecating old ones, without changing the core API.
+440. What is the difference between a mutation and a query in GraphQL?
+In GraphQL, a query is used to fetch data from the server, while a mutation is used to modify data on the server (e.g., creating, updating, or deleting data).
+441. How do you handle error responses in GraphQL?
+Error responses in GraphQL are handled by returning an errors array in the response. Each error contains details about what went wrong.
+442. How do you use aliases in GraphQL?
+Aliases in GraphQL allow you to rename the result of a field for clarity or to fetch the same field with different arguments in a single query.
+443. What is the N+1 query problem in GraphQL?
+The N+1 query problem occurs when GraphQL queries trigger multiple database queries in a loop, fetching data inefficiently. It can be resolved using tools like DataLoader to batch requests and reduce the number of queries.
+444. How do you implement authorization in GraphQL?
+Authorization in GraphQL is implemented by checking permissions in the resolvers or context before executing queries or mutations. You can use middleware to handle token validation and authorization checks.
+445. What are some best practices for structuring a GraphQL schema?
+Best practices for structuring a GraphQL schema include: - Keep the schema modular by dividing it into logical units (e.g., user, product). - Use input types to define complex objects. - Add validation and error handling for inputs. - Use custom scalars for handling special data types.
+446. What is the purpose of the context in GraphQL server?
+The context in GraphQL is used to pass shared information (such as authentication data or database connections) to all resolvers in a query or mutation. It is typically used for user authentication, logging, and data access.
+447. How does batching work in GraphQL?
+Batching in GraphQL allows you to combine multiple queries or mutations into a single request. This reduces the overhead of multiple HTTP requests and improves performance.
+448. What is the role of the resolver in GraphQL?
+A resolver in GraphQL is a function that fetches the data for a specific field in a query. Each field in the GraphQL schema is backed by a resolver that retrieves or manipulates the data for that field.
+449. What are directives in GraphQL?
+Directives in GraphQL are used to modify the execution of queries or mutations. They allow you to conditionally include or skip fields or modify query behavior, such as @include or @skip.
+450. How does GraphQL handle pagination?
+Pagination in GraphQL can be handled using techniques like "limit and offset" or "cursor-based pagination." Cursor-based pagination is more efficient for large datasets.
+451. What are resolvers used for in a GraphQL server?
+Resolvers are used to provide a mechanism for fetching data for the fields defined in the GraphQL schema. They map the GraphQL query fields to functions that resolve the value for those fields, potentially accessing databases, APIs, or other services.
+452. What is the role of the query and mutation in GraphQL?
+In GraphQL, a query is used to fetch data, while a mutation is used to modify data (e.g., create, update, or delete). The query syntax allows clients to request only the data they need, and mutations change the underlying data.
+453. How do you handle error handling in GraphQL?
+In GraphQL, errors are returned in an "errors" array in the response. Each error object includes a message, a path to the field that caused the error, and sometimes additional details about the error.
+454. What is Apollo Client in GraphQL?
+Apollo Client is a popular JavaScript library for managing GraphQL data in client applications. It simplifies the process of making GraphQL queries and mutations and also manages local state and caching.
+455. What is the difference between REST and GraphQL?
+REST is a set of architectural principles for building web services, whereas GraphQL is a query language and runtime for APIs. With GraphQL, clients can request exactly the data they need, while REST endpoints often return a fixed set of data. GraphQL is more flexible and efficient for complex systems and large datasets.
+456. What are fragments in GraphQL?
+Fragments in GraphQL allow you to reuse parts of a query in multiple places. They help reduce redundancy and make queries more maintainable.
+457. How do you handle authorization and authentication in GraphQL?
+Authorization and authentication in GraphQL can be handled in the context. A common approach is to verify the user's credentials (e.g., via JWT or session tokens) in the context function before allowing access to the GraphQL resolvers.
+458. What is the difference between "Query" and "Mutation" in GraphQL?
+A "Query" is used to fetch data, while a "Mutation" is used to modify data. Queries are always read-only, and mutations typically alter the underlying data on the server.
+459. What is Apollo Server?
+Apollo Server is an open-source GraphQL server that allows you to easily implement a GraphQL API with various data sources, including REST, databases, and more. It provides features like query batching, schema stitching, and performance monitoring.
+460. How does GraphQL handle nested queries?
+GraphQL allows for nested queries, where you can request data from multiple related objects in a single query. This allows clients to efficiently fetch complex data in a single request.
+461. What is a "resolver map" in GraphQL?
+A resolver map in GraphQL is a set of functions that handle fetching data for each field in a schema. It is used by the GraphQL server to resolve the values for each query or mutation.
+462. What is the role of a schema in GraphQL?
+The schema in GraphQL defines the structure of the API, including the types of data available and the queries and mutations that can be executed. It acts as a contract between the client and server.
+463. How do you implement pagination in GraphQL?
+Pagination in GraphQL is often done using cursor-based pagination. This involves returning a "cursor" in each page of data that can be used to fetch the next set of data.
+464. What are the benefits of using GraphQL over REST?
+GraphQL provides several benefits over REST: - Clients can request only the data they need, reducing over-fetching. - It allows for more efficient data fetching by combining multiple requests into one. - GraphQL supports real-time updates through subscriptions. - It provides a strongly typed schema, allowing for better introspection and validation.
+465. What is a GraphQL subscription?
+A GraphQL subscription allows clients to subscribe to real-time updates from the server. When the data changes, the server pushes updates to the client, enabling real-time functionality.
+466. How do you handle errors in GraphQL?
+Errors in GraphQL can be handled by including an "errors" field in the response. Each error object contains a message and additional details, such as the path and locations where the error occurred.
+467. What are the advantages of using Apollo Client with GraphQL?
+Apollo Client is a popular library for interacting with GraphQL APIs. It provides: - Automatic caching of data to minimize unnecessary requests. - Query batching for improved performance. - Optimized server-side rendering (SSR). - Simple integration with React, Angular, and other frameworks. - Built-in support for subscriptions.
+468. How does GraphQL support real-time data updates?
+GraphQL supports real-time data updates through subscriptions. A subscription allows the client to receive updates when the server data changes. Subscriptions are usually implemented with websockets to maintain a persistent connection.
+469. How can you optimize GraphQL queries to reduce server load?
+To optimize GraphQL queries: - Use query batching to minimize the number of requests. - Avoid requesting unnecessary fields by using fragments and aliasing. - Implement caching and persistence mechanisms. - Use batching and caching for database queries. - Limit the depth of queries to avoid overly complex ones.
+470. What is the role of a "context" in GraphQL?
+The context in GraphQL provides a way to share data and functionality (like authentication, authorization, database connections) across resolvers. It is created during each request and can be accessed in all resolvers for a particular query.
+471. What is "batching" in the context of GraphQL?
+Batching in GraphQL refers to combining multiple queries or requests into one. Apollo Server can batch queries, reducing the number of HTTP requests made to the server. This improves performance by sending a single request with multiple operations.
+472. How do you use variables in GraphQL queries?
+Variables in GraphQL are used to provide dynamic values in queries. Instead of hardcoding values, you can pass variables that are replaced during query execution.
+473. How can you prevent over-fetching in GraphQL?
+Over-fetching in GraphQL can be avoided by specifying exactly what data you need in a query. Unlike REST, where responses include predefined data, GraphQL allows clients to request only the fields they need.
+474. How do you integrate GraphQL with a REST API?
+To integrate GraphQL with a REST API, you can create a GraphQL resolver that makes requests to the REST API. This allows you to combine GraphQL queries with existing REST endpoints.
+475. What is the difference between a "field" and a "resolver" in GraphQL?
+A "field" in GraphQL refers to a single piece of data or an operation within a query or mutation. A "resolver" is a function that defines how to fetch the data for that field. Resolvers are used to resolve the data for fields in the schema.
+476. What is a "DataLoader" in GraphQL?
+DataLoader is a utility that helps to batch and cache requests in GraphQL. It is useful for reducing redundant data fetching when the same resource is requested multiple times. DataLoader prevents the N+1 query problem by batching multiple requests into a single query.
+477. How do you implement pagination in GraphQL?
+Pagination in GraphQL can be implemented using cursor-based or offset-based methods. Cursor-based pagination uses a unique identifier (cursor) for each item to fetch subsequent pages. Offset-based pagination uses a page number and a limit for fetching results.
+478. How do you handle nested queries in GraphQL?
+Nested queries in GraphQL allow you to request related data in a single query. The server resolves the nested fields by executing multiple resolvers for each nested level, ensuring that the data is retrieved in the desired structure.
+479. How do you implement custom scalars in GraphQL?
+Custom scalars are user-defined types in GraphQL that allow you to define data types that are not included in the default GraphQL specification. You can implement custom scalars for things like Date, Email, or other special formats.
+480. What is the purpose of "Apollo Server" in GraphQL?
+Apollo Server is a popular open-source GraphQL server implementation that simplifies the process of building and managing a GraphQL API. It integrates seamlessly with various data sources and supports features like authentication, performance tracing, and schema stitching.
+481. How does "GraphQL Federation" work?
+GraphQL Federation is a methodology for combining multiple GraphQL services into a single, unified GraphQL API. Each service defines a part of the overall schema, and federation allows these services to collaborate by sharing data through a central gateway.
+482. What is the difference between GraphQL and REST?
+The key differences between GraphQL and REST: - GraphQL allows clients to request specific data, while REST typically returns predefined data. - GraphQL uses a single endpoint for all queries, whereas REST uses multiple endpoints. - With GraphQL, clients can retrieve data in a single query, reducing the number of network requests. - REST follows a strict resource-based approach, while GraphQL is more flexible with data structures.
+483. How do you handle rate limiting in GraphQL?
+Rate limiting in GraphQL can be handled by using middleware that tracks the number of requests made by a client in a given time period. The server can then return a "429 Too Many Requests" response once the rate limit is exceeded.
+485. How do you test GraphQL APIs?
+Testing GraphQL APIs involves writing unit tests for resolvers and queries. Tools like Jest or Mocha can be used in conjunction with Apollo Server to test different queries, mutations, and subscriptions. You can also use integration testing to simulate real queries and check the responses.
+487. How do you implement subscriptions in GraphQL?
+Subscriptions in GraphQL allow clients to receive real-time updates from the server. This is commonly used for use cases like chat applications, live data feeds, or notifications. Subscriptions are established using WebSockets and are defined similarly to queries but with the `subscription` keyword.
+489. What is the role of "Resolvers" in GraphQL?
+Resolvers in GraphQL are functions that resolve a value for a field in a GraphQL schema. When a query is made, the corresponding resolver is executed to fetch the data requested. Resolvers can interact with databases, external APIs, or any other data sources.
+490. How do you optimize the performance of a GraphQL API?
+Performance optimization in GraphQL can be achieved through techniques like batching and caching. Using DataLoader to batch requests helps avoid the N+1 query problem. Implementing query complexity analysis and depth limiting can help prevent expensive or nested queries. Additionally, implementing proper caching strategies can significantly improve response times.
+491. How do you handle error handling in GraphQL?
+Error handling in GraphQL can be done by including error messages in the response object. Errors are usually returned as part of the response's `errors` array, and you can include specific details such as error type, message, and stack trace. You can also define custom error formats for your resolvers.
+492. What is "GraphQL Schema Stitching"?
+Schema stitching in GraphQL is the process of combining multiple GraphQL schemas into a single, unified schema. It allows you to combine schemas from different services or microservices to provide a single API endpoint for clients to interact with.
+493. How do you protect a GraphQL API?
+Protecting a GraphQL API involves securing endpoints, validating inputs, and applying authentication and authorization checks. You can use techniques like rate-limiting, logging, and setting up API gateways to manage traffic. Additionally, it's essential to implement proper user authentication (e.g., using OAuth, JWT) and authorization to restrict access to sensitive data.
+494. How do you handle file uploads in GraphQL?
+File uploads in GraphQL are handled using a special scalar type called `Upload`. You can use libraries like Apollo Server to implement file uploads, where clients can send files as part of the request. The server can then handle the file, store it, and return a URL or file details in the response.
+495. What is "GraphQL query complexity analysis"?
+Query complexity analysis is the process of measuring the "cost" or "complexity" of a GraphQL query. By analyzing query depth, fields, and relationships, you can prevent clients from sending expensive queries that could overload your server. There are libraries that help you calculate and limit query complexity.
+496. How do you optimize queries in GraphQL?
+Optimizing queries in GraphQL involves several techniques, such as batching requests, reducing the depth of queries, and using query complexity analysis. It is also essential to use proper pagination and field selection to prevent over-fetching data. Additionally, caching results and using efficient data fetching strategies (e.g., DataLoader) can improve query performance.
+497. What are the best practices for structuring a GraphQL schema?
+Structuring a GraphQL schema should follow best practices for clarity and scalability. It's recommended to organize the schema into distinct types (e.g., Query, Mutation, Subscription). Use modular type definitions to break the schema into reusable parts, and keep resolvers organized by their respective types. Also, use clear naming conventions and document your schema for easy understanding.
+498. How do you manage authentication in a GraphQL API?
+Authentication in GraphQL can be managed using tokens like JWT. The token is usually sent via HTTP headers, and resolvers check the token's validity before processing the request. Additionally, GraphQL allows for custom authentication schemes, such as OAuth or session-based management.
+499. What is a "GraphQL Gateway"?
+A GraphQL Gateway is an abstraction layer that sits between the client and multiple GraphQL services. It aggregates the data from different GraphQL services and exposes a single API endpoint to clients. This is useful when you have microservices with their own GraphQL APIs, and you want to present them as a unified schema.
+500. What are "directives" in GraphQL?
+Directives in GraphQL are special annotations that can modify the behavior of a query or mutation. For example, `@include` and `@skip` can be used to conditionally include or skip fields in a query. Directives are also useful for custom behaviors like authentication or authorization logic.
+501. How do you implement error handling with custom error messages in GraphQL?
+Custom error handling in GraphQL can be implemented by throwing errors in resolvers with specific error messages. You can create custom error classes for different scenarios and handle them accordingly. GraphQL allows you to customize error responses with additional fields like `extensions`, which can carry extra information like error codes or details.
+502. How do you implement a pagination mechanism in GraphQL?
+Pagination in GraphQL can be implemented using `cursor-based` pagination or `offset-based` pagination. The `cursor-based` pagination is the recommended approach because it’s more reliable when handling data changes between requests. It involves passing a cursor to the next page or to the previous page. The cursor is typically a unique identifier.
+503. How do you manage authorization in GraphQL?
+Authorization in GraphQL is often handled in resolvers by checking user permissions before accessing certain resources. You can use tools like middleware or context functions to check for user roles or permissions. Combining authorization checks with authentication (like JWT or OAuth) ensures that only authorized users can access certain fields or perform specific mutations.
+504. What is the role of the "Context" in GraphQL?
+The "Context" in GraphQL is an object shared by all resolvers for a specific query. It can be used to store authentication information, database connections, and any other data that needs to be accessible across multiple resolvers. This is useful for operations such as checking if a user is authenticated or for passing configuration information.
+505. What is the "Apollo Client" in the context of GraphQL?
+Apollo Client is a popular library for interacting with GraphQL APIs from the client-side. It helps manage the state of your application, making it easier to fetch data via GraphQL queries and mutations, and it also provides features like caching, pagination, and real-time updates with subscriptions. It integrates with React, Angular, and other frontend libraries.
+506. How do you implement a real-time subscription in GraphQL?
+Real-time subscriptions in GraphQL allow clients to listen for updates to data and receive automatic notifications when the data changes. This is typically implemented using WebSockets, with the server subscribing to specific events and clients subscribing to relevant queries. Apollo Server supports subscriptions out of the box.
+507. What are "Fragments" in GraphQL?
+Fragments in GraphQL are reusable units that allow you to share parts of a query. They help avoid repetition by enabling you to create a set of fields that can be used across multiple queries or mutations. Fragments can also help optimize performance by allowing you to select the same fields from multiple objects.
+508. How do you handle versioning in GraphQL?
+Versioning in GraphQL is not typically handled through different versions of the API (like in REST). Instead, GraphQL supports backward compatibility by allowing you to add new fields or types without breaking existing clients. If breaking changes are necessary, you can deprecate fields and guide clients to migrate to new fields using deprecation warnings.
+509. What is the difference between a "Query" and a "Mutation" in GraphQL?
+In GraphQL, a "Query" is used to fetch data, while a "Mutation" is used to modify data (e.g., create, update, or delete). Queries are read-only operations that do not have side effects, while mutations are used to change the state of the server or data. Both queries and mutations can return data, but mutations typically return the modified data.
+510. How do you manage data fetching in GraphQL for performance optimization?
+Data fetching in GraphQL can be optimized through techniques such as batching and caching. Tools like `DataLoader` are used to batch multiple requests into a single query to reduce the number of database calls. Query complexity analysis and limiting the depth of queries can also prevent excessive data fetching and improve performance.
