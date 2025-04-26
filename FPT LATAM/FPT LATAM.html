@@ -1238,7 +1238,7 @@
         <li>Listo para producción con métricas y monitorización integradas</li>
         <li>Las dependencias de inicio simplifican la configuración de Maven/Gradle</li>
       </ul>
-      <a href="#SPRING_BOOT">SPRING BOOT</a></div>
+  <a href="#SPRING_BOOT">SPRING BOOT</a></div>
 </div>
 
 <div class="qa-box">
@@ -1261,7 +1261,7 @@
         </li>
       </ul>
   </div>
-    <a href="#SPRING_BOOT">SPRING BOOT</a></div>
+<a href="#SPRING_BOOT">SPRING BOOT</a></div>
 
 <div class="qa-box">
     <div class="question"><a name="Q_003" id="Q_003"></a>3. How do you create a basic REST API in Spring Boot? - ¿Cómo se crea una API REST básica en Spring Boot?</div>
@@ -1489,7 +1489,7 @@ public class ApiController { }</code></pre>
     <ul>
       <li><a href="#SPRING_BOOT">SPRING BOOT</a></li>
     </ul>
-    </div>
+</div>
 
   <div class="qa-box">
     <div class="question"><a name="Q_019" id="Q_019"></a>19. What is the role of CommandLineRunner in Spring Boot? - ¿Cuál es el papel de CommandLineRunner en Spring Boot?</div>
@@ -1939,9 +1939,10 @@ public void secureMethod() { }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_051" id="Q_051"></a>51. How do you log events in Spring Boot? - </div>
+    <div class="question"><a name="Q_051" id="Q_051"></a>51. How do you log events in Spring Boot? - ¿Cómo registrar eventos en Spring Boot?</div>
     <div class="answer">
-      Use SLF4J with Logback (default) or switch to Log4j2. Use <code>LoggerFactory</code> to create loggers.
+      <p>Use SLF4J with Logback (default) or switch to Log4j2. Use <code>LoggerFactory</code> to create loggers.    </p>
+      <p>Use SLF4J con Logback (predeterminado) o cambie a Log4j2. Use LoggerFactory para crear registradores. </p>
     </div>
     <pre><code>private static final Logger log = LoggerFactory.getLogger(MyClass.class);
 
@@ -1950,9 +1951,10 @@ log.info("Application started");</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_001"></a>52. How do you handle form submissions in Spring Boot? - </div>
+    <div class="question"><a name="Q_001"></a>52. How do you handle form submissions in Spring Boot? - ¿Cómo se gestionan los envíos de formularios en Spring Boot?</div>
     <div class="answer">
-      Bind form fields to a model object with <code>@ModelAttribute</code> or <code>@RequestParam</code> and return a view.
+      <p>Bind form fields to a model object with <code>@ModelAttribute</code> or <code>@RequestParam</code> and return a view.    </p>
+      <p>Vincula campos de formulario a un objeto modelo con @ModelAttribute o @RequestParam y devuelve una vista. </p>
     </div>
     <pre><code>@PostMapping("/submit")
 public String handleForm(@ModelAttribute User user) {
@@ -1962,9 +1964,10 @@ public String handleForm(@ModelAttribute User user) {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_053" id="Q_053"></a>53. How do you customize JSON serialization in Spring Boot? - </div>
+    <div class="question"><a name="Q_053" id="Q_053"></a>53. How do you customize JSON serialization in Spring Boot? - ¿Cómo personalizar la serialización JSON en Spring Boot?</div>
     <div class="answer">
-      Customize Jackson with annotations like <code>@JsonIgnore</code>, <code>@JsonProperty</code>, or register a custom <code>ObjectMapper</code> bean.
+      <p>Customize Jackson with annotations like <code>@JsonIgnore</code>, <code>@JsonProperty</code>, or register a custom <code>ObjectMapper</code> bean.    </p>
+      <p>Personalice Jackson con anotaciones como @JsonIgnore, @JsonProperty o registre un bean ObjectMapper personalizado. </p>
     </div>
     <pre><code>@JsonIgnore
 private String password;
@@ -1975,9 +1978,10 @@ private String email;</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_054" id="Q_054"></a>54. What are actuator custom endpoints? - </div>
+    <div class="question"><a name="Q_054" id="Q_054"></a>54. What are actuator custom endpoints? - ¿Qué son los puntos finales personalizados del actuador?</div>
     <div class="answer">
-      You can create custom actuator endpoints using <code>@Endpoint</code>, <code>@ReadOperation</code>, <code>@WriteOperation</code>.
+      <p>You can create custom actuator endpoints using <code>@Endpoint</code>, <code>@ReadOperation</code>, <code>@WriteOperation</code>.    </p>
+      <p>Puede crear puntos finales de actuador personalizados utilizando @Endpoint, @ReadOperation, @WriteOperation. </p>
     </div>
     <pre><code>@Endpoint(id = "custom")
 @Component
@@ -1991,18 +1995,20 @@ public class CustomEndpoint {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_055" id="Q_055"></a>55. How do you disable a specific Spring Boot auto-configuration? - </div>
+    <div class="question"><a name="Q_055" id="Q_055"></a>55. How do you disable a specific Spring Boot auto-configuration? - ¿Cómo deshabilitar una configuración automática específica de Spring Boot?</div>
     <div class="answer">
-      Use the <code>@EnableAutoConfiguration(exclude = ...)</code> or use <code>spring.autoconfigure.exclude</code> in properties.
+      <p>Use the <code>@EnableAutoConfiguration(exclude = ...)</code> or use <code>spring.autoconfigure.exclude</code> in properties.    </p>
+      <p>Utilice @EnableAutoConfiguration(exclude = ...) o utilice spring.autoconfigure.exclude en las propiedades. </p>
     </div>
     <pre><code>spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_056" id="Q_056"></a>56. What is Flyway and how do you use it in Spring Boot? - </div>
+    <div class="question"><a name="Q_056" id="Q_056"></a>56. What is Flyway and how do you use it in Spring Boot? - ¿Qué es Flyway y cómo se usa en Spring Boot?</div>
     <div class="answer">
-      Flyway is a database migration tool. Place SQL scripts in <code>db/migration</code> and Spring Boot will run them automatically.
+      <p>Flyway is a database migration tool. Place SQL scripts in <code>db/migration</code> and Spring Boot will run them automatically.    </p>
+      <p>Flyway es una herramienta de migración de bases de datos. Coloque scripts SQL en db/migration y Spring Boot los ejecutará automáticamente. </p>
     </div>
     <pre><code>// V1__init.sql in src/main/resources/db/migration
 CREATE TABLE users (id BIGINT, name VARCHAR(100));</code></pre>
@@ -2010,18 +2016,20 @@ CREATE TABLE users (id BIGINT, name VARCHAR(100));</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_057" id="Q_057"></a>57. How do you use pagination with Spring Data JPA? - </div>
+    <div class="question"><a name="Q_057" id="Q_057"></a>57. How do you use pagination with Spring Data JPA? - ¿Cómo se utiliza la paginación con Spring Data JPA?</div>
     <div class="answer">
-      Use the <code>Pageable</code> interface to paginate query results.
+      <p>Use the <code>Pageable</code> interface to paginate query results.    </p>
+      <p>Utilice la interfaz Pageable para paginar los resultados de la consulta. </p>
     </div>
     <pre><code>Page&lt;User&gt; findByRole(String role, Pageable pageable);</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_058" id="Q_058"></a>58. What is @RepositoryRestResource? - </div>
+    <div class="question"><a name="Q_058" id="Q_058"></a>58. What is @RepositoryRestResource? - ¿Qué es @RepositoryRestResource?</div>
     <div class="answer">
-      Used in Spring Data REST to expose repository interfaces as RESTful endpoints automatically.
+      <p>Used in Spring Data REST to expose repository interfaces as RESTful endpoints automatically.    </p>
+      <p>Se utiliza en Spring Data REST para exponer interfaces de repositorio como puntos finales RESTful automáticamente. </p>
     </div>
     <pre><code>@RepositoryRestResource
 public interface UserRepository extends JpaRepository&lt;User, Long&gt; { }</code></pre>
@@ -2029,9 +2037,10 @@ public interface UserRepository extends JpaRepository&lt;User, Long&gt; { }</cod
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_059" id="Q_059"></a>59. How do you enable caching in Spring Boot? - </div>
+    <div class="question"><a name="Q_059" id="Q_059"></a>59. How do you enable caching in Spring Boot? - ¿Cómo habilitar el almacenamiento en caché en Spring Boot?</div>
     <div class="answer">
-      Use <code>@EnableCaching</code> and annotate methods with <code>@Cacheable</code>, <code>@CacheEvict</code>, etc.
+      <p>Use <code>@EnableCaching</code> and annotate methods with <code>@Cacheable</code>, <code>@CacheEvict</code>, etc.    </p>
+      <p>Utilice @EnableCaching y anote métodos con @Cacheable, @CacheEvict, etc. </p>
     </div>
     <pre><code>@EnableCaching
 @SpringBootApplication
@@ -2043,11 +2052,12 @@ public User getUser(Long id) { }</code></pre>
   </div>
 
 <div class="qa-box">
-    <div class="question"><a name="Q_060" id="Q_060"></a>60. What is Spring Boot Admin? - </div>
+    <div class="question"><a name="Q_060" id="Q_060"></a>60. What is Spring Boot Admin? - ¿Qué es Spring Boot Admin?</div>
 <div class="answer">
-      Spring Boot Admin is a community project to manage and monitor Spring Boot apps using a web UI.
-  </div>
-    <pre><code>// Add dependency and configure:
+      <p>Spring Boot Admin is a community project to manage and monitor Spring Boot apps using a web UI.  </p>
+      <p>Spring Boot Admin es un proyecto comunitario para administrar y monitorear aplicaciones Spring Boot mediante una interfaz de usuario web. </p>
+</div>
+<pre><code>// Add dependency and configure:
 spring.boot.admin.client.url=http://localhost:8080
 spring.application.name=my-app</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
@@ -2055,11 +2065,12 @@ spring.application.name=my-app</code></pre>
 
   <!-- Q&As 61-80 -->
 <div class="qa-box">
-    <div class="question"><a name="Q_061" id="Q_061"></a>61. How do you use Lombok in a Spring Boot project? - </div>
-    <div class="answer">
-      Lombok reduces boilerplate code like getters/setters. Add the Lombok dependency and annotate classes with <code>@Data</code>, <code>@Getter</code>, <code>@Setter</code>, etc.
-    </div>
-    <pre><code>@Data
+    <div class="question"><a name="Q_061" id="Q_061"></a>61. How do you use Lombok in a Spring Boot project? - ¿Cómo se utiliza Lombok en un proyecto Spring Boot?</div>
+<div class="answer">
+      <p>Lombok reduces boilerplate code like getters/setters. Add the Lombok dependency and annotate classes with <code>@Data</code>, <code>@Getter</code>, <code>@Setter</code>, etc.    </p>
+      <p>Lombok reduce el código repetitivo como los getters/setters. Añade la dependencia de Lombok y anota las clases con @Data, @Getter, @Setter, etc. </p>
+</div>
+<pre><code>@Data
 public class User {
   private Long id;
   private String name;
@@ -2068,9 +2079,10 @@ public class User {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_062" id="Q_062"></a>62. How do you integrate Spring Boot with Swagger? - </div>
+    <div class="question"><a name="Q_062" id="Q_062"></a>62. How do you integrate Spring Boot with Swagger? - ¿Cómo integrar Spring Boot con Swagger?</div>
     <div class="answer">
-      Use <code>springdoc-openapi-ui</code> dependency and access Swagger UI at <code>/swagger-ui.html</code>.
+      <p>Use <code>springdoc-openapi-ui</code> dependency and access Swagger UI at <code>/swagger-ui.html</code>.    </p>
+      <p>Utilice la dependencia springdoc-openapi-ui y acceda a Swagger UI en /swagger-ui.html. </p>
     </div>
     <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;org.springdoc&lt;/groupId&gt;
@@ -2081,9 +2093,10 @@ public class User {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_063" id="Q_063"></a>63. How do you inject a list of beans into a Spring component? - </div>
+    <div class="question"><a name="Q_063" id="Q_063"></a>63. How do you inject a list of beans into a Spring component? - ¿Cómo se inyecta una lista de beans en un componente Spring?</div>
     <div class="answer">
-      You can autowire a <code>List&lt;T&gt;</code> or <code>Map&lt;String, T&gt;</code> to inject multiple beans of the same type.
+      <p>You can autowire a <code>List&lt;T&gt;</code> or <code>Map&lt;String, T&gt;</code> to inject multiple beans of the same type.    </p>
+      <p>Puede cablear automáticamente un List&lt;T&gt; o Map&lt;String, T&gt; para inyectar múltiples beans del mismo tipo. </p>
     </div>
     <pre><code>@Autowired
 private List&lt;MyService&gt; services;</code></pre>
@@ -2091,18 +2104,20 @@ private List&lt;MyService&gt; services;</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_064" id="Q_064"></a>64. What is Spring Boot CLI? - </div>
+    <div class="question"><a name="Q_064" id="Q_064"></a>64. What is Spring Boot CLI? - ¿Qué es Spring Boot CLI?</div>
     <div class="answer">
-      It's a command-line interface to run Spring Boot applications written in Groovy without boilerplate code.
+      <p>It's a command-line interface to run Spring Boot applications written in Groovy without boilerplate code.    </p>
+      <p>Es una interfaz de línea de comandos para ejecutar aplicaciones Spring Boot escritas en Groovy sin código repetitivo. </p>
     </div>
     <pre><code>$ spring run app.groovy</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_065" id="Q_065"></a>65. How can you reload properties without restarting the application? - </div>
+    <div class="question"><a name="Q_065" id="Q_065"></a>65. How can you reload properties without restarting the application? - ¿Cómo puedo recargar propiedades sin reiniciar la aplicación?</div>
     <div class="answer">
-      Use Spring Cloud Config or libraries like <code>spring-boot-refresh</code> for dynamic property reloading.
+      <p>Use Spring Cloud Config or libraries like <code>spring-boot-refresh</code> for dynamic property reloading.    </p>
+      <p>Utilice Spring Cloud Config o bibliotecas como spring-boot-refresh para la recarga dinámica de propiedades. </p>
     </div>
     <pre><code>@RefreshScope
 @RestController
@@ -2114,9 +2129,10 @@ public class MyController {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_066" id="Q_066"></a>66. How do you configure a custom login page in Spring Security? - </div>
+    <div class="question"><a name="Q_066" id="Q_066"></a>66. How do you configure a custom login page in Spring Security? - ¿Cómo configurar una página de inicio de sesión personalizada en Spring Security?</div>
     <div class="answer">
-      Override the <code>configure(HttpSecurity http)</code> method and use <code>loginPage()</code>.
+      <p>Override the <code>configure(HttpSecurity http)</code> method and use <code>loginPage()</code>.    </p>
+      <p>Anule el método configure(HttpSecurity http) y utilice loginPage(). </p>
     </div>
     <pre><code>http.formLogin()
   .loginPage("/login")
@@ -2125,9 +2141,10 @@ public class MyController {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_067" id="Q_067"></a>67. What is the use of @ControllerAdvice? - </div>
+    <div class="question"><a name="Q_067" id="Q_067"></a>67. What is the use of @ControllerAdvice? - ¿Para qué sirve @ControllerAdvice?</div>
     <div class="answer">
-      <code>@ControllerAdvice</code> allows centralized exception handling across all controllers.
+      <p><code>@ControllerAdvice</code> allows centralized exception handling across all controllers.    </p>
+      <p>@ControllerAdvice permite el manejo centralizado de excepciones en todos los controladores. </p>
     </div>
     <pre><code>@ControllerAdvice
 public class GlobalExceptionHandler {
@@ -2140,9 +2157,10 @@ public class GlobalExceptionHandler {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_068" id="Q_068"></a>68. How do you add filters in Spring Boot? - </div>
+    <div class="question"><a name="Q_068" id="Q_068"></a>68. How do you add filters in Spring Boot? - ¿Cómo agregar filtros en Spring Boot?</div>
     <div class="answer">
-      Implement <code>javax.servlet.Filter</code> and register it using <code>@Component</code> or <code>FilterRegistrationBean</code>.
+      <p>Implement <code>javax.servlet.Filter</code> and register it using <code>@Component</code> or <code>FilterRegistrationBean</code>.    </p>
+      <p>Implemente javax.servlet.Filter y regístrelo usando @Component o FilterRegistrationBean. </p>
     </div>
     <pre><code>@Component
 public class MyFilter implements Filter {
@@ -2152,9 +2170,10 @@ public class MyFilter implements Filter {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_069" id="Q_069"></a>69. What is the difference between @RestController and @Controller? - </div>
+    <div class="question"><a name="Q_069" id="Q_069"></a>69. What is the difference between @RestController and @Controller? - ¿Cuál es la diferencia entre @RestController y @Controller?</div>
     <div class="answer">
-      <code>@RestController</code> = <code>@Controller</code> + <code>@ResponseBody</code>. It returns JSON/XML directly, not views.
+      <p><code>@RestController</code> = <code>@Controller</code> + <code>@ResponseBody</code>. It returns JSON/XML directly, not views.    </p>
+      <p>@RestController = @Controller + @ResponseBody. Devuelve JSON/XML directamente, no vistas. </p>
     </div>
     <pre><code>@RestController
 public class MyRestController {
@@ -2167,9 +2186,10 @@ public class MyRestController {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_070" id="Q_070"></a>70. How do you inject application properties into a Spring bean? - </div>
+    <div class="question"><a name="Q_070" id="Q_070"></a>70. How do you inject application properties into a Spring bean? - ¿Cómo inyectar propiedades de aplicación en un bean Spring?</div>
     <div class="answer">
-      Use <code>@Value</code> or bind a <code>@ConfigurationProperties</code> class.
+      <p>Use <code>@Value</code> or bind a <code>@ConfigurationProperties</code> class.    </p>
+      <p>Utilice @Value o vincule una clase @ConfigurationProperties. </p>
     </div>
     <pre><code>@Value("${app.name}")
 private String appName;
@@ -2182,9 +2202,10 @@ public class AppProperties {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_071" id="Q_071"></a>71. How do you send scheduled emails in Spring Boot? - </div>
+    <div class="question"><a name="Q_071" id="Q_071"></a>71. How do you send scheduled emails in Spring Boot? - ¿Cómo enviar correos electrónicos programados en Spring Boot?</div>
     <div class="answer">
-      Use <code>@Scheduled</code> with <code>JavaMailSender</code>.
+      <p>Use <code>@Scheduled</code> with <code>JavaMailSender</code>.    </p>
+      <p>Utilice @Scheduled con JavaMailSender. </p>
     </div>
     <pre><code>@Scheduled(fixedRate = 60000)
 public void sendEmail() {
@@ -2194,9 +2215,10 @@ public void sendEmail() {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_072" id="Q_072"></a>72. What is @PostConstruct used for? - </div>
+    <div class="question"><a name="Q_072" id="Q_072"></a>72. What is @PostConstruct used for? - ¿Para qué se utiliza @PostConstruct?</div>
     <div class="answer">
-      Runs a method once after dependency injection is complete.
+      <p>Runs a method once after dependency injection is complete.    </p>
+      <p>Ejecuta un método una vez que se completa la inyección de dependencia. </p>
     </div>
     <pre><code>@PostConstruct
 public void init() {
@@ -2206,9 +2228,10 @@ public void init() {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_073" id="Q_073"></a>73. What is @Scheduled and how do you enable it? - </div>
+    <div class="question"><a name="Q_073" id="Q_073"></a>73. What is @Scheduled and how do you enable it? - ¿Qué es @Scheduled y cómo habilitarlo?</div>
     <div class="answer">
-      <code>@Scheduled</code> is used for scheduling tasks. Enable it with <code>@EnableScheduling</code>.
+      <p><code>@Scheduled</code> is used for scheduling tasks. Enable it with <code>@EnableScheduling</code>.    </p>
+      <p>@Scheduled se utiliza para programar tareas. Habilítelo con @EnableScheduling. </p>
     </div>
     <pre><code>@EnableScheduling
 @SpringBootApplication
@@ -2220,9 +2243,10 @@ public void task() { }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_074" id="Q_074"></a>74. What is Spring Boot Starter? - </div>
+    <div class="question"><a name="Q_074" id="Q_074"></a>74. What is Spring Boot Starter? - ¿Qué es Spring Boot Starter?</div>
     <div class="answer">
-      Starters are convenient dependency descriptors for common functionalities (e.g., web, JPA).
+      <p>Starters are convenient dependency descriptors for common functionalities (e.g., web, JPA).    </p>
+      <p>Los iniciadores son descriptores de dependencia convenientes para funcionalidades comunes (por ejemplo, web, JPA). </p>
     </div>
     <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -2232,9 +2256,10 @@ public void task() { }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_075" id="Q_075"></a>75. How do you run SQL scripts at application startup? - </div>
+    <div class="question"><a name="Q_075" id="Q_075"></a>75. How do you run SQL scripts at application startup? - ¿Cómo ejecutar scripts SQL al iniciar la aplicación?</div>
     <div class="answer">
-      Put <code>schema.sql</code> and <code>data.sql</code> files in <code>resources</code>.
+      <p>Put <code>schema.sql</code> and <code>data.sql</code> files in <code>resources</code>.    </p>
+      <p>Coloque los archivos schema.sql y data.sql en recursos. </p>
     </div>
     <pre><code>src/main/resources/schema.sql
 src/main/resources/data.sql</code></pre>
@@ -2242,7 +2267,7 @@ src/main/resources/data.sql</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_076" id="Q_076"></a>76. What are the different scopes for Spring beans? - </div>
+    <div class="question"><a name="Q_076" id="Q_076"></a>76. What are the different scopes for Spring beans? - ¿Cuáles son los diferentes alcances de los beans Spring?</div>
     <div class="answer">
       Common scopes: <code>singleton</code>, <code>prototype</code>, <code>request</code>, <code>session</code>, <code>application</code>, <code>websocket</code>.
     </div>
@@ -2253,9 +2278,10 @@ public class MyBean { }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_077" id="Q_077"></a>77. What is @ComponentScan used for? - </div>
+    <div class="question"><a name="Q_077" id="Q_077"></a>77. What is @ComponentScan used for? - ¿Para qué se utiliza @ComponentScan?</div>
     <div class="answer">
-      Tells Spring where to search for annotated components to register as beans.
+      <p>Tells Spring where to search for annotated components to register as beans.    </p>
+      <p>Le dice a Spring dónde buscar componentes anotados para registrarlos como beans. </p>
     </div>
     <pre><code>@SpringBootApplication
 @ComponentScan("com.example.services")</code></pre>
@@ -2263,9 +2289,10 @@ public class MyBean { }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_078" id="Q_078"></a>78. How do you customize error responses globally? - </div>
+    <div class="question"><a name="Q_078" id="Q_078"></a>78. How do you customize error responses globally? - ¿Cómo personalizar las respuestas de error a nivel global?</div>
     <div class="answer">
-      Extend <code>ResponseEntityExceptionHandler</code> or use <code>@ControllerAdvice</code>.
+      <p>Extend <code>ResponseEntityExceptionHandler</code> or use <code>@ControllerAdvice</code>.    </p>
+      <p>Amplíe ResponseEntityExceptionHandler o utilice @ControllerAdvice. </p>
     </div>
     <pre><code>@ControllerAdvice
 public class ErrorHandler extends ResponseEntityExceptionHandler {
@@ -2278,9 +2305,10 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_079" id="Q_079"></a>79. How do you use profiles in Spring Boot? - </div>
+    <div class="question"><a name="Q_079" id="Q_079"></a>79. How do you use profiles in Spring Boot? - ¿Cómo se utilizan los perfiles en Spring Boot?</div>
     <div class="answer">
-      Use <code>@Profile</code> annotation and create separate <code>application-{profile}.properties</code> files.
+      <p>Use <code>@Profile</code> annotation and create separate <code>application-{profile}.properties</code> files.    </p>
+      <p>Utilice la anotación @Profile y cree archivos application-{profile}.properties separados. </p>
     </div>
     <pre><code>@Profile("dev")
 @Component
@@ -2289,22 +2317,24 @@ public class DevConfig { }</code></pre>
   </div>
 
 <div class="qa-box">
-    <div class="question"><a name="Q_080" id="Q_080"></a>80. How do you call external REST APIs in Spring Boot? - </div>
+    <div class="question"><a name="Q_080" id="Q_080"></a>80. How do you call external REST APIs in Spring Boot? - ¿Cómo llamar a las API REST externas en Spring Boot?</div>
 <div class="answer">
-      Use <code>RestTemplate</code> or <code>WebClient</code> for non-blocking calls.
-  </div>
-    <pre><code>RestTemplate restTemplate = new RestTemplate();
+      <p>Use <code>RestTemplate</code> or <code>WebClient</code> for non-blocking calls.</p>
+      <p>Utilice RestTemplate o WebClient para llamadas no bloqueantes.</p>
+</div>
+<pre><code>RestTemplate restTemplate = new RestTemplate();
 String result = restTemplate.getForObject("http://api.com/data", String.class);</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
 </div>
   
   <!-- Q&As 81-100 -->
 <div class="qa-box">
-    <div class="question"><a name="Q_081" id="Q_081"></a>81. What is the difference between @Primary and @Qualifier? - </div>
-    <div class="answer">
-      <code>@Primary</code> marks a bean as the default when multiple candidates are available. <code>@Qualifier</code> explicitly selects a bean when ambiguity exists.
-    </div>
-    <pre><code>@Bean
+    <div class="question"><a name="Q_081" id="Q_081"></a>81. What is the difference between @Primary and @Qualifier? - ¿Cuál es la diferencia entre @Primary y @Qualifier?</div>
+<div class="answer">
+      <p><code>@Primary</code> marks a bean as the default when multiple candidates are available. <code>@Qualifier</code> explicitly selects a bean when ambiguity exists.    </p>
+      <p>@Primary marca un bean como predeterminado cuando hay varios candidatos disponibles. @Qualifier selecciona explícitamente un bean cuando existe ambigüedad. </p>
+</div>
+<pre><code>@Bean
 @Primary
 public MyService defaultService() { ... }
 
@@ -2315,9 +2345,10 @@ public MyService specialService() { ... }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_082" id="Q_082"></a>82. How do you set active profiles in Spring Boot? - </div>
+    <div class="question"><a name="Q_082" id="Q_082"></a>82. How do you set active profiles in Spring Boot? - ¿Cómo configurar perfiles activos en Spring Boot?</div>
     <div class="answer">
-      You can set active profiles via <code>application.properties</code>, environment variables, or command-line arguments.
+      <p>You can set active profiles via <code>application.properties</code>, environment variables, or command-line arguments.    </p>
+      <p>Puede configurar perfiles activos a través de application.properties, variables de entorno o argumentos de la línea de comandos. </p>
     </div>
     <pre><code>spring.profiles.active=dev</code></pre>
     <pre><code>java -jar app.jar --spring.profiles.active=prod</code></pre>
@@ -2325,9 +2356,10 @@ public MyService specialService() { ... }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_083" id="Q_083"></a>83. What is a Spring Boot actuator? - </div>
+    <div class="question"><a name="Q_083" id="Q_083"></a>83. What is a Spring Boot actuator? - ¿Qué es un actuador Spring Boot?</div>
     <div class="answer">
-      Spring Boot Actuator provides production-ready endpoints like health, metrics, info, etc., for monitoring and management.
+      <p>Spring Boot Actuator provides production-ready endpoints like health, metrics, info, etc., for monitoring and management.    </p>
+      <p>Spring Boot Actuator proporciona puntos finales listos para producción, como estado, métricas, información, etc., para monitoreo y administración. </p>
     </div>
     <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -2337,29 +2369,32 @@ public MyService specialService() { ... }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_084" id="Q_084"></a>84. How do you secure Actuator endpoints? - </div>
+    <div class="question"><a name="Q_084" id="Q_084"></a>84. How do you secure Actuator endpoints? - ¿Cómo se protegen los puntos finales del actuador?</div>
     <div class="answer">
-      You can restrict access to Actuator endpoints using Spring Security and application properties.
+      <p>You can restrict access to Actuator endpoints using Spring Security and application properties.    </p>
+      <p>Puede restringir el acceso a los puntos finales del actuador mediante Spring Security y las propiedades de la aplicación. </p>
     </div>
     <pre><code>management.endpoints.web.exposure.include=health,info
 management.endpoint.health.roles=ADMIN</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
-  <div class="qa-box">
-    <div class="question"><a name="Q_085" id="Q_085"></a>85. How do you implement custom validation in Spring Boot? - </div>
-    <div class="answer">
-      Use <code>@Constraint</code> to create a custom annotation and a corresponding validator class.
-    </div>
-    <pre><code>@Constraint(validatedBy = MyValidator.class)
+<div class="qa-box">
+    <div class="question"><a name="Q_085" id="Q_085"></a>85. How do you implement custom validation in Spring Boot? - ¿Cómo implementar una validación personalizada en Spring Boot?</div>
+<div class="answer">
+      <p>Use <code>@Constraint</code> to create a custom annotation and a corresponding validator class.    </p>
+      <p>Utilice @Constraint para crear una anotación personalizada y una clase de validador correspondiente. </p>
+</div>
+<pre><code>@Constraint(validatedBy = MyValidator.class)
 public @interface ValidData { }</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_086" id="Q_086"></a>86. What is Spring's Environment abstraction? - </div>
+    <div class="question"><a name="Q_086" id="Q_086"></a>86. What is Spring's Environment abstraction? - ¿Qué es la abstracción de entorno de Spring?</div>
     <div class="answer">
-      It's an abstraction to access profiles and properties. You can inject it using <code>@Autowired</code>.
+      <p>It's an abstraction to access profiles and properties. You can inject it using <code>@Autowired</code>.    </p>
+      <p>Es una abstracción para acceder a perfiles y propiedades. Puedes inyectarla usando @Autowired. </p>
     </div>
     <pre><code>@Autowired
 private Environment env;
@@ -2369,9 +2404,10 @@ String dbUrl = env.getProperty("spring.datasource.url");</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_087" id="Q_087"></a>87. How do you create a multipart file upload endpoint? - </div>
+    <div class="question"><a name="Q_087" id="Q_087"></a>87. How do you create a multipart file upload endpoint? - ¿Cómo se crea un punto final de carga de archivos multiparte?</div>
     <div class="answer">
-      Use <code>@RequestParam("file") MultipartFile file</code> in your controller.
+      <p>Use <code>@RequestParam("file") MultipartFile file</code> in your controller.    </p>
+      <p>Utilice el archivo MultipartFile @RequestParam(&quot;file&quot;) en su controlador. </p>
     </div>
     <pre><code>@PostMapping("/upload")
 public ResponseEntity&lt;?&gt; upload(@RequestParam("file") MultipartFile file) {
@@ -2381,9 +2417,10 @@ public ResponseEntity&lt;?&gt; upload(@RequestParam("file") MultipartFile file) 
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_088" id="Q_088"></a>88. What is the use of the @RequestBody annotation? - </div>
+    <div class="question"><a name="Q_088" id="Q_088"></a>88. What is the use of the @RequestBody annotation? - ¿Cuál es el uso de la anotación @RequestBody?</div>
     <div class="answer">
-      <code>@RequestBody</code> maps the body of an HTTP request to a Java object.
+      <p><code>@RequestBody</code> maps the body of an HTTP request to a Java object.    </p>
+      <p>@RequestBody asigna el cuerpo de una solicitud HTTP a un objeto Java. </p>
     </div>
     <pre><code>@PostMapping("/users")
 public void addUser(@RequestBody User user) {
@@ -2393,9 +2430,10 @@ public void addUser(@RequestBody User user) {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_089" id="Q_089"></a>89. What is the use of @ResponseStatus? - </div>
+    <div class="question"><a name="Q_089" id="Q_089"></a>89. What is the use of @ResponseStatus? - ¿Cuál es el uso de @ResponseStatus?</div>
     <div class="answer">
-      It allows you to define the HTTP status code for a controller method or exception handler.
+      <p>It allows you to define the HTTP status code for a controller method or exception handler.    </p>
+      <p>Le permite definir el código de estado HTTP para un método de controlador o un manejador de excepciones. </p>
     </div>
     <pre><code>@ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException extends RuntimeException { }</code></pre>
@@ -2403,9 +2441,10 @@ public class NotFoundException extends RuntimeException { }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_090" id="Q_090"></a>90. How do you customize Jackson ObjectMapper globally? - </div>
+    <div class="question"><a name="Q_090" id="Q_090"></a>90. How do you customize Jackson ObjectMapper globally? - ¿Cómo personalizar Jackson ObjectMapper globalmente?</div>
     <div class="answer">
-      You can create a <code>@Bean</code> of type <code>ObjectMapper</code> and configure it.
+      <p>You can create a <code>@Bean</code> of type <code>ObjectMapper</code> and configure it.    </p>
+      <p>Puede crear un @Bean de tipo ObjectMapper y configurarlo. </p>
     </div>
     <pre><code>@Bean
 public ObjectMapper objectMapper() {
@@ -2417,9 +2456,10 @@ public ObjectMapper objectMapper() {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_091" id="Q_091"></a>91. How do you implement versioning in REST APIs? - </div>
+    <div class="question"><a name="Q_091" id="Q_091"></a>91. How do you implement versioning in REST APIs? - ¿Cómo implementar el control de versiones en las API REST?</div>
     <div class="answer">
-      Versioning can be done via URI, query parameters, or headers.
+      <p>Versioning can be done via URI, query parameters, or headers.    </p>
+      <p>El control de versiones se puede realizar mediante URI, parámetros de consulta o encabezados. </p>
     </div>
     <pre><code>@GetMapping("/v1/users")
 public List&lt;User&gt; getUsersV1() { ... }</code></pre>
@@ -2427,9 +2467,10 @@ public List&lt;User&gt; getUsersV1() { ... }</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_092" id="Q_092"></a>92. What is a configuration class in Spring? - </div>
+    <div class="question"><a name="Q_092" id="Q_092"></a>92. What is a configuration class in Spring? - ¿Qué es una clase de configuración en Spring?</div>
     <div class="answer">
-      A class annotated with <code>@Configuration</code> defines beans using <code>@Bean</code> methods.
+      <p>A class annotated with <code>@Configuration</code> defines beans using <code>@Bean</code> methods.    </p>
+      <p>Una clase anotada con @Configuration define beans utilizando métodos @Bean. </p>
     </div>
     <pre><code>@Configuration
 public class AppConfig {
@@ -2440,9 +2481,10 @@ public class AppConfig {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_093" id="Q_093"></a>93. What is the difference between @Bean and @Component? - </div>
+    <div class="question"><a name="Q_093" id="Q_093"></a>93. What is the difference between @Bean and @Component? - ¿Cuál es la diferencia entre @Bean y @Component?</div>
     <div class="answer">
-      <code>@Bean</code> is used in configuration classes, <code>@Component</code> is for classpath-scanned classes.
+      <p><code>@Bean</code> is used in configuration classes, <code>@Component</code> is for classpath-scanned classes.    </p>
+      <p>@Bean se utiliza en clases de configuración, @Component es para clases escaneadas por classpath. </p>
     </div>
     <pre><code>@Component
 public class MyService { }
@@ -2456,20 +2498,22 @@ public class AppConfig {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_094" id="Q_094"></a>94. How do you use interceptors in Spring Boot? - </div>
+    <div class="question"><a name="Q_094" id="Q_094"></a>94. How do you use interceptors in Spring Boot? - ¿Cómo se utilizan los interceptores en Spring Boot?</div>
     <div class="answer">
-      Implement <code>HandlerInterceptor</code> and register it in a <code>WebMvcConfigurer</code>.
+      <p>Implement <code>HandlerInterceptor</code> and register it in a <code>WebMvcConfigurer</code>.    </p>
+      <p>Implemente HandlerInterceptor y regístrelo en un WebMvcConfigurer. </p>
     </div>
     <pre><code>public class MyInterceptor implements HandlerInterceptor {
   public boolean preHandle(...) { return true; }
 }</code></pre>
-    <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
+    <p><a href="#SPRING_BOOT">SPRING BOOT</a>0</p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_095" id="Q_095"></a>95. What is the use of @RequestHeader? - </div>
+    <div class="question"><a name="Q_095" id="Q_095"></a>95. What is the use of @RequestHeader? - ¿Cuál es el uso de @RequestHeader?</div>
     <div class="answer">
-      It binds HTTP headers to method parameters in controller methods.
+      <p>It binds HTTP headers to method parameters in controller methods.    </p>
+      <p>Vincula los encabezados HTTP a los parámetros del método en los métodos del controlador. </p>
     </div>
     <pre><code>@GetMapping("/data")
 public String getData(@RequestHeader("User-Agent") String userAgent) {
@@ -2479,9 +2523,10 @@ public String getData(@RequestHeader("User-Agent") String userAgent) {
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_096" id="Q_096"></a>96. How do you log in Spring Boot? - </div>
+    <div class="question"><a name="Q_096" id="Q_096"></a>96. How do you log in Spring Boot? - ¿Cómo iniciar sesión en Spring Boot?</div>
     <div class="answer">
-      Use the built-in logging (Logback) and <code>LoggerFactory</code>.
+      <p>Use the built-in logging (Logback) and <code>LoggerFactory</code>.    </p>
+      <p>Utilice el registro integrado (Logback) y LoggerFactory. </p>
     </div>
     <pre><code>private static final Logger logger = LoggerFactory.getLogger(MyClass.class);
 logger.info("Hello");</code></pre>
@@ -2489,9 +2534,10 @@ logger.info("Hello");</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_097" id="Q_097"></a>97. What is Flyway and how is it used in Spring Boot? - </div>
+    <div class="question"><a name="Q_097" id="Q_097"></a>97. What is Flyway and how is it used in Spring Boot? - ¿Qué es Flyway y cómo se usa en Spring Boot?</div>
     <div class="answer">
-      Flyway handles database migrations via versioned SQL files placed in <code>resources/db/migration</code>.
+      <p>Flyway handles database migrations via versioned SQL files placed in <code>resources/db/migration</code>.    </p>
+      <p>Flyway maneja las migraciones de bases de datos a través de archivos SQL versionados ubicados en recursos/db/migration. </p>
     </div>
     <pre><code>V1__init.sql
 V2__add_users.sql</code></pre>
@@ -2499,27 +2545,30 @@ V2__add_users.sql</code></pre>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_098" id="Q_098"></a>98. What is the role of @EnableAutoConfiguration? - </div>
+    <div class="question"><a name="Q_098" id="Q_098"></a>98. What is the role of @EnableAutoConfiguration? - ¿Cuál es la función de @EnableAutoConfiguration?</div>
     <div class="answer">
-      Enables Spring Boot's auto-configuration mechanism based on classpath settings and properties.
+      <p>Enables Spring Boot's auto-configuration mechanism based on classpath settings and properties.    </p>
+      <p>Habilita el mecanismo de configuración automática de Spring Boot según la configuración y las propiedades de classpath. </p>
     </div>
     <pre><code>@SpringBootApplication // includes @EnableAutoConfiguration</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_099" id="Q_099"></a>99. How do you exclude auto-configuration classes? - </div>
+    <div class="question"><a name="Q_099" id="Q_099"></a>99. How do you exclude auto-configuration classes? - ¿Cómo excluir clases de configuración automática?</div>
     <div class="answer">
-      Use <code>@SpringBootApplication(exclude = ...)</code> to disable specific auto-configs.
+      <p>Use <code>@SpringBootApplication(exclude = ...)</code> to disable specific auto-configs.    </p>
+      <p>Utilice @SpringBootApplication(exclude = ...) para deshabilitar configuraciones automáticas específicas. </p>
     </div>
     <pre><code>@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
   <div class="qa-box">
-    <div class="question"><a name="Q_100" id="Q_100"></a>100. How do you configure logging levels in Spring Boot? - </div>
+    <div class="question"><a name="Q_100" id="Q_100"></a>100. How do you configure logging levels in Spring Boot? - ¿Cómo configurar los niveles de registro en Spring Boot?</div>
     <div class="answer">
-      Set levels in <code>application.properties</code> using <code>logging.level</code> prefix.
+      <p>Set levels in <code>application.properties</code> using <code>logging.level</code> prefix.    </p>
+      <p>Establezca niveles en application.properties usando el prefijo logging.level. </p>
     </div>
     <pre><code>logging.level.org.springframework=INFO
 logging.level.com.example=DEBUG</code></pre>
@@ -2528,9 +2577,10 @@ logging.level.com.example=DEBUG</code></pre>
   
   <!-- Q&As 101-120 -->
 <div class="qa-box">
-  <div class="question"><a name="Q_101" id="Q_101"></a>101. How do you load YAML configuration files in Spring Boot? - </div>
+  <div class="question"><a name="Q_101" id="Q_101"></a>101. How do you load YAML configuration files in Spring Boot? - ¿Cómo se cargan archivos de configuración YAML en Spring Boot?</div>
   <div class="answer">
-    Spring Boot automatically loads <code>application.yml</code> or <code>application-{profile}.yml</code>.
+    <p>Spring Boot automatically loads <code>application.yml</code> or <code>application-{profile}.yml</code>.  </p>
+    <p>Spring Boot carga automáticamente application.yml o application-{profile}.yml. </p>
   </div>
   <pre><code>server:
   port: 8081
@@ -2542,9 +2592,10 @@ spring:
 </div>
 
 <div class="qa-box">
-  <div class="question"><a name="Q_102" id="Q_102"></a>102. How do you override properties at runtime? - </div>
+  <div class="question"><a name="Q_102" id="Q_102"></a>102. How do you override properties at runtime? - ¿Cómo anular propiedades en tiempo de ejecución?</div>
   <div class="answer">
-    You can override using command-line args, environment variables, or system properties.
+    <p>You can override using command-line args, environment variables, or system properties.  </p>
+    <p>Puede anularlo utilizando argumentos de la línea de comandos, variables de entorno o propiedades del sistema. </p>
   </div>
   <pre><code>java -Dserver.port=8082 -jar app.jar</code></pre>
   <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
@@ -2761,7 +2812,7 @@ client.get().uri("/api").retrieve().bodyToMono(String.class);</code></pre>
     <p><a href="#SPRING_BOOT">SPRING BOOT</a></p>
   </div>
 
-  <div class="qa-box">
+<div class="qa-box">
     <div class="question"><a name="Q_122" id="Q_122"></a>122. How do you implement GraphQL in a Spring Boot application? - </div>
     <div class="answer">
       To implement GraphQL in Spring Boot, you need to add dependencies such as <code>spring-boot-starter-graphql</code>, create a schema file, and define resolvers to handle queries and mutations. Spring Boot also integrates with GraphQL tools to help define the GraphQL schema programmatically.
