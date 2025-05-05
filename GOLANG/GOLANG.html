@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Programming - Introduction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-left: 5px solid #00838f;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .answer {
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-left: 5px solid #4caf50;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #eceff1;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #333;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <ul>
+      <li data-start="78" data-end="193">
+        <p data-start="81" data-end="103"><strong data-start="81" data-end="103">Introduction to Go</strong></p>
+        <ul data-start="107" data-end="193"><li data-start="166" data-end="193"><p data-start="168" data-end="193">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="195" data-end="319">
+        <p data-start="198" data-end="215"><strong data-start="198" data-end="215">Go Data Types</strong></p>
+        <ul data-start="219" data-end="319"><li data-start="295" data-end="319"><p data-start="297" data-end="319">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="321" data-end="464">
+        <p data-start="324" data-end="346"><strong data-start="324" data-end="346">Control Flow in Go</strong></p>
+        <ul data-start="350" data-end="464"><li data-start="431" data-end="464"><p data-start="433" data-end="464">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="466" data-end="613">
+        <p data-start="469" data-end="485"><strong data-start="469" data-end="485">Go Functions</strong></p>
+        <ul data-start="489" data-end="613"><li data-start="593" data-end="613"><p data-start="595" data-end="613">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="615" data-end="723">
+        <p data-start="618" data-end="633"><strong data-start="618" data-end="633">Go Pointers</strong></p>
+        <ul data-start="637" data-end="723"><li data-start="699" data-end="723"><p data-start="701" data-end="723">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="725" data-end="826">
+        <p data-start="728" data-end="746"><strong data-start="728" data-end="746">Go Concurrency</strong></p>
+        <ul data-start="750" data-end="826"><li data-start="802" data-end="826"><p data-start="804" data-end="826">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="828" data-end="979">
+        <p data-start="831" data-end="860"><strong data-start="831" data-end="860">Go Packages and Libraries</strong></p>
+        <ul data-start="864" data-end="979">
+          <li data-start="864" data-end="890"></li>
+        </ul>
+      </li>
+      <li data-start="981" data-end="1127">
+        <p data-start="984" data-end="1024"><strong data-start="984" data-end="1024">Go Object-Oriented Programming (OOP)</strong></p>
+        <ul data-start="1028" data-end="1127"><li data-start="1088" data-end="1127"><p data-start="1090" data-end="1127">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="1129" data-end="1239">
+        <p data-start="1132" data-end="1153"><strong data-start="1132" data-end="1153">Go Error Handling</strong></p>
+        <ul data-start="1157" data-end="1239"><li data-start="1208" data-end="1239"><p data-start="1210" data-end="1239">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="1241" data-end="1340">
+        <p data-start="1245" data-end="1269"><strong data-start="1245" data-end="1269">Go Memory Management</strong></p>
+        <ul data-start="1274" data-end="1340"><li data-start="1323" data-end="1340"><p data-start="1325" data-end="1340">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="1342" data-end="1497">
+        <p data-start="1346" data-end="1377"><strong data-start="1346" data-end="1377">Go Testing and Benchmarking</strong></p>
+        <ul data-start="1382" data-end="1497"><li data-start="1477" data-end="1497"><p data-start="1479" data-end="1497">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="1499" data-end="1657">
+        <p data-start="1503" data-end="1540"><strong data-start="1503" data-end="1540">Go Networking and Web Development</strong></p>
+        <ul data-start="1545" data-end="1657">
+          <li data-start="1545" data-end="1571"></li>
+        </ul>
+      </li>
+      <li data-start="1659" data-end="1803">
+        <p data-start="1663" data-end="1700"><strong data-start="1663" data-end="1700">Go Web Services and Microservices</strong></p>
+        <ul data-start="1705" data-end="1803"><li data-start="1768" data-end="1803"><p data-start="1770" data-end="1803">&nbsp;</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="1805" data-end="1948">
+        <p data-start="1809" data-end="1840"><strong data-start="1809" data-end="1840">Go Performance Optimization</strong></p>
+        <ul data-start="1845" data-end="1948"><li data-start="1915" data-end="1948"><p data-start="1917" data-end="1948">e</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="1950" data-end="2117">
+        <p data-start="1954" data-end="1986"><strong data-start="1954" data-end="1986">Go Databases and Persistence</strong></p>
+        <ul data-start="1991" data-end="2117">
+          <li data-start="1991" data-end="2039">
+            <p data-start="1993" data-end="2039">Working with SQL databases (PostgreSQL, MySQL)</p>
+          </li>
+          <li data-start="2044" data-end="2078">
+            <p data-start="2046" data-end="2078">ORM libraries in Go (Gorm, sqlx)</p>
+          </li>
+          <li data-start="2083" data-end="2117">
+            <p data-start="2085" data-end="2117">NoSQL databases (MongoDB, Redis)</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="2119" data-end="2314">
+        <p data-start="2123" data-end="2162"><strong data-start="2123" data-end="2162">Go Deployment and Cloud Integration</strong></p>
+        <ul data-start="2167" data-end="2314">
+          <li data-start="2167" data-end="2211">
+            <p data-start="2169" data-end="2211">Containerizing Go applications with Docker</p>
+          </li>
+          <li data-start="2216" data-end="2272">
+            <p data-start="2218" data-end="2272">Deploying Go apps to cloud platforms (AWS, GCP, Azure)</p>
+          </li>
+          <li data-start="2277" data-end="2314">
+            <p data-start="2279" data-end="2314">CI/CD pipelines for Go applications</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="2316" data-end="2486">
+        <p data-start="2320" data-end="2350"><strong data-start="2320" data-end="2350">Go Security Best Practices</strong></p>
+        <ul data-start="2355" data-end="2486">
+          <li data-start="2355" data-end="2380">
+            <p data-start="2357" data-end="2380">Secure coding practices</p>
+          </li>
+          <li data-start="2385" data-end="2425">
+            <p data-start="2387" data-end="2425">Go security libraries (crypto package)</p>
+          </li>
+          <li data-start="2430" data-end="2486">
+            <p data-start="2432" data-end="2486">Preventing injection attacks and other vulnerabilities</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="2488" data-end="2627">
+        <p data-start="2492" data-end="2533"><strong data-start="2492" data-end="2533">Go Design Patterns and Best Practices</strong></p>
+        <ul data-start="2538" data-end="2627">
+          <li data-start="2538" data-end="2565">
+            <p data-start="2540" data-end="2565">Common Go design patterns</p>
+          </li>
+          <li data-start="2570" data-end="2584">
+            <p data-start="2572" data-end="2584">Idiomatic Go</p>
+          </li>
+          <li data-start="2589" data-end="2627">
+            <p data-start="2591" data-end="2627">Code organization and modularization</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="2629" data-end="2748">
+        <p data-start="2633" data-end="2656"><strong data-start="2633" data-end="2656">Go CLI Applications</strong></p>
+        <ul data-start="2661" data-end="2748">
+          <li data-start="2661" data-end="2696">
+            <p data-start="2663" data-end="2696">Building command-line tools in Go</p>
+          </li>
+          <li data-start="2701" data-end="2719">
+            <p data-start="2703" data-end="2719">Argument parsing</p>
+          </li>
+          <li data-start="2724" data-end="2748">
+            <p data-start="2726" data-end="2748">Packaging Go CLI tools</p>
+          </li>
+        </ul>
+      </li>
+      <li data-start="2750" data-end="2872">
+        <p data-start="2754" data-end="2776"><strong data-start="2754" data-end="2776">Go Advanced Topics</strong></p>
+        <ul data-start="2781" data-end="2872">
+          <li data-start="2781" data-end="2818">
+            <p data-start="2783" data-end="2818">Go internals (compiler and runtime)</p>
+          </li>
+          <li data-start="2823" data-end="2840">
+            <p data-start="2825" data-end="2840">Reflect package</p>
+          </li>
+          <li data-start="2845" data-end="2872">
+            <p data-start="2847" data-end="2872">Go runtime and schedulers</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <h1>&nbsp;</h1>
+        <h1>Introduction to Go Programming</h1>
+        <!-- Question 1 -->
+        <div class="question">
+            1. What is Go and why should you use it?
+        </div>
+        <div class="answer">
+            Go, or Golang, is an open-source programming language designed by Google. It is known for its simplicity, efficiency, and scalability, making it ideal for building large-scale applications, web servers, and cloud-based systems. Its key features include garbage collection, concurrency, and a statically typed structure that provides both flexibility and performance.
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            2. How do you declare a variable in Go?
+        </div>
+        <div class="answer">
+            Variables in Go are declared using the 'var' keyword or using short declaration syntax ':='. Here’s an example:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var x int = 10
+                    y := 20
+                    fmt.Println("x:", x, "y:", y)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            3. What is the difference between "var" and ":=" in Go?
+        </div>
+        <div class="answer">
+            The "var" keyword is used for explicit variable declarations with a specified type, while ":=" is shorthand for variable declaration and initialization in a function, automatically inferring the type.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var a int = 5      // Explicit type declaration
+                    b := 10            // Implicit type declaration (shorthand)
+                    fmt.Println(a, b)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            4. How does Go handle memory management?
+        </div>
+        <div class="answer">
+            Go uses a garbage collector to automatically manage memory allocation and deallocation. This reduces memory leaks and makes Go easier to use compared to languages that require manual memory management, like C or C++.
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            5. How do you define a function in Go?
+        </div>
+        <div class="answer">
+            Functions in Go are defined using the 'func' keyword, followed by the function name, parameters (if any), and the return type (if any).
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func greet(name string) string {
+                    return "Hello, " + name
+                }
+
+                func main() {
+                    fmt.Println(greet("Go"))
+                }
+            </pre>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            6. What are Go's key features?
+        </div>
+        <div class="answer">
+            Go is known for its simplicity, concurrency support (via goroutines and channels), garbage collection, and strong standard library. It is also fast, statically typed, and offers built-in support for testing and profiling.
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            7. What are Go packages?
+        </div>
+        <div class="answer">
+            Packages in Go are used to organize and reuse code. A package is a collection of Go files in the same directory. The main package in Go programs is the "main" package, and packages are imported using the 'import' keyword.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    fmt.Println("Hello, Go!")
+                }
+            </pre>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            8. What is the 'main' function in Go?
+        </div>
+        <div class="answer">
+            The 'main' function is the entry point of any Go application. It is where the program begins execution. Every Go program must have a main package and a main function.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    fmt.Println("This is the main function")
+                }
+            </pre>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            9. How does Go handle concurrency?
+        </div>
+        <div class="answer">
+            Go uses goroutines to handle concurrency. Goroutines are lightweight threads of execution. They are managed by Go's runtime, making it easy to handle concurrent operations.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func greet(name string) {
+                    fmt.Println("Hello, " + name)
+                }
+
+                func main() {
+                    go greet("Go")  // Start goroutine
+                    greet("World")  // Main function
+                }
+            </pre>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            10. What is a Go interface?
+        </div>
+  <div class="answer">
+            An interface in Go is a type that specifies a set of method signatures. A type is considered to implement an interface if it has all the methods declared by the interface.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                type Speaker interface {
+                    Speak() string
+                }
+
+                type Person struct {
+                    Name string
+                }
+
+                func (p Person) Speak() string {
+                    return "Hello, my name is " + p.Name
+                }
+
+                func main() {
+                    var s Speaker
+                    s = Person{Name: "Go Developer"}
+                    fmt.Println(s.Speak())
+                }
+            </pre>
+  </div>
+            <div class="container">
+        <h1>Data Types and Variables in Go</h1>
+        
+        <!-- Question 1 -->
+        <div class="question">
+            1. What are the basic data types in Go?
+        </div>
+        <div class="answer">
+            Go provides several basic data types, including:
+            - Integers: int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64
+            - Floating-point numbers: float32, float64
+            - Complex numbers: complex64, complex128
+            - Boolean: bool
+            - String: string
+            - Byte: byte (alias for uint8)
+            - Rune: rune (alias for int32, used for Unicode code points)
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            2. How do you declare a variable in Go?
+        </div>
+        <div class="answer">
+            Variables in Go can be declared using the 'var' keyword or short declaration ':=' for local variables within functions.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var x int = 10
+                    y := 20  // Short declaration
+                    fmt.Println("x:", x, "y:", y)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            3. How do you declare and initialize multiple variables at once in Go?
+        </div>
+        <div class="answer">
+            You can declare and initialize multiple variables in Go using a single 'var' statement or short declaration:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var a, b, c int = 1, 2, 3
+                    fmt.Println(a, b, c)
+
+                    // Short declaration
+                    x, y := 10, 20
+                    fmt.Println(x, y)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            4. What is the zero value in Go for different data types?
+        </div>
+        <div class="answer">
+            In Go, every data type has a zero value:
+            - int, float64: 0
+            - bool: false
+            - string: ""
+            - pointers: nil
+            - arrays, slices, maps: nil or empty
+            - structs: fields with zero values
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            5. What is a constant in Go and how do you declare one?
+        </div>
+        <div class="answer">
+            A constant is a fixed value that cannot be changed once it is assigned. In Go, constants are declared using the 'const' keyword:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                const pi = 3.14
+                const gravity = 9.81
+
+                func main() {
+                    fmt.Println("Pi:", pi, "Gravity:", gravity)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            6. How do you convert data types in Go?
+        </div>
+        <div class="answer">
+            You can convert between data types explicitly using type conversion:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var i int = 42
+                    var f float64 = float64(i)
+                    fmt.Println(f)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            7. What is the difference between 'var' and ':=' in variable declaration?
+        </div>
+        <div class="answer">
+            'var' is used for explicit declarations where the type can be specified. ':=' is used for implicit declarations and can only be used within functions to declare and initialize variables.
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var a int = 5
+                    b := 10  // Short declaration
+                    fmt.Println(a, b)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            8. What are pointers in Go and how do you declare them?
+        </div>
+        <div class="answer">
+            A pointer in Go holds the memory address of another variable. You can declare a pointer using the '*' operator:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var x int = 58
+                    var p *int = &x
+                    fmt.Println("Address of x:", p)
+                    fmt.Println("Value at address:", *p)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            9. How do you declare and initialize arrays in Go?
+        </div>
+        <div class="answer">
+            Arrays in Go are fixed-length collections of elements. You declare an array by specifying the length and type:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var arr [3]int = [3]int{1, 2, 3}
+                    fmt.Println(arr)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            10. How do you declare and initialize slices in Go?
+        </div>
+        <div class="answer">
+            Slices in Go are dynamic arrays that can grow and shrink. They are declared with a reference to an array:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var slice []int = []int{1, 2, 3, 4}
+                    fmt.Println(slice)
+                }
+            </pre>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Go Programming Resource</p>
+        </footer>
+    </div>
+
+        <footer>
+            <p>&copy; 2025 Go Programming Resource</p>
+        </footer>
+</div>
+    
+<div class="container">
+        <h1>Control Structures in Go</h1>
+        
+        <!-- Question 1 -->
+        <div class="question">
+            1. How does the if statement work in Go?
+        </div>
+        <div class="answer">
+            The 'if' statement in Go allows you to execute a block of code based on a condition:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    x := 10
+                    if x > 5 {
+                        fmt.Println("x is greater than 5")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            2. Can you use an else if statement in Go?
+        </div>
+        <div class="answer">
+            Yes, Go supports the 'else if' construct, which allows you to check multiple conditions:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    x := 15
+                    if x < 10 {
+                        fmt.Println("x is less than 10")
+                    } else if x == 15 {
+                        fmt.Println("x is equal to 15")
+                    } else {
+                        fmt.Println("x is greater than 10 but not 15")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            3. How do you handle multiple conditions with logical operators in Go?
+        </div>
+        <div class="answer">
+            You can combine multiple conditions using logical operators like '&&' (AND) and '||' (OR):
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    x := 5
+                    y := 10
+                    if x > 2 && y < 20 {
+                        fmt.Println("Both conditions are true")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            4. What is the switch statement in Go?
+        </div>
+        <div class="answer">
+            The 'switch' statement in Go evaluates an expression and executes the corresponding case block:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    day := "Monday"
+                    switch day {
+                    case "Monday":
+                        fmt.Println("Start of the week!")
+                    case "Friday":
+                        fmt.Println("Almost weekend!")
+                    default:
+                        fmt.Println("Just another day")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            5. Can you use fallthrough in a Go switch statement?
+        </div>
+        <div class="answer">
+            Yes, Go allows 'fallthrough' in switch cases to execute the next case:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    day := "Monday"
+                    switch day {
+                    case "Monday":
+                        fmt.Println("Start of the week!")
+                        fallthrough
+                    case "Friday":
+                        fmt.Println("Almost weekend!")
+                    default:
+                        fmt.Println("Just another day")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            6. How does the for loop work in Go?
+        </div>
+        <div class="answer">
+            Go has a single 'for' loop construct that can be used in several ways:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    for i := 0; i < 5; i++ {
+                        fmt.Println(i)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            7. Can you write an infinite loop using for in Go?
+        </div>
+        <div class="answer">
+            Yes, an infinite loop can be created by omitting the loop condition:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    for {
+                        fmt.Println("This loop will run forever!")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            8. What is a range in Go and how is it used?
+        </div>
+        <div class="answer">
+            The 'range' keyword in Go is used to iterate over slices, arrays, maps, or channels:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    numbers := []int{1, 2, 3, 4, 5}
+                    for index, value := range numbers {
+                        fmt.Println("Index:", index, "Value:", value)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            9. Can you use a for loop with only a condition in Go?
+        </div>
+        <div class="answer">
+            Yes, a for loop can be written with only a condition (like a while loop in other languages):
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    x := 0
+                    for x < 5 {
+                        fmt.Println(x)
+                        x++
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            10. What is the purpose of the break and continue statements in Go?
+        </div>
+        <div class="answer">
+            'break' exits the current loop or switch, while 'continue' skips to the next iteration of the loop:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    for i := 0; i < 5; i++ {
+                        if i == 3 {
+                            continue // Skip the current iteration
+                        }
+                        if i == 4 {
+                            break // Exit the loop
+                        }
+                        fmt.Println(i)
+                    }
+                }
+            </pre>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Go Programming Resource</p>
+        </footer>
+</div>
+        <div class="container">
+        <h1>Data Structures in Go</h1>
+
+        <!-- Question 1 -->
+        <div class="question">
+            1. What is an array in Go, and how is it declared?
+        </div>
+        <div class="answer">
+            An array in Go is a fixed-length sequence of elements of the same type. You declare an array like this:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    var arr [3]int
+                    arr[0] = 1
+                    arr[1] = 2
+                    arr[2] = 3
+                    fmt.Println(arr)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            2. How do you initialize an array with values in Go?
+        </div>
+        <div class="answer">
+            You can initialize an array with values at the time of declaration:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    arr := [3]int{1, 2, 3}
+                    fmt.Println(arr)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            3. What is a slice in Go, and how does it differ from an array?
+        </div>
+        <div class="answer">
+            A slice is a dynamic, flexible view of an array. Unlike arrays, slices can grow or shrink in size:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    arr := [5]int{1, 2, 3, 4, 5}
+                    slice := arr[1:4]
+                    fmt.Println(slice) // Output: [2 3 4]
+                }
+            </pre>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            4. How do you append to a slice in Go?
+        </div>
+        <div class="answer">
+            You can use the `append()` function to add elements to a slice:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    slice := []int{1, 2, 3}
+                    slice = append(slice, 4, 5)
+                    fmt.Println(slice) // Output: [1 2 3 4 5]
+                }
+            </pre>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            5. What is a map in Go, and how is it declared?
+        </div>
+        <div class="answer">
+            A map in Go is an unordered collection of key-value pairs. You can declare a map like this:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    m := make(map[string]int)
+                    m["a"] = 1
+                    m["b"] = 2
+                    fmt.Println(m)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            6. How do you access elements in a map in Go?
+        </div>
+        <div class="answer">
+            You can access map elements by using the key:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    m := map[string]int{"a": 1, "b": 2}
+                    fmt.Println(m["a"]) // Output: 1
+                }
+            </pre>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            7. How do you check if a key exists in a map in Go?
+        </div>
+        <div class="answer">
+            You can use the comma-ok idiom to check if a key exists in a map:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    m := map[string]int{"a": 1, "b": 2}
+                    value, ok := m["c"]
+                    if ok {
+                        fmt.Println("Key found:", value)
+                    } else {
+                        fmt.Println("Key not found")
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            8. What is a struct in Go, and how is it declared?
+        </div>
+        <div class="answer">
+            A struct is a collection of fields (variables) that are grouped together. You declare a struct like this:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                type Person struct {
+                    Name string
+                    Age  int
+                }
+
+                func main() {
+                    p := Person{Name: "John", Age: 30}
+                    fmt.Println(p)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            9. How do you pass a struct to a function in Go?
+        </div>
+        <div class="answer">
+            You can pass a struct to a function by value or by reference:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                type Person struct {
+                    Name string
+                    Age  int
+                }
+
+                func printPerson(p Person) {
+                    fmt.Println(p.Name, p.Age)
+                }
+
+                func main() {
+                    p := Person{Name: "John", Age: 30}
+                    printPerson(p)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            10. How do you define a method for a struct in Go?
+        </div>
+        <div class="answer">
+            You can define a method for a struct by specifying a receiver:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                type Person struct {
+                    Name string
+                    Age  int
+                }
+
+                func (p Person) greet() {
+                    fmt.Println("Hello, my name is", p.Name)
+                }
+
+                func main() {
+                    p := Person{Name: "John", Age: 30}
+                    p.greet()
+                }
+            </pre>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Go Programming Resource</p>
+        </footer>
+</div>
+        <div class="container">
+        <h1>Concurrency in Go</h1>
+
+        <!-- Question 1 -->
+        <div class="question">
+            1. What is a Goroutine in Go, and how is it created?
+        </div>
+        <div class="answer">
+            A Goroutine is a lightweight thread managed by the Go runtime. You can create a Goroutine by using the `go` keyword:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func sayHello() {
+                    fmt.Println("Hello from Goroutine!")
+                }
+
+                func main() {
+                    go sayHello()  // Start a new Goroutine
+                    fmt.Println("Hello from main!")
+                }
+            </pre>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            2. How does Go handle concurrency with Goroutines?
+        </div>
+        <div class="answer">
+            Go handles concurrency by allowing Goroutines to run concurrently in parallel, using multiple CPUs when possible. The Go runtime schedules the Goroutines to execute independently of each other:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func printNumbers() {
+                    for i := 1; i <= 5; i++ {
+                        fmt.Println(i)
+                    }
+                }
+
+                func printLetters() {
+                    for _, letter := range "abcde" {
+                        fmt.Println(string(letter))
+                    }
+                }
+
+                func main() {
+                    go printNumbers()
+                    go printLetters()
+                    // Wait for goroutines to finish
+                    var input string
+                    fmt.Scanln(&input)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            3. What is a WaitGroup in Go, and how do you use it?
+        </div>
+        <div class="answer">
+            A `sync.WaitGroup` is used to wait for a collection of Goroutines to finish. You add tasks to the WaitGroup and call `Wait()` to block the main Goroutine until all tasks are complete:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "sync"
+                )
+
+                func printNumber(n int, wg *sync.WaitGroup) {
+                    defer wg.Done()
+                    fmt.Println(n)
+                }
+
+                func main() {
+                    var wg sync.WaitGroup
+                    for i := 1; i <= 3; i++ {
+                        wg.Add(1)
+                        go printNumber(i, &wg)
+                    }
+                    wg.Wait() // Wait for all Goroutines to finish
+                }
+            </pre>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            4. What is a Channel in Go, and how do you use it?
+        </div>
+        <div class="answer">
+            A Channel is used to communicate between Goroutines. You can send and receive data through channels:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func greet(ch chan string) {
+                    ch <- "Hello from Goroutine!"
+                }
+
+                func main() {
+                    ch := make(chan string)
+                    go greet(ch)
+                    fmt.Println(<-ch) // Receive the message from the channel
+                }
+            </pre>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            5. What is a buffered channel in Go, and when would you use it?
+        </div>
+        <div class="answer">
+            A buffered channel allows you to send a limited number of messages without needing the receiver to be ready immediately:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    ch := make(chan string, 2) // Buffered channel with capacity of 2
+                    ch <- "First message"
+                    ch <- "Second message"
+                    fmt.Println(<-ch)
+                    fmt.Println(<-ch)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            6. What is the `select` statement in Go, and how is it used?
+        </div>
+        <div class="answer">
+            The `select` statement allows you to wait on multiple channel operations. It blocks until one of the channels is ready:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func sendMessage(ch chan string) {
+                    ch <- "Hello from select"
+                }
+
+                func main() {
+                    ch := make(chan string)
+                    go sendMessage(ch)
+                    select {
+                    case msg := <-ch:
+                        fmt.Println(msg)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            7. How do you close a channel in Go?
+        </div>
+        <div class="answer">
+            You can close a channel to indicate no more values will be sent. This is done using the `close()` function:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func main() {
+                    ch := make(chan string)
+                    go func() {
+                        ch <- "Message 1"
+                        ch <- "Message 2"
+                        close(ch) // Close the channel
+                    }()
+                    for msg := range ch { // Iterate over the channel until it is closed
+                        fmt.Println(msg)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            8. What is the `defer` statement in Go, and how is it used in concurrency?
+        </div>
+        <div class="answer">
+            The `defer` statement delays the execution of a function until the surrounding function returns. It can be useful in concurrency to ensure cleanup:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func printNumbers() {
+                    defer fmt.Println("Done printing numbers!")
+                    for i := 1; i <= 3; i++ {
+                        fmt.Println(i)
+                    }
+                }
+
+                func main() {
+                    go printNumbers()
+                    var input string
+                    fmt.Scanln(&input)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            9. What is the `atomic` package in Go, and when should you use it?
+        </div>
+        <div class="answer">
+            The `atomic` package provides low-level atomic operations for synchronizing access to shared variables. Use it for safe concurrent access to variables:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "sync/atomic"
+                    "unsafe"
+                )
+
+                func main() {
+                    var counter int32
+                    atomic.AddInt32(&counter, 1)
+                    fmt.Println(counter)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            10. How do you handle race conditions in Go?
+        </div>
+        <div class="answer">
+            To handle race conditions, you can use synchronization primitives such as `sync.Mutex` or `sync.RWMutex`:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "sync"
+                )
+
+                var counter int
+                var mu sync.Mutex
+
+                func increment() {
+                    mu.Lock()
+                    counter++
+                    mu.Unlock()
+                }
+
+                func main() {
+                    for i := 0; i < 1000; i++ {
+                        go increment()
+                    }
+                    fmt.Println("Counter:", counter)
+                }
+            </pre>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Go Programming Resource</p>
+        </footer>
+</div>
+        <div class="container">
+        <h1>Error Handling in Go</h1>
+
+        <!-- Question 1 -->
+        <div class="question">
+            1. How does Go handle errors?
+        </div>
+        <div class="answer">
+            Go handles errors by returning them as values from functions, typically the last return value. If the error is `nil`, it means there was no error:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "errors"
+                )
+
+                func divide(a, b int) (int, error) {
+                    if b == 0 {
+                        return 0, errors.New("division by zero")
+                    }
+                    return a / b, nil
+                }
+
+                func main() {
+                    result, err := divide(10, 0)
+                    if err != nil {
+                        fmt.Println("Error:", err)
+                    } else {
+                        fmt.Println("Result:", result)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question">
+            2. What is the `error` type in Go?
+        </div>
+        <div class="answer">
+            The `error` type is an interface that is implemented by types that represent errors. It has a single method, `Error()`, that returns the error message:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                type MyError struct {
+                    Message string
+                }
+
+                func (e *MyError) Error() string {
+                    return e.Message
+                }
+
+                func main() {
+                    err := &MyError{Message: "Something went wrong"}
+                    fmt.Println(err.Error())
+                }
+            </pre>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question">
+            3. How do you create a custom error in Go?
+        </div>
+        <div class="answer">
+            You can create a custom error by defining a type that implements the `Error()` method:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                type FileError struct {
+                    FileName string
+                    ErrorMsg string
+                }
+
+                func (e *FileError) Error() string {
+                    return fmt.Sprintf("Error with file %s: %s", e.FileName, e.ErrorMsg)
+                }
+
+                func main() {
+                    err := &FileError{"data.txt", "file not found"}
+                    fmt.Println(err.Error())
+                }
+            </pre>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question">
+            4. How do you handle multiple errors in Go?
+        </div>
+        <div class="answer">
+            You can handle multiple errors by checking each one and either logging them or handling them appropriately:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "errors"
+                )
+
+                func validate(input string) error {
+                    if input == "" {
+                        return errors.New("input cannot be empty")
+                    }
+                    return nil
+                }
+
+                func main() {
+                    inputs := []string{"", "valid input"}
+                    for _, input := range inputs {
+                        if err := validate(input); err != nil {
+                            fmt.Println("Error:", err)
+                        } else {
+                            fmt.Println("Input is valid:", input)
+                        }
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question">
+            5. What is `defer` used for in error handling?
+        </div>
+        <div class="answer">
+            `defer` is often used to ensure that cleanup tasks are performed, such as closing a file, even when an error occurs:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "os"
+                )
+
+                func readFile(fileName string) error {
+                    file, err := os.Open(fileName)
+                    if err != nil {
+                        return err
+                    }
+                    defer file.Close() // Ensures the file is closed even if there's an error
+                    fmt.Println("Reading file:", fileName)
+                    return nil
+                }
+
+                func main() {
+                    if err := readFile("data.txt"); err != nil {
+                        fmt.Println("Error:", err)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question">
+            6. How do you use `panic` and `recover` in Go?
+        </div>
+        <div class="answer">
+            `panic` is used to stop normal execution and begin unwinding the stack. `recover` allows you to regain control when panics occur:
+            <pre class="code">
+                package main
+
+                import "fmt"
+
+                func safeDivide(a, b int) (int, error) {
+                    defer func() {
+                        if r := recover(); r != nil {
+                            fmt.Println("Recovered from panic:", r)
+                        }
+                    }()
+                    if b == 0 {
+                        panic("division by zero")
+                    }
+                    return a / b, nil
+                }
+
+                func main() {
+                    result, err := safeDivide(10, 0)
+                    fmt.Println("Result:", result, "Error:", err)
+                }
+            </pre>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question">
+            7. Can you chain errors in Go?
+        </div>
+        <div class="answer">
+            Yes, Go supports error chaining using `fmt.Errorf` or custom error types that wrap other errors:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "errors"
+                )
+
+                func foo() error {
+                    return errors.New("error in foo")
+                }
+
+                func bar() error {
+                    err := foo()
+                    if err != nil {
+                        return fmt.Errorf("bar failed: %w", err) // Wrap the error
+                    }
+                    return nil
+                }
+
+                func main() {
+                    if err := bar(); err != nil {
+                        fmt.Println("Error:", err)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question">
+            8. How can you handle errors in Go without terminating the program?
+        </div>
+        <div class="answer">
+            You can handle errors gracefully by logging them or by returning them to the caller instead of using `panic`:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "errors"
+                )
+
+                func divide(a, b int) (int, error) {
+                    if b == 0 {
+                        return 0, errors.New("division by zero")
+                    }
+                    return a / b, nil
+                }
+
+                func main() {
+                    result, err := divide(10, 0)
+                    if err != nil {
+                        fmt.Println("Error:", err)
+                    } else {
+                        fmt.Println("Result:", result)
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question">
+            9. What is the `errors.Is` function in Go?
+        </div>
+        <div class="answer">
+            The `errors.Is` function checks if an error is equal to a specific error or wrapped error:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "errors"
+                )
+
+                var ErrNotFound = errors.New("not found")
+
+                func fetchItem(id int) error {
+                    if id <= 0 {
+                        return ErrNotFound
+                    }
+                    return nil
+                }
+
+                func main() {
+                    if err := fetchItem(0); err != nil {
+                        if errors.Is(err, ErrNotFound) {
+                            fmt.Println("Item not found")
+                        } else {
+                            fmt.Println("Error:", err)
+                        }
+                    }
+                }
+            </pre>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question">
+            10. How do you handle timeouts and cancellations in Go?
+        </div>
+        <div class="answer">
+            You can use context and the `timeout` pattern to handle timeouts and cancellations:
+            <pre class="code">
+                package main
+
+                import (
+                    "fmt"
+                    "time"
+                    "context"
+                )
+
+                func fetchData(ctx context.Context) error {
+                    select {
+                    case <-time.After(2 * time.Second):
+                        return nil // Simulate success
+                    case <-ctx.Done():
+                        return ctx.Err() // Timeout or cancellation
+                    }
+                }
+
+                func main() {
+                    ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+                    defer cancel()
+
+                    if err := fetchData(ctx); err != nil {
+                        fmt.Println("Error:", err)
+                    }
+                }
+            </pre>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Go Programming Resource</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airflow Q&A - Set 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+    .qa-set {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .qa-set h2 {
+      font-size: 1.5em;
+      color: #2c3e50;
+    }
+    .qa-set p {
+      font-size: 1em;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .code {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin-bottom: 15px;
+    }
+    pre, code {
+      display: block;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .answer {
+      margin-top: 10px;
+      font-style: italic;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Airflow Q&A - Set 1</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>1. What is Apache Airflow?</h2>
+      <p>Apache Airflow is an open-source platform to programmatically author, schedule, and monitor workflows. It allows you to define complex workflows as directed acyclic graphs (DAGs) of tasks.</p>
+      <pre><code>import airflow
+from airflow import DAG
+from airflow.operators.dummy_operator import DummyOperator
+from datetime import datetime
+
+dag = DAG('example_dag', start_date=datetime(2023, 5, 1))
+
+start_task = DummyOperator(task_id='start', dag=dag)
+end_task = DummyOperator(task_id='end', dag=dag)
+
+start_task >> end_task</code></pre>
+      <p class="answer">Answer: Airflow is a platform for authoring, scheduling, and monitoring workflows. It allows for the easy construction and management of complex task dependencies.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>2. What is a DAG in Airflow?</h2>
+      <p>A Directed Acyclic Graph (DAG) is a collection of tasks with defined dependencies between them. It represents the workflow, where each node is a task, and the edges represent the dependencies between those tasks.</p>
+      <pre><code>dag = DAG('example_dag', default_args=default_args, schedule_interval='@daily')
+task1 = DummyOperator(task_id='task1', dag=dag)
+task2 = DummyOperator(task_id='task2', dag=dag)
+
+task1 >> task2</code></pre>
+      <p class="answer">Answer: A DAG is a collection of tasks organized in a way that reflects their dependencies and execution order. It defines the structure of your workflow.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>3. What are operators in Airflow?</h2>
+      <p>Operators in Airflow define the work to be performed. There are many types of operators, such as BashOperator, PythonOperator, and DummyOperator, each serving a specific function in task execution.</p>
+      <pre><code>from airflow.operators.bash_operator import BashOperator
+
+task = BashOperator(
+    task_id='bash_task',
+    bash_command='echo "Hello World"',
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: Operators are used in tasks to define the actions to be performed, such as executing a bash command, running a Python function, or making an HTTP request.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>4. What is the difference between a task and a DAG in Airflow?</h2>
+      <p>A task represents a single unit of work that can be executed, while a DAG is a collection of tasks with defined dependencies that need to be executed in a specific order.</p>
+      <pre><code>dag = DAG('example_dag', start_date=datetime(2023, 5, 1))
+
+task1 = DummyOperator(task_id='task1', dag=dag)
+task2 = DummyOperator(task_id='task2', dag=dag)
+
+task1 >> task2</code></pre>
+      <p class="answer">Answer: A DAG is a collection of tasks, while a task is a single operation in the workflow that is executed as part of a DAG.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>5. How do you schedule a DAG in Airflow?</h2>
+      <p>You can schedule a DAG by setting the `schedule_interval` parameter. It can be set to a cron expression or a predefined string like `@daily`, `@hourly`, etc.</p>
+      <pre><code>dag = DAG('example_dag', schedule_interval='@daily', start_date=datetime(2023, 5, 1))</code></pre>
+      <p class="answer">Answer: The `schedule_interval` parameter determines the frequency at which the DAG is triggered. You can use cron expressions or special strings for scheduling.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>6. What are Airflow task dependencies?</h2>
+      <p>Task dependencies define the order in which tasks should run. You can set dependencies using the `>>` operator to specify which tasks should run before or after others.</p>
+      <pre><code>task1 >> task2  # task1 runs before task2
+task2 >> task3  # task2 runs before task3</code></pre>
+      <p class="answer">Answer: Task dependencies define the execution order of tasks. By chaining tasks with `>>` or using `set_upstream()` and `set_downstream()`, you can establish dependencies.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>7. How can you pass parameters between tasks in Airflow?</h2>
+      <p>You can pass parameters between tasks using XComs. XComs allow tasks to exchange messages, such as passing a value from one task to another.</p>
+      <pre><code>def push_value(**kwargs):
+    value = 'some value'
+    kwargs['ti'].xcom_push(key='my_key', value=value)
+
+def pull_value(**kwargs):
+    value = kwargs['ti'].xcom_pull(key='my_key', task_ids='push_task')
+    print(value)
+
+push_task = PythonOperator(
+    task_id='push_task',
+    python_callable=push_value,
+    dag=dag
+)
+
+pull_task = PythonOperator(
+    task_id='pull_task',
+    python_callable=pull_value,
+    dag=dag
+)
+
+push_task >> pull_task</code></pre>
+      <p class="answer">Answer: XComs (short for "Cross-communication") allow tasks to exchange data. You can push data to XComs in one task and pull it in another.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>8. What is Airflow's Web UI?</h2>
+      <p>The Airflow Web UI is a web-based interface that allows users to monitor and manage their workflows, view logs, and interact with tasks and DAGs.</p>
+      <pre><code># The Web UI can be accessed at http://localhost:8080 (by default)
+</code></pre>
+      <p class="answer">Answer: The Web UI provides a user-friendly interface for visualizing DAGs, managing tasks, and reviewing logs and task statuses.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>9. How do you create a custom operator in Airflow?</h2>
+      <p>To create a custom operator, you need to subclass an existing operator (e.g., BaseOperator) and implement the `execute()` method with the specific logic for your task.</p>
+      <pre><code>from airflow.models import BaseOperator
+from airflow.utils.decorators import apply_defaults
+
+class CustomOperator(BaseOperator):
+    @apply_defaults
+    def __init__(self, param1, param2, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.param1 = param1
+        self.param2 = param2
+
+    def execute(self, context):
+        print(f'Executing task with {self.param1} and {self.param2}')
+
+custom_task = CustomOperator(
+    task_id='custom_task',
+    param1='value1',
+    param2='value2',
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: A custom operator is created by subclassing `BaseOperator` and overriding the `execute()` method to implement the task's specific logic.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>10. What is Airflow's scheduler?</h2>
+      <p>The Airflow scheduler is responsible for executing tasks on a specified schedule. It monitors the DAGs and triggers tasks when their scheduled time arrives or when dependencies are met.</p>
+      <pre><code># Airflow scheduler runs automatically when you start the Airflow services
+</code></pre>
+      <p class="answer">Answer: The scheduler triggers tasks according to their schedule and dependencies. It ensures that tasks are executed at the right time and in the correct order.</p>
+    </div>
+  </div>
+  <h1>Airflow Q&A - Set 2</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>11. How do you configure Airflow connections?</h2>
+      <p>Airflow connections are configured through the Web UI or via environment variables. You can create a connection to databases, cloud providers, or other external services that your tasks will interact with.</p>
+      <pre><code># In the Airflow UI, go to Admin > Connections to add a connection.
+# Alternatively, use environment variables for credentials:
+# Example for PostgreSQL:
+export AIRFLOW_CONN_MY_DB='postgres://username:password@localhost:5432/mydatabase'</code></pre>
+      <p class="answer">Answer: Connections in Airflow can be configured either through the Web UI or environment variables, which store connection details for external services.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>12. What is the purpose of the `on_failure_callback` in Airflow?</h2>
+      <p>The `on_failure_callback` allows you to specify a function that will be triggered if a task fails. It can be used to send notifications or perform cleanup actions.</p>
+      <pre><code>from airflow.operators.dummy_operator import DummyOperator
+
+def notify_failure(context):
+    print("Task failed! Sending notifications...")
+
+task = DummyOperator(
+    task_id='example_task',
+    on_failure_callback=notify_failure,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `on_failure_callback` is used to define custom behavior when a task fails, such as sending an email or logging an error message.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>13. What is the `BranchPythonOperator` in Airflow?</h2>
+      <p>The `BranchPythonOperator` allows you to conditionally choose which path to follow in a workflow. It evaluates a Python function and branches to the task returned by the function.</p>
+      <pre><code>from airflow.operators.python_operator import BranchPythonOperator
+
+def choose_branch(**kwargs):
+    if kwargs['execution_date'].day % 2 == 0:
+        return 'even_day_task'
+    else:
+        return 'odd_day_task'
+
+branch_task = BranchPythonOperator(
+    task_id='branch_task',
+    python_callable=choose_branch,
+    provide_context=True,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `BranchPythonOperator` executes a Python function and allows you to conditionally select which downstream task to run based on the function's output.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>14. How do you trigger a DAG manually in Airflow?</h2>
+      <p>You can trigger a DAG manually from the Web UI or via the command line using the `airflow dags trigger` command.</p>
+      <pre><code># Triggering DAG from the command line
+airflow dags trigger 'example_dag'</code></pre>
+      <p class="answer">Answer: To trigger a DAG manually, you can use the Web UI or the CLI with the command `airflow dags trigger` followed by the DAG name.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>15. What is the `PythonOperator` in Airflow?</h2>
+      <p>The `PythonOperator` is used to execute a Python function as a task in your workflow. It allows you to run any Python code inside an Airflow task.</p>
+      <pre><code>from airflow.operators.python_operator import PythonOperator
+
+def my_python_task():
+    print("Executing Python task")
+
+python_task = PythonOperator(
+    task_id='python_task',
+    python_callable=my_python_task,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `PythonOperator` allows you to execute Python functions as tasks, enabling you to integrate Python code into your Airflow workflows.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>16. What is the difference between `airflow` and `airflow webserver` commands?</h2>
+      <p>The `airflow` command is used for various administrative tasks in Airflow, such as triggering DAGs, managing connections, and upgrading the database. The `airflow webserver` command starts the Web UI server.</p>
+      <pre><code># To start the Airflow Web UI
+airflow webserver --port 8080</code></pre>
+      <p class="answer">Answer: `airflow` is a general command-line interface for managing Airflow tasks, while `airflow webserver` specifically starts the Web UI server for managing and monitoring workflows.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>17. What are "task retries" in Airflow?</h2>
+      <p>Task retries are used to automatically retry a task if it fails. You can configure the number of retries and the delay between retries using the `retries` and `retry_delay` parameters.</p>
+      <pre><code>task = DummyOperator(
+    task_id='example_task',
+    retries=3,
+    retry_delay=timedelta(minutes=5),
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: Task retries are configured with the `retries` and `retry_delay` parameters. They allow tasks to be retried a specified number of times if they fail.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>18. What are Airflow pools?</h2>
+      <p>Airflow pools allow you to limit the number of concurrent task instances for certain types of tasks. Pools are useful to avoid overwhelming a resource or service.</p>
+      <pre><code># Defining a pool with a limit of 5 concurrent task instances
+task = DummyOperator(
+    task_id='example_task',
+    pool='my_pool',
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: Pools help limit the number of concurrent tasks for specific tasks, helping manage resources more efficiently by controlling task concurrency.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>19. What is the `SubDagOperator` in Airflow?</h2>
+      <p>The `SubDagOperator` is used to define a sub-DAG within a task. It allows you to organize complex workflows into smaller, reusable parts.</p>
+      <pre><code>from airflow.operators.subdag_operator import SubDagOperator
+
+def subdag(parent_dag_name, child_dag_name, args):
+    subdag = DAG(child_dag_name, default_args=args, schedule_interval="@daily")
+    task = DummyOperator(task_id='subdag_task', dag=subdag)
+    return subdag
+
+subdag_task = SubDagOperator(
+    task_id='subdag_task',
+    subdag=subdag('parent_dag', 'child_dag', default_args),
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `SubDagOperator` allows you to define a sub-DAG within a main DAG. This helps to break down complex workflows into smaller, manageable pieces.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>20. How can you monitor a DAG's progress in Airflow?</h2>
+      <p>In Airflow, you can monitor a DAG's progress through the Web UI, where you can view task statuses, logs, and overall DAG performance.</p>
+      <pre><code># The Web UI is available by default at http://localhost:8080
+</code></pre>
+      <p class="answer">Answer: Monitoring a DAG's progress can be done through the Airflow Web UI, where you can view task execution status, logs, and even retry or pause tasks.</p>
+    </div>
+  </div>
+    <h1>Airflow Q&A - Set 3</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>21. How do you use the `DummyOperator` in Airflow?</h2>
+      <p>The `DummyOperator` is used as a placeholder operator in a DAG. It does not perform any task but is often used for organizing and structuring workflows.</p>
+      <pre><code>from airflow.operators.dummy_operator import DummyOperator
+
+dummy_task = DummyOperator(
+    task_id='dummy_task',
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `DummyOperator` is used as a no-op placeholder, often to structure DAGs or provide dependencies between tasks.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>22. What is the `TaskInstance` object in Airflow?</h2>
+      <p>The `TaskInstance` object represents a specific run of a task. It provides access to task parameters, task status, and execution context.</p>
+      <pre><code>from airflow.models import TaskInstance
+
+task_instance = TaskInstance(task=task, execution_date=execution_date)
+task_instance.run()  # To execute the task instance</code></pre>
+      <p class="answer">Answer: The `TaskInstance` object encapsulates a specific execution of a task, providing access to execution details like status and logs.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>23. What is the use of the `ShortCircuitOperator` in Airflow?</h2>
+      <p>The `ShortCircuitOperator` is used to skip downstream tasks based on a condition. If the condition is false, the operator will short-circuit, stopping the execution of subsequent tasks.</p>
+      <pre><code>from airflow.operators.python_operator import ShortCircuitOperator
+
+def check_condition():
+    return True  # Or any condition
+
+short_circuit_task = ShortCircuitOperator(
+    task_id='check_condition_task',
+    python_callable=check_condition,
+    provide_context=True,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `ShortCircuitOperator` allows you to skip downstream tasks based on a condition, effectively short-circuiting the DAG if the condition is not met.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>24. How do you schedule a DAG in Airflow?</h2>
+      <p>You can schedule a DAG by setting the `schedule_interval` parameter. This can be a cron expression, a timedelta object, or a preset string like `@daily`.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    schedule_interval='@daily',  # Run the DAG every day at midnight
+    default_args=default_args
+)</code></pre>
+      <p class="answer">Answer: The `schedule_interval` parameter defines how often the DAG should run, and it can be set using cron syntax, timedelta, or predefined strings like `@daily`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>25. What are Airflow Variables and how are they used?</h2>
+      <p>Airflow Variables are used to store and retrieve key-value pairs that can be shared across tasks in a DAG. They are useful for configuration and storing sensitive data.</p>
+      <pre><code>from airflow.models import Variable
+
+# Get a variable's value
+my_var = Variable.get("my_variable")
+
+# Set a variable's value
+Variable.set("my_variable", "my_value")</code></pre>
+      <p class="answer">Answer: Airflow Variables are used to store configuration values and other data that can be accessed by tasks in a DAG, allowing for easier management and reusability.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>26. What is the purpose of the `SlackAPIPostOperator`?</h2>
+      <p>The `SlackAPIPostOperator` is used to send messages to a Slack channel as part of your DAG workflow. It's commonly used for task notifications.</p>
+      <pre><code>from airflow.providers.slack.operators.slack_api import SlackAPIPostOperator
+
+slack_task = SlackAPIPostOperator(
+    task_id='send_slack_message',
+    channel='#general',
+    text='Hello from Airflow!',
+    token='your-slack-api-token',
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `SlackAPIPostOperator` is used to send messages to Slack channels, typically for notifying users about task statuses or failures.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>27. How do you pass parameters between tasks in Airflow?</h2>
+      <p>Parameters can be passed between tasks using XComs (short for "cross-communication"). Tasks can push and pull data from the XComs system to share information.</p>
+      <pre><code>from airflow.operators.python_operator import PythonOperator
+
+def push_xcom(**kwargs):
+    kwargs['ti'].xcom_push(key='my_key', value='my_value')
+
+push_task = PythonOperator(
+    task_id='push_task',
+    python_callable=push_xcom,
+    provide_context=True,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: XComs are used in Airflow to pass data between tasks. A task can push data using `xcom_push()` and another task can retrieve it with `xcom_pull()`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>28. How do you manage task dependencies in Airflow?</h2>
+      <p>Task dependencies in Airflow can be set using the `set_upstream()` and `set_downstream()` methods or by using the `>>` and `<<` operators to define task order.</p>
+      <pre><code>task_1 >> task_2  # task_1 runs before task_2
+task_2.set_upstream(task_1)  # Another way to set dependency</code></pre>
+      <p class="answer">Answer: Task dependencies in Airflow are defined using methods like `set_upstream()`, `set_downstream()`, or the `>>` and `<<` operators to create DAG flow.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>29. What is the difference between `task_id` and `dag_id`?</h2>
+      <p>The `task_id` is a unique identifier for a task within a DAG, whereas the `dag_id` is a unique identifier for the entire DAG. Both are used to reference tasks and DAGs within the Airflow system.</p>
+      <pre><code>task = PythonOperator(
+    task_id='example_task',  # Unique ID for the task
+    dag_id='my_dag',  # Unique ID for the DAG
+    python_callable=my_function,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: `task_id` uniquely identifies a task within a DAG, while `dag_id` identifies the DAG itself.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>30. What are "Dynamic DAGs" in Airflow?</h2>
+      <p>Dynamic DAGs are DAGs that are generated programmatically based on conditions or external factors. They allow you to create a set of tasks dynamically at runtime.</p>
+      <pre><code>def create_dynamic_dag(dag_id, schedule):
+    dag = DAG(dag_id, schedule_interval=schedule)
+    task = PythonOperator(
+        task_id='dynamic_task',
+        python_callable=my_function,
+        dag=dag
+    )
+    return dag
+
+# Creating dynamic DAGs
+dynamic_dag = create_dynamic_dag('dynamic_dag_id', '@daily')</code></pre>
+      <p class="answer">Answer: Dynamic DAGs are generated dynamically at runtime, often using Python functions to create tasks or DAGs based on conditions.</p>
+    </div>
+  </div>
+    <h1>Airflow Q&A - Set 4</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>31. What is the `PythonOperator` in Airflow?</h2>
+      <p>The `PythonOperator` is used to execute a Python function within a DAG. This operator allows for the execution of Python code and integrates Python logic within your Airflow workflows.</p>
+      <pre><code>from airflow.operators.python_operator import PythonOperator
+
+def my_function():
+    print("Executing Python task")
+
+python_task = PythonOperator(
+    task_id='python_task',
+    python_callable=my_function,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `PythonOperator` runs a Python function as part of an Airflow task, enabling Python logic to be integrated into your workflows.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>32. What is the use of `BranchPythonOperator` in Airflow?</h2>
+      <p>The `BranchPythonOperator` is used to branch the execution flow based on a condition. It allows you to create conditional workflows where only one of several paths is executed.</p>
+      <pre><code>from airflow.operators.python_operator import BranchPythonOperator
+
+def choose_branch():
+    return 'branch_1'  # Or another branch
+
+branch_task = BranchPythonOperator(
+    task_id='branch_task',
+    python_callable=choose_branch,
+    provide_context=True,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `BranchPythonOperator` enables conditional execution of tasks by choosing one path based on a Python function’s return value.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>33. How do you define retries for a task in Airflow?</h2>
+      <p>Retries for tasks can be defined by setting the `retries` parameter in the task’s arguments. This defines the number of times the task will be retried in case of failure.</p>
+      <pre><code>task = PythonOperator(
+    task_id='my_task',
+    python_callable=my_function,
+    retries=3,  # Number of retries before failing the task
+    retry_delay=timedelta(minutes=5),  # Time delay between retries
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `retries` parameter controls how many times a task should be retried in case of failure, and `retry_delay` sets the time between retries.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>34. What is the purpose of the `SubDagOperator` in Airflow?</h2>
+      <p>The `SubDagOperator` allows for defining a sub-DAG inside a parent DAG. This is useful for organizing complex workflows and reusing parts of a DAG in other workflows.</p>
+      <pre><code>from airflow.operators.subdag_operator import SubDagOperator
+
+def create_subdag(parent_dag_name, child_dag_name, args):
+    with DAG(child_dag_name, default_args=args, schedule_interval="@daily") as subdag:
+        # Define tasks for the sub-DAG
+        task = PythonOperator(task_id='subdag_task', python_callable=my_function)
+        return subdag
+
+subdag_task = SubDagOperator(
+    task_id='subdag_task',
+    subdag=create_subdag('parent_dag', 'parent_dag.subdag_task', default_args),
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `SubDagOperator` is used to create and manage sub-DAGs, which can be used as part of larger workflows, allowing for modularity and task grouping.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>35. How do you use `TimeDelta` in Airflow?</h2>
+      <p>`TimeDelta` is used in Airflow to define time-based parameters, such as the `retry_delay` or the `schedule_interval` for tasks and DAGs. It is part of Python's `datetime` module.</p>
+      <pre><code>from datetime import timedelta
+
+task = PythonOperator(
+    task_id='my_task',
+    python_callable=my_function,
+    retry_delay=timedelta(minutes=10),  # Retry delay of 10 minutes
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: `TimeDelta` is used for time-related configurations like `retry_delay` or `execution_timeout` to specify time durations for tasks in Airflow.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>36. What is the use of the `TriggerDagRunOperator`?</h2>
+      <p>The `TriggerDagRunOperator` is used to trigger the execution of another DAG from within a running DAG. This allows for workflows to be chained together.</p>
+      <pre><code>from airflow.operators.dagrun_operator import TriggerDagRunOperator
+
+trigger_task = TriggerDagRunOperator(
+    task_id='trigger_another_dag',
+    trigger_dag_id='another_dag_id',  # DAG to trigger
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `TriggerDagRunOperator` is used to trigger the execution of another DAG during the execution of a task within the current DAG.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>37. What is the purpose of `TaskGroup` in Airflow?</h2>
+      <p>The `TaskGroup` is used to group tasks together within a DAG for better organization and visualization. It helps in structuring large DAGs with multiple tasks.</p>
+      <pre><code>from airflow.utils.task_group import TaskGroup
+
+with TaskGroup("group_1", dag=dag) as group:
+    task_1 = PythonOperator(task_id="task_1", python_callable=my_function)
+    task_2 = PythonOperator(task_id="task_2", python_callable=my_function)
+</code></pre>
+      <p class="answer">Answer: The `TaskGroup` is used to group tasks within a DAG for better organization and more clear visualization of the DAG structure in the UI.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>38. How do you set up a custom executor in Airflow?</h2>
+      <p>A custom executor can be set up by modifying the `airflow.cfg` file or by configuring the executor class directly in your Airflow setup.</p>
+      <pre><code>[core]
+executor = LocalExecutor  # Example of setting the executor
+</code></pre>
+      <p class="answer">Answer: A custom executor can be configured by specifying the `executor` option in the `airflow.cfg` file or by using different types like `LocalExecutor`, `CeleryExecutor`, etc.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>39. How do you handle failed tasks in Airflow?</h2>
+      <p>You can handle failed tasks by setting the `on_failure_callback` parameter. This allows you to execute a function when a task fails, like sending notifications or retrying the task.</p>
+      <pre><code>def task_failure_alert(context):
+    # Send an alert or notification
+    print("Task failed!")
+
+task = PythonOperator(
+    task_id='my_task',
+    python_callable=my_function,
+    on_failure_callback=task_failure_alert,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: By using the `on_failure_callback` parameter, you can define custom behavior such as notifications or logging when a task fails.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>40. What is the `ExternalTaskSensor` in Airflow?</h2>
+      <p>The `ExternalTaskSensor` waits for a task in another DAG to complete before running its own task. It is useful when tasks depend on the completion of tasks in different DAGs.</p>
+      <pre><code>from airflow.sensors.external_task_sensor import ExternalTaskSensor
+
+external_task = ExternalTaskSensor(
+    task_id='external_task_sensor',
+    external_dag_id='other_dag_id',
+    external_task_id='other_task_id',
+    timeout=600,
+    poke_interval=60,
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `ExternalTaskSensor` is used to wait for a task from another DAG to finish before the current task can start, useful for cross-DAG dependencies.</p>
+    </div>
+  </div>
+    <h1>Airflow Q&A - Set 5</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>41. How do you install Apache Airflow?</h2>
+      <p>Apache Airflow can be installed via pip using the following command:</p>
+      <pre><code>pip install apache-airflow</code></pre>
+      <p class="answer">Answer: To install Apache Airflow, use the `pip install apache-airflow` command. You may need to specify a version or additional dependencies depending on your system and use case.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>42. What is the difference between `SequentialExecutor` and `LocalExecutor` in Airflow?</h2>
+      <p>The `SequentialExecutor` executes tasks one by one, which is typically used for testing or small-scale setups. The `LocalExecutor`, on the other hand, allows tasks to be executed concurrently in parallel on the local machine, improving scalability.</p>
+      <pre><code>[core]
+executor = LocalExecutor  # Use LocalExecutor for parallel task execution
+</code></pre>
+      <p class="answer">Answer: `SequentialExecutor` runs tasks sequentially (one at a time), while `LocalExecutor` executes tasks concurrently, making it more efficient for larger workflows.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>43. How do you set up logging in Apache Airflow?</h2>
+      <p>Logging in Apache Airflow is configured through the `airflow.cfg` file. You can customize log file locations, log formats, and log levels.</p>
+      <pre><code>[logging]
+base_log_folder = /path/to/logs
+remote_base_log_folder = s3://my-airflow-logs/
+log_level = INFO
+</code></pre>
+      <p class="answer">Answer: To set up logging, modify the `airflow.cfg` file to specify log folder paths and log levels. Airflow supports remote logging to cloud storage services like AWS S3.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>44. What is a `Sensor` in Airflow?</h2>
+      <p>A `Sensor` is a special type of operator in Airflow that waits for a specific condition to be met before proceeding with the execution of subsequent tasks. It checks for the presence of a file, a database record, or any other condition.</p>
+      <pre><code>from airflow.sensors.filesystem import FileSensor
+
+file_sensor_task = FileSensor(
+    task_id='check_for_file',
+    fs_conn_id='my_fs_connection',
+    filepath='path/to/file.txt',
+    poke_interval=60,  # Wait for 60 seconds before re-checking
+    timeout=600,  # Timeout after 10 minutes
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: A `Sensor` waits for a specific condition (such as the presence of a file) to be met before moving forward with the task execution.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>45. What is the `Executor` in Airflow?</h2>
+      <p>The `Executor` is responsible for executing the tasks within an Airflow DAG. There are several types of executors like `SequentialExecutor`, `LocalExecutor`, and `CeleryExecutor`, which determine how tasks are scheduled and executed.</p>
+      <pre><code>[core]
+executor = CeleryExecutor  # Use Celery for distributed task execution
+</code></pre>
+      <p class="answer">Answer: The `Executor` in Airflow is responsible for running the tasks in your DAG, with different types of executors offering different ways of executing tasks (sequentially, locally, or distributed).</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>46. What is a `DAG` in Apache Airflow?</h2>
+      <p>A DAG (Directed Acyclic Graph) is a collection of tasks with dependencies, where each task represents a unit of work. DAGs define the order and structure of tasks in a workflow, and they ensure that tasks are executed in the correct order.</p>
+      <pre><code>from airflow import DAG
+from airflow.operators.dummy_operator import DummyOperator
+from datetime import datetime
+
+dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily'
+)
+
+start_task = DummyOperator(task_id='start', dag=dag)
+end_task = DummyOperator(task_id='end', dag=dag)
+start_task >> end_task  # Define the task dependencies
+</code></pre>
+      <p class="answer">Answer: A DAG is a workflow in Airflow, consisting of tasks and their dependencies, which are executed in a specified order.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>47. What is the `schedule_interval` in Airflow?</h2>
+      <p>The `schedule_interval` defines how often a DAG should be executed. It can be set to cron expressions, timedelta objects, or predefined macros such as `@daily`, `@hourly`, etc.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily'  # DAG will run once every day
+)
+</code></pre>
+      <p class="answer">Answer: `schedule_interval` defines the frequency of DAG execution, and can be set using cron expressions, `timedelta`, or macros like `@daily`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>48. How do you pass parameters to tasks in Airflow?</h2>
+      <p>Parameters can be passed to tasks in Airflow using the `op_args` or `op_kwargs` arguments when defining the task. These arguments allow you to pass dynamic values to the Python functions executed by tasks.</p>
+      <pre><code>def my_function(arg1, arg2):
+    print(f"Received arguments: {arg1}, {arg2}")
+
+task = PythonOperator(
+    task_id='my_task',
+    python_callable=my_function,
+    op_args=['arg1_value', 'arg2_value'],
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: Parameters are passed to tasks via `op_args` or `op_kwargs` when defining a task. These are used to pass arguments to the Python callable function.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>49. What are `task dependencies` in Airflow?</h2>
+      <p>Task dependencies in Airflow define the order in which tasks should be executed. You can set dependencies using `>>` (right shift) or `<<` (left shift) operators to define sequential or parallel task execution.</p>
+      <pre><code>task1 = PythonOperator(task_id='task1', python_callable=my_function, dag=dag)
+task2 = PythonOperator(task_id='task2', python_callable=my_function, dag=dag)
+
+task1 >> task2  # task2 will run after task1</code></pre>
+      <p class="answer">Answer: Task dependencies are set using the `>>` or `<<` operators to define the order in which tasks are executed within a DAG.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>50. How do you trigger a DAG manually in Airflow?</h2>
+      <p>You can trigger a DAG manually using the Airflow UI or via the command line using the `trigger_dag` command. This is useful for ad-hoc runs or testing.</p>
+      <pre><code>airflow dags trigger my_dag</code></pre>
+      <p class="answer">Answer: To manually trigger a DAG, use the `airflow dags trigger <dag_id>` command in the terminal or use the Airflow UI to trigger it.</p>
+    </div>
+  </div>
+  <h1>Airflow Q&A - Set 6</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>51. What is the `catchup` parameter in Airflow?</h2>
+      <p>The `catchup` parameter controls whether or not the DAG should "catch up" on missed executions. When set to `True`, Airflow will try to backfill missing runs for past scheduled intervals.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily',
+    catchup=False  # Don't backfill missed runs
+)</code></pre>
+      <p class="answer">Answer: The `catchup` parameter, when set to `False`, prevents Airflow from running past DAG runs. By default, it is set to `True` to backfill missed DAG executions.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>52. How can you pause a DAG in Airflow?</h2>
+      <p>You can pause a DAG in Airflow either from the Airflow UI or by using the `pause` CLI command. Pausing a DAG will stop it from running on its scheduled intervals.</p>
+      <pre><code>airflow dags pause my_dag</code></pre>
+      <p class="answer">Answer: To pause a DAG, use the `airflow dags pause <dag_id>` command in the terminal or disable it via the UI to prevent future runs.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>53. What is the difference between `airflow dags list` and `airflow tasks list`?</h2>
+      <p>The `airflow dags list` command lists all the available DAGs in the Airflow environment, while `airflow tasks list` is used to list all the tasks within a specific DAG.</p>
+      <pre><code>airflow dags list       # Lists all available DAGs
+airflow tasks list my_dag  # Lists tasks in a specific DAG
+</code></pre>
+      <p class="answer">Answer: `airflow dags list` shows the available DAGs, and `airflow tasks list` shows the tasks inside a specific DAG, helping users navigate their workflows.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>54. How do you trigger a DAG run for a specific execution date?</h2>
+      <p>You can trigger a DAG run for a specific execution date using the `airflow dags trigger` command with the `--exec_date` argument.</p>
+      <pre><code>airflow dags trigger my_dag --exec_date 2023-05-01T00:00:00
+</code></pre>
+      <p class="answer">Answer: The `--exec_date` argument allows you to specify a custom execution date when triggering a DAG run manually.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>55. How can you clear tasks in Airflow?</h2>
+      <p>You can clear tasks in Airflow using the `airflow tasks clear` command, which allows you to remove task instances and reset their status, making them eligible to be re-executed.</p>
+      <pre><code>airflow tasks clear my_dag --task_id task_name --start_date 2023-01-01 --end_date 2023-01-10
+</code></pre>
+      <p class="answer">Answer: Use `airflow tasks clear` to clear task instances within a specific time range and task ID, which is useful for re-running failed tasks.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>56. What are the benefits of using `SubDagOperator` in Airflow?</h2>
+      <p>The `SubDagOperator` is used to define a sub-DAG within a parent DAG, which can help organize complex workflows into smaller, more manageable pieces.</p>
+      <pre><code>from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.subdag_operator import SubDagOperator
+
+def subdag(parent_dag_name, child_dag_name, args):
+    with DAG(dag_id=child_dag_name, default_args=args) as subdag:
+        start = DummyOperator(task_id='start')
+        end = DummyOperator(task_id='end')
+        start >> end
+    return subdag
+
+parent_dag = DAG('parent_dag', schedule_interval='@daily')
+subdag_task = SubDagOperator(
+    task_id='subdag_task',
+    subdag=subdag('parent_dag', 'subdag_task', {'owner': 'airflow'}),
+    dag=parent_dag
+)
+</code></pre>
+      <p class="answer">Answer: `SubDagOperator` allows nesting of DAGs, enabling the creation of modular and reusable workflows, which helps improve clarity and maintainability.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>57. What is the `max_active_runs` parameter in Airflow?</h2>
+      <p>The `max_active_runs` parameter limits the number of active DAG runs for a specific DAG. This is useful to prevent a backlog of DAG runs from overwhelming the system.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily',
+    max_active_runs=3  # Limit the number of active DAG runs
+)</code></pre>
+      <p class="answer">Answer: `max_active_runs` sets the maximum number of concurrent runs for a DAG. This prevents overlapping DAG runs and system overload.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>58. What are `Task Instances` in Apache Airflow?</h2>
+      <p>A task instance represents a specific run of a task in a DAG. It is identified by the task's ID, DAG ID, and execution date. The task instance keeps track of the status, logs, and retries.</p>
+      <pre><code>task_instance = TaskInstance(task=my_task, execution_date=datetime(2023, 1, 1))
+task_instance.run()
+</code></pre>
+      <p class="answer">Answer: A task instance is a record of a task's execution, including its status (success, failure), logs, and retry attempts, identified by the task ID and execution date.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>59. How do you use `XCom` to pass data between tasks?</h2>
+      <p>`XCom` (short for Cross-communication) is used to share data between tasks in Airflow. You can push and pull data from XCom within tasks using the `xcom_push()` and `xcom_pull()` methods.</p>
+      <pre><code>def push_data(**kwargs):
+    kwargs['ti'].xcom_push(key='data', value='Some important data')
+
+def pull_data(**kwargs):
+    value = kwargs['ti'].xcom_pull(task_ids='push_data_task', key='data')
+    print(value)
+
+push_task = PythonOperator(
+    task_id='push_data_task',
+    python_callable=push_data,
+    provide_context=True,
+    dag=dag
+)
+
+pull_task = PythonOperator(
+    task_id='pull_data_task',
+    python_callable=pull_data,
+    provide_context=True,
+    dag=dag
+)
+
+push_task >> pull_task
+</code></pre>
+      <p class="answer">Answer: `XCom` allows tasks to exchange data. Use `xcom_push` to push data and `xcom_pull` to retrieve it in a different task.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>60. How do you monitor the execution of tasks in Airflow?</h2>
+      <p>You can monitor the execution of tasks through the Airflow UI, where you can see the status, logs, and history of each task. Additionally, you can set up alerts to notify you of task failures.</p>
+      <pre><code># Example to set up alerts using email
+default_args = {
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'email': ['your_email@example.com']
+}
+</code></pre>
+      <p class="answer">Answer: Use the Airflow UI to monitor tasks and configure email alerts for task failures by setting `email_on_failure` and providing your email addresses in `default_args`.</p>
+    </div>
+  </div>
+    <h1>Airflow Q&A - Set 7</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>61. What is the `sla_miss_callback` in Airflow?</h2>
+      <p>The `sla_miss_callback` is a function that is executed when a task exceeds its SLA (Service Level Agreement). It allows users to define custom actions when a task's execution time surpasses the specified SLA time.</p>
+      <pre><code>def sla_miss_callback(context):
+    print(f"Task {context['task_instance'].task_id} exceeded its SLA")
+
+dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily',
+    sla_miss_callback=sla_miss_callback
+)</code></pre>
+      <p class="answer">Answer: `sla_miss_callback` is used to handle missed SLA events, allowing custom actions like logging, alerts, or notifications when a task exceeds its expected runtime.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>62. What is the `Pool` in Apache Airflow?</h2>
+      <p>A `Pool` is a mechanism in Airflow that limits the number of concurrent tasks running within a specific pool. Pools are used to control the resource utilization, ensuring that certain tasks do not overwhelm system resources.</p>
+      <pre><code>from airflow.models import Pool
+
+# Create a pool
+pool = Pool(pool='my_pool', slots=5)
+
+dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily'
+)
+
+task1 = BashOperator(
+    task_id='task_1',
+    bash_command='echo "Running task 1"',
+    pool='my_pool',
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: Pools allow Airflow users to control how many tasks can be run concurrently within a pool by specifying the `slots` parameter. The pool is defined and assigned to tasks to limit execution concurrency.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>63. How do you set up retries for a task in Airflow?</h2>
+      <p>You can set the number of retries for a task by using the `retries` parameter in the task’s arguments. The `retry_delay` parameter controls the time between retry attempts.</p>
+      <pre><code>task = BashOperator(
+    task_id='my_task',
+    bash_command='exit 1',  # Simulate failure
+    retries=3,
+    retry_delay=timedelta(minutes=5),
+    dag=dag
+)</code></pre>
+      <p class="answer">Answer: The `retries` parameter sets the number of retry attempts, and `retry_delay` specifies the time interval between retries. This helps ensure a task is retried after failures within a specific time range.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>64. How do you use `TriggerRule` in Airflow?</h2>
+      <p>The `TriggerRule` defines the conditions under which a task should be executed. It can control task execution based on the success, failure, or other statuses of upstream tasks.</p>
+      <pre><code>from airflow.utils.trigger_rule import TriggerRule
+
+task = BashOperator(
+    task_id='my_task',
+    bash_command='echo "Task executed"',
+    trigger_rule=TriggerRule.ALL_SUCCESS,  # Only run if all upstream tasks succeed
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `TriggerRule` allows setting conditions for task execution based on the success or failure of other tasks. Common trigger rules include `ALL_SUCCESS`, `ALL_FAILED`, and `ONE_FAILED`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>65. What is the use of the `TaskInstance` object in Airflow?</h2>
+      <p>The `TaskInstance` object in Airflow represents a specific execution of a task within a DAG. It provides methods for interacting with task state, logging, and triggering manual execution.</p>
+      <pre><code>from airflow.models import TaskInstance
+
+# Accessing TaskInstance for a task
+task_instance = TaskInstance(task=task, execution_date=datetime(2023, 1, 1))
+task_instance.run()
+</code></pre>
+      <p class="answer">Answer: `TaskInstance` is an Airflow object that tracks the execution of a task for a specific DAG run. You can use it to get the status, logs, and manage retries or manual execution.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>66. What is the purpose of `DagRun` in Apache Airflow?</h2>
+      <p>A `DagRun` represents a single execution of a DAG. It contains information about the execution state, task instances, and the start and end times of the DAG run.</p>
+      <pre><code>from airflow.models import DagRun
+
+# Creating a DagRun manually
+dagrun = DagRun(
+    dag_id='my_dag',
+    execution_date=datetime(2023, 1, 1)
+)
+dagrun.run()
+</code></pre>
+      <p class="answer">Answer: `DagRun` is an object that tracks the state of a DAG's execution. It provides the context for individual task instances and allows monitoring and manual triggering of DAG runs.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>67. How can you implement dynamic task generation in Airflow?</h2>
+      <p>You can generate tasks dynamically using loops or other programmatic approaches inside a DAG definition. This allows for more flexibility when creating tasks that follow a repetitive pattern.</p>
+      <pre><code>tasks = []
+for i in range(5):
+    task = BashOperator(
+        task_id=f'task_{i}',
+        bash_command=f'echo "Task {i}"',
+        dag=dag
+    )
+    tasks.append(task)
+
+# Set task dependencies
+tasks[0] >> tasks[1] >> tasks[2] >> tasks[3] >> tasks[4]
+</code></pre>
+      <p class="answer">Answer: Dynamic task generation in Airflow allows you to create a sequence of tasks programmatically using loops or other constructs, optimizing your DAG definition.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>68. What is the purpose of `Variable` in Apache Airflow?</h2>
+      <p>The `Variable` class in Airflow allows you to store and retrieve configuration or state information that needs to be shared across tasks or DAGs.</p>
+      <pre><code>from airflow.models import Variable
+
+# Setting a variable
+Variable.set("my_variable", "some_value")
+
+# Getting the variable
+value = Variable.get("my_variable")
+</code></pre>
+      <p class="answer">Answer: `Variable` in Airflow is used to store key-value pairs that can be accessed globally within your DAGs and tasks, enabling shared configurations or state.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>69. What is `PythonOperator` in Apache Airflow?</h2>
+      <p>The `PythonOperator` is used to execute Python functions within an Airflow DAG. It allows you to pass arguments and context to the Python function for execution.</p>
+      <pre><code>from airflow.operators.python_operator import PythonOperator
+
+def my_python_function():
+    print("Hello from PythonOperator!")
+
+task = PythonOperator(
+    task_id='my_python_task',
+    python_callable=my_python_function,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `PythonOperator` runs Python functions as tasks in a DAG. You can use it to invoke Python code as part of your workflow, passing arguments and context if needed.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>70. How do you execute a task based on the time of day in Airflow?</h2>
+      <p>You can use the `schedule_interval` parameter in Airflow to set a task to execute at specific times. You can also use the `cron` expressions to control the execution time.</p>
+      <pre><code>dag = DAG(
+    'my_time_based_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='0 6 * * *'  # Execute at 6 AM every day
+)
+</code></pre>
+      <p class="answer">Answer: By setting the `schedule_interval` using cron expressions or pre-defined schedules like `@daily`, you can control when your tasks should execute based on the time of day.</p>
+    </div>
+  </div>
+  <h1>Airflow Q&A - Set 8</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>71. What is the difference between `TriggerRule.ALL_SUCCESS` and `TriggerRule.ONE_FAILED`?</h2>
+      <p>`TriggerRule.ALL_SUCCESS` ensures that a task runs only if all upstream tasks are successful, while `TriggerRule.ONE_FAILED` ensures that a task runs if any one of the upstream tasks fails.</p>
+      <pre><code>from airflow.utils.trigger_rule import TriggerRule
+
+task = BashOperator(
+    task_id='my_task',
+    bash_command='echo "Task executed"',
+    trigger_rule=TriggerRule.ALL_SUCCESS,  # Runs only if all upstream tasks are successful
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `TriggerRule.ALL_SUCCESS` ensures task execution only if all upstream tasks succeed, while `TriggerRule.ONE_FAILED` runs the task if any upstream task fails.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>72. How do you use `XCom` in Apache Airflow?</h2>
+      <p>`XCom` (short for "Cross-communication") is used to share data between tasks in a DAG. Tasks can push and pull data to/from XComs using `xcom_push` and `xcom_pull` methods.</p>
+      <pre><code>def push_function(**kwargs):
+    kwargs['ti'].xcom_push(key='my_key', value='my_value')
+
+def pull_function(**kwargs):
+    value = kwargs['ti'].xcom_pull(task_ids='task_1', key='my_key')
+    print(value)
+
+push_task = PythonOperator(
+    task_id='task_1',
+    python_callable=push_function,
+    provide_context=True,
+    dag=dag
+)
+
+pull_task = PythonOperator(
+    task_id='task_2',
+    python_callable=pull_function,
+    provide_context=True,
+    dag=dag
+)
+
+push_task >> pull_task
+</code></pre>
+      <p class="answer">Answer: `XCom` is used to pass data between tasks in Airflow. Tasks can push and pull data via the `xcom_push` and `xcom_pull` methods using the task instance (`ti`).</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>73. What is the purpose of `SubDagOperator`?</h2>
+      <p>The `SubDagOperator` allows you to create a sub-DAG within a main DAG. It is useful for breaking down complex workflows into smaller, more manageable sub-DAGs.</p>
+      <pre><code>from airflow.operators.subdag_operator import SubDagOperator
+
+def generate_subdag(parent_dag_name, child_dag_name, args):
+    dag_subdag = DAG(
+        dag_id=child_dag_name,
+        default_args=args,
+        schedule_interval="@daily"
+    )
+
+    # Define tasks for the sub-DAG here
+    task1 = PythonOperator(
+        task_id='task_1',
+        python_callable=lambda: print("Subdag Task 1"),
+        dag=dag_subdag
+    )
+
+    return dag_subdag
+
+subdag_task = SubDagOperator(
+    task_id='subdag_task',
+    subdag=generate_subdag('main_dag', 'main_dag.subdag', default_args),
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `SubDagOperator` allows you to embed a smaller DAG within a larger DAG, which is useful for modularizing complex workflows and improving readability.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>74. How can you trigger a DAG manually in Airflow?</h2>
+      <p>You can trigger a DAG manually using the `TriggerDagRunOperator` or through the Airflow web interface. The operator triggers a DAG run when invoked.</p>
+      <pre><code>from airflow.operators.dagrun_operator import TriggerDagRunOperator
+
+trigger_dag = TriggerDagRunOperator(
+    task_id='trigger_subdag',
+    trigger_dag_id='subdag_dag_id',
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: A DAG can be triggered manually by using `TriggerDagRunOperator` to initiate another DAG, or you can trigger it via the Airflow UI by clicking "Trigger DAG" for a specific DAG run.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>75. What is `TaskQueue` in Airflow?</h2>
+      <p>Task queues allow Airflow to schedule and assign tasks to specific workers. You can define custom queues for tasks, ensuring that certain tasks run on workers with the necessary resources.</p>
+      <pre><code>task = BashOperator(
+    task_id='my_task',
+    bash_command='echo "Task execution"',
+    queue='high_priority_queue',
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `TaskQueue` defines which worker queues the task should be sent to. This is helpful when you want to prioritize tasks or direct them to specific workers based on their resource needs.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>76. What is the `Executor` in Apache Airflow?</h2>
+      <p>The `Executor` is the component in Airflow that handles running tasks. It is responsible for task scheduling and managing the task instances. Common executors include the `SequentialExecutor`, `LocalExecutor`, and `CeleryExecutor`.</p>
+      <pre><code>[core]
+executor = LocalExecutor  # This configures Airflow to use the LocalExecutor
+</code></pre>
+      <p class="answer">Answer: The `Executor` determines how tasks are executed, either in sequence, locally, or across a distributed system. Common choices include `LocalExecutor` and `CeleryExecutor`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>77. How can you define a custom operator in Airflow?</h2>
+      <p>You can define a custom operator by subclassing the `BaseOperator` class and implementing the required `execute` method to define the task logic.</p>
+      <pre><code>from airflow.models import BaseOperator
+from airflow.utils.decorators import apply_defaults
+
+class MyCustomOperator(BaseOperator):
+    @apply_defaults
+    def __init__(self, my_param, *args, **kwargs):
+        super(MyCustomOperator, self).__init__(*args, **kwargs)
+        self.my_param = my_param
+
+    def execute(self, context):
+        print(f"Executing task with parameter {self.my_param}")
+
+custom_task = MyCustomOperator(
+    task_id='custom_task',
+    my_param='custom_value',
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: A custom operator is created by subclassing `BaseOperator` and overriding the `execute` method, which contains the logic to be executed when the task runs.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>78. What is the difference between `DAG` and `Task` in Apache Airflow?</h2>
+      <p>A `DAG` (Directed Acyclic Graph) is a collection of tasks organized in a way that defines dependencies between them. A `Task` is a single unit of work within a DAG, representing an operation to be executed.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    default_args={'owner': 'airflow', 'start_date': datetime(2023, 1, 1)},
+    schedule_interval='@daily'
+)
+
+task1 = BashOperator(
+    task_id='task_1',
+    bash_command='echo "Task 1 executed"',
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: A `DAG` is a collection of tasks with defined dependencies, while a `Task` is an individual unit of execution within the DAG.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>79. What is `Airflow Scheduler` responsible for?</h2>
+      <p>The Airflow Scheduler is responsible for monitoring DAGs and scheduling task instances for execution according to their defined schedules.</p>
+      <pre><code>[scheduler]
+scheduler_queued_task_cutoff = 600
+</code></pre>
+      <p class="answer">Answer: The Airflow Scheduler is responsible for triggering tasks at their scheduled times, ensuring tasks are executed according to their dependencies and schedules.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>80. What is the role of the `Airflow Web Server`?</h2>
+      <p>The Airflow Web Server provides a UI to manage and monitor DAGs, task instances, and workflows. It allows users to trigger DAG runs, check logs, and monitor task progress.</p>
+      <pre><code>flask run  # This starts the Airflow web server
+</code></pre>
+      <p class="answer">Answer: The `Airflow Web Server` serves the web UI for managing and monitoring Airflow workflows, providing an interface for triggering tasks and viewing logs.</p>
+    </div>
+  </div>
+  <h1>Airflow Q&A - Set 9</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>81. How do you handle retries for tasks in Apache Airflow?</h2>
+      <p>Retries in Airflow can be managed using the `retries` parameter in the task definition. You can also set a delay between retries using `retry_delay`.</p>
+      <pre><code>task = BashOperator(
+    task_id='task_with_retries',
+    bash_command='echo "Task with retries"',
+    retries=3,
+    retry_delay=timedelta(minutes=5),
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: You can handle retries by setting the `retries` and `retry_delay` parameters in the task definition to control the number of retries and the delay between retries.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>82. What is the purpose of `Pool` in Apache Airflow?</h2>
+      <p>A `Pool` in Apache Airflow is used to limit the number of concurrent tasks that can run in the system, providing resource management for tasks that require specific resources.</p>
+      <pre><code>from airflow.models import Pool
+
+pool_task = BashOperator(
+    task_id='task_with_pool',
+    bash_command='echo "Task with pool"',
+    pool='my_pool',
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: A `Pool` limits the number of concurrent tasks that can be executed, allowing you to manage resource utilization more efficiently.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>83. How can you set task dependencies in Apache Airflow?</h2>
+      <p>Task dependencies in Airflow can be set using the `set_upstream()` and `set_downstream()` methods, or by using the `>>` and `<<` operators to define the execution order.</p>
+      <pre><code>task1 >> task2  # task2 will run after task1
+task2.set_upstream(task1)  # Another way to define task dependencies
+</code></pre>
+      <p class="answer">Answer: Task dependencies can be set using `set_upstream()`, `set_downstream()`, or the `>>` and `<<` operators to define the execution flow between tasks.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>84. How do you set the schedule interval for a DAG?</h2>
+      <p>The schedule interval for a DAG is set using the `schedule_interval` parameter. You can specify it as a string, `cron` expression, or a `timedelta` object.</p>
+      <pre><code>dag = DAG(
+    'my_scheduled_dag',
+    default_args=default_args,
+    schedule_interval='@daily'  # Cron expression for daily schedule
+)
+</code></pre>
+      <p class="answer">Answer: The `schedule_interval` parameter is used to define the schedule frequency for the DAG. It can be a cron expression or a `timedelta` object.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>85. What is the difference between `TriggerRule.ALL_FAILED` and `TriggerRule.ALL_SUCCESS`?</h2>
+      <p>`TriggerRule.ALL_FAILED` ensures that a task runs only when all upstream tasks have failed, while `TriggerRule.ALL_SUCCESS` ensures that a task runs only when all upstream tasks have succeeded.</p>
+      <pre><code>from airflow.utils.trigger_rule import TriggerRule
+
+task = BashOperator(
+    task_id='my_task',
+    bash_command='echo "Task executed"',
+    trigger_rule=TriggerRule.ALL_FAILED,  # Runs only if all upstream tasks fail
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `TriggerRule.ALL_FAILED` runs a task only if all upstream tasks fail, while `TriggerRule.ALL_SUCCESS` ensures that the task runs only if all upstream tasks are successful.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>86. What is the role of `DAG` in Apache Airflow?</h2>
+      <p>A `DAG` (Directed Acyclic Graph) defines a workflow with a set of tasks and their dependencies. It specifies the order and logic in which tasks are executed.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    default_args=default_args,
+    schedule_interval='@hourly'  # Define the schedule for the DAG
+)
+</code></pre>
+      <p class="answer">Answer: A `DAG` represents a workflow that consists of a set of tasks with defined dependencies and execution order. It is the central component of an Airflow workflow.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>87. How do you handle failures in Airflow tasks?</h2>
+      <p>Failures in Airflow tasks can be handled by setting the `on_failure_callback` parameter. You can also define custom failure handling logic in the task's `PythonOperator` or other operators.</p>
+      <pre><code>def task_failure_alert(context):
+    print("Task Failed!")
+
+task = PythonOperator(
+    task_id='my_task',
+    python_callable=my_function,
+    on_failure_callback=task_failure_alert,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: Failures can be handled by using `on_failure_callback` to define a function to be executed when the task fails. You can also set retry parameters like `retries` and `retry_delay`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>88. What is the purpose of `task_instance` (ti) in Airflow?</h2>
+      <p>The `task_instance` (ti) provides the context for a specific task execution, including its state, execution time, and XCom data.</p>
+      <pre><code>def print_task_instance(ti):
+    print(ti.dag_id)  # Prints DAG ID for the task instance
+
+task = PythonOperator(
+    task_id='task_instance_example',
+    python_callable=print_task_instance,
+    provide_context=True,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `task_instance` (ti) holds the execution context for a task, including information like the task's state and parameters passed through XComs.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>89. What is `airflow.cli` used for?</h2>
+      <p>`airflow.cli` provides a command-line interface (CLI) for managing and interacting with Airflow. It is used to trigger DAGs, list tasks, view logs, and much more.</p>
+      <pre><code>airflow dags list  # List all DAGs in the system
+</code></pre>
+      <p class="answer">Answer: `airflow.cli` is the command-line tool used for managing Airflow, allowing you to trigger DAGs, check logs, and perform various other tasks from the terminal.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>90. How can you configure retries and alerts for a task in Apache Airflow?</h2>
+      <p>Retries can be configured using the `retries` parameter, and you can configure alerts using `on_failure_callback`, `on_retry_callback`, and `on_success_callback` to handle failure, retry, and success events.</p>
+      <pre><code>def failure_alert(context):
+    print("Task Failed, sending alert!")
+
+task = PythonOperator(
+    task_id='task_with_alerts',
+    python_callable=my_function,
+    retries=3,
+    retry_delay=timedelta(minutes=5),
+    on_failure_callback=failure_alert,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: You can configure retries by setting `retries` and `retry_delay`, while alerts can be configured by passing callbacks for success, failure, or retries, such as `on_failure_callback`.</p>
+    </div>
+  </div>
+    <h1>Airflow Q&A - Set 10</h1>
+  <div class="container">
+    <div class="qa-set">
+      <h2>91. How do you use Airflow's `PythonOperator` to run a Python function?</h2>
+      <p>The `PythonOperator` in Airflow is used to execute Python functions. You pass the Python function to the `python_callable` parameter.</p>
+      <pre><code>from airflow.operators.python_operator import PythonOperator
+
+def my_python_function():
+    print("This is a Python function")
+
+task = PythonOperator(
+    task_id='run_python_function',
+    python_callable=my_python_function,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: The `PythonOperator` is used to run a Python function by specifying the function to be executed in the `python_callable` parameter.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>92. What is `XCom` in Apache Airflow?</h2>
+      <p>`XCom` (short for "Cross-communication") is a mechanism for tasks to exchange small amounts of data during DAG execution. Tasks can push and pull data using XCom.</p>
+      <pre><code>from airflow.operators.python_operator import PythonOperator
+
+def push_xcom(ti):
+    ti.xcom_push(key='message', value='Hello from task')
+
+task = PythonOperator(
+    task_id='push_xcom_example',
+    python_callable=push_xcom,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: `XCom` allows tasks to exchange small amounts of data by pushing and pulling key-value pairs. It's useful for sharing information between tasks.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>93. What is the role of the `task_instance` in Apache Airflow?</h2>
+      <p>The `task_instance` in Airflow provides access to the specific instance of a task's execution, including its state, execution time, and XCom values.</p>
+      <pre><code>def print_task_instance(ti):
+    print(ti.dag_id)
+
+task = PythonOperator(
+    task_id='print_task_instance',
+    python_callable=print_task_instance,
+    provide_context=True,
+    dag=dag
+)
+</code></pre>
+      <p class="answer">Answer: The `task_instance` provides access to the task's context, including its state, logs, and any data shared via XCom.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>94. How do you set a dynamic schedule for a DAG in Airflow?</h2>
+      <p>You can set a dynamic schedule for a DAG using the `schedule_interval` parameter and also make it more dynamic by using a Python function to return the schedule value.</p>
+      <pre><code>from datetime import timedelta
+
+def get_schedule():
+    return timedelta(days=1)
+
+dag = DAG(
+    'dynamic_scheduled_dag',
+    default_args=default_args,
+    schedule_interval=get_schedule()  # Dynamic schedule
+)
+</code></pre>
+      <p class="answer">Answer: A dynamic schedule can be set by using a Python function that returns the schedule interval based on runtime parameters or other logic.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>95. How can you monitor a DAG’s execution in Apache Airflow?</h2>
+      <p>You can monitor a DAG's execution through the Airflow UI, which provides a visual representation of the DAG, its task states, and logs. Additionally, you can use the CLI to check the status of tasks.</p>
+      <pre><code>airflow dags list  # List all available DAGs
+airflow tasks list my_dag  # List tasks for a specific DAG
+</code></pre>
+      <p class="answer">Answer: You can monitor a DAG's execution via the Airflow UI, which shows the status of tasks and logs. Additionally, you can use the CLI to list DAGs and tasks.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>96. How can you pause or resume a DAG in Airflow?</h2>
+      <p>To pause or resume a DAG, you can use the Airflow UI or the CLI commands `airflow dags pause <dag_id>` and `airflow dags unpause <dag_id>`.</p>
+      <pre><code>airflow dags pause my_dag  # Pause the DAG
+airflow dags unpause my_dag  # Resume the DAG
+</code></pre>
+      <p class="answer">Answer: You can pause or resume a DAG using the Airflow UI or by running the CLI commands `airflow dags pause` and `airflow dags unpause`.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>97. What is the difference between a DAG run and a task instance?</h2>
+      <p>A DAG run represents the execution of a DAG, whereas a task instance represents the execution of a specific task within a DAG run.</p>
+      <pre><code>dag_run = dag.create_dagrun()
+task_instance = task.get_task_instance(dag_run)
+</code></pre>
+      <p class="answer">Answer: A DAG run is the execution of the entire DAG, while a task instance is the execution of a specific task within that DAG run.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>98. How do you trigger a DAG run manually in Apache Airflow?</h2>
+      <p>You can manually trigger a DAG run via the Airflow UI or use the CLI command `airflow dags trigger <dag_id>`.</p>
+      <pre><code>airflow dags trigger my_dag  # Trigger DAG run manually
+</code></pre>
+      <p class="answer">Answer: A DAG run can be triggered manually using the `airflow dags trigger` command or by clicking the trigger button in the Airflow UI.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>99. What is the purpose of `TaskInstance.xcom_pull()` in Apache Airflow?</h2>
+      <p>The `xcom_pull()` method is used to pull data from XComs, allowing tasks to access the output of other tasks in the workflow.</p>
+      <pre><code>result = ti.xcom_pull(task_ids='task_id', key='message')
+</code></pre>
+      <p class="answer">Answer: `xcom_pull()` is used to retrieve data from XComs. It allows tasks to access the values pushed by other tasks using the XCom mechanism.</p>
+    </div>
+
+    <div class="qa-set">
+      <h2>100. How do you apply a `catchup` behavior to a DAG in Airflow?</h2>
+      <p>The `catchup` parameter in a DAG determines whether Airflow should backfill the DAG's past runs. Setting it to `False` prevents backfilling for missed runs.</p>
+      <pre><code>dag = DAG(
+    'my_dag',
+    default_args=default_args,
+    catchup=False  # Disable backfilling
+)
+</code></pre>
+      <p class="answer">Answer: You can control the backfilling behavior of a DAG using the `catchup` parameter. Setting it to `False` will prevent Airflow from backfilling any missed DAG runs.</p>
+    </div>
+  </div>
+  </body>
+</html>
