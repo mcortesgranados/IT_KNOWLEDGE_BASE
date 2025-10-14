@@ -1,0 +1,93 @@
+<div style="overflow-x:auto;">
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; min-width:1400px;">
+<thead style="background:#f2f2f2;">
+<tr>
+<th>#</th>
+<th>Path / File</th>
+<th>Description</th>
+<th>Clean Architecture</th>
+<th>DDD</th>
+<th>Hexagonal</th>
+<th>CQRS</th>
+<th>Event-Driven</th>
+<th>Serverless</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>build.gradle</td><td>Gradle build script</td><td>✓</td><td></td><td></td><td></td><td></td><td>✓</td></tr>
+<tr><td>2</td><td>settings.gradle</td><td>Gradle settings</td><td>✓</td><td></td><td></td><td></td><td></td><td>✓</td></tr>
+<tr><td>3</td><td>template.yaml</td><td>AWS SAM / Lambda template</td><td></td><td></td><td></td><td></td><td></td><td>✓</td></tr>
+
+<tr><td>4</td><td>src/main/java/org/ldschurch/rest_api/domain/</td><td>Core domain layer</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>5</td><td>domain/model/User.java</td><td>Domain entity</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>6</td><td>domain/service/BusinessRules.java</td><td>Domain services for business logic</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>7</td><td>domain/event/DomainEvent.java</td><td>Base domain event class</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>8</td><td>domain/event/UserCreatedEvent.java</td><td>User created event</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>9</td><td>domain/event/EventPublisher.java</td><td>Publishes domain events</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>10</td><td>domain/command/handlers/UserCommandHandler.java</td><td>Handles domain commands</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td></tr>
+
+<tr><td>11</td><td>application/command/CreateUserCommand.java</td><td>Command object to create user</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>12</td><td>application/command/UpdateUserCommand.java</td><td>Command object to update user</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>13</td><td>application/command/DeleteUserCommand.java</td><td>Command object to delete user</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>14</td><td>application/command/CommandHandler.java</td><td>Generic command handler interface</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+
+<tr><td>15</td><td>application/query/GetUserQuery.java</td><td>Query object to get user</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>16</td><td>application/query/ListUsersQuery.java</td><td>Query object to list users</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>17</td><td>application/query/QueryHandler.java</td><td>Generic query handler interface</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+
+<tr><td>18</td><td>application/port/input/CommandUseCase.java</td><td>Input port for commands</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>19</td><td>application/port/input/QueryUseCase.java</td><td>Input port for queries</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>20</td><td>application/port/input/EventHandlerUseCase.java</td><td>Input port for events</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td></td></tr>
+
+<tr><td>21</td><td>application/port/output/UserWriteRepositoryPort.java</td><td>Output port for writes</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>22</td><td>application/port/output/UserReadRepositoryPort.java</td><td>Output port for reads</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>23</td><td>application/port/output/EventPublisherPort.java</td><td>Output port for publishing events</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+
+<tr><td>24</td><td>application/service/command/CreateUserService.java</td><td>Service executing create command</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>25</td><td>application/service/command/UpdateUserService.java</td><td>Service executing update command</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>26</td><td>application/service/command/DeleteUserService.java</td><td>Service executing delete command</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>27</td><td>application/service/query/GetUserService.java</td><td>Service executing get query</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>28</td><td>application/service/query/ListUsersService.java</td><td>Service executing list query</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>29</td><td>application/service/EventDrivenService.java</td><td>Handles domain events</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+
+<tr><td>30</td><td>adapter/rest/command/UserCommandController.java</td><td>REST controller for commands</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>31</td><td>adapter/rest/command/HealthCheckController.java</td><td>Health check endpoint</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>32</td><td>adapter/rest/query/UserQueryController.java</td><td>REST controller for queries</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+
+<tr><td>33</td><td>adapter/persistence/write/JpaUserWriteRepositoryAdapter.java</td><td>JPA adapter for writes</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>34</td><td>adapter/persistence/read/JpaUserReadRepositoryAdapter.java</td><td>JPA adapter for reads</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+
+<tr><td>35</td><td>adapter/lambda/CommandLambdaHandler.java</td><td>Lambda handler for commands</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td>✓</td></tr>
+<tr><td>36</td><td>adapter/lambda/QueryLambdaHandler.java</td><td>Lambda handler for queries</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td>✓</td></tr>
+
+<tr><td>37</td><td>adapter/events/KafkaEventPublisherAdapter.java</td><td>Kafka event publishing adapter</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>38</td><td>adapter/events/SnsEventPublisherAdapter.java</td><td>SNS event publishing adapter</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>39</td><td>adapter/events/SqsEventListener.java</td><td>SQS event listener</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>40</td><td>adapter/events/EventDeserializer.java</td><td>Event deserializer</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+
+<tr><td>41</td><td>adapter/config/BeanConfig.java</td><td>Spring bean configuration</td><td>✓</td><td></td><td>✓</td><td></td><td></td><td>✓</td></tr>
+<tr><td>42</td><td>adapter/config/KafkaConfig.java</td><td>Kafka configuration</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+<tr><td>43</td><td>adapter/config/SnsConfig.java</td><td>SNS configuration</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+<tr><td>44</td><td>adapter/config/SqsConfig.java</td><td>SQS configuration</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+
+<tr><td>45</td><td>infrastructure/tracing/LoggingAspect.java</td><td>Logging AOP for tracing</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>46</td><td>infrastructure/tracing/TracingInterceptor.java</td><td>Interceptor for tracing</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td></td></tr>
+<tr><td>47</td><td>infrastructure/exception/GlobalExceptionHandler.java</td><td>Global exception handler</td><td>✓</td><td></td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>48</td><td>infrastructure/metrics/MetricsCollector.java</td><td>Metrics collection utility</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td></td></tr>
+
+<tr><td>49</td><td>SpringbootLambdaApplication.java</td><td>Main Spring Boot entry point</td><td>✓</td><td></td><td>✓</td><td></td><td>✓</td><td>✓</td></tr>
+
+<tr><td>50</td><td>resources/application.yml</td><td>Spring configuration</td><td>✓</td><td></td><td></td><td></td><td></td><td>✓</td></tr>
+<tr><td>51</td><td>resources/logback-spring.xml</td><td>Logging configuration</td><td>✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>52</td><td>resources/static/</td><td>Static files (JS, CSS, images)</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+<tr><td>53</td><td>test/application/command/CreateUserServiceTest.java</td><td>Unit test for create command service</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>54</td><td>test/application/query/GetUserServiceTest.java</td><td>Unit test for get query service</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>55</td><td>test/adapter/persistence/write/JpaUserWriteRepositoryAdapterTest.java</td><td>Test for write repository adapter</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>56</td><td>test/adapter/persistence/read/JpaUserReadRepositoryAdapterTest.java</td><td>Test for read repository adapter</td><td>✓</td><td></td><td>✓</td><td>✓</td><td></td><td></td></tr>
+<tr><td>57</td><td>test/adapter/events/KafkaEventPublisherAdapterTest.java</td><td>Test for Kafka publisher adapter</td><td>✓</td><td>✓</td><td>✓</td><td></td><td>✓</td><td></td></tr>
+
+<tr><td>58</td><td>build/distributions/springboot-lambda-0.0.1-SNAPSHOT.zip</td><td>Build artifact</td><td></td><td></td><td></td><td></td><td></td><td>✓</td></tr>
+</tbody>
+</table>
+</div>

@@ -1,0 +1,1270 @@
+Can hooks be used inside loops or conditions?	Hooks Rules
+Can React components return multiple elements?	Basics
+Can you set state directly?	State
+Can you use if statements inside JSX?	JSX
+Can you use multiple useEffect hooks in a component?	Hooks
+How can useRef be used to access DOM elements?	Hooks
+How can useRef help avoid re-renders?	Hooks
+How can you comment inside JSX?	JSX
+How can you implement accessibility roles and attributes in React?	Accessibility  
+How can you implement drag and drop functionality in React?	Advanced Patterns  
+How can you implement internationalization (i18n) in React?	Advanced Patterns
+How can you improve accessibility with ARIA roles in React?	Accessibility  
+How can you memoize a component with React.memo?	Performance
+How can you optimize bundle size in React apps?	Performance Optimization
+How can you optimize images in React applications?	Performance Optimization  
+How can you prevent excessive re-renders in React?	Performance Optimization  
+How can you reduce bundle size in a React app?	Performance
+How can you trigger an effect only once using useEffect?	Hooks
+How do atoms and selectors work in Recoil?	State Management
+How do HOCs differ from render props?	Advanced Patterns
+How do lifecycle methods compare to hooks like useEffect?	Lifecycle
+How do portals help with modals and tooltips?	Advanced Concepts
+How do React Suspense and Concurrent Mode work together?	Advanced Concepts
+How do render props differ from HOCs?	Advanced Patterns
+How do render props work?	Advanced Concepts
+How do screen readers interact with React apps?	Accessibility
+How do useState and useEffect work together?	Hooks
+How do you access DOM elements in React?	Refs
+How do you access DOM elements using useRef?	Hooks
+How do you access native device features like camera and GPS?	React Native
+How do you access query parameters in React Router?	Routing
+How do you apply styles in JSX?	JSX
+How do you avoid infinite loops with useEffect?	Hooks
+How do you avoid prop drilling in React applications?	State Management
+How do you avoid prop drilling?	Advanced Concepts
+How do you avoid unnecessary re-renders in React?	Performance
+How do you avoid unnecessary re-renders with Context API?	Context API
+How do you bind event handlers in class components?	Events
+How do you build and deploy a React Native app?	React Native
+How do you cache GraphQL results?	Data Fetching
+How do you cancel an ongoing fetch request?	Data Fetching
+How do you change the language dynamically in a React app?	Internationalization
+How do you clean up effects in useEffect?	Hooks
+How do you combine multiple reducers in Redux?	State Management
+How do you combine multiple useEffect hooks?	Hooks
+How do you conditionally render components in React?	Components  
+How do you connect React components to Redux?	State Management
+How do you consume context values in class and functional components?	Context API
+How do you create a catch-all 404 route in React Router?	Routing
+How do you create a class component in React?	Components
+How do you create a context in React?	Hooks
+How do you create a controlled input component?	Forms
+How do you create a custom 404 page in Next.js?	SSR / SSG
+How do you create a custom hook for form validation?	Hooks  
+How do you create a custom hook?	Hooks
+How do you create a functional component in React?	Components
+How do you create a higher-order component (HOC) in React?	Advanced Patterns  
+How do you create a layout with shared components using React Router?	Routing
+How do you create a middleware in Next.js?	SSR / SSG
+How do you create a portal in React?	Advanced Concepts
+How do you create a portal using ReactDOM.createPortal?	Advanced
+How do you create a React component?	Basics
+How do you create a reusable modal component in React?	Components  
+How do you create a selector using reselect?	State Management
+How do you create a slice with Redux Toolkit?	State Management
+How do you create accessible React components?	Accessibility
+How do you create actions in Redux?	State Management
+How do you create an error boundary component?	Advanced Concepts  
+How do you create and use React components?	Components  
+How do you create compound components in React?	Advanced Patterns  
+How do you create context and context providers in React?	State Management  
+How do you create context providers in React?	State Management  
+How do you create controlled forms in React?	Forms  
+How do you create custom hooks in React?	Hooks  
+How do you create custom hooks to share logic?	Hooks  
+How do you create custom hooks?	Hooks
+How do you create custom React hooks?	Hooks  
+How do you create dynamic forms in React?	Forms  
+How do you create Higher-Order Components (HOCs) in React?	Advanced Patterns  
+How do you create Higher-Order Components (HOCs)?	Advanced Patterns  
+How do you create Higher-Order Components?	Advanced Patterns  
+How do you create reusable components in React?	Components  
+How do you create reusable components?	Components  
+How do you create reusable custom hooks?	Hooks  
+How do you create reusable form components?	Forms
+How do you create reusable React component libraries?	Components  
+How do you create reusable React components?	Components  
+How do you debounce events in React?	Performance Optimization
+How do you debounce input in React?	Performance Optimization
+How do you debounce input with hooks?	Hooks
+How do you debounce or throttle events in React?	Performance Optimization
+How do you debounce user input in React?	Performance Optimization
+How do you debug a React Native app?	React Native
+How do you debug React applications effectively?	Debugging
+How do you debug React applications using React Developer Tools?	Debugging  
+How do you debug React applications?	Debugging
+How do you debug React apps effectively?	Debugging  
+How do you debug React apps using React Developer Tools?	Debugging  
+How do you debug React apps using React DevTools?	Debugging  
+How do you debug React apps with React Developer Tools?	Debugging  
+How do you debug React apps?	Debugging
+How do you debug React Native applications?	Debugging  
+How do you debug Redux state changes?	State Management
+How do you define routes using React Router?	Routing
+How do you deploy a Next.js app to Vercel?	SSR / SSG
+How do you detect unnecessary re-renders?	Performance
+How do you disable a submit button until form validation passes?	Forms
+How do you dispatch actions in Redux?	State Management
+How do you display error messages in a form?	Forms
+How do you do static site generation (SSG) with React?	Advanced Concepts  
+How do you eject from CRA and	
+How do you embed JavaScript expressions in JSX?	JSX
+How do you enable dynamic routing in Next.js?	SSR / SSG
+How do you ensure keyboard navigation in React components?	Accessibility
+How do you fetch data from a REST API in React?	Data Fetching
+How do you fetch data in Next.js for SSR?	SSR / SSG
+How do you fetch data in React?	Data Fetching
+How do you fetch data with hooks?	Hooks
+How do you force a React component to re-render?	Rendering
+How do you format numbers, dates, and currencies in React?	Internationalization
+How do you forward refs in functional components?	Refs  
+How do you forward refs in React components?	Refs
+How do you forward refs in React functional components?	Refs  
+How do you forward refs in React?	Refs
+How do you forward refs to child components in React?	Refs  
+How do you forward refs to child components?	Refs
+How do you forward refs using React.forwardRef?	Refs  
+How do you forward refs with React.forwardRef?	Refs  
+How do you forward refs with TypeScript in React?	Refs  
+How do you generate snapshots in Jest?	Testing
+How do you handle 404 routes in React Router?	Routing
+How do you handle accessibility (a11y) in React applications?	Accessibility  
+How do you handle accessibility (a11y) in React projects?	Accessibility  
+How do you handle accessibility in custom React components?	Accessibility  
+How do you handle accessibility in React applications?	Accessibility  
+How do you handle accessibility in React components?	Accessibility  
+How do you handle accessibility in React forms?	Accessibility  
+How do you handle accessibility in React?	Accessibility  
+How do you handle animations in React?	Styling
+How do you handle API data caching in React?	State Management  
+How do you handle app permissions in React Native?	React Native
+How do you handle async logic in Redux?	State Management
+How do you handle async operations in hooks?	Hooks
+How do you handle asynchronous actions in Redux?	State Management
+How do you handle asynchronous data fetching in React?	Hooks  
+How do you handle asynchronous operations in React?	Hooks  
+How do you handle authentication in React applications?	Security  
+How do you handle authentication in React apps?	Security  
+How do you handle authentication in React?	Security  
+How do you handle authentication with JWT in React?	Security  
+How do you handle complex animations in React?	Styling  
+How do you handle concurrent data fetching in React?	Advanced Concepts  
+How do you handle concurrent rendering in React?	Advanced Concepts  
+How do you handle conditional form fields?	Forms
+How do you handle conditional rendering in React?	Core Concepts
+How do you handle debouncing and throttling in React?	Performance Optimization  
+How do you handle default props in TypeScript?	TypeScript
+How do you handle dependent form fields?	Forms
+How do you handle drag and drop functionality in React?	Advanced Patterns  
+How do you handle error boundaries in functional components?	Error Handling
+How do you handle error boundaries in React?	Error Handling  
+How do you handle error boundaries with fallback UI in React?	Error Handling  
+How do you handle errors globally in React applications?	Error Handling  
+How do you handle errors in Apollo Client?	Data Fetching
+How do you handle errors in hooks?	Hooks
+How do you handle errors in React async operations?	Error Handling  
+How do you handle errors in React components?	Error Handling
+How do you handle errors in React with error boundaries?	Error Handling  
+How do you handle errors in React?	Error Handling
+How do you handle errors in Suspense?	Advanced Concepts
+How do you handle errors using error boundaries in React?	Error Handling
+How do you handle errors with error boundaries?	Error Handling
+How do you handle event bubbling and capturing in React?	Event Handling  
+How do you handle event delegation in React?	Event Handling  
+How do you handle event handling in React?	Event Handling  
+How do you handle event listeners in React?	Event Handling  
+How do you handle event propagation in React?	Event Handling  
+How do you handle events in functional components?	Events
+How do you handle events in React?	Event Handling
+How do you handle file uploads in React forms?	Forms
+How do you handle file uploads in React?	Forms  
+How do you handle form input changes in React?	Forms  
+How do you handle form input in React?	Forms
+How do you handle form input validation in React using Yup?	Forms  
+How do you handle form inputs and validations in React?	Forms  
+How do you handle form inputs in React?	Forms  
+How do you handle form submission in React?	Forms  
+How do you handle form validation in React?	Forms  
+How do you handle form validation using Formik in React?	Forms  
+How do you handle forms and validations in React?	Forms  
+How do you handle forms in React Hook Form?	Forms  
+How do you handle forms in React using Formik?	Forms  
+How do you handle forms in React with validation?	Forms  
+How do you handle forms in React?	Forms
+How do you handle forms using controlled components?	Forms  
+How do you handle forms using React Hook Form library?	Forms  
+How do you handle forms using React Hook Form?	Forms  
+How do you handle forms using useReducer?	Hooks
+How do you handle forms validation in React?	Forms
+How do you handle forms with controlled components?	Forms
+How do you handle forms with React Hook Form library?	Forms  
+How do you handle forms with React Hook Form?	Forms  
+How do you handle forms with validation in React?	Forms  
+How do you handle image optimization in React?	Performance
+How do you handle input changes in a form?	Forms
+How do you handle internationalization (i18n) in React applications?	Advanced Concepts  
+How do you handle keyboard navigation and focus management in React?	Accessibility  
+How do you handle keyboard navigation in React components?	Accessibility  
+How do you handle loading and error states in data fetching?	Data Fetching
+How do you handle multiple state values in functional components?	State
+How do you handle navigation programmatically in React Router?	Routing
+How do you handle nested forms in React?	Forms
+How do you handle optimistic UI updates in React?	Advanced Patterns
+How do you handle optional props in TypeScript?	TypeScript
+How do you handle pagination in React applications?	Advanced Patterns  
+How do you handle redirects in Next.js?	SSR / SSG
+How do you handle route transitions with animations?	Routing
+How do you handle routing and navigation with React Router v6?	Routing  
+How do you handle routing guards in React Router?	Routing  
+How do you handle routing with React Router v6?	Routing  
+How do you handle server-side rendering with hydration in React?	Advanced Concepts  
+How do you handle side effects in React components?	Hooks
+How do you handle side effects in React with useEffect?	Hooks  
+How do you handle side effects in React?	Hooks
+How do you handle side effects using useEffect hook in React?	Hooks  
+How do you handle side effects with the useEffect hook?	Hooks
+How do you handle side effects with useEffect hook?	Hooks
+How do you handle side effects with useEffect?	Hooks  
+How do you handle state immutability in React?	State Management  
+How do you handle state lifting in React applications?	State Management  
+How do you handle touch and gestures in React Native?	React Native
+How do you handle user events in React?	Event Handling
+How do you implement a controlled form input in React?	Forms
+How do you implement a custom hook in React?	Hooks  
+How do you implement a dark mode toggle in React?	Styling
+How do you implement a HOC (Higher Order Component)?	Advanced Patterns
+How do you implement an error boundary?	Error Handling
+How do you implement authentication flows in React apps?	Security
+How do you implement authentication in React applications?	Security  
+How do you implement authentication in React apps?	Security  
+How do you implement authentication in React?	Security  
+How do you implement authentication with hooks?	Hooks
+How do you implement code splitting in React applications?	Code Splitting  
+How do you implement code splitting in React using dynamic import?	Code Splitting  
+How do you implement code splitting in React using React.lazy?	Code Splitting  
+How do you implement code splitting in React?	Code Splitting
+How do you implement code splitting using React.lazy and Suspense?	Code Splitting  
+How do you implement code splitting with dynamic imports?	Code Splitting  
+How do you implement code splitting with React Router?	Code Splitting  
+How do you implement code splitting with React.lazy and Suspense?	Code Splitting
+How do you implement code splitting with React.lazy?	Code Splitting  
+How do you implement compound components in React?	Advanced Patterns  
+How do you implement conditional rendering in React?	Core Concepts  
+How do you implement context API for global state management?	State Management
+How do you implement context in React?	State Management
+How do you implement context selectors for optimizing React Context?	State Management  
+How do you implement controlled inputs in React forms?	Forms  
+How do you implement custom hooks in React?	Hooks  
+How do you implement custom validations with React Hook Form?	Forms
+How do you implement dark mode in React applications?	Styling  
+How do you implement dark mode in React Native?	React Native
+How do you implement dark mode in React?	Styling  
+How do you implement dark mode toggle in React?	Styling  
+How do you implement dark mode using CSS-in-JS in React?	Styling  
+How do you implement dynamic routing in React Router?	Routing  
+How do you implement dynamic routing with React Router?	Routing  
+How do you implement dynamic theming in React?	Styling  
+How do you implement error boundaries in React?	Error Handling  
+How do you implement error boundaries?	Error Handling  
+How do you implement focus management in modals or dialogs?	Accessibility
+How do you implement form validation in React?	Forms  
+How do you implement form validation with React Hook Form?	Forms  
+How do you implement global error handling in React?	Error Handling  
+How do you implement global state management with Redux Toolkit?	State Management  
+How do you implement global state management with Redux?	State Management
+How do you implement global state with Redux?	State Management
+How do you implement Higher-Order Components (HOCs) in React?	Advanced Patterns  
+How do you implement Higher-Order Components (HOCs)?	Advanced Patterns  
+How do you implement Higher-Order Components?	Advanced Patterns  
+How do you implement HOCs?	Advanced Concepts
+How do you implement incremental static regeneration (ISR) in React frameworks like Next.js?	Advanced Concepts  
+How do you implement infinite scrolling in React?	Advanced Patterns  
+How do you implement infinite scrolling with Intersection Observer in React?	Advanced Patterns  
+How do you implement internationalization (i18n) in React applications?	Advanced Patterns  
+How do you implement internationalization (i18n) in React apps?	Advanced Patterns  
+How do you implement internationalization (i18n) in React?	Advanced Features
+How do you implement lazy loading components with React.lazy?	Code Splitting  
+How do you implement lazy loading for images in React?	Code Splitting  
+How do you implement lazy loading for React components?	Code Splitting  
+How do you implement lazy loading images in React?	Code Splitting  
+How do you implement lazy loading in React applications?	Code Splitting  
+How do you implement lazy loading in React?	Code Splitting  
+How do you implement lazy loading of images in React?	Code Splitting  
+How do you implement lazy loading with React Router?	Code Splitting
+How do you implement lazy loading with React.lazy and Suspense?	Code Splitting  
+How do you implement lazy loading with React.lazy?	Code Splitting
+How do you implement memoization for expensive React computations?	Performance Optimization  
+How do you implement memoization in React components?	Performance Optimization  
+How do you implement navigation guards in React Router?	Routing  
+How do you implement optimistic UI updates in React applications?	Advanced Patterns  
+How do you implement optimistic UI updates in React?	Advanced Patterns
+How do you implement optimistic UI updates?	Advanced Patterns  
+How do you implement optimistic updates in Redux?	State Management
+How do you implement polling in data fetching?	Data Fetching
+How do you implement polling with hooks?	Hooks
+How do you implement portal-based modals in React?	Advanced Features  
+How do you implement portals for modals in React?	Advanced Features  
+How do you implement portals in React?	Advanced Features  
+How do you implement protected routes in React Router?	Routing
+How do you implement React Portals and when are they useful?	Advanced Features  
+How do you implement React Router for navigation?	Routing
+How do you implement React Suspense for data fetching?	Code Splitting  
+How do you implement React.memo and when should you use it?	Performance Optimization  
+How do you implement React.memo for functional components?	Performance Optimization  
+How do you implement route guards in React apps?	Routing
+How do you implement routing guards with React Router?	Routing  
+How do you implement routing in React applications?	Routing
+How do you implement routing in React apps?	Routing  
+How do you implement routing in React?	Routing
+How do you implement routing using React Router v6?	Routing  
+How do you implement routing using React Router?	Routing  
+How do you implement routing with React Router v6?	Routing  
+How do you implement routing with React Router?	Routing  
+How do you implement server-side rendering (SSR) in React apps?	Advanced Concepts  
+How do you implement server-side rendering (SSR) with Next.js?	Advanced Concepts  
+How do you implement server-side rendering (SSR) with React?	Advanced Concepts  
+How do you implement server-side rendering with hydration?	Advanced Concepts
+How do you implement server-side rendering with Next.js?	Advanced Concepts  
+How do you implement server-side rendering with React?	Advanced Concepts
+How do you implement side effects in React?	Hooks  
+How do you implement state management using Redux Toolkit?	State Management  
+How do you implement state management with MobX in React?	State Management  
+How do you implement state management with Redux Toolkit?	State Management  
+How do you implement suspense for data fetching in React?	Code Splitting  
+How do you implement Suspense in React?	Code Splitting
+How do you initialize state in a class component?	State
+How do you initialize state lazily with useState?	Hooks
+How do you integrate React with Redux Toolkit?	State Management
+How do you integrate React with TypeScript?	Advanced Concepts  
+How do you integrate Redux with React Router?	State Management
+How do you lazy-load routes in React Router?	Routing
+How do you lift state up in a component hierarchy?	State Management
+How do you lift state up in React?	State Management
+How do you make a React app accessible?	Accessibility
+How do you manage accessibility in React applications?	Accessibility  
+How do you manage accessibility in React apps?	Accessibility  
+How do you manage accessibility in React components?	Accessibility  
+How do you manage animations in React applications?	Styling  
+How do you manage authentication in React apps?	Security  
+How do you manage authentication state in React apps?	Security  
+How do you manage complex state with useReducer?	Hooks  
+How do you manage component lifecycle in functional components?	Hooks  
+How do you manage component lifecycle in React functional components?	Hooks  
+How do you manage component state with useReducer?	Hooks  
+How do you manage component state with Zustand or Recoil?	State Management  
+How do you manage focus for accessibility in React?	Accessibility  
+How do you manage focus in React applications?	Accessibility
+How do you manage focus in React apps?	Accessibility  
+How do you manage focus in React components for accessibility?	Accessibility  
+How do you manage focus in React for accessibility?	Accessibility  
+How do you manage focus with hooks?	Hooks
+How do you manage form state and validation in React?	Forms  
+How do you manage form state in React?	Forms  
+How do you manage form state with Formik?	Forms  
+How do you manage form validation in React?	Forms  
+How do you manage forms and validation in React?	Forms  
+How do you manage forms and validation with Formik?	Forms  
+How do you manage forms in React?	Forms
+How do you manage forms using Formik?	Forms  
+How do you manage forms using React Hook Form?	Forms  
+How do you manage forms with validation using Formik?	Forms  
+How do you manage global state in a React app?	State Management
+How do you manage global state in React applications?	State Management
+How do you manage global state in React apps?	State Management
+How do you manage global state in React?	State Management
+How do you manage global state using Context API?	State Management  
+How do you manage global state using Recoil?	State Management  
+How do you manage global state using Redux?	State Management  
+How do you manage global state using Zustand?	State Management  
+How do you manage global state with Context API?	State Management  
+How do you manage global state with hooks?	Hooks
+How do you manage global state with Recoil in React?	State Management  
+How do you manage global state with Recoil?	State Management  
+How do you manage global state with Redux Toolkit?	State Management  
+How do you manage global state with Redux?	State Management  
+How do you manage global state with Zustand?	State Management  
+How do you manage multiple form inputs in React?	Forms  
+How do you manage side effects in functional components?	Hooks  
+How do you manage side effects in React with useEffect?	Hooks  
+How do you manage side effects in React?	Hooks
+How do you manage side effects using React Query?	State Management  
+How do you manage side effects using the useEffect hook?	Hooks  
+How do you manage side effects using useEffect hook?	Hooks  
+How do you manage side effects using useEffect?	Hooks  
+How do you manage side effects with custom hooks?	Hooks
+How do you manage side effects with React Query?	State Management  
+How do you manage side effects with Redux Saga?	State Management  
+How do you manage side effects with the useEffect hook?	Hooks  
+How do you manage side effects with useEffect?	Hooks  
+How do you manage state lifting in React?	State Management  
+How do you manage state using the useState hook?	Hooks  
+How do you manage state with Recoil?	State Management  
+How do you manage state with useReducer instead of useState?	Hooks  
+How do you manage state with useReducer?	Hooks  
+How do you manage state with Zustand?	State Management  
+How do you manage translation files in a scalable React project?	Internationalization
+How do you memoize callback functions in React?	Hooks
+How do you memoize components and functions?	Advanced Concepts
+How do you memoize components with React.memo?	Performance Optimization
+How do you memoize components?	Performance Optimization
+How do you memoize expensive calculations in React?	Performance Optimization
+How do you memoize functions with useCallback?	Hooks
+How do you memoize React components?	Performance Optimization
+How do you memoize values with useMemo?	Hooks
+How do you mimic componentDidMount behavior with hooks?	Hooks
+How do you mimic componentDidUpdate using hooks?	Hooks
+How do you mock API calls in React tests?	Testing
+How do you mock API calls in tests?	Testing
+How do you mock API calls in unit tests?	Testing
+How do you mock context in React tests?	Testing
+How do you navigate between screens in React Native?	React Native
+How do you optimize bundle size in React apps?	Advanced Concepts  
+How do you optimize component rendering with useMemo?	Performance Optimization  
+How do you optimize large forms?	Forms
+How do you optimize list rendering in React applications?	Performance Optimization  
+How do you optimize list rendering in React?	Performance Optimization
+How do you optimize list rendering performance in React?	Performance Optimization  
+How do you optimize list rendering with virtualization?	Performance Optimization  
+How do you optimize list rendering?	Performance Optimization  
+How do you optimize performance in React Native apps?	React Native
+How do you optimize performance using React.memo?	Performance Optimization  
+How do you optimize performance using useMemo?	Performance Optimization  
+How do you optimize performance with React.memo?	Performance Optimization  
+How do you optimize React app performance with code splitting?	Code Splitting  
+How do you optimize React app performance with lazy loading?	Performance
+How do you optimize React app performance with React.memo?	Performance Optimization
+How do you optimize React app performance with useMemo and useCallback?	Performance Optimization  
+How do you optimize React app performance with virtualization?	Performance Optimization  
+How do you optimize React app performance?	Performance Optimization
+How do you optimize React application performance?	Performance Optimization  
+How do you optimize React applications for better performance?	Performance Optimization  
+How do you optimize React apps for mobile?	Performance Optimization
+How do you optimize React component performance with useMemo?	Performance Optimization  
+How do you optimize React component rendering with React.memo?	Performance Optimization  
+How do you optimize React component rendering?	Performance Optimization  
+How do you optimize React context to avoid unnecessary renders?	State Management  
+How do you optimize React performance using React.memo and useCallback?	Performance Optimization  
+How do you optimize React performance using virtualization?	Performance Optimization  
+How do you optimize React performance with React.memo and useCallback?	Performance Optimization  
+How do you optimize React performance with virtualization?	Performance Optimization
+How do you optimize React performance?	Performance Optimization
+How do you optimize React rendering using React.memo?	Performance Optimization  
+How do you optimize React rendering with React.memo?	Performance Optimization  
+How do you optimize React rendering with useMemo?	Performance Optimization  
+How do you optimize rendering performance in React?	Performance Optimization
+How do you optimize rendering performance using React.memo?	Performance Optimization  
+How do you optimize rendering performance with useMemo and useCallback?	Performance Optimization  
+How do you optimize rendering using useMemo and useCallback?	Performance Optimization  
+How do you optimize rendering with React.memo?	Performance Optimization  
+How do you optimize rendering with useMemo and useCallback?	Performance Optimization  
+How do you optimize re-rendering of React components?	Performance Optimization  
+How do you pass parameters to a custom hook?	Hooks
+How do you pass parameters to routes in React Router?	Routing
+How do you pass props to a child component?	Props
+How do you pass props to a component?	Basics
+How do you perform a mutation using Apollo Client?	Data Fetching
+How do you perform code splitting using React.lazy?	Code Splitting  
+How do you perform side effects with useEffect?	Hooks
+How do you persist data in React Native?	React Native
+How do you persist form data between sessions?	Forms
+How do you persist Redux state across sessions?	State Management
+How do you preload React components?	Performance
+How do you prevent component re-renders in React?	Performance Optimization
+How do you prevent form submission on Enter key?	Forms
+How do you prevent memory leaks in React components?	Performance Optimization
+How do you prevent prop drilling in large React apps?	State Management
+How do you prevent prop drilling in React applications?	State Management  
+How do you prevent prop drilling using Context API?	State Management  
+How do you prevent prop drilling using React context?	State Management  
+How do you prevent prop drilling?	State Management
+How do you prevent React components from re-rendering unnecessarily?	Performance
+How do you prevent the default behavior in event handlers?	Events
+How do you prevent unnecessary renders in React?	Performance Optimization
+How do you prevent unnecessary renders using React.memo?	Performance Optimization
+How do you prevent unnecessary renders with hooks?	Hooks
+How do you prevent unnecessary renders?	Performance Optimization
+How do you prevent unnecessary re-renders in React?	Performance Optimization
+How do you prevent XSS attacks in React?	Security  
+How do you profile React app performance?	Performance
+How do you programmatically navigate using React Router?	Routing
+How do you protect routes in React based on user roles?	Security  
+How do you protect routes using authentication in React Router?	Routing
+How do you provide and consume a context?	Hooks
+How do you redirect in React Router v6?	Routing
+How do you redirect programmatically in React Router?	Routing
+How do you refetch data when a dependency changes?	Data Fetching
+How do you render a list of elements in React?	Lists & Keys
+How do you reset a form programmatically?	Forms
+How do you reset a form using React Hook Form?	Forms
+How do you reset Redux state on logout?	State Management
+How do you reuse logic across multiple components with hooks?	Hooks
+How do you secure sensitive data in React applications?	Security  
+How do you set up a Redux store?	State Management
+How do you set up Apollo Provider?	Data Fetching
+How do you set up Cypress for React?	Testing
+How do you set up routing in a React application?	Routing
+How do you share logic between components using hooks?	Hooks
+How do you share logic between components with hooks?	Hooks
+How do you share state between sibling components in React?	State Management  
+How do you share stateful logic without changing component hierarchy?	Hooks
+How do you simulate events in tests?	Testing
+How do you split code using dynamic import?	Performance
+How do you stop event propagation in React?	Event Handling
+How do you structure Redux state for scalability?	State Management
+How do you style components with Tailwind CSS in React Native?	React Native
+How do you style React components effectively?	Styling  
+How do you style React components using CSS modules?	Styling  
+How do you style React components using CSS-in-JS libraries?	Styling  
+How do you style React components using styled-components?	Styling  
+How do you style React components with CSS modules?	Styling  
+How do you style React components with styled-components?	Styling  
+How do you style React components?	Styling  
+How do you submit a form in React?	Forms
+How do you synchronize server data with client state?	State Management
+How do you test a custom hook?	Hooks
+How do you test asynchronous actions in React components?	Testing  
+How do you test asynchronous behavior in React components?	Testing
+How do you test asynchronous code in React components?	Testing  
+How do you test asynchronous logic in React components?	Testing
+How do you test asynchronous React components?	Testing  
+How do you test components that consume context?	Context API
+How do you test components that use hooks?	Hooks
+How do you test for accessibility in React?	Accessibility
+How do you test React components for accessibility?	Testing  
+How do you test React components using Jest and React Testing Library?	Testing  
+How do you test React components using Jest?	Testing
+How do you test React components using React Testing Library?	Testing  
+How do you test React components with Enzyme?	Testing  
+How do you test React components with Jest and React Testing Library?	Testing
+How do you test React components with Jest?	Testing  
+How do you test React components with mocking?	Testing  
+How do you test React components with React Testing Library?	Testing  
+How do you test React components?	Testing
+How do you test React hooks with Jest and React Testing Library?	Testing  
+How do you test React hooks with Jest?	Testing  
+How do you test React hooks?	Testing
+How do you test Redux reducers and actions?	State Management
+How do you test user interactions in React?	Testing
+How do you type context values in TypeScript?	TypeScript
+How do you type custom hooks in TypeScript?	TypeScript
+How do you type forwardRef components in TypeScript?	TypeScript
+How do you type props for class components in TypeScript?	TypeScript
+How do you type props in a functional component using TypeScript?	TypeScript
+How do you type React.memo components with props?	TypeScript
+How do you update context values?	State Management
+How do you update state based on previous state in useState?	Hooks
+How do you update state immutably in Redux reducers?	State Management
+How do you update the state in a component?	Basics
+How do you use a ternary operator in JSX?	JSX
+How do you use Axios to fetch data in React?	Data Fetching
+How do you use context API to manage application state?	State Management  
+How do you use createAsyncThunk in Redux Toolkit?	State Management
+How do you use Expo for fast development?	React Native
+How do you use Formik in React?	Forms
+How do you use Formik with Yup for validation?	Forms
+How do you use fragments to avoid extra nodes?	Components  
+How do you use GraphQL with React?	Data Fetching
+How do you use higher-order components (HOCs)?	Design Patterns
+How do you use hooks in class	
+How do you use hooks in React?	Hooks
+How do you use inline styles in React?	Styling
+How do you use multiple contexts in a component?	Context API
+How do you use portals to render children outside the DOM hierarchy?	Advanced Features
+How do you use React Context API for global state management?	State Management  
+How do you use React Context API for state management?	State Management  
+How do you use React Context API to avoid prop drilling?	State Management  
+How do you use React Context API?	State Management
+How do you use React Context to avoid prop drilling?	State Management  
+How do you use React fragments?	Components  
+How do you use React Hook Form?	Forms
+How do you use React Portals to render children outside the DOM hierarchy?	Advanced Features  
+How do you use React Profiler for performance monitoring?	Debugging  
+How do you use React Profiler for performance tuning?	Advanced Concepts
+How do you use React Profiler to analyze component rendering?	Debugging  
+How do you use React Profiler to identify performance issues?	Debugging  
+How do you use React Profiler to improve performance?	Debugging  
+How do you use React Profiler to measure performance?	Debugging  
+How do you use React Query to cache server responses?	State Management
+How do you use React Router for navigation?	Routing  
+How do you use React.lazy for code splitting?	Advanced Concepts
+How do you use React.memo to improve performance?	Performance Optimization
+How do you use React.memo to optimize component rendering?	Performance Optimization  
+How do you use React.memo to prevent unnecessary re-renders?	Performance Optimization  
+How do you use React.memo with TypeScript?	TypeScript
+How do you use React’s Profiler to detect performance bottlenecks?	Debugging  
+How do you use React’s useTransition hook?	Hooks  
+How do you use react-intl for localization?	Internationalization
+How do you use refs in React?	Refs
+How do you use route parameters in React Router?	Routing
+How do you use ScrollView and FlatList in React Native?	React Native
+How do you use StyleSheet in React Native?	React Native
+How do you use the `useState` hook in a functional component?	Hooks
+How do you use the Context API with TypeScript?	TypeScript
+How do you use the Link component for navigation?	Routing
+How do you use the React Profiler API for performance monitoring?	Debugging  
+How do you use the unstable_useTransition hook?	Advanced Concepts
+How do you use the useContext hook?	Hooks
+How do you use the useDebugValue hook?	Hooks
+How do you use the useDeferredValue hook in React?	Hooks  
+How do you use the useEffect hook?	Hooks
+How do you use the useImperativeHandle hook?	Refs  
+How do you use the useLayoutEffect hook and when should you use it?	Hooks  
+How do you use the useLayoutEffect hook effectively?	Hooks  
+How do you use the useLayoutEffect hook?	Hooks  
+How do you use the useLocation hook?	Routing
+How do you use the useReducer hook for complex state management?	Hooks
+How do you use the useReducer hook for complex state?	Hooks
+How do you use the useReducer hook in React?	Hooks  
+How do you use the useReducer hook?	Hooks  
+How do you use the useRef hook in React?	Refs  
+How do you use the useState hook to manage state in functional components?	Hooks  
+How do you use the useSyncExternalStore hook?	Hooks  
+How do you use TypeScript with Redux Toolkit?	TypeScript
+How do you use useCallback to memoize functions?	Performance
+How do you use useEffect to manage side effects?	Hooks  
+How do you use useEffect to perform side effects?	Hooks  
+How do you use useForm from React Hook Form?	Forms
+How do you use useImperativeHandle with forwardRef?	Hooks
+How do you use useNavigate in React Router?	Routing
+How do you use useReducer for complex state management?	Hooks  
+How do you use useReducer for state management?	Hooks
+How do you use useRef to access DOM elements?	Refs  
+How do you use useRef to persist values?	Hooks
+How do you use Webpack to optimize React apps?	Advanced Concepts  
+How do you validate a form in React?	Forms
+How do you validate form input in React?	Forms
+How do you validate forms in React?	Forms
+How do you write a GraphQL query in a React component?	Data Fetching
+How do you write a Higher-Order Component?	Advanced Patterns
+How do you write unit tests for components?	Testing
+How does Concurrent Mode improve UI responsiveness?	Advanced Concepts
+How does Next.js enable server-side rendering?	Advanced
+How does Next.js enable SSR?	Advanced Concepts  
+How does React batch state updates?	State
+How does React compare to other frontend frameworks like Angular or Vue?	Core Concepts
+How does React differ from traditional DOM manipulation?	Core Concepts
+How does React Fiber improve performance?	React Internals
+How does React handle cleanup in useEffect?	Hooks
+How does React handle errors in components?	Error Handling
+How does React handle event pooling?	Event Handling
+How does React handle events differently than the DOM?	Core Concepts
+How does React handle keys during reconciliation?	Advanced
+How does React handle reconciliation for lists with keys?	Lists & Keys
+How does React handle reconciliation?	Core Concepts
+How does React handle state management compared to Redux?	State Management
+How does React Hook Form differ from Formik?	Forms
+How does React manage component lifecycle with hooks?	Hooks  
+How does React Native differ from React?	React Native
+How does React support localization and internationalization (i18n)?	Internationalization
+How does React update the UI?	Core Concepts
+How does React.lazy help in code splitting?	Code Splitting
+How does React.lazy work?	Code Splitting
+How does React’s context API work?	State Management
+How does React’s diffing algorithm work?	Core Concepts
+How does React’s event system differ from native DOM events?	Event Handling
+How does React’s reconciliation algorithm optimize updates?	Core Concepts
+How does React’s reconciliation algorithm work internally?	React Internals  
+How does React’s reconciliation algorithm work?	Core Concepts
+How does React's reconciliation algorithm work?	Advanced Concepts
+How does Redux DevTools help in development?	State Management
+How does SSR improve performance and SEO?	SSR / SSG
+How does Suspense help with data fetching?	Advanced Concepts
+How does the useEffect hook work in React?	Hooks
+How does the useEffect hook work?	Hooks
+How does the useImperativeHandle hook work?	Refs
+How does the virtual DOM improve performance?	Basics
+How does tree shaking affect React app size?	Performance
+How does useCallback help with unnecessary re-renders?	Hooks
+How does useLayoutEffect differ from useEffect?	Hooks
+How does useMemo help optimize performance?	Performance
+How does Webpack bundle a React application?	Tooling
+How is useReducer different from useState?	Hooks
+How is useRef different from state?	Hooks
+How to handle errors in functional components?	Error Handling
+How to manage forms with Formik or React Hook Form?	Forms
+How to test React components with Jest and React Testing Library?	Testing
+What are accessibility best practices in React?	Accessibility  
+What are action creators in Redux?	State Management
+What are actions and reducers in Redux?	State Management
+What are ARIA roles and how are they used in React?	Accessibility
+What are best practices for accessibility in React?	Accessibility  
+What are best practices for React component design?	Best Practices
+What are common causes of performance issues in React?	Performance
+What are common security risks in React apps?	Security  
+What are components in React Native?	React Native
+What are compound components and how do you build them?	Advanced Patterns  
+What are compound components and how do you create them?	Advanced Patterns  
+What are compound components in React and how do you build them?	Advanced Patterns  
+What are compound components?	Design Patterns
+What are controlled and uncontrolled components in forms?	Forms
+What are controlled and uncontrolled components in React?	Forms  
+What are controlled and uncontrolled components?	Forms
+What are controlled components and how do you use them?	Forms  
+What are controlled components and uncontrolled components?	Forms  
+What are controlled components in React forms?	Forms  
+What are controlled components in React?	Forms
+What are controlled components?	Forms  
+What are controlled vs uncontrolled components in React forms?	Forms  
+What are controlled vs uncontrolled components?	Forms
+What are custom hooks and why create them?	Hooks
+What are custom hooks in React?	Hooks
+What are default props?	Props
+What are error boundaries and how are they implemented?	Error Handling  
+What are error boundaries and how do they function?	Error Handling
+What are error boundaries and how do they help?	Error Handling
+What are error boundaries and how do they work in React?	Error Handling
+What are error boundaries and how do they work?	Error Handling
+What are error boundaries and how do you use them?	Error Handling  
+What are error boundaries in React and how do they work?	Error Handling  
+What are error boundaries in React and how do you create them?	Error Handling  
+What are error boundaries in React?	Error Handling
+What are error boundaries?	Error Handling
+What are Expo and React Native CLI?	React Native
+What are fallback components in Suspense?	Advanced Concepts
+What are Flexbox layouts in React Native?	React Native
+What are fragments in React and why are they useful?	Components
+What are fragments in React?	JSX
+What are Higher-Order Components (HOCs) and how are they used?	Advanced Patterns  
+What are Higher-Order Components (HOCs) and how do you create them?	Advanced Patterns  
+What are Higher-Order Components (HOCs) in React?	Advanced Patterns  
+What are higher-order components (HOCs)?	Advanced Patterns
+What are hook dependency arrays and why are they important?	Hooks
+What are hooks and how do they relate to patterns?	Design Patterns
+What are hooks rules and why are they important?	Hooks  
+What are hooks rules you must follow?	Hooks Rules
+What are lifecycle methods in class components?	Lifecycle
+What are portals in React and when would you use them?	Advanced Features
+What are portals in React?	Advanced Features
+What are prop types and how do you use them?	Props
+What are props in React and how do you pass them?	Props  
+What are props in React?	Props
+What are pure components in React?	Performance Optimization
+What are React error boundaries and how do they work?	Error Handling  
+What are React error boundaries and how do you implement them?	Error Handling  
+What are React error boundaries and how do you use them?	Error Handling  
+What are React error boundaries limitations?	Error Handling  
+What are React error boundaries?	Error Handling  
+What are React fibers?	Advanced Concepts
+What are React fragments and how do they help in rendering?	Components  
+What are React fragments and when should you use them?	Components  
+What are React fragments and why are they useful?	Components  
+What are React fragments and why use them?	Components
+What are React Higher-Order Components (HOCs)?	Advanced Patterns  
+What are React hooks and why are they useful?	Hooks
+What are React hooks and why were they introduced?	Hooks
+What are React hooks rules and best practices?	Hooks  
+What are React Hooks rules and why must they be followed?	Hooks  
+What are React hooks rules you must follow?	Hooks Rules
+What are React Hooks?	Hooks
+What are React portals and how are they used?	Advanced Features
+What are React portals and how do they work?	Advanced Features  
+What are React portals and how do you use them?	Advanced Features
+What are React portals and when should you use them?	Advanced Features  
+What are React portals and why use them?	Advanced Features
+What are React portals used for?	Advanced Features  
+What are React portals?	Advanced Features
+What are React Server Components and how do they differ from client components?	Advanced Concepts  
+What are React Server Components and how do they differ from traditional components?	Advanced Concepts  
+What are React Server Components and their advantages?	Advanced Concepts  
+What are React Server Components and their benefits?	Advanced Concepts  
+What are React Server Components?	Advanced Concepts  
+What are React Suspense boundaries?	Code Splitting
+What are React synthetic events?	Event Handling
+What are refs used for?	Refs
+What are render props and when should you use them?	Advanced Patterns
+What are render props in React?	Advanced Patterns
+What are render props?	Advanced Patterns
+What are RTK Query benefits and use cases?	State Management
+What are rules of hooks violations?	Hooks
+What are selectors in Redux?	State Management
+What are semantic HTML elements and why are they important in React?	Accessibility
+What are side effects in React?	Hooks
+What are slices in Redux Toolkit?	State Management
+What are snapshot tests in React?	Testing
+What are snapshot tests?	Testing
+What are some best practices for styling React components?	Styling  
+What are some common pitfalls when using hooks?	Hooks
+What are some common use cases for React?	Core Concepts
+What are some core components in React Native?	React Native
+What are some strategies for testing React hooks?	Testing
+What are some use cases for portals?	Advanced
+What are subscriptions in GraphQL?	Data Fetching
+What are Suspense and Concurrent Mode in React 18?	Advanced Concepts  
+What are synthetic events and how are they different from native events?	Event Handling  
+What are synthetic events in React and how are they managed?	Event Handling  
+What are synthetic events in React and how do they differ from native events?	Event Handling  
+What are synthetic events in React and how do they work?	Event Handling
+What are synthetic events in React?	Event Handling
+What are the advantages and disadvantages of Redux compared to React Context?	State Management
+What are the advantages and disadvantages of render props?	Advanced Concepts
+What are the advantages of functional components over class components?	Components  
+What are the advantages of using TypeScript with React?	TypeScript
+What are the benefits of custom hooks?	Hooks
+What are the benefits of React Server Components?	Advanced Concepts  
+What are the benefits of React.memo for functional components?	Performance Optimization  
+What are the benefits of SSR?	Advanced Concepts
+What are the benefits of static rendering in web apps?	SSR / SSG
+What are the benefits of using functional components over class components?	Components
+What are the benefits of using React functional components over class components?	Core Concepts  
+What are the benefits of using React Router?	Routing
+What are the benefits of using React Server Components?	Advanced Concepts
+What are the benefits of using React StrictMode?	Advanced Features  
+What are the benefits of using React.memo?	Performance Optimization  
+What are the benefits of using useCallback vs inline functions?	Performance Optimization  
+What are the best practices for accessibility in React applications?	Accessibility  
+What are the best practices for optimizing React applications?	Performance
+What are the best practices for structuring React projects?	Architecture  
+What are the best practices for styling React components?	Styling  
+What are the best practices for using React context?	State Management  
+What are the common accessibility features in React?	Accessibility
+What are the common pitfalls in React performance optimization?	Performance Optimization  
+What are the core principles of Redux?	State Management
+What are the dependencies in useEffect used for?	Hooks
+What are the differences between class components and functional components?	Components  
+What are the differences between client-side and server-side rendering?	Advanced Concepts
+What are the differences between controlled and uncontrolled components?	Forms  
+What are the differences between React and Angular?	Comparison
+What are the differences between React and Vue?	Comparison
+What are the differences between React class components and functional components?	Core Concepts  
+What are the differences between React Router v5 and v6?	Routing  
+What are the differences between Redux and Context API?	State Management
+What are the differences between useEffect and useInsertionEffect?	Hooks  
+What are the differences between useEffect cleanup and componentWillUnmount?	Hooks  
+What are the limitations of React error boundaries?	Error Handling  
+What are the limitations of React?	Core Concepts
+What are the main features of React?	Basics
+What are the pros and cons of server-side rendering?	Advanced Concepts
+What are the rules of hooks in React?	Hooks  
+What are the rules of hooks?	Hooks Rules
+What are the rules of JSX syntax?	JSX
+What are the rules of using Hooks?	Hooks
+What are the three main phases of the React lifecycle?	Lifecycle
+What are the trade-offs of using Redux vs Context API?	State Management  
+What are the ways to style React components?	Styling
+What are uncontrolled components?	Forms
+What are uncontrolled inputs and when to use them?	Forms
+What are Webpack and Babel in the React toolchain?	Tooling
+What happens if you call useState inside a loop?	Hooks
+What happens if you omit the dependency array in useEffect?	Hooks
+What happens if you pass an empty array to useEffect?	Hooks
+What happens when state changes in a component?	State
+What happens when you call setState?	Basics
+What is a controlled component?	Forms
+What is a controlled vs uncontrolled pattern in UI components?	Design Patterns
+What is a custom hook and why would you write one?	Hooks
+What is a layout in Next.js?	SSR / SSG
+What is a loader in Webpack?	Tooling
+What is a nested route in React Router?	Routing
+What is a plugin in Webpack?	Tooling
+What is a portal in React?	Advanced
+What is a reducer and how does it work?	State Management
+What is a unit test in React?	Testing
+What is an error boundary in React?	Error Handling
+What is an uncontrolled component?	Forms
+What is Apollo Client and how is it used?	Data Fetching
+What is client-side navigation in Next.js?	SSR / SSG
+What is code splitting and how do you implement it?	Code Splitting
+What is code splitting and how is it implemented?	Performance Optimization
+What is code splitting and why is it important?	Advanced Concepts  
+What is code splitting in React?	Performance
+What is component composition in React?	Design Patterns
+What is componentDidMount used for?	Lifecycle
+What is componentDidUpdate used for?	Lifecycle
+What is componentWillUnmount used for?	Lifecycle
+What is Concurrent Mode in React?	Advanced Concepts
+What is conditional rendering in React?	Rendering
+What is context and how does it solve prop drilling?	State Management
+What is Context API and when to use it?	Context API
+What is context-based i18n and how is it implemented?	Internationalization
+What is Create React App (CRA)?	Tooling
+What is end-to-end (E2E) testing?	Testing
+What is error boundary and how to implement it?	Error Handling
+What is error boundary in React?	Error Handling
+What is event delegation in React?	Event Handling
+What is Formik and how does it help with form management?	Forms
+What is Formik and why is it used?	Forms
+What is getDerivedStateFromProps and when is it used?	Lifecycle
+What is getServerSideProps in Next.js?	SSR / SSG
+What is getSnapshotBeforeUpdate used for?	Lifecycle
+What is getStaticPaths in Next.js?	SSR / SSG
+What is getStaticProps in Next.js?	SSR / SSG
+What is hydration in React?	Advanced Concepts
+What is inversion of control in React components?	Design Patterns
+What is Jest and how is it used in React projects?	Testing
+What is Jotai and how does it handle state management?	State Management
+What is JSX and how does it differ from HTML?	Core Concepts  
+What is JSX and how does it work in React?	Core Concepts  
+What is JSX and how does it work?	Core Concepts  
+What is JSX and why is it used in React?	Core Concepts  
+What is JSX and why is it used?	Core Concepts
+What is JSX in React?	Core Concepts  
+What is JSX?	JSX
+What is lazy loading and code splitting?	Code Splitting
+What is lazy loading in React?	Code Splitting
+What is lifting state up in React?	State Management
+What is memoization and how is it used in React?	Performance Optimization
+What is memoization in React?	Performance Optimization
+What is middleware in Redux?	State Management
+What is mocking in testing and how is it done?	Testing
+What is Next.js and how does it support SSR and SSG?	SSR / SSG
+What is optimistic UI in data fetching?	Data Fetching
+What is prop drilling and how can Context API help?	State Management  
+What is prop drilling and how can it be avoided?	State Management
+What is prop drilling and how can you avoid it?	State Management
+What is prop drilling and how do you avoid it?	State Management
+What is prop drilling and how do you prevent it?	State Management  
+What is prop drilling and how do you solve it?	State Management
+What is prop drilling and how to avoid it?	State Management
+What is prop drilling?	State Management
+What is React and what problem does it solve?	Core Concepts
+What is React and why is it used?	Basics
+What is React Concurrent Mode and why is it important?	Advanced Concepts  
+What is React Concurrent Mode?	Advanced Concepts  
+What is React Context and how do you use it?	State Management  
+What is React Context and how does it work?	State Management  
+What is React Context and when should you use it?	State Management  
+What is React Context API and how do you use it?	State Management  
+What is React Context API and how is it used?	State Management  
+What is React Context API and when should it be used?	State Management  
+What is React Context API and when should you use it?	State Management  
+What is React Fiber and how does it affect rendering?	React Internals  
+What is React Fiber and how does it enhance rendering?	React Internals  
+What is React Fiber and how does it impact rendering?	React Internals  
+What is React Fiber and how does it improve performance?	React Internals  
+What is React Fiber and how does it improve rendering?	React Internals
+What is React Fiber and how does it work?	React Internals  
+What is React Fiber and what improvements does it bring?	React Internals  
+What is React Fiber and why is it important?	React Internals
+What is React Fiber architecture and why is it important?	React Internals  
+What is React Fiber architecture?	React Internals
+What is React Fiber?	React Internals
+What is React Hook Form and why use it?	Forms
+What is React Hook Form?	Forms
+What is React Navigation and how is it used?	React Native
+What is React Profiler and how do you use it?	Debugging
+What is React Profiler?	Debugging
+What is React Profiler’s flamegraph and how do you use it?	Debugging
+What is React Query and how does it help with data fetching?	State Management
+What is React Router and how do you implement routing?	Routing  
+What is React Router and how is it used?	Routing
+What is React Router and why is it used?	Routing
+What is React StrictMode and what benefits does it offer?	Advanced Features  
+What is React StrictMode and what benefits does it provide?	Advanced Features  
+What is React StrictMode and what is its purpose?	Advanced Features  
+What is React StrictMode and why is it useful?	Advanced Features  
+What is React StrictMode and why should you use it?	Advanced Features  
+What is React StrictMode and why use it?	Advanced Features
+What is React StrictMode?	Advanced Features  
+What is React Suspense and how do you use it?	Code Splitting  
+What is React Suspense and how does it help with data fetching?	Code Splitting  
+What is React Suspense and how does it improve loading?	Code Splitting
+What is React Suspense and how does it relate to data fetching?	Code Splitting  
+What is React Suspense and how does it relate to lazy loading?	Code Splitting  
+What is React Suspense and how does it work with data fetching?	Code Splitting
+What is React Suspense and how does it work?	Code Splitting  
+What is React Suspense and how is it used for data fetching?	Code Splitting  
+What is React Suspense and how is it used?	Code Splitting  
+What is React Suspense and how is it useful?	Code Splitting  
+What is React Suspense?	Code Splitting
+What is React SuspenseList and how do you use it?	Code Splitting  
+What is React SuspenseList and how does it help coordinate multiple Suspense components?	Code Splitting  
+What is React SuspenseList and how does it work?	Code Splitting  
+What is React SuspenseList and how is it used?	Code Splitting  
+What is React SuspenseList?	Code Splitting  
+What is React Testing Library?	Testing
+What is React.Fragment used for?	Components  
+What is React.lazy and how do you implement it?	Code Splitting
+What is React.lazy and how does it help with performance?	Code Splitting  
+What is React.lazy and how is it used?	Performance
+What is React.memo and how does it help with performance?	Performance Optimization  
+What is React.memo and how does it optimize functional components?	Performance Optimization  
+What is React.memo and how does it work?	Performance Optimization
+What is React.StrictMode and its benefits?	Advanced Features  
+What is React.StrictMode and what are its benefits?	Advanced Features
+What is React.StrictMode and what benefits does it provide?	Advanced Features  
+What is React.StrictMode and what does it do?	Advanced Features  
+What is React.StrictMode and why is it used?	Advanced Features
+What is React.StrictMode and why is it useful?	Advanced Features  
+What is React.StrictMode and why should it be used?	Advanced Features  
+What is React.StrictMode and why should you use it?	Advanced Features  
+What is React.StrictMode and why use it?	Advanced Features  
+What is React.StrictMode used for?	Advanced
+What is React.StrictMode?	Advanced Features
+What is React’s concurrent mode and how does it improve UI responsiveness?	Advanced Concepts  
+What is React’s Concurrent Mode?	Advanced Concepts  
+What is React’s render props pattern and how is it used?	Advanced Patterns
+What is React’s SuspenseList and how does it help?	Code Splitting  
+What is React's concurrent mode?	Advanced Concepts
+What is Recoil and how is it used in React?	State Management
+What is reconciliation algorithm in React?	Core Concepts
+What is reconciliation and how does React use it?	Core Concepts
+What is reconciliation in React and how does it work?	Core Concepts
+What is reconciliation in React and why is it important?	Core Concepts  
+What is reconciliation in React?	Core Concepts
+What is Redux and why is it used with React?	State Management
+What is Redux and why is it used?	State Management
+What is Redux Saga and when would you use it?	State Management
+What is Redux Thunk and how does it work?	State Management
+What is Redux Toolkit and how does it simplify Redux?	State Management
+What is server-side rendering (SSR) in React?	Advanced Concepts
+What is shouldComponentUpdate and how does it help performance?	Lifecycle
+What is snapshot testing in React?	Testing
+What is SSG (Static Site Generation)?	SSR / SSG
+What is SSR (Server-Side Rendering)?	SSR / SSG
+What is state in React?	State
+What is state lifting in React?	State Management
+What is static site generation (SSG) in React?	Advanced
+What is Suspense and how does it work with lazy components?	Performance
+What is Suspense and how is it used?	Performance
+What is Suspense component in React?	Code Splitting
+What is Suspense in React?	Code Splitting
+What is SWR and how is it used with React?	State Management
+What is the App Router in Next.js 13+?	SSR / SSG
+What is the Content Security Policy (CSP) and how does it apply to React?	Security  
+What is the Context API and how does it help with state management?	State Management
+What is the Context API and how does it improve state management?	State Management
+What is the Context API and when should it be used?	State Management
+What is the context API in React?	State Management
+What is the dependency array in useEffect used for?	Hooks
+What is the dependency array in useEffect?	Hooks
+What is the difference between <Link> and <NavLink>?	Routing
+What is the difference between a button type submit and button type button in forms?	Forms
+What is the difference between a class component and a functional component?	Basics
+What is the difference between a controlled and uncontrolled component?	Forms  
+What is the difference between BrowserRouter and HashRouter?	Routing
+What is the difference between class and functional components?	Components
+What is the difference between client state and server state?	State Management
+What is the difference between client-side and server-side rendering in React?	Advanced Concepts  
+What is the difference between client-side and server-side rendering?	Advanced Concepts
+What is the difference between client-side and server-side routing?	Routing
+What is the difference between client-side rendering and server-side rendering in React?	Advanced Concepts  
+What is the difference between client-side rendering and server-side rendering?	Advanced Concepts
+What is the difference between componentDidMount and componentWillUnmount?	Lifecycle
+What is the difference between controlled and uncontrolled components in forms?	Forms
+What is the difference between controlled and uncontrolled components in React?	Forms  
+What is the difference between controlled and uncontrolled components?	Forms
+What is the difference between controlled and uncontrolled inputs?	Forms
+What is the difference between controlled components and uncontrolled components in forms?	Forms  
+What is the difference between development and production builds in React?	Tooling
+What is the difference between Fast Refresh and Hot Reloading?	React Native
+What is the difference between HTML and React event handling?	Events
+What is the difference between mapStateToProps and useSelector?	State Management
+What is the difference between props and state in React?	Core Concepts  
+What is the difference between PureComponent and Component?	Performance
+What is the difference between PureComponent and React.memo?	Performance Optimization
+What is the difference between query and mutation in GraphQL?	Data Fetching
+What is the difference between React class and functional components?	Components
+What is the difference between React class components and functional components?	Components
+What is the difference between React components and elements?	Core Concepts  
+What is the difference between React Context and MobX?	State Management  
+What is the difference between React Context and Redux for state management?	State Management  
+What is the difference between React context and Redux?	State Management  
+What is the difference between React Context API and Redux?	State Management  
+What is the difference between React elements and components?	Core Concepts  
+What is the difference between React Hooks and lifecycle methods?	Hooks
+What is the difference between React Router v5 and v6?	Routing  
+What is the difference between React.Fragment and <> syntax?	Components
+What is the difference between React.Fragment and a div?	Components
+What is the difference between React.Fragment and div?	Components
+What is the difference between React.lazy and dynamic imports?	Code Splitting
+What is the difference between React.lazy and React.Suspense?	Code Splitting  
+What is the difference between React.memo and PureComponent?	Performance Optimization  
+What is the difference between React.memo and useMemo?	Performance Optimization  
+What is the difference between React.PureComponent and React.Component?	Performance Optimization
+What is the difference between React.StrictMode and error boundaries?	Error Handling
+What is the difference between React’s controlled components and form libraries like Formik?	Forms
+What is the difference between React’s synthetic events and native events?	Event Handling  
+What is the difference between React’s useEffect and useImperativeHandle hooks?	Hooks  
+What is the difference between React’s useState and useReducer hooks?	Hooks  
+What is the difference between React's concurrent mode and legacy mode?	Advanced Concepts
+What is the difference between Redux and Context API?	State Management
+What is the difference between Redux and MobX?	State Management
+What is the difference between REST and GraphQL APIs?	Data Fetching
+What is the difference between server-side rendering (SSR) and static site generation (SSG) in React?	Advanced Concepts  
+What is the difference between server-side rendering and static site generation?	Advanced Concepts  
+What is the difference between shallow and deep rendering in React testing?	Testing
+What is the difference between shallow and deep rendering in testing?	Testing
+What is the difference between shallow rendering and full rendering?	Testing
+What is the difference between shouldComponentUpdate and React.memo?	Performance Optimization
+What is the difference between SSR and client-side rendering?	Advanced
+What is the difference between state and context?	State Management
+What is the difference between state and props?	State vs Props
+What is the difference between strict mode and normal mode in React?	Advanced
+What is the difference between touched and dirty in form libraries?	Forms
+What is the difference between useCallback and useMemo hooks?	Hooks  
+What is the difference between useCallback and useMemo?	Hooks
+What is the difference between useDispatch and bindActionCreators?	State Management
+What is the difference between useEffect and componentDidMount?	Hooks
+What is the difference between useEffect and useInsertionEffect?	Hooks  
+What is the difference between useEffect and useLayoutEffect hooks?	Hooks  
+What is the difference between useEffect and useLayoutEffect?	Hooks
+What is the difference between useImperativeHandle and useRef?	Refs
+What is the difference between useMemo and memo?	Performance Optimization  
+What is the difference between useMemo and React.memo?	Performance
+What is the difference between useMemo and useCallback hooks?	Hooks  
+What is the difference between useMemo and useCallback?	Hooks
+What is the difference between useState and useReducer hooks?	Hooks
+What is the difference between useState and useReducer?	Hooks  
+What is the difference between useState and useRef in React Native?	React Native
+What is the Fetch API and how is it used in React?	Data Fetching
+What is the importance of keys in React lists?	Lists & Keys  
+What is the key prop and why is it important?	JSX
+What is the order of lifecycle methods in mounting?	Lifecycle
+What is the order of lifecycle methods in updating?	Lifecycle
+What is the purpose of `key` in a React list?	Lists & Keys
+What is the purpose of Babel in React?	Tooling
+What is the purpose of generics in React TypeScript components?	TypeScript
+What is the purpose of keys in lists and how do they help React?	Lists & Keys  
+What is the purpose of keys in React lists?	Lists & Keys
+What is the purpose of React fragments?	Components  
+What is the purpose of React keys in lists?	Lists & Keys  
+What is the purpose of React keys?	Lists & Keys
+What is the purpose of React Profiler API?	Debugging
+What is the purpose of React.Fragment?	Components  
+What is the purpose of React.StrictMode?	Advanced Features
+What is the purpose of React’s error boundaries?	Error Handling  
+What is the purpose of React’s StrictMode in development?	Advanced Features  
+What is the purpose of render() in class components?	Basics
+What is the purpose of setState?	Basics
+What is the purpose of synthetic events in React?	Events
+What is the purpose of the Route component?	Routing
+What is the purpose of the useCallback hook?	Hooks  
+What is the purpose of the useEffect hook?	Hooks  
+What is the purpose of the useImperativeHandle hook?	Hooks  
+What is the purpose of the useRef hook?	Refs
+What is the purpose of useCallback hook and when should you use it?	Hooks  
+What is the purpose of useCallback hook?	Hooks  
+What is the purpose of useDebugValue hook?	Hooks
+What is the purpose of useReducer hook?	Hooks  
+What is the purpose of useRef hook in React?	Refs  
+What is the purpose of useRef?	Refs  
+What is the purpose of useTransition hook?	Hooks  
+What is the purpose of using React.Fragment?	JSX
+What is the React component lifecycle?	Lifecycle
+What is the React Context API?	State Management
+What is the React Profiler and how do you use it for performance analysis?	Debugging  
+What is the React Profiler tool in DevTools?	Performance
+What is the Redux DevTools extension?	State Management
+What is the Redux store?	State Management
+What is the Redux Toolkit and why use it?	State Management
+What is the render props pattern?	Design Patterns
+What is the role of `children` in props?	Props
+What is the role of `setState()` in class components?	State
+What is the role of context selectors in React Context API?	State Management
+What is the role of fragments in GraphQL?	Data Fetching
+What is the role of keys in lists in React?	Lists & Keys  
+What is the role of keys in React lists and why are they important?	Lists & Keys  
+What is the role of keys in React lists?	Lists & Keys  
+What is the role of keys in React reconciliation?	Lists & Keys
+What is the role of keys in React?	Lists & Keys
+What is the role of keys in reconciliation?	Lists & Keys
+What is the role of middleware in Redux?	State Management
+What is the role of portals in React?	Advanced Features  
+What is the role of React Profiler?	Debugging  
+What is the role of test coverage in a project?	Testing
+What is the role of the dependency array in useEffect?	Hooks  
+What is the role of the React Profiler’s “commit phase”?	Debugging  
+What is the role of the useCallback hook?	Hooks  
+What is the role of the useEffect dependency array?	Hooks
+What is the significance of keys in dynamic lists?	Lists & Keys
+What is the significance of keys in lists for React reconciliation?	Lists & Keys
+What is the significance of keys in React lists?	Lists & Keys  
+What is the significance of keys in React?	Lists & Keys
+What is the significance of keys when rendering lists in React?	Lists & Keys
+What is the significance of the dependency array in useEffect?	Hooks
+What is the significance of the key prop in React lists?	Lists & Keys  
+What is the use of keyof and typeof in React TypeScript?	TypeScript
+What is the use of React Context API?	State Management  
+What is the use of React portals?	Advanced Features  
+What is the use of React Profiler API?	Debugging  
+What is the use of React Profiler?	Debugging  
+What is the use of React.Fragment?	Components
+What is the use of React.lazy and Suspense in code splitting?	Code Splitting  
+What is the use of React.memo?	Performance Optimization
+What is the use of React.StrictMode?	Advanced Features
+What is the use of the React Profiler API?	Debugging  
+What is the use of the React Profiler?	Debugging
+What is the use of the useCallback hook?	Hooks  
+What is the use of the useDeferredValue hook?	Hooks  
+What is the use of the useEffect hook?	Hooks  
+What is the use of the useImperativeHandle hook in React?	Hooks  
+What is the use of the useImperativeHandle hook?	Hooks  
+What is the use of the useLayoutEffect hook?	Hooks  
+What is the use of the useReducer hook in React?	Hooks  
+What is the use of the useReducer hook?	Hooks
+What is the use of the useRef hook in React?	Refs  
+What is the use of the useRef hook?	Refs
+What is the use of the useState hook?	Hooks
+What is the use of the useTransition hook in React?	Hooks  
+What is the use of the useTransition hook?	Hooks
+What is the use of useCallback hook in React?	Hooks  
+What is the use of useCallback hook?	Hooks
+What is the use of useCallback?	Hooks
+What is the use of useContext hook in React?	Hooks  
+What is the use of useEffect hook in React?	Hooks  
+What is the use of useEffect hook?	Hooks  
+What is the use of useMemo hook in React?	Hooks  
+What is the use of useReducer hook in React?	Hooks  
+What is the use of useReducer hook?	Hooks
+What is the use of useRef hook in React?	Refs  
+What is the use of useRef hook?	Refs  
+What is the use of useRef in React?	Refs  
+What is the use of useSyncExternalStore hook?	Hooks
+What is the use of useTransition hook in React?	Hooks  
+What is the useCallback hook and why is it useful?	Hooks
+What is the useCallback hook in React?	Hooks  
+What is the useCallback hook?	Hooks
+What is the useContext hook?	Context API
+What is the useDispatch hook in Redux?	State Management
+What is the useEffect hook and when should you use it?	Hooks  
+What is the useImperativeHandle hook?	Refs
+What is the useLocation hook and when would you use it?	Routing
+What is the useMemo hook and how does it differ from useCallback?	Hooks
+What is the useNavigate hook in React Router v6?	Routing
+What is the useParams hook in React Router v6?	Routing
+What is the useReducer hook and when should you use it?	Hooks
+What is the useReducer hook in React?	Hooks  
+What is the useReducer hook?	Hooks  
+What is the useRef hook and how do you use it?	Refs
+What is the useRef hook and when should you use it?	Refs
+What is the useRef hook used for in React?	Refs  
+What is the useRef hook?	Refs
+What is the useSelector hook in Redux?	State Management
+What is the useState hook and how does it work?	Hooks
+What is the useTransition hook and how does it improve UI responsiveness?	Hooks  
+What is the virtual DOM and how does React use it?	Core Concepts  
+What is the Virtual DOM in React?	Core Concepts
+What is the virtual DOM?	Core Concepts
+What is throttling and how is it used in React?	Performance
+What is thunk in Redux?	State Management
+What is tree shaking in React build tools?	Advanced Concepts  
+What is useCallback and how is it used?	Hooks
+What is useCallback and when should it be used?	Hooks
+What is useContext and how is it used?	Hooks
+What is useEffect and how is it used?	Hooks
+What is useEffect’s role in data fetching?	Data Fetching
+What is useImperativeHandle and when is it used?	Hooks
+What is useLayoutEffect and how is it different from useEffect?	Hooks
+What is useMemo and how does it help performance?	Hooks
+What is useMemo and when should you use it?	Hooks
+What is useReducer and how does it compare to useState?	Hooks
+What is useRef and how is it different from state?	Hooks
+What is useRef and how is it used?	Hooks
+What is useState and how is it used?	Hooks
+What is Zustand and how does it compare to Redux?	State Management
+What libraries can be used for i18n in React?	Internationalization
+What libraries can help with form handling in React?	Forms
+What libraries help with form management?	Forms
+What lifecycle methods correspond to error boundaries?	Advanced Concepts  
+What rules must hooks follow?	Hooks
+What tools can be used for E2E testing in React?	Testing
+What tools can you use to profile performance in React apps?	Performance
+What’s the difference between React elements and components?	Core Concepts  
+When should you create a custom hook?	Hooks
+When should you use useReducer over useState?	Hooks
+Why are keys important in React lists?	Lists & Keys  
+Why can’t error boundaries catch errors inside event handlers?	Error Handling
+Why is immutability important in React state management?	Core Concepts
+Why were Hooks introduced in React?	Hooks
+Why would you create a custom hook?	Hooks

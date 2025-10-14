@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🧩 2. Why This Supports Microservices Architecture</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: 950px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+p { line-height: 1.45; }
+.note {
+  background: #e3f2fd;
+  border-left: 4px solid #1976d2;
+  padding: 8px 14px;        /* reduced from 16px 20px */
+  margin: 8px 0;            /* reduced from 18px 0 */
+  border-radius: 7px;
+}
+.note ul {
+  list-style: disc inside;
+  margin: 0;
+  padding-left: 1.2em;
+}
+.note li {
+  margin-bottom: 1px;       /* reduced from 3px */
+  line-height: 1.18;        /* reduced from 1.35 */
+}
+.note p {
+  margin: 0 0 2px 0;        /* reduced from 0 0 6px 0 */
+  line-height: 1.18;        /* reduced from 1.5 */
+}
+pre { background: #f5f5f5; border-radius: 8px; padding: 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95em; line-height: 1.4; }
+.table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; }
+.table th, .table td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+.table th { background: #f0f7ff; color: #1565c0; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+@media (max-width: 600px) { .container { padding: 16px 8px; } .table th, .table td { padding: 8px; } }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧩 2. Why This Supports Microservices Architecture</h1>
+
+    <p>The table below maps each concept in the folder layout to its purpose within a microservices-ready structure.</p>
+
+    <table class="table" role="table" aria-label="Concept to Purpose mapping">
+      <thead>
+        <tr>
+          <th>Concept</th>
+          <th>Purpose in This Structure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>adapter/rest</code></td>
+          <td>API Gateway entry points for synchronous communication (REST endpoints per service).</td>
+        </tr>
+        <tr>
+          <td><code>adapter/lambda</code></td>
+          <td>Serverless handler for AWS Lambda integration — deploy each microservice as a function.</td>
+        </tr>
+        <tr>
+          <td><code>adapter/events</code></td>
+          <td>Enables asynchronous, decoupled communication between microservices via Kafka, SNS, or SQS.</td>
+        </tr>
+        <tr>
+          <td><code>domain/event</code></td>
+          <td>Defines domain-specific events that are published across services (e.g., <code>UserCreatedEvent</code>).</td>
+        </tr>
+        <tr>
+          <td><code>application/port/input</code></td>
+          <td>Exposes application-level use cases. The REST/Lambda adapters call these.</td>
+        </tr>
+        <tr>
+          <td><code>application/port/output</code></td>
+          <td>Abstracts infrastructure dependencies (databases, event buses).</td>
+        </tr>
+        <tr>
+          <td><code>adapter/persistence</code></td>
+          <td>Implements database access (JPA, DynamoDB, etc.) for this microservice only.</td>
+        </tr>
+        <tr>
+          <td><code>infrastructure/</code></td>
+          <td>Houses cross-cutting concerns — tracing, metrics, exception handling.</td>
+        </tr>
+        <tr>
+          <td><code>template.yaml</code></td>
+          <td>Defines how the microservice is deployed as a Lambda function via AWS SAM.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>⚙ 3. Multi-Service Example (Monorepo Layout)</h2>
+
+    <p>At the root of your repository, you can host multiple microservices:</p>
+
+    <pre>
+/ldschurch-platform/
+├── user-service/
+│   └── (structure above)
+│
+├── notification-service/
+│   └── (same structure, focuses on email/SMS logic)
+│
+├── order-service/
+│   └── (handles order lifecycle, publishes OrderCreatedEvent)
+│
+├── shared-libs/
+│   ├── domain-events/
+│   │   └── DomainEvent.java (shared base class)
+│   ├── utils/
+│   │   └── JsonMapper.java
+│   └── build.gradle
+│
+└── build.gradle (root)
+    </pre>
+
+    <div class="note">
+      <p>Each microservice:</p>
+      <ul>
+        <li>Is independently deployable</li>
+        <li>Can use different databases</li>
+        <li>Communicates via REST (synchronous) or SNS/SQS/Kafka (asynchronous)</li>
+        <li>Shares only common utilities or event contracts through <code>shared-libs/</code></li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <p>© 2025 Microservices • Clean Architecture • Hexagonal • Event-Driven</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DDD Folder Structure — Domain, Application, Adapter, Infrastructure</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: 950px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+p { line-height: 1.45; }
+pre { background: #f5f5f5; border-radius: 8px; padding: 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95em; line-height: 1.4; }
+.note {
+  background: #e3f2fd;
+  border-left: 4px solid #1976d2;
+  padding: 8px 14px;
+  margin: 8px 0;
+  border-radius: 7px;
+}
+.note ul {
+  list-style: disc inside;
+  margin: 0;
+  padding-left: 1.2em;
+}
+.note li {
+  margin-bottom: 1px;
+  line-height: 1.18;
+}
+.note p {
+  margin: 0 0 2px 0;
+  line-height: 1.18;
+}
+.table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; }
+.table th, .table td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+.table th { background: #f0f7ff; color: #1565c0; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+@media (max-width: 600px) { .container { padding: 16px 8px; } .table th, .table td { padding: 8px; } }
+code { background:#f0f4f8; padding:2px 6px; border-radius:4px; font-size:0.95em; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>DDD Folder Structure — Explanation & Justifications</h1>
+
+    <h2>1. domain/</h2>
+    <p>This is the heart of DDD — the Domain Layer, representing the core business logic and rules.</p>
+
+    <h3>model/</h3>
+    <p>Contains entities like <code>User.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> DDD emphasizes rich domain models. Entities encapsulate data and behavior, representing the ubiquitous language of the business.</p>
+    </div>
+
+    <h3>service/</h3>
+    <p>Contains <code>BusinessRules.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Domain Services handle domain logic that doesn’t naturally belong to a single entity. They implement complex business rules directly in the domain layer.</p>
+    </div>
+
+    <h3>event/</h3>
+    <p>Contains <code>DomainEvent.java</code>, <code>UserCreatedEvent.java</code>, <code>EventPublisher.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> DDD encourages capturing domain events to reflect important business occurrences. Events decouple the domain from infrastructure and allow eventual consistency or integration with other bounded contexts.</p>
+    </div>
+
+    <hr>
+
+    <h2>2. application/</h2>
+    <p>This is the Application Layer in DDD — orchestrates domain objects to fulfill use cases, without embedding business logic.</p>
+
+    <h3>port/input/</h3>
+    <p>Contains interfaces like <code>CreateUserUseCase.java</code>, <code>GetUserUseCase.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Defines what the application can do (use cases) without exposing implementation details. This aligns with DDD’s separation of application logic from domain logic.</p>
+    </div>
+
+    <h3>port/output/</h3>
+    <p>Contains interfaces like <code>UserRepositoryPort.java</code>, <code>EventPublisherPort.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Outgoing ports abstract dependencies on external systems (DB, messaging). This allows domain logic to remain independent from frameworks and infrastructure.</p>
+    </div>
+
+    <h3>service/</h3>
+    <p>Contains <code>CreateUserService.java</code>, <code>GetUserService.java</code>, <code>EventDrivenService.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Implements application use cases by orchestrating domain objects and invoking domain services/events. Keeps orchestration separate from domain rules.</p>
+    </div>
+
+    <hr>
+
+    <h2>3. adapter/</h2>
+    <p>This is the Adapters Layer (or Infrastructure/Interface adapters) — bridges domain/application to external systems.</p>
+
+    <h3>rest/</h3>
+    <p>Contains <code>UserController.java</code>, <code>HealthCheckController.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Incoming adapters that convert HTTP requests into calls to application ports. Controllers never contain business rules, preserving DDD principles.</p>
+    </div>
+
+    <h3>persistence/</h3>
+    <p>Contains <code>JpaUserRepositoryAdapter.java</code>, <code>SpringDataUserRepository.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Outgoing adapters implementing <code>UserRepositoryPort</code>. They persist domain entities but do not embed domain logic.</p>
+    </div>
+
+    <h3>lambda/</h3>
+    <p>Contains <code>LambdaHandler.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Another incoming adapter for AWS Lambda, transforming events into calls to application use cases.</p>
+    </div>
+
+    <h3>events/</h3>
+    <p>Contains <code>KafkaEventPublisherAdapter.java</code>, <code>SnsEventPublisherAdapter.java</code>, <code>SqsEventListener.java</code>, <code>EventDeserializer.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Handles domain events asynchronously. Implements ports for publishing/consuming events, keeping domain unaware of messaging frameworks.</p>
+    </div>
+
+    <h3>config/</h3>
+    <p>Contains <code>BeanConfig.java</code>, <code>KafkaConfig.java</code>, <code>SnsConfig.java</code>, <code>SqsConfig.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Infrastructure configuration. Keeps domain pure, avoiding framework-specific code inside domain/application layers.</p>
+    </div>
+
+    <hr>
+
+    <h2>4. infrastructure/</h2>
+
+    <h3>tracing/</h3>
+    <p>Contains <code>LoggingAspect.java</code>, <code>TracingInterceptor.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Cross-cutting concerns for monitoring and tracing. DDD domains remain independent of these technical concerns.</p>
+    </div>
+
+    <h3>exception/</h3>
+    <p>Contains <code>GlobalExceptionHandler.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Centralized handling of errors. Domain exceptions can propagate through application/adapters, keeping domain logic clean.</p>
+    </div>
+
+    <h3>metrics/</h3>
+    <p>Contains <code>MetricsCollector.java</code>.</p>
+    <div class="note">
+      <p><strong>Justification:</strong> Tracks performance and events, outside domain logic.</p>
+    </div>
+
+    <hr>
+
+    <h2>5. src/main/java/org/ldschurch/rest_api/SpringbootLambdaApplication.java</h2>
+    <p>Justification: Bootstraps the application but does not contain domain logic. All core business rules remain in <code>domain/</code>.</p>
+
+    <hr>
+
+    <h2>✅ Summary</h2>
+    <table class="table" role="table" aria-label="Folder to DDD Role mapping">
+      <thead>
+        <tr>
+          <th>Folder</th>
+          <th>DDD Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>domain/model</code></td><td>Core entities (ubiquitous language)</td></tr>
+        <tr><td><code>domain/service</code></td><td>Domain services implementing business rules</td></tr>
+        <tr><td><code>domain/event</code></td><td>Captures business events, decouples domain from infrastructure</td></tr>
+        <tr><td><code>application/port/input</code></td><td>Defines use cases, separates orchestration from domain</td></tr>
+        <tr><td><code>application/port/output</code></td><td>Abstracts external systems for domain independence</td></tr>
+        <tr><td><code>application/service</code></td><td>Orchestrates domain entities and services per use case</td></tr>
+        <tr><td><code>adapter/rest</code></td><td>Incoming adapter (HTTP → application ports)</td></tr>
+        <tr><td><code>adapter/persistence</code></td><td>Outgoing adapter (application ports → DB)</td></tr>
+        <tr><td><code>adapter/lambda</code></td><td>Incoming adapter (Lambda → application ports)</td></tr>
+        <tr><td><code>adapter/events</code></td><td>Handles asynchronous events, decouples domain from messaging</td></tr>
+        <tr><td><code>adapter/config</code></td><td>Technical configurations, keeps domain pure</td></tr>
+        <tr><td><code>infrastructure</code></td><td>Cross-cutting concerns (logging, metrics, exceptions)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <p><strong>Why this folder structure perfectly supports DDD:</strong></p>
+      <ul>
+        <li>Domain logic is isolated in <code>domain/</code>.</li>
+        <li>Ports define boundaries, keeping domain independent of frameworks and external systems.</li>
+        <li>Adapters implement infrastructure without contaminating domain rules.</li>
+        <li>Application layer orchestrates domain use cases, preserving separation of concerns.</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <p>© 2025 DDD • Clean Architecture • Hexagonal • Spring Boot • AWS Lambda</p>
+    </div>
+  </div>
+</body>
+</html>

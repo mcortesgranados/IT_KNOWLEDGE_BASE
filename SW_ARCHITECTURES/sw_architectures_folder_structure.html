@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>springboot-lambda Project Structure - Full Hierarchy</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #fafbfc;
+    color: #23272f;
+    margin: 0;
+    padding: 40px;
+  }
+  h1 {
+    text-align: center;
+    color: #1e293b;
+    margin-bottom: 20px;
+  }
+  .table-container {
+    overflow-x: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    background: white;
+    padding: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 1800px;
+  }
+  th, td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  th {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+  .check {
+    color: #16a34a;
+    font-weight: bold;
+    text-align: center;
+  }
+  /* Architectural pattern colors */
+  .clean { background-color: #e0f2fe; }
+  .ddd { background-color: #fef9c3; }
+  .hex { background-color: #f3e8ff; }
+  .cqrs { background-color: #dcfce7; }
+  .event { background-color: #fee2e2; }
+  .serverless { background-color: #f0f9ff; }
+  .path-cell {
+    font-family: Consolas, 'Courier New', monospace;
+    white-space: pre; 
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<h1>springboot-lambda Project Structure - Full Architectural Hierarchy (Complete) 🚀</h1>
+<div class="table-container">
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Path / File</th>
+      <th>Description</th>
+      <th class="clean">Clean</th>
+      <th class="ddd">DDD</th>
+      <th class="hex">Hexagonal</th>
+      <th class="cqrs">CQRS</th>
+      <th class="event">Event-Driven</th>
+      <th class="serverless">Serverless</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td class="path-cell">📁 springboot-lambda/</td><td>Project Root Directory</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>2</td><td class="path-cell">├── 📄 build.gradle</td><td>Gradle build script (Dependencies and Configuration)</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>3</td><td class="path-cell">├── 📄 settings.gradle</td><td>Gradle settings for module resolution</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>4</td><td class="path-cell">├── 📜 template.yaml</td><td>AWS SAM / CloudFormation template for serverless deployment</td><td></td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>5</td><td class="path-cell">├── 📁 src/</td><td>Source code and test directories</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+    
+    <tr><td>6</td><td class="path-cell">│   ├── 📁 main/</td><td>Main production source code</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>7</td><td class="path-cell">│   │   ├── 📁 java/</td><td>Java source files root</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>8</td><td class="path-cell">│   │   │   └── 📁 org/ldschurch/rest_api/</td><td>Base package structure (Implied layers start here)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+
+    <tr><td>9</td><td class="path-cell">│   │   │       ├── 🏢 domain/</td><td>The core business logic (DDD)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>10</td><td class="path-cell">│   │   │       │   ├── 👤 model/</td><td>Entities and Value Objects</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>11</td><td class="path-cell">│   │   │       │   │   └── User.java</td><td>User Aggregate Root</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>12</td><td class="path-cell">│   │   │       │   ├── ⚙️ service/</td><td>Domain Services</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>13</td><td class="path-cell">│   │   │       │   │   └── BusinessRules.java</td><td>Service for complex business rules</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>14</td><td class="path-cell">│   │   │       │   ├── 📢 event/</td><td>Domain Events structure</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>15</td><td class="path-cell">│   │   │       │   │   ├── DomainEvent.java</td><td>Base interface/class for all events</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>16</td><td class="path-cell">│   │   │       │   │   ├── UserCreatedEvent.java</td><td>Specific domain event</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>17</td><td class="path-cell">│   │   │       │   │   └── EventPublisher.java</td><td>Domain interface for event publishing</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>18</td><td class="path-cell">│   │   │       │   └── ✍️ command/handlers/</td><td>Domain logic handlers for commands</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>19</td><td class="path-cell">│   │   │       │       └── UserCommandHandler.java</td><td>Handler for processing user commands</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+
+    <tr><td>20</td><td class="path-cell">│   │   │       ├── 🧩 application/</td><td>Use Cases and Application Ports</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>21</td><td class="path-cell">│   │   │       │   ├── 📩 command/</td><td>Command DTOs (Write side data)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>22</td><td class="path-cell">│   │   │       │   │   ├── CreateUserCommand.java</td><td>DTO for user creation</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>23</td><td class="path-cell">│   │   │       │   │   ├── UpdateUserCommand.java</td><td>DTO for user update</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>24</td><td class="path-cell">│   │   │       │   │   ├── DeleteUserCommand.java</td><td>DTO for user deletion</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>25</td><td class="path-cell">│   │   │       │   │   └── CommandHandler.java</td><td>Base command handler interface</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>26</td><td class="path-cell">│   │   │       │   ├── ❓ query/</td><td>Query DTOs (Read side data)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>27</td><td class="path-cell">│   │   │       │   │   ├── GetUserQuery.java</td><td>DTO for retrieving a single user</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>28</td><td class="path-cell">│   │   │       │   │   ├── ListUsersQuery.java</td><td>DTO for retrieving a list of users</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>29</td><td class="path-cell">│   │   │       │   │   └── QueryHandler.java</td><td>Base query handler interface</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>30</td><td class="path-cell">│   │   │       │   ├── ➡️ port/</td><td>Boundary interfaces (Ports)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>31</td><td class="path-cell">│   │   │       │   │   ├── input/</td><td>Primary/Driving Ports (APIs exposed by the application)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>32</td><td class="path-cell">│   │   │       │   │   │   ├── CommandUseCase.java</td><td>Interface for use cases that modify data</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>33</td><td class="path-cell">│   │   │       │   │   │   ├── QueryUseCase.java</td><td>Interface for use cases that retrieve data</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>34</td><td class="path-cell">│   │   │       │   │   │   └── EventHandlerUseCase.java</td><td>Interface for use cases responding to events</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>35</td><td class="path-cell">│   │   │       │   │   └── ⬅️ output/</td><td>Secondary/Driven Ports (Dependencies of the application)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>36</td><td class="path-cell">│   │   │       │   │       ├── UserWriteRepositoryPort.java</td><td>Port for writing to the command-side database</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>37</td><td class="path-cell">│   │   │       │   │       ├── UserReadRepositoryPort.java</td><td>Port for reading from the query-side database</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>38</td><td class="path-cell">│   │   │       │   │       └── EventPublisherPort.java</td><td>Port for notifying external systems of events</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>39</td><td class="path-cell">│   │   │       │   └── ✅ service/</td><td>Implementations of the Use Cases (Business workflows)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td></tr>
+    <tr><td>40</td><td class="path-cell">│   │   │       │       ├── command/CreateUserService.java</td><td>Implements user creation workflow (Command)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>41</td><td class="path-cell">│   │   │       │       ├── command/UpdateUserService.java</td><td>Implements user update workflow (Command)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>42</td><td class="path-cell">│   │   │       │       ├── command/DeleteUserService.java</td><td>Implements user deletion workflow (Command)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>43</td><td class="path-cell">│   │   │       │       ├── query/GetUserService.java</td><td>Implements single user retrieval workflow (Query)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>44</td><td class="path-cell">│   │   │       │       └── query/ListUsersService.java</td><td>Implements list retrieval workflow (Query)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>45</td><td class="path-cell">│   │   │       │       └── EventDrivenService.java</td><td>Service handling event responses/reactions</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+
+    <tr><td>46</td><td class="path-cell">│   │   │       ├── 🔌 adapter/</td><td>External infrastructure implementations (Adapters)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>47</td><td class="path-cell">│   │   │       │   ├── 🌐 rest/</td><td>REST API Adapters (Inbound/Driving)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>48</td><td class="path-cell">│   │   │       │   │   ├── command/UserCommandController.java</td><td>Spring Controller for commands (POST, PUT, DELETE)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>49</td><td class="path-cell">│   │   │       │   │   └── command/HealthCheckController.java</td><td>Controller for application health check endpoint</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>50</td><td class="path-cell">│   │   │       │   │   └── query/UserQueryController.java</td><td>Spring Controller for queries (GET)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>51</td><td class="path-cell">│   │   │       │   ├── 💾 persistence/</td><td>Database Adapters (Outbound/Driven)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>52</td><td class="path-cell">│   │   │       │   │   ├── read/JpaUserReadRepositoryAdapter.java</td><td>JPA implementation for UserReadRepositoryPort (Query side)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>53</td><td class="path-cell">│   │   │       │   │   └── write/JpaUserWriteRepositoryAdapter.java</td><td>JPA implementation for UserWriteRepositoryPort (Command side)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>54</td><td class="path-cell">│   │   │       │   ├── λ lambda/</td><td>Serverless Lambda Handlers (Inbound/Driving)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td></tr>
+    <tr><td>55</td><td class="path-cell">│   │   │       │   │   ├── CommandLambdaHandler.java</td><td>AWS Lambda entry point for command events (e.g., API Gateway POST)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td></tr>
+    <tr><td>56</td><td class="path-cell">│   │   │       │   │   └── QueryLambdaHandler.java</td><td>AWS Lambda entry point for query events (e.g., API Gateway GET)</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td></tr>
+    <tr><td>57</td><td class="path-cell">│   │   │       │   ├── 💬 events/</td><td>Event System Adapters (Inbound/Outbound)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>58</td><td class="path-cell">│   │   │       │   │   ├── KafkaEventPublisherAdapter.java</td><td>Adapter to publish events to Kafka</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>59</td><td class="path-cell">│   │   │       │   │   ├── SnsEventPublisherAdapter.java</td><td>Adapter to publish events to AWS SNS</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>60</td><td class="path-cell">│   │   │       │   │   ├── SqsEventListener.java</td><td>Adapter to consume events from AWS SQS</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>61</td><td class="path-cell">│   │   │       │   │   └── EventDeserializer.java</td><td>Utility for deserializing incoming event payloads</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>62</td><td class="path-cell">│   │   │       │   └── 💉 config/</td><td>Spring Dependency Injection Configuration</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>63</td><td class="path-cell">│   │   │       │       ├── BeanConfig.java</td><td>General Spring `@Configuration` for use cases/ports</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>64</td><td class="path-cell">│   │   │       │       ├── KafkaConfig.java</td><td>Configuration for Kafka connections</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+    <tr><td>65</td><td class="path-cell">│   │   │       │       ├── SnsConfig.java</td><td>Configuration for AWS SNS connections</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td></tr>
+    <tr><td>66</td><td class="path-cell">│   │   │       │       └── SqsConfig.java</td><td>Configuration for AWS SQS connections</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td></tr>
+
+    <tr><td>67</td><td class="path-cell">│   │   │       ├── 🏗️ infrastructure/</td><td>Cross-Cutting Concerns and shared utilities</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>68</td><td class="path-cell">│   │   │       │   ├── 🪞 tracing/LoggingAspect.java</td><td>AOP component for logging/tracing</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>69</td><td class="path-cell">│   │   │       │   │   └── TracingInterceptor.java</td><td>Interceptor for distributed tracing context</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>70</td><td class="path-cell">│   │   │       │   ├── 🛑 exception/GlobalExceptionHandler.java</td><td>Centralized error handling for APIs/Lambdas</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    <tr><td>71</td><td class="path-cell">│   │   │       │   └── 📊 metrics/MetricsCollector.java</td><td>Utility for application performance monitoring</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td><td></td><td></td></tr>
+    
+    <tr><td>72</td><td class="path-cell">│   │   │       └── 🚀 SpringbootLambdaApplication.java</td><td>Main Spring Boot entry point and configuration starter</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>73</td><td class="path-cell">│   │   └── 📁 resources/</td><td>Configuration and static content</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>74</td><td class="path-cell">│   │       ├── ⚙️ application.yml</td><td>Primary Spring Boot configuration file</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>75</td><td class="path-cell">│   │       ├── 📄 logback-spring.xml</td><td>Configuration file for logging framework</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>76</td><td class="path-cell">│   │       └── 📂 static/</td><td>Static web content directory</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+
+    <tr><td>77</td><td class="path-cell">│   └── 🧪 test/</td><td>Test source root</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>78</td><td class="path-cell">│       └── 📁 java/.../application/command/</td><td>Unit tests for Application Command Services</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>79</td><td class="path-cell">│           └── CreateUserServiceTest.java</td><td>Unit test for CreateUserService</td><td class="check">✓</td><td></td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>80</td><td class="path-cell">│       └── 📁 java/.../adapter/persistence/write/</td><td>Integration tests for Write Adapters</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>81</td><td class="path-cell">│           └── JpaUserWriteRepositoryAdapterTest.java</td><td>Test for the JPA implementation of the write port</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td></td></tr>
+    <tr><td>82</td><td class="path-cell">│           └── events/KafkaEventPublisherAdapterTest.java</td><td>Test for Kafka event publishing functionality</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td></td><td class="check">✓</td><td></td></tr>
+
+    <tr><td>83</td><td class="path-cell">└── 📁 build/distributions/</td><td>Generated build artifacts</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+    <tr><td>84</td><td class="path-cell">&nbsp;&nbsp;&nbsp;&nbsp;└── springboot-lambda-0.0.1-SNAPSHOT.zip</td><td>Final deployable package (for Lambda)</td><td class="check">✓</td><td></td><td></td><td></td><td></td><td class="check">✓</td></tr>
+  </tbody>
+</table>
+</div>
+</body>
+</html>

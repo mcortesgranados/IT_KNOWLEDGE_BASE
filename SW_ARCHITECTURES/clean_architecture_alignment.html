@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfect Clean Architecture + Hexagonal + AWS Lambda</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: 950px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+pre { background: #f5f5f5; border-radius: 8px; padding: 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.95em; line-height: 1.4; }
+.note {
+  background: #e3f2fd;
+  border-left: 4px solid #1976d2;
+  padding: 8px 14px;
+  margin: 8px 0;
+  border-radius: 7px;
+}
+.note ul {
+  list-style: disc inside;
+  margin: 0;
+  padding-left: 1.2em;
+}
+.note li {
+  margin-bottom: 1px;
+  line-height: 1.18;
+}
+.note p {
+  margin: 0 0 2px 0;
+  line-height: 1.18;
+}
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+.params th { background: #f0f0f0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+@media (max-width: 600px) { .container { padding: 16px 8px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🧩 Perfect Clean Architecture + Hexagonal + AWS Lambda</h1>
+
+  <p>This folder structure is a fully aligned <strong>Clean Architecture</strong> (a.k.a. Hexagonal Architecture) that supports <strong>DDD, Layered, Event-Driven</strong> principles and integrates seamlessly with <strong>Spring Boot</strong> and <strong>AWS Lambda</strong>.</p>
+
+  <h2>✅ Clean Architecture Alignment</h2>
+
+  <div class="note">
+    <table class="params">
+      <tr>
+        <th>Layer</th>
+        <th>Folder</th>
+        <th>Description</th>
+        <th>Example Classes</th>
+      </tr>
+      <tr>
+        <td><strong>Entities (Domain Layer)</strong></td>
+        <td><code>domain/</code></td>
+        <td>Pure business logic, no frameworks. Independent of Spring, AWS, or databases.</td>
+        <td><code>User.java</code>, <code>BusinessRules.java</code>, <code>DomainEvent.java</code>, <code>UserCreatedEvent.java</code></td>
+      </tr>
+      <tr>
+        <td><strong>Use Cases (Application Layer)</strong></td>
+        <td><code>application/</code></td>
+        <td>Core use cases and business rules orchestration. Contains interfaces (ports) and use case implementations.</td>
+        <td><code>CreateUserUseCase.java</code>, <code>GetUserService.java</code></td>
+      </tr>
+      <tr>
+        <td><strong>Interface Adapters (Adapters Layer)</strong></td>
+        <td><code>adapter/</code></td>
+        <td>Converts data between external systems (REST, Lambda, Database, Kafka) and the core domain.</td>
+        <td><code>UserController.java</code>, <code>JpaUserRepositoryAdapter.java</code>, <code>LambdaHandler.java</code>, <code>KafkaEventPublisherAdapter.java</code></td>
+      </tr>
+      <tr>
+        <td><strong>Frameworks & Drivers (Infrastructure Layer)</strong></td>
+        <td><code>adapter/config/</code> + main class</td>
+        <td>Entry points, Spring configuration, and infrastructure setup (Spring, AWS SDK, Kafka, etc.).</td>
+        <td><code>BeanConfig.java</code>, <code>KafkaConfig.java</code>, <code>SpringbootLambdaApplication.java</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>🧱 How Each Pattern Fits</h2>
+
+  <div class="note">
+    <dl class="params">
+      <dt>Layered (n-tier)</dt>
+      <dd>REST controllers → application services → persistence adapters</dd>
+
+      <dt>DDD / Modular Monolith</dt>
+      <dd>Domain separated into model, service, and event packages with clear aggregates and bounded contexts</dd>
+
+      <dt>Event-Driven / Reactive</dt>
+      <dd><code>domain/event</code> + <code>adapter/events</code> enable Kafka/SNS/SQS integration for asynchronous communication</dd>
+
+      <dt>Hexagonal / Clean Architecture</dt>
+      <dd>Ports (<code>application/port</code>) and Adapters (<code>adapter/*</code>) perfectly isolate the domain logic from frameworks</dd>
+
+      <dt>Microservices-ready</dt>
+      <dd>Each bounded context under <code>domain/</code> and <code>application/</code> can evolve into its own independent microservice</dd>
+    </dl>
+  </div>
+
+  <h2>⚙️ How It Plays with AWS Lambda</h2>
+
+  <pre>
+package org.ldschurch.rest_api.adapter.lambda;
+
+import org.springframework.cloud.function.adapter.aws.SpringBootRequestHandler;
+import org.ldschurch.rest_api.application.service.CreateUserService;
+import org.ldschurch.rest_api.adapter.rest.dto.UserRequest;
+
+public class LambdaHandler extends SpringBootRequestHandler&lt;UserRequest, String&gt; {
+    // Handles AWS Lambda request and delegates to Spring Boot bean
+}
+  </pre>
+
+  <p>In AWS SAM (<code>template.yaml</code>), the function points to this Lambda handler:</p>
+
+  <pre>
+Resources:
+  SpringbootLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: org.ldschurch.rest_api.adapter.lambda.LambdaHandler
+      Runtime: java17
+      CodeUri: build/distributions/springboot-lambda-0.0.1-SNAPSHOT.zip
+      MemorySize: 1024
+      Timeout: 30
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+  </pre>
+
+  <h2>🧩 Clean Architecture Dependencies Rule</h2>
+
+  <div class="important">
+    <p>✅ Inner layers must not depend on outer layers.<br>
+    Dependencies flow <strong>inward only</strong>:</p>
+
+    <pre>
+adapter --> application --> domain
+    </pre>
+
+    <ul>
+      <li>Business rules never depend on frameworks.</li>
+      <li>You can swap REST with GraphQL, or JPA with DynamoDB, without touching core logic.</li>
+      <li>Both AWS Lambda and a Spring Boot REST app can share the same business core.</li>
+    </ul>
+  </div>
+
+  <h2>🧠 Folder Layout Summary</h2>
+
+  <pre>
+springboot-lambda/
+├── build.gradle
+├── template.yaml
+├── src/
+│   └── main/
+│       ├── java/org/ldschurch/rest_api/
+│       │   ├── domain/                # Core business entities & events
+│       │   ├── application/           # Ports and Use Cases
+│       │   ├── adapter/               # Adapters (REST, Persistence, Lambda, Kafka)
+│       │   └── SpringbootLambdaApplication.java
+│       └── resources/
+│           ├── application.yml
+│           └── logback-spring.xml
+└── build/distributions/
+  </pre>
+
+  <div class="footer">
+    <p>© 2025 Clean Architecture • Spring Boot • AWS Lambda • Hexagonal Design Reference</p>
+  </div>
+</div>
+</body>
+</html>
