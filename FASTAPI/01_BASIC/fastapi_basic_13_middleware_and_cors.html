@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middleware and CORS</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Middleware and CORS</h1>
+    <p>Middleware wraps every request/response passing through the application. It is the place for cross-cutting concerns: CORS, logging, timing, compression, security headers, request IDs.</p>
+
+    <h2>How Middleware Works</h2>
+    <p>A middleware is a function that receives the request and a <code>call_next</code> delegate. Code before <code>call_next</code> runs on the way in; code after runs on the way out.</p>
+
+    <pre><code>import time
+from fastapi import FastAPI, Request
+
+app = FastAPI()
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    elapsed = time.perf_counter() - start
+    response.headers["X-Process-Time"] = f"{elapsed:.4f}"
+    return response
+</code></pre>
+
+    <h2>CORS: The Most Common Middleware</h2>
+    <p>Browsers block JavaScript on <code>https://mysite.com</code> from calling <code>https://api.mysite.com</code> unless the API answers with CORS headers.</p>
+    <pre><code>from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://mysite.com", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],     # or ["GET", "POST"]
+    allow_headers=["*"],     # or ["Authorization", "Content-Type"]
+)
+</code></pre>
+    <ul>
+        <li><strong>Never use <code>allow_origins=["*"]</code> with <code>allow_credentials=True</code></strong> &mdash; the spec forbids that combination for credentialed requests, and it is insecure anyway.</li>
+        <li>Preflight: for non-simple requests the browser first sends <code>OPTIONS</code>; CORSMiddleware answers it automatically.</li>
+        <li>CORS is enforced by the <em>browser</em>; curl/Postman ignore it. "It works in Postman but not in the browser" is almost always CORS.</li>
+    </ul>
+
+    <h2>Built-in Middlewares Worth Knowing</h2>
+    <pre><code>import gzip
+from fastapi.middleware.gzip import GZipMiddleware
+
+app.add_middleware(GZipMiddleware, minimum_size=1000)  # compress big responses
+</code></pre>
+    <ul>
+        <li><strong>GZipMiddleware:</strong> gzips responses larger than <code>minimum_size</code> bytes when the client accepts it.</li>
+        <li><strong>TrustedHostMiddleware:</strong> rejects requests with unexpected <code>Host</code> headers (defense against host-header attacks).</li>
+        <li><strong>HTTPSRedirectMiddleware:</strong> redirects all HTTP traffic to HTTPS.</li>
+        <li>ASGI ecosystem: <code>sentry-sdk</code>, <code>uvicorn.workers</code> proxies, and libraries like <code>asgi-correlation-id</code> plug in the same way.</li>
+    </ul>
+
+    <h2>Class-Based Middleware</h2>
+    <pre><code>from starlette.middleware.base import BaseHTTPMiddleware
+
+class RequestIDMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        import uuid
+        request.state.request_id = str(uuid.uuid4())
+        response = await call_next(request)
+        response.headers["X-Request-ID"] = request.state.request_id
+        return response
+
+app.add_middleware(RequestIDMiddleware)
+</code></pre>
+    <p>Use classes (or pure ASGI middleware for maximum performance) when you need configuration passed to the constructor. <code>request.state</code> is a scratchpad shared with endpoints and dependencies during the request.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Middleware vs dependencies &mdash; when to use which?</div>
+    <div class="answer">
+        <p>A: Middleware sees <em>every</em> request and works at the raw ASGI level (no access to validated parameters or route info) &mdash; use it for CORS, compression, timing, tracing. Dependencies are per-route, typed, can raise HTTP errors and appear in docs &mdash; use them for auth, DB sessions, pagination.</p>
+    </div>
+
+    <div class="question">Q: Does middleware execution order matter?</div>
+    <div class="answer">
+        <p>A: Yes. The <em>last</em> middleware added is the <em>outermost</em> &mdash; it runs first on the request and last on the response. Plan order accordingly (e.g. request-ID middleware should wrap everything else).</p>
+    </div>
+
+    <div class="question">Q: My CORS setup works for GET but fails for POST with JSON. Why?</div>
+    <div class="answer">
+        <p>A: A POST with <code>Content-Type: application/json</code> is a non-simple request, so the browser sends a preflight <code>OPTIONS</code>. Either <code>allow_headers</code> does not include <code>Content-Type</code>/your custom header, or another route/handler is intercepting <code>OPTIONS</code> before the CORS middleware.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Middleware is your global request pipeline: time requests, inject correlation IDs, compress, enforce hosts &mdash; and configure <code>CORSMiddleware</code> with explicit origins to let browsers call your API safely.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

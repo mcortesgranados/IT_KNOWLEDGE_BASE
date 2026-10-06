@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation and Error Handling</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Validation and Error Handling</h1>
+    <p>FastAPI validates inputs automatically and raises <strong>HTTPException</strong> for deliberate errors. Learning the error flow is key to building APIs that fail clearly instead of crashing.</p>
+
+    <h2>HTTPException: The Standard Way</h2>
+    <pre><code>from fastapi import FastAPI, HTTPException
+
+app = FastAPI()
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    if item_id not in items_db:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return items_db[item_id]
+</code></pre>
+    <p>Raising <code>HTTPException(404, "Item not found")</code> produces the response <code>{"detail": "Item not found"}</code> with status 404. <code>detail</code> can be any JSON-serializable value, including a dict or list.</p>
+
+    <h2>Custom Headers on Errors</h2>
+    <pre><code>raise HTTPException(
+    status_code=403,
+    detail="Not enough permissions",
+    headers={"WWW-Authenticate": "Bearer"},
+)
+</code></pre>
+
+    <h2>Automatic Validation Errors (422)</h2>
+    <p>When request data does not match the declared types/constraints, FastAPI returns 422 before your function runs:</p>
+    <pre><code>{
+  "detail": [
+    {
+      "type": "greater_than",
+      "loc": ["path", "item_id"],
+      "msg": "Input should be greater than 0",
+      "input": "-5"
+    }
+  ]
+}
+</code></pre>
+    <p><code>loc</code> tells you where the problem is: <code>path</code>, <code>query</code>, <code>body</code> (nested as <code>body.field.subfield</code>).</p>
+
+    <h2>Custom Exception Handlers</h2>
+    <pre><code>from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+
+app = FastAPI()
+
+@app.exception_handler(RequestValidationError)
+async def validation_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"errors": exc.errors(), "body": exc.body.decode() if isinstance(exc.body, bytes) else exc.body},
+    )
+
+class UnicornException(Exception):
+    pass
+
+@app.exception_handler(UnicornException)
+async def unicorn_handler(request: Request, exc: UnicornException):
+    return JSONResponse(status_code=418, content={"message": f"Oops: {exc}"})
+</code></pre>
+    <ul>
+        <li>Handlers for custom exception classes let your own domain errors become clean HTTP responses.</li>
+        <li>Handlers for framework exceptions (<code>RequestValidationError</code>, <code>StarletteHTTPException</code>) let you reshape the default error format (useful to match an error contract like RFC 7807 "problem details").</li>
+    </ul>
+
+    <h2>Pydantic Validators for Business Rules</h2>
+    <pre><code>from pydantic import BaseModel, field_validator
+
+class Order(BaseModel):
+    quantity: int
+    price: float
+
+    @field_validator("quantity")
+    @classmethod
+    def quantity_positive(cls, v: int) -> int:
+        if v &lt;= 0:
+            raise ValueError("quantity must be positive")
+        return v
+</code></pre>
+    <p>Use model validators for data-shaped rules (formats, ranges, cross-field checks); use <code>HTTPException</code> inside endpoints for resource-state rules (does the item exist?, is the user allowed?).</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: When should I use HTTPException vs returning an error dict?</div>
+    <div class="answer">
+        <p>A: Always raise. Returning <code>{"error": ...}</code> with status 200 breaks clients that check the status code and pollutes the docs. Exceptions also stop execution immediately.</p>
+    </div>
+
+    <div class="question">Q: How do I return a different status code for validation errors?</div>
+    <div class="answer">
+        <p>A: Override the <code>RequestValidationError</code> handler and return <code>JSONResponse(status_code=400, ...)</code> instead of 422, or use <code>FastAPI(exception_handlers={...})</code> at app creation.</p>
+    </div>
+
+    <div class="question">Q: Where do unhandled exceptions go?</div>
+    <div class="answer">
+        <p>A: They bubble up to the server, which returns a generic 500 and logs the traceback. Catch what you can meaningfully handle; let programming bugs crash loudly in dev, and add monitoring (Sentry, OpenTelemetry) in production.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>FastAPI's error model has three layers: automatic 422 validation errors for malformed input, <code>HTTPException</code> for expected application errors, and custom exception handlers for shaping responses. Together they give clients precise, consistent failure information.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

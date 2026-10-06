@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Basic - All Questions and Answers</title>
+    <style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+    </style>
+</head>
+<body>
+<div class="container">
+<main>
+    <a class="profile-link" href="index_basic.html">&larr; Back to Basic Index</a>
+    <h1>FastAPI - Basic: All Questions and Answers <span class="tag">15 topics &middot; 45 Q&amp;A</span></h1>
+
+    <div class="note">
+        <p><strong>Contents</strong> &mdash; click a topic to jump to it (every section is collapsible):</p>
+        <div class="row">
+            <div class="col">
+                <ul>
+                    <li><a href="#t01">01 &middot; Introduction to FastAPI</a></li>
+                    <li><a href="#t02">02 &middot; Installation and First App</a></li>
+                    <li><a href="#t03">03 &middot; Path Parameters</a></li>
+                    <li><a href="#t04">04 &middot; Query Parameters</a></li>
+                    <li><a href="#t05">05 &middot; Request Body and Pydantic Models</a></li>
+                    <li><a href="#t06">06 &middot; Response Models and Status Codes</a></li>
+                    <li><a href="#t07">07 &middot; Validation and Error Handling</a></li>
+                    <li><a href="#t08">08 &middot; Form Data and File Uploads</a></li>
+                </ul>
+            </div>
+            <div class="col">
+                <ul>
+                    <li><a href="#t09">09 &middot; Headers and Cookies</a></li>
+                    <li><a href="#t10">10 &middot; API Routers and Project Structure</a></li>
+                    <li><a href="#t11">11 &middot; Dependency Injection Basics (Depends)</a></li>
+                    <li><a href="#t12">12 &middot; async / await in FastAPI</a></li>
+                    <li><a href="#t13">13 &middot; Middleware and CORS</a></li>
+                    <li><a href="#t14">14 &middot; OpenAPI Docs and Metadata</a></li>
+                    <li><a href="#t15">15 &middot; Static Files and Templates</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TOPIC 01 ================= -->
+    <details class="collapsible-section" open id="t01">
+        <summary class="collapsible-summary"><span class="section-number">01</span> Introduction to FastAPI</summary>
+        <p>FastAPI is a modern, fast (high-performance) web framework for building APIs with Python 3.8+ based on standard Python type hints. It runs on <strong>ASGI</strong> servers such as <strong>Uvicorn</strong>, and is built on two libraries:</p>
+        <ul>
+            <li><strong>Starlette:</strong> provides the asynchronous web foundation (routing, requests/responses, middleware, WebSockets).</li>
+            <li><strong>Pydantic:</strong> provides data validation and serialization using Python type hints.</li>
+        </ul>
+        <h3>Key Features</h3>
+        <ul>
+            <li><strong>Fast:</strong> one of the fastest Python frameworks, on par with Node.js and Go (thanks to Starlette and Uvicorn).</li>
+            <li><strong>Automatic validation:</strong> invalid data returns clear 422 errors automatically.</li>
+            <li><strong>Automatic interactive documentation:</strong> Swagger UI at <code>/docs</code> and ReDoc at <code>/redoc</code>, generated from the OpenAPI schema (<code>/openapi.json</code>).</li>
+            <li><strong>Type hints everywhere:</strong> full editor and mypy support, fewer runtime bugs.</li>
+            <li><strong>Dependency injection:</strong> built-in, declarative (<code>Depends</code>) for sharing logic like DB sessions or authentication.</li>
+            <li><strong>Async support:</strong> native <code>async def</code> endpoints for I/O-bound workloads.</li>
+            <li><strong>Standards-based:</strong> OpenAPI (formerly Swagger) and JSON Schema.</li>
+        </ul>
+        <h3>FastAPI vs Flask vs Django</h3>
+        <ul>
+            <li><strong>Flask:</strong> synchronous micro-framework; validation, serialization and docs must be added by hand. FastAPI gives all of that out of the box.</li>
+            <li><strong>Django / DRF:</strong> batteries included (ORM, admin, templates), heavier and traditionally sync-first. FastAPI is lighter and async-first, ideal for pure APIs and microservices.</li>
+            <li><strong>FastAPI:</strong> best when you want a typed, validated, auto-documented API with high concurrency.</li>
+        </ul>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Is FastAPI only for asynchronous code?</dt>
+            <dd>A: No. You can write endpoints with normal <code>def</code> and FastAPI runs them in a thread pool, or with <code>async def</code> and it runs them on the event loop. You can mix both in the same application.</dd>
+            <dt>Q: What does "ASGI" mean and why does it matter?</dt>
+            <dd>A: ASGI is the async successor of WSGI. While WSGI (Flask/Django traditionally) handles one request per worker at a time, ASGI supports asynchronous, long-lived connections (WebSockets, SSE) and thousands of concurrent connections on a single process.</dd>
+            <dt>Q: What is OpenAPI's role in FastAPI?</dt>
+            <dd>A: FastAPI automatically generates an OpenAPI schema describing every path, parameter, request body and response. That schema powers the interactive docs and can be used to generate client code in other languages.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 02 ================= -->
+    <details class="collapsible-section" open id="t02">
+        <summary class="collapsible-summary"><span class="section-number">02</span> Installation and First App</summary>
+        <p>Install in a virtual environment and run the development server:</p>
+        <pre><code>python -m venv venv
+venv\Scripts\activate            # Windows
+source venv/bin/activate         # Linux / macOS
+
+pip install "fastapi[standard]"  # includes uvicorn, python-multipart, ...
+
+# classic minimal alternative
+pip install fastapi uvicorn</code></pre>
+        <h3>First Application: main.py</h3>
+        <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    return {"item_id": item_id}</code></pre>
+        <h3>Running the Server</h3>
+        <pre><code>fastapi dev main.py          # modern CLI (fastapi[standard])
+uvicorn main:app --reload    # classic way with uvicorn</code></pre>
+        <ul>
+            <li><code>main:app</code> = module <code>main.py</code>, object <code>app</code>.</li>
+            <li><code>--reload</code> restarts on code changes (development only).</li>
+            <li>Default address: <code>http://127.0.0.1:8000</code>. Docs: <code>http://127.0.0.1:8000/docs</code>.</li>
+        </ul>
+        <h3>Anatomy of the App</h3>
+        <ul>
+            <li><strong><code>FastAPI()</code></strong>: the application instance; routes, middleware and events attach to it.</li>
+            <li><strong>Path operation decorators</strong> (<code>@app.get</code>, <code>@app.post</code>, ...): declare HTTP method and path.</li>
+            <li><strong>Path operation function</strong>: runs per request; its return value is serialized to JSON by default.</li>
+            <li>Type hints (<code>item_id: int</code>) power validation and conversion: an invalid value returns 422 automatically.</li>
+        </ul>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: What is the difference between uvicorn and FastAPI?</dt>
+            <dd>A: FastAPI is the framework (routing, validation, docs). Uvicorn is the ASGI server that accepts TCP connections and talks to the app. You need both: the server hosts the application.</dd>
+            <dt>Q: Why does <code>uvicorn main:app --reload</code> fail with "ModuleNotFoundError"?</dt>
+            <dd>A: The command must run from the directory containing <code>main.py</code>, or you must pass the full dotted path (e.g. <code>app.main:app</code> if the file is <code>app/main.py</code>).</dd>
+            <dt>Q: Should I use <code>--reload</code> in production?</dt>
+            <dd>A: No. It watches files and restarts constantly, wasting resources. In production: <code>uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4</code> (or Gunicorn managing Uvicorn workers).</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 03 ================= -->
+    <details class="collapsible-section" open id="t03">
+        <summary class="collapsible-summary"><span class="section-number">03</span> Path Parameters</summary>
+        <p>Path parameters are variable parts of the URL path, declared with curly braces and received as typed function arguments:</p>
+        <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    return {"item_id": item_id}</code></pre>
+        <ul>
+            <li><code>GET /items/5</code> &rarr; <code>{"item_id": 5}</code> (converted to int).</li>
+            <li><code>GET /items/foo</code> &rarr; automatic <code>422 Unprocessable Entity</code>.</li>
+        </ul>
+        <h3>Order Matters: Fixed Paths Before Dynamic</h3>
+        <pre><code>@app.get("/users/me")
+def read_current_user():
+    return {"user_id": "the current user"}
+
+@app.get("/users/{user_id}")     # must be declared AFTER /users/me
+def read_user(user_id: str):
+    return {"user_id": user_id}</code></pre>
+        <h3>Enums as Constrained Values</h3>
+        <pre><code>from enum import Enum
+
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
+@app.get("/models/{model_name}")
+def get_model(model_name: ModelName):
+    return {"model_name": model_name}</code></pre>
+        <p>Only the listed values are accepted; anything else returns 422 with the valid options.</p>
+        <h3>Extra Validation with Path() and Multi-Segment Paths</h3>
+        <pre><code>from fastapi import Path
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int = Path(title="The ID of the item", ge=1, le=1000)):
+    return {"item_id": item_id}
+
+@app.get("/files/{file_path:path}")     # :path captures slashes too
+def read_file(file_path: str):
+    return {"file_path": file_path}</code></pre>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: What error does FastAPI return for an invalid path parameter type?</dt>
+            <dd>A: <code>422 Unprocessable Entity</code> with a JSON body listing the exact location, message and type of each validation error, e.g. <code>{"loc": ["path", "item_id"], "msg": "value is not a valid integer"}</code>.</dd>
+            <dt>Q: Can a path parameter have a default value?</dt>
+            <dd>A: No. Path parameters are always required because they are part of the URL structure. Only query parameters can be optional.</dd>
+            <dt>Q: How does FastAPI decide if a parameter is a path or query parameter?</dt>
+            <dd>A: By name: if the parameter name appears in the route template (<code>{item_id}</code>), it is a path parameter; otherwise it is read from the query string. Use <code>Path()</code> or <code>Query()</code> to be explicit.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 04 ================= -->
+    <details class="collapsible-section" open id="t04">
+        <summary class="collapsible-summary"><span class="section-number">04</span> Query Parameters</summary>
+        <p>Query parameters are the key-value pairs after the <code>?</code> in a URL (<code>/items?skip=0&amp;limit=10</code>). Any function parameter that is <strong>not</strong> in the path is a query parameter:</p>
+        <pre><code>from typing import Optional
+from fastapi import FastAPI, Query
+
+app = FastAPI()
+
+@app.get("/items/")
+def read_items(skip: int = 0, limit: int = 10):          # defaults
+    return {"skip": skip, "limit": limit}
+
+@app.get("/search/")
+def search(q: Optional[str] = None):                     # optional
+    return {"q": q}
+
+@app.get("/tags/")
+def filter_tags(tags: list[str] = []):                   # multiple values
+    return {"tags": tags}
+
+@app.get("/products/")
+def list_products(active: bool = True):                  # bool coercion
+    return {"active": active}</code></pre>
+        <ul>
+            <li><code>q: Optional[str] = None</code>: optional; a parameter with no default (<code>name: str</code>) is required &mdash; missing it returns 422.</li>
+            <li>Booleans accept <code>true/1/yes/on</code> and <code>false/0/no/off</code>.</li>
+            <li><code>/tags/?tags=python&amp;tags=api</code> &rarr; <code>["python", "api"]</code>.</li>
+        </ul>
+        <h3>Validation with Query()</h3>
+        <pre><code>@app.get("/items/")
+def read_items(
+    q: str | None = Query(default=None, min_length=3, max_length=50, pattern="^fixedquery"),
+    page: int = Query(default=1, gt=0),
+):
+    return {"q": q, "page": page}</code></pre>
+        <p><code>Query()</code> adds constraints (min_length, pattern, gt/ge) and metadata that appear both in validation errors and in the OpenAPI docs.</p>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: How does FastAPI distinguish path parameters from query parameters?</dt>
+            <dd>A: By name. If the parameter name appears in the path template it is a path parameter; otherwise it is read from the query string. Declare <code>Path()</code> or <code>Query()</code> to be explicit when a name could be both.</dd>
+            <dt>Q: What happens if a required query parameter is missing?</dt>
+            <dd>A: The request fails with 422 and a message like <code>{"loc": ["query", "name"], "msg": "Field required"}</code> &mdash; the client knows exactly what to fix.</dd>
+            <dt>Q: Is <code>Optional[str] = None</code> the same as <code>str = None</code>?</dt>
+            <dd>A: Practically both make the parameter optional, but <code>Optional[str] = None</code> (or <code>str | None = None</code>, Python 3.10+) is the correct typing; a plain <code>str = None</code> lies to the type checker and modern FastAPI versions may reject it.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 05 ================= -->
+    <details class="collapsible-section" open id="t05">
+        <summary class="collapsible-summary"><span class="section-number">05</span> Request Body and Pydantic Models</summary>
+        <p>Structured JSON bodies are received by declaring a parameter with a <strong>Pydantic model</strong> type. FastAPI reads, validates and converts the body into a typed object:</p>
+        <pre><code>from pydantic import BaseModel, Field, EmailStr
+
+class Item(BaseModel):
+    name: str = Field(min_length=1, max_length=50, examples=["Keyboard"])
+    price: float = Field(gt=0, description="Price in USD")
+    is_offer: bool | None = None
+    owner_email: EmailStr | None = None
+
+@app.post("/items/")
+def create_item(item: Item):
+    return {"item_name": item.name, "price_with_tax": item.price * 1.12}</code></pre>
+        <ul>
+            <li>Fields with a type and no default are <strong>required</strong>; with a default they are optional.</li>
+            <li><code>Field()</code> adds constraints and docs metadata; <code>EmailStr</code> requires <code>pip install "pydantic[email]"</code>.</li>
+        </ul>
+        <h3>Combining Body, Path and Query Parameters</h3>
+        <pre><code>@app.put("/items/{item_id}")
+def update_item(item_id: int, item: Item, q: str | None = None):
+    return {"item_id": item_id, **item.model_dump(), "q": q}</code></pre>
+        <p>FastAPI routes each parameter to its source: <code>item_id</code> from the path, <code>item</code> from the JSON body, <code>q</code> from the query string.</p>
+        <h3>Nested Models and Multiple Body Parameters</h3>
+        <pre><code>class Tag(BaseModel):
+    name: str
+
+class Article(BaseModel):
+    title: str
+    tags: list[Tag] = []                 # arbitrarily deep nesting works
+
+@app.put("/items/{item_id}")
+def update(item_id: int, item: Item, user: User):
+    # two models => body must be {"item": {...}, "user": {...}}
+    return {"item_id": item_id}</code></pre>
+        <p>Force embedding of a single model with <code>item: Item = Body(embed=True)</code>.</p>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: What is the difference between .model_dump() and .model_dump_json()?</dt>
+            <dd>A: <code>model_dump()</code> returns a Python dict; <code>model_dump_json()</code> returns a JSON string directly (faster, no intermediate dict). In Pydantic v1 these were called <code>.dict()</code> and <code>.json()</code>.</dd>
+            <dt>Q: Does FastAPI validate the response body too?</dt>
+            <dd>A: Only if you declare a <code>response_model</code>. Without it, whatever the function returns is serialized as-is. With it, the output is filtered and validated against the model.</dd>
+            <dt>Q: What happens with extra/unknown fields in the request body?</dt>
+            <dd>A: By default they are ignored. Change with <code>model_config = ConfigDict(extra="forbid")</code> to reject unknown fields with a 422 error, or <code>extra="allow"</code> to keep them.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 06 ================= -->
+    <details class="collapsible-section" open id="t06">
+        <summary class="collapsible-summary"><span class="section-number">06</span> Response Models and Status Codes</summary>
+        <p><code>response_model</code> declares what an endpoint returns: FastAPI filters, validates and documents the output &mdash; the standard way to keep sensitive fields out of responses:</p>
+        <pre><code>from pydantic import BaseModel, EmailStr
+
+class UserIn(BaseModel):
+    username: str
+    password: str
+    email: EmailStr
+
+class UserOut(BaseModel):
+    username: str
+    email: EmailStr
+
+@app.post("/users/", response_model=UserOut)
+def create_user(user: UserIn):
+    return user      # password is processed but NEVER returned</code></pre>
+        <h3>Common Patterns</h3>
+        <ul>
+            <li><strong>Input vs output models:</strong> separate <code>UserIn</code> / <code>UserOut</code> classes.</li>
+            <li><strong>Lists:</strong> <code>response_model=list[Item]</code>; unions: <code>response_model=Item | None</code>.</li>
+            <li><strong>Field control:</strong> <code>response_model_exclude_unset=True</code>, <code>response_model_include={"id", "name"}</code>, <code>response_model_exclude={"secret_key"}</code>.</li>
+        </ul>
+        <h3>Status Codes</h3>
+        <pre><code>from fastapi import status, Response
+
+@app.post("/items/", status_code=status.HTTP_201_CREATED)
+def create_item(item: Item):
+    return item
+
+@app.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_item(item_id: int):
+    return None                       # 204 must return no body
+
+@app.post("/jobs/")
+def create_job(response: Response):   # runtime-decided status
+    response.status_code = status.HTTP_202_ACCEPTED
+    return {"queued": True}</code></pre>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: What happens if the returned object does not match response_model?</dt>
+            <dd>A: FastAPI tries to coerce/validate it; if it truly does not fit, the server raises an <span class="error">Internal Server Error (500)</span> and logs the validation error. This catches bugs before bad data reaches clients.</dd>
+            <dt>Q: Does response_model cost performance?</dt>
+            <dd>A: There is an extra validation pass on the way out, but Pydantic v2 is Rust-based and fast; it buys safety and clean docs. For very hot endpoints you can skip it, but you lose the output contract.</dd>
+            <dt>Q: Why not just return a dict with the right keys?</dt>
+            <dd>A: Dicts are untyped: one developer returning <code>passwd</code> instead of <code>password</code> ships a bug silently. <code>response_model</code> enforces the shape and documents it automatically.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 07 ================= -->
+    <details class="collapsible-section" open id="t07">
+        <summary class="collapsible-summary"><span class="section-number">07</span> Validation and Error Handling</summary>
+        <p>Three error layers: automatic 422 validation errors, <code>HTTPException</code> for expected application errors, and custom exception handlers for shaping responses.</p>
+        <h3>HTTPException: The Standard Way</h3>
+        <pre><code>from fastapi import HTTPException
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    if item_id not in items_db:
+        raise HTTPException(
+            status_code=404,
+            detail="Item not found",
+            headers={"WWW-Authenticate": "Bearer"},   # optional headers
+        )
+    return items_db[item_id]</code></pre>
+        <p>Produces <code>{"detail": "Item not found"}</code> with status 404. <code>detail</code> can be any JSON-serializable value.</p>
+        <h3>Automatic Validation Errors (422)</h3>
+        <div class="endpoint"><span class="json">{
+  "detail": [
+    {
+      "type": "greater_than",
+      "loc": ["path", "item_id"],
+      "msg": "Input should be greater than 0",
+      "input": "-5"
+    }
+  ]
+}</span></div>
+        <p><code>loc</code> tells you where the problem is: <code>path</code>, <code>query</code>, <code>body</code> (nested as <code>body.field.subfield</code>).</p>
+        <h3>Custom Exception Handlers</h3>
+        <pre><code>from fastapi import Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+
+@app.exception_handler(RequestValidationError)
+async def validation_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(status_code=422, content={"errors": exc.errors()})
+
+class UnicornException(Exception):
+    pass
+
+@app.exception_handler(UnicornException)
+async def unicorn_handler(request: Request, exc: UnicornException):
+    return JSONResponse(status_code=418, content={"message": f"Oops: {exc}"})</code></pre>
+        <h3>Pydantic Validators for Business Rules</h3>
+        <pre><code>from pydantic import field_validator
+
+class Order(BaseModel):
+    quantity: int
+
+    @field_validator("quantity")
+    @classmethod
+    def quantity_positive(cls, v: int) -&gt; int:
+        if v &lt;= 0:
+            raise ValueError("quantity must be positive")
+        return v</code></pre>
+        <p>Model validators for data-shaped rules (formats, ranges); <code>HTTPException</code> inside endpoints for resource-state rules (does it exist?, is the user allowed?).</p>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: When should I use HTTPException vs returning an error dict?</dt>
+            <dd>A: Always raise. Returning <code>{"error": ...}</code> with status 200 breaks clients that check the status code and pollutes the docs. Exceptions also stop execution immediately.</dd>
+            <dt>Q: How do I return a different status code for validation errors?</dt>
+            <dd>A: Override the <code>RequestValidationError</code> handler and return <code>JSONResponse(status_code=400, ...)</code> instead of 422, or pass <code>exception_handlers={...}</code> at app creation.</dd>
+            <dt>Q: Where do unhandled exceptions go?</dt>
+            <dd>A: They bubble up to the server, which returns a generic 500 and logs the traceback. Catch what you can meaningfully handle; add monitoring (Sentry, OpenTelemetry) in production.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 08 ================= -->
+    <details class="collapsible-section" open id="t08">
+        <summary class="collapsible-summary"><span class="section-number">08</span> Form Data and File Uploads</summary>
+        <p>HTML forms send <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code> (with files). Requires <code>pip install python-multipart</code>.</p>
+        <pre><code>from fastapi import Form, UploadFile
+from typing import List
+
+@app.post("/login/")
+def login(username: str = Form(), password: str = Form()):
+    return {"username": username}
+
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile):
+    contents = await file.read()
+    return {"filename": file.filename, "content_type": file.content_type, "size": len(contents)}
+
+@app.post("/upload-multiple/")
+async def upload_multiple(files: List[UploadFile]):
+    return {"names": [f.filename for f in files]}</code></pre>
+        <h3>UploadFile vs bytes</h3>
+        <ul>
+            <li><code>file: bytes = File()</code>: loads the whole file into memory &mdash; fine for small files, dangerous for large ones.</li>
+            <li><code>file: UploadFile</code>: streamed; has metadata (<code>filename</code>, <code>content_type</code>) and async methods (<code>read(size)</code>, <code>seek(0)</code>, <code>close()</code>). Preferred.</li>
+        </ul>
+        <h3>Saving an Upload Safely</h3>
+        <pre><code>import shutil, uuid
+from pathlib import Path
+
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+@app.post("/save-file/")
+async def save_file(file: UploadFile):
+    safe_name = f"{uuid.uuid4()}{Path(file.filename).suffix}"   # never trust client filename
+    dest = UPLOAD_DIR / safe_name
+    with dest.open("wb") as out:
+        shutil.copyfileobj(file.file, out)
+    return {"saved_as": safe_name}</code></pre>
+        <p>Security: never use the client-supplied filename directly (path traversal), validate <code>content_type</code> and size limits.</p>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Why does the endpoint stop working with "Form data requires python-multipart"?</dt>
+            <dd>A: Form and file parsing are not part of FastAPI's core; install the parser with <code>pip install python-multipart</code>. It is included when you install <code>fastapi[standard]</code>.</dd>
+            <dt>Q: How do I limit upload size?</dt>
+            <dd>A: Check <code>file.size</code> if available, or read in chunks with <code>await file.read(1024 * 1024)</code> counting bytes and abort when over the limit; alternatively enforce the limit at the proxy (Nginx <code>client_max_body_size</code>).</dd>
+            <dt>Q: Can UploadFile be used with a Pydantic model?</dt>
+            <dd>A: Not directly inside a JSON model &mdash; files are multipart, not JSON. Declare the <code>UploadFile</code> as a separate parameter next to your <code>Form()</code> fields.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 09 ================= -->
+    <details class="collapsible-section" open id="t09">
+        <summary class="collapsible-summary"><span class="section-number">09</span> Headers and Cookies</summary>
+        <p>Read headers/cookies with <code>Header</code> and <code>Cookie</code>; write them through the injected <code>Response</code>:</p>
+        <pre><code>from fastapi import Header, Cookie, Response
+from typing import Optional
+
+@app.get("/items/")
+def read_items(
+    user_agent: Optional[str] = Header(default=None),   # User-Agent header
+    x_token: Optional[str] = Header(default=None),      # X-Token header
+):
+    return {"User-Agent": user_agent, "X-Token": x_token}
+
+@app.get("/preferences/")
+def get_preferences(session_id: Optional[str] = Cookie(default=None)):
+    return {"session_id": session_id}</code></pre>
+        <p>Underscores convert to hyphens automatically (<code>user_agent</code> reads <code>User-Agent</code>); header lookup is case-insensitive.</p>
+        <h3>Setting Headers and Cookies</h3>
+        <pre><code>@app.post("/set-cookie/")
+def set_cookie(response: Response):
+    response.headers["X-Process-Time"] = "0.42"
+    response.set_cookie(
+        key="session_id", value="abc123",
+        httponly=True,       # JavaScript cannot read it (XSS protection)
+        secure=True,         # only sent over HTTPS
+        samesite="lax",      # CSRF mitigation
+        max_age=3600,
+    )
+    return {"message": "cookie set"}
+
+@app.delete("/unset-cookie/")
+def unset_cookie(response: Response):
+    response.delete_cookie("session_id")
+    return {"message": "cookie removed"}</code></pre>
+        <h3>Headers You Will Actually Use</h3>
+        <ul>
+            <li><strong>Authorization:</strong> tokens (JWT) &mdash; usually read in a dependency.</li>
+            <li><strong>X-Request-ID / traceparent:</strong> correlation IDs for distributed tracing.</li>
+            <li><strong>Accept / Accept-Language:</strong> content negotiation.</li>
+            <li><strong>Cache-Control, ETag:</strong> HTTP caching.</li>
+        </ul>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Header names are case-insensitive in HTTP &mdash; does FastAPI care?</dt>
+            <dd>A: No. Declaring <code>x_token</code> matches <code>X-Token</code>, <code>x-token</code>, etc. The underscore-to-hyphen conversion is the only transformation applied.</dd>
+            <dt>Q: Why is my Set-Cookie header not reaching the browser?</dt>
+            <dd>A: Common causes: calling <code>set_cookie</code> on a locally-created response instead of the injected one; CORS &mdash; the frontend must use <code>credentials: "include"</code> and the server must set <code>Access-Control-Allow-Credentials: true</code> with an exact origin (wildcard <code>*</code> blocks cookies); or <code>secure=True</code> while testing over plain HTTP.</dd>
+            <dt>Q: Headers vs cookies vs local storage for auth tokens?</dt>
+            <dd>A: <code>Authorization</code> headers are the standard for APIs (stateless, no CSRF cookie issues). HttpOnly cookies protect against XSS but need CSRF protection. localStorage is readable by any injected script &mdash; generally avoid for tokens.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 10 ================= -->
+    <details class="collapsible-section" open id="t10">
+        <summary class="collapsible-summary"><span class="section-number">10</span> API Routers and Project Structure</summary>
+        <p><strong>APIRouter</strong> splits path operations into modules and mounts them on the app with prefixes and tags:</p>
+        <pre><code># routers/users.py
+from fastapi import APIRouter
+
+router = APIRouter(prefix="/users", tags=["users"])
+
+@router.get("/")
+def list_users():
+    return [{"username": "alice"}]
+
+# main.py
+from fastapi import FastAPI
+from routers import users, items
+
+app = FastAPI()
+app.include_router(users.router)
+app.include_router(items.router, prefix="/api", tags=["items"])</code></pre>
+        <ul>
+            <li><code>prefix</code> can be set on the router or at <code>include_router</code> time (they concatenate).</li>
+            <li>Routers can be included multiple times with different prefixes (e.g. <code>/api/v1</code> and <code>/api/v2</code>).</li>
+        </ul>
+        <h3>A Scalable Layout (Bigger Apps)</h3>
+        <pre><code>app/
+├── main.py              # app factory, middleware, include routers
+├── core/config.py       # pydantic-settings
+├── core/security.py     # hashing, JWT
+├── db/session.py        # engine, SessionLocal
+├── models/              # SQLAlchemy / DB models
+├── schemas/             # Pydantic models (in/out)
+├── crud/                # DB operations per entity
+├── routers/             # APIRouter per entity
+├── dependencies.py      # shared Depends (get_db, current_user)
+└── tests/</code></pre>
+        <p>Layering: <strong>routers</strong> depend on <strong>crud</strong> and <strong>schemas</strong>; <strong>crud</strong> depends on <strong>models</strong>. This keeps layers swappable and testable.</p>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Can two routers define the same path?</dt>
+            <dd>A: Yes, and the <strong>first</strong> matching route registered wins. This is a common source of "my endpoint returns the wrong thing" bugs &mdash; check include order, especially for catch-alls like <code>/{item_id}</code> declared before fixed paths.</dd>
+            <dt>Q: Should I create the FastAPI() app inside main.py or in a factory function?</dt>
+            <dd>A: For anything beyond a demo, use a factory: <code>def create_app() -&gt; FastAPI:</code> that wires routers, middleware and events. It makes testing (fresh app per suite) and per-environment configs trivial.</dd>
+            <dt>Q: Where do shared dependencies like get_db live?</dt>
+            <dd>A: In a central <code>dependencies.py</code> (or per-domain module). Routers import them and declare <code>db: Session = Depends(get_db)</code> &mdash; never create sessions directly inside endpoints.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 11 ================= -->
+    <details class="collapsible-section" open id="t11">
+        <summary class="collapsible-summary"><span class="section-number">11</span> Dependency Injection Basics (Depends)</summary>
+        <p><code>Depends</code> declares <em>things your endpoint needs</em> (DB sessions, auth, pagination) as parameters. FastAPI builds them per-request and caches them within that request:</p>
+        <pre><code>from fastapi import Depends, HTTPException, Header
+
+async def pagination(skip: int = 0, limit: int = 20):
+    return {"skip": skip, "limit": limit}
+
+def verify_token(x_token: str = Header()):
+    if x_token != "secret":
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return x_token
+
+@app.get("/items/")
+def list_items(page: dict = Depends(pagination)):
+    return {"page": page}
+
+@app.get("/admin/")
+def admin_panel(token: str = Depends(verify_token)):
+    return {"access": "granted"}</code></pre>
+        <p>Raising <code>HTTPException</code> inside a dependency aborts the request before the endpoint runs &mdash; the natural place for auth, authorization and rate limiting.</p>
+        <h3>Resources with Cleanup: yield Dependencies</h3>
+        <pre><code>def get_db():
+    db = SessionLocal()
+    try:
+        yield db          # endpoint runs with this value
+    finally:
+        db.close()        # always runs afterwards (like a context manager)</code></pre>
+        <h3>Dependency Trees and Caching</h3>
+        <pre><code>def get_current_user(token: str = Depends(verify_token), db=Depends(get_db)):
+    ...
+
+@app.get("/me/")
+def me(user=Depends(get_current_user)):
+    ...</code></pre>
+        <ul>
+            <li>Dependencies can depend on other dependencies &mdash; a tree resolved per request.</li>
+            <li><strong>Same-request caching:</strong> two dependencies using <code>get_db</code> share one session per request. Disable with <code>Depends(fn, use_cache=False)</code>.</li>
+        </ul>
+        <h3>Class Dependencies and Shortcuts</h3>
+        <pre><code>class CommonParams:
+    def __init__(self, q: str | None = None, skip: int = 0, limit: int = 20):
+        self.q, self.skip, self.limit = q, skip, limit
+
+@app.get("/things/")
+def list_things(common: CommonParams = Depends()):   # Depends() uses the class itself
+    return {"q": common.q}</code></pre>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: When does a dependency run &mdash; and how often?</dt>
+            <dd>A: Once per request, before the endpoint, resolved lazily as the dependency tree is built. Results are cached for that single request only &mdash; they are not singletons; use module-level objects (engine, connection pools) for cross-request state.</dd>
+            <dt>Q: Can I apply a dependency to a whole router without using its value?</dt>
+            <dd>A: Yes: <code>router = APIRouter(dependencies=[Depends(verify_token)])</code> runs the check on every route but discards the result. Also available per-endpoint: <code>@app.get("/", dependencies=[...])</code>.</dd>
+            <dt>Q: Dependencies vs middleware &mdash; which one do I use?</dt>
+            <dd>A: Middleware runs for every request globally with no access to route parameters &mdash; CORS, timing, logging. Dependencies are per-route, typed, can raise HTTP errors and receive validated parameters &mdash; auth, pagination, DB sessions.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 12 ================= -->
+    <details class="collapsible-section" open id="t12">
+        <summary class="collapsible-summary"><span class="section-number">12</span> async / await in FastAPI</summary>
+        <p>The single most important performance decision: choosing between <code>def</code> and <code>async def</code> correctly.</p>
+        <pre><code>import httpx
+
+@app.get("/sync-mode/")
+def sync_mode():
+    result = blocking_call()      # runs in a worker thread (default 40 threads)
+
+@app.get("/async-mode/")
+async def async_mode():
+    async with httpx.AsyncClient() as client:   # runs on the event loop
+        result = await client.get("https://api.example.com/data")
+    return {"ok": True}</code></pre>
+        <div class="important">
+            <strong>The golden rule:</strong> never call blocking I/O inside <code>async def</code>. <code>time.sleep(5)</code> or a synchronous DB query inside an <code>async def</code> freezes the entire event loop &mdash; the whole server stops serving <em>all</em> requests. Use plain <code>def</code> (threadpool), or wrap it: <code>await asyncio.to_thread(blocking_fn)</code>.
+        </div>
+        <h3>Decision Guide</h3>
+        <div class="params">
+            <table>
+                <tr><th>Situation</th><th>Use</th></tr>
+                <tr><td>Async libraries (httpx, asyncpg, motor, aiofiles)</td><td><code>async def</code></td></tr>
+                <tr><td>Blocking libraries (requests, psycopg2, pandas, boto3 sync)</td><td>plain <code>def</code></td></tr>
+                <tr><td>Pure CPU work (no I/O)</td><td>plain <code>def</code>; offload heavy compute to Celery/RQ or another process</td></tr>
+                <tr><td>Not sure</td><td>plain <code>def</code> &mdash; always safe (threadpool), just less scalable</td></tr>
+            </table>
+        </div>
+        <h3>Concurrency vs Parallelism</h3>
+        <ul>
+            <li><strong>Async gives concurrency:</strong> while one request waits on I/O, the event loop serves others. It does <em>not</em> speed up CPU work.</li>
+            <li><strong>Workers give parallelism:</strong> <code>uvicorn --workers 4</code> uses multiple cores (rule of thumb: <code>2 &times; cores + 1</code>). Usually you want both.</li>
+        </ul>
+        <h3>Calling Multiple Things in Parallel</h3>
+        <pre><code>import asyncio
+
+@app.get("/dashboard/")
+async def dashboard():
+    async with httpx.AsyncClient() as client:
+        user, orders = await asyncio.gather(
+            client.get("https://api.example.com/user/1"),
+            client.get("https://api.example.com/orders?user=1"),
+        )
+    return {"user": user.json(), "orders": orders.json()}   # latency = slower call, not the sum</code></pre>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: My async endpoint is slower than the sync version. Why?</dt>
+            <dd>A: Almost always because it does blocking work on the event loop (sync DB driver, requests, CPU-heavy pandas). Everything queues behind those calls. Switch to async libraries or declare the endpoint as plain <code>def</code>.</dd>
+            <dt>Q: Does <code>async def</code> make my endpoint run in parallel with others automatically?</dt>
+            <dd>A: It allows <em>interleaved</em> execution at every <code>await</code> point. Two async endpoints progress concurrently while they await I/O, but the code between awaits still runs one at a time on the single loop thread.</dd>
+            <dt>Q: What is the default threadpool size for sync endpoints?</dt>
+            <dd>A: AnyIO's default is 40 threads. Tune it at startup: <code>anyio.to_thread.current_default_thread_limiter().total_tokens = 100</code>. Beyond the limit, sync requests queue up.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 13 ================= -->
+    <details class="collapsible-section" open id="t13">
+        <summary class="collapsible-summary"><span class="section-number">13</span> Middleware and CORS</summary>
+        <p>Middleware wraps every request/response &mdash; the place for CORS, logging, timing, compression and request IDs. Code before <code>call_next</code> runs on the way in; after, on the way out:</p>
+        <pre><code>import time
+from fastapi import Request
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    response.headers["X-Process-Time"] = f"{time.perf_counter() - start:.4f}"
+    return response</code></pre>
+        <h3>CORS: The Most Common Middleware</h3>
+        <pre><code>from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://mysite.com", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)</code></pre>
+        <ul>
+            <li><strong>Never</strong> combine <code>allow_origins=["*"]</code> with <code>allow_credentials=True</code> &mdash; the spec forbids it for credentialed requests and it is insecure.</li>
+            <li>Preflight: non-simple requests trigger an <code>OPTIONS</code> preflight; CORSMiddleware answers it automatically.</li>
+            <li>CORS is enforced by the <em>browser</em>; curl/Postman ignore it. "Works in Postman but not in the browser" is almost always CORS.</li>
+        </ul>
+        <h3>Built-in and Class-Based Middleware</h3>
+        <pre><code>from fastapi.middleware.gzip import GZipMiddleware
+app.add_middleware(GZipMiddleware, minimum_size=1000)    # compress big responses
+
+class RequestIDMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        request.state.request_id = str(uuid.uuid4())
+        response = await call_next(request)
+        response.headers["X-Request-ID"] = request.state.request_id
+        return response
+
+app.add_middleware(RequestIDMiddleware)</code></pre>
+        <ul>
+            <li>Also built-in: <strong>TrustedHostMiddleware</strong> (host-header defense), <strong>HTTPSRedirectMiddleware</strong>.</li>
+            <li>Order matters: the <em>last</em> middleware added is the <em>outermost</em> &mdash; it runs first on requests and last on responses.</li>
+        </ul>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Middleware vs dependencies &mdash; when to use which?</dt>
+            <dd>A: Middleware sees <em>every</em> request at the raw ASGI level (no validated parameters) &mdash; CORS, compression, timing, tracing. Dependencies are per-route, typed, can raise HTTP errors and appear in docs &mdash; auth, DB sessions, pagination.</dd>
+            <dt>Q: Does middleware execution order matter?</dt>
+            <dd>A: Yes. The last middleware added wraps everything else. Plan order accordingly (e.g. request-ID middleware should wrap all others).</dd>
+            <dt>Q: My CORS setup works for GET but fails for POST with JSON. Why?</dt>
+            <dd>A: A POST with <code>Content-Type: application/json</code> is non-simple, so the browser sends a preflight <code>OPTIONS</code>. Either <code>allow_headers</code> does not include <code>Content-Type</code>/your custom header, or another handler intercepts <code>OPTIONS</code> before the CORS middleware.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 14 ================= -->
+    <details class="collapsible-section" open id="t14">
+        <summary class="collapsible-summary"><span class="section-number">14</span> OpenAPI Docs and Metadata</summary>
+        <p>FastAPI generates an <strong>OpenAPI</strong> schema automatically. Three URLs come for free:</p>
+        <ul>
+            <li><code>/openapi.json</code> &mdash; the raw OpenAPI 3 schema.</li>
+            <li><code>/docs</code> &mdash; Swagger UI: try endpoints from the browser ("Try it out").</li>
+            <li><code>/redoc</code> &mdash; ReDoc: cleaner read-only reference.</li>
+        </ul>
+        <h3>Enriching the Schema</h3>
+        <pre><code>app = FastAPI(
+    title="Inventory API",
+    description="API for managing warehouse inventory.",
+    version="1.0.0",
+    openapi_tags=[
+        {"name": "items", "description": "CRUD for items"},
+        {"name": "health", "description": "Service status"},
+    ],
+)
+
+@app.post("/items/", tags=["items"], summary="Create an item",
+          response_description="The created item", status_code=201)
+def create_item(item: Item):
+    return {"id": 1, **item.model_dump()}</code></pre>
+        <p>Every parameter accepts <code>title</code>, <code>description</code>, <code>examples</code>; models get <code>Field(description=...)</code>; decorators get <code>summary</code>, <code>description</code>, <code>tags</code>.</p>
+        <h3>Documenting Responses</h3>
+        <pre><code>class ErrorMessage(BaseModel):
+    detail: str
+
+@app.get("/items/{item_id}",
+         responses={
+             404: {"model": ErrorMessage, "description": "Item not found"},
+             400: {"description": "Invalid id format"},
+         })
+def read_item(item_id: int): ...</code></pre>
+        <h3>Hiding and Customizing</h3>
+        <pre><code>app = FastAPI(docs_url="/documentation", redoc_url=None, openapi_url="/schema.json")
+
+@app.get("/internal/", include_in_schema=False)   # keep out of the docs
+def internal(): ...</code></pre>
+        <h3>Using the Schema Beyond Docs</h3>
+        <ul>
+            <li><strong>Client generation:</strong> <code>openapi-typescript</code>, <code>openapi-generator</code> create typed clients from <code>/openapi.json</code>.</li>
+            <li><strong>Contract testing:</strong> schemathesis fuzzes your API using the schema.</li>
+            <li><strong>API gateways:</strong> import the schema (Kong, Azure APIM, AWS API Gateway).</li>
+        </ul>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Where do the docs come from &mdash; do I write OpenAPI YAML by hand?</dt>
+            <dd>A: Never by hand. FastAPI introspects your paths, parameters, Pydantic models and declared status codes, then builds the schema at startup. Your Python code is the single source of truth.</dd>
+            <dt>Q: How do I group endpoints by resource in the UI?</dt>
+            <dd>A: Use <code>tags=["items"]</code> on routers or endpoints. Tags declared in <code>openapi_tags</code> get descriptions and a fixed order in the docs.</dd>
+            <dt>Q: Can I test endpoints from the docs UI against my real database?</dt>
+            <dd>A: Yes &mdash; the docs call the real server. In shared environments protect or disable docs (<code>docs_url=None</code>, or gate them behind auth) since "Try it out" executes real mutations.</dd>
+        </dl>
+    </details>
+
+    <!-- ================= TOPIC 15 ================= -->
+    <details class="collapsible-section" open id="t15">
+        <summary class="collapsible-summary"><span class="section-number">15</span> Static Files and Templates</summary>
+        <p>FastAPI can also serve static assets and render server-side HTML with Jinja2 &mdash; useful for admin pages, dashboards and small internal tools.</p>
+        <h3>Serving Static Files</h3>
+        <pre><code>from fastapi.staticfiles import StaticFiles
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+# StaticFiles(directory="static", html=True) also serves index.html</code></pre>
+        <ul>
+            <li><code>app.mount()</code> attaches a full ASGI sub-application at a path prefix.</li>
+            <li>In production, serve assets with Nginx/CDN if performance matters.</li>
+        </ul>
+        <h3>Jinja2 Templates</h3>
+        <pre><code>pip install jinja2</code></pre>
+        <pre><code>from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/dashboard/", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    stats = {"total_items": 42, "low_stock": 3}
+    return templates.TemplateResponse(
+        request=request, name="dashboard.html",
+        context={"title": "Dashboard", "stats": stats},
+    )</code></pre>
+        <pre><code>&lt;h1&gt;{{ title }}&lt;/h1&gt;
+&lt;p&gt;Total items: {{ stats.total_items }}&lt;/p&gt;
+{% if stats.low_stock &gt; 0 %}
+  &lt;p class="alert"&gt;{{ stats.low_stock }} items low on stock!&lt;/p&gt;
+{% endif %}</code></pre>
+        <p>Jinja2 syntax: <code>{{ variable }}</code> for output, <code>{% ... %}</code> for logic, filters like <code>{{ price | round(2) }}</code>.</p>
+        <h3>Returning Raw HTML</h3>
+        <pre><code>@app.get("/hello/", response_class=HTMLResponse)
+def hello():
+    return "&lt;h1&gt;Hello&lt;/h1&gt;"</code></pre>
+        <h3>Quick Questions and Answers</h3>
+        <dl>
+            <dt>Q: Should a FastAPI app render HTML, or should I split frontend and backend?</dt>
+            <dd>A: For real products, prefer a separated SPA (React/Angular/Vue) consuming the API &mdash; independent deploys and scaling. Templates are great for server-rendered admin panels, emails, PDF reports or small internal tools.</dd>
+            <dt>Q: Why does <code>app.mount("/static", ...)</code> fail with a runtime error?</dt>
+            <dd>A: Usually because the directory does not exist relative to the working directory where Uvicorn was started. Create the folder or resolve the path from the file location: <code>Path(__file__).parent / "static"</code>.</dd>
+            <dt>Q: How do I use template responses inside routers without global state?</dt>
+            <dd>A: Create the <code>Jinja2Templates</code> instance once (e.g. in a <code>core/templates.py</code> module or via a dependency) and import it in your routers &mdash; creating one per request/module wastes resources.</dd>
+        </dl>
+    </details>
+</main>
+<p class="footer">Manuela Cort&eacute;s Granados &middot; IT Knowledge Base &middot; FastAPI Basic &middot; 2026</p>
+</div>
+</body>
+</html>

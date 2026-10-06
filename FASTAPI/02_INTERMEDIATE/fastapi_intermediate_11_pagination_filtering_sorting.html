@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Pagination, Filtering and Sorting Patterns</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Pagination, Filtering and Sorting Patterns</h1>
+    <p>List endpoints live or die by their query ergonomics. This page assembles the standard FastAPI toolkit: a reusable pagination dependency, validated sorting, filtering, and a response envelope with total counts and navigation links.</p>
+
+    <h2>A Reusable Pagination Dependency</h2>
+    <pre><code>from dataclasses import dataclass
+from fastapi import Depends, Query
+
+@dataclass
+class Pagination:
+    skip: int = Query(0, ge=0)
+    limit: int = Query(20, ge=1, le=100)     # cap page size to protect the DB
+
+def pagination_params(skip: int = Query(0, ge=0),
+                      limit: int = Query(20, ge=1, le=100)) -&gt; Pagination:
+    return Pagination(skip=skip, limit=limit)
+
+@app.get("/items/")
+def list_items(page: Pagination = Depends(pagination_params), db=Depends(get_db)):
+    total = db.scalar(select(func.count()).select_from(Item))
+    items = db.scalars(select(Item).offset(page.skip).limit(page.limit)).all()
+    return {"total": total, "items": items}
+</code></pre>
+    <ul>
+        <li><code>ge/le</code> constraints stop clients from requesting <code>limit=100000</code>.</li>
+        <li>Every list endpoint reuses the same dependency &rarr; consistent query params across the API.</li>
+    </ul>
+
+    <h2>Generic Page Envelope (Pydantic v2 Generics)</h2>
+    <pre><code>from typing import Generic, TypeVar
+from pydantic import BaseModel
+
+T = TypeVar("T")
+
+class Page(BaseModel, Generic[T]):
+    total: int
+    skip: int
+    limit: int
+    items: list[T]
+
+@app.get("/items/", response_model=Page[ItemOut])
+def list_items(page: Pagination = Depends(pagination_params), db=Depends(get_db)):
+    total = db.scalar(select(func.count()).select_from(Item))
+    items = db.scalars(select(Item).offset(page.skip).limit(page.limit)).all()
+    return Page(total=total, skip=page.skip, limit=page.limit, items=items)
+</code></pre>
+    <p><code>Page[ItemOut]</code>, <code>Page[UserOut]</code>... one envelope for every resource, fully documented by OpenAPI.</p>
+
+    <h2>Sorting with a Whitelist</h2>
+    <pre><code>ALLOWED_SORT_FIELDS = {"name": Item.name, "price": Item.price, "created": Item.created_at}
+
+@app.get("/items/")
+def list_items(sort: str = Query("created", pattern="^(name|price|created)$"),
+               order: str = Query("asc", pattern="^(asc|desc)$"),
+               db=Depends(get_db)):
+    column = ALLOWED_SORT_FIELDS[sort]
+    stmt = select(Item).order_by(column.desc() if order == "desc" else column.asc())
+    return db.scalars(stmt).all()
+</code></pre>
+    <div class="warning">
+        <strong>Never build ORDER BY (or any SQL) from raw client strings.</strong> Map allowed values to columns through a whitelist dict &mdash; the same injection discipline as parameterized values, applied to identifiers.
+    </div>
+
+    <h2>Filtering: Explicit Params Beat a Magic Dict</h2>
+    <pre><code>@app.get("/items/")
+def list_items(
+    name: str | None = None,
+    min_price: float | None = Query(None, ge=0),
+    max_price: float | None = Query(None, ge=0),
+    owner_id: int | None = None,
+    db=Depends(get_db),
+):
+    stmt = select(Item)
+    if name:
+        stmt = stmt.where(Item.name.ilike(f"%{name}%"))
+    if min_price is not None:
+        stmt = stmt.where(Item.price &gt;= min_price)
+    if max_price is not None:
+        stmt = stmt.where(Item.price &lt;= max_price)
+    if owner_id:
+        stmt = stmt.where(Item.owner_id == owner_id)
+    return db.scalars(stmt).all()
+</code></pre>
+    <p>Explicit optional parameters are self-documenting in <code>/docs</code>. A "catch-all filter dict" hides the contract and invites injection &mdash; avoid it in public APIs.</p>
+
+    <h2>Offset vs Cursor Pagination</h2>
+    <ul>
+        <li><strong>Offset (<code>skip/limit</code>):</strong> easy, jump to any page, shows totals &mdash; but slow on huge tables (<code>OFFSET 100000</code> scans what it skips) and rows can shift between pages.</li>
+        <li><strong>Cursor (keyset):</strong> <code>?after=last_seen_id</code>, SQL is <code>WHERE id &lt; :after ORDER BY id DESC LIMIT :n</code> &mdash; stable and fast at any depth; no page numbers or totals. Standard for feeds and infinite scroll.</li>
+        <li>Rule of thumb: admin tables &rarr; offset; high-volume feeds &rarr; cursor.</li>
+    </ul>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Should the response include "total"?</div>
+    <div class="answer">
+        <p>A: It costs one <code>COUNT(*)</code> per request &mdash; cheap on small/medium tables, expensive on huge ones. Include it for admin/paging UIs; omit it (or cache it) for cursor-paginated feeds where clients only need "is there a next page".</p>
+    </div>
+
+    <div class="question">Q: How do I give clients ready-made next/prev URLs?</div>
+    <div class="answer">
+        <p>A: Rebuild the request URL with updated params: <code>request.url.include_query_params(skip=skip + limit, limit=limit)</code> and put it in the envelope (<code>"next": str(url)</code>). Clients then never construct URLs themselves.</p>
+    </div>
+
+    <div class="question">Q: Where does pagination logic belong &mdash; endpoint, dependency, or CRUD layer?</div>
+    <div class="answer">
+        <p>A: Params parsing and constraints in the dependency, SQL application (<code>offset/limit/where</code>) in the CRUD/repository functions, envelope building in the endpoint. Each layer stays independently testable.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Standardize lists with a pagination dependency + generic <code>Page[T]</code> envelope, whitelist sort fields, keep filters explicit, and pick offset vs cursor by table size. Consistent list endpoints are the part of an API other teams consume the most &mdash; invest in the pattern once.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

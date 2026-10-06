@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAPI Docs and Metadata</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>OpenAPI Docs and Metadata</h1>
+    <p>FastAPI generates an <strong>OpenAPI</strong> schema for your API automatically. From it you get interactive documentation for free &mdash; and a machine-readable contract for codegen, tests and clients.</p>
+
+    <h2>The Three URLs</h2>
+    <ul>
+        <li><code>/openapi.json</code> &mdash; the raw OpenAPI 3 schema.</li>
+        <li><code>/docs</code> &mdash; Swagger UI: try endpoints from the browser ("Try it out").</li>
+        <li><code>/redoc</code> &mdash; ReDoc: cleaner read-only reference, good for sharing with consumers.</li>
+    </ul>
+
+    <h2>Enriching the Schema</h2>
+    <pre><code>from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+app = FastAPI(
+    title="Inventory API",
+    description="API for managing warehouse inventory.\n\n**v1** endpoints only.",
+    version="1.0.0",
+    openapi_tags=[
+        {"name": "items", "description": "CRUD for items"},
+        {"name": "health", "description": "Service status"},
+    ],
+)
+
+class Item(BaseModel):
+    name: str = Field(description="Human-readable name", examples=["Wrench"])
+    price: float = Field(gt=0, description="Unit price in USD")
+
+@app.post("/items/", tags=["items"], summary="Create an item",
+          description="Creates an item and returns it with its generated id.",
+          response_description="The created item",
+          status_code=201)
+def create_item(item: Item):
+    return {"id": 1, **item.model_dump()}
+</code></pre>
+    <p>Every parameter accepts <code>title</code>, <code>description</code>, <code>examples</code>; models get <code>Field(description=...)</code>; decorators get <code>summary</code>, <code>description</code>, <code>tags</code>. All of it flows into the schema.</p>
+
+    <h2>Documenting Responses</h2>
+    <pre><code>from fastapi import FastAPI, status
+from pydantic import BaseModel
+
+class ErrorMessage(BaseModel):
+    detail: str
+
+@app.get("/items/{item_id}",
+         responses={
+             404: {"model": ErrorMessage, "description": "Item not found"},
+             400: {"description": "Invalid id format"},
+         })
+def read_item(item_id: int):
+    ...
+</code></pre>
+    <p>The <code>responses</code> parameter documents additional status codes so consumers know what errors to expect.</p>
+
+    <h2>Hiding and Customizing</h2>
+    <pre><code>from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
+
+app = FastAPI(docs_url="/documentation", redoc_url=None, openapi_url="/schema.json")
+
+@app.get("/internal/", include_in_schema=False)
+def internal(): ...
+</code></pre>
+    <ul>
+        <li><code>include_in_schema=False</code>: keep an endpoint out of the docs (health checks, internal routes).</li>
+        <li>You can serve a customized schema via a custom <code>app.openapi = lambda: get_openapi(...)</code> or generate clients from <code>app.openapi()</code>.</li>
+        <li>Disable docs entirely in production with <code>FastAPI(openapi_url=None)</code> if your policy requires it.</li>
+    </ul>
+
+    <h2>Using the Schema Beyond Docs</h2>
+    <ul>
+        <li><strong>Client generation:</strong> <code>openapi-typescript</code>, <code>openapi-generator</code> create typed TS/JS or Java clients from <code>/openapi.json</code>.</li>
+        <li><strong>Contract testing:</strong> validate the served schema against expectations (schemathesis fuzzes your API using the schema).</li>
+        <li><strong>API gateways:</strong> import the schema to configure routes (Kong, Azure APIM, AWS API Gateway).</li>
+    </ul>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Where do the docs come from &mdash; do I write OpenAPI YAML by hand?</div>
+    <div class="answer">
+        <p>A: Never by hand. FastAPI introspects your paths, parameters, Pydantic models and declared status codes, then builds the schema at startup. Your Python code is the single source of truth.</p>
+    </div>
+
+    <div class="question">Q: How do I group endpoints by resource in the UI?</div>
+    <div class="answer">
+        <p>A: Use <code>tags=["items"]</code> on routers or endpoints. Tags declared in <code>openapi_tags</code> get descriptions and a fixed order in the docs.</p>
+    </div>
+
+    <div class="question">Q: Can I test endpoints from the docs UI against my real database?</div>
+    <div class="answer">
+        <p>A: Yes &mdash; the docs call the real server. For shared/team environments protect or disable docs (<code>docs_url=None</code>, or gate them behind auth) since "Try it out" executes real mutations.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Documentation is a byproduct of writing typed FastAPI code: enrich it with <code>tags</code>, <code>summary</code>, <code>Field(description=...)</code> and <code>responses</code>, then reuse the <code>openapi.json</code> for clients and testing. Well-described schemas are how teams consume your API without asking you questions.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

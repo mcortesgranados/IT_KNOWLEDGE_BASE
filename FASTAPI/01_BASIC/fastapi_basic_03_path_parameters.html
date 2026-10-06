@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path Parameters</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Path Parameters</h1>
+    <p>Path parameters are variable parts of the URL path, declared with curly braces and received as function arguments. FastAPI converts and validates them using the declared type hints.</p>
+
+    <h2>Basic Usage</h2>
+    <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    return {"item_id": item_id}
+</code></pre>
+    <ul>
+        <li><code>GET /items/5</code> &rarr; <code>{"item_id": 5}</code> (converted to int).</li>
+        <li><code>GET /items/foo</code> &rarr; automatic error <code>422 Unprocessable Entity</code> with a clear message, no manual parsing needed.</li>
+    </ul>
+
+    <h2>Order Matters: Fixed Paths Before Dynamic</h2>
+    <pre><code>@app.get("/users/me")
+def read_current_user():
+    return {"user_id": "the current user"}
+
+@app.get("/users/{user_id}")
+def read_user(user_id: str):
+    return {"user_id": user_id}
+</code></pre>
+    <p>Routes are evaluated in declaration order. <code>/users/me</code> must be declared before <code>/users/{user_id}</code>, otherwise <code>"me"</code> would be captured as a <code>user_id</code>.</p>
+
+    <h2>Enums as Constrained Values</h2>
+    <pre><code>from enum import Enum
+
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
+@app.get("/models/{model_name}")
+def get_model(model_name: ModelName):
+    if model_name is ModelName.alexnet:
+        return {"model_name": model_name, "message": "Deep Learning FTW!"}
+    return {"model_name": model_name, "message": "Have some residuals"}
+</code></pre>
+    <p>Only the values <code>alexnet</code>, <code>resnet</code>, <code>lenet</code> are accepted; anything else returns 422 with the list of valid options.</p>
+
+    <h2>Extra Path Validation with Path()</h2>
+    <pre><code>from fastapi import FastAPI, Path
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int = Path(title="The ID of the item", ge=1, le=1000)):
+    return {"item_id": item_id}
+</code></pre>
+    <p><code>ge=1</code> (greater than or equal) rejects IDs like 0 or negatives; the <code>title</code> appears in the OpenAPI docs.</p>
+
+    <h2>Full Path Structure with :path Converter</h2>
+    <pre><code>@app.get("/files/{file_path:path}")
+def read_file(file_path: str):
+    return {"file_path": file_path}
+</code></pre>
+    <p>By default a parameter cannot contain slashes. The <code>:path</code> converter captures multi-segment paths like <code>/files/home/user/report.pdf</code>.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: What error does FastAPI return for an invalid path parameter type?</div>
+    <div class="answer">
+        <p>A: <code>422 Unprocessable Entity</code> with a JSON body listing the exact location, message and type of each validation error, e.g. <code>{"loc": ["path", "item_id"], "msg": "value is not a valid integer"}</code>.</p>
+    </div>
+
+    <div class="question">Q: Can a path parameter have a default value?</div>
+    <div class="answer">
+        <p>A: No. Path parameters are always required because they are part of the URL structure; if you give a default, FastAPI raises an error. Only query parameters can be optional.</p>
+    </div>
+
+    <div class="question">Q: How do I declare a parameter that could be a path segment OR come from somewhere else?</div>
+    <div class="answer">
+        <p>A: FastAPI resolves parameters by name in this order: path parameters first (by matching the route), then query parameters. Use <code>Path()</code> or <code>Query()</code> to be explicit when the same name appears in more than one place.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Path parameters let one route serve many resources. Type hints turn them into validated, documented values for free: declare <code>int</code>, <code>UUID</code>, <code>Enum</code> or add constraints with <code>Path(ge=..., le=...)</code> and FastAPI handles conversion, errors and docs.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

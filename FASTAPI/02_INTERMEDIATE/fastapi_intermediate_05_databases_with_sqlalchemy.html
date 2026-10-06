@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Databases with SQLAlchemy</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Databases with SQLAlchemy</h1>
+    <p>This page wires FastAPI to a relational database using SQLAlchemy 2.0 (sync style) and the <code>Depends</code> system: one session per request, clean separation between DB models and Pydantic schemas.</p>
+
+    <h2>Setup: Engine, Session Factory, Models</h2>
+    <pre><code>pip install sqlalchemy
+</code></pre>
+    <pre><code># db/session.py
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+
+DATABASE_URL = "postgresql://user:pass@localhost:5432/appdb"
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+class Base(DeclarativeBase):
+    pass
+</code></pre>
+    <pre><code># db/models.py
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from db.session import Base
+
+class Item(Base):
+    __tablename__ = "items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), index=True)
+    price: Mapped[float]
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    owner: Mapped["User"] = relationship(back_populates="items")
+</code></pre>
+
+    <h2>The get_db Dependency (One Session per Request)</h2>
+    <pre><code>from db.session import SessionLocal
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+</code></pre>
+    <p>FastAPI opens a session before the endpoint and closes it after &mdash; including on exceptions. Endpoints never create sessions themselves; they receive <code>db: Session = Depends(get_db)</code>.</p>
+
+    <h2>CRUD Endpoint Using the Session</h2>
+    <pre><code>from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+app = FastAPI()
+
+@app.post("/items/", response_model=ItemOut, status_code=201)
+def create_item(item_in: ItemCreate, db: Session = Depends(get_db)):
+    item = Item(**item_in.model_dump())
+    db.add(item)
+    db.commit()
+    db.refresh(item)          # reload DB-generated fields (id)
+    return item
+
+@app.get("/items/{item_id}", response_model=ItemOut)
+def read_item(item_id: int, db: Session = Depends(get_db)):
+    item = db.get(Item, item_id)
+    if item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return item
+</code></pre>
+
+    <h2>Bridging ORM Models and Pydantic (from_attributes)</h2>
+    <pre><code>from pydantic import BaseModel, ConfigDict
+
+class ItemOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)   # Pydantic v2; v1: orm_mode = True
+
+    id: int
+    name: str
+    price: float
+</code></pre>
+    <p><code>from_attributes=True</code> lets <code>response_model=ItemOut</code> read data from the ORM object (<code>item.name</code>) instead of only dicts. Returning the ORM object directly keeps passwords or internal columns out when the output schema excludes them.</p>
+
+    <h2>Queries: Filtering, Joins, Relationships</h2>
+    <pre><code>from sqlalchemy import select
+
+@app.get("/items/", response_model=list[ItemOut])
+def list_items(min_price: float = 0, db: Session = Depends(get_db)):
+    stmt = (
+        select(Item)
+        .where(Item.price &gt;= min_price)
+        .order_by(Item.price.desc())
+        .limit(50)
+    )
+    return db.scalars(stmt).all()
+
+# lazy vs eager loading:
+stmt = select(Item).options(selectinload(Item.owner))  # avoid N+1 queries
+</code></pre>
+    <p>SQLAlchemy 2.0 uses a unified <code>select()</code> style. Beware the <strong>N+1 problem</strong>: accessing <code>item.owner</code> in a loop triggers one query per item unless you eager-load with <code>selectinload</code> or <code>joinedload</code>.</p>
+
+    <h2>Creating Tables and Migrations</h2>
+    <pre><code>Base.metadata.create_all(bind=engine)   # quick start (dev only)
+</code></pre>
+    <p>For real projects use <strong>Alembic</strong>: versioned migrations (<code>alembic revision --autogenerate</code>, <code>alembic upgrade head</code>) so schema changes are reviewable and reversible. <code>create_all</code> never alters existing tables.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Why do I get "Object is not attached to a session" or detached-instance errors?</div>
+    <div class="answer">
+        <p>A: The session closed before you read a lazy relationship. Set <code>expire_on_commit=False</code> so objects stay usable after <code>commit()</code>, eager-load relationships, or serialize within the request (the <code>response_model</code> conversion happens while the session is still open).</p>
+    </div>
+
+    <div class="question">Q: Where should transactions begin and end?</div>
+    <div class="answer">
+        <p>A: Keep the unit of work inside the request: <code>db.commit()</code> per logical operation, or open a transaction in <code>get_db</code> and commit/rollback in the <code>finally</code> for all-or-nothing endpoints. Do not share one session across requests &mdash; sessions are not thread-safe.</p>
+    </div>
+
+    <div class="question">Q: Why does the DB pool get exhausted under load?</div>
+    <div class="answer">
+        <p>A: Sessions that are never closed (missing <code>finally: db.close()</code>) or leaked connections from forgotten commits. Sync SQLAlchemy blocks a thread per query &mdash; with many concurrent sync endpoints, tune <code>pool_size</code>/<code>max_overflow</code> and consider the async driver (advanced level) so the event loop handles waiting.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>The pattern to memorize: <code>get_db</code> yield-dependency &rarr; endpoint receives a <code>Session</code> &rarr; SQLAlchemy models for storage &rarr; Pydantic schemas (<code>from_attributes=True</code>) for the API boundary. With Alembic for migrations, this is the backbone of most FastAPI services.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

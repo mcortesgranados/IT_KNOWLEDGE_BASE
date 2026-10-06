@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - JWT Authentication</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .warning { background-color: #fff3e0; padding: 15px; border-left: 5px solid #ef6c00; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>JWT Authentication</h1>
+    <p>A JWT (JSON Web Token) is a signed, self-contained token: the server issues it at login, and every later request is authenticated by <em>verifying the signature</em> instead of querying a session store. The previous page's <code>/token</code> endpoint now returns a real JWT.</p>
+
+    <h2>Installing and Creating Tokens</h2>
+    <pre><code>pip install pyjwt
+</code></pre>
+    <pre><code>from datetime import datetime, timedelta, timezone
+import jwt
+
+SECRET_KEY = "change-me-keep-secret"   # in prod: from pydantic-settings/env
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -&gt; str:
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire, "iat": datetime.now(timezone.utc)})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+</code></pre>
+    <p>Standard claims: <code>sub</code> (subject &mdash; usually the user id), <code>exp</code> (expiry &mdash; PyJWT rejects expired tokens automatically), <code>iat</code> (issued at). Anything else you add (<code>roles</code>, <code>scopes</code>) travels with the token.</p>
+
+    <h2>Decoding and the get_current_user Dependency</h2>
+    <pre><code>import jwt
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_error
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired", headers={"WWW-Authenticate": "Bearer"})
+    except jwt.InvalidTokenError:
+        raise credentials_error
+    user = users_repo.get_by_id(user_id)
+    if user is None:
+        raise credentials_error
+    return user
+
+@app.get("/users/me")
+def read_me(user = Depends(get_current_user)):
+    return user
+</code></pre>
+    <ul>
+        <li><code>jwt.decode</code> verifies the signature and <code>exp</code> in one call; a tampered token raises <code>InvalidTokenError</code>.</li>
+        <li>Always pass <code>algorithms=[...]</code> explicitly &mdash; accepting the algorithm from the token itself is the classic JWT vulnerability (the "alg: none" attack).</li>
+    </ul>
+
+    <h2>Wiring It Into the /token Endpoint</h2>
+    <pre><code>@app.post("/token")
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Incorrect username or password",
+                            headers={"WWW-Authenticate": "Bearer"})
+    token = create_access_token(data={"sub": str(user.id)})
+    return {"access_token": token, "token_type": "bearer"}
+</code></pre>
+
+    <h2>Access + Refresh Token Pattern</h2>
+    <pre><code>def create_refresh_token(user_id: str) -&gt; str:
+    return jwt.encode({"sub": user_id, "type": "refresh",
+                       "exp": datetime.now(timezone.utc) + timedelta(days=7)}, SECRET_KEY, algorithm="HS256")
+
+@app.post("/token/refresh")
+def refresh(refresh_token: str = Depends(oauth2_scheme)):
+    payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=["HS256"])
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Not a refresh token")
+    return {"access_token": create_access_token({"sub": payload["sub"]}), "token_type": "bearer"}
+</code></pre>
+    <ul>
+        <li><strong>Short-lived access token</strong> (minutes) + <strong>long-lived refresh token</strong> (days, stored securely server-side or httpOnly cookie).</li>
+        <li>A leaked access token expires quickly; the refresh token is used rarely, so it is harder to steal.</li>
+        <li>Store the refresh token's <code>jti</code> server-side to support revocation ("logout everywhere").</li>
+    </ul>
+
+    <div class="warning">
+        <strong>Security rules:</strong> a JWT payload is only <em>signed</em>, not encrypted &mdash; anyone can base64-decode it, so never put passwords or PII inside. Keep <code>SECRET_KEY</code> in an environment variable, rotate it with a versioned <code>kid</code>, and prefer <strong>RS256</strong> (asymmetric) when other services must verify tokens: they only need the public key.
+    </div>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: How do I "log out" a user with JWT?</div>
+    <div class="answer">
+        <p>A: You cannot invalidate a stateless JWT directly. Options: short expiry times (most common), a server-side blocklist of <code>jti</code> values checked in <code>get_current_user</code>, or token versioning (a <code>ver</code> claim compared against the user's current version, bumped on logout/password change).</p>
+    </div>
+
+    <div class="question">Q: Why did my token validation fail with "Signature verification failed" after a redeploy?</div>
+    <div class="answer">
+        <p>A: Each instance must use the same <code>SECRET_KEY</code>. If it is generated randomly at startup (or differs per container), tokens issued by one worker are invalid on another. Load it from shared configuration.</p>
+    </div>
+
+    <div class="question">Q: PyJWT or python-jose?</div>
+    <div class="answer">
+        <p>A: PyJWT is the actively maintained, focused JWT library and the current recommendation. python-jose (used in older FastAPI docs) also handles JWE/JWK but has had CVEs and slower releases. If you need JWKs from an IdP, consider <code>authlib</code> or <code>python-jose[cryptography]</code> carefully.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>JWT turns authentication into signature verification: issue at <code>/token</code> with a short <code>exp</code>, validate in the <code>get_current_user</code> dependency, keep secrets out of the payload, and add refresh tokens for long sessions. Combined with the previous page, you now have production-grade login.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

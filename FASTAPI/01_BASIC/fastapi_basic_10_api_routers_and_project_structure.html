@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Routers and Project Structure</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>API Routers and Project Structure</h1>
+    <p>Keeping every endpoint in <code>main.py</code> does not scale. <strong>APIRouter</strong> lets you split path operations into modules and mount them on the app with prefixes and tags.</p>
+
+    <h2>Creating a Router</h2>
+    <pre><code># routers/users.py
+from fastapi import APIRouter
+
+router = APIRouter(
+    prefix="/users",
+    tags=["users"],
+    dependencies=[],  # router-wide dependencies (e.g. auth)
+)
+
+@router.get("/")
+def list_users():
+    return [{"username": "alice"}]
+
+@router.get("/{user_id}")
+def get_user(user_id: int):
+    return {"user_id": user_id}
+</code></pre>
+
+    <h2>Mounting Routers on the App</h2>
+    <pre><code># main.py
+from fastapi import FastAPI
+from routers import users, items
+
+app = FastAPI()
+app.include_router(users.router)
+app.include_router(items.router, prefix="/api", tags=["items"])
+</code></pre>
+    <ul>
+        <li><code>prefix</code> can be set on the router or at <code>include_router</code> time (they concatenate).</li>
+        <li><code>tags</code> group endpoints in the docs UI.</li>
+        <li>Routers can be included multiple times with different prefixes (e.g. <code>/api/v1</code> and <code>/api/v2</code>).</li>
+    </ul>
+
+    <h2>A Scalable Layout (Bigger Apps)</h2>
+    <pre><code>app/
+├── main.py              # app factory, middleware, include routers
+├── core/
+│   ├── config.py        # pydantic-settings
+│   └── security.py      # hashing, JWT
+├── db/
+│   └── session.py       # engine, SessionLocal
+├── models/              # SQLAlchemy / DB models
+├── schemas/             # Pydantic models (in/out)
+├── crud/                # DB operations per entity
+├── routers/             # APIRouter per entity
+│   ├── users.py
+│   └── items.py
+├── dependencies.py      # shared Depends (get_db, current_user)
+└── tests/
+</code></pre>
+    <p>Rule of thumb: <strong>schemas</strong> never import from <strong>models</strong> logic-wise they are independent; <strong>routers</strong> depend on <strong>crud</strong> and <strong>schemas</strong>; <strong>crud</strong> depends on <strong>models</strong>. This keeps layers swappable and testable.</p>
+
+    <h2>Versioning an API</h2>
+    <pre><code>app_v1 = FastAPI()
+app_v1.include_router(users_v1.router, prefix="/v1")
+
+app = FastAPI()
+app.mount("/api", app_v1)  # sub-application mounting
+</code></pre>
+    <p>Alternatively use prefixes only (<code>prefix="/api/v1"</code>) &mdash; simpler and usually enough until you need truly different apps.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Can two routers define the same path?</div>
+    <div class="answer">
+        <p>A: Yes, and the <strong>first</strong> matching route registered wins. This is a common source of "my endpoint returns the wrong thing" bugs &mdash; check include order, especially for a catch-all like <code>/{item_id}</code> declared before a fixed path.</p>
+    </div>
+
+    <div class="question">Q: Should I create the FastAPI() app inside main.py or in a factory function?</div>
+    <div class="answer">
+        <p>A: For anything beyond a demo, use a factory: <code>def create_app() -&gt; FastAPI:</code> that wires routers, middleware and events. It makes testing (fresh app per suite) and different configs per environment trivial.</p>
+    </div>
+
+    <div class="question">Q: Where do shared dependencies like get_db live?</div>
+    <div class="answer">
+        <p>A: In a central <code>dependencies.py</code> (or per-domain module). Routers import them and declare <code>db: Session = Depends(get_db)</code> &mdash; never create sessions directly inside endpoints.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p><code>APIRouter</code> is how FastAPI apps grow: one router per resource, mounted with prefixes and tags, backed by a layered folder structure (routers &rarr; crud &rarr; models, with pydantic schemas at the boundary). Start simple, but structure early.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

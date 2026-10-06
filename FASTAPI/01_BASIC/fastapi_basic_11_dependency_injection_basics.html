@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dependency Injection Basics (Depends)</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Dependency Injection Basics (Depends)</h1>
+    <p>FastAPI's dependency injection system lets you declare <em>things your endpoint needs</em> (DB sessions, auth users, pagination, clients) as function parameters. FastAPI builds them per-request and caches them within that request.</p>
+
+    <h2>A First Dependency</h2>
+    <pre><code>from fastapi import FastAPI, Depends, HTTPException
+
+app = FastAPI()
+
+async def pagination(skip: int = 0, limit: int = 20):
+    return {"skip": skip, "limit": limit}
+
+@app.get("/items/")
+def list_items(page: dict = Depends(pagination)):
+    return {"page": page}
+</code></pre>
+    <p>Anything you can declare in an endpoint (query params, headers, bodies) can be declared inside a dependency instead. The client still sends <code>?skip=10&amp;limit=5</code>; the dependency receives them and the endpoint gets the result.</p>
+
+    <h2>Dependencies That Can Fail: Auth Example</h2>
+    <pre><code>from fastapi import Depends, HTTPException, Header
+
+def verify_token(x_token: str = Header()):
+    if x_token != "secret":
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return x_token
+
+@app.get("/admin/")
+def admin_panel(token: str = Depends(verify_token)):
+    return {"access": "granted", "token": token}
+</code></pre>
+    <p>Raising <code>HTTPException</code> inside a dependency aborts the request before the endpoint runs &mdash; dependencies are the natural place for authentication, authorization and rate limiting.</p>
+
+    <h2>Resources with Cleanup: yield Dependencies</h2>
+    <pre><code>def get_db():
+    db = SessionLocal()
+    try:
+        yield db          # endpoint runs with this value
+    finally:
+        db.close()        # always runs afterwards (like a context manager)
+</code></pre>
+    <p>The code before <code>yield</code> is setup, after is teardown. Perfect for DB sessions, transactions and temp files. (Supported directly in FastAPI; nested yield dependencies work too.)</p>
+
+    <h2>Dependency Trees and Caching</h2>
+    <pre><code>def get_current_user(token: str = Depends(verify_token), db=Depends(get_db)):
+    ...
+
+@app.get("/me/")
+def me(user=Depends(get_current_user)):
+    ...
+</code></pre>
+    <ul>
+        <li>Dependencies can depend on other dependencies &mdash; forming a tree resolved per request.</li>
+        <li><strong>Same-request caching:</strong> if two dependencies both use <code>get_db</code>, the session is created once per request and shared.</li>
+        <li>Disable caching for a subtree with <code>Depends(fn, use_cache=False)</code>.</li>
+    </ul>
+
+    <h2>Class Dependencies and Shortcuts</h2>
+    <pre><code>class CommonParams:
+    def __init__(self, q: str | None = None, skip: int = 0, limit: int = 20):
+        self.q, self.skip, self.limit = q, skip, limit
+
+@app.get("/things/")
+def list_things(common: CommonParams = Depends()):
+    return {"q": common.q, "skip": common.skip}
+</code></pre>
+    <p><code>Depends()</code> with no argument uses the declared class/callable itself. Classes are great when a dependency needs several related values or configuration.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: When does a dependency run &mdash; and how often?</div>
+    <div class="answer">
+        <p>A: Once per request, before the endpoint, resolved lazily as the dependency tree is built. Results are cached for the duration of that single request only &mdash; they are not singletons; use module-level objects (engine, connection pools) for cross-request state.</p>
+    </div>
+
+    <div class="question">Q: Can I apply a dependency to a whole router without using its value?</div>
+    <div class="answer">
+        <p>A: Yes: <code>router = APIRouter(dependencies=[Depends(verify_token)])</code> runs the check on every route but discards the result. Also available per-endpoint: <code>@app.get("/", dependencies=[...])</code>.</p>
+    </div>
+
+    <div class="question">Q: Dependencies vs middleware &mdash; which one do I use?</div>
+    <div class="answer">
+        <p>A: Middleware runs for every request globally and has no access to route parameters &mdash; use it for cross-cutting concerns (CORS, timing, logging). Dependencies are declared per-route (or per-router), can be async, can raise HTTP errors and receive validated parameters &mdash; use them for auth, pagination, DB sessions.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p><code>Depends</code> is FastAPI's superpower: compose reusable logic (auth, DB, pagination) from small functions, get per-request caching and automatic cleanup with <code>yield</code>, and keep endpoints focused on business logic.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

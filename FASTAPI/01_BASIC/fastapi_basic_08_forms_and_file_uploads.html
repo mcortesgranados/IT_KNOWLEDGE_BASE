@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Data and File Uploads</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Form Data and File Uploads</h1>
+    <p>Not all requests are JSON. HTML forms send <code>application/x-www-form-urlencoded</code> or <code>multipart/form-data</code> (when files are involved). FastAPI handles both with <code>Form</code> and <code>File</code>/<code>UploadFile</code>.</p>
+
+    <h2>Receiving Form Fields</h2>
+    <pre><code>from fastapi import FastAPI, Form
+
+app = FastAPI()
+
+@app.post("/login/")
+def login(username: str = Form(), password: str = Form()):
+    return {"username": username}
+</code></pre>
+    <p>Requires <code>pip install python-multipart</code>. Unlike query/body params, a parameter declared with <code>Form()</code> is read from the form body, and the docs show a form-style request body.</p>
+
+    <h2>Single and Multiple File Uploads</h2>
+    <pre><code>from fastapi import FastAPI, UploadFile, File
+from typing import List
+
+app = FastAPI()
+
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile):
+    contents = await file.read()
+    return {
+        "filename": file.filename,
+        "content_type": file.content_type,
+        "size": len(contents),
+    }
+
+@app.post("/upload-multiple/")
+async def upload_multiple(files: List[UploadFile]):
+    return {"names": [f.filename for f in files]}
+</code></pre>
+
+    <h2>UploadFile vs bytes</h2>
+    <ul>
+        <li><code>file: bytes = File()</code>: loads the whole file into memory &mdash; fine for small files, dangerous for large ones.</li>
+        <li><code>file: UploadFile</code>: streamed; has metadata (<code>filename</code>, <code>content_type</code>) and async methods (<code>await file.read(size)</code>, <code>await file.seek(0)</code>, <code>await file.close()</code>). Preferred for anything real.</li>
+    </ul>
+
+    <h2>Saving an Upload Safely</h2>
+    <pre><code>import shutil, uuid
+from pathlib import Path
+
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+@app.post("/save-file/")
+async def save_file(file: UploadFile):
+    safe_name = f"{uuid.uuid4()}{Path(file.filename).suffix}"  # never trust client filename
+    dest = UPLOAD_DIR / safe_name
+    with dest.open("wb") as out:
+        shutil.copyfileobj(file.file, out)  # sync streaming copy
+    return {"saved_as": safe_name}
+</code></pre>
+    <p>Security notes: never use the client-supplied filename directly (path traversal), validate <code>content_type</code> and size limits, and consider scanning uploads.</p>
+
+    <h2>Mixing File + Form Fields</h2>
+    <pre><code>@app.post("/reports/")
+async def upload_report(
+    title: str = Form(),
+    period: str = Form(),
+    attachment: UploadFile | None = None,
+):
+    return {"title": title, "has_attachment": attachment is not None}
+</code></pre>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Why does the endpoint stop working with "Form data requires python-multipart"?</div>
+    <div class="answer">
+        <p>A: Form and file parsing are not part of FastAPI's core; install the parser with <code>pip install python-multipart</code>. It is included when you install <code>fastapi[standard]</code>.</p>
+    </div>
+
+    <div class="question">Q: How do I limit upload size?</div>
+    <div class="answer">
+        <p>A: Read in chunks and abort when you exceed the limit: check <code>file.size</code> if available, or loop <code>await file.read(1024 * 1024)</code> counting bytes; alternatively enforce the limit at the proxy level (Nginx <code>client_max_body_size</code>).</p>
+    </div>
+
+    <div class="question">Q: Can UploadFile be used with a Pydantic model?</div>
+    <div class="answer">
+        <p>A: Not directly inside a JSON model &mdash; files are multipart, not JSON. Declare the <code>UploadFile</code> as a separate parameter next to your <code>Form()</code> fields (or a <code>BaseModel</code> with <code>model_config = ConfigDict(arbitrary_types_allowed=True)</code> as a dependency).</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p><code>Form()</code> reads urlencoded fields and <code>UploadFile</code> streams files with metadata. Always prefer <code>UploadFile</code> over raw <code>bytes</code>, sanitize filenames, and enforce size limits &mdash; uploads are the classic attack surface of an API.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

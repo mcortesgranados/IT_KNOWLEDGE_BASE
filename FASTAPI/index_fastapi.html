@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Knowledge Base</title>
+    <style>
+        body {
+            font-family: Arial, Calibri, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #009688;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #00796b;
+        }
+        ul { list-style: none; padding-left: 10px; }
+        ul li { margin: 8px 0; }
+        a {
+            text-decoration: none;
+            color: #00796b;
+            font-size: 16px;
+        }
+        a:hover { color: #004d40; text-decoration: underline; }
+        .pending { color: #9e9e9e; font-size: 15px; }
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+    <h1>FastAPI Knowledge Base</h1>
+    <p>FastAPI is a modern, fast (high-performance) web framework for building APIs with Python, based on standard type hints. Content is organized by level, following the same structure as the Kafka section.</p>
+    <h2>Levels</h2>
+    <ul>
+        <li><a href="01_BASIC/index_basic.html" target="_blank"><strong>Basic</strong></a> &mdash; 15 topics: from installation to routers, dependency injection, async and docs. <a href="01_BASIC/fastapi_basic_all_questions.html" target="_blank">All questions and answers (single page)</a>.</li>
+        <li><a href="02_INTERMEDIATE/index_intermediate.html" target="_blank"><strong>Intermediate</strong></a> &mdash; 12 topics: background tasks, security (OAuth2/JWT/scopes), SQLAlchemy, WebSockets, testing, settings, lifespan, responses, pagination and versioning.</li>
+        <li><span class="pending">Advanced &mdash; planned: async DB patterns, deployment (Docker/K8s), observability, caching, scaling and microservices.</span></li>
+    </ul>
+</div>
+</body>
+</html>

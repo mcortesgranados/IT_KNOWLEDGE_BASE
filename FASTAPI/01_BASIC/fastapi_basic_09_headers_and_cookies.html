@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Headers and Cookies</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Headers and Cookies</h1>
+    <p>HTTP headers carry metadata (auth tokens, content negotiation, tracing IDs) and cookies carry small client-side state. FastAPI reads them with <code>Header</code> and <code>Cookie</code>, and writes them through the <code>Response</code> object.</p>
+
+    <h2>Reading Headers</h2>
+    <pre><code>from fastapi import FastAPI, Header
+from typing import Optional
+
+app = FastAPI()
+
+@app.get("/items/")
+def read_items(
+    user_agent: Optional[str] = Header(default=None),
+    x_token: Optional[str] = Header(default=None),
+):
+    return {"User-Agent": user_agent, "X-Token": x_token}
+</code></pre>
+    <p>Underscores convert to hyphens automatically: the parameter <code>user_agent</code> reads the <code>User-Agent</code> header. To keep underscores literal, use <code>Header(convert_underscores=False)</code>.</p>
+
+    <h2>Setting Response Headers</h2>
+    <pre><code>from fastapi import FastAPI, Response
+
+app = FastAPI()
+
+@app.get("/download/")
+def download(response: Response):
+    response.headers["X-Process-Time"] = "0.42"
+    response.headers["Content-Disposition"] = 'attachment; filename="report.csv"'
+    return {"status": "ok"}
+</code></pre>
+    <p>Or return a <code>JSONResponse</code> directly when you need full control (note: then the return value of your function is ignored and the response is built manually).</p>
+
+    <h2>Reading and Setting Cookies</h2>
+    <pre><code>from fastapi import FastAPI, Cookie, Response
+
+app = FastAPI()
+
+@app.get("/preferences/")
+def get_preferences(session_id: Optional[str] = Cookie(default=None)):
+    return {"session_id": session_id}
+
+@app.post("/set-cookie/")
+def set_cookie(response: Response):
+    response.set_cookie(
+        key="session_id",
+        value="abc123",
+        httponly=True,      # JavaScript cannot read it (XSS protection)
+        secure=True,        # only sent over HTTPS
+        samesite="lax",     # CSRF mitigation
+        max_age=3600,
+    )
+    return {"message": "cookie set"}
+
+@app.delete("/unset-cookie/")
+def unset_cookie(response: Response):
+    response.delete_cookie("session_id")
+    return {"message": "cookie removed"}
+</code></pre>
+
+    <h2>Headers You Will Actually Use</h2>
+    <ul>
+        <li><strong>Authorization:</strong> tokens (JWT) &mdash; usually read in a dependency, not the endpoint.</li>
+        <li><strong>X-Request-ID / traceparent:</strong> correlation IDs for distributed tracing.</li>
+        <li><strong>Accept / Accept-Language:</strong> content negotiation.</li>
+        <li><strong>Cache-Control, ETag:</strong> HTTP caching.</li>
+    </ul>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Header names are case-insensitive in HTTP &mdash; does FastAPI care?</div>
+    <div class="answer">
+        <p>A: No. Header lookup is case-insensitive; declaring <code>x_token</code> matches <code>X-Token</code>, <code>x-token</code>, etc. The underscore-to-hyphen conversion is the only transformation applied.</p>
+    </div>
+
+    <div class="question">Q: Why is my Set-Cookie header not reaching the browser?</div>
+    <div class="answer">
+        <p>A: Common causes: calling <code>set_cookie</code> on a locally-created <code>JSONResponse</code> instead of the injected <code>Response</code>; CORS &mdash; the frontend must use <code>credentials: "include"</code> and the server must set <code>Access-Control-Allow-Credentials: true</code> with an exact origin (wildcard <code>*</code> blocks cookies); or <code>secure=True</code> while testing over plain HTTP.</p>
+    </div>
+
+    <div class="question">Q: Headers vs cookies vs local storage for auth tokens?</div>
+    <div class="answer">
+        <p>A: <code>Authorization</code> headers are the standard for APIs (stateless, no CSRF cookie issues). HttpOnly cookies protect against XSS but need CSRF protection. localStorage is readable by any injected script &mdash; generally avoid for tokens.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Declare <code>Header</code>/<code>Cookie</code> parameters to read metadata, and use the injected <code>Response</code> to set headers and cookies with secure flags. Authentication and tracing dependencies (coming in Intermediate) build exactly on these primitives.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

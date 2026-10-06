@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Background Tasks</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .warning { background-color: #fff3e0; padding: 15px; border-left: 5px solid #ef6c00; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Background Tasks</h1>
+    <p>Often a request should respond immediately and do slow work afterwards: sending emails, writing audit logs, pushing notifications. <code>BackgroundTasks</code> runs a function <em>after</em> the response has been sent, inside the same process.</p>
+
+    <h2>Basic Usage</h2>
+    <pre><code>from fastapi import FastAPI, BackgroundTasks
+
+app = FastAPI()
+
+def send_email(email_to: str, message: str):
+    # pretend this takes 2 seconds
+    with open("emails.log", "a") as f:
+        f.write(f"{email_to}: {message}\n")
+
+@app.post("/users/")
+async def create_user(email: str, background_tasks: BackgroundTasks):
+    background_tasks.add_task(send_email, email, message="Welcome!")
+    return {"message": "User created - email will be sent shortly"}
+</code></pre>
+    <p>The client gets the 200 response right away; <code>send_email</code> runs afterwards. <code>add_task(fn, *args, **kwargs)</code> accepts the callable plus its arguments.</p>
+
+    <h2>Async and Sync Task Functions</h2>
+    <ul>
+        <li><strong><code>async def</code> task:</strong> awaited directly on the event loop &mdash; use for async I/O (httpx, async DB).</li>
+        <li><strong><code>def</code> task:</strong> executed in the thread pool &mdash; safe for blocking code.</li>
+        <li>Multiple <code>add_task</code> calls run sequentially in the order added.</li>
+    </ul>
+
+    <h2>Using BackgroundTasks in a Dependency</h2>
+    <pre><code>def write_audit_log(background_tasks: BackgroundTasks, user: str = Header()):
+    def log(action: str):
+        print(f"{user} did {action}")
+    background_tasks.add_task(log, "created_item")
+    # nothing to return - dependency just schedules side effects
+
+@app.post("/items/", dependencies=[Depends(write_audit_log)])
+def create_item(item: Item):
+    return item
+</code></pre>
+    <p>You can inject <code>BackgroundTasks</code> in dependencies and endpoints alike &mdash; tasks from all of them accumulate and run after the response.</p>
+
+    <h2>Practical Example: Notification With Status Update</h2>
+    <pre><code>async def process_report(report_id: int, db_session_factory):
+    async with db_session_factory() as db:
+        report = await db.get(Report, report_id)
+        report.status = "processing"
+        await db.commit()
+        # ... heavy work ...
+        report.status = "done"
+        await db.commit()
+
+@app.post("/reports/", status_code=202)
+async def request_report(background_tasks: BackgroundTasks):
+    report_id = create_pending_report()
+    background_tasks.add_task(process_report, report_id, async_session_factory)
+    return {"report_id": report_id, "status": "queued"}
+</code></pre>
+    <p>Return <strong>202 Accepted</strong> to signal "received, processing later" &mdash; the semantically correct status for background work, with a status field the client can poll.</p>
+
+    <div class="warning">
+        <strong>Limitations &mdash; know when NOT to use BackgroundTasks:</strong>
+        tasks run in the same process that serves the request. If the process crashes or restarts (deploy!), pending tasks are <strong>lost</strong>. There are no retries, no persistence, no scheduling, and heavy CPU work still competes with request handling. For anything critical (payments, emails that must arrive, large jobs) use a real queue: <strong>Celery</strong>, <strong>RQ</strong>, <strong>Dramatiq</strong> or <strong>ARQ</strong> with a broker (Redis/RabbitMQ).
+    </div>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Does the background task block the response?</div>
+    <div class="answer">
+        <p>A: No. Starlette sends the response first, then awaits the task functions. The client is already gone when the task runs &mdash; that is why tasks cannot change the response.</p>
+    </div>
+
+    <div class="question">Q: Can a background task access the request's DB session?</div>
+    <div class="answer">
+        <p>A: Not the one from <code>get_db</code> &mdash; by the time the task runs, the request lifecycle (and the session) has ended. Create a fresh session inside the task (pass a session factory), or load all needed data before returning the response.</p>
+    </div>
+
+    <div class="question">Q: BackgroundTasks vs Celery &mdash; how do I choose?</div>
+    <div class="answer">
+        <p>A: BackgroundTasks for fire-and-forget work that may be lost occasionally without harm (logs, non-critical notifications, cache warming) and that finishes in seconds. Celery/RQ for jobs that must not be lost, need retries/timeouts, take minutes, or must run on separate worker machines.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p><code>BackgroundTasks</code> is the zero-infrastructure way to answer fast and work later: inject it, <code>add_task(fn, ...)</code>, return 202. It has no delivery guarantees &mdash; the moment a task matters for the business, move it to a real message queue.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

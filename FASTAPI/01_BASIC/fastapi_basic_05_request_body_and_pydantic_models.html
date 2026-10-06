@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Body and Pydantic Models</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Request Body and Pydantic Models</h1>
+    <p>To receive structured data (typically JSON) in a POST, PUT or PATCH request, you declare a parameter with a <strong>Pydantic model</strong> type. FastAPI reads the body, validates it and gives you a typed object.</p>
+
+    <h2>Defining a Model</h2>
+    <pre><code>from pydantic import BaseModel, Field, EmailStr
+
+class Item(BaseModel):
+    name: str = Field(min_length=1, max_length=50, examples=["Keyboard"])
+    price: float = Field(gt=0, description="Price in USD")
+    is_offer: bool | None = None
+    owner_email: EmailStr | None = None
+
+@app.post("/items/")
+def create_item(item: Item):
+    return {"item_name": item.name, "price_with_tax": item.price * 1.12}
+</code></pre>
+    <ul>
+        <li>Fields with a type and no default are <strong>required</strong>; fields with a default are optional.</li>
+        <li><code>Field()</code> adds constraints and documentation metadata.</li>
+        <li><code>EmailStr</code> requires <code>pip install "pydantic[email]"</code> and validates the format automatically.</li>
+    </ul>
+
+    <h2>Combining Body, Path and Query Parameters</h2>
+    <pre><code>@app.put("/items/{item_id}")
+def update_item(item_id: int, item: Item, q: str | None = None):
+    return {"item_id": item_id, **item.model_dump(), "q": q}
+</code></pre>
+    <p>FastAPI routes each parameter to its source: <code>item_id</code> from the path, <code>item</code> from the JSON body, <code>q</code> from the query string.</p>
+
+    <h2>Nested Models</h2>
+    <pre><code>class Tag(BaseModel):
+    name: str
+
+class Article(BaseModel):
+    title: str
+    tags: list[Tag] = []
+    metadata_: dict[str, str] | None = None
+
+@app.post("/articles/")
+def create_article(article: Article):
+    return {"title": article.title, "first_tag": article.tags[0].name if article.tags else None}
+</code></pre>
+    <p>Arbitrarily deep nesting works: lists of models, dicts, optional fields. Validation errors point to the exact nested path.</p>
+
+    <h2>Multiple Body Parameters and Embedded Bodies</h2>
+    <pre><code>from fastapi import Body
+
+@app.put("/items/{item_id}")
+def update(item_id: int, item: Item, user: User):
+    return {"item_id": item_id, "item": item.model_dump(), "user": user.model_dump()}
+</code></pre>
+    <p>Two models in one function means the JSON body must be <code>{"item": {...}, "user": {...}}</code> (FastAPI embeds them automatically when there is more than one body parameter). With a single model you can force embedding using <code>item: Item = Body(embed=True)</code>.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: What is the difference between .model_dump() and .model_dump_json()?</div>
+    <div class="answer">
+        <p>A: <code>model_dump()</code> returns a Python dict; <code>model_dump_json()</code> returns a JSON string directly (faster, no intermediate dict). In Pydantic v1 these were called <code>.dict()</code> and <code>.json()</code>.</p>
+    </div>
+
+    <div class="question">Q: Does FastAPI validate the response body too?</div>
+    <div class="answer">
+        <p>A: Only if you declare a <code>response_model</code>. Without it, whatever the function returns is serialized as-is. With it, the output is filtered and validated against the model (see the next page).</p>
+    </div>
+
+    <div class="question">Q: What happens with extra/unknown fields in the request body?</div>
+    <div class="answer">
+        <p>A: By default they are ignored. You can change this with <code>model_config = ConfigDict(extra="forbid")</code> to reject unknown fields with a 422 error, or <code>extra="allow"</code> to keep them.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Pydantic models are the contract of your API: declare once and you get validation, conversion, nested structures, editor autocompletion and schema generation. This single mechanism replaces a lot of manual parsing code.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

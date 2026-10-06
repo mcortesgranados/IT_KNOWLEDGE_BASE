@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Settings and Environments (pydantic-settings)</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .warning { background-color: #fff3e0; padding: 15px; border-left: 5px solid #ef6c00; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Settings and Environments (pydantic-settings)</h1>
+    <p>Configuration (DB URLs, secrets, feature flags) must come from the environment, not from code. <strong>pydantic-settings</strong> gives you typed, validated settings loaded from environment variables and <code>.env</code> files &mdash; the official FastAPI recommendation.</p>
+
+    <h2>Defining Settings</h2>
+    <pre><code>pip install pydantic-settings
+</code></pre>
+    <pre><code># core/config.py
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
+    app_name: str = "Inventory API"
+    environment: str = "dev"                     # dev | staging | prod
+    debug: bool = False
+    database_url: str
+    secret_key: str
+    access_token_expire_minutes: int = 30
+    cors_origins: list[str] = []
+</code></pre>
+    <pre><code># .env   (NEVER commit this file)
+DATABASE_URL=postgresql://user:pass@localhost:5432/appdb
+SECRET_KEY=09d25e094faa6ca2556c818166b7a956...
+CORS_ORIGINS=["http://localhost:3000","https://mysite.com"]
+</code></pre>
+    <ul>
+        <li>Values are parsed and <strong>type-converted</strong> automatically (<code>debug=true</code> &rarr; <code>True</code>; JSON lists/dicts parse from strings).</li>
+        <li>Fields without defaults (<code>database_url</code>) fail fast at startup if missing &mdash; much better than a KeyError at 3 a.m.</li>
+        <li>Precedence: constructor args &gt; environment variables &gt; <code>.env</code> file &gt; defaults.</li>
+    </ul>
+
+    <h2>Injecting Settings via Dependencies</h2>
+    <pre><code>from functools import lru_cache
+from fastapi import Depends, FastAPI
+from core.config import Settings
+
+app = FastAPI()
+
+@lru_cache
+def get_settings() -&gt; Settings:
+    return Settings()
+
+@app.get("/info/")
+def info(settings: Settings = Depends(get_settings)):
+    return {"app": settings.app_name, "env": settings.environment}
+</code></pre>
+    <ul>
+        <li><code>@lru_cache</code> reads/parses the environment <strong>once</strong>; without it, every request would re-read.</li>
+        <li>Injecting <code>Settings</code> as a dependency (instead of importing a global) keeps tests trivial: <code>app.dependency_overrides[get_settings] = lambda: Settings(secret_key="test", database_url="sqlite://")</code>.</li>
+    </ul>
+
+    <h2>Multiple Environments</h2>
+    <pre><code>class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+
+    environment: str = "dev"
+    database_url: str
+    echo_sql: bool = False
+
+    @property
+    def is_prod(self) -&gt; bool:
+        return self.environment == "prod"
+</code></pre>
+    <pre><code># deploy: dev uses .env, prod gets variables from the platform
+ENVIRONMENT=prod DATABASE_URL=... uvicorn app.main:app --workers 4
+</code></pre>
+    <ul>
+        <li>Production values should come from the platform's secret manager (Kubernetes Secrets, AWS SSM/Secrets Manager, Azure Key Vault) &mdash; not from files baked into images.</li>
+        <li>Behavioral switches follow from settings: docs disabled in prod (<code>docs_url=None if settings.is_prod else "/docs"</code>), SQL echo only in dev, stricter CORS origins.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>Never commit secrets.</strong> Add <code>.env</code> to <code>.gitignore</code> immediately, commit a <code>.env.example</code> with empty values instead, and treat any secret that ever touched git history as compromised (rotate it). Use <code>SecretStr</code> as the type for sensitive fields so they are not printed in logs/repr.
+    </div>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Why did my list-valued env var fail to parse?</div>
+    <div class="answer">
+        <p>A: For complex types (list, dict) pydantic-settings expects JSON in the environment: <code>CORS_ORIGINS=["http://a.com"]</code>. Alternatively declare the field as <code>str</code> and split it yourself, or use an <code>env_parse_none_str</code>/<code>NoDecode</code> customization.</p>
+    </div>
+
+    <div class="question">Q: Settings vs constants module &mdash; why the ceremony?</div>
+    <div class="answer">
+        <p>A: A <code>constants.py</code> hard-codes values into the build and is identical in every environment. <code>BaseSettings</code> validates types at boot, fails fast on missing config, reads 12-factor style from the environment, and plugs into <code>dependency_overrides</code> for tests.</p>
+    </div>
+
+    <div class="question">Q: Can I have per-environment Settings classes (Dev/Prod subclasses)?</div>
+    <div class="answer">
+        <p>A: Yes &mdash; a common pattern is a base <code>Settings</code> plus <code>DevSettings</code>/<code>ProdSettings</code> chosen by an <code>APP_ENV</code> variable in a <code>get_settings()</code> factory. Keep it simple though: different values via environment variables usually beats different classes.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>pydantic-settings makes configuration a typed, validated input of your app: define the schema once, supply values per environment, cache with <code>lru_cache</code>, and override in tests. Combined with <code>SecretStr</code> and a good secrets manager, this closes the "config" layer of a production service.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

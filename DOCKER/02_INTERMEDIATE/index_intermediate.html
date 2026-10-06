@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker — Intermediate Questions and Answers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1d63b8;
+            text-align: center;
+            border-bottom: 3px solid #2496ed;
+            padding-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1d63b8;
+            border-bottom: 2px solid #d6e6f7;
+            padding-bottom: 5px;
+            margin-top: 35px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        code {
+            background: #eef4fb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, 'Courier New', monospace;
+            color: #c7254e;
+            font-size: 0.95em;
+        }
+        pre {
+            background: #1e2430;
+            color: #e8ecf1;
+            padding: 14px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            border-left: 5px solid #2496ed;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        p {
+            line-height: 1.7;
+            color: #444;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #d6e6f7;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #eef4fb;
+            color: #1d63b8;
+        }
+        .levels {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+            background: #eef4fb;
+            border-radius: 8px;
+        }
+        .levels a {
+            color: #1d63b8;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+        .levels a:hover {
+            color: #2496ed;
+            text-decoration: underline;
+        }
+        .levels .current {
+            color: #2496ed;
+            border-bottom: 2px solid #2496ed;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            color: #888;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            color: #2496ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Docker — Intermediate Questions and Answers</h1>
+        <div class="levels">
+            <a href="../01_BASIC/index_basic.html">Beginner</a> |
+            <a href="index_intermediate.html" class="current">Intermediate</a> |
+            <a href="../03_ADVANCED/index_advanced.html">Advanced</a> |
+            <a href="../DOCKER_COMPOSE/docker_compose.html">Docker Compose</a>
+        </div>
+
+        <h2>1. What are the key Dockerfile best practices?</h2>
+        <ul>
+            <li><strong>Order instructions from least to most frequently changing.</strong> The build cache invalidates a layer and everything after it. Copying <code>requirements.txt</code> and installing dependencies <em>before</em> copying source code means code edits do not reinstall dependencies.</li>
+            <li><strong>Use a <code>.dockerignore</code> file.</strong> Exclude <code>.git</code>, <code>node_modules</code>, build artifacts, and secrets from the build context — smaller context, faster builds, fewer accidental leaks.</li>
+            <li><strong>Prefer small base images:</strong> <code>-slim</code>, <code>-alpine</code>, or distroless variants instead of full Debian/Ubuntu images.</li>
+            <li><strong>Pin versions</strong> for base images and packages: <code>python:3.12-slim</code>, not <code>python:latest</code>.</li>
+            <li><strong>Combine <code>RUN</code> commands and clean up in the same layer:</strong> a later <code>rm</code> does not shrink earlier layers.</li>
+            <li><strong>One concern per container</strong> (the single-process principle): a web app and its database belong in separate containers.</li>
+            <li><strong>Run as a non-root user</strong> (see the Advanced page for details).</li>
+        </ul>
+        <pre><code># .dockerignore
+.git
+node_modules
+__pycache__
+*.log
+.env
+Dockerfile
+.dockerignore</code></pre>
+
+        <h2>2. CMD vs. ENTRYPOINT — what is the difference?</h2>
+        <p>Both define what runs when the container starts, but they behave differently when you pass arguments to <code>docker run</code>:</p>
+        <table>
+            <tr><th></th><th>CMD</th><th>ENTRYPOINT</th></tr>
+            <tr><td>Purpose</td><td>Default command — easily overridden</td><td>Fixed executable — the container's purpose</td></tr>
+            <tr><td><code>docker run image foo</code></td><td><code>foo</code> <strong>replaces</strong> CMD</td><td><code>foo</code> is <strong>appended</strong> as an argument</td></tr>
+            <tr><td>Typical use</td><td>Defaults and arguments</td><td>CLIs and executables (<code>nginx</code>, <code>java -jar ...</code>)</td></tr>
+        </table>
+        <p>They combine naturally: ENTRYPOINT is the executable, CMD is its default arguments:</p>
+        <pre><code>ENTRYPOINT ["python", "app.py"]
+CMD ["--port", "8000"]
+
+# docker run myapi              -> python app.py --port 8000
+# docker run myapi --port 9000  -> python app.py --port 9000
+# docker run --entrypoint sh myapi  -> override for debugging</code></pre>
+        <p><strong>Always use the exec (JSON array) form</strong> — <code>CMD ["python","app.py"]</code>. The shell form (<code>CMD python app.py</code>) runs under <code>/bin/sh -c</code>, which does not forward signals like SIGTERM, so <code>docker stop</code> ends up force-killing your app after the grace period.</p>
+
+        <h2>3. COPY vs. ADD — when does the difference matter?</h2>
+        <p><code>COPY</code> does one thing: copies local files into the image. <code>ADD</code> does that <em>plus</em> two extras: auto-extracting local <code>.tar</code> archives and fetching remote URLs. The community convention is to <strong>use <code>COPY</code> unless you specifically need tar extraction</strong> — it is explicit and predictable. Remote-URL downloads are better done with <code>RUN curl</code> (cacheable, inspectable).</p>
+
+        <h2>4. Volumes vs. bind mounts vs. tmpfs — which mount do I use?</h2>
+        <table>
+            <tr><th>Mount type</th><th>Stored where</th><th>Managed by</th><th>Best for</th></tr>
+            <tr><td><strong>Named volume</strong> <code>-v mydata:/data</code></td><td>Docker storage area on the host</td><td>Docker CLI/API</td><td>Persistent production data (databases), portability</td></tr>
+            <tr><td><strong>Bind mount</strong> <code>-v /host/code:/app</code></td><td>Any path on the host</td><td>You (the host OS)</td><td>Development: live-edit host code in the container</td></tr>
+            <tr><td><strong>tmpfs mount</strong> <code>--mount type=tmpfs,dst=/tmp</code></td><td>Host memory only</td><td>Never persisted</td><td>Sensitive temporary data, scratch files</td></tr>
+        </table>
+        <pre><code># Development pattern: bind mount the source, keep dependencies inside
+docker run -d -p 3000:3000 \
+  -v "$(pwd)":/app \
+  -v /app/node_modules \
+  node:20 npm run dev</code></pre>
+        <p>The second <code>-v /app/node_modules</code> is an anonymous volume that "shields" the container's installed dependencies from being hidden by the host bind mount — a very common trick.</p>
+
+        <h2>5. How does container networking work?</h2>
+        <p>Docker ships with several network drivers:</p>
+        <ul>
+            <li><strong>bridge</strong> (default) — containers on a private network on the host; they reach the internet via NAT. Containers on the <em>default</em> bridge cannot resolve each other by name — only by legacy links or IP.</li>
+            <li><strong>host</strong> — no isolation: the container shares the host's network stack directly (ports bind straight to the host; no <code>-p</code> needed).</li>
+            <li><strong>none</strong> — no networking at all.</li>
+            <li><strong>overlay / macvlan</strong> — multi-host networking (Swarm) and direct LAN attachment, respectively.</li>
+        </ul>
+        <pre><code>docker network create mynet
+docker network ls
+docker network inspect mynet
+docker run -d --name db --network mynet postgres:16
+docker network connect mynet web   # attach a running container</code></pre>
+
+        <h2>6. How do containers find each other by name?</h2>
+        <p>On any <strong>user-defined</strong> network (custom bridge or Compose's default network), Docker runs an embedded DNS server: containers resolve each other by <em>container name</em> (and network aliases). This is the foundation of multi-container apps:</p>
+        <pre><code>docker network create appnet
+docker run -d --name db --network appnet postgres:16
+docker run -d --name api --network appnet -e DB_HOST=db my-api:1.0
+# the api container connects using host "db" — DNS resolves it automatically</code></pre>
+        <p>Best practice: put only the containers that need to talk on the same user-defined network, and keep databases off the public bridge.</p>
+
+        <h2>7. ENV vs. ARG — build-time vs. run-time variables</h2>
+        <table>
+            <tr><th></th><th>ARG</th><th>ENV</th></tr>
+            <tr><td>Available during</td><td><code>docker build</code> only</td><td>Build <em>and</em> container runtime</td></tr>
+            <tr><td>Override</td><td><code>--build-arg NAME=value</code></td><td><code>docker run -e NAME=value</code></td></tr>
+            <tr><td>Persisted in image</td><td>No (unless promoted to ENV)</td><td>Yes — visible via <code>docker inspect</code></td></tr>
+        </table>
+        <pre><code>ARG NODE_VERSION=20
+FROM node:${NODE_VERSION}-slim
+
+ENV APP_ENV=production \
+    PORT=8000</code></pre>
+        <p>Use <code>ARG</code> for build-time knobs (versions, build profiles). Use <code>ENV</code> for sensible defaults that can still be overridden per container. <strong>Never pass secrets as build args or ENV</strong> — both leak into image metadata and <code>docker history</code> (see Advanced: build secrets).</p>
+
+        <h2>8. How do I configure a container without rebuilding the image?</h2>
+        <p>The twelve-factor principle: <em>config belongs in the environment, not the image</em>. One image, many configurations:</p>
+        <pre><code>docker run -d \
+  -e DB_HOST=prod-db.internal \
+  -e DB_PASSWORD_FILE=/run/secrets/db_pw \
+  --env-file ./config/app.env \
+  my-api:1.0</code></pre>
+        <p>Options, from simple to robust: <code>-e</code> single variables, <code>--env-file</code> for batches, mounted config files for structured config, and orchestrator secrets for credentials.</p>
+
+        <h2>9. How do HEALTHCHECKs work?</h2>
+        <p>A <code>HEALTHCHECK</code> tells Docker how to test the application is actually working — not just that the process is alive:</p>
+        <pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -fsS http://localhost:8000/health || exit 1</code></pre>
+        <ul>
+            <li>Docker runs the command inside the container every <code>interval</code>.</li>
+            <li>Exit 0 = healthy, 1 = unhealthy. Status shows in <code>docker ps</code> (<code>Up (healthy)</code>).</li>
+            <li><code>start-period</code> gives slow-starting apps time before failures count.</li>
+            <li>Docker itself takes no action on unhealthy — but Compose's <code>depends_on: condition: service_healthy</code> and orchestrators use it for ordering and self-healing.</li>
+        </ul>
+
+        <h2>10. How do I limit container resources and control restarts?</h2>
+        <p>Without limits, one container can starve the whole host (the "noisy neighbor" problem):</p>
+        <pre><code>docker run -d \
+  --memory=512m --memory-swap=512m \
+  --cpus=1.5 \
+  --restart unless-stopped \
+  my-api:1.0</code></pre>
+        <p>Restart policies: <code>no</code> (default), <code>on-failure[:max-retries]</code>, <code>always</code>, <code>unless-stopped</code> (like always, but stays stopped if you stopped it manually — the usual production choice).</p>
+
+        <h2>11. What is Docker Compose and when do I reach for it?</h2>
+        <p>Compose defines a <strong>multi-container application</strong> (app + database + cache + queue) in a single <code>docker-compose.yml</code> and manages the whole stack with one command: <code>docker compose up</code>. It handles the network creation, name-based DNS, startup order, and volumes for you. It is the default tool for local development and test environments. A full walkthrough lives in the dedicated <a href="../DOCKER_COMPOSE/docker_compose.html">Docker Compose</a> page.</p>
+
+        <h2>12. What is a good workflow for debugging a misbehaving container?</h2>
+        <ol>
+            <li><code>docker ps -a</code> — is it running, restarting, or exited? Check the status column.</li>
+            <li><code>docker logs --tail 200 &lt;name&gt;</code> — the application's own output is the first clue.</li>
+            <li>Crash-looping? <code>docker inspect --format '{{.State.ExitCode}} {{.State.Error}}' &lt;name&gt;</code> for exit codes (137 = OOM/killed, 126/127 = command problems).</li>
+            <li><code>docker exec -it &lt;name&gt; sh</code> — poke around inside: env vars present? Can it reach the database? <code>curl</code> the dependency.</li>
+            <li><code>docker inspect</code> — verify mounts, ports, networks, and healthcheck results (<code>.State.Health</code>).</li>
+            <li>Need a shell but the image has none? Run a debug container in the same network: <code>docker run --rm -it --network &lt;net&gt; nicolaka/netshoot</code>.</li>
+        </ol>
+        <p>Most incidents boil down to: wrong environment variable, port already in use, unreachable dependency, or a volume masking application files.</p>
+
+        <a class="back-link" href="../../IT.html">&#8592; Back to IT Knowledge Base</a>
+    </div>
+</body>
+</html>

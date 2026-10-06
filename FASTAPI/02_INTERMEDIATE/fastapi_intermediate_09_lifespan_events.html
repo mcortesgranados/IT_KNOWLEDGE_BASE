@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Lifespan Events</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Lifespan Events</h1>
+    <p>Some resources must exist <em>before</em> the app serves requests and be released <em>after</em> the last one: connection pools, HTTP clients, ML models, caches, background workers. The <strong>lifespan</strong> context manager is FastAPI's modern way to run setup and teardown code once per process.</p>
+
+    <h2>The lifespan Context Manager</h2>
+    <pre><code>from contextlib import asynccontextmanager
+from fastapi import FastAPI
+import httpx
+
+ml_models = {}
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ---- startup ----
+    app.state.http = httpx.AsyncClient()          # shared HTTP client
+    ml_models["sentiment"] = load_model()          # heavy one-time work
+    print("Application ready")
+    yield
+    # ---- shutdown ----
+    await app.state.http.aclose()
+    ml_models.clear()
+    print("Shutting down")
+
+app = FastAPI(lifespan=lifespan)
+
+@app.get("/predict/")
+async def predict(text: str):
+    async with app.state.http as client:           # reuse the pooled client
+        resp = await client.get("https://api.example.com/enrich")
+    return {"sentiment": ml_models["sentiment"].score(text)}
+</code></pre>
+    <ul>
+        <li>Everything before <code>yield</code> runs once at startup, <em>before</em> the server accepts requests; everything after runs at shutdown.</li>
+        <li>If startup fails (exception before <code>yield</code>), the app refuses to start &mdash; fail-fast instead of serving with broken state.</li>
+        <li><code>app.state</code> is the conventional place to stash objects created here; alternatives are module-level globals (as with <code>ml_models</code>).</li>
+    </ul>
+
+    <h2>The Legacy Style (Deprecated but Common)</h2>
+    <pre><code>@app.on_event("startup")
+async def startup():
+    ...
+
+@app.on_event("shutdown")
+async def shutdown():
+    ...
+</code></pre>
+    <p><code>on_event</code> still works but is deprecated in favor of <code>lifespan</code> (since FastAPI 0.93). New code should always use the context manager &mdash; it guarantees that teardown runs even if startup partially completed, and it reads as one coherent block.</p>
+
+    <h2>Typical Startup / Shutdown Work</h2>
+    <ul>
+        <li><strong>Startup:</strong> initialize DB engine/pools (usually module-level already), create one shared <code>httpx.AsyncClient</code>, warm caches, load ML models, start metric exporters, run lightweight migrations.</li>
+        <li><strong>Shutdown:</strong> close HTTP clients and DB engines (<code>engine.dispose()</code>), flush logs/metrics, stop consumers, release locks.</li>
+        <li>Health/readiness endpoints pair with this: report <code>ready</code> only once startup finished.</li>
+    </ul>
+
+    <h2>One Shared httpx Client &mdash; Why It Matters</h2>
+    <pre><code># BAD: a new TCP handshake + pool per request
+@app.get("/proxy/")
+async def proxy(url: str):
+    async with httpx.AsyncClient() as client:   # created and destroyed every time
+        return (await client.get(url)).json()
+
+# GOOD: one client created in lifespan, pooled connections
+@app.get("/proxy/")
+async def proxy(url: str):
+    r = await app.state.http.get(url)
+    return r.json()
+</code></pre>
+    <p>Creating a client per request wastes connection pools and TLS handshakes. Creating it in <code>lifespan</code> and closing it at shutdown is the correct pattern (the same reasoning as SQLAlchemy's module-level <code>engine</code>).</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: When does lifespan run &mdash; per worker or per app instance?</div>
+    <div class="answer">
+        <p>A: Once per worker process. <code>uvicorn --workers 4</code> runs lifespan 4 times &mdash; each worker builds its own pools/models. Keep startup work idempotent and per-process-safe (don't run destructive migrations there; use Alembic in the deploy pipeline instead).</p>
+    </div>
+
+    <div class="question">Q: Can lifespan be async even if my setup is blocking?</div>
+    <div class="answer">
+        <p>A: The lifespan function is async; call blocking code carefully &mdash; wrap heavy blocking init with <code>await asyncio.to_thread(...)</code> so the event loop is not frozen during startup, or accept the delay (nothing else is being served yet).</p>
+    </div>
+
+    <div class="question">Q: How do I test code that depends on lifespan state?</div>
+    <div class="answer">
+        <p>A: <code>TestClient(app)</code> used as a context manager triggers the lifespan: <code>with TestClient(app) as client: ...</code>. Plain <code>TestClient(app)</code> without the <code>with</code> block skips startup/shutdown &mdash; a common reason state like <code>app.state.http</code> is missing in tests.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>The lifespan context manager is the cleanest way to own process-wide resources: async setup before <code>yield</code>, guaranteed teardown after. It replaces <code>on_event</code>, integrates with testing via the <code>with TestClient</code> form, and sets the stage for the deployment patterns of the advanced level.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

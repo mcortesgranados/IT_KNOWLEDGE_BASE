@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Scopes and Role-Based Access Control</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Scopes and Role-Based Access Control</h1>
+    <p>Authentication answers <em>who you are</em>; authorization answers <em>what you may do</em>. FastAPI supports two patterns: OAuth2 <strong>scopes</strong> (fine-grained permissions in the token, spec-compliant) and <strong>role checks</strong> (simpler, application-level).</p>
+
+    <h2>OAuth2 Scopes: Security + SecurityScopes</h2>
+    <pre><code>from fastapi import FastAPI, Depends, HTTPException, Security
+from fastapi.security import OAuth2PasswordBearer, SecurityScopes
+
+app = FastAPI()
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="token",
+    scopes={
+        "items:read": "Read items",
+        "items:write": "Create or update items",
+        "admin": "Admin operations",
+    },
+)
+
+def get_current_user(security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)):
+    payload = decode_jwt(token)                    # as in the previous page
+    token_scopes = payload.get("scopes", [])
+    # check that the token has every scope required by the endpoint
+    for scope in security_scopes.scopes:
+        if scope not in token_scopes:
+            raise HTTPException(
+                status_code=403,
+                detail=f"Not enough permissions. Required: {security_scopes.scope_str}",
+                headers={"WWW-Authenticate": f"Bearer scope=\"{security_scopes.scope_str}\""},
+            )
+    return get_user(payload["sub"])
+
+@app.delete("/items/{item_id}", dependencies=[Security(get_current_user, scopes=["items:write"])])
+def delete_item(item_id: int):
+    return {"deleted": item_id}
+</code></pre>
+    <ul>
+        <li><code>Security(get_current_user, scopes=[...])</code> is <code>Depends</code> plus required scopes.</li>
+        <li><code>SecurityScopes</code> collects the union of all scopes required up to that point (router + endpoint), so one dependency can enforce everything.</li>
+        <li>Scopes requested by the client arrive in the token request as a space-separated string: <code>scope=items:read items:write</code> &mdash; grant only what the user actually has.</li>
+    </ul>
+
+    <h2>Granting Scopes at Token Issuance</h2>
+    <pre><code>ROLE_SCOPES = {
+    "user": ["items:read"],
+    "editor": ["items:read", "items:write"],
+    "admin": ["items:read", "items:write", "admin"],
+}
+
+@app.post("/token")
+def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = authenticate_user(form_data.username, form_data.password)
+    requested = set(form_data.scopes)                       # client-requested scopes
+    allowed = set(ROLE_SCOPES[user.role])
+    granted = list(requested & allowed)                     # intersection
+    token = create_access_token({"sub": str(user.id), "scopes": granted})
+    return {"access_token": token, "token_type": "bearer"}
+</code></pre>
+    <p>Scopes requested by the client arrive in the token request as a space-separated string: <code>scope=items:read items:write</code> &mdash; grant only what the user actually has.</p>
+
+    <h2>Simpler Alternative: Role-Based Dependencies</h2>
+    <pre><code>from functools import wraps
+
+def require_role(*roles: str):
+    async def checker(user = Depends(get_current_user)):
+        if user.role not in roles:
+            raise HTTPException(status_code=403, detail="Forbidden for your role")
+        return user
+    return checker
+
+admin_router = APIRouter(
+    prefix="/admin",
+    dependencies=[Depends(require_role("admin"))],
+)
+
+@admin_router.post("/users/")
+def admin_create_user(...): ...
+</code></pre>
+    <ul>
+        <li>A dependency <em>factory</em> (<code>require_role("admin", "editor")</code>) parametrizes the check; apply it per-endpoint or per-router.</li>
+        <li>Roles are coarse (few, hierarchical); scopes are fine-grained (many, orthogonal). Teams often map roles &rarr; scopes as above.</li>
+    </ul>
+
+    <h2>Object-Level Authorization</h2>
+    <pre><code>@app.put("/items/{item_id}")
+def update_item(item_id: int, item: ItemUpdate, user = Depends(get_current_user)):
+    stored = items_repo.get(item_id)
+    if stored is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    if stored.owner_id != user.id and user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not the owner")
+    ...
+</code></pre>
+    <p>Scopes/roles answer "can this user call this endpoint?"; ownership checks answer "can they touch <em>this row</em>?" &mdash; both are needed, and the second lives in the endpoint (or a dedicated dependency) because it needs the resource.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: What status code should a permission failure return &mdash; 401 or 403?</div>
+    <div class="answer">
+        <p>A: <strong>401 Unauthorized</strong> when there is no valid authentication (missing/invalid/expired token) and <strong>403 Forbidden</strong> when the user is authenticated but lacks permission. Mixing them up confuses clients' retry logic.</p>
+    </div>
+
+    <div class="question">Q: Do scopes appear in the Swagger UI?</div>
+    <div class="answer">
+        <p>A: Yes &mdash; the <code>scopes={...}</code> dictionary on <code>OAuth2PasswordBearer</code> renders as checkboxes in the "Authorize" dialog, so testers can obtain tokens with specific scopes and the docs show which endpoints need which scopes.</p>
+    </div>
+
+    <div class="question">Q: Where should I enforce permissions &mdash; dependency or endpoint?</div>
+    <div class="answer">
+        <p>A: Route-level "can call this" checks belong in dependencies (reusable, visible in one place). Resource-level checks ("is this their row?") usually stay in the endpoint or a dependency that receives the path parameter &mdash; a dependency can read path/query parameters too, e.g. <code>def owns_item(item_id: int, user=Depends(get_current_user))</code>.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>FastAPI makes authorization a first-class citizen: declare scopes on <code>OAuth2PasswordBearer</code>, enforce them with <code>Security(...)</code> and <code>SecurityScopes</code>, grant at token time from roles, and add ownership checks for object-level rules. The auth story from the last two pages is now complete.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

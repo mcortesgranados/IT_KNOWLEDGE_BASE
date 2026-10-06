@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Sub-Applications, Mounting and API Versioning</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Sub-Applications, Mounting and API Versioning</h1>
+    <p>As an API evolves you need versioning (<code>/api/v1</code> &rarr; <code>/api/v2</code>) and sometimes genuinely separate applications (admin panel, public API, internal tools) inside one process. FastAPI offers <code>include_router</code> with prefixes for route grouping and <code>app.mount()</code> for full sub-applications.</p>
+
+    <h2>include_router: The Everyday Versioning Tool</h2>
+    <pre><code>from fastapi import FastAPI, APIRouter
+
+v1 = APIRouter(prefix="/api/v1", tags=["v1"])
+v2 = APIRouter(prefix="/api/v2", tags=["v2"])
+
+@v1.get("/users/{user_id}")
+def get_user_v1(user_id: int):
+    return {"id": user_id}                        # old shape
+
+@v2.get("/users/{user_id}")
+def get_user_v2(user_id: int):
+    return {"data": {"id": user_id}, "meta": {}}  # new shape
+
+app = FastAPI(title="My API", version="2.0.0")
+app.include_router(v1)
+app.include_router(v2)
+</code></pre>
+    <ul>
+        <li>Both versions live in the same docs UI, grouped by prefix/tags.</li>
+        <li>Shared dependencies/middleware still apply &mdash; usually exactly what you want.</li>
+        <li>Deprecate old versions with <code>deprecated=True</code> on routers/endpoints; the docs show them grayed out.</li>
+    </ul>
+
+    <h2>app.mount(): Full Sub-Applications</h2>
+    <pre><code>admin_app = FastAPI(docs_url="/admin/docs", title="Admin")
+
+@admin_app.get("/stats/")
+def stats():
+    return {"users": 4211}
+
+app = FastAPI(title="Main")
+app.mount("/admin", admin_app)          # everything under /admin/* goes to admin_app
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+</code></pre>
+    <ul>
+        <li>A mounted sub-app is a complete ASGI application with <strong>its own</strong> docs (<code>/admin/docs</code>), OpenAPI schema, middleware and exception handlers.</li>
+        <li><code>mount</code> takes the first matching prefix: mount specific paths (<code>/admin</code>, <code>/static</code>) <em>before</em> anything generic like a catch-all <code>/{path:path}</code>.</li>
+        <li>State is not shared automatically &mdash; sub-apps are separate objects; share via modules (config, <code>get_db</code>) rather than globals on the parent app.</li>
+    </ul>
+
+    <h2>Which One When?</h2>
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tr><th>Need</th><th>Use</th></tr>
+        <tr><td>New response shapes for the same resources</td><td><code>include_router</code> with <code>/api/vN</code> prefix</td></tr>
+        <tr><td>Different auth or middleware for a section</td><td><code>include_router(dependencies=[...])</code> or a mounted app</td></tr>
+        <tr><td>Own docs/OpenAPI for a section (admin, partner API)</td><td><code>app.mount()</code></td></tr>
+        <tr><td>Serving static assets / SPAs / other frameworks (Flask app, Dash)</td><td><code>app.mount()</code></td></tr>
+    </table>
+
+    <h2>Serving an SPA (React/Angular Build) from FastAPI</h2>
+    <pre><code>from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="assets")
+
+@app.get("/{full_path:path}", include_in_schema=False)   # SPA fallback - keep LAST
+def spa(full_path: str):
+    return FileResponse("frontend/dist/index.html")
+</code></pre>
+    <p>Mount assets first, then a catch-all returning <code>index.html</code> so client-side routing works on refresh. Declare it <code>include_in_schema=False</code> and register it after every real route.</p>
+
+    <h2>Versioning Strategies Beyond URL Prefixes</h2>
+    <ul>
+        <li><strong>URL prefix (recommended):</strong> <code>/api/v1/...</code> &mdash; explicit, cacheable, easy to route and to sunset.</li>
+        <li><strong>Header-based:</strong> <code>Accept: application/vnd.myapi.v2+json</code> &mdash; cleaner URLs but harder to test/cache; implement via a dependency reading headers.</li>
+        <li><strong>No versioning:</strong> additive-only changes (new optional fields) can skip versions &mdash; breaking changes still force one eventually.</li>
+    </ul>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: My mounted sub-app's routes return 404 &mdash; why?</div>
+    <div class="answer">
+        <p>A: Two usual causes: another route (often a catch-all or a similar prefix declared earlier) matched first, or the client called the wrong full path &mdash; mounted paths are absolute: <code>admin_app</code>'s <code>/stats/</code> is served at <code>/admin/stats/</code>, not <code>/stats/</code>.</p>
+    </div>
+
+    <div class="question">Q: Do mounted apps share middleware and lifespan with the parent?</div>
+    <div class="answer">
+        <p>A: No. A sub-application runs its own middleware stack and its own (optional) lifespan &mdash; that isolation is often the reason to mount. If you need shared behavior, extract it into modules used by both apps or attach it to each app.</p>
+    </div>
+
+    <div class="question">Q: How many versions should I keep alive?</div>
+    <div class="answer">
+        <p>A: Ideally two: current and previous (previous read-only or deprecated with a sunset date). Every parallel version doubles testing and security surface &mdash; publish a deprecation policy and let the docs' <code>deprecated=True</code> flags communicate it.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Version with <code>APIRouter</code> prefixes by default and reserve <code>app.mount()</code> for sections that deserve their own app identity &mdash; separate docs, auth or static/SPA serving. Together with the routing structure from Basic, this scales an API from one file to a multi-version platform.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

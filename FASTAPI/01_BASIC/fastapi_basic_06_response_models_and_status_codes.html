@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response Models and Status Codes</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Response Models and Status Codes</h1>
+    <p>The <code>response_model</code> parameter declares what an endpoint returns. FastAPI uses it to filter the output, validate it and document it. This is also how you keep sensitive fields (like passwords) out of responses.</p>
+
+    <h2>Filtering Output with response_model</h2>
+    <pre><code>from pydantic import BaseModel, EmailStr
+from fastapi import FastAPI
+
+class UserIn(BaseModel):
+    username: str
+    password: str
+    email: EmailStr
+
+class UserOut(BaseModel):
+    username: str
+    email: EmailStr
+
+app = FastAPI()
+
+@app.post("/users/", response_model=UserOut)
+def create_user(user: UserIn):
+    return user  # password is stored/processed but never returned
+</code></pre>
+    <p>Even though the function returns the full <code>UserIn</code> object, the response only contains <code>username</code> and <code>email</code>. The password never leaks, and the docs show <code>UserOut</code> as the response schema.</p>
+
+    <h2>Common Patterns</h2>
+    <ul>
+        <li><strong>Input model vs output model:</strong> separate <code>UserIn</code> / <code>UserOut</code> classes (the output often excludes secrets and includes generated fields like <code>id</code>).</li>
+        <li><strong>Lists:</strong> <code>response_model=list[Item]</code> for an endpoint returning many items.</li>
+        <li><strong>Optional / union:</strong> <code>response_model=Item | None</code> when the result may not exist.</li>
+        <li><strong>Combining models:</strong> Pydantic inheritance lets you build <code>UserOutWithId(UserOut)</code> adding fields.</li>
+    </ul>
+
+    <h2>Disabling Default Filtering (Pydantic v2)</h2>
+    <pre><code>class Config:
+    pass
+
+@app.get("/items/", response_model=Item, response_model_exclude_unset=True)
+def get_items():
+    ...
+</code></pre>
+    <ul>
+        <li><code>response_model_exclude_unset=True</code>: omit fields that were not explicitly set.</li>
+        <li><code>response_model_exclude={"secret_key"}</code> / <code>response_model_include={"id", "name"}</code>: field-level control.</li>
+        <li>FastAPI defaults to <code>response_model_exclude_none=True</code>-like behavior only for <code>None</code> fields in some configurations; by default all fields of the model appear.</li>
+    </ul>
+
+    <h2>Status Codes</h2>
+    <pre><code>from fastapi import FastAPI, status
+
+@app.post("/items/", status_code=status.HTTP_201_CREATED)
+def create_item(item: Item):
+    return item
+
+@app.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_item(item_id: int):
+    return None
+</code></pre>
+    <ul>
+        <li>Default status is <strong>200 OK</strong>; POST endpoints usually declare <strong>201 Created</strong>.</li>
+        <li><strong>204 No Content</strong> responses must return nothing (no body).</li>
+        <li>Use <code>status.HTTP_...</code> constants for readability; they appear in the docs grouped by code.</li>
+    </ul>
+
+    <h2>Returning a Custom Status with Response</h2>
+    <pre><code>from fastapi import Response, status
+
+@app.post("/jobs/")
+def create_job(response: Response):
+    response.status_code = status.HTTP_202_ACCEPTED
+    return {"queued": True}
+</code></pre>
+    <p>Inject <code>Response</code> when the status code (or a header) must be decided at runtime instead of statically.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: What happens if the returned object does not match response_model?</div>
+    <div class="answer">
+        <p>A: FastAPI tries to coerce/validate it; if it truly does not fit, the server raises an <code>Internal Server Error</code> (500) and logs the validation error. This catches bugs before bad data reaches clients.</p>
+    </div>
+
+    <div class="question">Q: Does response_model cost performance?</div>
+    <div class="answer">
+        <p>A: There is a validation pass on the way out, but it is fast (Pydantic v2 is Rust-based) and buys you safety and clean docs. For very hot endpoints you can skip it, but you lose the output contract.</p>
+    </div>
+
+    <div class="question">Q: Why not just return a dict with the right keys?</div>
+    <div class="answer">
+        <p>A: Dicts are untyped: one developer returning <code>passwd</code> instead of <code>password</code> ships a bug silently. <code>response_model</code> enforces the shape and documents it automatically.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p><code>response_model</code> is your API's output contract: it filters sensitive fields, validates responses and documents them. Pair it with explicit <code>status_code</code> declarations so both your clients and your docs always say exactly what an endpoint does.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

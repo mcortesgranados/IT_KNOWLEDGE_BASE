@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - WebSockets</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>WebSockets</h1>
+    <p>WebSockets provide a persistent, bidirectional connection between client and server &mdash; ideal for chat, live dashboards, collaborative editing and notifications. FastAPI (via Starlette) supports them natively, and they only work on ASGI servers like Uvicorn.</p>
+
+    <h2>A Minimal Echo Server</h2>
+    <pre><code>from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+
+app = FastAPI()
+
+@app.websocket("/ws/echo")
+async def websocket_echo(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            message = await websocket.receive_text()
+            await websocket.send_text(f"Echo: {message}")
+    except WebSocketDisconnect:
+        print("client disconnected")
+</code></pre>
+    <ul>
+        <li><code>@app.websocket(path)</code> declares a WS route (no HTTP method).</li>
+        <li><code>await websocket.accept()</code> completes the handshake; afterwards you can <code>send_text</code> / <code>receive_text</code> (also <code>send_json</code>, <code>send_bytes</code>).</li>
+        <li>The loop ends when the client disconnects &mdash; that raises <code>WebSocketDisconnect</code>.</li>
+    </ul>
+
+    <h2>A Connection Manager (Broadcast Pattern)</h2>
+    <pre><code>from fastapi import FastAPI, WebSocket
+
+class ConnectionManager:
+    def __init__(self):
+        self.active: list[WebSocket] = []
+
+    async def connect(self, ws: WebSocket):
+        await ws.accept()
+        self.active.append(ws)
+
+    def disconnect(self, ws: WebSocket):
+        self.active.remove(ws)
+
+    async def broadcast(self, message: str):
+        for ws in list(self.active):
+            try:
+                await ws.send_text(message)
+            except Exception:
+                self.disconnect(ws)
+
+manager = ConnectionManager()
+
+@app.websocket("/ws/chat/{room}")
+async def chat(websocket: WebSocket, room: str):
+    await manager.connect(websocket)
+    await manager.broadcast(f"someone joined {room}")
+    try:
+        while True:
+            msg = await websocket.receive_text()
+            await manager.broadcast(f"[{room}] {msg}")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+        await manager.broadcast("someone left")
+</code></pre>
+
+    <h2>Client Side (Browser JavaScript)</h2>
+    <pre><code>const ws = new WebSocket("ws://localhost:8000/ws/chat/general");
+ws.onopen = () =&gt; ws.send("hello!");
+ws.onmessage = (event) =&gt; console.log("received:", event.data);
+ws.onclose = () =&gt; console.log("closed");
+</code></pre>
+
+    <h2>Query Parameters and Authentication</h2>
+    <pre><code>from fastapi import Query, WebSocket, WebSocketDisconnect, status
+
+@app.websocket("/ws/secure")
+async def secure_ws(websocket: WebSocket, token: str = Query()):
+    user = validate_jwt_or_none(token)
+    if user is None:
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+    await websocket.accept()
+    ...  # normal loop
+</code></pre>
+    <ul>
+        <li>Browsers cannot set custom headers on WebSocket connections, so auth tokens travel as a query param, a cookie, or a first message.</li>
+        <li>Call <code>accept()</code> only after validating &mdash; or accept and immediately <code>close(1008)</code> with the policy-violation code.</li>
+        <li>Path parameters, query params and cookies work like HTTP routes; <code>Depends</code> works too (a dependency may raise <code>WebSocketException</code>).</li>
+    </ul>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: My WebSocket works with one worker but messages vanish with several. Why?</div>
+    <div class="answer">
+        <p>A: The <code>ConnectionManager</code> is in-process memory. With <code>--workers 4</code> (or multiple replicas behind a load balancer), clients connect to different processes and each manager only knows its own sockets. Scale with Redis pub/sub (or a message broker) so every process relays broadcasts to its local connections &mdash; that is the advanced-level pattern.</p>
+    </div>
+
+    <div class="question">Q: How do I send a message to a client from a normal HTTP endpoint?</div>
+    <div class="answer">
+        <p>A: Keep the manager (or a registry keyed by user id) as a module-level singleton and call <code>await manager.send_to(user_id, msg)</code> from the HTTP route. Both HTTP and WS handlers run on the same event loop per worker process.</p>
+    </div>
+
+    <div class="question">Q: WebSockets vs Server-Sent Events (SSE)?</div>
+    <div class="answer">
+        <p>A: WebSockets are bidirectional and support binary &mdash; chat, games, collaborative apps. SSE (a <code>StreamingResponse</code> of <code>text/event-stream</code>) is unidirectional server&rarr;client, auto-reconnects for free over plain HTTP &mdash; simpler and often enough for notifications and live feeds. If the client only listens, prefer SSE.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>WebSocket endpoints follow a simple lifecycle: accept, loop on <code>receive</code>, handle <code>WebSocketDisconnect</code>. A ConnectionManager gives you rooms and broadcasting; authentication goes through query params or cookies; and horizontal scaling needs a shared broker &mdash; keep that constraint in mind from day one.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

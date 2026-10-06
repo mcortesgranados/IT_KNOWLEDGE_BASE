@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async / await in FastAPI</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .warning { background-color: #fff3e0; padding: 15px; border-left: 5px solid #ef6c00; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>async / await in FastAPI</h1>
+    <p>FastAPI supports both normal <code>def</code> and <code>async def</code> endpoints, and choosing between them correctly is the single most important performance decision in a FastAPI app.</p>
+
+    <h2>The Two Modes</h2>
+    <pre><code>import httpx
+
+@app.get("/sync-mode/")
+def sync_mode():
+    # runs in a worker thread from the threadpool (default 40 threads)
+    result = blocking_call()      # e.g. requests.get, time.sleep, sync DB driver
+    return {"ok": True}
+
+@app.get("/async-mode/")
+async def async_mode():
+    # runs on the event loop
+    async with httpx.AsyncClient() as client:
+        result = await client.get("https://api.example.com/data")
+    return {"ok": True}
+</code></pre>
+    <ul>
+        <li><strong><code>def</code> endpoint:</strong> FastAPI runs it in an external thread pool (via Starlette/AnyIO). Blocking calls are OK, but concurrency is limited by the thread pool size.</li>
+        <li><strong><code>async def</code> endpoint:</strong> runs on the event loop. It can handle thousands of concurrent connections &mdash; <em>as long as it never blocks the loop</em>.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>The golden rule:</strong> never call blocking I/O inside <code>async def</code>.
+        A call like <code>time.sleep(5)</code> or a synchronous DB query inside an <code>async def</code> freezes the entire event loop &mdash; the whole server stops serving <em>all</em> requests until it finishes. If you must call blocking code, use <code>def</code> (threadpool) or wrap it: <code>await run_in_threadpool(blocking_fn)</code> / <code>await asyncio.to_thread(blocking_fn)</code>.
+    </div>
+
+    <h2>Decision Guide</h2>
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tr><th>Situation</th><th>Use</th></tr>
+        <tr><td>You call async libraries (httpx, asyncpg, motor, aiofiles, redis.asyncio)</td><td><code>async def</code></td></tr>
+        <tr><td>You call blocking libraries (requests, psycopg2, pandas, boto3 sync)</td><td>plain <code>def</code></td></tr>
+        <tr><td>Pure CPU work (no I/O)</td><td>plain <code>def</code>, and offload heavy compute to a worker (Celery/RQ) or another process</td></tr>
+        <tr><td>Not sure</td><td>plain <code>def</code> &mdash; it is always safe (threadpool), just less scalable for huge concurrency</td></tr>
+    </table>
+
+    <h2>Concurrency vs Parallelism</h2>
+    <ul>
+        <li><strong>Async gives concurrency:</strong> while one request waits on network I/O, the event loop serves others. It does <em>not</em> make CPU work faster.</li>
+        <li><strong>Multiple workers give parallelism:</strong> run <code>uvicorn --workers 4</code> (or Gunicorn managing Uvicorn workers) to use multiple CPU cores. Typically <code>workers = 2 * cores + 1</code>.</li>
+        <li>You usually want both: several worker processes, each running an event loop.</li>
+    </ul>
+
+    <h2>Calling Multiple Things in Parallel</h2>
+    <pre><code>import asyncio, httpx
+
+@app.get("/dashboard/")
+async def dashboard():
+    async with httpx.AsyncClient() as client:
+        user, orders = await asyncio.gather(
+            client.get("https://api.example.com/user/1"),
+            client.get("https://api.example.com/orders?user=1"),
+        )
+    return {"user": user.json(), "orders": orders.json()}
+</code></pre>
+    <p><code>asyncio.gather</code> issues both HTTP calls at the same time &mdash; total latency is the slower call, not the sum. This is where async shines.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: My async endpoint is slower than the sync version. Why?</div>
+    <div class="answer">
+        <p>A: Almost always because it is doing blocking work on the event loop (sync DB driver, requests, CPU-heavy pandas). The event loop serializes everything behind those calls. Switch to async libraries or declare the endpoint as plain <code>def</code>.</p>
+    </div>
+
+    <div class="question">Q: Does <code>async def</code> make my endpoint run in parallel with others automatically?</div>
+    <div class="answer">
+        <p>A: It allows <em>interleaved</em> execution at every <code>await</code> point. Two async endpoints progress concurrently while they await I/O, but the code between awaits still runs one at a time on the single loop thread.</p>
+    </div>
+
+    <div class="question">Q: What is the default threadpool size for sync endpoints?</div>
+    <div class="answer">
+        <p>A: AnyIO's default is 40 threads. You can tune it: <code>anyio.to_thread.current_default_thread_limiter().total_tokens = 100</code> at startup. Beyond that, sync requests queue up.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Use <code>async def</code> with async libraries to maximize concurrency; use plain <code>def</code> when you call blocking code, and let FastAPI offload it to the threadpool. Mixing them wrongly (blocking inside <code>async def</code>) is the #1 FastAPI performance bug.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

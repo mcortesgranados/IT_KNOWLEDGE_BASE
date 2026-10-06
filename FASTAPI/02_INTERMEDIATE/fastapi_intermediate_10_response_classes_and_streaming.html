@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Response Classes and Streaming</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Response Classes and Streaming</h1>
+    <p>By default FastAPI returns <code>JSONResponse</code>. But APIs also serve files, CSV exports, redirects, generated images or infinite event streams &mdash; each has a dedicated response class that controls media type and how the body is produced.</p>
+
+    <h2>The Response Family</h2>
+    <ul>
+        <li><strong><code>JSONResponse</code></strong> (default) &mdash; serializes to JSON with the standard encoder.</li>
+        <li><strong><code>ORJSONResponse</code></strong> &mdash; much faster, via <code>orjson</code> (<code>pip install orjson</code>); set as default with <code>FastAPI(default_response_class=ORJSONResponse)</code>.</li>
+        <li><strong><code>PlainTextResponse</code></strong> &mdash; <code>text/plain</code> (health checks, webhooks echoes).</li>
+        <li><strong><code>HTMLResponse</code></strong> &mdash; <code>text/html</code> (templates, small pages).</li>
+        <li><strong><code>RedirectResponse</code></strong> &mdash; 307/302 redirect to another URL.</li>
+        <li><strong><code>FileResponse</code></strong> &mdash; efficiently streams a file from disk with proper headers (ETag, content-length).</li>
+        <li><strong><code>StreamingResponse</code></strong> &mdash; chunks from any generator/async iterator.</li>
+    </ul>
+
+    <h2>Returning a Response Directly vs response_class</h2>
+    <pre><code>from fastapi import FastAPI
+from fastapi.responses import RedirectResponse, FileResponse, ORJSONResponse
+
+app = FastAPI()
+
+@app.get("/old-docs/")
+def old_docs():
+    return RedirectResponse(url="/docs/", status_code=307)
+
+@app.get("/reports/{report_id}")
+def download_report(report_id: int):
+    return FileResponse(
+        path=f"reports/{report_id}.pdf",
+        media_type="application/pdf",
+        filename="report.pdf",            # forces "Save as" with this name
+    )
+</code></pre>
+    <p>When you return a Response object directly, FastAPI passes it through untouched &mdash; <code>response_model</code> is not applied and headers/status are exactly what you set.</p>
+
+    <h2>StreamingResponse: CSV Export Example</h2>
+    <pre><code>import csv
+from io import StringIO
+from fastapi.responses import StreamingResponse
+
+def rows_to_csv(rows):
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    for row in rows:                      # generator: one row in memory at a time
+        writer.writerow(row)
+        yield buffer.getvalue()
+        buffer.seek(0)
+        buffer.truncate(0)
+
+@app.get("/export/items/")
+def export_items():
+    return StreamingResponse(
+        rows_to_csv(query_all_items()),   # any iterable or async generator
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="items.csv"'},
+    )
+</code></pre>
+    <p>Memory usage stays constant even for millions of rows &mdash; the client starts downloading immediately while the generator yields chunks. Async generators (<code>async def ... yield</code>) work too, e.g. streaming from a server-sent events (SSE) source: media type <code>text/event-stream</code>.</p>
+
+    <h2>Setting Default Response Classes</h2>
+    <pre><code>from fastapi.responses import ORJSONResponse
+
+app = FastAPI(default_response_class=ORJSONResponse)   # app-wide
+
+router = APIRouter(default_response_class=ORJSONResponse)   # per-router
+
+@app.get("/txt/", response_class=PlainTextResponse)          # per-endpoint
+def ping():
+    return "pong"
+</code></pre>
+    <p>Precedence: endpoint &gt; router &gt; app. Note that <code>response_model</code> still validates data before the response class serializes it.</p>
+
+    <h2>Headers, Cookies and Status on Any Response</h2>
+    <pre><code>from fastapi import FastAPI, Response
+
+@app.get("/jobs/{job_id}")
+def get_job(job_id: int, response: Response):
+    response.headers["X-Job-Status"] = "running"
+    response.set_cookie("last_job", str(job_id))
+    return {"job_id": job_id}          # body + the headers set above
+</code></pre>
+    <p>Injecting <code>Response</code> lets you add headers/cookies while still returning a normal object (the default serialization applies). Returning a Response directly is only needed when replacing the body generation itself.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: StreamingResponse vs FileResponse for downloads &mdash; which one?</div>
+    <div class="answer">
+        <p>A: <code>FileResponse</code> for existing files on disk &mdash; it uses efficient OS-level file serving, sets content-length and supports ETag/range semantics. <code>StreamingResponse</code> for data generated on the fly (DB exports, transformations) or fetched from another service.</p>
+    </div>
+
+    <div class="question">Q: Why does my streamed response arrive all at once at the end?</div>
+    <div class="answer">
+        <p>A: Something is buffering it: a reverse proxy (Nginx <code>proxy_buffering on</code>), GZip middleware (needs enough bytes), or the client itself. For SSE, disable proxy buffering (<code>X-Accel-Buffering: no</code> header) and yield small chunks.</p>
+    </div>
+
+    <div class="question">Q: Can I mix response types in one endpoint (e.g. JSON or file)?</div>
+    <div class="answer">
+        <p>A: Yes &mdash; return the Response object for the file case and a dict for the JSON case. For accurate docs declare <code>responses={200: {"content": {"application/json": {}}, "application/pdf": {}}}</code> so the OpenAPI schema shows both media types.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Choose the response class deliberately: <code>ORJSONResponse</code> for speed, <code>FileResponse</code> for downloads, <code>StreamingResponse</code> for generated or unbounded data, <code>RedirectResponse</code> for moves. Default serialization + <code>response_model</code> still apply unless you take full control by returning a Response yourself.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

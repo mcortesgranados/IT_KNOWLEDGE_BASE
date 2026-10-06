@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Intermediate - Testing with TestClient and pytest</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Testing with TestClient and pytest</h1>
+    <p>FastAPI's design (dependency injection, app factory) makes it unusually testable: tests call your endpoints in-process with <code>TestClient</code>, swap real dependencies (DB, auth) for fakes with <code>dependency_overrides</code>, and never need a running server.</p>
+
+    <h2>Setup and First Test</h2>
+    <pre><code>pip install pytest httpx
+</code></pre>
+    <pre><code># test_main.py
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+def test_health():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+def test_create_item():
+    response = client.post("/items/", json={"name": "wrench", "price": 9.99})
+    assert response.status_code == 201
+    assert response.json()["name"] == "wrench"
+
+def test_validation_error():
+    response = client.post("/items/", json={"name": "", "price": -5})
+    assert response.status_code == 422
+</code></pre>
+    <p><code>TestClient</code> (from Starlette, needs <code>httpx</code>) dispatches requests through the ASGI app directly &mdash; no network, no port.</p>
+
+    <h2>Overriding Dependencies: Fake DB</h2>
+    <pre><code>import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+from app.main import app
+from app.dependencies import get_db
+
+test_engine = create_engine(
+    "sqlite://",                       # in-memory SQLite
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,              # one shared connection for all sessions
+)
+TestingSessionLocal = sessionmaker(bind=test_engine)
+Base.metadata.create_all(bind=test_engine)
+
+def override_get_db():
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+app.dependency_overrides[get_db] = override_get_db
+
+@pytest.fixture(autouse=True)
+def clean_db():
+    yield
+    # truncate tables between tests
+    for table in reversed(Base.metadata.sorted_tables):
+        with test_engine.begin() as conn:
+            conn.execute(table.delete())
+</code></pre>
+    <p>The endpoint code does not change at all &mdash; the same <code>Depends(get_db)</code> now receives the test session. That is the payoff of DI.</p>
+
+    <h2>Overriding Auth in Tests</h2>
+    <pre><code>def fake_current_user():
+    return User(id=1, username="tester", role="admin")
+
+app.dependency_overrides[get_current_user] = fake_current_user
+
+def test_admin_endpoint():
+    r = client.post("/admin/users/", json={"username": "bob"})
+    assert r.status_code == 201
+</code></pre>
+    <p>Override per-test when needed (e.g. test the 403 path by overriding with a "guest" user) and clean up with <code>app.dependency_overrides.clear()</code>.</p>
+
+    <h2>Testing Authenticated / Token Flows</h2>
+    <pre><code>def test_login_and_me():
+    r = client.post("/token", data={"username": "alice", "password": "secret123"})
+    assert r.status_code == 200
+    token = r.json()["access_token"]
+
+    me = client.get("/users/me", headers={"Authorization": f"Bearer {token}"})
+    assert me.json()["username"] == "alice"
+</code></pre>
+    <p>Note: the token endpoint takes <strong>form data</strong> (<code>data=</code>), JSON endpoints take <code>json=</code>.</p>
+
+    <h2>Async Endpoint Tests</h2>
+    <pre><code>pip install anyio pytest
+</code></pre>
+    <pre><code>import httpx
+import pytest
+from app.main import app
+
+@pytest.mark.anyio
+async def test_async_endpoint():
+    transport = httpx.ASGITransport(app=app)
+    async with httpx.AsyncClient(transport=transport, base_url="http://test") as ac:
+        r = await ac.get("/items/")
+    assert r.status_code == 200
+</code></pre>
+    <p><code>TestClient</code> runs the app in a worker thread and is fine for most cases; use <code>httpx.AsyncClient</code> + <code>ASGITransport</code> when you must test true async behavior (background tasks, websockets) in the same loop.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: TestClient fails with "httpx not installed" &mdash; why?</div>
+    <div class="answer">
+        <p>A: Since Starlette 0.21+, <code>TestClient</code> is built on httpx. Install it: <code>pip install httpx</code>. Older snippets using <code>requests</code> belong to the Starlette versions before that.</p>
+    </div>
+
+    <div class="question">Q: My SQLite tests pass but PostgreSQL behaves differently &mdash; is that OK?</div>
+    <div class="answer">
+        <p>A: In-memory SQLite is fast and great for endpoint logic, but it does not enforce all PostgreSQL types/constraints (arrays, JSONB, enums, some transactions). Keep fast SQLite tests for the suite and add a smaller integration tier against real PostgreSQL (e.g. via Docker/testcontainers).</p>
+    </div>
+
+    <div class="question">Q: How do I test WebSockets?</div>
+    <div class="answer">
+        <p>A: <code>TestClient</code> supports a context manager: <code>with client.websocket_connect("/ws/echo") as ws: ws.send_text("hi"); assert ws.receive_text() == "Echo: hi"</code>.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>The testing triangle is <code>TestClient</code> (call endpoints), <code>dependency_overrides</code> (swap DB/auth for fakes), and pytest fixtures (fresh state per test). Because overrides work through the same DI system your app uses, tests exercise real routing, validation and serialization &mdash; not mocks of your own framework.</p>
+
+    <p class="nav"><a href="index_intermediate.html">&larr; Back to Intermediate Index</a></p>
+</body>
+</html>

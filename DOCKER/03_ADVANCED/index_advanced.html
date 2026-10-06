@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker — Advanced Questions and Answers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1d63b8;
+            text-align: center;
+            border-bottom: 3px solid #2496ed;
+            padding-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1d63b8;
+            border-bottom: 2px solid #d6e6f7;
+            padding-bottom: 5px;
+            margin-top: 35px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        code {
+            background: #eef4fb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, 'Courier New', monospace;
+            color: #c7254e;
+            font-size: 0.95em;
+        }
+        pre {
+            background: #1e2430;
+            color: #e8ecf1;
+            padding: 14px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            border-left: 5px solid #2496ed;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        p {
+            line-height: 1.7;
+            color: #444;
+        }
+        ul li, ol li {
+            margin: 4px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #d6e6f7;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #eef4fb;
+            color: #1d63b8;
+        }
+        .levels {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+            background: #eef4fb;
+            border-radius: 8px;
+        }
+        .levels a {
+            color: #1d63b8;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+        .levels a:hover {
+            color: #2496ed;
+            text-decoration: underline;
+        }
+        .levels .current {
+            color: #2496ed;
+            border-bottom: 2px solid #2496ed;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            color: #888;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            color: #2496ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Docker — Advanced Questions and Answers</h1>
+        <div class="levels">
+            <a href="../01_BASIC/index_basic.html">Beginner</a> |
+            <a href="../02_INTERMEDIATE/index_intermediate.html">Intermediate</a> |
+            <a href="index_advanced.html" class="current">Advanced</a> |
+            <a href="../DOCKER_COMPOSE/docker_compose.html">Docker Compose</a>
+        </div>
+
+        <h2>1. What are multi-stage builds and why do they matter?</h2>
+        <p>A multi-stage build uses several <code>FROM</code> blocks in one Dockerfile: heavy "builder" stages compile and produce artifacts, and a lightweight final stage copies <em>only the artifacts</em>. Build tools, compilers, caches, and test dependencies never reach the shipped image — making it smaller and reducing the attack surface.</p>
+        <pre><code># ---- Stage 1: build ----
+FROM node:20 AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# ---- Stage 2: runtime ----
+FROM node:20-slim
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+EXPOSE 3000
+USER node
+CMD ["node", "dist/server.js"]</code></pre>
+        <p>Notes:</p>
+        <ul>
+            <li><code>COPY --from=build</code> pulls files from a previous stage instead of the build context.</li>
+            <li>Build only one stage with <code>docker build --target build .</code> (useful for CI test stages).</li>
+            <li>Same pattern for compiled languages (Go, Rust, Java with jlink) — final images of tens of MB instead of hundreds.</li>
+        </ul>
+
+        <h2>2. How do I analyze and shrink an image?</h2>
+        <pre><code>docker image ls                          # sizes at a glance
+docker history my-api:1.0                # size contributed by each layer
+docker buildx build --sbom=true .        # SBOM (with BuildKit)
+# interactive layer-by-layer exploration:
+# dive my-api:1.0   (github.com/wagoodman/dive)</code></pre>
+        <p>Shrinking techniques, in order of impact:</p>
+        <ul>
+            <li>Multi-stage builds (see above).</li>
+            <li>Smaller base: <code>-slim</code>, <code>-alpine</code>, distroless, or <code>FROM scratch</code> for static binaries.</li>
+            <li>Install and clean in the same <code>RUN</code>: <code>apt-get update &amp;&amp; apt-get install -y --no-install-recommends ... &amp;&amp; rm -rf /var/lib/apt/lists/*</code>; <code>pip install --no-cache-dir</code>.</li>
+            <li>A proper <code>.dockerignore</code> so tests, docs, and <code>.git</code> never enter the context.</li>
+            <li>Only <code>COPY</code> what the app needs to run — not the whole repository.</li>
+        </ul>
+
+        <h2>3. How do I scan images for vulnerabilities?</h2>
+        <p>Treat images as dependencies: scan them continuously in CI and on schedule.</p>
+        <pre><code>docker scout cves my-api:1.0        # Docker Scout (built into Docker Desktop)
+trivy image my-api:1.0              # Trivy — very common in CI pipelines
+grype my-api:1.0                    # Grype (Anchore)</code></pre>
+        <ul>
+            <li>Fail the build on <strong>High/Critical</strong> findings with a fix available; triage the rest explicitly.</li>
+            <li>Pin base images by <strong>digest</strong> for reproducibility: <code>FROM node:20-slim@sha256:abcd...</code>.</li>
+            <li>Rebuild regularly — a "clean" image ages badly as new CVEs are disclosed.</li>
+            <li>Prefer official/verified images and minimal bases: fewer packages, fewer CVEs.</li>
+        </ul>
+
+        <h2>4. How do I run containers securely (least privilege)?</h2>
+        <ul>
+            <li><strong>Non-root user:</strong> <code>RUN useradd -r app &amp;&amp; USER app</code> in the Dockerfile, or <code>docker run --user 1000:1000</code>. Containers running as root can escape more easily on kernel vulnerabilities.</li>
+            <li><strong>Read-only root filesystem:</strong> <code>docker run --read-only --tmpfs /tmp ...</code> — the app can only write to explicitly mounted volumes.</li>
+            <li><strong>Drop capabilities:</strong> <code>--cap-drop=ALL --cap-add=NET_BIND_SERVICE</code> — grant back only what is needed (e.g., binding port 80).</li>
+            <li><strong>No privilege escalation:</strong> <code>--security-opt no-new-privileges</code>.</li>
+            <li><strong>Rootless Docker/Podman</strong> — the whole daemon runs unprivileged, so a daemon compromise does not mean host root.</li>
+            <li><strong>Never mount <code>/var/run/docker.sock</code></strong> into a container unless it is a trusted CI tool — it is effectively root on the host.</li>
+            <li>Hardened runtimes (seccomp/AppArmor profiles) for hostile workloads.</li>
+        </ul>
+
+        <h2>5. How should I handle secrets?</h2>
+        <p>Rules of thumb: never <code>COPY</code> secrets into images, never put them in <code>ENV</code>/<code>ARG</code> (they persist in image metadata and <code>docker history</code>), and never commit them. Options:</p>
+        <pre><code># Build-time secret via BuildKit — never stored in a layer:
+# syntax=docker/dockerfile:1
+RUN --mount=type=secret,id=npm_token \
+    NPM_TOKEN=$(cat /run/secrets/npm_token) npm ci
+# docker build --secret id=npm_token,src=.npmrc .</code></pre>
+        <ul>
+            <li><strong>Runtime:</strong> environment variables from a secret store, mounted files (<code>_FILE</code> convention), Docker Swarm secrets, Kubernetes Secrets (ideally with encryption/external backing), or a vault (Vault, AWS Secrets Manager, Azure Key Vault).</li>
+            <li>Rotatable secrets favor <em>files mounted at runtime</em> over env vars, since env vars live for the process lifetime.</li>
+        </ul>
+
+        <h2>6. How do private registries work?</h2>
+        <pre><code># Self-hosted registry (with basic auth via reverse proxy or htpasswd):
+docker run -d -p 5000:5000 --restart always --name registry registry:2
+
+# Cloud registries: AWS ECR, Azure ACR, Google GAR/Artifact Registry
+docker login myregistry.corp.com
+docker tag my-api:1.0 myregistry.corp.com/team/my-api:1.0
+docker push myregistry.corp.com/team/my-api:1.0</code></pre>
+        <ul>
+            <li>CI/CD machines authenticate with short-lived tokens/OIDC, not personal logins.</li>
+            <li>Set <strong>retention/immutable-tag</strong> policies; use a <strong>pull-through cache</strong> to proxy Docker Hub (also mitigates Docker Hub rate limits).</li>
+            <li>By digest pinning + signature/attestation (cosign) for supply-chain integrity.</li>
+        </ul>
+
+        <h2>7. How does Docker fit into a CI/CD pipeline?</h2>
+        <p>A typical pipeline per commit: <strong>build → test (inside containers) → scan → push → deploy</strong>.</p>
+        <pre><code># GitHub Actions example
+- name: Set up Buildx
+  uses: docker/setup-buildx-action@v3
+- name: Login to registry
+  uses: docker/login-action@v3
+  with:
+    registry: ghcr.io
+    username: ${{ github.actor }}
+    password: ${{ secrets.GITHUB_TOKEN }}
+- name: Build and push
+  uses: docker/build-push-action@v6
+  with:
+    context: .
+    push: true
+    tags: |
+      ghcr.io/org/app:${{ github.sha }}
+      ghcr.io/org/app:latest
+    cache-from: type=registry,ref=ghcr.io/org/app:cache
+    cache-to: type=registry,ref=ghcr.io/org/app:cache,mode=max</code></pre>
+        <ul>
+            <li><strong>Tagging strategy:</strong> immutable tags per commit (<code>git SHA</code>) deployed in production; semantic versions for releases; avoid relying on <code>latest</code> for deployments.</li>
+            <li><strong>Layer caching in CI:</strong> export/import BuildKit cache to a registry (as above) so builds stay fast.</li>
+            <li>Tests run in ephemeral containers with throwaway service databases — identical to production runtime.</li>
+        </ul>
+
+        <h2>8. When do I need orchestration — and which one?</h2>
+        <p>Docker alone manages a <em>single host</em>. You need an orchestrator when you require multi-host scheduling, self-healing, load balancing, rolling deployments, and scaling:</p>
+        <table>
+            <tr><th>Option</th><th>Best for</th><th>Notes</th></tr>
+            <tr><td><strong>Docker Swarm</strong></td><td>Small clusters, simplicity</td><td>Built into Docker; declining adoption</td></tr>
+            <tr><td><strong>Kubernetes</strong></td><td>The de-facto standard at any serious scale</td><td>Steep learning curve, huge ecosystem</td></tr>
+            <tr><td><strong>Managed services</strong></td><td>AWS/Azure workloads without cluster ops</td><td>ECS/EKS/Fargate on AWS, AKS on Azure, GKE on GCP</td></tr>
+        </table>
+        <p>Related pages in this knowledge base:</p>
+        <ul>
+            <li><a href="../../CONCEPTS/AWS%20ECS.html" target="_blank">AWS ECS (Elastic Container Service)</a></li>
+            <li><a href="../../CONCEPTS/AWS%20EKS.html" target="_blank">AWS EKS (Elastic Kubernetes Service)</a></li>
+            <li><a href="../../CONCEPTS/Azure%20Kubernetes%20Service.html" target="_blank">Azure Kubernetes Service (AKS)</a></li>
+        </ul>
+
+        <h2>9. What exists beyond Docker? (OCI, containerd, Podman)</h2>
+        <p>Images and runtimes are standardized by the <strong>Open Container Initiative (OCI)</strong>: an image spec and a runtime spec. Consequences:</p>
+        <ul>
+            <li><strong>containerd</strong> — the runtime Docker itself uses underneath; also runs standalone (and inside Kubernetes via CRI).</li>
+            <li><strong>Podman</strong> — daemonless, rootless-by-default Docker CLI replacement; images are OCI-compatible, so <code>docker build</code> output runs unchanged (<code>alias docker=podman</code>).</li>
+            <li><strong>CRI-O</strong> — Kubernetes-focused lightweight runtime.</li>
+            <li>Practical takeaway: an OCI image is portable across all compliant runtimes — Docker is the most common tool, not a lock-in.</li>
+        </ul>
+
+        <h2>10. Production-readiness checklist for a containerized service</h2>
+        <ol>
+            <li>Runs as a <strong>non-root</strong> user; read-only root filesystem where possible.</li>
+            <li>Minimal, version-pinned base image (multi-stage if building), scanned with no open Critical/High CVEs.</li>
+            <li><strong>HEALTHCHECK</strong> / readiness endpoint implemented.</li>
+            <li>Handles <strong>SIGTERM</strong> gracefully (drain connections; <code>docker stop</code> grace period / <code>stop_grace_period</code> tuned).</li>
+            <li>Logs to <strong>stdout/stderr</strong>; logs and metrics collected externally.</li>
+            <li>Resource limits (<code>--memory</code>, <code>--cpus</code>) and a restart policy set.</li>
+            <li>State in <strong>volumes</strong> or external services only — never in the container layer.</li>
+            <li>Config via <strong>environment/secrets</strong>, never baked in; secrets rotated, not in image metadata.</li>
+            <li>Deployed by immutable tag (commit SHA or semver), never <code>latest</code>.</li>
+            <li>Defined upgrade path: image rebuild cadence to pick up base-image patches.</li>
+        </ol>
+
+        <a class="back-link" href="../../IT.html">&#8592; Back to IT Knowledge Base</a>
+    </div>
+</body>
+</html>

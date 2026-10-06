@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation and First App</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Installation and First App</h1>
+    <p>This page covers how to install FastAPI, run the development server, and understand the minimal "Hello World" application.</p>
+
+    <h2>Installation</h2>
+    <p>It is recommended to use a virtual environment:</p>
+    <pre><code>python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux / macOS
+source venv/bin/activate
+
+pip install "fastapi[standard]"
+</code></pre>
+    <p>The <code>[standard]</code> extra installs Uvicorn (with <code>uvloop</code>/<code>httptools</code>), <code>python-multipart</code> for forms/files, and other commonly used packages. Alternatively, install only the minimum:</p>
+    <pre><code>pip install fastapi uvicorn
+</code></pre>
+
+    <h2>First Application: main.py</h2>
+    <pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int):
+    return {"item_id": item_id}
+</code></pre>
+
+    <h2>Running the Server</h2>
+    <pre><code># Modern CLI (installed with fastapi[standard])
+fastapi dev main.py
+
+# Classic way with uvicorn
+uvicorn main:app --reload
+</code></pre>
+    <ul>
+        <li><code>main:app</code> means: module <code>main.py</code>, object <code>app</code>.</li>
+        <li><code>--reload</code> restarts the server when code changes (development only, never in production).</li>
+        <li>Default address: <code>http://127.0.0.1:8000</code>. Interactive docs: <code>http://127.0.0.1:8000/docs</code>.</li>
+    </ul>
+
+    <h2>Anatomy of the App</h2>
+    <ul>
+        <li><strong><code>FastAPI()</code></strong>: creates the application instance; all routes, middleware and events attach to it.</li>
+        <li><strong>Path operation decorators</strong> (<code>@app.get</code>, <code>@app.post</code>, <code>@app.put</code>, <code>@app.delete</code>, ...): declare the HTTP method and path.</li>
+        <li><strong>Path operation function</strong>: the Python function that runs; its return value is serialized to JSON by default.</li>
+        <li>Type hints (<code>item_id: int</code>) are not comments: FastAPI validates and converts the incoming string path segment to an <code>int</code> automatically, returning 422 if it fails.</li>
+    </ul>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: What is the difference between uvicorn and FastAPI?</div>
+    <div class="answer">
+        <p>A: FastAPI is the framework (routing, validation, docs). Uvicorn is the ASGI server that actually accepts TCP connections and talks to the app. You need both: the server hosts the application.</p>
+    </div>
+
+    <div class="question">Q: Why does <code>uvicorn main:app --reload</code> fail with "ModuleNotFoundError"?</div>
+    <div class="answer">
+        <p>A: The command must run from the directory containing <code>main.py</code>, or you must pass the full dotted path (e.g. <code>app.main:app</code> if the file is <code>app/main.py</code>).</p>
+    </div>
+
+    <div class="question">Q: Should I use <code>--reload</code> in production?</div>
+    <div class="answer">
+        <p>A: No. It watches files and restarts constantly, wasting resources. In production run Uvicorn with workers (or use Gunicorn managing Uvicorn workers): <code>uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4</code>.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Getting a FastAPI app running takes three steps: install, create the <code>app</code> object with decorated functions, and start Uvicorn. The type hints in the function signature are what power validation and the automatic docs.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

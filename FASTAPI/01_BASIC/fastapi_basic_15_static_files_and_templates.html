@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Files and Templates</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Static Files and Templates</h1>
+    <p>Although FastAPI is built for APIs, it can also serve static assets (CSS, JS, images) and render server-side HTML with Jinja2 &mdash; useful for admin pages, dashboards or simple frontends that live in the same service.</p>
+
+    <h2>Serving Static Files</h2>
+    <pre><code>from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+
+app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+</code></pre>
+    <ul>
+        <li><code>app.mount()</code> attaches a full ASGI sub-application at a path prefix &mdash; here <code>/static/*</code> is served directly from the <code>static/</code> directory.</li>
+        <li><code>StaticFiles(directory="static", html=True)</code> additionally serves <code>index.html</code> for the directory root.</li>
+        <li>In production, serve assets with Nginx/CDN instead if performance matters &mdash; Python file serving is convenient, not fast.</li>
+    </ul>
+
+    <h2>Jinja2 Templates</h2>
+    <pre><code>pip install jinja2
+</code></pre>
+    <pre><code>from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/dashboard/", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    stats = {"total_items": 42, "low_stock": 3}
+    return templates.TemplateResponse(
+        request=request,
+        name="dashboard.html",
+        context={"title": "Dashboard", "stats": stats},
+    )
+</code></pre>
+
+    <h2>The Template (templates/dashboard.html)</h2>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;{{ title }}&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;{{ title }}&lt;/h1&gt;
+  &lt;p&gt;Total items: {{ stats.total_items }}&lt;/p&gt;
+  {% if stats.low_stock &gt; 0 %}
+    &lt;p class="alert"&gt;{{ stats.low_stock }} items low on stock!&lt;/p&gt;
+  {% endif %}
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+    <p>Jinja2 syntax: <code>{{ variable }}</code> for output, <code>{% ... %}</code> for logic (if/for/block), filters like <code>{{ price | round(2) }}</code>.</p>
+
+    <h2>Returning Raw HTML</h2>
+    <pre><code>from fastapi.responses import HTMLResponse
+
+@app.get("/hello/", response_class=HTMLResponse)
+def hello():
+    return "&lt;h1&gt;Hello&lt;/h1&gt;"
+</code></pre>
+    <p><code>response_class=HTMLResponse</code> makes the docs show a media type of <code>text/html</code>; without a model, the string returned is sent as-is.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: Should a FastAPI app render HTML, or should I split frontend and backend?</div>
+    <div class="answer">
+        <p>A: For real products, prefer a separated SPA (React/Angular/Vue) consuming the API &mdash; independent deploys and scaling. Templates are great for server-rendered admin panels, emails, PDF reports or small internal tools where a second frontend would be overkill.</p>
+    </div>
+
+    <div class="question">Q: Why does <code>app.mount("/static", ...)</code> fail with a runtime error?</div>
+    <div class="answer">
+        <p>A: Usually because the directory does not exist relative to the working directory where Uvicorn was started. Create the folder or resolve the path from the file location: <code>Path(__file__).parent / "static"</code>.</p>
+    </div>
+
+    <div class="question">Q: How do I use template responses inside routers without global state?</div>
+    <div class="answer">
+        <p>A: Create the <code>Jinja2Templates</code> instance once (e.g. in a <code>core/templates.py</code> module or via a dependency) and import it in your routers &mdash; creating one per request/module repeatedly wastes resources.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p><code>app.mount()</code> with <code>StaticFiles</code> serves assets, and <code>Jinja2Templates</code> renders HTML pages &mdash; enough to give an API a small face (health dashboards, admin screens) without leaving the FastAPI process.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>

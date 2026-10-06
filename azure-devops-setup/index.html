@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configure Azure DevOps from Scratch — Step-by-Step Guide</title>
+<style>
+  :root {
+    --azure-blue: #0078d4;
+    --azure-dark: #005a9e;
+    --ink: #1f2933;
+    --ink-soft: #52606d;
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --border: #e4e9ef;
+    --accent-bg: #e8f1fb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    background: linear-gradient(135deg, var(--azure-dark) 0%, var(--azure-blue) 60%, #2b9df0 100%);
+    color: #fff;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  header h1 { font-size: 2rem; font-weight: 600; margin-bottom: 10px; }
+  header p  { font-size: 1.05rem; opacity: .92; max-width: 720px; margin: 0 auto; }
+  .badge-row { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 4px 14px; border-radius: 999px; font-size: .85rem;
+  }
+
+  main { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* ---------- Overview ---------- */
+  .overview {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+  .overview h2 { font-size: 1.2rem; margin-bottom: 14px; color: var(--azure-dark); }
+  .overview ol { padding-left: 22px; }
+  .overview li { margin: 6px 0; }
+  .overview .todo { color: #9aa5b1; }
+
+  /* ---------- Prerequisites ---------- */
+  .prereq {
+    background: var(--accent-bg);
+    border-left: 4px solid var(--azure-blue);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 48px;
+  }
+  .prereq h2 { font-size: 1.05rem; color: var(--azure-dark); margin-bottom: 8px; }
+  .prereq ul { padding-left: 22px; }
+
+  /* ---------- Steps ---------- */
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 1px 3px rgba(31,41,51,.06);
+  }
+  .step-header { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+  .step-num {
+    flex: 0 0 auto;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--azure-blue); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; font-weight: 700;
+  }
+  .step-header h2 { font-size: 1.3rem; color: var(--ink); }
+  .step p.intro { color: var(--ink-soft); margin-bottom: 12px; }
+  .step ol.actions { padding-left: 24px; margin-bottom: 16px; }
+  .step ol.actions li { margin: 6px 0; }
+  .step .ui-ref {   /* references to on-screen UI elements */
+    background: #eef1f4; border: 1px solid #d9e0e7; border-radius: 4px;
+    padding: 1px 6px; font-size: .9em; white-space: nowrap;
+  }
+  .screenshot {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--border); border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(31,41,51,.10);
+    cursor: zoom-in;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .screenshot:hover {
+    box-shadow: 0 4px 18px rgba(31,41,51,.22);
+    transform: translateY(-1px);
+  }
+
+  /* ---------- Lightbox (click a screenshot to view high-res) ---------- */
+  .lightbox {
+    display: none;
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(13, 21, 30, .90);
+    padding: 28px;
+    align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: min(96vw, 1920px);
+    max-height: 88vh;
+    border-radius: 6px;
+    box-shadow: 0 14px 60px rgba(0,0,0,.6);
+    animation: zoomIn .18s ease-out;
+  }
+  @keyframes zoomIn {
+    from { transform: scale(.93); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .lightbox-caption {
+    color: #e6edf3; margin-top: 14px;
+    font-size: .95rem; text-align: center; max-width: 82vw;
+  }
+  .lightbox-close {
+    position: absolute; top: 18px; right: 24px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.35);
+    color: #fff; font-size: 1.5rem; line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-close:hover { background: rgba(255,255,255,.28); }
+  body.modal-open { overflow: hidden; }
+  .caption {
+    text-align: center; font-size: .88rem; color: var(--ink-soft);
+    margin-top: 10px; font-style: italic;
+  }
+  .tip {
+    margin-top: 16px; padding: 12px 16px;
+    background: #fff8e6; border: 1px solid #f0dfa8; border-radius: 8px;
+    font-size: .95rem;
+  }
+  .tip strong { color: #8a6d1a; }
+
+  footer {
+    text-align: center; color: var(--ink-soft);
+    font-size: .85rem; padding: 24px; border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚙️ Configure Azure DevOps from Scratch</h1>
+  <p>A complete, screenshot-driven walkthrough: from signing in to Azure and creating your
+     organization, to provisioning projects, repos, and pipelines in Azure DevOps.</p>
+  <div class="badge-row">
+    <span class="badge">Guide in progress</span>
+    <span class="badge">Updated: October 2026</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== OVERVIEW ===================== -->
+  <section class="overview">
+    <h2>Steps in this guide</h2>
+    <ol>
+      <li><a href="#step-1">Sign in to Microsoft Azure and pick your account</a></li>
+      <li><a href="#step-2">Verify your identity — send a code to your email</a></li>
+      <li><a href="#step-3">Retrieve the single-use code from your inbox</a></li>
+      <li><a href="#step-4">Open the email and copy the code</a></li>
+      <li><a href="#step-5">Confirm the &ldquo;Stay signed in?&rdquo; prompt</a></li>
+      <li><a href="#step-6">Dismiss the Azure portal welcome tour</a></li>
+      <li><a href="#step-7">Create a resource — start the Azure Function setup</a></li>
+      <li><a href="#step-8">Choose &ldquo;Function App&rdquo; from the Marketplace</a></li>
+      <li><a href="#step-9">Activate an Azure free trial (no subscription yet)</a></li>
+      <li><a href="#step-10">Open <em>Users</em> to invite collaborators as contributors</a></li>
+      <li><a href="#step-11">Create or invite the new user</a></li>
+      <li><a href="#step-12">Choose &ldquo;Invite external user&rdquo;</a></li>
+      <li><a href="#step-13">Fill in and send the invitation</a></li>
+      <li><a href="#step-14">Review the summary and send the invite</a></li>
+      <li><a href="#step-15">Confirmation — &ldquo;User invitation in progress&rdquo;</a></li>
+      <li><a href="#step-16">Guest side — the invitation email arrives in Gmail</a></li>
+      <li><a href="#step-17">Open the email and accept the invitation</a></li>
+      <li><a href="#step-18">Guest accepts the requested permissions</a></li>
+      <li><a href="#step-19">Guest lands on My Apps (myapplications.microsoft.com)</a></li>
+      <li><a href="#step-20">Verify the guest appears in the users list</a></li>
+      <li><a href="#step-21">Open <em>Subscriptions</em> from the portal home</a></li>
+      <li><a href="#step-22">Open <em>Azure subscription 1</em></a></li>
+      <li><a href="#step-23">Open <em>Access control (IAM)</em> from the subscription Overview</a></li>
+      <li><a href="#step-24">Open <em>Access control (IAM) &rarr; Role assignments</em> on the subscription</a></li>
+      <li><a href="#step-25">Start the assignment — <em>Add &rarr; Add role assignment</em></a></li>
+      <li><a href="#step-26">Sign out to switch accounts</a></li>
+      <li><a href="#step-27">As the Contributor: choose <em>Function App</em> again</a></li>
+      <li><a href="#step-28">Select the hosting option — <em>Flex Consumption</em></a></li>
+      <li><a href="#step-29">Fill in the <em>Basics</em> tab</a></li>
+      <li><a href="#step-30">Review the summary and click <em>Create</em></a></li>
+      <li><a href="#step-31">Confirmation — &ldquo;Initializing deployment&rdquo; of the Function App</a></li>
+      <li><a href="#step-32">Deployment complete — go to the resource</a></li>
+      <li><a href="#step-33">Azure DevOps sign-up — complete your profile details</a></li>
+      <li><a href="#step-34">Click &ldquo;Create new organization&rdquo;</a></li>
+      <li><a href="#step-35">Confirm the account and Continue</a></li>
+      <li><a href="#step-36">Name the organization and complete the CAPTCHA</a></li>
+      <li><a href="#step-37">Provisioning — &ldquo;Taking you to your organization…&rdquo;</a></li>
+      <li><a href="#step-38">Create the first project</a></li>
+      <li><a href="#step-39">Provisioning — &ldquo;New project is being created…&rdquo;</a></li>
+      <li><a href="#step-40">Project created — open <em>Repos</em></a></li>
+      <li class="todo">More steps will be added as screenshots are provided…</li>
+    </ol>
+  </section>
+
+  <!-- ===================== PREREQUISITES ===================== -->
+  <section class="prereq">
+    <h2>✅ Before you start</h2>
+    <ul>
+      <li>A Microsoft account (e.g., an Outlook/Hotmail or Gmail-registered Microsoft account) <em>or</em> a work/school account.</li>
+      <li>An active Azure subscription is recommended if you plan to link Azure DevOps to Azure billing
+          (buy parallel jobs, artifacts, etc.). You can start without one.</li>
+      <li>A modern browser (Edge or Chrome) with internet access.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== STEP 1 ===================== -->
+  <section class="step" id="step-1">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <h2>Sign in to Microsoft Azure and pick your account</h2>
+    </div>
+
+    <p class="intro">
+      Everything starts from the Azure portal, since your Azure DevOps organization will be tied to
+      the Microsoft identity (and, optionally, the subscription) you sign in with.
+    </p>
+
+    <ol class="actions">
+      <li>Open a browser and go to <span class="ui-ref">https://portal.azure.com</span>.
+          The Microsoft sign-in page opens.</li>
+      <li>On the <strong>&ldquo;Pick an account&rdquo;</strong> screen, click the account you want to use —
+          in this example, <span class="ui-ref">veeduriabg@gmail.com</span> (highlighted in red below).</li>
+      <li>If your account is not listed, click <span class="ui-ref">Use another account</span> and enter
+          your credentials.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-01-pick-account.png"
+         alt="Microsoft Azure sign-in page showing the 'Pick an account' dialog with the account veeduriabg@gmail.com highlighted">
+    <p class="caption">Step 1 — Pick the Microsoft account to continue to the Azure portal.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Use the same account consistently throughout this guide. The Azure DevOps
+      organization you create later will be created under the directory (tenant) of this sign-in.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 2 ===================== -->
+  <section class="step" id="step-2">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <h2>Verify your identity — send a code to your email</h2>
+    </div>
+
+    <p class="intro">
+      Because you are signing in with a personal Microsoft account (such as one registered with a
+      Gmail address), Microsoft asks you to prove your identity with a one-time verification code
+      instead of a classic password prompt.
+    </p>
+
+    <ol class="actions">
+      <li>After selecting your account, the <strong>&ldquo;Get a code to sign in&rdquo;</strong> screen appears,
+          confirming the email the code will be sent to — in this example,
+          <span class="ui-ref">veeduriabg@gmail.com</span>.</li>
+      <li>Click the <span class="ui-ref">Send code</span> button (highlighted in red below).</li>
+      <li>Microsoft emails a short one-time code to that address.</li>
+      <li>On the next screen, open your email inbox, copy the code, paste/enter it into the
+          verification field, and continue.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-02-send-code.png"
+         alt="Microsoft 'Get a code to sign in' screen offering to email a verification code to veeduriabg@gmail.com, with the Send code button highlighted">
+    <p class="caption">Step 2 — Click "Send code" to receive a one-time sign-in code by email.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The code expires after a few minutes. If it doesn't arrive within a minute
+      or two, check your spam/junk folder, then use the <em>resend</em> option on the verification screen.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 3 ===================== -->
+  <section class="step" id="step-3">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <h2>Retrieve the single-use code from your inbox</h2>
+    </div>
+
+    <p class="intro">
+      Microsoft has emailed the verification code. Now switch to your email provider — in this example,
+      Gmail — to fetch it. Since the sign-in used a Gmail address, the code arrives in the Gmail inbox.
+    </p>
+
+    <ol class="actions">
+      <li>Open a new browser tab and go to <span class="ui-ref">https://mail.google.com</span>, signed in
+          with the same account you used for Azure (<span class="ui-ref">veeduriabg@gmail.com</span>).</li>
+      <li>In the inbox, locate the email from <strong>&ldquo;Microsoft account team&rdquo;</strong> with the
+          subject <strong>&ldquo;Your single-use code&rdquo;</strong> (highlighted in red below) — it usually
+          appears within seconds.</li>
+      <li>Open it and copy the code shown in the body — in this example,
+          <span class="ui-ref">514944</span>.</li>
+      <li>Return to the Azure sign-in tab, enter the code in the verification field, and continue.</li>
+      <li>If the email has not arrived after a minute or two, go back to the Azure tab, click
+          <em>resend</em> and try again.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-03-email-code.png"
+         alt="Gmail inbox showing the email from the Microsoft account team with subject 'Your single-use code' highlighted">
+    <p class="caption">Step 3 — In Gmail, open the "Your single-use code" email from the Microsoft account team.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The single-use code is valid for a limited time and works only once.
+      Never share it with anyone — Microsoft will never ask you for it by phone or unsolicited email.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 4 ===================== -->
+  <section class="step" id="step-4">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <h2>Open the email and copy the code</h2>
+    </div>
+
+    <p class="intro">
+      The email from the <strong>Microsoft account team</strong>
+      (<span class="ui-ref">account-security-noreply@accountprotection.microsoft.com</span>) contains
+      the one-time code you need to finish signing in.
+    </p>
+
+    <ol class="actions">
+      <li>Open the <strong>&ldquo;Your single-use code&rdquo;</strong> email.</li>
+      <li>Find the line <em>&ldquo;Your single-use code is:&rdquo;</em> — in this example the code is
+          <span class="ui-ref">514944</span> (highlighted in red below).</li>
+      <li>Copy the code and switch back to the Azure sign-in tab.</li>
+      <li>Paste or type the code into the verification field and continue.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-04-open-code-email.png"
+         alt="Opened Gmail email 'Your single-use code' from the Microsoft account team showing the code 514944 highlighted">
+    <p class="caption">Step 4 — The email body shows the single-use code to enter on the Azure sign-in screen.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> As the email itself warns: only enter this code on an official website or
+      app, and don't share it with anyone. If the code has expired by the time you enter it, simply
+      request a new one from the Azure sign-in screen.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 5 ===================== -->
+  <section class="step" id="step-5">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <h2>Confirm the &ldquo;Stay signed in?&rdquo; prompt</h2>
+    </div>
+
+    <p class="intro">
+      After the code is accepted, Microsoft asks whether to keep the session open on this device so you
+      won't have to repeat the whole sign-in (and email verification) every time you visit the portal.
+    </p>
+
+    <ol class="actions">
+      <li>On the <strong>&ldquo;Stay signed in?&rdquo;</strong> screen, click
+          <span class="ui-ref">Yes</span> (highlighted in red below) — recommended for your own
+          development machine.</li>
+      <li>Choose <span class="ui-ref">No</span> instead if you are on a shared or public computer.</li>
+      <li>You are then redirected to the Azure portal home dashboard.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-05-stay-signed-in.png"
+         alt="Microsoft 'Stay signed in?' dialog for veeduriabg@gmail.com with the Yes button highlighted">
+    <p class="caption">Step 5 — Click "Yes" to skip repeated sign-ins on this device.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Choosing <em>Yes</em> keeps you authenticated on this browser profile,
+      which saves a lot of time while following the rest of this guide. Just avoid it on shared machines.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 6 ===================== -->
+  <section class="step" id="step-6">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <h2>Dismiss the Azure portal welcome tour</h2>
+    </div>
+
+    <p class="intro">
+      The first time you reach the portal, Azure offers a guided tour of the interface. You don't need
+      it for this guide, so you can skip it and go straight to the dashboard.
+    </p>
+
+    <ol class="actions">
+      <li>When the <strong>&ldquo;Welcome to Microsoft Azure&rdquo;</strong> dialog appears
+          (&ldquo;Let's show you around before you get started&rdquo;), click
+          <span class="ui-ref">Maybe later</span> (highlighted in red below).</li>
+      <li>Optionally click <span class="ui-ref">Start tour</span> instead if you'd like Azure to walk
+          you through the portal basics now — you can always reopen the tour later from the help menu.</li>
+      <li>The dialog closes and the Azure portal home dashboard is fully visible.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-06-welcome-maybe-later.png"
+         alt="Azure portal 'Welcome to Microsoft Azure' dialog with Start tour and Maybe later buttons, Maybe later highlighted">
+    <p class="caption">Step 6 — Click "Maybe later" to skip the guided tour and reach the dashboard.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The tour is purely informational — skipping it changes nothing in your
+      subscription. You can launch it any time from the globe/help icon in the portal's top toolbar.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 7 ===================== -->
+  <section class="step" id="step-7">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <h2>Create a resource — start the Azure Function setup</h2>
+    </div>
+
+    <p class="intro">
+      You are now on the Azure portal home (<span class="ui-ref">portal.azure.com/#home</span>).
+      Besides configuring Azure DevOps, this guide creates an <strong>Azure Function</strong> as the
+      cloud resource that the DevOps pipeline will build and deploy to. Everything starts from the
+      <em>Create a resource</em> shortcut, which opens the Azure Marketplace.
+    </p>
+
+    <ol class="actions">
+      <li>If you don't have a subscription yet, the home screen offers options such as
+          <em>&ldquo;Start with an Azure free trial&rdquo;</em> ($200 credit for 30 days plus 12 months of
+          popular free services) or <em>&ldquo;Azure for Students&rdquo;.</em></li>
+      <li>Under <strong>Azure services</strong>, click <span class="ui-ref">Create a resource</span>
+          — the first tile with the <strong>+</strong> icon (highlighted in red below).</li>
+      <li>The <strong>Create a resource</strong> page (Marketplace) opens; in the next steps you will
+          search for <em>Function App</em> and configure it.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-07-create-resource.png"
+         alt="Azure portal home screen with the 'Create a resource' tile highlighted under Azure services">
+    <p class="caption">Step 7 — On the portal home, click "Create a resource" to begin creating the Azure Function.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> You can reach the same page from anywhere in the portal: click
+      <span class="ui-ref">+ Create a resource</span> in the top-left toolbar, or press
+      <span class="ui-ref">G+/</span> from the global search bar.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 8 ===================== -->
+  <section class="step" id="step-8">
+    <div class="step-header">
+      <div class="step-num">8</div>
+      <h2>Choose &ldquo;Function App&rdquo; from the Marketplace</h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Create a resource</strong> page is Azure's Marketplace, with categories on the left
+      (Compute, Databases, DevOps, Web, …) and popular services and products in the center. The service
+      we need — a <strong>Function App</strong> — is among the most popular, so it appears right at the top.
+    </p>
+
+    <ol class="actions">
+      <li>On the <strong>Create a resource</strong> page, locate <strong>Function App</strong> in the
+          <em>Popular Azure services</em> list (highlighted in red below) — or type
+          &ldquo;Function App&rdquo; into the <span class="ui-ref">Search services and marketplace</span> box.</li>
+      <li>Click <span class="ui-ref">Create</span> on the Function App tile (or the tile itself).</li>
+      <li>The <strong>Create Function App</strong> wizard opens, starting with the
+          <em>Basics</em> tab that you will fill in next.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-08-choose-function-app.png"
+         alt="Azure 'Create a resource' Marketplace page with the Function App tile highlighted under Popular Azure services">
+    <p class="caption">Step 8 — Pick "Function App" (the lightning-bolt icon) from the Marketplace.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Don't confuse <em>Function App</em> with <em>Web App</em> — both are
+      compute services shown near each other in the list. A Function App hosts event-driven,
+      serverless code; a Web App hosts a continuously running website or API.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 9 ===================== -->
+  <section class="step" id="step-9">
+    <div class="step-header">
+      <div class="step-num">9</div>
+      <h2>Activate an Azure free trial (no subscription yet)</h2>
+    </div>
+
+    <p class="intro">
+      Every resource in Azure — including a Function App — must live inside a <strong>subscription</strong>.
+      If your account doesn't have one yet, Azure intercepts the <em>Create a resource</em> flow and shows
+      the <strong>&ldquo;Welcome to Azure! Don't have a subscription?&rdquo;</strong> page with sign-up options.
+    </p>
+
+    <ol class="actions">
+      <li>On the &ldquo;Welcome to Azure!&rdquo; page, choose
+          <strong>&ldquo;Start with an Azure free trial&rdquo;</strong> (highlighted in red below) and click
+          <span class="ui-ref">Start</span>. It includes <strong>$200 of free credit</strong> for 30 days
+          plus 12 months of popular free services.</li>
+      <li>Complete the free-trial sign-up form Azure presents: confirm your profile, verify your identity
+          by phone, and add a credit card (used to validate your identity — you won't be charged unless
+          you explicitly upgrade).</li>
+      <li>Alternative: if you are a student, pick <strong>&ldquo;Azure for Students&rdquo;</strong> instead —
+          it grants free credit without requiring a credit card.</li>
+      <li>Once the trial is active, return to <em>Create a resource</em> and continue with the
+          <strong>Function App</strong> selection from the previous step.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-09-free-trial.png"
+         alt="Azure 'Welcome to Azure!' no-subscription page with the 'Start with an Azure free trial' option highlighted">
+    <p class="caption">Step 9 — No subscription yet? Start the Azure free trial to unlock resource creation.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The free trial is more than enough for this guide — a Function App on the
+      <em>Consumption</em> plan falls within the free monthly grant (1 million executions). Set a spending
+      alert in <em>Cost Management</em> anyway so you always know where you stand.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 10 ===================== -->
+  <section class="step" id="step-10">
+    <div class="step-header">
+      <div class="step-num">10</div>
+      <h2>Open <em>Users</em> to invite collaborators as contributors</h2>
+    </div>
+
+    <p class="intro">
+      From the <strong>primary Azure account</strong> (the one that owns the subscription), the other
+      members of the team will be invited to participate as <strong>contributors</strong>. The
+      <em>Users</em> shortcut on the portal home takes you straight to user management in
+      Microsoft Entra ID.
+    </p>
+
+    <ol class="actions">
+      <li>On the Azure portal home, under <strong>Azure services</strong>, click the
+          <span class="ui-ref">Users</span> tile (highlighted in red below).</li>
+      <li>The <strong>Users | All users</strong> page opens, listing every identity in your directory.</li>
+      <li>From here you will invite the remaining team members (next step): add each user and then grant
+          them the <strong>Contributor</strong> role so they can work on the subscription's resources —
+          for example the Function App and its resource group.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-10-users-tile.png"
+         alt="Azure portal home with the Users tile highlighted under Azure services, and recent resources listed below">
+    <p class="caption">Step 10 — Click "Users" to manage directory users and start inviting contributors.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> <em>Contributor</em> can create and manage everything under the granted
+      scope, but cannot change who else has access — that requires <em>Owner</em>. Grant the role at the
+      narrowest scope that makes sense (e.g., the project's resource group rather than the whole subscription).
+    </div>
+  </section>
+
+  <!-- ===================== STEP 11 ===================== -->
+  <section class="step" id="step-11">
+    <div class="step-header">
+      <div class="step-num">11</div>
+      <h2>Create or invite the new user</h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Users | All users</strong> page (default directory) lists every identity in your tenant.
+      Here you add the teammates who will collaborate on the project. The list shows both
+      <em>Member</em> accounts and <em>Guest</em> accounts added by invitation — in the example below,
+      a guest user added via invitation and the member
+      <span class="ui-ref">Manuela Cortés Granados</span>.
+    </p>
+
+    <ol class="actions">
+      <li>On <strong>Users | All users</strong>, click <span class="ui-ref">+ New user</span>
+          (highlighted in red below).</li>
+      <li>Pick how to add the person:
+        <ul>
+          <li><strong>Create new user</strong> — generates a corporate identity in your directory
+              (id <span class="ui-ref">@&lt;domain&gt;.onmicrosoft.com</span> with an auto-issued password).</li>
+          <li><strong>Invite external user</strong> — sends an email invitation; ideal for personal
+              accounts such as Gmail-registered Microsoft accounts. The person must redeem the invitation
+              to gain access, and appears with <em>User type: Guest</em>.</li>
+        </ul>
+      </li>
+      <li>Fill in the identity basics (display name and email / user principal name) and click
+          <span class="ui-ref">Review + create</span> (or <span class="ui-ref">Invite</span> for guests).</li>
+      <li>Once the user exists in the directory, grant them the <strong>Contributor</strong> role
+          (covered in the next step).</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-11-new-user.png"
+         alt="Microsoft Entra ID 'Users | All users' page with the '+ New user' button highlighted and two users listed">
+    <p class="caption">Step 11 — Click "+ New user" to add the next collaborator to the directory.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Members authenticate with directory-managed credentials; guests keep using
+      their own account (e.g., their Gmail-backed Microsoft account). For a study or demo project like this
+      one, inviting external users as guests is usually the simplest path.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 12 ===================== -->
+  <section class="step" id="step-12">
+    <div class="step-header">
+      <div class="step-num">12</div>
+      <h2>Choose &ldquo;Invite external user&rdquo;</h2>
+    </div>
+
+    <p class="intro">
+      The <span class="ui-ref">+ New user</span> button is actually a split button: clicking its arrow
+      reveals the two ways of adding someone. Since the collaborators join with their own personal
+      Microsoft accounts (Gmail-registered), the invitation route is the one to use.
+    </p>
+
+    <ol class="actions">
+      <li>Open the <span class="ui-ref">+ New user</span> dropdown (highlighted in red below).</li>
+      <li>Select <strong>&ldquo;Invite external user&rdquo;</strong> —
+          <em>&ldquo;Invite an external user to collaborate with your organization&rdquo;</em> — rather than
+          <strong>&ldquo;Create new user&rdquo;</strong>, which would mint an internal account
+          (<span class="ui-ref">@&lt;domain&gt;.onmicrosoft.com</span>) instead.</li>
+      <li>The <strong>Invite external user</strong> form opens: enter the person's email address, a display
+          name, and an optional welcome message.</li>
+      <li>Review the assignment options shown on the form (you can add group memberships here), then click
+          <span class="ui-ref">Review + invite</span> to send the invitation.</li>
+      <li>The guest receives an acceptance email; once they accept, they appear in the users list with
+          <em>User type: Guest</em>.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-12-invite-external-user.png"
+         alt="New user dropdown open with the 'Invite external user' option highlighted">
+    <p class="caption">Step 12 — Select "Invite external user" so collaborators can join with their own accounts.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Invited guests keep signing in with their personal credentials — no new
+      password to manage. If someone's invitation email never arrives, you can copy the
+      <em>direct redemption link</em> shown after sending and share it with them yourself.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 13 ===================== -->
+  <section class="step" id="step-13">
+    <div class="step-header">
+      <div class="step-num">13</div>
+      <h2>Fill in and send the invitation</h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Invite external user</strong> wizard has four tabs —
+      <em>Basics</em>, <em>Properties</em>, <em>Assignments</em>, and <em>Review + invite</em>.
+      Only the <em>Basics</em> tab is required to get the guest into the directory.
+    </p>
+
+    <ol class="actions">
+      <li>On the <em>Basics</em> tab, under <strong>Identity</strong>, enter the collaborator's email in
+          <span class="ui-ref">Email</span> — here <span class="ui-ref">veeduriabg@gmail.com</span>. The
+          <span class="ui-ref">Display name</span> auto-fills from the address; adjust it to the person's
+          real name if you prefer (both fields are highlighted in red below).</li>
+      <li>Optionally type a short <strong>Message</strong> so the invitation doesn't feel like spam, and add a
+          <span class="ui-ref">Cc recipient</span> if someone else should get a copy. Leave
+          <span class="ui-ref">Send invite message</span> checked.</li>
+      <li>Leave the <span class="ui-ref">Invite redirect URL</span> at its default
+          (<span class="ui-ref">myapplications.microsoft.com</span>) — it's where the guest lands after
+          accepting.</li>
+      <li>Click <span class="ui-ref">Review + invite</span> (highlighted at the bottom) to send the
+          invitation right away. Alternatively, use <em>Next: Properties</em> to add job details first, or
+          the <em>Assignments</em> tab to add the guest to groups or roles during the invite.</li>
+      <li>The guest receives an email titled with your organization's invitation — they must accept it
+          (redeem it) to become active.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-13-invite-form.png"
+         alt="Invite external user form with Email and Display name filled in as veeduriabg@gmail.com, and the Review + invite button highlighted">
+    <p class="caption">Step 13 — Enter the guest's email, keep the defaults, and click "Review + invite".</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> You don't have to assign the Contributor role during the invite —
+      <em>Assignments</em> is optional. The next steps cover granting the role explicitly at the
+      subscription scope, which is the more transparent way.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 14 ===================== -->
+  <section class="step" id="step-14">
+    <div class="step-header">
+      <div class="step-num">14</div>
+      <h2>Review the summary and send the invite</h2>
+    </div>
+
+    <p class="intro">
+      The <em>Review + invite</em> tab condenses everything the guest will receive into one summary.
+      Take a few seconds to verify it — once sent, the invitation email is on its way.
+    </p>
+
+    <ol class="actions">
+      <li>Open the <span class="ui-ref">Review + invite</span> tab (highlighted at the top).</li>
+      <li>Check the summary: <span class="ui-ref">Email</span> and
+          <span class="ui-ref">Display name</span> — <span class="ui-ref">veeduriabg@gmail.com</span> in
+          this example; <span class="ui-ref">Send invite message: Yes</span>; the redirect URL; and under
+          <strong>Properties</strong>, <span class="ui-ref">User type: Guest</span>. The
+          <strong>Assignments</strong> section (Groups, Roles) is empty because none were selected.</li>
+      <li>Click <span class="ui-ref">Invite</span> (highlighted at the bottom-left).</li>
+      <li>A confirmation notification appears and the invitation email is sent. The guest must open it and
+          accept — from that moment they show up in <em>Users | All users</em> as a Guest.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-14-review-invite.png"
+         alt="Invite external user 'Review + invite' tab showing the guest summary with the Invite button highlighted">
+    <p class="caption">Step 14 — Verify the guest summary and click "Invite" to send the email invitation.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> If the guest says the email never arrived, open their profile under
+      <em>Users | All users</em> and use the <em>Resend invitation</em> action — it regenerates the
+      redemption link without creating a duplicate account.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 15 ===================== -->
+  <section class="step" id="step-15">
+    <div class="step-header">
+      <div class="step-num">15</div>
+      <h2>Confirmation — &ldquo;User invitation in progress&rdquo;</h2>
+    </div>
+
+    <p class="intro">
+      As soon as you click <em>Invite</em>, the portal reports the result in the notification panel at the
+      top-right of the toolbar.
+    </p>
+
+    <ol class="actions">
+      <li>Look at the top-right corner of the portal — the notification (highlighted in red below) reads
+          <strong>&ldquo;User invitation in progress for user veeduriabg@gmail.com&rdquo;</strong>.</li>
+      <li>Within a few seconds it updates to <em>&ldquo;Successfully invited user&rdquo;</em> — the invitation
+          email has been sent and the guest account now exists in the directory.</li>
+      <li>The collaborator can now accept the invitation from their inbox; once accepted, they appear as an
+          active guest in <em>Users | All users</em>.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-15-invitation-progress.png"
+         alt="Azure portal notification 'User invitation in progress for user veeduriabg@gmail.com' highlighted">
+    <p class="caption">Step 15 — The portal confirms the invitation is being processed for the guest user.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Clicking the notification bell (the <strong>1</strong> badge next to it)
+      opens the full notification history, useful to double-check that every teammate's invitation went
+      through before moving on to role assignment.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 16 ===================== -->
+  <section class="step" id="step-16">
+    <div class="step-header">
+      <div class="step-num">16</div>
+      <h2>Guest side — the invitation email arrives in Gmail</h2>
+    </div>
+
+    <p class="intro">
+      Now switching seats: everything so far was done by the <strong>subscription owner</strong>. From here,
+      the steps are performed by the <strong>invited collaborator</strong>, starting in their own inbox.
+    </p>
+
+    <ol class="actions">
+      <li>Sign in to Gmail with the invited account and look in the inbox for a message from
+          <strong>&ldquo;Microsoft Invitations&rdquo;</strong> (highlighted in red below).</li>
+      <li>The subject reads <em>&ldquo;Directorio predeterminado invited you to access applications within
+          their organization&rdquo;</em> — the directory name your teammate entered on the invite.</li>
+      <li>Note the security line in the preview: <em>&ldquo;Please only act on this email if you trust the
+          organization represented below&rdquo;</em>. Verify you recognize the sender organization before
+          doing anything else.</li>
+      <li>Open the email and click <strong>Accept invitation</strong> — the redemption flow is covered in
+          the next step.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-16-invitation-email.png"
+         alt="Gmail inbox showing the Microsoft Invitations email 'Directorio predeterminado invited you to access applications within their organization' highlighted">
+    <p class="caption">Step 16 — In the guest's Gmail, open the Microsoft Invitations email.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> If the message isn't in the inbox, check <em>Updates</em> or spam —
+      Microsoft invitation emails are occasionally auto-filtered on Gmail.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 17 ===================== -->
+  <section class="step" id="step-17">
+    <div class="step-header">
+      <div class="step-num">17</div>
+      <h2>Open the email and accept the invitation</h2>
+    </div>
+
+    <p class="intro">
+      The invitation email contains everything needed to verify who is inviting you and where you will
+      land after accepting — worth a quick check before clicking anything.
+    </p>
+
+    <ol class="actions">
+      <li>Open the invitation email. Verify the sender: <strong>&ldquo;Microsoft Invitations on behalf of
+          Directorio predeterminado&rdquo;</strong> (<span class="ui-ref">invites@microsoft.com</span>) and
+          the red warning banner about acting only on invitations you trust.</li>
+      <li>Confirm the details in the body: <strong>Organization:</strong>
+          <span class="ui-ref">Directorio predeterminado</span> and <strong>Domain:</strong>
+          <span class="ui-ref">manuelacortesgranadosgmail.onmicrosoft.com</span> — your teammate's
+          Azure directory.</li>
+      <li>Click <strong>Accept invitation</strong> (highlighted in red below).</li>
+      <li>The browser opens the redemption page at
+          <span class="ui-ref">myapplications.microsoft.com</span>, where you sign in with the invited
+          Microsoft account and confirm access — covered next.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-17-accept-invitation.png"
+         alt="Opened invitation email from Microsoft Invitations on behalf of Directorio predeterminado with the Accept invitation link highlighted">
+    <p class="caption">Step 17 — Verify organization and domain, then click "Accept invitation".</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The <em>Domain</em> line is the fastest authenticity check: it must match the
+      tenant that invited you. If it references a domain you don't recognize, don't accept — report the
+      email as phishing instead.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 18 ===================== -->
+  <section class="step" id="step-18">
+    <div class="step-header">
+      <div class="step-num">18</div>
+      <h2>Guest accepts the requested permissions</h2>
+    </div>
+
+    <p class="intro">
+      After clicking <em>Accept invitation</em> and signing in with the invited Microsoft account,
+      Microsoft shows the consent screen that formalizes the relationship between the guest and the
+      organization's directory.
+    </p>
+
+    <ol class="actions">
+      <li>Review the <strong>&ldquo;Permissions requested by&rdquo;</strong> screen: the organization is
+          <span class="ui-ref">Directorio predeterminado</span>
+          (<span class="ui-ref">manuelacortesgranadosgmail.onmicrosoft.com</span>).</li>
+      <li>By accepting, you allow the organization to:
+        <ul>
+          <li>Receive your profile data.</li>
+          <li>Collect and log your activity.</li>
+          <li>Use your profile data and activity data.</li>
+        </ul>
+      </li>
+      <li>Click <span class="ui-ref">Accept</span> (highlighted in red below) to grant the permissions and
+          complete the redemption. <span class="ui-ref">Cancel</span> aborts the process and the guest
+          account stays inactive.</li>
+      <li>You are redirected to <span class="ui-ref">myapplications.microsoft.com</span> (My Apps), now
+          appearing as a guest of the organization. From the owner's side, the user now shows as an active
+          Guest in <em>Users | All users</em>.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-18-permissions-accept.png"
+         alt="Microsoft consent screen 'Permissions requested by Directorio predeterminado' with the Accept button highlighted">
+    <p class="caption">Step 18 — Review the permissions and click "Accept" to finish redeeming the invitation.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> These are standard consent permissions for any guest invite (profile and
+      activity data), not access to your files or mail. Guests can later review and revoke consent at
+      <span class="ui-ref">myaccount.microsoft.com</span> under <em>Organizations</em>.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 32 ===================== -->
+  <section class="step" id="step-32">
+    <div class="step-header">
+      <div class="step-num">32</div>
+      <h2>Deployment complete — go to the resource</h2>
+    </div>
+
+    <p class="intro">
+      A couple of minutes after <em>Create</em>, the deployment's own <strong>Overview</strong> page confirms
+      the result with a green check: <strong>&ldquo;Your deployment is complete&rdquo;</strong>. This page
+      is reachable by clicking the completion notification, or under the resource group's
+      <em>Deployments</em> blade.
+    </p>
+
+    <ol class="actions">
+      <li>Read the deployment header: name
+          <span class="ui-ref">Microsoft.Web-FunctionApp-Portal-d7487089-9723</span>, subscription
+          <span class="ui-ref">Azure subscription 1</span>, resource group
+          <span class="ui-ref">AzureResourceGroup1</span>, plus the start time and the
+          <em>Correlation ID</em> (useful when opening a support ticket).</li>
+      <li>Expand <strong>Deployment details</strong> to see every resource the template provisioned — the
+          Function App, its hosting plan, the storage account, and Application Insights.</li>
+      <li>Click <span class="ui-ref">Go to resource</span> (highlighted in red below) under
+          <strong>Next steps</strong> — it opens the new Function App's overview page.</li>
+      <li>The left menu here (<em>Inputs</em>, <em>Outputs</em>, <em>Template</em>) stays available: the
+          <em>Template</em> view shows the exact ARM JSON that was deployed, ideal for reusing as
+          Infrastructure as Code.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-32-deployment-complete.png"
+         alt="Deployment Overview page showing 'Your deployment is complete' with the Go to resource button highlighted">
+    <p class="caption">Step 32 — "Your deployment is complete" — click "Go to resource" to open the Function App.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Bookmark the deployment's <em>Template</em> export (or the
+      <em>Download</em> button in the toolbar): it's the fastest way to turn a portal-created resource into
+      a repeatable Bicep/ARM deployment for future environments.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 33 ===================== -->
+  <section class="step" id="step-33">
+    <div class="step-header">
+      <div class="step-num">33</div>
+      <h2>Azure DevOps sign-up — complete your profile details</h2>
+    </div>
+
+    <p class="intro">
+      With the Azure side ready, it's time for the star of this guide: <strong>Azure DevOps</strong>.
+      Browse to <span class="ui-ref">https://dev.azure.com</span> and sign in with your Microsoft account —
+      the very first time, DevOps asks for a few profile details before creating your organization.
+    </p>
+
+    <ol class="actions">
+      <li>In a browser, open <span class="ui-ref">https://dev.azure.com</span> and sign in with the Microsoft
+          account (here, <span class="ui-ref">veeduriabg@gmail.com</span> — note the account name in the
+          top-right bar).</li>
+      <li>On the <strong>&ldquo;We need a few more details&rdquo;</strong> screen, confirm your name —
+          <span class="ui-ref">Veeduria Ciudadana Informatica y Buen Gobierno</span> — and the contact
+          email, both pre-filled from your Microsoft account.</li>
+      <li>Select your country/region in the <span class="ui-ref">From</span> dropdown (required).</li>
+      <li>Optionally untick the box about receiving information, tips, and resources about Microsoft
+          developer tools if you don't want marketing email.</li>
+      <li>Click <strong>Continue</strong> (highlighted in red below). By continuing you accept the
+          <em>Terms of Service</em>, <em>Privacy Statement</em>, and <em>Code of Conduct</em>.</li>
+      <li>The next screen lets you create (or join) an Azure DevOps <strong>organization</strong> — covered
+          in the following steps.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-33-devops-more-details.png"
+         alt="Azure DevOps 'We need a few more details' screen with name, contact email, country selector and the Continue button highlighted">
+    <p class="caption">Step 33 — Fill in the DevOps profile details and click Continue.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Azure DevOps is free for individuals: the <em>Basic</em> plan includes up to
+      5 free users with unlimited private Git repos and pipelines with a free monthly grant — no credit
+      card required for this part of the guide.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 34 ===================== -->
+  <section class="step" id="step-34">
+    <div class="step-header">
+      <div class="step-num">34</div>
+      <h2>Click &ldquo;Create new organization&rdquo;</h2>
+    </div>
+
+    <p class="intro">
+      With the profile completed, the <strong>Get started with Azure DevOps</strong> landing page appears.
+      An <strong>organization</strong> is the top-level container in Azure DevOps: it groups your projects,
+      repos, pipelines, and boards, and is billed (or made free) as a unit.
+    </p>
+
+    <ol class="actions">
+      <li>Review the profile panel on the left — <span class="ui-ref">Veeduria Ciudadana Informatica y Buen
+          Gobierno</span>, <span class="ui-ref">veeduriabg@gmail.com</span>, account type
+          <em>Microsoft account</em>, country <em>Colombia</em> — and use
+          <span class="ui-ref">Edit profile</span> if anything needs correcting.</li>
+      <li>Click <strong>Create new organization</strong> (highlighted in red below) on the right side.</li>
+      <li>The creation form opens, asking for an organization name and hosting region — configured in the
+          next step.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-34-create-organization.png"
+         alt="Get started with Azure DevOps page with the Create new organization button highlighted">
+    <p class="caption">Step 34 — Click "Create new organization" to set up your DevOps organization.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The <em>Visual Studio Dev Essentials</em> panel at the bottom is free to join
+      and bundles extra benefits (learning content, monthly Azure credits) that pair nicely with this
+      project.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 35 ===================== -->
+  <section class="step" id="step-35">
+    <div class="step-header">
+      <div class="step-num">35</div>
+      <h2>Confirm the account and Continue</h2>
+    </div>
+
+    <p class="intro">
+      A compact confirmation dialog appears before the organization is actually provisioned — it binds the
+      new organization to a specific Microsoft account and directory.
+    </p>
+
+    <ol class="actions">
+      <li>Verify the identity shown at the top: <span class="ui-ref">veeduriabg@gmail.com</span>. The new
+          organization will be created under this account.</li>
+      <li>Optionally click <span class="ui-ref">Switch directory</span> to host the organization in a
+          different Microsoft Entra tenant (for example, the work directory instead of the personal one) —
+          for this guide, the default directory is fine.</li>
+      <li>Untick the information/offers checkbox if you prefer no marketing email.</li>
+      <li>Click <strong>Continue</strong> (highlighted in red below). This accepts the <em>Terms of
+          Service</em>, <em>Privacy Statement</em>, and <em>Code of Conduct</em>, and provisions the
+          organization with a default name — you can rename it right after.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-35-devops-continue.png"
+         alt="Azure DevOps 'Get started' confirmation dialog with the Continue button highlighted">
+    <p class="caption">Step 35 — Confirm the identity and click Continue to provision the organization.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Azure DevOps generates a default organization name from your email and
+      region. You can rename it in seconds (Organization settings → Overview) — but choose something
+      readable early, because it appears in every URL: <span class="ui-ref">dev.azure.com/&lt;org&gt;</span>.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 36 ===================== -->
+  <section class="step" id="step-36">
+    <div class="step-header">
+      <div class="step-num">36</div>
+      <h2>Name the organization and complete the CAPTCHA</h2>
+    </div>
+
+    <p class="intro">
+      The <strong>&ldquo;Almost done…&rdquo;</strong> screen collects the three final inputs for the
+      organization: its name, its hosting region, and a human-verification code.
+    </p>
+
+    <ol class="actions">
+      <li>Set <strong>Name your Azure DevOps organization</strong> — here
+          <span class="ui-ref">veeduriaibg</span>, which becomes the permanent URL
+          <span class="ui-ref">dev.azure.com/veeduriaibg</span>. Use letters, digits, and hyphens only.</li>
+      <li>Choose where projects will be hosted in the <em>We'll host your projects in</em> dropdown — this
+          example selects <strong>Europe</strong>. (Pick the region closest to your team; for Colombia,
+          a US region is usually lower-latency.)</li>
+      <li>Type the characters you see in the CAPTCHA image — in the example, the code
+          <span class="ui-ref">6SLRSJ</span> has been entered.</li>
+      <li>Click <strong>Continue</strong> (highlighted in red below). The organization is provisioned and
+          you land in it, ready to create the first project.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-36-name-organization.png"
+         alt="Azure DevOps 'Almost done' screen with organization name veeduriaibg, Europe region, CAPTCHA entered and Continue highlighted">
+    <p class="caption">Step 36 — Organization name, hosting region, CAPTCHA… then Continue.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The organization name is the only part of the URL that's hard to change
+      later, while the hosting region is fixed at creation. Decide both with the final team size and
+      location in mind — renaming an org is possible but breaks every cloned repo URL and service hook.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 37 ===================== -->
+  <section class="step" id="step-37">
+    <div class="step-header">
+      <div class="step-num">37</div>
+      <h2>Provisioning — &ldquo;Taking you to your organization…&rdquo;</h2>
+    </div>
+
+    <p class="intro">
+      After <em>Continue</em>, Azure DevOps provisions the organization behind the scenes. This loading
+      screen is the only thing between you and your brand-new DevOps home.
+    </p>
+
+    <ol class="actions">
+      <li>Wait a few seconds — no action is required while the spinner runs and the message
+          <strong>&ldquo;Taking you to your Azure DevOps organization…&rdquo;</strong> is displayed.</li>
+      <li>The redirect ends inside your organization, at
+          <span class="ui-ref">dev.azure.com/veeduriaibg</span>, showing the
+          <em>&ldquo;Create a project to get started&rdquo;</em> page.</li>
+      <li>If the screen hangs for more than a minute, refresh the page — the organization is usually
+          already created and the session simply needs to resume.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-37-redirect-org.png"
+         alt="Azure DevOps loading screen 'Taking you to your Azure DevOps organization...' with a spinner">
+    <p class="caption">Step 37 — Brief provisioning spinner on the way into the new organization.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> From this point on, your organization's URL
+      (<span class="ui-ref">dev.azure.com/veeduriaibg</span>) is the single address your whole team needs —
+      projects, repos, and pipelines all hang off it.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 38 ===================== -->
+  <section class="step" id="step-38">
+    <div class="step-header">
+      <div class="step-num">38</div>
+      <h2>Create the first project</h2>
+    </div>
+
+    <p class="intro">
+      Inside the new organization, the first thing Azure DevOps asks for is a <strong>project</strong> —
+      the container for your boards, repositories, pipelines, and test plans. This minimal form only needs
+      a name and a visibility choice.
+    </p>
+
+    <ol class="actions">
+      <li>Type the <strong>Project name</strong> — in this example
+          <span class="ui-ref">ProyectoVeeduriaBG001</span> (highlighted in red below).</li>
+      <li>Choose the <strong>Visibility</strong>: <em>Private</em> is selected here, so only the people you
+          grant access to can view the project. <em>Public</em> is disabled for this organization — it can
+          be turned on later via <span class="ui-ref">organization policies</span>, with the caveat that
+          some features (like TFVC) are not supported for public projects.</li>
+      <li>The streamlined form applies DevOps defaults for everything else — Git version control and the
+          Agile work item process — both changeable later in project settings.</li>
+      <li>Click <strong>+ Create project</strong> (highlighted in red, arrow annotation). After a few
+          seconds the project's <em>Summary</em> page opens, with Boards, Repos, Pipelines, and Test Plans
+          ready in the left menu.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-38-create-project.png"
+         alt="Create a project screen with name ProyectoVeeduriaBG001, Private visibility selected and the Create project button highlighted">
+    <p class="caption">Step 38 — Name the project, keep it Private, and click "+ Create project".</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Choose project names without spaces or special characters — the name becomes
+      part of clone URLs, REST API paths, and pipeline identifiers. Renaming later is possible, but every
+      old reference has to catch up.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 39 ===================== -->
+  <section class="step" id="step-39">
+    <div class="step-header">
+      <div class="step-num">39</div>
+      <h2>Provisioning — &ldquo;New project is being created…&rdquo;</h2>
+    </div>
+
+    <p class="intro">
+      Right after clicking <em>+ Create project</em>, the form grays out and a spinner appears. Behind the
+      scenes, DevOps is scaffolding the project's default team, board, Git repository, and service
+      connections.
+    </p>
+
+    <ol class="actions">
+      <li>Wait a few seconds while the highlighted banner shows
+          <strong>&ldquo;New project is being created…&rdquo;</strong> — the name field and visibility
+          choice stay locked during this step.</li>
+      <li>When provisioning finishes, the banner is replaced by the project's
+          <strong>Summary</strong> page — the project home with its Wiki and dashboard shortcuts.</li>
+      <li>If creation seems stuck, a page refresh usually resolves it; the project either exists or the
+          form returns with an error explaining what to fix (most commonly, a duplicate project name).</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-39-project-creating.png"
+         alt="Create a project screen showing the 'New project is being created...' spinner highlighted">
+    <p class="caption">Step 39 — The brief provisioning spinner right after "+ Create project".</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Provisioning also creates a <em>default team</em> named after the project
+      (with its own backlog and dashboard) — you can add more teams later in Project settings, one team
+      per work stream.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 40 ===================== -->
+  <section class="step" id="step-40">
+    <div class="step-header">
+      <div class="step-num">40</div>
+      <h2>Project created — open <em>Repos</em></h2>
+    </div>
+
+    <p class="intro">
+      Provisioning finished — the <strong>Summary</strong> page greets you with
+      <em>&ldquo;Welcome to the project!&rdquo;</em> and shortcut buttons for every service. The breadcrumb
+      confirms the full hierarchy: <span class="ui-ref">veeduriaibg / ProyectoVeeduriaBG001 / Summary</span>.
+    </p>
+
+    <ol class="actions">
+      <li>Take note of the left navigation — this is the hub you'll live in:
+          <strong>Boards</strong> (work items, sprints), <strong>Repos</strong> (source control),
+          <strong>Pipelines</strong> (CI/CD), <strong>Test Plans</strong>, and <strong>Artifacts</strong>
+          (package feeds), plus Overview/Dashboards/Wiki above them.</li>
+      <li>Click <strong>Repos</strong> in the left menu (highlighted in red with the arrow annotation
+          below) — or the <span class="ui-ref">Repos</span> shortcut button in the welcome panel.</li>
+      <li>Repos opens the project's empty Git repository, offering to clone it, import existing code, or
+          initialize it with a README — the next step of the guide.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-40-project-summary.png"
+         alt="Project Summary 'Welcome to the project' page with Repos highlighted in the left navigation">
+    <p class="caption">Step 40 — The project is live; open Repos to start with source control.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Every service is also reachable from the horizonal switcher at the very top
+      of the page — useful once you work across several projects in the same organization.
+    </div>
+  </section>
+
+  <!-- ===================== MORE STEPS APPENDED HERE ===================== -->
+
+  <!-- ===================== STEP 19 ===================== -->
+  <section class="step" id="step-19">
+    <div class="step-header">
+      <div class="step-num">19</div>
+      <h2>Guest lands on My Apps (myapplications.microsoft.com)</h2>
+    </div>
+
+    <p class="intro">
+      This is the redirect destination promised by the invitation email — the guest's proof that the
+      redemption worked. The <strong>My Apps</strong> portal is the personal launchpad a user gets for
+      every organization they belong to.
+    </p>
+
+    <ol class="actions">
+      <li>After clicking <em>Accept</em> on the permissions screen, the browser lands on
+          <span class="ui-ref">myapplications.microsoft.com</span> — the <strong>Apps dashboard</strong>.</li>
+      <li>&ldquo;There are no apps to show&rdquo; is the expected result: the guest hasn't been assigned any
+          enterprise applications yet, and none are needed for this project.</li>
+      <li>The important part is invisible: the invited Microsoft account is now linked to the
+          <span class="ui-ref">Directorio predeterminado</span> directory as a <strong>Guest</strong>.</li>
+      <li>The guest can simply close this tab. The rest of the work — granting the
+          <strong>Contributor</strong> role — happens on the owner's account, as shown from step 24 on.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-19-my-apps.png"
+         alt="My Apps dashboard at myapplications.microsoft.com showing 'There are no apps to show'">
+    <p class="caption">Step 19 — The empty My Apps dashboard confirms the guest redemption completed.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> If the guest ever needs to switch between their personal context and this
+      organization, the account icon (top-right) lists every directory they belong to.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 20 ===================== -->
+  <section class="step" id="step-20">
+    <div class="step-header">
+      <div class="step-num">20</div>
+      <h2>Verify the guest appears in the users list</h2>
+    </div>
+
+    <p class="intro">
+      Back on the owner's account (check the top-right corner: the session is signed in as
+      <span class="ui-ref">manuelacortesgranados…</span> in <em>Directorio predeterminado</em>), refresh the
+      directory to confirm the invitation landed.
+    </p>
+
+    <ol class="actions">
+      <li>Reopen <strong>Users | All users</strong> (breadcrumb highlighted at the top-left).</li>
+      <li>The list now reports <strong>3 users found</strong>: the member
+          <span class="ui-ref">Manuela Cortés Granados</span>, the earlier guest
+          <span class="ui-ref">Aura Cristina Garzón Rodriguez</span>, and — highlighted in red — the newly
+          invited <span class="ui-ref">veeduriabg@gmail.com</span> with
+          <em>User type: Guest</em> and <em>Creation type: Invitation</em>.</li>
+      <li>Seeing the guest listed means the invitation was redeemed successfully — no pending acceptance
+          remains.</li>
+      <li>Optionally click the user's name to open their profile (status, contact info, resend/reset
+          actions live there).</li>
+      <li>The directory is ready; next comes granting the <strong>Contributor</strong> role on the
+          subscription.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-20-verify-guest.png"
+         alt="Users | All users page showing 3 users with the newly invited guest veeduriabg@gmail.com highlighted">
+    <p class="caption">Step 20 — The invited guest now appears in Users | All users as "Guest / Invitation".</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> If a guest shows up but with a <em>Pending</em> acceptance state, they haven't
+      redeemed the invitation yet — open their profile and use <em>Resend invitation</em>, or share the
+      redemption link directly.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 21 ===================== -->
+  <section class="step" id="step-21">
+    <div class="step-header">
+      <div class="step-num">21</div>
+      <h2>Open <em>Subscriptions</em> from the portal home</h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Contributor</strong> role will be granted at the subscription level, so the first move is
+      to reach your subscription. The portal home offers a direct shortcut to it.
+    </p>
+
+    <ol class="actions">
+      <li>On the Azure portal home, under <strong>Azure services</strong>, click the
+          <span class="ui-ref">Subscriptions</span> tile — the yellow key icon (highlighted in red below).</li>
+      <li>You can also reach it from the <strong>Resources</strong> list below, where
+          <span class="ui-ref">Azure subscription 1</span> appears under <em>Recent</em>.</li>
+      <li>The <strong>Subscriptions</strong> page opens, listing your subscription — click
+          <span class="ui-ref">Azure subscription 1</span> to open it; the <em>Access control (IAM)</em>
+          step follows.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-21-subscriptions-tile.png"
+         alt="Azure portal home with the Subscriptions tile highlighted under Azure services and recent resources listed">
+    <p class="caption">Step 21 — Click the "Subscriptions" tile to reach Azure subscription 1.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Subscriptions are billing and access boundaries — everything created in this
+      guide (resource group, Function App) lives inside <em>Azure subscription 1</em>, which is why roles
+      are assigned at that level.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 22 ===================== -->
+  <section class="step" id="step-22">
+    <div class="step-header">
+      <div class="step-num">22</div>
+      <h2>Open <em>Azure subscription 1</em></h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Subscriptions</strong> page lists every subscription you can manage, with its health at a
+      glance — role, cost, and status. One click takes you inside.
+    </p>
+
+    <ol class="actions">
+      <li>On the <strong>Subscriptions</strong> page, locate <span class="ui-ref">Azure subscription 1</span>
+          (highlighted in red below) — the only subscription in this directory.</li>
+      <li>Check the row's details before opening it: <strong>Status: Active</strong>,
+          <strong>My role: Owner</strong>, <strong>Current cost: $0.00</strong>, and the subscription ID
+          <span class="ui-ref">0e9f2fce-a0ea-4f4d-9efa-f7113d99c023</span>.</li>
+      <li>Click the subscription name to open its <strong>Overview</strong> blade.</li>
+      <li>The next step works from this blade's <em>Access control (IAM)</em> menu, where the
+          <strong>Contributor</strong> role will be granted to the invited guest.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-22-open-subscription.png"
+         alt="Subscriptions page with Azure subscription 1 highlighted, showing Owner role, Active status and $0.00 current cost">
+    <p class="caption">Step 22 — Open "Azure subscription 1" (Active, you are Owner) to manage its access.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Only <em>Owners</em> and <em>User Access Administrators</em> can assign roles.
+      If your <strong>My role</strong> column shows <em>Reader</em> or <em>Contributor</em> instead, ask an
+      owner to either elevate your access or perform the assignment for you.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 23 ===================== -->
+  <section class="step" id="step-23">
+    <div class="step-header">
+      <div class="step-num">23</div>
+      <h2>Open <em>Access control (IAM)</em> from the subscription Overview</h2>
+    </div>
+
+    <p class="intro">
+      Inside <span class="ui-ref">Azure subscription 1</span>, the <strong>Overview</strong> blade shows the
+      essentials (ID, directory, status, your role, plan) plus cost and usage charts. The menu on the left
+      is where access management lives.
+    </p>
+
+    <ol class="actions">
+      <li>On the subscription's <strong>Overview</strong> blade, look at the left navigation menu.</li>
+      <li>Click <strong>Access control (IAM)</strong> — highlighted in red with the arrow annotation
+          below, right under <em>Activity log</em>.</li>
+      <li>The IAM blade opens, defaulted to the <em>Check access</em> view. The
+          <strong>Role assignments</strong> tab — covered in the next step — is where you'll see and add
+          role assignments.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-23-open-iam.png"
+         alt="Azure subscription 1 Overview blade with Access control (IAM) highlighted in the left menu">
+    <p class="caption">Step 23 — Click "Access control (IAM)" in the subscription's left menu.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> IAM stands for Identity and Access Management — Azure RBAC's control center.
+      The same blade exists at every scope (management group, resource group, single resource), so the same
+      flow applies if you ever want to grant access to just one resource group.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 24 ===================== -->
+  <section class="step" id="step-24">
+    <div class="step-header">
+      <div class="step-num">24</div>
+      <h2>Open <em>Access control (IAM) &rarr; Role assignments</em> on the subscription</h2>
+    </div>
+
+    <p class="intro">
+      With the guest active in the directory, it's time to grant them permissions over the subscription's
+      resources. Back on the <strong>owner's account</strong>, Azure RBAC (role-based access control) is
+      managed from the subscription's <em>Access control (IAM)</em> blade.
+    </p>
+
+    <ol class="actions">
+      <li>From the portal, go to <strong>Subscriptions</strong> and open
+          <span class="ui-ref">Azure subscription 1</span>.</li>
+      <li>In the left menu, click <strong>Access control (IAM)</strong> (highlighted in red below).</li>
+      <li>Select the <strong>Role assignments</strong> tab (highlighted, with the arrow annotation) — this
+          lists everyone who currently has a role on the subscription.</li>
+      <li>To grant the Contributor role, click <span class="ui-ref">Add role assignment</span> in the
+          <em>&ldquo;Grant access to this resource&rdquo;</em> card — or the
+          <span class="ui-ref">+ Add</span> button at the top of the blade. The assignment wizard is covered
+          in the next steps.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-24-access-control-iam.png"
+         alt="Azure subscription 1 Access control (IAM) page with the Role assignments tab highlighted and the Add role assignment card visible">
+    <p class="caption">Step 24 — On the subscription, open Access control (IAM) and go to the Role assignments tab.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The orange banner about classic administrator roles being retired (August 31,
+      2024) only matters for old <em>Co-Administrator</em>/<em>Service Administrator</em> setups — always use
+      Azure RBAC roles like <em>Contributor</em>, as this guide does.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 25 ===================== -->
+  <section class="step" id="step-25">
+    <div class="step-header">
+      <div class="step-num">25</div>
+      <h2>Start the assignment — <em>Add &rarr; Add role assignment</em></h2>
+    </div>
+
+    <p class="intro">
+      On the <strong>Role assignments</strong> tab you can review who already has access — the list below
+      shows <em>Owner (2)</em> and <em>Contributor (2)</em> entries at the <em>This resource</em> scope,
+      with 5 of the 4,000 allowed assignments in use. To add a new one, the <span class="ui-ref">+ Add</span>
+      button in the toolbar opens the correct entry point.
+    </p>
+
+    <ol class="actions">
+      <li>On the <strong>Role assignments</strong> tab, open the <span class="ui-ref">+ Add</span> dropdown
+          in the toolbar (highlighted in red below).</li>
+      <li>Choose <strong>Add role assignment</strong> — the RBAC route.</li>
+      <li>Avoid the other two options: <em>Add co-administrator</em> belongs to the retired classic
+          administrator model, and <em>Add custom role</em> is for defining brand-new role definitions, not
+          assigning existing ones.</li>
+      <li>The <strong>Add role assignment</strong> wizard opens with its four tabs — <em>Role</em>,
+          <em>Members</em>, <em>Conditions</em>, and <em>Review + assign</em> — configured in the following
+          steps.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-25-add-role-assignment.png"
+         alt="IAM Role assignments tab with the + Add dropdown open and 'Add role assignment' highlighted">
+    <p class="caption">Step 25 — Toolbar "+ Add" → "Add role assignment" starts the wizard.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Azure allows up to 4,000 role assignments per subscription. Assigning roles
+      to <strong>groups</strong> instead of individual users counts as one assignment and scales much
+      better as the team grows.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 26 ===================== -->
+  <section class="step" id="step-26">
+    <div class="step-header">
+      <div class="step-num">26</div>
+      <h2>Sign out to switch accounts</h2>
+    </div>
+
+    <p class="intro">
+      This guide switches between two identities — the guest (<span class="ui-ref">veeduriabg@gmail.com</span>)
+      and the subscription owner (<span class="ui-ref">Manuela Cortés Granados</span>). The account menu in
+      the portal's top-right corner is how you move between them. Here, the signed-in guest signs out so the
+      owner can continue the <em>Add role assignment</em> flow.
+    </p>
+
+    <ol class="actions">
+      <li>Click your avatar / account name in the portal's <strong>top-right corner</strong>. The menu shows
+          the current identity — <span class="ui-ref">veeduriabg@gmail.com</span> under
+          <em>Directorio predeterminado</em> — with <span class="ui-ref">View account</span> and
+          <span class="ui-ref">Switch organization</span> links.</li>
+      <li>Click <strong>Sign out</strong> (highlighted in red below) to end the session completely.</li>
+      <li>To change identity <em>without</em> a full sign-out, use
+          <strong>&ldquo;Sign in with a different account&rdquo;</strong> at the bottom of the same menu —
+          handy when both accounts are yours.</li>
+      <li>Sign back in as the subscription owner (<span class="ui-ref">Manuela Cortés Granados</span>) and
+          return to <em>Access control (IAM)</em> to continue the role assignment wizard.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-26-sign-out.png"
+         alt="Azure portal account menu for veeduriabg@gmail.com with the Sign out option highlighted">
+    <p class="caption">Step 26 — The account menu: "Sign out" ends the session; "Sign in with a different account" switches identity.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Both accounts belong to the same directory, so
+      <em>Switch organization</em> is unnecessary here — that option is for users who belong to several
+      tenants and need to hop between them.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 27 ===================== -->
+  <section class="step" id="step-27">
+    <div class="step-header">
+      <div class="step-num">27</div>
+      <h2>As the Contributor: choose <em>Function App</em> again</h2>
+    </div>
+
+    <p class="intro">
+      Now the collaborator's turn. With the <strong>Contributor</strong> role granted, the guest
+      (<span class="ui-ref">veeduriabg@gmail.com</span> — check the top-right corner) can create and manage
+      resources on their own. The Marketplace flow is the same one from steps 8 and 9, but this time it
+      succeeds under the guest's own credentials.
+    </p>
+
+    <ol class="actions">
+      <li>Signed in as <span class="ui-ref">veeduriabg@gmail.com</span>, open
+          <strong>Create a resource</strong> from the portal home.</li>
+      <li>In <em>Popular Azure services</em>, click the <strong>Function App</strong> tile (highlighted in
+          red below) — or search for it — and then <span class="ui-ref">Create</span>.</li>
+      <li>Thanks to the Contributor assignment, the wizard will let you pick the subscription
+          (<span class="ui-ref">Azure subscription 1</span>) and complete creation — without it, the
+          <em>Review + create</em> validation would fail with a &ldquo;does not have permission&rdquo;
+          error.</li>
+      <li>Fill in the wizard's tabs as before: Basics (resource group, name, runtime stack, region, plan),
+          then Hosting, Networking, Monitoring, and finally <em>Review + create</em>.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-27-contributor-function-app.png"
+         alt="Create a resource Marketplace page signed in as veeduriabg@gmail.com with the Function App tile highlighted">
+    <p class="caption">Step 27 — The collaborator (Contributor) selects Function App to create it themselves.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> A Contributor can do almost everything with resources, but cannot modify
+      <em>access</em> (that's Owner/User Access Administrator territory) — the reason the role-assignment
+      wizard had to be run by Manuela.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 28 ===================== -->
+  <section class="step" id="step-28">
+    <div class="step-header">
+      <div class="step-num">28</div>
+      <h2>Select the hosting option — <em>Flex Consumption</em></h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Create Function App</strong> wizard starts by asking how the app will be hosted — this
+      choice determines how it scales, what resources each instance gets, and how it is billed. The page
+      lays the five options side by side in a comparison table.
+    </p>
+
+    <ol class="actions">
+      <li>Review the comparison table: <em>Scale to zero</em>, <em>Scale behavior</em>,
+          <em>Virtual networking</em>, <em>Dedicated compute / cold start</em>, and
+          <em>Max scale out (instances)</em>.</li>
+      <li>Select <strong>Flex Consumption</strong> (highlighted in red below) — high scalability with
+          compute choices, virtual networking support, pay-as-you-go billing, scale to zero, fast
+          event-driven scaling, and up to 1,000 instances.</li>
+      <li>The alternatives, for reference: <em>Consumption</em> (the classic pay-per-execution plan, up to
+          200 instances), <em>Functions Premium</em> (pre-warmed instances, no cold start),
+          <em>App Service</em> (runs web and function apps on a dedicated plan), and
+          <em>Container Apps environment</em> (containerized microservices with KEDA).</li>
+      <li>Click <span class="ui-ref">Select</span> (highlighted at the bottom-left) to confirm and move on
+          to the <strong>Basics</strong> tab.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-28-hosting-option.png"
+         alt="Create Function App hosting option comparison with Flex Consumption selected and the Select button highlighted">
+    <p class="caption">Step 28 — Pick "Flex Consumption" and click Select to continue.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> For a learning or low-traffic project, Flex Consumption and classic
+      Consumption are effectively free at small volumes (monthly free grant). Flex is the newer generation
+      and the portal's default — a safe choice for this guide.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 29 ===================== -->
+  <section class="step" id="step-29">
+    <div class="step-header">
+      <div class="step-num">29</div>
+      <h2>Fill in the <em>Basics</em> tab</h2>
+    </div>
+
+    <p class="intro">
+      The <strong>Basics</strong> tab gathers the identity of the app: where it lives (subscription and
+      resource group), what it is called, where it runs, and on what technology. The fields highlighted in
+      red below are the ones touched in this example.
+    </p>
+
+    <ol class="actions">
+      <li><strong>Project Details</strong>: confirm <span class="ui-ref">Subscription: Azure subscription
+          1</span> and set <span class="ui-ref">Resource Group: AzureResourceGroup1</span> (or click
+          <em>Create new</em> for a fresh group).</li>
+      <li><strong>Instance Details</strong>: set the <span class="ui-ref">Function App name</span> — here
+          <span class="ui-ref">FunctionAppGrupoLoyal</span>. It must be globally unique: it becomes
+          <span class="ui-ref">functionappgrupoloyal.azurewebsites.net</span>. The green check means the
+          name is available.</li>
+      <li>Choose the <span class="ui-ref">Region: Canada Central</span> — normally the region closest to
+          your users.</li>
+      <li>Pick the technology: <span class="ui-ref">Runtime stack: .NET</span> with
+          <span class="ui-ref">Version: 8 (LTS), isolated worker model</span>, and
+          <span class="ui-ref">Instance size: 2048 MB</span>.</li>
+      <li>Click <span class="ui-ref">Review + create</span> (highlighted at the bottom-left) to jump
+          straight to validation — or walk the remaining tabs (<em>Storage</em>,
+          <em>Networking</em>, <em>Monitoring</em>, <em>Deployment</em>, <em>Authentication</em>,
+          <em>Tags</em>) with <em>Next</em> if you need non-default settings.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-29-basics-tab.png"
+         alt="Create Function App Basics tab with subscription, resource group, name FunctionAppGrupoLoyal, runtime stack .NET and instance size highlighted">
+    <p class="caption">Step 29 — Basics: subscription, resource group, unique name, region, .NET 8 runtime, instance size.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> The <em>isolated worker model</em> for .NET 8 runs your code in a separate
+      process — it's the model Microsoft recommends for .NET 8 and the only one that will support future
+      .NET versions in Functions.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 30 ===================== -->
+  <section class="step" id="step-30">
+    <div class="step-header">
+      <div class="step-num">30</div>
+      <h2>Review the summary and click <em>Create</em></h2>
+    </div>
+
+    <p class="intro">
+      The <em>Review + create</em> tab runs a final validation and condenses the whole configuration into
+      one summary — the last chance to catch a typo before resources are actually provisioned (and before
+      anything can bill).
+    </p>
+
+    <ol class="actions">
+      <li>Open the <span class="ui-ref">Review + create</span> tab (highlighted at the top). The blue banner
+          about <em>basic authentication being disabled</em> is informational — modern deployments use
+          Microsoft Entra credentials instead.</li>
+      <li>Check the <strong>Details</strong> block: subscription
+          <span class="ui-ref">0e9f2fce-…</span>, resource group <span class="ui-ref">AzureResourceGroup1</span>,
+          name <span class="ui-ref">FunctionAppGrupoLoyal</span>, runtime
+          <span class="ui-ref">.NET 8 (LTS), isolated worker model</span>, instance size
+          <span class="ui-ref">2048 MB</span>.</li>
+      <li>Check the <strong>Hosting</strong> block — Azure will create these automatically: storage account
+          <span class="ui-ref">azureresourcegroup1a3fd</span> (required by Functions) and the Flex
+          Consumption plan <span class="ui-ref">ASP-AzureResourceGroup1-9c29</span> (Linux, Canada Central),
+          plus <em>Monitoring (New)</em> — the Application Insights resource.</li>
+      <li>Optionally click <span class="ui-ref">Download a template for automation</span> to export the
+          equivalent ARM/Bicep template — handy for Infrastructure as Code later.</li>
+      <li>Click <span class="ui-ref">Create</span> (highlighted at the bottom-left). This fires the template
+          deployment confirmed by the notification in the next step.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-30-review-create.png"
+         alt="Review + create summary for FunctionAppGrupoLoyal with the Create button highlighted and an arrow pointing at it">
+    <p class="caption">Step 30 — Validate the summary and click "Create" to provision everything.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Note what gets created for you: one Function App, one storage account, one
+      hosting plan, and one Application Insights instance. Keeping them in the same resource group
+      (<em>AzureResourceGroup1</em>) means you can delete — or redeploy — the whole project as a unit.
+    </div>
+  </section>
+
+  <!-- ===================== STEP 31 ===================== -->
+  <section class="step" id="step-31">
+    <div class="step-header">
+      <div class="step-num">31</div>
+      <h2>Confirmation — &ldquo;Initializing deployment&rdquo; of the Function App</h2>
+    </div>
+
+    <p class="intro">
+      After the Function App wizard's final <em>Review + create</em> validation passes and
+      <strong>Create</strong> is clicked, Azure submits an ARM template deployment behind the scenes —
+      the portal reports it immediately in the notification panel.
+    </p>
+
+    <ol class="actions">
+      <li>Look at the top-right notification (highlighted in red below):
+          <strong>&ldquo;Initializing deployment…&rdquo;</strong> — <em>Initializing template deployment to
+          resource group &lsquo;AzureResourceGroup1&rsquo;</em>.</li>
+      <li>This means the Function App and its dependencies (storage account, Application Insights,
+          hosting plan) are being rolled out as a single template deployment into
+          <span class="ui-ref">AzureResourceGroup1</span>.</li>
+      <li>After a minute or two the notification changes to <em>&ldquo;Deployment is in progress&rdquo;</em>
+          and finally <em>&ldquo;Your deployment is complete&rdquo;</em>, with a
+          <strong>Go to resource</strong> shortcut.</li>
+      <li>To follow the rollout in detail, open the resource group
+          (<span class="ui-ref">AzureResourceGroup1</span>) and check <strong>Deployments</strong> — or click
+          the notification itself, which links to the deployment's progress page.</li>
+    </ol>
+
+    <img class="screenshot" src="images/step-31-initializing-deployment.png"
+         alt="Azure portal notification 'Initializing deployment… — Initializing template deployment to resource group AzureResourceGroup1'">
+    <p class="caption">Step 31 — The template deployment to AzureResourceGroup1 has started.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> A Function App deployment typically completes in 2–4 minutes. Navigating away
+      doesn't cancel it — but keeping the notification open makes it easy to jump straight to the finished
+      resource via <em>Go to resource</em>.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  IT Knowledge Base · Azure DevOps Setup Guide · Screenshots provided by the author
+</footer>
+
+<!-- ===================== IMAGE LIGHTBOX ===================== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="High-resolution image preview">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close preview">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+  (function () {
+    var lightbox        = document.getElementById('lightbox');
+    var lightboxImg     = document.getElementById('lightboxImg');
+    var lightboxCaption = document.getElementById('lightboxCaption');
+    var closeBtn        = document.getElementById('lightboxClose');
+
+    function openLightbox(img) {
+      lightboxImg.src = img.src;          // same full-resolution file, unconstrained size
+      lightboxImg.alt = img.alt;
+      var step = img.closest('.step');
+      var cap  = step ? step.querySelector('.caption') : null;
+      lightboxCaption.textContent = cap ? cap.textContent : '';
+      lightbox.classList.add('open');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.classList.remove('modal-open');
+      lightboxImg.src = '';
+    }
+
+    // Bind to every screenshot on the page (works for future steps too)
+    document.querySelectorAll('.screenshot').forEach(function (img) {
+      img.addEventListener('click', function () { openLightbox(img); });
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    // Click on the dark backdrop (but not the image) closes it
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // ESC key closes it
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+    });
+  })();
+</script>
+
+</body>
+</html>

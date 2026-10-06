@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker — Beginner Questions and Answers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1d63b8;
+            text-align: center;
+            border-bottom: 3px solid #2496ed;
+            padding-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1d63b8;
+            border-bottom: 2px solid #d6e6f7;
+            padding-bottom: 5px;
+            margin-top: 35px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        code {
+            background: #eef4fb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, 'Courier New', monospace;
+            color: #c7254e;
+            font-size: 0.95em;
+        }
+        pre {
+            background: #1e2430;
+            color: #e8ecf1;
+            padding: 14px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            border-left: 5px solid #2496ed;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        p {
+            line-height: 1.7;
+            color: #444;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #d6e6f7;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #eef4fb;
+            color: #1d63b8;
+        }
+        .levels {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+            background: #eef4fb;
+            border-radius: 8px;
+        }
+        .levels a {
+            color: #1d63b8;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+        .levels a:hover {
+            color: #2496ed;
+            text-decoration: underline;
+        }
+        .levels .current {
+            color: #2496ed;
+            border-bottom: 2px solid #2496ed;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            color: #888;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            color: #2496ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Docker — Beginner Questions and Answers</h1>
+        <div class="levels">
+            <a href="index_basic.html" class="current">Beginner</a> |
+            <a href="../02_INTERMEDIATE/index_intermediate.html">Intermediate</a> |
+            <a href="../03_ADVANCED/index_advanced.html">Advanced</a> |
+            <a href="../DOCKER_COMPOSE/docker_compose.html">Docker Compose</a>
+        </div>
+
+        <h2>1. What is Docker and why should I use it?</h2>
+        <p>Docker is an open-source platform for building, shipping, and running applications in <strong>containers</strong>. A container packages an application together with everything it needs to run — the runtime, system libraries, dependencies, and configuration — so the application behaves identically on a laptop, a CI server, or production. It solves the classic <em>"it works on my machine"</em> problem: the machine is the container.</p>
+        <p>Key benefits:</p>
+        <ul>
+            <li><strong>Consistency:</strong> the same artifact runs in every environment.</li>
+            <li><strong>Isolation:</strong> applications and their dependencies do not conflict with each other or the host.</li>
+            <li><strong>Density:</strong> many containers run on a single host with very little overhead.</li>
+            <li><strong>Speed:</strong> containers start in milliseconds, enabling fast scaling and CI pipelines.</li>
+        </ul>
+
+        <h2>2. Containers vs. Virtual Machines</h2>
+        <p>Both provide isolation, but at different levels. A virtual machine virtualizes <em>hardware</em> and runs a full guest operating system. A container virtualizes at the <em>operating system</em> level and shares the host kernel.</p>
+        <table>
+            <tr><th>Aspect</th><th>Virtual Machine</th><th>Container</th></tr>
+            <tr><td>Guest OS</td><td>Full OS per VM (Windows, Linux...)</td><td>None — shares the host kernel</td></tr>
+            <tr><td>Size</td><td>Gigabytes</td><td>Megabytes</td></tr>
+            <tr><td>Boot time</td><td>Minutes</td><td>Milliseconds</td></tr>
+            <tr><td>Isolation</td><td>Strong (hardware level)</td><td>Process-level (namespaces, cgroups)</td></tr>
+            <tr><td>Overhead</td><td>High (hypervisor + OS)</td><td>Very low</td></tr>
+            <tr><td>Density per host</td><td>Tens</td><td>Hundreds</td></tr>
+        </table>
+        <p>They are complements, not rivals: containers frequently run <em>inside</em> VMs in cloud environments.</p>
+
+        <h2>3. What are the core components of Docker's architecture?</h2>
+        <ul>
+            <li><strong>Docker Client</strong> — the <code>docker</code> CLI. You type commands; it talks to the daemon via a REST API (Unix socket or TCP).</li>
+            <li><strong>Docker Daemon</strong> (<code>dockerd</code>) — the server that builds images, runs containers, and manages volumes and networks. It uses <code>containerd</code> underneath to actually manage container processes.</li>
+            <li><strong>Images</strong> — read-only templates used to create containers.</li>
+            <li><strong>Containers</strong> — runnable instances of images.</li>
+            <li><strong>Registry</strong> — stores and distributes images. The default public registry is <a href="https://hub.docker.com" target="_blank">Docker Hub</a>; private registries exist too (ECR, ACR, self-hosted).</li>
+        </ul>
+
+        <h2>4. What is an image? What is a container? How are they related?</h2>
+        <p>An <strong>image</strong> is an immutable template: a packaged filesystem (application + dependencies) plus metadata such as the default command and exposed ports. A <strong>container</strong> is a running (or stopped) instance of that image with a thin writable layer on top.</p>
+        <p>A useful analogy: the image is the <em>class</em>, containers are <em>object instances</em>. You can run many containers from one image, and deleting containers never modifies the image.</p>
+        <pre><code>docker images                 # list local images
+docker run -d --name web1 nginx   # container 1 from the nginx image
+docker run -d --name web2 nginx   # container 2 from the same image
+docker ps                     # see both containers running</code></pre>
+
+        <h2>5. What are image layers and why do they matter?</h2>
+        <p>Every instruction in a Dockerfile creates a <strong>layer</strong>: a filesystem diff stacked on top of the previous ones using a union filesystem. Layers matter because they are:</p>
+        <ul>
+            <li><strong>Cacheable:</strong> if nothing before an instruction changed, Docker reuses the cached layer, making rebuilds almost instant. This is why instruction <em>order</em> matters (rarely-changing steps first).</li>
+            <li><strong>Shareable:</strong> two images based on the same <code>node:20</code> base store that base only once on disk, and pulls transfer only missing layers.</li>
+            <li><strong>Immutable:</strong> deleting a file in a later layer does not shrink earlier layers — the data still exists underneath.</li>
+        </ul>
+
+        <h2>6. What is a registry and what are image tags?</h2>
+        <p>A <strong>registry</strong> is a service that stores and serves images. Docker Hub is the default. An image reference has the form <code>[registry/][namespace/]name[:tag]</code>:</p>
+        <pre><code>docker pull nginx                 # nginx:latest from Docker Hub (implicit tag)
+docker pull nginx:1.27-alpine     # specific version + variant
+docker pull myregistry.corp.com/team/api:1.4.2   # private registry</code></pre>
+        <p><strong>Watch out for <code>latest</code>:</strong> it is just the default tag, not "newest version", and it is not guaranteed to be stable. Pin explicit versions in real projects.</p>
+
+        <h2>7. What are the essential Docker commands?</h2>
+        <pre><code># Images
+docker pull nginx:1.27            # download an image
+docker images                     # list local images
+docker rmi nginx:1.27             # remove an image
+
+# Containers
+docker run -d --name web -p 8080:80 nginx   # create + start
+docker ps                         # running containers
+docker ps -a                      # all containers (including stopped)
+docker stop web                   # graceful stop (SIGTERM, then SIGKILL)
+docker start web                  # start a stopped container
+docker restart web
+docker rm web                     # delete a stopped container
+docker rm -f web                  # force-delete a running one</code></pre>
+
+        <h2>8. What does <code>docker run</code> actually do, and what are its most common flags?</h2>
+        <p><code>docker run</code> creates a container from an image and starts it. If the image is not local, it is pulled first. The flags you will use daily:</p>
+        <pre><code>docker run \
+  --name my-api \          # human-readable container name
+  -d \                     # detached: run in the background
+  -p 8080:8000 \           # publish: host port 8080 -> container port 8000
+  -e APP_ENV=prod \        # environment variable
+  -v mydata:/var/lib/data \# named volume for persistence
+  --rm \                   # auto-remove when it stops (great for one-offs)
+  -it \                    # interactive + TTY (for shells and CLIs)
+  my-api-image:1.0</code></pre>
+        <p>A quick interactive example — a throwaway Ubuntu shell:</p>
+        <pre><code>docker run --rm -it ubuntu:24.04 bash</code></pre>
+
+        <h2>9. How do I inspect and debug a running container?</h2>
+        <pre><code>docker logs -f web            # follow stdout/stderr output
+docker logs --tail 100 web    # last 100 lines
+docker exec -it web bash      # open a shell inside the running container
+docker exec web ls /app       # run a one-off command inside it
+docker inspect web            # full JSON: IP, mounts, env, restart policy...
+docker stats                  # live CPU/memory per container
+docker cp web:/app/log.txt .  # copy files in/out of a container</code></pre>
+        <p>Remember: applications should log to stdout/stderr (not files inside the container) so <code>docker logs</code> works.</p>
+
+        <h2>10. How do I write my first Dockerfile?</h2>
+        <p>A Dockerfile is a text file named <code>Dockerfile</code> with one instruction per line. A minimal Python web app:</p>
+        <pre><code>FROM python:3.12-slim        # base image: official Python, slim variant
+
+WORKDIR /app                 # set the working directory inside the image
+
+COPY requirements.txt .      # copy dependency list first (cache trick)
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .                     # now copy the rest of the source code
+
+EXPOSE 8000                  # document the port the app listens on
+
+CMD ["python", "app.py"]     # default command when the container starts</code></pre>
+        <p>Instruction meanings:</p>
+        <ul>
+            <li><code>FROM</code> — the base image everything builds on. Always start from an official, small image.</li>
+            <li><code>WORKDIR</code> — creates and switches to the directory for subsequent instructions.</li>
+            <li><code>COPY</code> — copies files from your machine (the <em>build context</em>) into the image.</li>
+            <li><code>RUN</code> — executes a command <em>at build time</em> (installing dependencies, compiling).</li>
+            <li><code>EXPOSE</code> — documentation only; it does not publish ports (that is <code>-p</code> at runtime).</li>
+            <li><code>CMD</code> — the default command <em>at run time</em>. Only one per image (the last wins).</li>
+        </ul>
+
+        <h2>11. How do I build an image and run it?</h2>
+        <pre><code>docker build -t my-api:1.0 .
+docker run -d --name api -p 8080:8000 my-api:1.0
+curl http://localhost:8080/</code></pre>
+        <p>The trailing <code>.</code> is the <strong>build context</strong> — the folder Docker sends to the daemon (and where it looks for the Dockerfile). Use <code>-f</code> if the Dockerfile has another name/location: <code>docker build -f deploy/Dockerfile .</code>. The <code>-t name:tag</code> flags name the resulting image.</p>
+
+        <h2>12. Volumes 101 — why does my data disappear, and how do I keep it?</h2>
+        <p>Container filesystems are <strong>ephemeral</strong>: when the container is removed, its writable layer is deleted too. Any data written inside the container (e.g., a database file) is lost. <strong>Volumes</strong> are Docker-managed storage that lives outside the container lifecycle:</p>
+        <pre><code>docker volume create appdata
+docker run -d --name db -v appdata:/var/lib/postgresql/data postgres:16
+docker volume ls
+docker volume inspect appdata</code></pre>
+        <p>Even if the <code>db</code> container is deleted and recreated, the <code>appdata</code> volume persists. Volumes are covered in more depth (volumes vs. bind mounts) in the <a href="../02_INTERMEDIATE/index_intermediate.html">Intermediate</a> level.</p>
+
+        <h2>13. How do I clean up my Docker installation?</h2>
+        <p>Docker accumulates stopped containers, dangling images, unused volumes, and build cache. Periodic cleanup:</p>
+        <pre><code>docker container prune          # remove all stopped containers
+docker image prune              # remove dangling (untagged) images
+docker image prune -a           # remove ALL images not used by a container
+docker volume prune             # remove unused volumes  (data loss risk!)
+docker system prune             # everything above + unused networks
+docker system prune -a --volumes # nuclear option: also unused images/volumes
+docker system df                # show disk usage by images/containers/volumes</code></pre>
+        <p>Be careful with volume pruning — it deletes data that is not currently attached to a container.</p>
+
+        <a class="back-link" href="../../IT.html">&#8592; Back to IT Knowledge Base</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Compose — Multi-Container Applications</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, Calibri, sans-serif;
+            line-height: 1.6;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1d63b8;
+            text-align: center;
+            border-bottom: 3px solid #2496ed;
+            padding-bottom: 12px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #1d63b8;
+            border-bottom: 2px solid #d6e6f7;
+            padding-bottom: 5px;
+            margin-top: 35px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        code {
+            background: #eef4fb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, 'Courier New', monospace;
+            color: #c7254e;
+            font-size: 0.95em;
+        }
+        pre {
+            background: #1e2430;
+            color: #e8ecf1;
+            padding: 14px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 14px;
+            border-left: 5px solid #2496ed;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        p {
+            line-height: 1.7;
+            color: #444;
+        }
+        ul li, ol li {
+            margin: 4px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #d6e6f7;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #eef4fb;
+            color: #1d63b8;
+        }
+        .levels {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+            background: #eef4fb;
+            border-radius: 8px;
+        }
+        .levels a {
+            color: #1d63b8;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+        .levels a:hover {
+            color: #2496ed;
+            text-decoration: underline;
+        }
+        .levels .current {
+            color: #2496ed;
+            border-bottom: 2px solid #2496ed;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 35px;
+            color: #888;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            color: #2496ed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Docker Compose — Multi-Container Applications</h1>
+        <div class="levels">
+            <a href="../01_BASIC/index_basic.html">Beginner</a> |
+            <a href="../02_INTERMEDIATE/index_intermediate.html">Intermediate</a> |
+            <a href="../03_ADVANCED/index_advanced.html">Advanced</a> |
+            <a href="docker_compose.html" class="current">Docker Compose</a>
+        </div>
+
+        <h2>1. What is Docker Compose and when should I use it?</h2>
+        <p>Docker Compose lets you define a <strong>whole multi-container application</strong> — your API, its database, a cache, a queue — in a single declarative YAML file, then manage the entire stack with one command: <code>docker compose up</code>. It creates the network, resolves service names, wires volumes, and handles startup order for you.</p>
+        <p>Typical uses: local development environments, integration/system test environments, demos, and simple single-host deployments. It is <em>not</em> a cluster orchestrator — that is Kubernetes territory (see the Advanced page).</p>
+        <p>Command syntax note: Docker Compose <strong>v2</strong> is a plugin invoked as <code>docker compose</code> (a space). The legacy v1 standalone binary was <code>docker-compose</code> (a hyphen). Use v2.</p>
+
+        <h2>2. The anatomy of a docker-compose.yml</h2>
+        <p>A complete example: a web API, a PostgreSQL database, and a Redis cache.</p>
+        <pre><code>services:
+  api:
+    build:                          # build the image from a Dockerfile
+      context: ./api
+      dockerfile: Dockerfile
+    image: myapp/api:dev            # tag given to the built image
+    ports:
+      - "8080:8000"                 # host:container
+    environment:
+      - DATABASE_URL=postgres://app:secret@db:5432/app
+      - REDIS_URL=redis://cache:6379
+    volumes:
+      - ./api:/code                 # bind mount: live code for development
+    depends_on:
+      db:
+        condition: service_healthy  # wait until db is really ready
+      cache:
+        condition: service_started
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app
+    volumes:
+      - db_data:/var/lib/postgresql/data   # named volume: persists data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  cache:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - cache_data:/data
+
+volumes:
+  db_data:
+  cache_data:</code></pre>
+        <p>Top-level keys: <code>services</code> (the containers), <code>volumes</code> (named volumes), <code>networks</code> (custom networks), and <code>name</code> (project name). Each service is roughly a <code>docker run</code> translated to YAML.</p>
+
+        <h2>3. Building images vs. pulling images</h2>
+        <ul>
+            <li><code>image: postgres:16-alpine</code> — pull (or reuse) a ready-made image from a registry.</li>
+            <li><code>build: ./path</code> — build from a Dockerfile; combine with <code>image:</code> to tag the result.</li>
+            <li><code>docker compose build</code> rebuilds; <code>docker compose up --build</code> rebuilds and starts in one go. Builds are cached just like plain <code>docker build</code>.</li>
+        </ul>
+
+        <h2>4. Ports, volumes, and environment in Compose</h2>
+        <ul>
+            <li><strong>Ports:</strong> short form <code>"8080:8000"</code>; long form binds to a specific host IP: <code>target: 8000, published: "8080"</code>. Quote the values — unquoted <code>5672:5672</code> can parse as YAML octal/base-60 and silently change meaning.</li>
+            <li><strong>Volumes:</strong> named volumes (<code>db_data:/var/lib/postgresql/data</code>) for persistent data; bind mounts (<code>./api:/code</code>) for live-reload development.</li>
+            <li><strong>Environment:</strong> list or map form, <code>env_file: .env</code> for batches, and <strong>variable substitution</strong> from the shell/<code>.env</code>: <code>- "DB_PASSWORD=${DB_PASSWORD}"</code>.</li>
+        </ul>
+
+        <h2>5. Startup order: depends_on and healthchecks</h2>
+        <p><code>depends_on</code> controls <em>start</em> order, not <em>readiness</em> — Postgres being "started" does not mean it accepts connections yet. Combine healthchecks with conditions:</p>
+        <pre><code>depends_on:
+  db:
+    condition: service_healthy    # wait for the healthcheck to pass
+  cache:
+    condition: service_started    # plain "it is running" is enough here</code></pre>
+        <p>This is the Compose equivalent of waiting for dependencies — it removes most "app crashes at boot because the DB wasn't ready" flakiness.</p>
+
+        <h2>6. Networking in Compose</h2>
+        <ul>
+            <li>Every Compose project gets its own default network; every service can reach the others <strong>by service name</strong> (<code>db</code>, <code>cache</code> — embedded DNS).</li>
+            <li>Custom networks let you segment the stack — e.g., keep the database off a "frontend" network:</li>
+        </ul>
+        <pre><code>services:
+  api:
+    networks: [frontend, backend]
+  db:
+    networks: [backend]           # not reachable from "frontend" services
+
+networks:
+  frontend:
+  backend:
+    internal: true                # no outbound internet access</code></pre>
+        <li style="list-style: none;"><code>external: true</code> networks connect Compose to pre-existing Docker networks (e.g., another project's network).</li>
+
+        <h2>7. The essential commands</h2>
+        <pre><code>docker compose up -d            # create + start everything, detached
+docker compose up -d api        # start just one service (and its deps)
+docker compose up --build       # rebuild images first
+docker compose ps               # stack status
+docker compose logs -f api      # follow one service's logs
+docker compose logs -f          # follow everything, interleaved
+docker compose exec api sh      # shell inside a running service
+docker compose run --rm api pytest   # one-off command (new container)
+docker compose stop             # stop without removing
+docker compose start            # resume
+docker compose restart api
+docker compose down             # stop + remove containers and networks
+docker compose down -v          # ... and volumes (DATA LOSS for db_data!)
+docker compose config           # validate + view the merged configuration
+docker compose pull             # pull latest images for all services</code></pre>
+        <p>Know the difference: <code>down</code> removes containers (their writable layers) but keeps named volumes unless you pass <code>-v</code>. Most "I lost my database" accidents are <code>down -v</code>.</p>
+
+        <h2>8. Reusing configuration: overrides, profiles, .env</h2>
+        <ul>
+            <li><strong>Multiple files:</strong> Compose automatically merges <code>docker-compose.override.yml</code> on top of <code>docker-compose.yml</code>. Common pattern: base file for the real stack, override for dev (bind mounts, debug ports). Explicit selection: <code>docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d</code>.</li>
+            <li><strong>Profiles:</strong> tag services with <code>profiles: ["debug"]</code> and start them only when wanted: <code>docker compose --profile debug up</code>.</li>
+            <li><strong>.env file:</strong> automatically loaded for variable substitution (<code>${DB_PASSWORD}</code>); add it to <code>.gitignore</code>.</li>
+            <li><strong>Project name:</strong> prefixes all resources (<code>myapp-api-1</code>); set via top-level <code>name:</code>, <code>-p</code>, or <code>COMPOSE_PROJECT_NAME</code>. Different names = isolated copies of the stack on one machine.</li>
+        </ul>
+
+        <h2>9. Scaling and one-off tasks</h2>
+        <pre><code>docker compose up -d --scale api=3      # 3 replicas behind the same network
+docker compose run --rm api python manage.py migrate   # one-off migration
+docker compose run --rm api pytest -q                  # run tests in the stack</code></pre>
+        <p>Scaling a service with a published host port conflicts (port already allocated) — for scaled services, remove fixed host ports and put a load balancer in front.</p>
+
+        <h2>10. Is Compose suitable for production?</h2>
+        <p>For a small, single-host deployment with modest availability needs — yes, especially with <code>restart: unless-stopped</code> and healthchecks. Compose limits become visible when you need:</p>
+        <ul>
+            <li>Multiple hosts / self-healing rescheduling (a dead host stays dead in Compose).</li>
+            <li>Rolling deployments with zero downtime.</li>
+            <li>Horizontal autoscaling, advanced secret management, and service meshes.</li>
+        </ul>
+        <p>At that point move to Kubernetes or a managed container service (ECS/EKS/AKS — see the <a href="../03_ADVANCED/index_advanced.html">Advanced</a> page). Compose files also translate well: many teams use them as the source of truth for what runs, then deploy the same images to an orchestrator.</p>
+
+        <a class="back-link" href="../../IT.html">&#8592; Back to IT Knowledge Base</a>
+    </div>
+</body>
+</html>

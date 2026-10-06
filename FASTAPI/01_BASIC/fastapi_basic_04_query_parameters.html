@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Parameters</title>
+    <style>
+        body { font-family: Arial, Calibri, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 20px; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, "Courier New", monospace; }
+        .question { background-color: #e0f7fa; padding: 10px; border-left: 5px solid #00838f; margin-bottom: 10px; font-weight: bold; }
+        .answer { background-color: #f1f8e9; padding: 15px; border-left: 5px solid #4caf50; margin-bottom: 20px; }
+        .nav { margin-top: 40px; font-size: 14px; }
+        .nav a { color: #2980b9; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Query Parameters</h1>
+    <p>Query parameters are the key-value pairs after the <code>?</code> in a URL (<code>/items?skip=0&amp;limit=10</code>). Any function parameter that is <strong>not</strong> part of the path is automatically treated as a query parameter.</p>
+
+    <h2>Required, Optional and Default Values</h2>
+    <pre><code>from typing import Optional
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/items/")
+def read_items(skip: int = 0, limit: int = 10):
+    return {"skip": skip, "limit": limit}
+
+@app.get("/search/")
+def search(q: Optional[str] = None):
+    return {"q": q}
+</code></pre>
+    <ul>
+        <li><code>skip: int = 0</code>: optional with default 0 &mdash; <code>/items/</code> works fine.</li>
+        <li><code>q: Optional[str] = None</code>: optional, no default value.</li>
+        <li><code>name: str</code> (no default): required &mdash; missing it returns 422.</li>
+    </ul>
+
+    <h2>Booleans Are Converted Automatically</h2>
+    <pre><code>@app.get("/products/")
+def list_products(active: bool = True):
+    return {"active": active}
+</code></pre>
+    <p>FastAPI accepts <code>active=true</code>, <code>active=1</code>, <code>active=yes</code>, <code>active=on</code> as <code>True</code>, and <code>false</code>, <code>0</code>, <code>no</code>, <code>off</code> as <code>False</code>.</p>
+
+    <h2>Multiple Values for the Same Key</h2>
+    <pre><code>from typing import List
+
+@app.get("/tags/")
+def filter_tags(tags: List[str] = []):
+    return {"tags": tags}
+</code></pre>
+    <p>A URL like <code>/tags/?tags=python&amp;tags=api</code> produces <code>tags=["python", "api"]</code>.</p>
+
+    <h2>Validation with Query()</h2>
+    <pre><code>from fastapi import FastAPI, Query
+
+@app.get("/items/")
+def read_items(
+    q: str | None = Query(default=None, min_length=3, max_length=50, pattern="^fixedquery"),
+    page: int = Query(default=1, gt=0),
+):
+    return {"q": q, "page": page}
+</code></pre>
+    <p><code>Query()</code> adds metadata (title, description, deprecated) and constraints (min_length, pattern, gt/ge) that appear both in validation errors and in the OpenAPI docs.</p>
+
+    <h2>Quick Questions and Answers</h2>
+
+    <div class="question">Q: How does FastAPI distinguish path parameters from query parameters?</div>
+    <div class="answer">
+        <p>A: By name. If the parameter name appears in the path template (<code>{item_id}</code>), it is a path parameter; otherwise it is read from the query string. Use <code>Path()</code> or <code>Query()</code> to be explicit.</p>
+    </div>
+
+    <div class="question">Q: What happens if a required query parameter is missing?</div>
+    <div class="answer">
+        <p>A: The request fails with 422 and a message like <code>{"loc": ["query", "name"], "msg": "Field required"}</code>. The client knows exactly what to fix.</p>
+    </div>
+
+    <div class="question">Q: Is <code>Optional[str] = None</code> the same as <code>str = None</code>?</div>
+    <div class="answer">
+        <p>A: Practically both make the parameter optional in FastAPI, but <code>Optional[str] = None</code> (or <code>str | None = None</code> in Python 3.10+) is the correct typing; a plain <code>str = None</code> lies to the type checker and modern FastAPI versions may reject it.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>Query parameters handle filtering, pagination and search options. Declaring them with types and <code>Query()</code> constraints gives you automatic conversion, validation, sensible 422 errors and self-documenting endpoints.</p>
+
+    <p class="nav"><a href="index_basic.html">&larr; Back to Basic Index</a></p>
+</body>
+</html>
