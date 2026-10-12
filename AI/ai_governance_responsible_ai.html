@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI - Arquitectura, Gobierno, Seguridad y Uso Responsable | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Inteligencia Artificial &mdash; Arquitectura, Escalamiento, Gobierno, Seguridad, Privacidad, Riesgos y Uso Responsable</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cuenta con experiencia o conocimientos en arquitectura y escalamiento de soluciones de IA, gobierno, seguridad, privacidad, gesti&oacute;n de riesgos y uso responsable de IA, incluyendo ISO/IEC 42001?</p>
+        <p><strong>Nota:</strong> la norma vigente es <strong>ISO/IEC 42001:2023</strong> (publicada en diciembre de 2023), el primer est&aacute;ndar internacional certificable de sistema de gesti&oacute;n de IA (AIMS). Cuando aparezca &laquo;42001:20&raquo; en la pregunta, se interpreta como esta versi&oacute;n.</p>
+        <p>Esta p&aacute;gina cubre los 8 bloques del temario: arquitectura (Q1&ndash;Q10), escalamiento (Q11&ndash;Q20), gobierno (Q21&ndash;Q30), seguridad (Q31&ndash;Q40), privacidad (Q41&ndash;Q48), gesti&oacute;n de riesgos (Q49&ndash;Q56), uso responsable (Q57&ndash;Q64) e ISO/IEC 42001:2023 (Q65&ndash;Q78), m&aacute;s una plantilla de respuesta para entrevista.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Arquitectura de soluciones de IA &mdash; 10 preguntas</a></li>
+        <li><a href="#s2">2. Escalamiento de soluciones de IA &mdash; 10 preguntas</a></li>
+        <li><a href="#s3">3. Gobierno de IA (AI Governance) &mdash; 10 preguntas</a></li>
+        <li><a href="#s4">4. Seguridad de IA &mdash; 10 preguntas</a></li>
+        <li><a href="#s5">5. Privacidad y protecci&oacute;n de datos &mdash; 8 preguntas</a></li>
+        <li><a href="#s6">6. Gesti&oacute;n de riesgos de IA &mdash; 8 preguntas</a></li>
+        <li><a href="#s7">7. Uso responsable de IA &mdash; 8 preguntas</a></li>
+        <li><a href="#s8">8. ISO/IEC 42001:2023 &mdash; 14 preguntas</a></li>
+        <li><a href="#s9">9. C&oacute;mo responder esta pregunta en una entrevista (plantilla)</a></li>
+        <li><a href="#s10">10. Est&aacute;ndares, marcos y referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Arquitectura de soluciones de IA</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es la arquitectura de una soluci&oacute;n de IA y en qu&eacute; se diferencia de una aplicaci&oacute;n tradicional?</p>
+        <p class="a">Es el dise&ntilde;o de todos los componentes que permiten llevar un modelo de IA desde los datos hasta el usuario final: datos, plataforma de entrenamiento, servicio de inferencia, aplicaci&oacute;n y capas transversales de MLOps, seguridad, observabilidad y gobernanza. A diferencia de una aplicaci&oacute;n tradicional (c&oacute;digo determinista y est&aacute;tico), un sistema de IA depende de datos y modelos que cambian en el tiempo (drift), no es completamente determinista y exige controles de IA responsable, trazabilidad de modelos y gesti&oacute;n continua del ciclo de vida.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Cu&aacute;les son las capas de una arquitectura de referencia de IA?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Capa de datos:</strong> ingesta (batch/streaming), almacenamiento (lakehouse), feature store, bases vectoriales, linaje y calidad de datos.</li>
+                <li><strong>Plataforma ML/LLM:</strong> pipelines de entrenamiento, experiment tracking, tuning, registro de modelos (model registry) y gesti&oacute;n de artefactos.</li>
+                <li><strong>Capa de serving/inferencia:</strong> APIs en tiempo real, inferencia batch y streaming, motores de servicio (Triton, vLLM), gateways de IA.</li>
+                <li><strong>Capa de aplicaci&oacute;n:</strong> integraci&oacute;n con canales de negocio, orquestaci&oacute;n (agentes, RAG), interfaces de usuario.</li>
+                <li><strong>Capas transversales:</strong> MLOps/LLMOps (CI/CD/CT), observabilidad, seguridad, privacidad, gobernanza y gesti&oacute;n de riesgos.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Qu&eacute; es una feature store y por qu&eacute; es importante?</p>
+        <p class="a">Es un repositorio centralizado de caracter&iacute;sticas (features) reutilizables, con versiones, linaje y consistencia entre entrenamiento y producci&oacute;n (offline store para entrenar, online store para servir con baja latencia). Evita el sesgo de entrenamiento-servicio (training/serving skew), acelera nuevos modelos y mejora la gobernanza de datos. Ejemplos: Feast, SageMaker Feature Store, Vertex AI Feature Store.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Qu&eacute; patrones existen para incorporar LLMs en una aplicaci&oacute;n?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Prompting / few-shot:</strong> r&aacute;pido y barato, sin entrenamiento; limitado por el contexto y el conocimiento del modelo.</li>
+                <li><strong>RAG:</strong> a&ntilde;ade conocimiento propio y actualizado en tiempo de consulta; reduce alucinaciones y facilita citar fuentes.</li>
+                <li><strong>Fine-tuning / LoRA / destilaci&oacute;n:</strong> adapta el modelo a tareas o estilos espec&iacute;ficos con datos propios; mayor costo y esfuerzo de MLOps.</li>
+                <li><strong>Agentes con herramientas:</strong> el modelo orquesta acciones (APIs, consultas, transacciones); requiere controles de seguridad estrictos (least privilege, aprobaci&oacute;n humana).</li>
+            </ul>
+            La elecci&oacute;n se decide por costo, latencia, privacidad de datos, precisi&oacute;n requerida y capacidad operativa.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;Qu&eacute; es RAG y cu&aacute;ndo conviene usarlo?</p>
+        <p class="a">Retrieval-Augmented Generation: combina un buscador sem&aacute;ntico (embeddings + base vectorial) con un LLM. Flujo: ingesta y chunking de documentos, generaci&oacute;n de embeddings, recuperaci&oacute;n por similitud, re-ranking y generaci&oacute;n de la respuesta con citas. Conviene cuando se necesita conocimiento privado, din&aacute;mico o verificable (normativa, cat&aacute;logos, documentaci&oacute;n interna) sin reentrenar el modelo. Clave: control de acceso por permisos en la recuperaci&oacute;n y evaluaci&oacute;n de calidad (evals de grounding).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Qu&eacute; diferencia hay entre MLOps y LLMOps?</p>
+        <p class="a">MLOps cubre el ciclo de vida de modelos cl&aacute;sicos (datos, entrenamiento, despliegue, monitoreo, reentrenamiento). LLMOps a&ntilde;ade pr&aacute;cticas propias de modelos fundacionales: gesti&oacute;n y versionado de prompts, evaluaciones autom&aacute;ticas y humanas (evals), guardrails de entrada/salida, observabilidad de tokens y costos, gesti&oacute;n de contexto/RAG y control de versiones del modelo del proveedor.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;C&oacute;mo se elige entre modelos por API (propietarios) y modelos abiertos auto-hospedados?</p>
+        <p class="a">Criterios: <strong>privacidad y cumplimiento</strong> (¿los datos pueden salir de la organizaci&oacute;n?), costo por token vs costo de infraestructura GPU, latencia, control de versiones, capacidad de personalizaci&oacute;n y esfuerzo operativo. Patr&oacute;n com&uacute;n: arquitectura h&iacute;brida con enrutamiento por caso de uso (modelos peque&ntilde;os locales para tareas simples; API para tareas complejas), evitando dependencia &uacute;nica de un proveedor (multi-model / model routing).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Qu&eacute; rol cumple una plataforma como SageMaker, Vertex AI o Azure ML?</p>
+        <p class="a">Son plataformas gestionadas end-to-end que integran preparaci&oacute;n de datos, entrenamiento, tuning de hiperpar&aacute;metros, registro de modelos, despliegue (endpoints en tiempo real y batch) y monitoreo, con integraci&oacute;n a IAM, cifrado y servicios de observabilidad del cloud. Reducen el esfuerzo de construir y escalar infraestructura de ML y aportan controles de seguridad, auditor&iacute;a y gobernanza nativos de la nube (AWS, GCP, Azure respectivamente).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;C&oacute;mo se dise&ntilde;a la observabilidad de un sistema de IA?</p>
+        <p class="a">Cuatro planos: (1) <strong>calidad de datos</strong> (esquema, nulos, distribuciones); (2) <strong>modelo</strong> (performance, drift de datos y concepto, sesgo por subgrupos); (3) <strong>sistema</strong> (latencia p50/p95/p99, throughput, errores, utilizaci&oacute;n GPU, costo por inferencia); (4) <strong>negocio</strong> (KPIs del caso de uso). Para LLM se a&ntilde;ade: tokens, TTFT, tasa de bloqueos de guardrails, calidad de respuestas y trazas de prompts con protecci&oacute;n de datos. Herramientas: CloudWatch/Grafana, Evidently, Langfuse/LangSmith.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;C&oacute;mo se documenta la arquitectura de un sistema de IA para efectos de auditor&iacute;a y gobernanza?</p>
+        <p class="a">Con artefactos trazables: diagramas de arquitectura y flujo de datos, model cards y data cards, inventario/registro del sistema de IA, decisiones de dise&ntilde;o documentadas (ADRs), linaje de datos, versi&oacute;n del modelo y del dataset, resultados de evaluaciones (rendimiento, sesgo, robustez) y mapeo a controles de referencia (Anexo A de ISO/IEC 42001, NIST AI RMF). Esta evidencia es exactamente lo que un auditor o regulador solicita.</p>
+    </div>
+
+    <h2 id="s2">2. Escalamiento de soluciones de IA</h2>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;C&oacute;mo se escala el entrenamiento de modelos?</p>
+        <p class="a">Por datos (m&aacute;s volumen y mejor calidad, data augmentation), por c&oacute;mputo (multi-GPU/multi-nodo con paralelismo de datos, tensor y pipeline; FSDP, DeepSpeed, Horovod) y por t&eacute;cnicas de eficiencia (mixed precision, gradient checkpointing, acumulaci&oacute;n de gradientes). Tambi&eacute;n se escala con transfer learning / fine-tuning sobre modelos preentrenados en lugar de entrenar desde cero.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;C&oacute;mo se escala la inferencia en producci&oacute;n?</p>
+        <p class="a">Con r&eacute;plicas stateless detr&aacute;s de un balanceador, autoscaling por m&eacute;tricas reales (utilizaci&oacute;n GPU, profundidad de cola, latencia), batching din&aacute;mico, cach&eacute; (respuestas y embeddings) y, si aplica, compartición de GPU (MIG, time-slicing). Escalado horizontal para throughput; escalado vertical (GPU m&aacute;s grande) solo cuando el modelo no cabe en una GPU o la latencia lo exige.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Qu&eacute; t&eacute;cnicas reducen costo y latencia de inferencia con LLMs?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Cuantizaci&oacute;n</strong> (INT8/INT4, GPTQ, AWQ): menos memoria y m&aacute;s velocidad con p&eacute;rdida m&iacute;nima de calidad.</li>
+                <li><strong>Motores de serving optimizados</strong> (vLLM con PagedAttention, TensorRT-LLM) y <strong>KV cache</strong>.</li>
+                <li><strong>Decodificaci&oacute;n especulativa</strong> y modelos destilados o m&aacute;s peque&ntilde;os para tareas acotadas.</li>
+                <li><strong>Semantic caching</strong> de respuestas frecuentes y optimizaci&oacute;n de prompts (menos tokens).</li>
+            </ul>
+            La palanca de negocio es el costo por 1.000 tokens o por inferencia, no solo la latencia.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;Qu&eacute; es el batching din&aacute;mico?</p>
+        <p class="a">Agrupar peticiones que llegan en una ventana corta de tiempo en un solo lote para maximizar el uso de la GPU (throughput). El trade-off es latencia vs throughput: lotes m&aacute;s grandes mejoran la utilizaci&oacute;n pero a&ntilde;aden espera. Lo implementan motores como NVIDIA Triton y vLLM con continuous batching. Para latencia estricta se combina con particionado de la cola por SLA.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;C&oacute;mo se escala una soluci&oacute;n RAG / base vectorial?</p>
+        <p class="a">Con &iacute;ndices ANN eficientes (HNSW, IVF-PQ), sharding y r&eacute;plicas de lectura, filtros por metadatos para reducir el espacio de b&uacute;squeda, re-ranking en dos etapas (recuperaci&oacute;n amplia + reordenamiento preciso), cach&eacute; de embeddings y actualizaci&oacute;n incremental del &iacute;ndice. A gran escala se separa el almacenamiento vectorial del motor de b&uacute;squeda y se eval&uacute;a calidad (recall/precision) en cada cambio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;C&oacute;mo se dise&ntilde;a el escalado multi-regi&oacute;n y alta disponibilidad?</p>
+        <p class="a">Replicaci&oacute;n de servicios y datos por regi&oacute;n, failover autom&aacute;tico, enrutamiento por latencia (CDN/global load balancing) y despliegues versionados del modelo consistentes en todas las regiones. Restricci&oacute;n clave de gobernanza: <strong>residencia de datos</strong>; hay que garantizar que los datos de entrenamiento e inferencia no crucen fronteras no permitidas y que el failover respete esas reglas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;Autoscaling por CPU/GPU o por colas? &iquest;Y serverless?</p>
+        <p class="a">Para cargas de IA, el autoscaling por CPU suele ser pobre; es mejor escalar por m&eacute;tricas relevantes: profundidad de cola (KEDA con SQS/Kafka), utilizaci&oacute;n de GPU, tokens pendientes o latencia objetivo. Serverless GPU (scale-to-zero) reduce costo en cargas intermitentes a cambio de cold starts; para latencia cr&iacute;tica se mantiene un m&iacute;nimo de instancias calientes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;C&oacute;mo se escalan los pipelines de datos para IA?</p>
+        <p class="a">Con procesamiento distribuido (Spark), streaming donde el caso lo requiera (Kafka), orquestaci&oacute;n (Airflow), particionado y formato columnar/lakehouse (Parquet, Delta, Iceberg), y validaci&oacute;n automatizada de calidad de datos (Great Expectations) como gate antes de entrenar. Los feature pipelines se versionan junto con el c&oacute;digo y el modelo para garantizar reproducibilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; m&eacute;tricas definen capacidad y rendimiento en IA?</p>
+        <p class="a">Throughput (RPS, tokens/s), latencia p50/p95/p99, TTFT (time to first token) en LLM, tokens por segundo por usuario, utilizaci&oacute;n de GPU/memoria, error rate, saturaci&oacute;n de colas y costo por inferencia / por 1.000 tokens. Se fijan SLOs por caso de uso y se capacita con pruebas de carga realistas (incluyendo prompts largos y concurrencia).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;Cu&aacute;ndo conviene edge/federado en lugar de centralizado?</p>
+        <p class="a">Cuando hay latencia cr&iacute;tica (tiempo real industrial), conectividad limitada, o cuando la privacidad exige que los datos no salgan del dispositivo (salud, finanzas, sector p&uacute;blico). El aprendizaje federado entrena modelos sin centralizar datos, a cambio de mayor complejidad operativa y de investigaci&oacute;n. Es una decisi&oacute;n de arquitectura y de cumplimiento, no solo t&eacute;cnica.</p>
+    </div>
+
+    <h2 id="s3">3. Gobierno de IA (AI Governance)</h2>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; es el gobierno de IA?</p>
+        <p class="a">Es el conjunto de pol&iacute;ticas, procesos, roles y controles con los que una organizaci&oacute;n dirige y supervisa el uso de la IA para alinearlo con su estrategia, la ley, los valores &eacute;ticos y las expectativas de sus partes interesadas. El est&aacute;ndar ISO/IEC 38507:2022 describe las implicaciones de gobierno del uso de IA en las organizaciones y c&oacute;mo integrarlas en los &oacute;rganos de gobierno existentes (junta, comit&eacute;s, auditor&iacute;a).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;Qu&eacute; elementos m&iacute;nimos tiene un programa de gobierno de IA?</p>
+        <p class="a">
+            <ul>
+                <li>Pol&iacute;tica de IA aprobada por la direcci&oacute;n (usos permitidos/prohibidos).</li>
+                <li>Comit&eacute; de gobernanza de IA con roles y responsabilidades definidos.</li>
+                <li>Inventario de casos de uso y clasificaci&oacute;n por riesgo.</li>
+                <li>Evaluaciones de riesgo e impacto por sistema, y controles por etapa del ciclo de vida.</li>
+                <li>Formaci&oacute;n y alfabetizaci&oacute;n en IA; gesti&oacute;n de incidentes; auditor&iacute;a y m&eacute;tricas de cumplimiento.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;Qu&eacute; es el inventario de sistemas de IA y por qu&eacute; es clave?</p>
+        <p class="a">Es el registro central de todos los sistemas y casos de uso de IA de la organizaci&oacute;n, con datos como: responsable (owner), prop&oacute;sito, datos utilizados, modelo/proveedor, clasificaci&oacute;n de riesgo, estado de cumplimiento y controles aplicados. Es el punto de partida de cualquier marco de gobernanza: sin inventario no hay control, y es una de las primeras cosas que pide una auditor&iacute;a (ISO/IEC 42001) o un regulador (EU AI Act, NIST AI RMF &ndash; funci&oacute;n Map).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;C&oacute;mo se clasifican los sistemas de IA por riesgo?</p>
+        <p class="a">Con un enfoque proporcional tipo EU AI Act: <strong>riesgo inaceptable</strong> (usos prohibidos: puntuaci&oacute;n social, manipulación), <strong>alto riesgo</strong> (empleo, cr&eacute;dito, salud, educaci&oacute;n, infraestructura cr&iacute;tica: obligaciones estrictas), <strong>riesgo limitado</strong> (obligaciones de transparencia, p. ej. chatbots o contenido generado) y <strong>riesgo m&iacute;nimo</strong> (spam, videojuegos). ISO/IEC 42001 exige un enfoque equivalente: la evaluaci&oacute;n de riesgo y de impacto determina qu&eacute; controles del Anexo A aplican (declaraci&oacute;n de aplicabilidad).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;Qu&eacute; roles suelen existir en la gobernanza de IA?</p>
+        <p class="a">Direcci&oacute;n/board (aprobaci&oacute;n de pol&iacute;tica y apetito de riesgo), CAIO o Head of AI (estrategia), comit&eacute; de gobernanza/&eacute;tica de IA (decisi&oacute;n), AI Governance Officer / responsable de cumplimiento de IA, Model Risk Management (validaci&oacute;n de modelos), DPO (privacidad), CISO (seguridad), due&ntilde;os de caso de uso (owners), auditor&iacute;a interna (aseguramiento). En organizaciones peque&ntilde;as los roles se combinan, pero las responsabilidades deben estar documentadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; debe contener una pol&iacute;tica de IA?</p>
+        <p class="a">Principios y compromisos (uso responsable, cumplimiento legal, &eacute;tica), usos permitidos y prohibidos, proceso de aprobaci&oacute;n de nuevos casos de uso, requisitos de datos, seguridad y privacidad, evaluaci&oacute;n de riesgo/impacto obligatoria, transparencia con usuarios, roles y responsabilidades, formaci&oacute;n, gesti&oacute;n de incidentes y consecuencias del incumplimiento. Es el documento de nivel 1 del sistema de gesti&oacute;n (cl&aacute;usula 5.2 de ISO/IEC 42001).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;C&oacute;mo se relaciona el gobierno de IA con el gobierno de datos?</p>
+        <p class="a">El gobierno de datos (calidad, linaje, propiedad, clasificaci&oacute;n, consentimiento, retenci&oacute;n) es la base del gobierno de IA: un modelo solo es confiable y auditable si sus datos lo son. Sin due&ntilde;os de datos, linaje y controles de calidad no se puede demostrar cumplimiento ni gestionar riesgos como sesgo, fuga de informaci&oacute;n o uso indebido. En ISO/IEC 42001 el control de datos es un dominio completo del Anexo A (A.7).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;C&oacute;mo se gobierna espec&iacute;ficamente la IA generativa?</p>
+        <p class="a">Con pol&iacute;tica de uso aceptable de GenAI, cat&aacute;logo de herramientas aprobadas (para frenar shadow AI), controles de datos (no pegar informaci&oacute;n confidencial en herramientas p&uacute;blicas, DLP), requisitos contractuales con proveedores (retenci&oacute;n cero de datos, no entrenamiento con nuestros datos, indemnizaci&oacute;n), revisi&oacute;n de salidas en procesos cr&iacute;ticos, marcas de contenido generado y formaci&oacute;n a empleados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;Qu&eacute; es el &laquo;shadow AI&raquo; y c&oacute;mo se gestiona?</p>
+        <p class="a">Es el uso no autorizado de herramientas de IA por empleados (chatbots p&uacute;blicos, extensiones, scripts con APIs) sin pasar por seguridad o cumplimiento. Se gestiona con inventario y detecci&oacute;n (CASB, DLP, an&aacute;lisis de tr&aacute;fico), una alternativa corporativa aprobada que sea f&aacute;cil de usar, pol&iacute;ticas claras con consecuencias, y capacitaci&oacute;n para que el equipo entienda los riesgos (fuga de datos, propiedad intelectual, cumplimiento).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;C&oacute;mo se demuestra cumplimiento ante un auditor o regulador?</p>
+        <p class="a">Con evidencia documentada y trazable: pol&iacute;tica de IA, actas del comit&eacute;, inventario de sistemas, evaluaciones de riesgo e impacto, declaraci&oacute;n de aplicabilidad de controles, registros de formaci&oacute;n, resultados de pruebas (sesgo, robustez, seguridad), informes de monitoreo, gesti&oacute;n de incidentes y auditor&iacute;as internas. La trazabilidad a marcos (ISO/IEC 42001, ISO/IEC 27001, NIST AI RMF) demuestra que el sistema de gesti&oacute;n funciona y mejora de forma continua.</p>
+    </div>
+
+    <h2 id="s4">4. Seguridad de IA</h2>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;En qu&eacute; se diferencia la seguridad de IA de la ciberseguridad tradicional?</p>
+        <p class="a">A&ntilde;ade nuevas superficies de ataque: datos de entrenamiento, modelos, prompts, embeddings y la cadena de suministro de modelos. Aparecen amenazas propias (evasi&oacute;n adversarial, envenenamiento de datos, extracci&oacute;n de modelos, prompt injection) y el modelo se convierte en un componente m&aacute;s a proteger y monitorear. Adem&aacute;s, la IA es a la vez herramienta de defensa y de ataque, lo que exige integrar seguridad de IA dentro del programa de ciberseguridad existente, no como un silo aparte.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; es el prompt injection y c&oacute;mo se mitiga?</p>
+        <p class="a">Es una t&eacute;cnica donde un atacante inserta instrucciones maliciosas que el modelo obedece: <strong>directa</strong> (el usuario escribe instrucciones para eludir restricciones) o <strong>indirecta</strong> (instrucciones ocultas en documentos, p&aacute;ginas web o correos que el modelo lee v&iacute;a RAG). Mitigaciones: separar instrucciones de datos, validar y sanitizar entradas y contenido recuperado, filtros de entrada/salida, m&iacute;nimo privilegio para herramientas (que una inyecci&oacute;n no pueda ejecutar acciones cr&iacute;ticas), confirmaci&oacute;n humana en acciones sensibles y monitoreo continuo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; es el envenenamiento de datos/modelos (poisoning)?</p>
+        <p class="a">Manipular los datos de entrenamiento o ajuste para degradar el modelo o implantar comportamientos maliciosos (puertas traseras que se activan con un patr&oacute;n concreto). Controles: procedencia verificada de datos, validaci&oacute;n y limpieza, revisi&oacute;n de datasets de terceros, pruebas de integridad y de robustez, an&aacute;lisis de comportamiento an&oacute;malo tras desplegar y reentrenamientos con datos controlados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;Qu&eacute; es el OWASP Top 10 para aplicaciones LLM?</p>
+        <p class="a">Es la lista de referencia de riesgos de seguridad en aplicaciones con LLM (versi&oacute;n 2025):
+            <ul>
+                <li>LLM01 Prompt Injection &mdash; LLM02 Sensitive Information Disclosure &mdash; LLM03 Supply Chain</li>
+                <li>LLM04 Data and Model Poisoning &mdash; LLM05 Improper Output Handling &mdash; LLM06 Excessive Agency</li>
+                <li>LLM07 System Prompt Leakage &mdash; LLM08 Vector and Embedding Weaknesses &mdash; LLM09 Misinformation &mdash; LLM10 Unbounded Consumption</li>
+            </ul>
+            Se usa como checklist de dise&ntilde;o seguro y como base de pruebas en revisiones de seguridad y red teaming.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;Cu&aacute;les son los riesgos de la cadena de suministro de IA?</p>
+        <p class="a">Modelos preentrenados comprometidos o sin procedencia verificada, datasets envenenados, dependencias y paquetes maliciosos, servicios y APIs de terceros, y plugins/herramientas inseguras. Controles: inventario de componentes (SBOM/AI-BOM), repositorios aprobados, verificaci&oacute;n de hashes y firmas, escaneo de artefactos, evaluaci&oacute;n de proveedores y contratos con requisitos de seguridad y transparencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;C&oacute;mo se protege un modelo frente al robo o la extracci&oacute;n?</p>
+        <p class="a">Controlando el acceso a pesos y endpoints (autenticaci&oacute;n, autorizaci&oacute;n, cuotas), limitando la informaci&oacute;n devuelta por las APIs (sin logits crudos ni detalles internos), detectando patrones de consulta an&oacute;malos (ataques de extracci&oacute;n masiva), aplicando marcas de agua cuando aplique, cifrando artefactos y usando entornos aislados (TEEs) para modelos cr&iacute;ticos. El modelo es propiedad intelectual y a la vez un activo regulado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Qu&eacute; es el red teaming de IA?</p>
+        <p class="a">Es un ejercicio estructurado de ataque al sistema de IA (jailbreaks, fuga de datos, inyecciones, abusos de herramientas, sesgos explotables) realizado por equipos internos o externos antes del lanzamiento y de forma peri&oacute;dica. Combina t&eacute;cnicas autom&aacute;ticas (herramientas de escaneo) y manuales (expertos que piensan como atacantes). Los hallazgos se priorizan, remedian y documentan; es una pr&aacute;ctica clave tanto de seguridad como de evaluaci&oacute;n de riesgo y de cumplimiento (EU AI Act para modelos de prop&oacute;sito general requiere evaluaciones adversarias).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;Qu&eacute; controles de seguridad aplicar a agentes de IA?</p>
+        <p class="a">M&iacute;nimo privilegio en cada herramienta y credencial, sandboxing de ejecuci&oacute;n, listas blancas de acciones, l&iacute;mites de recursos y gasto, confirmaci&oacute;n humana para acciones sensibles o irreversibles (pagos, borrados, env&iacute;os), auditor&iacute;a completa de decisiones y acciones del agente, separaci&oacute;n de entornos y kill switch. El riesgo &laquo;Excessive Agency&raquo; (OWASP LLM06) es el m&aacute;s cr&iacute;tico: un agente con demasiados permisos convierte un error del modelo en un incidente real.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;Qu&eacute; es MLSecOps y c&oacute;mo se integra en CI/CD?</p>
+        <p class="a">Es la extensi&oacute;n de DevSecOps al ciclo de vida de ML: escaneo de dependencias y artefactos, validaci&oacute;n de datasets y modelos, pruebas de robustez y sesgo, gates de aprobaci&oacute;n antes de desplegar, gesti&oacute;n de secretos, versionado seguro de modelos y monitoreo continuo en producci&oacute;n. Se integra en los pipelines de MLOps para que los controles de seguridad sean autom&aacute;ticos y no un paso manual que se omite bajo presi&oacute;n de entrega.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;Qu&eacute; es el consumo ilimitado / DoS en sistemas de IA?</p>
+        <p class="a">El abuso de recursos (prompts enormes, bucles de agentes, consultas masivas automatizadas) que agota presupuesto de tokens, GPU o cuotas, degradando el servicio o generando p&eacute;rdidas econ&oacute;micas. Mitigaciones: rate limiting, cuotas por usuario y por token, l&iacute;mites de longitud y de iteraciones de agentes, timeouts, presupuestos por aplicaci&oacute;n y alertas de anomal&iacute;as de consumo (OWASP LLM10).</p>
+    </div>
+
+    <h2 id="s5">5. Privacidad y protecci&oacute;n de datos</h2>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;Qu&eacute; implicaciones tiene la IA para la privacidad?</p>
+        <p class="a">Los datos de entrenamiento pueden contener informaci&oacute;n personal; los modelos pueden memorizar y regurgitar datos (especialmente LLM), permitir inferencias sobre individuos (membership inference, atributos sensibles), habilitar decisiones automatizadas con efectos legales y transferir datos a terceros/proveedores. Todo esto exige base legal, finalidad determinada, transparencia y controles t&eacute;cnicos, tanto en entrenamiento como en operaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;Qu&eacute; principios de privacidad aplicar?</p>
+        <p class="a">Privacidad desde el dise&ntilde;o y por defecto, minimizaci&oacute;n de datos, limitaci&oacute;n de la finalidad, exactitud, limitaci&oacute;n del plazo de conservaci&oacute;n, transparencia y consentimiento cuando corresponda. Referencias: GDPR art. 5 (principios), GDPR art. 22 (decisiones automatizadas) y, en Colombia, Ley 1581 de 2012 (Habeas Data) con su r&eacute;gimen de tratamiento de datos personales, aplicable tambi&eacute;n a sistemas de IA que traten datos de personas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;C&oacute;mo se puede entrenar con datos sensibles de forma responsable?</p>
+        <p class="a">Anonimizaci&oacute;n/pseudonimizaci&oacute;n robusta, agregaci&oacute;n, privacidad diferencial (a&ntilde;adir ruido calibrado), aprendizaje federado (los datos no salen del origen), datos sint&eacute;ticos generados con garant&iacute;as, entornos seguros de an&aacute;lisis (data clean rooms) y acuerdos de tratamiento con los proveedores. La decisi&oacute;n se documenta en la evaluaci&oacute;n de impacto y con aprobaci&oacute;n del DPO.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;Qu&eacute; es una DPIA/EIPD en proyectos de IA?</p>
+        <p class="a">La Evaluaci&oacute;n de Impacto relativa a la Protecci&oacute;n de Datos es obligatoria (GDPR art. 35 y regulaciones equivalentes) cuando el tratamiento implica alto riesgo para los derechos de las personas: decisiones automatizadas con efecto significativo, perfilado, datos sensibles o vigilancia a gran escala. Documenta la necesidad y proporcionalidad del tratamiento, los riesgos identificados, las medidas mitigadoras y la opini&oacute;n del DPO; en IA se complementa con la evaluaci&oacute;n de impacto de sistemas de IA que exige ISO/IEC 42001.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;Qu&eacute; dice el GDPR sobre las decisiones automatizadas?</p>
+        <p class="a">El art&iacute;culo 22 establece el derecho a no ser objeto de una decisi&oacute;n basada &uacute;nicamente en tratamiento automatizado que produzca efectos jur&iacute;dicos o significativos, salvo excepciones estrictas (necesidad contractual, ley, consentimiento expl&iacute;cito). En esos casos se garantiza intervenci&oacute;n humana, derecho a expresar el punto de vista, a obtener explicaci&oacute;n y a impugnar la decisi&oacute;n. Es directamente aplicable a sistemas de IA que deciden sobre cr&eacute;ditos, empleo, seguros, etc.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; es la retenci&oacute;n cero (zero data retention) con proveedores de IA?</p>
+        <p class="a">Es una cl&aacute;usula contractual por la cual el proveedor de servicios de IA no almacena los prompts ni las respuestas del cliente, no los usa para entrenar sus modelos y no los comparte; idealmente tampoco los procesa en subencargados sin control. Es una condici&oacute;n pr&aacute;ctica para poder usar IA de terceros con datos corporativos, y debe revisarse junto con las ubicaciones de procesamiento (transferencias internacionales) y los planes de respuesta ante incidentes del proveedor.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Cu&aacute;les son los riesgos de fuga de informaci&oacute;n en RAG?</p>
+        <p class="a">El recuperador puede devolver documentos a los que el usuario no tiene permiso (el &iacute;ndice vectorial no hereda autom&aacute;ticamente los permisos del origen). Controles: indexar con metadatos de control de acceso y filtrar por permisos en tiempo de consulta, sincronizar los cambios de permisos del sistema origen, evaluar el grounding y auditar consultas. Es un riesgo de privacidad y de seguridad a la vez (OWASP LLM08: debilidades en vectores y embeddings).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo se anonimiza de forma efectiva en la era de la IA?</p>
+        <p class="a">&laquo;Quitar los nombres&raquo; no es suficiente: con datos ricos, la reidentificaci&oacute;n es viable. Se combinan t&eacute;cnicas: k-anonimato y l-diversidad para agregaci&oacute;n, privacidad diferencial para consultas y entrenamiento, generalizaci&oacute;n y supresi&oacute;n de cuasi-identificadores, y evaluaci&oacute;n formal del riesgo de reidentificaci&oacute;n antes de publicar o compartir. La anonimizaci&oacute;n se valida con pruebas, no con una declaraci&oacute;n.</p>
+    </div>
+
+    <h2 id="s6">6. Gesti&oacute;n de riesgos de IA</h2>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;Qu&eacute; marcos existen para la gesti&oacute;n de riesgos de IA?</p>
+        <p class="a">
+            <ul>
+                <li><strong>ISO/IEC 23894:2023:</strong> gu&iacute;a de gesti&oacute;n de riesgos de IA, basada en ISO 31000, con cat&aacute;logo de fuentes de riesgo de IA.</li>
+                <li><strong>NIST AI RMF 1.0:</strong> marco voluntario con cuatro funciones: Govern, Map, Measure, Manage (y el perfil de IA generativa NIST AI 600-1).</li>
+                <li><strong>ISO/IEC 42001:2023:</strong> sistema de gesti&oacute;n certificable que integra riesgo + impacto de IA.</li>
+                <li><strong>EU AI Act:</strong> cumplimiento regulatorio obligatorio por nivel de riesgo.</li>
+                <li><strong>FAIR:</strong> enfoque cuantitativo para priorizar p&eacute;rdidas por escenarios de riesgo.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo es el proceso de gesti&oacute;n de riesgos (ciclo completo)?</p>
+        <p class="a">1) <strong>Identificar</strong> riesgos y fuentes (usar cat&aacute;logos como ISO/IEC 23894 y las experiencias del sector); 2) <strong>analizar y evaluar</strong> probabilidad e impacto frente al apetito de riesgo; 3) <strong>tratar</strong> (mitigar, evitar, transferir, aceptar) definiendo controles y responsables; 4) <strong>monitorear y revisar</strong> de forma continua; 5) <strong>registrar y comunicar</strong> en el registro de riesgos con due&ntilde;os, plazos y evidencia. Es un ciclo vivo, no un documento anual.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;Cu&aacute;les son los riesgos t&iacute;picos de un sistema de IA?</p>
+        <p class="a">Sesgo y discriminaci&oacute;n (datos o modelo), alucinaci&oacute;n e incorrecci&oacute;n, drift de datos y de concepto, fallos de seguridad (prompt injection, fuga de datos), privacidad (memorizaci&oacute;n, inferencias), incumplimiento regulatorio, dependencia de proveedores, costos descontrolados por consumo, reputaci&oacute;n y confianza, impacto ambiental por consumo de c&oacute;mputo, y uso indebido por usuarios o partes internas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;Qu&eacute; es el apetito de riesgo aplicado a IA?</p>
+        <p class="a">Es el nivel de riesgo que la organizaci&oacute;n est&aacute; dispuesta a asumir por tipo de caso de uso. Se expresa en una matriz de tolerancia (por ejemplo: riesgo bajo aceptable en asistentes internos; riesgo m&iacute;nimo para decisiones legales, salud o cr&eacute;dito) y gu&iacute;a la clasificaci&oacute;n de los sistemas y la proporcionalidad de los controles. La direcci&oacute;n lo aprueba y se revisa peri&oacute;dicamente (cl&aacute;usula 6 de ISO/IEC 42001).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;C&oacute;mo se monitorea el riesgo de un modelo en producci&oacute;n?</p>
+        <p class="a">Con monitoreo de drift (distribuci&oacute;n de entrada y relaci&oacute;n datos-resultado), degradaci&oacute;n de m&eacute;tricas de negocio y de modelo, an&aacute;lisis de sesgo por subgrupos, alertas por umbrales, revisi&oacute;n peri&oacute;dica del registro de riesgos y disparadores de reentrenamiento o retiro del modelo. Los incidentes alimentan el ciclo de aprendizaje: cada fallo actualiza evaluaciones y controles.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;Qu&eacute; es la evaluaci&oacute;n de impacto de sistemas de IA?</p>
+        <p class="a">Es un requisito distintivo de ISO/IEC 42001 (cl&aacute;usula 6.1.4): analizar c&oacute;mo el sistema afecta a individuos, grupos vulnerables, sociedad y medio ambiente, m&aacute;s all&aacute; del riesgo para la organizaci&oacute;n. Su resultado condiciona si el caso de uso es aceptable y qu&eacute; controles adicionales requiere (transparencia, supervisi&oacute;n humana, restricciones). Se complementa con la gu&iacute;a ISO/IEC 42005 y, en privacidad, con la DPIA.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo se gestiona el riesgo de terceros (proveedores y modelos)?</p>
+        <p class="a">Con due diligence previa (seguridad, privacidad, cumplimiento, estabilidad), contratos que fijen responsabilidades (indemnizaci&oacute;n, notificaci&oacute;n de incidentes, retenci&oacute;n cero, uso de datos), gesti&oacute;n de cambios de versi&oacute;n del modelo (aviso previo y evaluaci&oacute;n del impacto), monitoreo continuo del desempe&ntilde;o y planes de salida (evitar lock-in: portabilidad de prompts, datos y arquitectura).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;C&oacute;mo se maneja un incidente de IA?</p>
+        <p class="a">Igual que un incidente de seguridad, con pasos adicionales: detecci&oacute;n (monitoreo, reportes de usuarios), contenci&oacute;n (desactivar el caso de uso, degradar a modo humano, rollback del modelo), an&aacute;lisis de causa ra&iacute;z (datos, modelo, prompt, integraci&oacute;n), notificaci&oacute;n (regulador y afectados si corresponde por ley), remediaci&oacute;n y lecciones aprendidas que actualizan riesgos y controles. Debe existir un procedimiento documentado y probado; el regulador eval&uacute;a c&oacute;mo la organizaci&oacute;n detect&oacute; y respondi&oacute;.</p>
+    </div>
+
+    <h2 id="s7">7. Uso responsable de IA</h2>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;Qu&eacute; significa uso responsable de IA?</p>
+        <p class="a">Desarrollar y usar IA de forma alineada con los derechos humanos, los valores &eacute;ticos y la ley, gestionando activamente sus impactos en las personas y la sociedad. Se concreta en seis pilares cl&aacute;sicos: equidad, confiabilidad y seguridad, privacidad y seguridad de la informaci&oacute;n, inclusividad, transparencia y responsabilidad (accountability). No es solo &eacute;tica declarativa: se implementa con procesos, controles y evidencia auditable.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;Cu&aacute;les son los seis pilares en detalle?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Equidad:</strong> tratar a todas las personas de forma justa, evitando sesgos y discriminaci&oacute;n.</li>
+                <li><strong>Confiabilidad y seguridad:</strong> el sistema funciona de forma consistente y sin causar da&ntilde;o.</li>
+                <li><strong>Privacidad y seguridad de la informaci&oacute;n:</strong> proteger datos personales y corporativos.</li>
+                <li><strong>Inclusividad:</strong> dise&ntilde;o accesible y que beneficie a todos los grupos, incluyendo vulnerables.</li>
+                <li><strong>Transparencia:</strong> explicar capacidades, l&iacute;mites y c&oacute;mo funcionan las decisiones.</li>
+                <li><strong>Responsabilidad:</strong> personas y procesos que rinden cuentas por los resultados del sistema.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;Qu&eacute; es la equidad (fairness) y c&oacute;mo se eval&uacute;a?</p>
+        <p class="a">Es la ausencia de sesgos injustificados contra grupos protegidos. Se eval&uacute;a midiendo m&eacute;tricas por subgrupos (paridad demogr&aacute;fica, igualdad de oportunidades, tasa de falsos positivos/negativos), analizando datos hist&oacute;ricos y variables proxy, y probando escenarios contrafactuales. Las mitigaciones se aplican antes (recolecci&oacute;n y balanceo), durante (funci&oacute;n de p&eacute;rdida, restricciones) o despu&eacute;s del modelo (ajuste de umbrales), con participaci&oacute;n de stakeholders afectados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; son explicabilidad e interpretabilidad?</p>
+        <p class="a">La interpretabilidad describe por qu&eacute; el modelo produce una salida (t&eacute;cnicas: SHAP, LIME, importancia de variables, contrafactuales, mapas de atenci&oacute;n); la explicabilidad es la capacidad de comunicar esa raz&oacute;n en t&eacute;rminos comprensibles para la persona afectada y para el negocio. En decisiones de alto impacto hay derecho a explicaci&oacute;n; en LLM se refuerza con citas de fuentes, res&uacute;menes de razonamiento y evaluaciones de fidelidad. Todo modelo desplegado deber&iacute;a tener su modelo documentado (model card): prop&oacute;sito, datos, m&eacute;tricas, limitaciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;Qu&eacute; es la supervisi&oacute;n humana (human-in-the-loop)?</p>
+        <p class="a">Es el dise&ntilde;o expl&iacute;cito de puntos donde las personas revisan, aprueban o pueden revertir decisiones del sistema: <em>human-in-the-loop</em> (aprobaci&oacute;n antes de actuar), <em>human-on-the-loop</em> (supervisi&oacute;n con capacidad de intervenir) y <em>human-in-command</em> (control estrat&eacute;gico y capacidad de desconectar). Obligatorio en decisiones de alto impacto; requiere interfaces claras, informaci&oacute;n suficiente para decidir y conciencia del sesgo de automatizaci&oacute;n (no aprobar por inercia).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;Qu&eacute; son la transparencia y la rendici&oacute;n de cuentas en IA?</p>
+        <p class="a">Transparencia: comunicar de forma clara qu&eacute; hace el sistema, qu&eacute; datos usa, cu&aacute;les son sus l&iacute;mites, cu&aacute;ndo el usuario interact&uacute;a con IA o consume contenido generado (system cards, avisos). Rendici&oacute;n de cuentas: responsables definidos por sistema, trazabilidad de decisiones, canales de apelaci&oacute;n y reclamaci&oacute;n para afectados, y reporte de incidentes e indicadores de cumplimiento a la direcci&oacute;n y al p&uacute;blico seg&uacute;n corresponda.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;Qu&eacute; principios internacionales enmarcan el uso responsable?</p>
+        <p class="a">Los Principios de IA de la OCDE (2019, actualizados en 2024), la Recomendaci&oacute;n de la UNESCO sobre la &Eacute;tica de la IA (2021), los Principios Rectores de la ONU sobre Empresas y Derechos Humanos (2011) y las declaraciones del G20. Todos convergen en: beneficio para las personas y el planeta, no causar da&ntilde;o, proporcionalidad, transparencia y explicabilidad, seguridad y robustez, y responsabilidad. Estos principios alimentan leyes nacionales y marcos como ISO/IEC 42001.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;Qu&eacute; es la alfabetizaci&oacute;n en IA (AI literacy) y por qu&eacute; importa?</p>
+        <p class="a">Es la formaci&oacute;n de empleados y usuarios para entender capacidades, l&iacute;mites y riesgos de la IA, y usarla de forma cr&iacute;tica y segura. Es una buena pr&aacute;ctica de todo programa de gobernanza y una obligaci&oacute;n regulatoria: el EU AI Act exige medidas de alfabetizaci&oacute;n en IA a los proveedores y usuarios de sistemas de IA. ISO/IEC 42001 la cubre en la cl&aacute;usula 7.2 (competencia) y el control A.4.4.</p>
+    </div>
+
+    <h2 id="s8">8. ISO/IEC 42001:2023</h2>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;Qu&eacute; es ISO/IEC 42001:2023?</p>
+        <p class="a">Es el primer est&aacute;ndar internacional, certificable, que especifica los requisitos para establecer, implementar, mantener y mejorar un <strong>sistema de gesti&oacute;n de inteligencia artificial (AIMS)</strong>. Publicado en diciembre de 2023 por ISO/IEC. Aplica a cualquier organizaci&oacute;n que desarrolle, provea o utilice productos y servicios de IA, y da una base com&uacute;n para demostrar uso responsable y cumplimiento frente a clientes, reguladores y socios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Cu&aacute;l es la estructura de la norma?</p>
+        <p class="a">Sigue la estructura armonizada de sistemas de gesti&oacute;n (igual que ISO/IEC 27001): cl&aacute;usulas 4 a 10 (contexto, liderazgo, planificaci&oacute;n, soporte, operaci&oacute;n, evaluaci&oacute;n del desempe&ntilde;o y mejora) y anexos de apoyo: <strong>Anexo A</strong> (objetivos de control y controles), <strong>Anexo B</strong> (gu&iacute;a de implementaci&oacute;n de los controles), <strong>Anexo C</strong> (fuentes y objetivos de riesgo de IA) y <strong>Anexo D</strong> (c&oacute;mo aplicar la norma en distintos dominios y sectores).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;Qu&eacute; exigen las cl&aacute;usulas 4 y 5?</p>
+        <p class="a">Cl&aacute;usula 4 &ndash; Contexto: entender la organizaci&oacute;n y sus partes interesadas, sus requisitos y expectativas, y definir el alcance del AIMS. Cl&aacute;usula 5 &ndash; Liderazgo: la alta direcci&oacute;n debe aprobar una <strong>pol&iacute;tica de IA</strong>, asignar roles y responsabilidades y asegurar que la gesti&oacute;n de IA se integre en los procesos de negocio. Sin liderazgo visible no hay sistema de gesti&oacute;n eficaz.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;Qu&eacute; exige la cl&aacute;usula 6 y qu&eacute; la hace distintiva?</p>
+        <p class="a">La planificaci&oacute;n incluye el doble enfoque que distingue a 42001: <strong>evaluaci&oacute;n de riesgos de IA</strong> (6.1.2) y su <strong>tratamiento</strong> (6.1.3) &mdash; como en 27001 &mdash; m&aacute;s una <strong>evaluaci&oacute;n de impacto de sistemas de IA</strong> (6.1.4) orientada a personas, grupos vulnerables, sociedad y ambiente. Tambi&eacute;n fija objetivos de IA medibles (6.2). El impacto condiciona la aceptaci&oacute;n del sistema y los controles proporcionales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;Qu&eacute; exigen las cl&aacute;usulas 7 y 8?</p>
+        <p class="a">Cl&aacute;usula 7 &ndash; Soporte: recursos, competencia y alfabetizaci&oacute;n en IA, sensibilizaci&oacute;n, comunicaci&oacute;n e informaci&oacute;n documentada (la evidencia del sistema). Cl&aacute;usula 8 &ndash; Operaci&oacute;n: ejecutar lo planificado mediante los controles del ciclo de vida (dise&ntilde;o, datos, desarrollo, despliegue, retiro), gesti&oacute;n de terceros, uso responsable del sistema y tratamiento de incidentes y reportes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;Qu&eacute; exigen las cl&aacute;usulas 9 y 10?</p>
+        <p class="a">Cl&aacute;usula 9 &ndash; Evaluaci&oacute;n del desempe&ntilde;o: seguimiento y medici&oacute;n, auditor&iacute;a interna y revisi&oacute;n por la direcci&oacute;n, con indicadores del AIMS y del cumplimiento de objetivos. Cl&aacute;usula 10 &ndash; Mejora: gesti&oacute;n de no conformidades y acciones correctivas, y mejora continua del sistema. Es el ciclo PDCA cl&aacute;sico de todo est&aacute;ndar de gesti&oacute;n, aplicado a la IA.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;Qu&eacute; es el Anexo A y c&oacute;mo se usa?</p>
+        <p class="a">Es el cat&aacute;logo de <strong>38 controles organizados en 9 dominios (A.2 a A.10)</strong>:
+            <ul>
+                <li>A.2 Pol&iacute;ticas relacionadas con IA &mdash; A.3 Organizaci&oacute;n interna</li>
+                <li>A.4 Recursos para sistemas de IA &mdash; A.5 Evaluaci&oacute;n de impactos de sistemas de IA</li>
+                <li>A.6 Ciclo de vida del sistema de IA &mdash; A.7 Datos para sistemas de IA</li>
+                <li>A.8 Informaci&oacute;n para interesados &mdash; A.9 Uso de sistemas de IA &mdash; A.10 Relaciones con terceros y clientes</li>
+            </ul>
+            No todos aplican a toda organizaci&oacute;n: tras evaluar riesgos, se declara cu&aacute;les aplican y con qu&eacute; justificaci&oacute;n en la <strong>Declaraci&oacute;n de Aplicabilidad (SoA)</strong>, igual que en ISO/IEC 27001.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;C&oacute;mo se certifica una organizaci&oacute;n en ISO/IEC 42001?</p>
+        <p class="a">Con una auditor&iacute;a de tercera parte por un organismo acreditado: an&aacute;lisis de brechas, implementaci&oacute;n del AIMS, auditor&iacute;a interna, y proceso de certificaci&oacute;n en dos fases (revisi&oacute;n documental y auditor&iacute;a en sitio). El certificado tiene vigencia de 3 a&ntilde;os con auditor&iacute;as de seguimiento anuales. Puede integrarse con ISO/IEC 27001 en un sistema de gesti&oacute;n integrado, compartiendo estructura, riesgos, auditor&iacute;as y gobierno.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;Cu&aacute;l es la relaci&oacute;n con ISO/IEC 27001 (seguridad de la informaci&oacute;n)?</p>
+        <p class="a">Ambas siguen la estructura armonizada y se dise&ntilde;an para integrarse. 27001 protege la informaci&oacute;n (confidencialidad, integridad, disponibilidad) y 42001 gobierna la IA con foco en impacto y uso responsable. Comparten pr&aacute;cticas (pol&iacute;ticas, gesti&oacute;n de riesgos, auditor&iacute;a, competencia) y muchos controles de seguridad de la informaci&oacute;n son prerrequisito para un AIMS s&oacute;lido: una organizaci&oacute;n con 27001 maduro tiene un camino m&aacute;s corto hacia 42001 y viceversa.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;Qu&eacute; otros est&aacute;ndares complementan a 42001?</p>
+        <p class="a">
+            <ul>
+                <li><strong>ISO/IEC 22989:</strong> conceptos y terminolog&iacute;a de IA (vocabulario com&uacute;n).</li>
+                <li><strong>ISO/IEC 23053:</strong> framework de sistemas de IA basados en machine learning.</li>
+                <li><strong>ISO/IEC 23894:</strong> gu&iacute;a de gesti&oacute;n de riesgos de IA (alimenta la cl&aacute;usula 6).</li>
+                <li><strong>ISO/IEC 38507:</strong> implicaciones de gobierno del uso de IA.</li>
+                <li><strong>ISO/IEC 5338:</strong> procesos del ciclo de vida de sistemas de IA.</li>
+                <li><strong>ISO/IEC 25059, TR 24027 y TR 24028:</strong> calidad de sistemas de IA, sesgo y confiabilidad.</li>
+                <li><strong>ISO/IEC 42005 y 42006:</strong> gu&iacute;a de evaluaci&oacute;n de impacto y requisitos para organismos de certificaci&oacute;n.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;Cu&aacute;les son los pasos pr&aacute;cticos para implementar ISO/IEC 42001?</p>
+        <p class="a">
+            <ol>
+                <li>Compromiso de la direcci&oacute;n y definici&oacute;n del alcance del AIMS.</li>
+                <li>An&aacute;lisis de brechas frente a los requisitos de la norma.</li>
+                <li>Pol&iacute;tica de IA, roles y comit&eacute; de gobernanza.</li>
+                <li>Inventario de sistemas de IA y evaluaciones de riesgo e impacto.</li>
+                <li>Plan de tratamiento y controles del Anexo A con Declaraci&oacute;n de Aplicabilidad.</li>
+                <li>Competencia, formaci&oacute;n y control de la documentaci&oacute;n (cl&aacute;usulas 7).</li>
+                <li>Operaci&oacute;n, monitoreo y medici&oacute;n (cl&aacute;usulas 8 y 9).</li>
+                <li>Auditor&iacute;a interna, revisi&oacute;n por la direcci&oacute;n y plan de mejora.</li>
+                <li>Auditor&iacute;a de certificaci&oacute;n por organismo acreditado.</li>
+            </ol>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;Qu&eacute; beneficios aporta 42001 a una organizaci&oacute;n?</p>
+        <p class="a">Gobernanza de IA estructurada y demostrable, confianza de clientes, socios y reguladores, ventaja en licitaciones que exigen IA responsable, alineaci&oacute;n anticipada con regulaciones (EU AI Act y normas locales), gesti&oacute;n sistem&aacute;tica de riesgos e impactos, mejor calidad de los sistemas por el ciclo de mejora continua, y una base com&uacute;n de lenguaje y controles para todos los equipos que usan IA.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;A qui&eacute;n aplica la norma y qu&eacute; evidencia se revisa en auditor&iacute;a?</p>
+        <p class="a">A organizaciones de cualquier tama&ntilde;o y sector que desarrollen, provean o usen IA (incluye a quien la consume como servicio). Evidencia t&iacute;pica: pol&iacute;tica de IA, alcance y contexto, registro de riesgos e impactos, inventario de sistemas, declaraci&oacute;n de aplicabilidad, registros de competencia y formaci&oacute;n, contratos y evaluaciones de terceros, resultados de monitoreo, gesti&oacute;n de incidentes, informes de auditor&iacute;a interna y actas de revisi&oacute;n por la direcci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo se relacionan ISO/IEC 42001, NIST AI RMF y el EU AI Act?</p>
+        <p class="a">
+            <ul>
+                <li><strong>ISO/IEC 42001:</strong> est&aacute;ndar de requisitos certificable de sistema de gesti&oacute;n de IA (qu&eacute; hay que tener y demostrar).</li>
+                <li><strong>NIST AI RMF:</strong> marco voluntario orientador (Govern, Map, Measure, Manage) muy &uacute;til para operar el ciclo de riesgo; no certificable, complementario.</li>
+                <li><strong>EU AI Act:</strong> regulaci&oacute;n obligatoria por nivel de riesgo; para sistemas de alto riesgo exige un sistema de gesti&oacute;n de calidad que un AIMS basado en 42001 ayuda a cumplir, junto con documentaci&oacute;n t&eacute;cnica, supervisi&oacute;n humana y evaluaciones.</li>
+            </ul>
+            Son complementarios: 42001 estructura el sistema de gesti&oacute;n, NIST gu&iacute;a el riesgo y el EU AI Act fija obligaciones legales.
+        </p>
+    </div>
+
+    <h2 id="s9">9. C&oacute;mo responder esta pregunta en una entrevista (plantilla)</h2>
+
+    <div class="note">
+        <p><strong>Pregunta:</strong> &iquest;Cuenta con experiencia o conocimientos en arquitectura y escalamiento de soluciones de IA, gobierno, seguridad, privacidad, gesti&oacute;n de riesgos y uso responsable de IA, incluyendo ISO/IEC 42001?</p>
+    </div>
+
+    <h3>Respuesta modelo (adapta los corchetes con tu experiencia real)</h3>
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. Cuento con experiencia y conocimientos en las tres dimensiones que plantea la pregunta: (1) arquitectura y escalamiento de soluciones de IA; (2) gobierno, seguridad, privacidad y gesti&oacute;n de riesgos aplicados a IA; y (3) uso responsable, incluyendo el marco ISO/IEC 42001:2023&raquo;.</p>
+        <p><strong>Arquitectura y escalamiento:</strong> &laquo;He dise&ntilde;ado/integrado soluciones de IA de punta a punta: pipelines de datos [Airflow/Spark], feature stores, entrenamiento y despliegue con [SageMaker/Vertex/Azure ML], patrones RAG y LLMOps, y escalamiento de inferencia con autoscaling, batching din&aacute;mico y optimizaci&oacute;n de costo por token [ejemplo: reduje latencia p95 en X% o costo por inferencia en Y%]&raquo;.</p>
+        <p><strong>Gobierno y riesgos:</strong> &laquo;He trabajado con inventario de casos de uso, clasificaci&oacute;n por riesgo, evaluaciones de riesgo e impacto, model cards y registros de riesgos con due&ntilde;os y controles. Conozco y aplico ISO/IEC 42001:2023 (cl&aacute;usulas 4&ndash;10 y Anexo A), ISO/IEC 23894 para riesgo, ISO/IEC 38507 para gobierno y el NIST AI RMF&raquo;.</p>
+        <p><strong>Seguridad y privacidad:</strong> &laquo;Aplico el OWASP Top 10 para LLM (prompt injection, fuga de informaci&oacute;n, agency excesiva), red teaming, least privilege en agentes, y controles de privacidad: minimizaci&oacute;n, DPIA, cero retenci&oacute;n con proveedores y control de acceso en RAG&raquo;.</p>
+        <p><strong>Uso responsable:</strong> &laquo;Trabajo con los pilares de IA responsable (equidad, confiabilidad, privacidad, inclusividad, transparencia y responsabilidad) y con los principios OCDE/UNESCO, traduci&eacute;ndolos a controles concretos del ciclo de vida&raquo;.</p>
+        <p><strong>Cierre (aplicaci&oacute;n al rol):</strong> &laquo;En los primeros 90 d&iacute;as de este rol levantaría el inventario de sistemas de IA, priorizar&iacute;a riesgos e impactos, y propondr&iacute;a un plan de controles alineado a ISO/IEC 42001 y a los requisitos regulatorios que apliquen&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Arquitectura de IA</td><td>Diagramas de arquitectura, integraci&oacute;n de SageMaker/Vertex/Azure ML, RAG, feature store, model registry</td><td>Casos desplegados, modelos en producci&oacute;n atendiendo usuarios internos o externos</td></tr>
+        <tr><td>Escalamiento</td><td>Autoscaling por cola/GPU, batching, cuantizaci&oacute;n, cach&eacute;, multi-regi&oacute;n</td><td>M&eacute;tricas: latencia p95, throughput, costos reducidos, SLA cumplidos</td></tr>
+        <tr><td>Gobierno</td><td>Pol&iacute;tica de IA, comit&eacute;, inventario de casos de uso, roles</td><td>Comit&eacute; operando, casos aprobados con expediente completo</td></tr>
+        <tr><td>Seguridad</td><td>OWASP LLM Top 10, red teaming, controles de agentes, MLSecOps</td><td>Hallazgos remediados, pruebas previas al lanzamiento documentadas</td></tr>
+        <tr><td>Privacidad</td><td>DPIA, minimizaci&oacute;n, zero retention, anonimizaci&oacute;n, control de acceso en RAG</td><td>Cumplimiento Ley 1581/GDPR, revisiones de DPO aprobadas</td></tr>
+        <tr><td>Riesgos</td><td>Registro de riesgos de IA, evaluaciones de impacto, monitoreo de drift</td><td>Riesgos con due&ntilde;o y controles verificados; incidentes gestionados</td></tr>
+        <tr><td>Uso responsable</td><td>Model cards, supervisi&oacute;n humana, transparencia con usuarios</td><td>Documentaci&oacute;n publicada; procesos con HITL en decisiones sensibles</td></tr>
+        <tr><td>ISO/IEC 42001</td><td>Implementaci&oacute;n, alineaci&oacute;n, auditor&iacute;a interna o certificaci&oacute;n</td><td>An&aacute;lisis de brechas, plan de implementaci&oacute;n, certificaci&oacute;n obtenida y mantenida</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica siempre que puedas (latencia, costo, cobertura, n&uacute;mero de sistemas gobernados).</li>
+        <li>Nombra los marcos con precisi&oacute;n: ISO/IEC 42001:2023 (no &laquo;42001:20&raquo;), ISO/IEC 23894:2023, NIST AI RMF 1.0, OWASP Top 10 LLM 2025, EU AI Act (Reglamento UE 2024/1689).</li>
+        <li>Muestra artefactos: registro de riesgos, model cards, inventario, DPIA, resultados de red teaming.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento te&oacute;rico s&oacute;lido y un plan concreto para aplicarlo (certificaciones: ISO/IEC 42001 Lead Implementer/Auditor, IAPP AIGP, ISACA AAISM, AI-102 de Microsoft, entre otras).</li>
+        <li>Conecta todo con el negocio: reducir riesgo regulatorio, habilitar casos de uso con seguridad y acelerar la adopci&oacute;n responsable.</li>
+    </ul>
+
+    <h2 id="s10">10. Est&aacute;ndares, marcos y referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>ISO/IEC 42001:2023</td><td>Sistema de gesti&oacute;n de IA (AIMS): requisitos certificables, Anexo A con 38 controles en 9 dominios.</td></tr>
+        <tr><td>ISO/IEC 22989:2022</td><td>Conceptos y terminolog&iacute;a de IA.</td></tr>
+        <tr><td>ISO/IEC 23053:2022</td><td>Framework de sistemas de IA basados en machine learning.</td></tr>
+        <tr><td>ISO/IEC 23894:2023</td><td>Gesti&oacute;n de riesgos de IA (basado en ISO 31000), fuentes de riesgo de IA.</td></tr>
+        <tr><td>ISO/IEC 38507:2022</td><td>Implicaciones de gobierno del uso de IA en las organizaciones.</td></tr>
+        <tr><td>ISO/IEC 5338:2023</td><td>Procesos del ciclo de vida de sistemas de IA.</td></tr>
+        <tr><td>ISO/IEC 25059 / TR 24027 / TR 24028</td><td>Calidad de sistemas de IA; sesgo; confiabilidad y robustez.</td></tr>
+        <tr><td>ISO/IEC 42005 / 42006</td><td>Gu&iacute;a de evaluaci&oacute;n de impacto de sistemas de IA; requisitos para organismos de certificaci&oacute;n de AIMS.</td></tr>
+        <tr><td>ISO/IEC 27001 / 27002 / 27701</td><td>Seguridad de la informaci&oacute;n y privacidad (base integrable con 42001).</td></tr>
+        <tr><td>NIST AI RMF 1.0 (AI 100-1) y NIST AI 600-1</td><td>Marco de gesti&oacute;n de riesgo de IA (Govern, Map, Measure, Manage) y perfil de IA generativa.</td></tr>
+        <tr><td>EU AI Act (Reglamento UE 2024/1689)</td><td>Regulaci&oacute;n por niveles de riesgo: prohibiciones (feb 2025), GPAI (ago 2025), alto riesgo (ago 2026).</td></tr>
+        <tr><td>OWASP Top 10 for LLM Applications (2025)</td><td>Riesgos de seguridad de aplicaciones con LLM y controles recomendados.</td></tr>
+        <tr><td>OCDE (2019/2024) y UNESCO (2021)</td><td>Principios internacionales de IA y recomendaci&oacute;n sobre &eacute;tica de la IA.</td></tr>
+        <tr><td>Colombia: Ley 1581 de 2012, CONPES 3975 (2019), Marco &Eacute;tico de IA (MinTIC, 2021)</td><td>Protecci&oacute;n de datos personales (Habeas Data), pol&iacute;tica nacional de IA y marco &eacute;tico.</td></tr>
+        <tr><td>Certificaciones de referencia</td><td>ISO/IEC 42001 Lead Implementer/Auditor (PECB y otros), IAPP AIGP, ISACA AAISM, Microsoft AI-102, AWS ML Specialty, Google Cloud ML Engineer.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
