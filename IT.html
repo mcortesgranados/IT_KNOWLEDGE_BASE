@@ -1,184 +1,185 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>IT KNOWLEDGE BASE</title>
-  <style type="text/css">
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 40px;
-      color: #333;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      color: #2c3e50;
-      margin-bottom: 40px;
-      border-bottom: 2px solid #2c3e50;
-      padding-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 20px;
-    }
-
-    ul li {
-      margin: 8px 0;
-    }
-
-    ul li strong {
-      display: inline-block;
-      margin: 10px 0;
-      font-size: 18px;
-      color: #1a5276;
-    }
-
-    a {
-      text-decoration: none;
-      color: #2980b9;
-      font-size: 16px;
-    }
-
-    a:hover {
-      color: #1abc9c;
-      text-decoration: underline;
-    }
-
-    ul ul {
-      margin-left: 20px;
-      padding-left: 10px;
-      border-left: 2px solid #dcdde1;
-    }
-
-    body > ul {
-      max-width: 1000px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT KNOWLEDGE BASE</title>
+<style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 28px 18px 52px; }
+    h1 { color: #1565c0; text-align: center; font-size: 1.85rem; margin: 8px 0 30px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+    .card { border: 1px solid #d7e3f1; border-radius: 10px; background: #fff; box-shadow: 0 3px 10px rgba(15, 23, 42, .05); overflow: hidden; transition: box-shadow .15s ease, transform .15s ease; }
+    .card:hover, .card:focus-within { box-shadow: 0 8px 22px rgba(21, 101, 192, .14); transform: translateY(-2px); }
+    .card-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); border-bottom: 1px solid #d7e3f1; }
+    .num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.2em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 900; line-height: 1.2; }
+    .card-title { font-weight: 800; font-size: 1rem; color: #1f4f8c; text-decoration: none; line-height: 1.25; }
+    a.card-title:hover, a.card-title:focus { color: #0d47a1; text-decoration: underline; outline: 2px solid #93c5fd; outline-offset: 2px; border-radius: 4px; }
+    .links { list-style: none; margin: 0; padding: 8px 10px 10px; }
+    .links li { margin: 2px 0; }
+    .links a { display: block; padding: 7px 10px; border-radius: 6px; color: #1565c0; text-decoration: none; font-size: .95rem; line-height: 1.35; transition: background .15s ease, box-shadow .15s ease; }
+    .links a:hover, .links a:focus { background: #dff3ff; box-shadow: inset 0 0 0 2px #1565c0; }
+    .sub { padding: 10px 14px 0; color: #7b1fa2; font-weight: 800; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
+    .muted { display: block; padding: 7px 10px; color: #64748b; font-size: .95rem; }
+    .grid > .card:nth-child(4n+1) { border-top: 3px solid #2e7d32; }
+    .grid > .card:nth-child(4n+1) .num { background: #2e7d32; }
+    .grid > .card:nth-child(4n+2) { border-top: 3px solid #1565c0; }
+    .grid > .card:nth-child(4n+2) .num { background: #1565c0; }
+    .grid > .card:nth-child(4n+3) { border-top: 3px solid #ef6c00; }
+    .grid > .card:nth-child(4n+3) .num { background: #ef6c00; }
+    .grid > .card:nth-child(4n) { border-top: 3px solid #7b1fa2; }
+    .grid > .card:nth-child(4n) .num { background: #7b1fa2; }
+    @media (max-width: 600px) { .container { padding: 16px 10px 32px; } h1 { font-size: 1.3rem; } .grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 
 <body>
-<h1>MANUELA CORTÉS GRANADOS'S IT KNOWLEDGE BASE</h1>
-  <ul>
-    <li><a href="AI/ai_governance_responsible_ai.html" target="_blank"><strong>AI GOVERNANCE &amp; RESPONSIBLE AI</strong></a></li>
-    <li><a href="BACKEND/PREGUNTAS_BACKEND.html" target="_blank">BACKEND</a></li>
-    <li><strong>CLOUD</strong>
-      <ul>
+<div class="container">
+  <h1>MANUELA CORTÉS GRANADOS'S IT KNOWLEDGE BASE</h1>
+
+  <div class="grid">
+
+    <article class="card">
+      <div class="card-header"><span class="num">01</span><a class="card-title" href="AI/ai_governance_responsible_ai.html" target="_blank">AI GOVERNANCE &amp; RESPONSIBLE AI</a></div>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">02</span><a class="card-title" href="BACKEND/PREGUNTAS_BACKEND.html" target="_blank">BACKEND</a></div>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">03</span><span class="card-title">CLOUD</span></div>
+      <ul class="links">
         <li><a href="CLOUD/ONE_STOP_FOR_CLOUD/index.html" target="_blank">ONE_STOP_FOR_CLOUD</a></li>
       </ul>
-    </li>
-    <li><strong>DATA_ENGINEER</strong>
-      <ul>
-        <li><strong>ANALISTA DE DATOS</strong>
-          <ul>
-            <li><a href="DATA_ENGINEER/ANALISTA_DATOS/ANALISTA_DATOS.html" target="_blank">ANALISTA_DATOS</a></li>
-            <li><a href="DATA_ENGINEER/ANALISTA_DATOS/Casos Exito Analista Datos.html" target="_blank">Casos Exito Analista Datos</a></li>
-            <li><a href="DATA_ENGINEER/ANALISTA_DATOS/Cuadro Comparativo 01.html" target="_blank">Cuadro Comparativo 01</a></li>
-            <li><a href="DATA_ENGINEER/ANALISTA_DATOS/Cuadro Comparativo 02.html" target="_blank">Cuadro Comparativo 02</a></li>
-          </ul>
-        </li>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">04</span><span class="card-title">DATA_ENGINEER</span></div>
+      <div class="sub">ANALISTA DE DATOS</div>
+      <ul class="links">
+        <li><a href="DATA_ENGINEER/ANALISTA_DATOS/ANALISTA_DATOS.html" target="_blank">ANALISTA_DATOS</a></li>
+        <li><a href="DATA_ENGINEER/ANALISTA_DATOS/Casos Exito Analista Datos.html" target="_blank">Casos Exito Analista Datos</a></li>
+        <li><a href="DATA_ENGINEER/ANALISTA_DATOS/Cuadro Comparativo 01.html" target="_blank">Cuadro Comparativo 01</a></li>
+        <li><a href="DATA_ENGINEER/ANALISTA_DATOS/Cuadro Comparativo 02.html" target="_blank">Cuadro Comparativo 02</a></li>
+      </ul>
+      <ul class="links">
         <li><a href="DATA_ENGINEER/BOTO3/boto3_30_questions.html" target="_blank">Boto3 Data Pipelines - Intermediate to Advanced Questions</a></li>
         <li><a href="DATA_ENGINEER/NUMPY/numpy_30_questions.html" target="_blank">Intermediate to Advanced NumPy Questions for Data Pipelines</a></li>
-        <li><a href="DATA_ENGINEER/PYSPARK/pyspark_30_questions.html">PySpark Intermediate to Advanced Questions and Answers</a></li>
+        <li><a href="DATA_ENGINEER/PYSPARK/pyspark_30_questions.html" target="_blank">PySpark Intermediate to Advanced Questions and Answers</a></li>
       </ul>
-    </li>
-    <li><strong>DOCKER</strong>
-      <ul>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">05</span><span class="card-title">DOCKER</span></div>
+      <ul class="links">
         <li><a href="DOCKER/01_BASIC/index_basic.html" target="_blank">Beginner</a></li>
         <li><a href="DOCKER/02_INTERMEDIATE/index_intermediate.html" target="_blank">Intermediate</a></li>
         <li><a href="DOCKER/03_ADVANCED/index_advanced.html" target="_blank">Advanced</a></li>
         <li><a href="DOCKER/DOCKER_COMPOSE/docker_compose.html" target="_blank">Docker Compose</a></li>
       </ul>
-    </li>
-    <li><strong>DOT_NET</strong>
-      <ul>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">06</span><span class="card-title">DOT_NET</span></div>
+      <ul class="links">
         <li><a href="DOT_NET/WINFORMS_NET_MIGRATION/WINFORMS_NET_MIGRATION.html" target="_blank">WINFORMS_NET_MIGRATION</a></li>
       </ul>
-    </li>
-    <li><a href="FPT LATAM/FPT LATAM main.html" target="_blank"><strong>FPT LATAM</strong></a></li>
-    <li><strong>FRONTEND</strong>
-      <ul>
-        <li><strong>ANGULAR</strong>
-          <ul>
-            <li><a href="FRONTEND/ANGULAR/BASIC/ANGULAR_BASIC.html" target="_blank">Angular Beginner</a></li>
-            <li><a href="FRONTEND/ANGULAR/INTERMEDIATE/angular_intermediate_20_01.html" target="_blank">Angular Intermediate</a></li>
-            <li><a href="FRONTEND/ANGULAR/ADVANCED/angular_advanced_20_01.html" target="_blank">Angular Advanced</a></li>
-            <li><a href="FRONTEND/REACT/01_react_all_questions.html" target="_blank">All questions</a></li>
-            <li></li>
-          </ul>
-        </li>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">07</span><a class="card-title" href="FPT LATAM/FPT LATAM main.html" target="_blank">FPT LATAM</a></div>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">08</span><span class="card-title">FRONTEND</span></div>
+      <div class="sub">ANGULAR</div>
+      <ul class="links">
+        <li><a href="FRONTEND/ANGULAR/BASIC/ANGULAR_BASIC.html" target="_blank">Angular Beginner</a></li>
+        <li><a href="FRONTEND/ANGULAR/INTERMEDIATE/angular_intermediate_20_01.html" target="_blank">Angular Intermediate</a></li>
+        <li><a href="FRONTEND/ANGULAR/ADVANCED/angular_advanced_20_01.html" target="_blank">Angular Advanced</a></li>
+        <li><a href="FRONTEND/REACT/01_react_all_questions.html" target="_blank">All questions</a></li>
       </ul>
-    </li>
-    <li><a href="CERTIFICATIONS/LIST_OF_CERTIFICATIONS.html"><strong>LIST OF CERTIFICATIONS</strong></a></li>
-    <li><strong>REACT</strong>
-      <ul>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">09</span><span class="card-title">CERTIFICATIONS</span></div>
+      <ul class="links">
+        <li><a href="CERTIFICATIONS/LIST_OF_CERTIFICATIONS.html" target="_blank">LIST OF CERTIFICATIONS</a></li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">10</span><span class="card-title">REACT</span></div>
+      <ul class="links">
         <li><a href="FRONTEND/REACT/01_react_basic.html" target="_blank">React Beginner Questions</a></li>
         <li><a href="FRONTEND/REACT/01_react_intermediate.html" target="_blank">React Intermediate Questions</a></li>
         <li><a href="FRONTEND/REACT/03_react_advanced.html" target="_blank">React Advanced Questions</a></li>
       </ul>
-    </li>
-    <li><strong>GRAPHQL</strong>
-      <ul>
-        <li><a href="GRAPHQL/BASICO.html" target="_blank"><strong>BASIC</strong></a></li>
-      </ul>
-    </li>
-    <li><strong>JAVA</strong>
+    </article>
 
-      <ul>
-        <li><a href="JAVA/JAVA_ADVANCED/Java Advanced Index.html" target="_blank">Java Advanced</a></li>
-        <li>Kafka</li>
+    <article class="card">
+      <div class="card-header"><span class="num">11</span><span class="card-title">GRAPHQL</span></div>
+      <ul class="links">
+        <li><a href="GRAPHQL/BASICO.html" target="_blank">BASIC</a></li>
       </ul>
-    </li>
-    <li><strong>KAFKA</strong>
-      <ul>
-        <li><a href="KAFKA/01_BASIC/index_basic.html" target="_blank">Beginner</a>
-          <ul>
-            <li><a href="KAFKA/02_INTERMEDIATE/kafka_intermediate_index.html" target="_blank">Intermediate</a></li>
-          </ul>
-        </li>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">12</span><span class="card-title">JAVA</span></div>
+      <ul class="links">
+        <li><a href="JAVA/JAVA_ADVANCED/Java Advanced Index.html" target="_blank">Java Advanced</a></li>
+        <li><span class="muted">Kafka</span></li>
+      </ul>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">13</span><span class="card-title">KAFKA</span></div>
+      <ul class="links">
+        <li><a href="KAFKA/01_BASIC/index_basic.html" target="_blank">Beginner</a></li>
+        <li><a href="KAFKA/02_INTERMEDIATE/kafka_intermediate_index.html" target="_blank">Intermediate</a></li>
         <li><a href="KAFKA/03_ADVANCED/kafka_advanced_index.html" target="_blank">Advanced</a></li>
       </ul>
-    </li>
-    <li><strong>ORACLE</strong></li>
-    <li><strong>PRISMA</strong>
-      <ul>
-        <li><a href="PRISMA/prisma_01.html" target="_blank"><strong>Intro</strong></a></li>
-        <li><a href="PRISMA/prisma_120_questions.html" target="_blank"><strong>100 Questions</strong></a></li>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">14</span><span class="card-title">ORACLE</span></div>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">15</span><span class="card-title">PRISMA</span></div>
+      <ul class="links">
+        <li><a href="PRISMA/prisma_01.html" target="_blank">Intro</a></li>
+        <li><a href="PRISMA/prisma_120_questions.html" target="_blank">100 Questions</a></li>
       </ul>
-    </li>
-    <li><strong>FASTAPI</strong>
-      <ul>
-        <li><a href="FASTAPI/index_fastapi.html" target="_blank">FastAPI Home</a>
-          <ul>
-            <li><a href="FASTAPI/01_BASIC/index_basic.html" target="_blank">Basic</a></li>
-            <li><a href="FASTAPI/02_INTERMEDIATE/index_intermediate.html" target="_blank">Intermediate</a></li>
-          </ul>
-        </li>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">16</span><span class="card-title">FASTAPI</span></div>
+      <ul class="links">
+        <li><a href="FASTAPI/index_fastapi.html" target="_blank">FastAPI Home</a></li>
+        <li><a href="FASTAPI/01_BASIC/index_basic.html" target="_blank">Basic</a></li>
+        <li><a href="FASTAPI/02_INTERMEDIATE/index_intermediate.html" target="_blank">Intermediate</a></li>
       </ul>
-    </li>
-    <li><strong>PYTHON</strong>
-      <ul>
-        <li><strong>Python Roadmap</strong>
-          <ul>
-            <li><a href="PYTHON/Python Roadmap/Python Roadmap.html" target="_blank">Python Roadmap</a></li>
-            <li><a href="PYTHON/Python_1077_questions_answers_frameset.html" target="_blank">Python 1077 Questions with Answers (Audio)</a></li>
-          </ul>
-        </li>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">17</span><span class="card-title">PYTHON</span></div>
+      <ul class="links">
+        <li><a href="PYTHON/Python Roadmap/Python Roadmap.html" target="_blank">Python Roadmap</a></li>
+        <li><a href="PYTHON/Python_1077_questions_answers_frameset.html" target="_blank">Python 1077 Questions with Answers (Audio)</a></li>
       </ul>
-    </li>
-    <li><a href="SW_ARCHITECTURES/sw_architectures.html" target="_blank"><strong>SW ARCHITECTURES</strong></a></li>
-    <li><strong><a href="YUMBRANDS/YUMBRANDS_main1.html" target="_blank">YUMRANDS</a></strong></li>
-    <li></li>
-  </ul>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">18</span><a class="card-title" href="SW_ARCHITECTURES/sw_architectures.html" target="_blank">SW ARCHITECTURES</a></div>
+    </article>
+
+    <article class="card">
+      <div class="card-header"><span class="num">19</span><a class="card-title" href="YUMBRANDS/YUMBRANDS_main1.html" target="_blank">YUMBRANDS</a></div>
+    </article>
+
+  </div>
+</div>
 </body>
 </html>
