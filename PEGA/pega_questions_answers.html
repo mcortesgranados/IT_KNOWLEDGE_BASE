@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEGA - Fundamentos, Case Management, Reglas, Integraciones, Seguridad y DevOps | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>PEGA &mdash; Fundamentos, Arquitectura, Case Management, Reglas, UI, Decisioning, Integraciones, Seguridad y DevOps</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Pega (BPM, case management y automatizaci&oacute;n) en modelado de casos, desarrollo de reglas, integraciones, seguridad y despliegues?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos (Q1&ndash;Q8), arquitectura de la plataforma (Q9&ndash;Q16), case management (Q17&ndash;Q24), modelo de datos: clases, propiedades y clipboard (Q25&ndash;Q32), reglas y rule resolution (Q33&ndash;Q40), interfaz y experiencia (Q41&ndash;Q47), decisioning, IA y RPA (Q48&ndash;Q55), integraciones (Q56&ndash;Q63), seguridad (Q64&ndash;Q71) y DevOps/administraci&oacute;n (Q72&ndash;Q81), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos de Pega, BPM y versiones &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Arquitectura de la plataforma &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. Case management &mdash; 8 preguntas</a></li>
+        <li><a href="#s4">4. Modelo de datos: clases, propiedades y clipboard &mdash; 8 preguntas</a></li>
+        <li><a href="#s5">5. Reglas y rule resolution &mdash; 8 preguntas</a></li>
+        <li><a href="#s6">6. Interfaz y experiencia (App Studio, Constellation, UI) &mdash; 7 preguntas</a></li>
+        <li><a href="#s7">7. Decisioning, IA y RPA &mdash; 8 preguntas</a></li>
+        <li><a href="#s8">8. Integraciones &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Seguridad &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. DevOps, despliegue, administraci&oacute;n y rendimiento &mdash; 10 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Pega en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos de Pega, BPM y versiones</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Pega y para qu&eacute; tipo de soluciones se usa?</p>
+        <p class="a">Pega (Pegasystems, fundada en 1983) es una plataforma enterprise low-code para la gesti&oacute;n de casos (case management), la automatizaci&oacute;n de workflows, el decisioning y la IA. Sobre Pega Platform se construyen aplicaciones de back-office (cr&eacute;ditos, siniestros, onboarding, disputas), servicio al cliente (Pega Customer Service), marketing 1:1 (Customer Decision Hub) y gobierno digital. Es especialmente fuerte en sectores como banca, seguros, salud, telecomunicaciones y sector p&uacute;blico, donde hay procesos complejos, regulados y de alto volumen.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Qu&eacute; es BPM y c&oacute;mo se relaciona con case management?</p>
+        <p class="a">BPM (Business Process Management) es la disciplina de modelar, ejecutar y mejorar procesos de negocio. El case management va m&aacute;s all&aacute;: gestiona un <em>caso</em> (una unidad de trabajo con datos, ciclo de vida, reglas y partes interesadas) que puede evolucionar de forma semiestructurada, con etapas y decisiones que cambian seg&uacute;n el contexto. Pega combina ambos: los procesos se ejecutan dentro de casos, y el motor de reglas decide el comportamiento din&aacute;micamente seg&uacute;n datos y circunstancias, en lugar de un flujo r&iacute;gido predefinido.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;C&oacute;mo se diferencia Pega de otras plataformas (Appian, Camunda, ServiceNow, Salesforce)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Pega:</strong> motor de reglas con <em>Rule Resolution</em>, case management nativo, decisioning 1:1 (CDH), IA y RPA en una sola plataforma; fuerte en procesos complejos de back-office con reglas de negocio cambiantes.</li>
+                <li><strong>Camunda:</strong> motor BPMN, orientado a flujos modelados y orquestaci&oacute;n de servicios; menos enfocado en UI low-code y decisioning.</li>
+                <li><strong>Appian:</strong> low-code similar; case management y automatizaci&oacute;n, sin el decisioning de CDH.</li>
+                <li><strong>ServiceNow:</strong> centrado en ITSM y workflows de servicio; <strong>Salesforce:</strong> centrado en CRM.</li>
+            </ul>
+            La elecci&oacute;n depende del tipo de proceso, del volumen, de las capacidades de decisi&oacute;n requeridas y del ecosistema existente.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Qu&eacute; versiones existen y c&oacute;mo se nombran?</p>
+        <p class="a">Hist&oacute;ricamente: PRPC (PegaRULES Process Commander) hasta 7.x, luego Pega Platform 7.x y 8.x (8.1&ndash;8.8). Desde 2023 el naming es por a&ntilde;o: Pega Platform '23, '24.1, '24.2, '25.x, dentro de la suite Pega Infinity. Pega Cloud aplica patches peri&oacute;dicos de forma gestionada y versiones mayores aproximadamente anuales con ventanas de upgrade planificadas; en on-premise el cliente planifica sus propias actualizaciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;Qu&eacute; es Pega Cloud y qu&eacute; alternativas de despliegue hay?</p>
+        <p class="a">Pega Cloud es el modelo SaaS gestionado por Pega (infraestructura en nubes p&uacute;blicas como AWS), donde Pega administra plataforma, parches, escalado y respaldo. Alternativas: instalaci&oacute;n on-premise tradicional, contenedores con Kubernetes (Pega provee charts/operadores para despliegues containerizados) y las ediciones para gobierno (Pega Government Cloud, con regiones y requisitos espec&iacute;ficos). La elecci&oacute;n depende de regulaci&oacute;n, residencia de datos y capacidades del equipo de operaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Qu&eacute; roles se distinguen en un proyecto Pega?</p>
+        <p class="a">Business Architect (dise&ntilde;o funcional y microjourneys), System Architect (CSA), Senior System Architect (SSA/CSSA), Lead System Architect (LSA/CLSA), Decisioning Consultant (CDH), desarrollador RPA y perfiles de administraci&oacute;n/DevOps. Certificaciones t&iacute;picas: Certified Pega Business Architect (CPBA), Certified System Architect (CSA), Certified Senior System Architect (CSSA), Certified Lead System Architect (CLSA) y Certified Pega Decisioning Consultant.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;Cu&aacute;l es el ciclo de vida de desarrollo en Pega?</p>
+        <p class="a">Dise&ntilde;o (workshops estilo Design Thinking, "Center-out", Pega Express con fases Discover&ndash;Build&ndash;Adopt) &rarr; construcci&oacute;n en App Studio/Dev Studio (con ramas por equipo) &rarr; pruebas (unit tests, scenario tests, regresi&oacute;n) &rarr; despliegue por pipelines (Deployment Manager) &rarr; operaci&oacute;n y mejora (Admin Studio, PDC, monitoreo). Pega Express enfatiza personas, microjourneys y entregas incrementales sobre la plataforma.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Qu&eacute; es un microjourney y el enfoque "center-out"?</p>
+        <p class="a">Un microjourney es un recorrido de valor de inicio a fin desde la perspectiva del cliente o usuario (por ejemplo: "resolver una disputa de tarjeta" o "aprobar un cr&eacute;dito"), y se implementa como un case type. El enfoque <em>center-out</em> dise&ntilde;a desde la intenci&oacute;n del cliente hacia adentro (personas, microjourneys y luego procesos internos), en lugar de partir de la estructura organizacional. Es la base metodol&oacute;gica de Pega Express y del Blueprint generado con GenAI.</p>
+    </div>
+
+    <h2 id="s2">2. Arquitectura de la plataforma</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;Qu&eacute; es el motor PegaRULES?</p>
+        <p class="a">Es el motor (Java) que interpreta y ejecuta las <strong>reglas</strong> almacenadas en la base de datos: proceso, UI, integraciones, seguridad y decisioning son reglas resueltas en tiempo de ejecuci&oacute;n mediante el algoritmo de <em>Rule Resolution</em>. Los desarrolladores configuran reglas (no compilan c&oacute;digo, aunque se pueden escribir pasos Java), lo que permite cambiar comportamiento sin re-desplegar la aplicaci&oacute;n. El motor mantiene cach&eacute; de reglas en cada nodo para ejecutarlas con baja latencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;C&oacute;mo se estructura la arquitectura de nodos?</p>
+        <p class="a">Pega corre como un cl&uacute;ster de nodos (JVMs) que comparten base de datos: nodos de interacci&oacute;n de usuario (web), nodos de procesamiento en background (agentes, queue processors, jobs) y nodos de streaming (para decisioning en tiempo real). En Pega Cloud esta topolog&iacute;a es gestionada; en on-premise se dise&ntilde;an tipos y cantidad de nodos seg&uacute;n carga. El estado de sesi&oacute;n (clipboard) vive en memoria por nodo, y la persistencia en la base de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Cu&aacute;l es el stack tecnol&oacute;gico?</p>
+        <p class="a">Java (JVM) como plataforma de ejecuci&oacute;n; base de datos relacional (PostgreSQL en Pega Cloud; en on-premise se soportan Oracle, SQL Server, PostgreSQL, entre otras); servidores de aplicaciones Java (Tomcat en cloud; WebLogic, WebSphere o Tomcat en on-premise); servicios de streaming (Kafka) para decisioning en tiempo real; APIs REST para integraci&oacute;n; y componentes web modernos en el cliente (Constellation).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Qu&eacute; entornos se manejan y c&oacute;mo se promueve el c&oacute;digo?</p>
+        <p class="a">T&iacute;picamente desarrollo &rarr; QA/Staging &rarr; producci&oacute;n, cada uno como instalaci&oacute;n/cl&uacute;ster independiente. Las reglas se promueven empaquetadas (productos/RAP o versiones de aplicaci&oacute;n) v&iacute;a pipelines de Deployment Manager; nunca se copia la base de datos de producci&oacute;n hacia desarrollo (solo refrescos controlados de entornos no productivos desde datos anonimizados cuando el proceso lo permite).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Qu&eacute; son las capas enterprise e implementation y los frameworks?</p>
+        <p class="a">Pega organiza las reglas en capas: el <strong>enterprise layer</strong> contiene reglas reutilizables para toda la organizaci&oacute;n (estructura Org-, utilidades, data types comunes); el <strong>implementation layer</strong> contiene la aplicaci&oacute;n espec&iacute;fica del negocio. Sobre esa base se extienden los <strong>frameworks</strong> de producto (Customer Service, Government, etc.), que aportan reglas est&aacute;ndar que la implementaci&oacute;n hereda y especializa sin modificarlas (extensi&oacute;n por herencia, no por edici&oacute;n).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo se organiza una aplicaci&oacute;n Pega?</p>
+        <p class="a">La regla <strong>Application</strong> define el nombre, la versi&oacute;n, el ruleset stack (lista ordenada de rulesets) y las aplicaciones base (built-on). Dentro se definen case types, data types, clases, portals, access groups y las divisiones/unidades organizacionales (Org-). Los usuarios se representan con <strong>Operator IDs</strong> ligados a access groups, workgroups y reglas de seguridad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;C&oacute;mo se logra escalabilidad y alta disponibilidad?</p>
+        <p class="a">Con escalado horizontal de nodos (m&aacute;s nodos web o de background seg&uacute;n la carga), escalado de la base de datos, balanceadores de carga y despliegue multi-zona. Pega Cloud gestiona esta elasticidad y la HA; en on-premise se dimensiona seg&uacute;n volumetr&iacute;a, se separan nodos por tipo de trabajo y se monitorea con PDC/alerts. El decisioning en tiempo real escala con servicios de streaming dedicados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;Qu&eacute; son los requestors y threads?</p>
+        <p class="a">Un <strong>requestor</strong> representa una sesi&oacute;n de trabajo (usuario en navegador, servicio REST, batch, aplicaci&oacute;n); un <strong>thread</strong> es una unidad de ejecuci&oacute;n dentro del requestor con su propio &aacute;mbito de clipboard. Las p&aacute;ginas de nivel requestor se comparten entre threads y persisten durante la sesi&oacute;n; las de nivel thread se crean y liberan por operaci&oacute;n. Entender esto es clave para performance: el tama&ntilde;o y la cantidad de p&aacute;ginas afectan memoria y velocidad.</p>
+    </div>
+
+    <h2 id="s3">3. Case management</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;Qu&eacute; es un case type y c&oacute;mo se estructura?</p>
+        <p class="a">Un case type (clase Work-) define un tipo de trabajo: su modelo de datos (data types y propiedades), su ciclo de vida (stages y steps), SLA, estados, seguridad y experiencia de usuario. Se dise&ntilde;a en el Case Designer de App Studio. Ejemplos: "Disputa", "Solicitud de cr&eacute;dito", "Onboarding de cliente", "Siniestro".</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; son las etapas, pasos y procesos?</p>
+        <p class="a">Las <strong>stages</strong> son las fases del caso (por ejemplo: Intake, Review, Approve, Resolve); dentro de cada stage hay <strong>steps</strong>, que pueden ser procesos automatizados (data transforms, integraciones, decisiones) o <strong>assignments</strong> (tareas de usuario con formularios). Las transiciones entre etapas pueden ser autom&aacute;ticas o manuales, y en versiones recientes existen etapas alternativas para rework o excepciones. El resultado: un ciclo de vida visual y gobernable.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;C&oacute;mo funcionan los estados, la urgencia y los SLA?</p>
+        <p class="a">Cada caso tiene un estado (New, Open, Pending, Resolved-&hellip;) visible como <em>pyStatusWork</em>. La <strong>urgencia</strong> (pxUrgencyWork) prioriza el trabajo y sube con incrementos configurables. Los <strong>SLA</strong> definen goal, deadline y passed deadline con acciones en cada umbral: incrementar urgencia, reassignar, notificar o ejecutar automatizaciones. As&iacute; se garantiza que los casos cr&iacute;ticos no se queden atr&aacute;s.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;C&oacute;mo funciona el routing de assignments?</p>
+        <p class="a">Los assignments pueden rutearse a un usuario, a una <strong>worklist</strong> (lista personal), a una <strong>workbasket</strong> (cola compartida) o resolverse con reglas de skills/routing (por ejemplo, asignar al grupo con la habilidad requerida). Las workbaskets se asocian a workgroups. El "Get Next Work" permite que el usuario tome el siguiente trabajo disponible seg&uacute;n reglas. Tambi&eacute;n existen SLA a nivel de assignment.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; son los child cases (add work y spin-off)?</p>
+        <p class="a">Un caso puede crear casos hijos para dividir trabajo: <strong>Add work</strong> crea un hijo que forma parte del ciclo del padre (el padre espera a que se resuelva dentro de su flujo), &uacute;til para tareas encapsuladas; <strong>Spin-off</strong> crea un hijo con ciclo de vida independiente (por ejemplo, gestionar una disputa mientras el pedido sigue su curso). El dise&ntilde;o correcto de dependencias evita bloqueos y permite paralelismo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;C&oacute;mo se manejan el locking y la persistencia de los casos?</p>
+        <p class="a">Pega aplica bloqueo optimista: al guardar se detectan conflictos si otro proceso modific&oacute; el caso. La apertura del caso en la UI y ciertas operaciones requieren lock; los procesos batch pueden operar sin lock para alto volumen. La persistencia se hace con m&eacute;todos Obj-Save (o "Save" en flows), y las actualizaciones masivas se realizan con cuidado para no pisar datos. El dise&ntilde;o de concurrencia es parte del modelado del caso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;Qu&eacute; son las correspondencias y los adjuntos?</p>
+        <p class="a">Las <strong>correspondence rules</strong> generan comunicaciones (email, cartas, PDF) combinando texto con propiedades del caso; pueden incluir fragmentos reutilizables y ser multimodales. Los <strong>attachments</strong> se clasifican por categor&iacute;a, tienen control de seguridad y se asocian al caso; la generaci&oacute;n de PDF es nativa. Todo esto permite gestionar la comunicaci&oacute;n con el cliente dentro del propio caso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Qu&eacute; son las work parties y c&oacute;mo se gobiernan los casos a escala?</p>
+        <p class="a">Las <strong>work parties</strong> son los roles asociados al caso (cliente, owner, partes interesadas) y determinan qui&eacute;n ve y qui&eacute;n act&uacute;a. A escala se gobiernan con: procesos masivos (bulk actions), archiving y purga de casos antiguos (data management), reportes y monitorizaci&oacute;n por estado/etapa, y reglas de negocio que mantengan los casos consistentes. Buena gobernanza = volumen controlado + trazabilidad.</p>
+    </div>
+
+    <h2 id="s4">4. Modelo de datos: clases, propiedades y clipboard</h2>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;Qu&eacute; son las clases y c&oacute;mo se organiza la jerarqu&iacute;a est&aacute;ndar?</p>
+        <p class="a">Las clases definen la estructura (propiedades) y el comportamiento (reglas) de los datos. La biblioteca est&aacute;ndar incluye: <strong>@baseclass</strong> (ra&iacute;z), <strong>Work-</strong> (casos), <strong>Data-</strong> (datos de referencia como Data-Party o Data-Customer), <strong>Org-</strong> (estructura organizacional), <strong>Embed-</strong> (p&aacute;ginas embebidas reutilizables), <strong>History-</strong>, <strong>Rule-</strong> (las reglas mismas) y <strong>Code-</strong> (page lists est&aacute;ndar como Code-Pega-List). Las clases pueden ser abstractas (no instanciables) o concretas; las Work- concretas son los case types.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; diferencia hay entre pattern inheritance y directed inheritance?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Pattern inheritance:</strong> herencia por nombre. "Work-Loan-CarLoan" hereda de "Work-Loan" y &eacute;sta de "Work-", siguiendo los prefijos del nombre de clase.</li>
+                <li><strong>Directed inheritance:</strong> herencia expl&iacute;cita hacia otra clase que no necesariamente comparte el prefijo (por ejemplo, una clase de implementaci&oacute;n que hereda del framework, o reglas est&aacute;ndar que heredan de @baseclass).</li>
+            </ul>
+            Al resolver una regla, el motor combina ambas rutas para decidir d&oacute;nde encontrarla.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;Qu&eacute; son las properties?</p>
+        <p class="a">Son los atributos de una clase: texto, n&uacute;mero, fecha, booleano, p&aacute;ginas (page), listas de p&aacute;ginas (page list) y page groups, entre otros modos. Cada property tiene su regla (etiqueta, tipo, validaci&oacute;n, valores). Las propiedades del sistema usan prefijos reservados: <em>py</em> (est&aacute;ndar de negocio, como pyID o pyStatusWork) y <em>px</em> (internas de plataforma). Nombrar bien las propiedades y reutilizarlas es parte de las buenas pr&aacute;cticas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;Qu&eacute; es el clipboard y por qu&eacute; importa?</p>
+        <p class="a">El clipboard es la memoria de trabajo de una sesi&oacute;n: contiene las p&aacute;ginas de datos (pyWorkPage con el caso activo, p&aacute;ginas de requestor compartidas, p&aacute;ginas de thread y data pages). Los desarrolladores lo inspeccionan con la herramienta Clipboard en Dev Studio. Importa para performance: un clipboard enorme (p&aacute;ginas innecesarias, page lists gigantes) degrada memoria y velocidad; limpiar y acotar p&aacute;ginas es una pr&aacute;ctica clave.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;Qu&eacute; son las data pages?</p>
+        <p class="a">Son mecanismos declarativos para cargar y cachear datos: se define la p&aacute;gina (estructura y par&aacute;metros), su <strong>scope</strong> (thread, requestor o node) y su <strong>fuente</strong> (data transform, activity, conector REST, report definition, entre otras). Con estrategias de refresco ("reload if older than", refresco bajo demanda) permiten desacoplar la UI y los procesos del origen de datos, mejorar performance por cach&eacute; y estandarizar integraciones. Son una pieza central del dise&ntilde;o en Pega.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; son los data types y los data transforms?</p>
+        <p class="a">Los <strong>data types</strong> modelan datos de referencia (clientes, productos, cat&aacute;logos) con sus campos y fuentes de datos (REST, base de datos, archivos, manuales). Los <strong>data transforms</strong> son reglas que mapean y actualizan propiedades de forma declarativa (set, append, mapeo de entrada); reemplazan a las activities para asignaciones simples y son preferidas por su claridad, reutilizaci&oacute;n y cumplimiento de guardrails.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;C&oacute;mo se guardan y consultan los datos de negocio?</p>
+        <p class="a">Los casos se persisten en tablas de la base de datos Pega (estructura generada por la plataforma) mediante m&eacute;todos Obj-Save/Obj-Open y las operaciones del motor. Para consultas de negocio se usan <strong>report definitions</strong> (reportes sobre la BD con filtros y columnas, base de Report Browser y de dashboards), data pages con report definition como fuente, y herramientas de an&aacute;lisis. Para vol&uacute;menes hist&oacute;ricos se aplican archiving y purga con jobs programados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; buenas pr&aacute;cticas aplican al modelo de datos?</p>
+        <p class="a">Separar claramente Work- (casos) de Data- (referencia); reutilizar data types del enterprise layer; evitar propiedades duplicadas o ad-hoc en clases de UI; nombrar consistentemente (prefijos por proyecto, sin tocar py/px); modelar p&aacute;ginas y page lists con la cardinalidad real; y revisar el impacto de cada propiedad en reportes, indexaci&oacute;n y purga. Un modelo limpio reduce deuda t&eacute;cnica y mejora performance.</p>
+    </div>
+
+    <h2 id="s5">5. Reglas y rule resolution</h2>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; es una regla y c&oacute;mo se identifica?</p>
+        <p class="a">Una regla es la unidad de comportamiento o configuraci&oacute;n del sistema (proceso, UI, decisi&oacute;n, integraci&oacute;n, seguridad, datos). Se identifica por su clave: tipo de regla + nombre + clase "applies to" (m&aacute;s par&aacute;metros en algunos tipos). Las reglas se almacenan en la base de datos, viven en rulesets versionados y se resuelven en runtime: en Pega se "configura", no se "programa" el core.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;Qu&eacute; es el Rule Resolution y cu&aacute;l es su orden de prioridad?</p>
+        <p class="a">
+            Es el algoritmo que determina cu&aacute;l regla aplica. Ante varias candidatas con la misma clave, decide por:
+            <ol>
+                <li><strong>Jerarqu&iacute;a de clases:</strong> b&uacute;squeda por pattern inheritance y directed inheritance desde la clase de la regla hacia arriba.</li>
+                <li><strong>Orden del ruleset stack</strong> de la aplicaci&oacute;n (el orden define qui&eacute;n tiene prioridad).</li>
+                <li><strong>Circumstances:</strong> una regla circunstanciada (condicionada por valores de propiedades) gana sobre la versi&oacute;n base.</li>
+                <li><strong>Disponibilidad (availability):</strong> Yes, No, Blocked, Final o Withdrawn, seg&uacute;n se quiera forzar o bloquear herencia.</li>
+                <li><strong>Versi&oacute;n del ruleset:</strong> gana la versi&oacute;n m&aacute;s alta.</li>
+            </ol>
+            El resultado se puede inspeccionar con herramientas de Dev Studio (por ejemplo, traza de resoluci&oacute;n / "where used").
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;Qu&eacute; son los rulesets y c&oacute;mo se versionan?</p>
+        <p class="a">Un ruleset es un contenedor versionado de reglas (formato mayor-menor-patch, por ejemplo 01-01-01). El ruleset stack de la aplicaci&oacute;n es la lista ordenada que participa en la resoluci&oacute;n. Una versi&oacute;n de ruleset puede bloquearse para edits y entonces se crea la siguiente versi&oacute;n; los cambios se empaquetan por ruleset para despliegue. Los rulesets tambi&eacute;n pueden declarar prerequisitos y se asocian a la Application rule.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; son las activities y cu&aacute;ndo usarlas?</p>
+        <p class="a">Son reglas procedurales de bajo nivel: secuencias de <em>steps</em> con m&eacute;todos (Page-New, Property-Set, Obj-Open, Apply-DataTransform, Connect-REST, Route, Queue-For-Processing, etc.), modos de iteraci&oacute;n sobre page lists, condiciones (when), par&aacute;metros y manejo de error (StepStatusFail). Siguen siendo &uacute;tiles para l&oacute;gica compleja o integraciones, pero los guardrails desaconsejan abusar de ellas (y de pasos Java); para asignaciones simples se prefieren data transforms, decisiones y reglas declarativas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Qu&eacute; son las reglas de decisi&oacute;n (when, decision table, decision tree, map value)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>When:</strong> condici&oacute;n booleana reutilizable (por ejemplo, "cliente VIP").</li>
+                <li><strong>Decision Table:</strong> matriz de condiciones y resultados (evaluaciones por filas con "otherwise").</li>
+                <li><strong>Decision Tree:</strong> &aacute;rbol de ramas con evaluaciones jer&aacute;rquicas.</li>
+                <li><strong>Map Value:</strong> mapeo de valores exactos o rangos (por ejemplo, score a categor&iacute;a).</li>
+            </ul>
+            Estas reglas son legibles para negocio, se reutilizan en validaciones, routing y estrategias, y suelen ejecutarse con performance controlado (principalmente en evaluaci&oacute;n de condiciones).
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;Qu&eacute; son las reglas declarativas (expression, constraint, onchange, trigger)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Declare Expression:</strong> calcula un target autom&aacute;ticamente cuando cambian sus fuentes (forward chaining) o al acceder a &eacute;l (backward chaining).</li>
+                <li><strong>Declare Constraint:</strong> regla de integridad que se aplica al guardar; puede forzar o impedir la persistencia.</li>
+                <li><strong>Declare OnChange:</strong> dispara l&oacute;gica cuando cambia una propiedad espec&iacute;fica.</li>
+                <li><strong>Declare Trigger:</strong> reacciona a eventos de instancias de una clase (crear, guardar, borrar) &mdash; usado con cuidado por su impacto.</li>
+                <li><strong>Declare Index:</strong> mantiene &iacute;ndices auxiliares para reportes de relaciones complejas.</li>
+            </ul>
+            Las declarativas evitan c&oacute;digo duplicado, pero requieren cuidar ciclos y performance.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;C&oacute;mo se implementan las validaciones?</p>
+        <p class="a">Con reglas <strong>Validate</strong> (validaciones de negocio que se ejecutan al enviar formularios o ejecutar acciones, mostrando mensajes al usuario), <strong>Edit Validate</strong> (validaciones de formato a nivel de campo), m&eacute;todos Obj-Validate en activities, propiedades requeridas y constraints declarativas. La regla de oro: validar en el punto m&aacute;s cercano al usuario, con mensajes claros, y no duplicar la misma validaci&oacute;n en m&uacute;ltiples capas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;Qu&eacute; son los guardrails y c&oacute;mo se usan?</p>
+        <p class="a">Los guardrails son las buenas pr&aacute;cticas de Pega codificadas como advertencias en Dev Studio, con un <strong>Compliance Score</strong> por aplicaci&oacute;n. Ejemplos de hallazgos t&iacute;picos: abuso de activities o pasos Java, uso de Connect-SQL en lugar de data pages, modificar reglas est&aacute;ndar (en vez de especializarlas por herencia), entre otros. Mantener el score alto reduce riesgo de upgrade y problemas de performance; el despliegue serio incluye los guardrails como calidad de entrada.</p>
+    </div>
+
+    <h2 id="s6">6. Interfaz y experiencia (App Studio, Constellation, UI)</h2>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;Qu&eacute; diferencia hay entre App Studio, Dev Studio y Admin Studio?</p>
+        <p class="a">
+            <ul>
+                <li><strong>App Studio:</strong> entorno principal para negocio y arquitectos: case types, data types, vistas, escenarios, Blueprint. Genera las reglas subyacentes.</li>
+                <li><strong>Dev Studio:</strong> entorno completo de desarrollo: todas las reglas, depuraci&oacute;n (Tracer, Clipboard), integraciones avanzadas, seguridad.</li>
+                <li><strong>Admin Studio:</strong> salud y operaci&oacute;n del sistema (alertas, monitoring, gesti&oacute;n operativa).</li>
+                <li><strong>Prediction Studio:</strong> ciclo de vida de modelos de IA/decisioning.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo funciona la UI tradicional (sections, harnesses, flow actions)?</p>
+        <p class="a">En la UI cl&aacute;sica, las <strong>sections</strong> definen la disposici&oacute;n de campos en cada &aacute;rea, los <strong>harnesses</strong> son los contenedores de p&aacute;gina (perform, new, confirm) y las <strong>flow actions</strong> gobiernan la interacci&oacute;n dentro de un assignment (confirmar, recopilar datos, aprobar). El estilo se controla con themes (Theme Cosmos en 8.x) y skins; los portales se construyen en Dev Studio. Es el modelo que sigue vigente en muchas aplicaciones existentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;Qu&eacute; es Constellation?</p>
+        <p class="a">Constellation es la arquitectura de UI moderna de Pega: una interfaz <em>server-driven</em> donde las vistas (views) se definen en App Studio y el front-end (basado en componentes de la Digital Experience &mdash; DX API y librer&iacute;a React de Pega) las renderiza consumiendo datos del motor v&iacute;a API. No se editan harnesses/sections tradicionales; la experiencia es consistente (SPA) y optimizada para apps nuevas en Pega Cloud, con menor costo de mantenimiento de UI.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;C&oacute;mo se personaliza la experiencia en Constellation?</p>
+        <p class="a">Organizando <strong>views</strong> por contexto (formularios, listas, res&uacute;menes), con reglas de visibilidad y comportamiento por etapa/estado; configurando landing pages y navegaci&oacute;n; aplicando temas y branding consistentes; y extendiendo con <strong>componentes DX personalizados</strong> solo cuando la librer&iacute;a est&aacute;ndar no cubre el caso. La personalizaci&oacute;n se gobierna en App Studio sobre el modelo de caso, no sobre HTML/CSS ad-hoc.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;Qu&eacute; canales y portales soporta Pega?</p>
+        <p class="a">Portales web responsivos, aplicaciones m&oacute;viles (Pega Mobile), email (con Email Bots y correspondencia), y mashups/web embeds (Pega Web Mashup) para integrar la experiencia Pega dentro de aplicaciones externas. La omnicanalidad consiste en que el mismo caso se gestiona desde cualquier canal, manteniendo datos, reglas y trazabilidad &uacute;nicos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;C&oacute;mo se manejan idioma y localizaci&oacute;n?</p>
+        <p class="a">Con reglas de localizaci&oacute;n de textos (field value/localization rules), reglas de <strong>Locale</strong> para formatos de n&uacute;mero, fecha y zona horaria, y variantes de UI/correspondencia por idioma. La estrategia habitual es centralizar los literales y evitar texto embebido en reglas. Para portales multi-pa&iacute;s se definen locales por operador o por contexto del caso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; buenas pr&aacute;cticas aplican a la UI en Pega?</p>
+        <p class="a">Reutilizar secciones/views en lugar de duplicar; dise&ntilde;ar formularios por tarea (no formularios monol&iacute;ticos); cargar datos bajo demanda (data pages con scope correcto) para no inflar el clipboard; cuidar accesibilidad y consistencia visual; y validar la experiencia en el canal real (desktop, m&oacute;vil). En Constellation, evitar "luchar contra el framework": extenderlo de forma soportada.</p>
+    </div>
+
+    <h2 id="s7">7. Decisioning, IA y RPA</h2>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;Qu&eacute; es Pega Customer Decision Hub (CDH)?</p>
+        <p class="a">Es el motor de decisi&oacute;n 1:1 de Pega para marketing y servicio: determina la mejor acci&oacute;n para cada cliente (next-best-action) en tiempo real o batch, combinando pol&iacute;ticas de negocio, estrategias y modelos anal&iacute;ticos. Se usa en inbound (web, call center) y outbound (email, SMS, push) para personalizaci&oacute;n consistente y gobernable, con control de contacto y priorizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;Cu&aacute;les son los conceptos centrales del decisioning?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Acci&oacute;n y tratamiento:</strong> qu&eacute; se ofrece (propuesta) y c&oacute;mo se presenta.</li>
+                <li><strong>Jerarqu&iacute;a Issue/Group/Action:</strong> organizaci&oacute;n del portafolio de ofertas.</li>
+                <li><strong>Estrategias:</strong> canvas de filtros, priorizaci&oacute;n y arbitraje que deciden qu&eacute; acci&oacute;n gana.</li>
+                <li><strong>Modelos predictivos y adaptativos:</strong> propensity scores que aprenden del comportamiento.</li>
+                <li><strong>Pol&iacute;ticas de contacto (engagement policies):</strong> l&iacute;mites de frecuencia, supresi&oacute;n y elegibilidad.</li>
+            </ul>
+            La gobernanza de estas piezas (NBA Designer, cat&aacute;logo de acciones, modelos) es responsabilidad del Decisioning Consultant y los equipos de negocio.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo se integran las decisiones en tiempo real?</p>
+        <p class="a">A trav&eacute;s de APIs de decisi&oacute;n invocadas desde canales digitales, contenedores en l&iacute;nea dentro de las aplicaciones y servicios de streaming que alimentan los eventos de interacci&oacute;n (comportamiento del cliente). Los modelos adaptativos aprenden de esos eventos de forma continua. El objetivo: decisi&oacute;n en milisegundos con datos frescos del cliente, respetando las pol&iacute;ticas de contacto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;Qu&eacute; es Pega Process AI y el Email Bot?</p>
+        <p class="a">Process AI aplica IA a la operaci&oacute;n de procesos: clasificaci&oacute;n y categorizaci&oacute;n de trabajo entrante, an&aacute;lisis de texto (intenciones, entidades), enrutamiento inteligente y sugerencias para el agente. El <strong>Email Bot</strong> es el caso emblem&aacute;tico: procesa correos entrantes, entiende la intenci&oacute;n (NLP), crea o actualiza casos, responde autom&aacute;ticamente o escala a un humano. Reduce trabajo manual de triage y acelera la atenci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;Qu&eacute; capacidades GenAI aporta Pega?</p>
+        <p class="a">Pega GenAI integra modelos de lenguaje para: <strong>Blueprint</strong> (describir una aplicaci&oacute;n en lenguaje natural y generar el dise&ntilde;o con personas, microjourneys y case types base), generaci&oacute;n y sugerencia de configuraci&oacute;n en App Studio, borradores de respuestas y res&uacute;menes de casos en servicio al cliente, y asistencia guiada. Los proveedores de LLM se configuran mediante reglas de conexi&oacute;n, con opciones de despliegue seg&uacute;n las pol&iacute;ticas de datos de la organizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;Qu&eacute; es Pega RPA y cu&aacute;ndo se usa?</p>
+        <p class="a">Pega Robotic Process Automation automatiza interacciones con aplicaciones (incluidas las que no tienen API), mediante robots construidos en <strong>Robot Studio</strong> y administrados a escala con <strong>Robot Manager</strong>. Robots <em>attended</em> asisten al usuario; los <em>unattended</em> ejecutan procesos completos. Se integran con los casos Pega para cubrir pasos sin interfaz program&aacute;tica (sistemas legacy, terminales, escritorios), y son una alternativa puente mientras se logra una integraci&oacute;n por API.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;Qu&eacute; mecanismos de procesamiento en background existen?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Job Scheduler:</strong> trabajos programados (cron-like) para tareas peri&oacute;dicas.</li>
+                <li><strong>Queue Processors:</strong> procesamiento as&iacute;ncrono desde colas, con paralelismo configurable; los procesos encolan trabajo (Queue-For-Processing) y siguen sin esperar.</li>
+                <li><strong>Agentes est&aacute;ndar:</strong> mecanismo cl&aacute;sico por intervalos; en dise&ntilde;os nuevos se prefieren schedulers y queue processors.</li>
+            </ul>
+            Patr&oacute;n clave: desacoplar integraciones lentas o masivas del request del usuario para mantener latencias bajas y tolerancia a fallos.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo se gobiernan los modelos de IA/decisioning?</p>
+        <p class="a">Con Prediction Studio: creaci&oacute;n y revisi&oacute;n de modelos, monitoreo de performance (m&eacute;tricas de calidad, deriva), an&aacute;lisis de predictores y explicabilidad (reason codes), y control de versiones/promoci&oacute;n. Los modelos adaptativos aprenden continuamente bajo pol&iacute;ticas definidas. La gobernanza incluye due&ntilde;os de modelo, revisi&oacute;n peri&oacute;dica y trazabilidad de decisiones para cumplimiento y auditor&iacute;a.</p>
+    </div>
+
+    <h2 id="s8">8. Integraciones</h2>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;Qu&eacute; panorama de integraci&oacute;n ofrece Pega?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Connectors</strong> (Pega llama a sistemas externos): Connect-REST, Connect-SOAP, Connect-SQL, repositorios de archivos (SFTP), colas JMS/MQ.</li>
+                <li><strong>Services</strong> (sistemas externos llaman a Pega): Service-REST, Service-SOAP, Service-File, listeners de email.</li>
+                <li><strong>Data pages</strong> como patr&oacute;n de acceso y cach&eacute; de datos externos.</li>
+                <li><strong>Asincron&iacute;a:</strong> Queue-For-Processing, queue processors, Kafka/stream para eventos.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;C&oacute;mo se construye una integraci&oacute;n REST (connector)?</p>
+        <p class="a">Se define el conector con endpoint, m&eacute;todo HTTP, autenticaci&oacute;n y opciones de conexi&oacute;n; se mapea la respuesta JSON a p&aacute;ginas del clipboard con data transforms (y la request desde propiedades); se especifica manejo de c&oacute;digos de error/estado y timeouts. Buenas pr&aacute;cticas: encapsular el conector en una data page, simular respuestas (mock) para pruebas, y no invocar servicios externos lentos dentro de pasos interactivos sin asincron&iacute;a.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;C&oacute;mo se exponen servicios desde Pega?</p>
+        <p class="a">Con reglas <strong>Service-REST</strong> (endpoints REST con request/response JSON mapeados a propiedades), <strong>Service-SOAP</strong> (legacy) o listeners de archivos/email para intake. Los servicios se agrupan en <strong>service packages</strong> que definen m&eacute;todos, clases y seguridad (qu&eacute; access groups pueden usar cada m&eacute;todo), y se consumen por sistemas externos para crear casos, consultar estado o disparar procesos. La autenticaci&oacute;n t&iacute;pica es OAuth 2.0 o basic auth sobre HTTPS.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;Por qu&eacute; las data pages son el patr&oacute;n preferido de integraci&oacute;n?</p>
+        <p class="a">Porque separan el "qu&eacute; datos necesito" del "c&oacute;mo los obtengo": la UI y los procesos consumen la p&aacute;gina, y la definici&oacute;n decide la fuente (REST, report, activity) y el scope de cach&eacute; (thread/requestor/node) con su estrategia de refresco. Esto permite reutilizar, cachear, simular en pruebas y cambiar de implementaci&oacute;n sin tocar a los consumidores. Cuidado con p&aacute;ginas demasiado grandes o scopes incorrectos: impactan memoria y frescura de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; opciones existen para archivos y procesamiento batch de datos?</p>
+        <p class="a">Repositorios (SFTP/otros) para leer y escribir archivos; listeners de archivos para intake autom&aacute;tico; <strong>data sets y data flows</strong> (CSV, JSON, tablas, Kafka) para mover datos de forma estructurada y masiva, muy usados en decisioning (customer data, interacciones); y el procesamiento por queue processors para integraciones pesadas. La elecci&oacute;n depende del volumen, la frecuencia y el destino (casos, decisiones o an&aacute;lisis).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo se integra la mensajer&iacute;a as&iacute;ncrona y los eventos?</p>
+        <p class="a">Con colas JMS/IBM MQ (connectores y servicios), y con <strong>Kafka/streaming</strong> para eventos en tiempo real &mdash; clave en decisioning (interacciones del cliente) y en arquitecturas event-driven. El patr&oacute;n recomendado para procesos: encolar (Queue-For-Processing) y dejar que un queue processor procese en background, con reintentos y monitoreo; as&iacute; el canal no depende de la disponibilidad del sistema externo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;C&oacute;mo se manejan los errores de integraci&oacute;n?</p>
+        <p class="a">Mapeando c&oacute;digos de estado y errores del servicio a estados de negocio y mensajes accionables; definiendo reintentos con backoff y colas de trabajo fallido (broken queue) para reproceso; registrando detalles t&eacute;cnicos en logs y alertas; y dise&ntilde;ando idempotencia (claves de correlaci&oacute;n, no duplicar casos/pagos) para poder reintentar con seguridad. El error de integraci&oacute;n debe ser visible y gestionable por operaci&oacute;n, no un log que nadie mira.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo se protegen las integraciones?</p>
+        <p class="a">Con OAuth 2.0 (client credentials o authorization code) y certificados/TLS en los conectores; gesti&oacute;n de tokens con cach&eacute; (por ejemplo, data page de token con refresco) y keystores para certificados; operadores de servicio dedicados con access groups de m&iacute;nimo privilegio; y registros de auditor&iacute;a del uso de servicios. Evitar credenciales embebidas en reglas o c&oacute;digo: centralizar en reglas de conexi&oacute;n seguras y secretos gestionados.</p>
+    </div>
+
+    <h2 id="s9">9. Seguridad</h2>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;C&oacute;mo funciona el modelo de seguridad de Pega?</p>
+        <p class="a">Combina autenticaci&oacute;n (qui&eacute;n es el usuario: SAML, OIDC, LDAP) y autorizaci&oacute;n (qu&eacute; puede hacer): RBAC con access groups, roles y AROs, m&aacute;s ABAC con access control policies; m&aacute;s la estructura organizacional (divisiones y unidades) que segmenta datos y trabajo. Los usuarios son Operator IDs; los servicios usan operadores dedicados. La seguridad se dise&ntilde;a junto con el modelo de caso, no despu&eacute;s.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;Qu&eacute; son los access groups, roles y AROs?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Access Group:</strong> agrupa aplicaci&oacute;n, roles, portal, workgroup y otros atributos; es lo que se asigna al operador.</li>
+                <li><strong>Access Role:</strong> conjunto de permisos que se otorga por clase mediante AROs.</li>
+                <li><strong>ARO (Access of Role to Object):</strong> define por clase y rol el nivel de acceso (Read, Write, Delete&hellip;) y los <em>privileges</em> (permisos especiales como aprobar, desembolsar, anular).</li>
+            </ul>
+            Los AROs respetan la jerarqu&iacute;a de clases: un rol puede recibir acceso en "Work-" y heredar a los case types, o definirse por case type espec&iacute;fico.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Qu&eacute; es ABAC y para qu&eacute; sirven las access control policies?</p>
+        <p class="a">El control de acceso basado en atributos condiciona permisos seg&uacute;n atributos del operador y del caso (por ejemplo, que el usuario solo acceda a casos de su regi&oacute;n o de su nivel de aprobaci&oacute;n). Se implementa con <strong>Access Control Policies</strong>: condiciones evaluadas en runtime que restringen el acceso otorgado por los roles cuando el contexto no cumple la pol&iacute;tica. Es la herramienta para reglas de seguridad finas (territorio, l&iacute;mite de monto, confidencialidad) sin multiplicar roles.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;Qu&eacute; opciones de autenticaci&oacute;n y SSO existen?</p>
+        <p class="a">SAML 2.0 y OpenID Connect para SSO con el IdP corporativo (con MFA gestionado en el IdP), LDAP/Active Directory en instalaciones on-premise, y autenticaci&oacute;n personalizada para casos espec&iacute;ficos. Para servicios se usan OAuth 2.0/client credentials. Se configuran timeouts de sesi&oacute;n, pol&iacute;ticas de contrase&ntilde;a (cuando aplica autenticaci&oacute;n local) y se recomienda forzar HTTPS y cabeceras seguras.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo se gestionan operadores y la estructura organizacional?</p>
+        <p class="a">Los <strong>Operator IDs</strong> representan usuarios (con access group, workgroup y divisiones/unidades); los <strong>workgroups/workbaskets</strong> gobiernan routing y pertenencia; y la jerarqu&iacute;a <strong>Org-</strong> (divisi&oacute;n, unidad) segmenta datos y visibilidad. La gesti&oacute;n del ciclo de vida (altas, bajas, cambios de rol) debe estar integrada con RR. HH. y revisarse peri&oacute;dicamente; operadores de servicio (integraci&oacute;n) se tratan aparte con permisos m&iacute;nimos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;Qu&eacute; mecanismos de auditor&iacute;a y trazabilidad existen?</p>
+        <p class="a">Las <strong>History classes</strong> (History-) registran cambios de instancias auditadas; los casos tienen su historial visible (etapas, asignaciones, cambios de estado); las reglas y su resoluci&oacute;n quedan versionadas por ruleset; y los logs de seguridad/autenticaci&oacute;n dejan evidencia de accesos. Para cumplimiento se combinan auditor&iacute;a t&eacute;cnica (plataforma) con controles de proceso (qui&eacute;n aprob&oacute; qu&eacute; y cu&aacute;ndo) y reportes de evidencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;Qu&eacute; protecciones a nivel de plataforma aplican?</p>
+        <p class="a">Cifrado en tr&aacute;nsito (TLS) y en reposo (gestionado en Pega Cloud); certificaciones de la nube de Pega (SOC 2, ISO 27001, entre otras); hardening mediante el <strong>Security Checklist</strong> de App Studio (revisar operadores de ejemplo, configuraciones por defecto inseguras, etc.); control de acceso por IP cuando aplica; y gesti&oacute;n de parches dentro del ciclo de upgrades. En on-premise, estas capas son responsabilidad del cliente sobre la infraestructura.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;Qu&eacute; consideraciones de privacidad de datos aplican?</p>
+        <p class="a">Clasificar y minimizar datos personales en el modelo (evitar copiar todo al clipboard); cifrar propiedades sensibles y restringir su visualizaci&oacute;n por rol; aplicar retenci&oacute;n y purga (incluye archivos y adjuntos); gobernar el uso de datos en decisioning (consentimiento, pol&iacute;ticas de contacto, tratamiento); y alinear con GDPR/leyes locales (derecho de acceso y borrado seg&uacute;n el alcance de la plataforma). La privacidad se dise&ntilde;a en el modelo de caso y datos, no solo en la UI.</p>
+    </div>
+
+    <h2 id="s10">10. DevOps, despliegue, administraci&oacute;n y rendimiento</h2>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;C&oacute;mo se versionan y empaquetan las reglas?</p>
+        <p class="a">Las reglas viven en rulesets versionados; los cambios se empaquetan con <strong>product rules</strong> (archivos RAP) o como <strong>versiones de aplicaci&oacute;n</strong> (application packages), que se importan en el entorno destino o se despliegan por pipeline. Para parches puntuales se usan productos espec&iacute;ficos con las reglas necesarias; para releases completos, la versi&oacute;n de la aplicaci&oacute;n con su ruleset stack. Los hotfixes de plataforma provienen del cat&aacute;logo de Pega y se aplican seg&uacute;n el modelo (cloud gestionado u on-premise).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;Qu&eacute; son las branches y c&oacute;mo se trabaja en equipo?</p>
+        <p class="a">Las <strong>branches</strong> permiten que varios desarrolladores trabajen en paralelo sobre las mismas reglas sin pisarse: cada equipo/feature abre una rama, desarrolla y luego se <strong>merge</strong> con revisi&oacute;n de diferencias regla por regla en Dev Studio. Buenas pr&aacute;cticas: ramas cortas, merges frecuentes, no ramificar reglas que no lo soportan (seg&uacute;n guardrails) y mantener el ruleset destino actualizado antes de integrar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;Qu&eacute; es Deployment Manager y c&oacute;mo funciona un pipeline?</p>
+        <p class="a">Deployment Manager es la herramienta de CD de Pega: se define un pipeline (por ejemplo, Dev &rarr; QA &rarr; Prod) con etapas y tareas (desplegar, ejecutar pruebas, aprobar), incluidos <strong>quality gates</strong> autom&aacute;ticos (por ejemplo, ejecuci&oacute;n de unit tests y cumplimiento de guardrails). Los candidatos son versiones de aplicaci&oacute;n o productos; cada despliegue queda auditado. En Pega Cloud el orquestador es gestionado; para on-premise requiere componentes adicionales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;Qu&eacute; son los productos (RAP) y cu&aacute;ndo se usan?</p>
+        <p class="a">La regla de <strong>product</strong> (Rule-Admin-Product) empaqueta un conjunto espec&iacute;fico de reglas en un archivo RAP para moverlas entre entornos. Se usa para parches puntuales, migraciones de emergencia o distribuci&oacute;n a otras instalaciones; para releases completos es preferible la versi&oacute;n de aplicaci&oacute;n. Importar un producto en producci&oacute;n es una operaci&oacute;n sensible: se prueba en un entorno previo y se documenta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;C&oacute;mo se prueba una aplicaci&oacute;n Pega?</p>
+        <p class="a">Con <strong>unit tests de reglas</strong> (Pega unit testing, creados junto a la regla y ejecutables en pipelines), <strong>scenario tests</strong> de case types (App Studio) para validar rutas y resultados, pruebas funcionales/regresi&oacute;n por caso de uso, y pruebas de performance/carga sobre nodos y base de datos. Las pruebas de integraci&oacute;n usan mocks/simulaciones de servicios externos. La automatizaci&oacute;n en el pipeline evita regresiones silenciosas entre sprints.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;C&oacute;mo se gestionan los entornos y la configuraci&oacute;n por ambiente?</p>
+        <p class="a">Cada entorno es una instalaci&oacute;n independiente; los valores que cambian por entorno (URLs, credenciales, par&aacute;metros) se gestionan con <strong>Dynamic System Settings (DSS)</strong> y reglas de configuraci&oacute;n, nunca hardcodeados. Los datos maestros de negocio se cargan por proceso controlado. Se evita promover datos entre entornos; se promueven reglas. Refrescos de datos (clones) solo con anonimizaci&oacute;n y autorizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;Qu&eacute; herramientas de administraci&oacute;n y monitoreo hay?</p>
+        <p class="a">Admin Studio (salud del sistema, alertas, revisi&oacute;n de configuraci&oacute;n), <strong>PDC (Predictive Diagnostic Cloud)</strong> para monitoreo SaaS con m&eacute;tricas, alertas proactivas y diagn&oacute;stico basado en el historial de la plataforma, y en on-premise herramientas cl&aacute;sicas como el SMA (System Management Application) para nodos y agentes. El trabajo rutinario: revisar alertas, capacidad, colas y salud de nodos antes de que se conviertan en incidentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;Qu&eacute; herramientas de diagn&oacute;stico existen?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Tracer:</strong> ejecuci&oacute;n paso a paso de actividades y procesamiento de casos (depuraci&oacute;n funcional).</li>
+                <li><strong>Clipboard:</strong> inspecci&oacute;n del estado de las p&aacute;ginas en memoria.</li>
+                <li><strong>PegaRULES log y Alert log:</strong> eventos y alertas del motor (excepciones, performance, patrones problem&aacute;ticos).</li>
+                <li><strong>DB Trace:</strong> SQL ejecutado contra la base de datos (con cautela en producci&oacute;n).</li>
+                <li><strong>PAL (Performance Analyzer Logging):</strong> contadores por interacci&oacute;n para medir hotspots de performance.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;Qu&eacute; buenas pr&aacute;cticas mejoran el rendimiento?</p>
+        <p class="a">Mantener el clipboard peque&ntilde;o (limpiar p&aacute;ginas, evitar page lists gigantes); usar data pages con scope y refresco correctos; preferir data transforms/report definitions sobre loops de Obj-* en activities; indexar y depurar la base de datos (incluye purga de hist&oacute;ricos); cuidar las reglas circunstanciadas costosas; y aprovechar lazy loading en Constellation. Medir siempre con PAL/PDC antes de optimizar por intuici&oacute;n: el cuello de botella suele estar en DB o en tama&ntilde;o de clipboard.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;C&oacute;mo se gestionan upgrades y mantenimiento de la plataforma?</p>
+        <p class="a">En Pega Cloud, los upgrades (versiones mayores y patches) son gestionados, con notificaci&oacute;n, ventana y recomendaciones de prueba previa; en on-premise el equipo planifica la instalaci&oacute;n, los scripts de actualizaci&oacute;n de base de datos y las pruebas de regresi&oacute;n. En ambos casos: revisar guardrails/alertas de compatibilidad, probar en un entorno previo, planificar con negocio y tener rollback definido. Un plan de upgrades disciplinado es lo que mantiene la plataforma sana a largo plazo.</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Pega en una entrevista (plantilla)</h2>
+
+    <div class="note">
+        <p><strong>Pregunta t&iacute;pica:</strong> &laquo;&iquest;Cu&aacute;l es su experiencia con Pega?&raquo; / &laquo;&iquest;Ha trabajado en modelado de casos, desarrollo de reglas y despliegues con Pega?&raquo;</p>
+    </div>
+
+    <h3>Respuesta modelo (adapta los corchetes con tu experiencia real)</h3>
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + contexto):</strong> &laquo;S&iacute;. Tengo experiencia con Pega Platform en [a&ntilde;os] a&ntilde;os, en proyectos de [industria], con roles de [an&aacute;lisis funcional, arquitectura, desarrollo y despliegue], usando [App Studio / Dev Studio] y versiones ['23 / '24.x]&raquo;.</p>
+        <p><strong>Case management y modelo:</strong> &laquo;He modelado case types de punta a punta: etapas y procesos, SLA y urgencia, assignments y routing, child cases; y dise&ntilde;ado clases, propiedades, data types y data pages reutilizables&raquo;.</p>
+        <p><strong>Desarrollo de reglas:</strong> &laquo;Trabajo con el Rule Resolution a diario: rulesets y versiones, pattern y directed inheritance, circumstances; construyo con data transforms, reglas de decisi&oacute;n, declarativas y activities cuando corresponde, cuidando los guardrails&raquo;.</p>
+        <p><strong>Integraciones:</strong> &laquo;He implementado integraciones v&iacute;a [Connect-REST, SOAP, servicios, colas/Kafka], usando data pages como patr&oacute;n de acceso, con OAuth 2.0, manejo de errores y colas de reproceso&raquo;.</p>
+        <p><strong>Seguridad y despliegue:</strong> &laquo;Gestiono seguridad con access groups, roles/AROs y access control policies; y despliego por branches y pipelines (Deployment Manager) con unit tests y quality gates&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n):</strong> &laquo;En mis proyectos logr&eacute; [ejemplo cuantificado: reducir tiempos de ciclo X%, automatizar N procesos, integrar N sistemas]. En este rol aportar&iacute;a [modelado/depuraci&oacute;n/optimizaci&oacute;n] desde el primer d&iacute;a&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Case management</td><td>Case types, stages/steps, SLA, routing, child cases, work parties</td><td>Procesos en producci&oacute;n, tiempos de ciclo reducidos</td></tr>
+        <tr><td>Modelo y reglas</td><td>Clases, data types, clipboard, rule resolution, data transforms, decisiones</td><td>Dise&ntilde;os reutilizables, guardrails en verde, deuda t&eacute;cnica baja</td></tr>
+        <tr><td>UI</td><td>App Studio, Constellation, vistas, portales y mashups</td><td>Experiencias entregadas en varios canales</td></tr>
+        <tr><td>Decisioning/IA</td><td>CDH, estrategias, modelos, Email Bot, GenAI</td><td>Personalizaci&oacute;n medida, automatizaci&oacute;n de triage</td></tr>
+        <tr><td>Integraciones</td><td>Connect-REST, servicios, data pages, colas/Kafka</td><td>Integraciones monitoreadas, errores bajo umbral</td></tr>
+        <tr><td>Seguridad</td><td>Roles/AROs, ACPs, SSO, auditor&iacute;a, checklist</td><td>Cumplimiento demostrado, hallazgos remediados</td></tr>
+        <tr><td>DevOps</td><td>Branches, pipelines, RAP, unit/scenario tests, upgrades</td><td>Releases predecibles, upgrades sin incidentes cr&iacute;ticos</td></tr>
+        <tr><td>Administraci&oacute;n</td><td>PDC, Tracer, PAL, tuning de clipboard/DB</td><td>Mejoras medibles de performance y salud del sistema</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: casos gestionados, procesos automatizados, tiempos de ciclo, errores reducidos.</li>
+        <li>Nombra con precisi&oacute;n: Pega Platform '24.x, App Studio/Dev Studio, Constellation, Rule Resolution, Pega Cloud, CDH, Deployment Manager.</li>
+        <li>Muestra artefactos: diagramas de case types, mapa de reglas, cat&aacute;logo de integraciones, plan de despliegue.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento te&oacute;rico s&oacute;lido y un plan concreto (certificaciones: CSA, CSSA, CPBA, Decisioning Consultant).</li>
+        <li>Conecta con el negocio: menos trabajo manual, cumplimiento, trazabilidad y velocidad de cambio.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Pega Documentation (docs.pega.com)</td><td>Documentaci&oacute;n oficial de plataforma, case management, integraciones y seguridad.</td></tr>
+        <tr><td>Pega Academy</td><td>Rutas de aprendizaje y certificaciones: CPBA, CSA, CSSA, CLSA, Decisioning Consultant.</td></tr>
+        <tr><td>Pega Community</td><td>Foros, art&iacute;culos t&eacute;cnicos, guardrails y cat&aacute;logo de hotfixes.</td></tr>
+        <tr><td>Pega Cloud</td><td>Modelo SaaS: upgrades gestionados, seguridad, disponibilidad y monitoreo con PDC.</td></tr>
+        <tr><td>Pega Express / Center-out</td><td>Metodolog&iacute;a de entrega por microjourneys, personas y Blueprint.</td></tr>
+        <tr><td>Constellation / DX API</td><td>Arquitectura UI moderna server-driven y experiencia omnicanal.</td></tr>
+        <tr><td>Deployment Manager</td><td>Pipelines, quality gates, despliegue continuo entre entornos.</td></tr>
+        <tr><td>Customer Decision Hub</td><td>Decisioning 1:1, estrategias, modelos predictivos/adaptativos y gobernanza de decisiones.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
