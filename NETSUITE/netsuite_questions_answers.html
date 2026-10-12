@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetSuite - Fundamentos, SuiteCloud, SuiteScript, Integraciones, Seguridad y OneWorld | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>NetSuite &mdash; Fundamentos, M&oacute;dulos, Modelo de Datos, SuiteScript, Workflows, Integraciones, Seguridad, OneWorld y Administraci&oacute;n</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con NetSuite (ERP en la nube) en configuraci&oacute;n, desarrollo SuiteCloud, integraciones, seguridad y administraci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos (Q1&ndash;Q8), m&oacute;dulos de negocio (Q9&ndash;Q17), modelo de datos (Q18&ndash;Q25), personalizaci&oacute;n (Q26&ndash;Q32), SuiteScript (Q33&ndash;Q42), workflows (Q43&ndash;Q50), integraciones (Q51&ndash;Q60), seguridad (Q61&ndash;Q69), OneWorld (Q70&ndash;Q77) y administraci&oacute;n (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos de NetSuite y ERP &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. M&oacute;dulos y procesos de negocio &mdash; 9 preguntas</a></li>
+        <li><a href="#s3">3. Modelo de datos: registros, campos y transacciones &mdash; 8 preguntas</a></li>
+        <li><a href="#s4">4. Personalizaci&oacute;n y SuiteBuilder &mdash; 7 preguntas</a></li>
+        <li><a href="#s5">5. SuiteScript 2.x &mdash; 10 preguntas</a></li>
+        <li><a href="#s6">6. Automatizaci&oacute;n: SuiteFlow y workflows &mdash; 8 preguntas</a></li>
+        <li><a href="#s7">7. Integraciones y APIs &mdash; 10 preguntas</a></li>
+        <li><a href="#s8">8. Seguridad, roles y auditor&iacute;a &mdash; 9 preguntas</a></li>
+        <li><a href="#s9">9. OneWorld: multi-subsidiaria y multi-moneda &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. Administraci&oacute;n, entornos, despliegues y rendimiento &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de NetSuite en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos de NetSuite y ERP</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es NetSuite y qu&eacute; tipo de soluci&oacute;n es?</p>
+        <p class="a">Es una suite de gesti&oacute;n empresarial (ERP) 100% en la nube de Oracle (adquirida en 2016; fundada en 1998), que unifica finanzas, operaciones, inventario, CRM, comercio electr&oacute;nico y gesti&oacute;n de personas sobre una &uacute;nica base de datos multi-tenant. Se accede v&iacute;a navegador, no requiere infraestructura propia y Oracle gestiona disponibilidad, seguridad y actualizaciones. Es una de las soluciones SaaS de ERP m&aacute;s usadas en el segmento mid-market y en empresas que buscan un solo sistema para m&uacute;ltiples procesos y pa&iacute;ses.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;C&oacute;mo se diferencia de otros ERP (SAP, Dynamics 365, Odoo)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Modelo SaaS multi-tenant:</strong> sin servidores propios, con dos actualizaciones mayores al a&ntilde;o aplicadas por el proveedor.</li>
+                <li><strong>Modelo de datos &uacute;nico:</strong> finanzas, CRM y operaciones comparten el mismo esquema; no hay integraciones internas que mantener.</li>
+                <li><strong>Personalizaci&oacute;n sin tocar el core:</strong> SuiteBuilder (low-code), SuiteScript (JavaScript) y SuiteFlow (workflows visuales).</li>
+                <li><strong>TCO y time-to-value:</strong> implementaciones m&aacute;s r&aacute;pidas que ERPs on-premise; SAP u Oracle Fusion suelen ofrecer mayor profundidad en procesos industriales complejos a cambio de m&aacute;s costo y esfuerzo.</li>
+            </ul>
+            La elecci&oacute;n t&iacute;pica: mid-market, crecimiento r&aacute;pido y necesidad de un sistema unificado y global.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Qu&eacute; ediciones y variantes existen?</p>
+        <p class="a">Las ediciones base se escalan por tama&ntilde;o y funcionalidad (Standard, Mid-Market y Enterprise), y <strong>OneWorld</strong> es la variante para compa&ntilde;&iacute;as con m&uacute;ltiples subsidiarias, monedas, libros contables e idiomas. Adem&aacute;s existen <strong>SuiteSuccess</strong> (paquetes por industria con configuraci&oacute;n preconstruida) y licencias/m&oacute;dulos adicionales (WMS, SuiteCommerce, SuitePeople, SuiteBilling, entre otros). El n&uacute;mero de usuarios concurrentes, sandboxes y concurrencia de web services depende de la edici&oacute;n y del contrato.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Qu&eacute; es SuiteCloud?</p>
+        <p class="a">
+            Es la plataforma de personalizaci&oacute;n y desarrollo de NetSuite, compuesta por:
+            <ul>
+                <li><strong>SuiteBuilder:</strong> customizaci&oacute;n sin c&oacute;digo (campos, registros, formularios, dashboards, saved searches).</li>
+                <li><strong>SuiteScript:</strong> API JavaScript (2.x) para extender la plataforma con l&oacute;gica propia.</li>
+                <li><strong>SuiteFlow:</strong> workflows visuales para automatizar procesos y aprobaciones.</li>
+                <li><strong>SuiteTalk:</strong> web services SOAP y REST para integraciones.</li>
+                <li><strong>SDF (SuiteCloud Development Framework):</strong> customizaciones como archivos XML con despliegue por CLI y control de versiones.</li>
+                <li><strong>SuiteBundler:</strong> empaquetado de customizaciones para distribuci&oacute;n entre cuentas.</li>
+                <li><strong>SuiteAnalytics:</strong> reportes, workbooks, SuiteQL y SuiteAnalytics Connect (JDBC/ODBC).</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;Qu&eacute; roles se distinguen en un proyecto NetSuite?</p>
+        <p class="a">Administrador funcional/t&eacute;cnico, consultor funcional (finanzas, cadena de suministro, CRM), desarrollador SuiteCloud (SuiteScript, SDF, integraciones), arquitecto de soluci&oacute;n, analista de datos (SuiteQL, reporting) y gestor de proyecto. Certificaciones t&iacute;picas: SuiteFoundation, NetSuite Certified Administrator, ERP Consultant y SuiteCloud Developer I/II.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;C&oacute;mo es la arquitectura de la plataforma?</p>
+        <p class="a">Es una plataforma multi-tenant alojada en data centers de Oracle (Norteam&eacute;rica, Europa, Asia-Pac&iacute;fico). Cada cliente tiene un <strong>Account ID</strong> y, por entorno, sufijos como <em>_SB1</em> para sandbox. La UI vive en system.netsuite.com y los servicios exponen URLs espec&iacute;ficas del data center (RESTlets, REST, SOAP). El cliente no administra servidores ni parches: NetSuite publica dos releases al a&ntilde;o y habilita entornos de prueba (sandbox y Release Preview) para validar los cambios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;Cu&aacute;l es el ciclo de un proyecto de implementaci&oacute;n?</p>
+        <p class="a">Levantamiento y an&aacute;lisis fit-gap &rarr; dise&ntilde;o de procesos y cat&aacute;logos &rarr; configuraci&oacute;n en NetSuite (SuiteBuilder, roles, datos maestros) &rarr; desarrollo (scripts, workflows, integraciones) &rarr; pruebas en sandbox/UAT y regresi&oacute;n &rarr; go-live y estabilizaci&oacute;n &rarr; mejora continua (optimizaci&oacute;n, nuevos releases, roadmap). Metodolog&iacute;as habituales: SuiteSuccess (por fases e industria) o enfoques &aacute;giles/waterfall adaptados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Cu&aacute;ndo NO es recomendable NetSuite?</p>
+        <p class="a">Cuando se requiere control total del core u on-premise, cuando la industria tiene requerimientos muy especializados que ni los m&oacute;dulos ni las SuiteApps cubren, cuando hay restricciones regulatorias de residencia de datos no soportadas en la regi&oacute;n, o cuando el costo de licencias e implementaci&oacute;n no se justifica frente a necesidades muy b&aacute;sicas. El an&aacute;lisis fit-gap previo es la herramienta para decidirlo.</p>
+    </div>
+
+    <h2 id="s2">2. M&oacute;dulos y procesos de negocio</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;Qu&eacute; cubre el m&oacute;dulo financiero?</p>
+        <p class="a">Contabilidad general (plan de cuentas y segmentos: department, class, location y custom segments), cuentas por cobrar y por pagar, activos fijos, conciliaciones, cierre de per&iacute;odos con checklist, presupuestos, impuestos (SuiteTax o motor legacy) y reconocimiento de ingresos (Revenue Recognition / Advanced Revenue Management, ASC 606 / IFRS 15). Todo alimenta el GL mediante transacciones posteadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;Qu&eacute; son Order-to-Cash y Procure-to-Pay en NetSuite?</p>
+        <p class="a">O2C: cotizaci&oacute;n &rarr; pedido de venta &rarr; fulfillment &rarr; factura &rarr; cobro &rarr; reconocimiento; P2P: requisici&oacute;n/orden de compra &rarr; recepci&oacute;n &rarr; factura del proveedor &rarr; pago. Cada transacci&oacute;n tiene estados y reglas (Pending Approval, Pending Fulfillment, Pending Billing, Paid in Full, etc.), aprobaciones con SuiteApprovals y automatizaciones con SuiteFlow o SuiteScript.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Qu&eacute; cubre inventario y cadena de suministro?</p>
+        <p class="a">&Iacute;tems (inventory, assembly, kit, service, etc.), almacenes y ubicaciones, transferencias, lotes/n&uacute;meros de serie, costeo (est&aacute;ndar, promedio, FIFO/LIFO), reposici&oacute;n y planificaci&oacute;n de demanda; WMS para la operaci&oacute;n de bodega y m&oacute;dulo de manufactura con BOM, work orders y WIP para procesos de producci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Qu&eacute; cubre el CRM y por qu&eacute; importa su integraci&oacute;n con el ERP?</p>
+        <p class="a">Leads y prospectos, clientes, oportunidades y pipeline, cotizaciones, pron&oacute;sticos, casos de soporte y campa&ntilde;as de marketing. Importa porque en NetSuite el cliente es una &uacute;nica entidad (<em>customer</em>) que conecta ventas, facturaci&oacute;n, cobros y servicio: no hay sincronizaci&oacute;n entre sistemas separados, lo cual reduce duplicidad y errores.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Qu&eacute; es SuiteCommerce?</p>
+        <p class="a">La soluci&oacute;n de comercio electr&oacute;nico B2B/B2C nativa de NetSuite: tiendas en l&iacute;nea alimentadas por el cat&aacute;logo de &iacute;tems, precios por cliente o grupo, listas de precios, checkout y pagos. SuiteCommerce Advanced (SCA) permite extensiones propias; los pedidos web entran directamente como transacciones en NetSuite.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;Qu&eacute; son Projects/PSA y SuitePeople?</p>
+        <p class="a">Projects/PSA gestiona proyectos, tareas, registro de tiempo y facturaci&oacute;n por horas o hitos, ideal para servicios profesionales. SuitePeople es el m&oacute;dulo de gesti&oacute;n de personas: empleados, ausencias, organigrama y n&oacute;mina para Estados Unidos, integrado con los costos y la seguridad del ERP.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;Qu&eacute; es SuiteAnalytics?</p>
+        <p class="a">El conjunto de herramientas de an&aacute;lisis nativo: reportes est&aacute;ndar y personalizados, saved searches, Workbooks y datasets para an&aacute;lisis interactivo, <strong>SuiteQL</strong> como lenguaje de consulta, y <strong>SuiteAnalytics Connect</strong> (drivers JDBC/ODBC) para herramientas de BI externas como Power BI o Tableau.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;Qu&eacute; es SuiteBilling?</p>
+        <p class="a">El m&oacute;dulo de facturaci&oacute;n por suscripci&oacute;n: planes y precios recurrentes, ciclos de facturaci&oacute;n, renovaciones y cambios de suscripci&oacute;n; se combina con Advanced Revenue Management cuando el reconocimiento de ingresos es complejo (m&uacute;ltiples obligaciones de desempe&ntilde;o).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;Qu&eacute; son las SuiteApps?</p>
+        <p class="a">Aplicaciones de terceros (o internas) que se instalan sobre la cuenta y extienden la funcionalidad: integraciones (Celigo, Boomi), impuestos (Avalara en ciertos pa&iacute;ses), conciliaci&oacute;n bancaria, firma electr&oacute;nica, an&aacute;lisis, etc. Se distribuyen como bundles y se gestionan con SuiteBundler; las p&uacute;blicas se publican en SuiteApp.com.</p>
+    </div>
+
+    <h2 id="s3">3. Modelo de datos: registros, campos y transacciones</h2>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; es un record y qu&eacute; categor&iacute;as existen?</p>
+        <p class="a">
+            Un <em>record</em> es la unidad b&aacute;sica de informaci&oacute;n (equivalente a una fila con estructura). Las categor&iacute;as principales son:
+            <ul>
+                <li><strong>List records:</strong> listas maestras (cuentas contables, &iacute;tems, categor&iacute;as).</li>
+                <li><strong>Entity records:</strong> customer, vendor, employee, partner, contact.</li>
+                <li><strong>Transaction records:</strong> sales order, invoice, journal entry, purchase order, etc.</li>
+                <li><strong>Custom records:</strong> customrecord_* creados por el cliente para extender el modelo.</li>
+            </ul>
+            Adem&aacute;s existen <em>subrecords</em> (address, contact) y <em>child records</em> (l&iacute;neas de transacci&oacute;n, relaciones). Todo record tiene un internal ID &uacute;nico.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; diferencia hay entre internal ID y external ID?</p>
+        <p class="a">El <strong>internal ID</strong> es el identificador num&eacute;rico que NetSuite asigna autom&aacute;ticamente. El <strong>external ID</strong> es una cadena que define el integrador y es &uacute;nica por tipo de record: es la clave para operaciones <em>upsert</em> y para lograr idempotencia en integraciones (evita duplicados si se reintenta una carga). Las transacciones tienen adem&aacute;s su n&uacute;mero de documento visible para el negocio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;C&oacute;mo est&aacute; estructurada una transacci&oacute;n?</p>
+        <p class="a">Cabecera + l&iacute;neas (la "main line" no tiene &iacute;tem y contiene totales/impuestos); cada l&iacute;nea puede ser de tipo &iacute;tem, gasto, descuento, subtotal, impuesto, etc. Las transacciones tienen estados seg&uacute;n su tipo (Pending Approval, Pending Fulfillment, Partially Fulfilled, Pending Billing, Paid in Full, Closed...) e impacto contable (GL Impact) seg&uacute;n el posting y el per&iacute;odo contable abierto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;C&oacute;mo se relacionan las entidades (customers, vendors, employees)?</p>
+        <p class="a">Cada entidad es un record con subrecords de direcciones y contactos; los contactos pueden asociarse a empresas y a transacciones. Existen relaciones espec&iacute;ficas como <em>customer-vendor</em> (para operaciones intercompany) y partners en transacciones. En OneWorld las entidades se segmentan por subsidiaria, lo que impacta permisos, impuestos y consolidaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;C&oacute;mo funciona el modelo contable?</p>
+        <p class="a">Plan de cuentas m&aacute;s segmentos (department, class, location y custom segments) definen la dimensi&oacute;n contable; los per&iacute;odos contables controlan el posting; las transacciones posteadas generan asientos autom&aacute;ticos y los journal entries permiten asientos manuales. El cierre de per&iacute;odo usa checklists y bloquea cambios retroactivos. Los reportes financieros (est&aacute;ndar y personalizados) se construyen sobre este modelo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;Qu&eacute; son los custom records y los campos personalizados?</p>
+        <p class="a">
+            Los <strong>custom record types</strong> (customrecord_*) permiten crear estructuras propias (cat&aacute;logos, maestros auxiliares, bitácoras de negocio). Los <strong>custom fields</strong> siguen convenciones de ID seg&uacute;n su contexto:
+            <ul>
+                <li><strong>custbody_</strong> campos de cabecera de transacci&oacute;n</li>
+                <li><strong>custcol_</strong> campos a nivel de l&iacute;nea</li>
+                <li><strong>custentity_</strong> campos de entidades (customer, vendor, etc.)</li>
+                <li><strong>custitem_</strong> campos de &iacute;tems</li>
+                <li><strong>custrecord_</strong> campos dentro de custom records</li>
+            </ul>
+            Tipos: texto, select, multi-select, fecha, moneda, checkbox, email, list/record reference, etc. El <em>sourcing &amp; filtering</em> permite campos derivados (por ejemplo, copiar un dato del cliente a la transacci&oacute;n).
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;C&oacute;mo se consulta el modelo de datos?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Saved searches:</strong> consultas configurables con criterios, resultados y f&oacute;rmulas; base del reporting diario.</li>
+                <li><strong>SuiteQL:</strong> lenguaje tipo SQL sobre el modelo (v&iacute;a N/query, REST query/v1 o SuiteAnalytics Connect), ideal para consultas complejas y reporting externo.</li>
+                <li><strong>N/search:</strong> API de b&uacute;squeda program&aacute;tica en SuiteScript.</li>
+                <li><strong>Reportes y Workbooks:</strong> capa anal&iacute;tica nativa para an&aacute;lisis y dashboards.</li>
+            </ul>
+            Los joins se construyen por campos de referencia entre records (cliente, subsidiaria, &iacute;tem, etc.).
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;Qu&eacute; restricciones y buenas pr&aacute;cticas aplican al modelo de datos?</p>
+        <p class="a">No hay acceso SQL directo al esquema interno: solo mediante SuiteAnalytics Connect o las APIs/analytics. NetSuite impone l&iacute;mites por cuenta (campos y registros personalizados, scripts desplegados, b&uacute;squedas...) que conviene conocer y monitorear. Buenas pr&aacute;cticas: usar external IDs y convenciones de nombres (prefijos por proyecto), evitar sobre-modelar (no crear custom records si basta un campo), cuidar el rendimiento de b&uacute;squedas no indexadas y documentar cada extensi&oacute;n del modelo.</p>
+    </div>
+
+    <h2 id="s4">4. Personalizaci&oacute;n y SuiteBuilder</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; se puede personalizar sin c&oacute;digo?</p>
+        <p class="a">Con SuiteBuilder: campos y registros personalizados, listas personalizadas, formularios (entry y transaction), pesta&ntilde;as y centros de men&uacute;, dashboards y portlets, KPIs, saved searches, plantillas de PDF y correo, roles y permisos. Es la primera opci&oacute;n antes de recurrir a workflows o scripts.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;C&oacute;mo funcionan los campos personalizados en formularios?</p>
+        <p class="a">Un mismo campo puede ser <em>body</em> (cabecera) o <em>column</em> (l&iacute;nea) seg&uacute;n d&oacute;nde se cree; su visibilidad y obligatoriedad se controlan por formulario. El ID, el tipo y el almacenamiento son claves para scripts, b&uacute;squedas e integraciones. Se recomienda validar en el formulario cuando la regla es simple y usar scripts cuando la l&oacute;gica es condicional o transaccional.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;Cu&aacute;ndo usar custom record types?</p>
+        <p class="a">Cuando se necesita representar informaci&oacute;n propia que no encaja en records est&aacute;ndar: maestros auxiliares, controles internos, cat&aacute;logos, bitácoras. Soportan numeraci&oacute;n autom&aacute;tica o manual, permisos por rol, campos propios y relaciones con records est&aacute;ndar; tambi&eacute;n se pueden referenciar desde transacciones (list/record fields) y automatizar con workflows/scripts.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;C&oacute;mo se controlan formularios y layouts por rol?</p>
+        <p class="a">Cada rol puede tener un formulario preferido por tipo de transacci&oacute;n/entrada; los formularios definen campos visibles, obligatorios, orden y sublistas. Adem&aacute;s existen print forms (PDF) y plantillas de correo. Buenas pr&aacute;cticas: pocos formularios bien dise&ntilde;ados, no duplicar reglas de negocio en formularios (eso va en scripts/workflows) y versionar los cambios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; son las saved searches y qu&eacute; usos tienen?</p>
+        <p class="a">Consultas guardadas sobre cualquier record: criterios, resultados, f&oacute;rmulas, agrupaciones y gr&aacute;ficas. Se usan para reporting, dashboards, vista de sublistas, criterios de workflows, recordatorios y alertas programadas por correo. Con permisos adecuados tambi&eacute;n son la base de auditor&iacute;as operativas (por ejemplo, transacciones sin aprobar o &iacute;tems sin movimiento).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; son los templates y c&oacute;mo se generan documentos PDF?</p>
+        <p class="a">Las plantillas de PDF/HTML usan FreeMarker y se renderizan desde transacciones o scripts (N/render). Permiten branding, idiomas y variantes por subsidiaria. Los correos tambi&eacute;n usan plantillas con placeholders. Pitfalls comunes: datos faltantes, dependencias de locale y rendimiento en documentos masivos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; criterios gu&iacute;an la decisi&oacute;n de personalizar?</p>
+        <p class="a">Orden de preferencia: configuraci&oacute;n (SuiteBuilder) &rarr; workflow (SuiteFlow) &rarr; script (SuiteScript). Antes de personalizar: justificar el valor, evaluar impacto en upgrades y soporte, y documentar. Todo cambio debe tener due&ntilde;o, caso de negocio y plan de pruebas; evitar modificar procesos est&aacute;ndar sin necesidad y usar el fit-gap como marco de decisi&oacute;n.</p>
+    </div>
+
+    <h2 id="s5">5. SuiteScript 2.x</h2>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; es SuiteScript y qu&eacute; versiones existen?</p>
+        <p class="a">Es la API de programaci&oacute;n JavaScript de NetSuite para extender la plataforma. La versi&oacute;n <strong>1.0</strong> est&aacute; obsoleta (sin nuevas ventas y con soporte finalizado); la actual es <strong>2.x</strong>: 2.0 con m&oacute;dulos AMD (define/require) y <strong>2.1</strong> (ejecuci&oacute;n m&aacute;s r&aacute;pida, solo scripts de servidor, se declara con @NApiVersion 2.1). Cada script se publica como <em>script record</em> + <em>script deployment</em> (audiencia, estado, log level, roles).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;Qu&eacute; tipos de script existen y cu&aacute;ndo usar cada uno?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Client Script:</strong> UX en el navegador (validaciones, campos din&aacute;micos).</li>
+                <li><strong>User Event Script:</strong> l&oacute;gica de servidor sobre altas/cambios/bajas de records.</li>
+                <li><strong>Scheduled Script:</strong> tareas recurrentes o por fecha.</li>
+                <li><strong>Map/Reduce:</strong> procesamiento masivo en paralelo por fases.</li>
+                <li><strong>Suitelet:</strong> p&aacute;ginas/formularios server-side y endpoints internos.</li>
+                <li><strong>RESTlet:</strong> API REST propia para integraciones externas.</li>
+                <li><strong>Portlet:</strong> componentes de dashboard.</li>
+                <li><strong>Workflow Action:</strong> l&oacute;gica invocada desde SuiteFlow.</li>
+                <li><strong>Mass Update y Bundle Installation:</strong> actualizaciones masivas y despliegue de bundles.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;C&oacute;mo funcionan los User Event Scripts?</p>
+        <p class="a">Tres puntos de entrada: <strong>beforeLoad</strong> (antes de renderizar la p&aacute;gina; ideal para mostrar/ocultar campos), <strong>beforeSubmit</strong> (validaci&oacute;n server-side; puede abortar la operaci&oacute;n) y <strong>afterSubmit</strong> (post-proceso; la transacci&oacute;n ya est&aacute; guardada). Se disparan en m&uacute;ltiples contextos (create, edit, delete, approve, xedit, import, web services...) y la misma l&oacute;gica puede reutilizarse con el contexto recibido. Cuidado con llamadas externas en beforeSubmit (bloquean la transacci&oacute;n) y con recursiones en afterSubmit.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; hacen los Client Scripts y cu&aacute;les son sus l&iacute;mites?</p>
+        <p class="a">Mejoran la experiencia de usuario: <em>pageInit, validateField, fieldChanged, postSourcing, saveRecord, sublistChanged</em>, etc. Corren en el navegador del usuario, por lo que su acceso a datos y m&oacute;dulos es limitado y no son el lugar para l&oacute;gica de negocio cr&iacute;tica; la pr&aacute;ctica recomendada es delegar los procesos privilegiados a Suitelets, RESTlets o user events.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Cu&aacute;ndo usar Scheduled vs Map/Reduce?</p>
+        <p class="a">Scheduled: recurrencias o ejecuciones programadas de bajo/medio volumen. Map/Reduce: procesamiento masivo con fases (getInputData &rarr; map &rarr; reduce &rarr; summarize), paralelismo, chunks y yield para trabajos de miles o millones de registros. Para vol&uacute;menes altos, Map/Reduce es la opci&oacute;n correcta; un Scheduled que recorre todo el registro acabar&aacute; excediendo governance.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;Qu&eacute; diferencia hay entre Suitelet y RESTlet?</p>
+        <p class="a">El <strong>Suitelet</strong> genera p&aacute;ginas y formularios server-side o puede exponer endpoints internos (wizards, dashboards, descargas). El <strong>RESTlet</strong> expone una API REST para sistemas externos (GET/POST/PUT/DELETE) con control total del contrato de datos y autenticaci&oacute;n TBA/OAuth. Los RESTlets suelen versionarse (v1, v2) para no romper integradores.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;Qu&eacute; es el governance y c&oacute;mo se gestiona?</p>
+        <p class="a">
+            Cada tipo de script tiene un l&iacute;mite de <strong>units</strong> por ejecuci&oacute;n (por defecto: user events ~1.000; scheduled y map/reduce ~10.000; RESTlets/Suitelets ~5.000). Se monitorea con <em>runtime.getCurrentScript().getRemainingUsage()</em>. Estrategias: usar b&uacute;squedas en lugar de cargar records, dynamic mode en N/record, chunking con yield, N/cache, minimizar llamadas externas y mover trabajos pesados a map/reduce o ventanas nocturnas.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;Cu&aacute;les son los m&oacute;dulos N/* m&aacute;s usados?</p>
+        <p class="a">N/record (CRUD de records), N/search y N/query (SuiteQL), N/runtime (governance), N/https (llamadas externas), N/file (archivos), N/ui/serverWidget (formularios server-side), N/ui/dialog y N/ui/message (di&aacute;logos en cliente), N/email, N/cache, N/task (programar map/reduce y scheduled), N/format, N/error, N/log, N/redirect, N/url, N/render (plantillas) y N/llm (integraciones con modelos de lenguaje).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;C&oacute;mo se depuran y monitorean los scripts?</p>
+        <p class="a">Mediante el Script Execution Log (constante o por deployment), execution context, estados del deployment (Testing, Released, Scheduled...) y log level por deployment (Debug/Audit/Error). En c&oacute;digo: try/catch con N/error y logs con N/log. Buenas pr&aacute;cticas: probar en sandbox, medir governance y tiempos, y monitorear fallos recurrentes para corregir en vez de solo reintentar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;Cu&aacute;les son las buenas pr&aacute;cticas de SuiteScript?</p>
+        <p class="a">
+            <ul>
+                <li>L&oacute;gica de negocio en scripts de servidor (user events, scheduled, map/reduce), no en client scripts.</li>
+                <li>Idempotencia en afterSubmit y <em>upsert</em> con external ID para integraciones.</li>
+                <li>Evitar llamadas externas lentas en beforeSubmit y bucles con record.load.</li>
+                <li>Reutilizar c&oacute;digo con librer&iacute;as (m&oacute;dulos AMD) y nombres/versiones claras.</li>
+                <li>Versionar con SDF + Git y desplegar por entornos con pruebas unitarias.</li>
+                <li>Documentar cada deployment con due&ntilde;o, prop&oacute;sito y audiencia.</li>
+            </ul>
+        </p>
+    </div>
+
+    <h2 id="s6">6. Automatizaci&oacute;n: SuiteFlow y workflows</h2>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;Qu&eacute; es SuiteFlow?</p>
+        <p class="a">Es el motor de workflows visual de NetSuite: un flujo se define con <strong>estados</strong>, <strong>acciones</strong>, <strong>transiciones</strong>, <strong>condiciones</strong> y <strong>reglas</strong>, y se dispara por eventos de records (crear, editar, ver, programado). Es la alternativa low-code para automatizar procesos y aprobaciones sobre records est&aacute;ndar y custom, sin escribir c&oacute;digo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;Qu&eacute; componentes y acciones son t&iacute;picos?</p>
+        <p class="a">Acciones como set field value, send email, create/update record, transition, return y add button; condiciones por campo o f&oacute;rmula; disparadores de inicio (on create, on view, scheduled, on entry/exit de estado). Cada workflow tiene logs de ejecuci&oacute;n para depuraci&oacute;n, y control de versi&oacute;n con estados de despliegue (Testing/Released).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;Cu&aacute;ndo elegir Workflow y cu&aacute;ndo SuiteScript?</p>
+        <p class="a">Workflow para flujos de negocio configurables (aprobaciones, cambios de estado, notificaciones, campos derivados simples) que el &aacute;rea funcional puede mantener; SuiteScript para l&oacute;gica compleja, c&aacute;lculos transaccionales, alto volumen o integraciones. El patr&oacute;n h&iacute;brido es com&uacute;n: workflow para el proceso + workflow action script para la l&oacute;gica delicada. Considerar mantenibilidad, governance y due&ntilde;o del proceso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; es SuiteApprovals?</p>
+        <p class="a">El m&oacute;dulo de aprobaciones de transacciones (compras, gastos, journals...) con reglas y cadenas por monto, subsidiaria o departamento; permite aprobaci&oacute;n multinivel, delegaci&oacute;n y trazabilidad para auditor&iacute;a. Se complementa con workflows custom cuando la l&oacute;gica excede las reglas est&aacute;ndar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; otras automatizaciones de negocio existen?</p>
+        <p class="a">Mass Updates (actualizaciones masivas seg&uacute;n criterios y permisos), CSV Import para cargas controladas, workflows programados, recordatorios y alertas por correo desde saved searches, y automatizaciones de cobranza (dunning) en cuentas por cobrar. La elecci&oacute;n depende del volumen, la recurrencia y el nivel de control requerido.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;Qu&eacute; limitaciones tiene SuiteFlow?</p>
+        <p class="a">Est&aacute; orientado a eventos de records y estados, no a procesamiento masivo ni c&aacute;lculos complejos; en vol&uacute;menes altos puede afectar el rendimiento; la depuraci&oacute;n es m&aacute;s limitada que en SuiteScript; y algunos registros/l&iacute;neas o contextos no soportan todos los disparadores. NetSuite documenta l&iacute;mites por cuenta (n&uacute;mero de workflows/estados) que conviene revisar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;Qu&eacute; patrones de negocio se implementan t&iacute;picamente con workflows?</p>
+        <p class="a">Aprobaci&oacute;n de pedidos de compra y gastos, onboarding de clientes y proveedores, ciclo de vida de contratos, dunning/cobranza, sincronizaci&oacute;n de estados entre records relacionados, notificaciones de cambios de estado y controles de l&iacute;mite de cr&eacute;dito en pedidos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo se mantienen los workflows en el tiempo?</p>
+        <p class="a">Nombrar y documentar cada flujo con due&ntilde;o de proceso, evitar solapamientos entre workflows y scripts sobre el mismo record, revisar el comportamiento durante los upgrades (Release Preview y sandbox), monitorear errores en los logs de workflow y versionar los cambios (SDF incluye workflows en formato XML para desplegarlos con control de versiones).</p>
+    </div>
+
+    <h2 id="s7">7. Integraciones y APIs</h2>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;Qu&eacute; opciones de integraci&oacute;n ofrece NetSuite?</p>
+        <p class="a">
+            <ul>
+                <li><strong>SuiteTalk SOAP:</strong> web services cl&aacute;sicos con amplio cat&aacute;logo de records.</li>
+                <li><strong>REST Web Services:</strong> API REST nativa (record/v1, query/v1, metadata/v1).</li>
+                <li><strong>RESTlets:</strong> endpoints personalizados en SuiteScript.</li>
+                <li><strong>SuiteAnalytics Connect:</strong> JDBC/ODBC para BI y extracci&oacute;n de datos.</li>
+                <li><strong>CSV Import / SFTP:</strong> cargas batch controladas.</li>
+                <li><strong>iPaaS/middleware:</strong> Celigo, Boomi, MuleSoft para orquestar flujos entre sistemas.</li>
+            </ul>
+            La elecci&oacute;n depende del volumen, del contrato de datos, del sistema origen/destino y de las capacidades del equipo.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;Cu&aacute;ndo usar SuiteTalk SOAP?</p>
+        <p class="a">En integraciones existentes que ya lo usan, cuando se necesita el cat&aacute;logo completo de operaciones (add, update, upsert, get, search) o cuando la herramienta de integraci&oacute;n s&oacute;lo ofrece SOAP. Es m&aacute;s verboso que REST y recibe menos inversi&oacute;n de desarrollo nuevo; para proyectos nuevos suele preferirse REST Web Services o RESTlets. Autenticaci&oacute;n t&iacute;pica: Token-Based Authentication.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;Qu&eacute; ofrecen los REST Web Services?</p>
+        <p class="a">CRUD est&aacute;ndar de records (record/v1), ejecuci&oacute;n de SuiteQL (query/v1) y metadata del modelo; payloads JSON y sem&aacute;ntica REST convencional. Son la v&iacute;a recomendada para integraciones nuevas de alcance est&aacute;ndar, con paginaci&oacute;n y l&iacute;mites de concurrencia/tama&ntilde;o que deben dise&ntilde;arse desde el inicio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;Cu&aacute;ndo conviene crear un RESTlet?</p>
+        <p class="a">Cuando el caso de negocio exige una API propia que combine varios records, aplique reglas espec&iacute;ficas o reduzca round-trips (por ejemplo, crear pedido + reservar + notificar en una sola llamada). Se versiona en la URL, se autentica con TBA u OAuth 2.0 y est&aacute; sujeto a governance, por lo que conviene dise&ntilde;arlo ligero y monitoreado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo se autentican las integraciones?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Token-Based Authentication (TBA):</strong> tokens ligados a un integration record y a un rol; est&aacute;ndar para SOAP y RESTlets.</li>
+                <li><strong>OAuth 2.0:</strong> authorization code (con PKCE) o client credentials, soportado para REST web services y RESTlets.</li>
+                <li><strong>Certificados y secretos:</strong> gestionados fuera del c&oacute;digo (vault/secret manager).</li>
+            </ul>
+            Adem&aacute;s se aplican 2FA a los usuarios humanos, IP allowlist opcional y roles dedicados de m&iacute;nimo privilegio por integraci&oacute;n.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;Qu&eacute; es SuiteAnalytics Connect?</p>
+        <p class="a">El acceso JDBC/ODBC al modelo anal&iacute;tico de NetSuite (esquema NetSuite2.com) para herramientas de BI, ETL y reporting corporativo; soporta SuiteQL para consultas. Respeta los permisos del rol asociado y tiene l&iacute;mites de conexiones/concurrencia; es la v&iacute;a adecuada cuando se necesita extracci&oacute;n masiva o modelado externo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;Qu&eacute; patrones de integraci&oacute;n se usan con NetSuite?</p>
+        <p class="a">Tiempo real (REST/RESTlet sobre eventos) vs batch (CSV/SFTP/Connect); idempotencia con external IDs; reintentos con backoff exponencial y colas/dead-letter; monitoreo con Web Services Usage Log y estados de integraci&oacute;n; contratos de datos documentados y promoci&oacute;n sandbox &rarr; producci&oacute;n con las mismas integraciones probadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;Qu&eacute; l&iacute;mites aplican a las integraciones y c&oacute;mo se manejan?</p>
+        <p class="a">NetSuite aplica l&iacute;mites de concurrencia por servicio (por defecto del orden de 5 solicitudes simult&aacute;neas en SOAP, REST y RESTlets, ampliables con SuiteCloud Plus), l&iacute;mites de tama&ntilde;o de petici&oacute;n/respuesta, timeouts y governance en scripts. Estrategias: batching, procesamiento as&iacute;ncrono, ventanas de ejecuci&oacute;n, backoff y priorizaci&oacute;n de cargas cr&iacute;ticas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;C&oacute;mo se migran o cargan datos masivamente?</p>
+        <p class="a">Con el CSV Import Assistant y/o cargas v&iacute;a API: primero maestros (listas, entidades, &iacute;tems) y luego transacciones, respetando dependencias; dedupe por external ID, validaci&oacute;n de errores por fila y pruebas en sandbox. Documentar mappings, owners y orden de carga es clave para repetibilidad. Para extracciones y an&aacute;lisis externo, usar Connect.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Cu&aacute;les son las buenas pr&aacute;cticas de integraci&oacute;n?</p>
+        <p class="a">
+            <ul>
+                <li>Credenciales en gestores de secretos, nunca en c&oacute;digo ni en scripts de cliente.</li>
+                <li>Un rol y un integration record dedicados por integraci&oacute;n (m&iacute;nimo privilegio).</li>
+                <li>Contratos versionados y compatibles hacia atr&aacute;s; correlaci&oacute;n de transacciones de punta a punta.</li>
+                <li>Observabilidad: logs, m&eacute;tricas y alarmas de errores; paneles de estado.</li>
+                <li>Documentaci&oacute;n funcional y t&eacute;cnica de cada flujo, con responsable asignado.</li>
+            </ul>
+        </p>
+    </div>
+
+    <h2 id="s8">8. Seguridad, roles y auditor&iacute;a</h2>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo funciona el modelo de seguridad de NetSuite?</p>
+        <p class="a">Se basa en <strong>roles + permisos</strong>: cada rol otorga niveles de acceso por record y por acci&oacute;n (View, Create, Edit, Full), adem&aacute;s de permisos espec&iacute;ficos (web services, reportes, configuraci&oacute;n). Los usuarios se vinculan a employee records y ven los centros de men&uacute; seg&uacute;n su rol. En OneWorld, los roles pueden restringirse por subsidiaria y por empleado (location, department, class).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;Qu&eacute; buenas pr&aacute;cticas aplican a roles y permisos?</p>
+        <p class="a">Dise&ntilde;ar roles por funci&oacute;n con m&iacute;nimo privilegio, evitar reutilizar el rol de administrador, crear roles dedicados para integraciones y servicios, restringir datos por subsidiaria/empleado cuando aplique, y revisar accesos peri&oacute;dicamente (access reviews) retirando permisos innecesarios y usuarios inactivos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo se autentican los usuarios?</p>
+        <p class="a">Con 2FA obligatorio para roles privilegiados (administraci&oacute;n, gesti&oacute;n de tokens, web services) y forzable a nivel de compa&ntilde;&iacute;a o rol; SSO empresarial v&iacute;a SAML 2.0/OIDC; pol&iacute;ticas de contrase&ntilde;as, bloqueo por intentos y gesti&oacute;n de sesiones. Las integraciones usan TBA/OAuth 2.0 en lugar de credenciales de usuario.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;C&oacute;mo se protegen las integraciones?</p>
+        <p class="a">Integration records dedicados con tokens rotables, OAuth con scopes m&iacute;nimos, IP allowlist cuando aplique, monitoreo del Web Services Usage Log, separaci&oacute;n de credenciales por entorno y procedimientos de revocaci&oacute;n r&aacute;pida si un token se compromete.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;Qu&eacute; mecanismos de auditor&iacute;a existen?</p>
+        <p class="a">System Notes en cada record (historial de cambios con usuario y fecha), Login Audit Trail, auditor&iacute;a de cambios en roles y usuarios, Script Execution Logs y la SuiteApp oficial Audit Trail para seguimiento de campos y eliminaci&oacute;n de datos. Todo esto soporta evidencias para auditores y revisiones de cumplimiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Qu&eacute; es la segregaci&oacute;n de funciones (SoD) en NetSuite?</p>
+        <p class="a">Separar qui&eacute;n crea, aprueba y paga/contabiliza para reducir fraude y errores: permisos por rol que impidan combinar funciones incompatibles, aprobaciones integradas con SuiteApprovals, y evidencia documentada de controles. Es clave en entornos SOX/ITGC y en auditor&iacute;as internas y externas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;Qu&eacute; consideraciones de privacidad y cumplimiento aplican?</p>
+        <p class="a">La plataforma cifra datos en tr&aacute;nsito y en reposo y cuenta con certificaciones (SOC 1/SOC 2, ISO 27001, entre otras); los data centers regionales atienden requerimientos de residencia. A nivel de cuenta se gestionan consentimientos, retenci&oacute;n, enmascaramiento de datos sensibles y localizaciones fiscales seg&uacute;n pa&iacute;s. El uso de datos personales debe respetar la normativa aplicable (GDPR, leyes locales de habeas data).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;Qu&eacute; otras protecciones se configuran?</p>
+        <p class="a">Company IP ranges para restringir acceso por red, pol&iacute;ticas de contrase&ntilde;a y bloqueo, control de sesiones, SuiteSignOn para SSO saliente hacia aplicaciones conectadas, roles de Employee Center limitados, y monitoreo de logins para detectar accesos an&oacute;malos o desde ubicaciones no esperadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;C&oacute;mo se gobiernan los accesos con el tiempo?</p>
+        <p class="a">Con revisiones peri&oacute;dicas de usuarios y roles, proceso de altas/bajas de empleados vinculado a RR. HH., matriz de roles documentada, alertas de cambios sensibles (roles, permisos, tokens) y auditor&iacute;a de evidencia para cumplimiento. La gobernanza de accesos es un control continuo, no una tarea &uacute;nica.</p>
+    </div>
+
+    <h2 id="s9">9. OneWorld: multi-subsidiaria y multi-moneda</h2>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;Qu&eacute; es OneWorld?</p>
+        <p class="a">La variante de NetSuite para organizaciones con m&uacute;ltiples entidades legales: subsidiarias en jerarqu&iacute;a, multi-moneda, m&uacute;ltiples libros contables, multi-idioma y reglas fiscales por jurisdicci&oacute;n, con consolidaci&oacute;n nativa. Se requiere cuando se necesita m&aacute;s de una subsidiaria, m&uacute;ltiples monedas o libros paralelos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo funcionan las subsidiarias y su jerarqu&iacute;a?</p>
+        <p class="a">Las subsidiarias son un record con relaci&oacute;n padre/hijo; segmentan datos y permisos (roles restringidos por subsidiaria) y son la base de la consolidaci&oacute;n. Pr&aacute;cticamente cualquier record o transacci&oacute;n puede marcarse por subsidiaria, y los cat&aacute;logos pueden ser compartidos o locales seg&uacute;n su naturaleza.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;C&oacute;mo se manejan las transacciones intercompany?</p>
+        <p class="a">Mediante pares cliente-proveedor entre subsidiarias, journal entries de intercompany autom&aacute;ticos, reglas de eliminaci&oacute;n (elimination subsidiaries) y procesos de reconciliaci&oacute;n entre entidades. El marco de <em>Automated Intercompany Management</em> simplifica el ciclo de venta-compra entre compa&ntilde;&iacute;as del mismo grupo, evitando asientos manuales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;C&oacute;mo funciona el multi-moneda?</p>
+        <p class="a">Cada subsidiaria tiene moneda base; las transacciones registran su moneda y se convierten con tipos de cambio configurables (rate types). Se gestionan ganancias/p&eacute;rdidas por FX, revaluaci&oacute;n de saldos en moneda extranjera y conversi&oacute;n a moneda de reporte para consolidaci&oacute;n, cuidando el uso de tasas hist&oacute;ricas vs actuales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;Qu&eacute; son los libros contables (accounting books)?</p>
+        <p class="a">Un libro primario m&aacute;s libros secundarios (por ejemplo, IFRS vs normativa local) con ajustes independientes, permitiendo reportar por m&aacute;s de un marco contable sobre las mismas transacciones. La administraci&oacute;n de per&iacute;odos y el posting se controla por libro, y su uso requiere OneWorld.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se gestionan los impuestos globales?</p>
+        <p class="a">Con SuiteTax como motor de determinaci&oacute;n fiscal (nexus por jurisdicci&oacute;n, c&oacute;digos de impuesto, exenciones) y reportes fiscales por pa&iacute;s; la determinaci&oacute;n puede variar por subsidiaria y tipo de transacci&oacute;n. Algunas localizaciones exigen requisitos espec&iacute;ficos y la disponibilidad de funciones fiscales var&iacute;a por pa&iacute;s.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;C&oacute;mo se consolidan y reportan m&uacute;ltiples entidades?</p>
+        <p class="a">Con subsidiarias de eliminaci&oacute;n para operaciones intercompany, conversi&oacute;n de moneda, estados financieros consolidados y comparativos por entidad; para reportes corporativos se combinan reportes nativos, workbooks y SuiteAnalytics Connect hacia herramientas de BI.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;Qu&eacute; desaf&iacute;os t&iacute;picos trae OneWorld?</p>
+        <p class="a">Complejidad de seguridad (restricciones por subsidiaria y por empleado), decisi&oacute;n sobre datos compartidos vs locales, configuraci&oacute;n fiscal por jurisdicci&oacute;n, pruebas de consolidaci&oacute;n y rendimiento de reportes multi-entidad. Una gobernanza clara de cat&aacute;logos, roles y procesos es lo que mantiene una implementaci&oacute;n OneWorld sana.</p>
+    </div>
+
+    <h2 id="s10">10. Administraci&oacute;n, entornos, despliegues y rendimiento</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo funcionan los releases y upgrades?</p>
+        <p class="a">NetSuite publica dos actualizaciones mayores al a&ntilde;o (a&ntilde;o.1 y a&ntilde;o.2) que Oracle aplica autom&aacute;ticamente; las cuentas acceden a Release Notes y a Release Preview para probar antes. El trabajo de upgrade incluye revisar novedades, ejecutar regresi&oacute;n de customizaciones (scripts, workflows, integraciones) y planificar ajustes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;Qu&eacute; entornos y sandboxes se usan?</p>
+        <p class="a">Producci&oacute;n y sandboxes (desarrollo, UAT, pruebas) seg&uacute;n la edici&oacute;n, m&aacute;s el Release Preview Sandbox durante ventanas de upgrade. Los sandboxes se refrescan desde producci&oacute;n con pol&iacute;ticas de datos y usuarios espec&iacute;ficas. Regla de oro: nunca probar cambios directamente en producci&oacute;n; todo pasa por sandbox con plan de pruebas y aprobaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;Qu&eacute; es SDF y por qu&eacute; es clave para el despliegue?</p>
+        <p class="a">SuiteCloud Development Framework permite trabajar customizaciones como archivos XML en un proyecto local (account customization project o SuiteApp), desplegarlas con la CLI <em>suitecloud</em> e integrarlas con Git y CI/CD. Soporta custom records, campos, scripts, workflows y m&aacute;s; incluye unit testing (SuiteCloud Unit Testing con Jest). Habilita promoci&oacute;n controlada sandbox &rarr; producci&oacute;n con historial de cambios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;Qu&eacute; son los bundles y SuiteApps?</p>
+        <p class="a">SuiteBundler empaqueta customizaciones para moverlas entre cuentas (bundle de origen &rarr; destino, con actualizaciones controladas). Las SuiteApps son aplicaciones versionadas que se instalan en la cuenta (privadas o publicadas en SuiteApp.com); los <em>managed bundles</em> permiten distribuir versiones bloqueadas. Instalar/actualizar una SuiteApp es un cambio que se prueba primero en sandbox.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se monitorea la salud de la cuenta?</p>
+        <p class="a">Con System Status, Web Services Usage Log (consumo y errores de integraciones), Script Execution Logs, reportes de uso (logins, transacciones), herramientas de performance (saved search performance, script usage) y alertas de l&iacute;mites. Revisar peri&oacute;dicamente consumo, errores y tendencias evita incidentes y sobrecostos de licencias.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;Qu&eacute; buenas pr&aacute;cticas mejoran el rendimiento?</p>
+        <p class="a">Optimizar saved searches (campos indexados, filtrar antes de aplicar f&oacute;rmulas, evitar wildcards iniciales), usar dynamic mode y b&uacute;squedas en lugar de cargar records completos, N/cache para datos repetidos, Map/Reduce para vol&uacute;menes y paginaci&oacute;n controlada. Cuidado con formularios pesados, scripts en beforeLoad y c&aacute;lculos costosos en contextos interactivos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;C&oacute;mo se gobiernan las customizaciones de la cuenta?</p>
+        <p class="a">Con convenciones de nombres (prefijos por proyecto), cat&aacute;logo o inventario de customs con due&ntilde;o, control de cambios formal (tickets, revisi&oacute;n de c&oacute;digo, CI/CD), documentaci&oacute;n de deployments y roles, y limpieza peri&oacute;dica de deuda t&eacute;cnica. En organizaciones grandes funciona un centro de excelencia (COE) de NetSuite que prioriza y estandariza.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;Qu&eacute; canales de soporte y escalaci&oacute;n existen?</p>
+        <p class="a">SuiteAnswers y el Help Center (documentaci&oacute;n oficial), casos de soporte con niveles de severidad (con acceso autorizado a la cuenta si se requiere), partners de Oracle NetSuite PartnerNetwork para especialidades, y comunidades/certificaciones para mantener conocimiento. Revisar Release Notes y notificaciones de la plataforma es parte del d&iacute;a a d&iacute;a del administrador.</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de NetSuite en una entrevista (plantilla)</h2>
+
+    <div class="note">
+        <p><strong>Pregunta t&iacute;pica:</strong> &laquo;&iquest;Cu&aacute;l es su experiencia con NetSuite?&raquo; / &laquo;&iquest;Ha trabajado con SuiteScript, integraciones y administraci&oacute;n de NetSuite?&raquo;</p>
+    </div>
+
+    <h3>Respuesta modelo (adapta los corchetes con tu experiencia real)</h3>
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + contexto):</strong> &laquo;S&iacute;. Tengo experiencia con NetSuite en [a&ntilde;os] a&ntilde;os, trabajando en cuentas [OneWorld / est&aacute;ndar] con m&oacute;dulos de [finanzas, inventario, CRM...], en roles de [configuraci&oacute;n funcional, desarrollo SuiteCloud, integraciones y administraci&oacute;n]&raquo;.</p>
+        <p><strong>Configuraci&oacute;n funcional:</strong> &laquo;He configurado campos y registros personalizados, formularios y roles; dise&ntilde;ado saved searches y reportes; y acompa&ntilde;ado procesos de [O2C, P2P, cierres contables] incluyendo [SuiteApprovals, workflows de aprobaci&oacute;n]&raquo;.</p>
+        <p><strong>Desarrollo SuiteCloud:</strong> &laquo;Desarrollo con SuiteScript 2.x (user events, client scripts, scheduled, map/reduce, RESTlets y Suitelets), automatizo con SuiteFlow y despliego con SDF y control de versiones [Git/CI-CD]; manejo governance, logs y pruebas en sandbox&raquo;.</p>
+        <p><strong>Integraciones:</strong> &laquo;He implementado integraciones v&iacute;a [REST web services, RESTlets, SOAP, middleware], con autenticaci&oacute;n [TBA/OAuth 2.0], idempotencia mediante external IDs y monitoreo de errores y concurrencia&raquo;.</p>
+        <p><strong>Administraci&oacute;n y seguridad:</strong> &laquo;Administro roles y permisos con m&iacute;nimo privilegio, 2FA y SSO; gestiono sandboxes, upgrades y rendimiento; y tengo experiencia con auditor&iacute;a (system notes, login audit) y SuiteAnalytics para reporting&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n):</strong> &laquo;En mis proyectos logr&eacute; [ejemplo cuantificado: reducir tiempo de cierre X%, automatizar N procesos, integrar N sistemas]. En este rol aportar&iacute;a [implementaci&oacute;n/optimizaci&oacute;n/soporte] desde el primer d&iacute;a&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Configuraci&oacute;n</td><td>SuiteBuilder, campos/records custom, formularios, roles, saved searches</td><td>Procesos implementados, usuarios productivos, reportes adoptados</td></tr>
+        <tr><td>SuiteScript</td><td>User events, client scripts, scheduled, map/reduce, RESTlets, governance</td><td>Scripts en producci&oacute;n, automatizaciones con ahorro medible</td></tr>
+        <tr><td>Workflows</td><td>SuiteFlow, aprobaciones, notificaciones, dunning</td><td>Flujos activos, tiempos de ciclo reducidos</td></tr>
+        <tr><td>Integraciones</td><td>REST/SOAP/RESTlet, middleware, TBA/OAuth, external IDs</td><td>Integraciones monitoreadas, errores bajo umbral, volumen procesado</td></tr>
+        <tr><td>Datos y analytics</td><td>SuiteQL, saved searches, Connect, Workbooks</td><td>Tableros entregados, extracciones automatizadas</td></tr>
+        <tr><td>Seguridad</td><td>Roles de m&iacute;nimo privilegio, 2FA/SSO, auditor&iacute;a, SoD</td><td>Accesos revisados, hallazgos remediados</td></tr>
+        <tr><td>OneWorld</td><td>Subsidiarias, multi-moneda, libros, intercompany</td><td>Cierres consolidados, entidades integradas</td></tr>
+        <tr><td>Administraci&oacute;n</td><td>Sandboxes, SDF, upgrades, performance, soporte</td><td>Despliegues controlados, upgrades sin incidentes cr&iacute;ticos</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: procesos automatizados, horas ahorradas, errores reducidos, transacciones procesadas.</li>
+        <li>Nombra con precisi&oacute;n: SuiteScript 2.1, SuiteFlow, SuiteTalk REST, SuiteQL, SDF, OneWorld, SuiteApprovals.</li>
+        <li>Muestra artefactos: diagramas de flujos, cat&aacute;logo de customizaciones, ejemplos de scripts, documentaci&oacute;n de integraciones.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento te&oacute;rico s&oacute;lido y un plan concreto (certificaciones: SuiteFoundation, Administrator, ERP Consultant, SuiteCloud Developer).</li>
+        <li>Conecta con el negocio: cierres m&aacute;s r&aacute;pidos, datos confiables, menos trabajo manual, escalabilidad multi-pa&iacute;s.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>NetSuite Help Center (docs.oracle.com / SuiteAnswers)</td><td>Documentaci&oacute;n oficial de m&oacute;dulos, administraci&oacute;n, seguridad y mejores pr&aacute;cticas.</td></tr>
+        <tr><td>SuiteScript 2.x API Reference (Oracle)</td><td>M&oacute;dulos N/*, tipos de script, governance y ejemplos.</td></tr>
+        <tr><td>SuiteCloud Development Framework (SDF)</td><td>Desarrollo basado en archivos, CLI suitecloud, CI/CD y unit testing.</td></tr>
+        <tr><td>SuiteTalk: REST Web Services y SOAP Web Services</td><td>APIs de integraci&oacute;n, autenticaci&oacute;n y l&iacute;mites de concurrencia.</td></tr>
+        <tr><td>SuiteAnalytics / Connect / SuiteQL</td><td>Reporting, consultas y acceso JDBC/ODBC (esquema NetSuite2.com).</td></tr>
+        <tr><td>SuiteFlow / SuiteApprovals</td><td>Workflows visuales, aprobaciones y automatizaci&oacute;n de procesos.</td></tr>
+        <tr><td>OneWorld</td><td>Multi-subsidiaria, multi-moneda, libros contables e intercompany.</td></tr>
+        <tr><td>Certificaciones NetSuite</td><td>SuiteFoundation, Administrator, ERP Consultant, SuiteCloud Developer I/II.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
