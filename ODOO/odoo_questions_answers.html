@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo - ERP y Gestion Empresarial: Fundamentos, Arquitectura, ORM, Modulos, Inventario, Contabilidad, Integraciones, Seguridad y Administracion | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Odoo &mdash; Fundamentos, Arquitectura, ORM, Desarrollo de M&oacute;dulos, Inventario, Manufactura, Contabilidad, Integraciones, Seguridad y Administraci&oacute;n</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Odoo (software ERP y de gesti&oacute;n empresarial) en configuraci&oacute;n funcional, desarrollo de m&oacute;dulos, integraciones, seguridad y administraci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos y versiones (Q1&ndash;Q8), arquitectura t&eacute;cnica y despliegue (Q9&ndash;Q16), modelo de datos y ORM (Q17&ndash;Q25), desarrollo de m&oacute;dulos y vistas (Q26&ndash;Q34), m&oacute;dulos funcionales de ventas, compras, inventario y manufactura (Q35&ndash;Q43), contabilidad y finanzas (Q44&ndash;Q51), integraciones (Q52&ndash;Q59), seguridad y usuarios (Q60&ndash;Q67), multi-compa&ntilde;&iacute;a, datos maestros, migraci&oacute;n y calidad (Q68&ndash;Q74) y administraci&oacute;n, rendimiento y operaciones (Q75&ndash;Q82), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos de Odoo y versiones &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Arquitectura t&eacute;cnica y despliegue &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. Modelo de datos y ORM &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Desarrollo de m&oacute;dulos, vistas y l&oacute;gica de negocio &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. M&oacute;dulos funcionales: ventas, compras, inventario y manufactura &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. Contabilidad, facturaci&oacute;n y finanzas &mdash; 8 preguntas</a></li>
+        <li><a href="#s7">7. Integraciones &mdash; 8 preguntas</a></li>
+        <li><a href="#s8">8. Seguridad y usuarios &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Multi-compa&ntilde;&iacute;a, datos maestros, migraci&oacute;n y calidad &mdash; 7 preguntas</a></li>
+        <li><a href="#s10">10. Administraci&oacute;n, rendimiento y operaciones &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Odoo en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos de Odoo y versiones</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Odoo y para qu&eacute; tipo de soluciones se usa?</p>
+        <p class="a">Odoo es una suite integrada de aplicaciones de gesti&oacute;n empresarial (ERP + CRM + comercio electr&oacute;nico + punto de venta + recursos humanos) de c&oacute;digo abierto, desarrollada por la empresa belga Odoo S.A. Su propuesta de valor es que todas las aplicaciones comparten un &uacute;nico modelo de datos y un &uacute;nico motor de permisos: ventas, inventario, compras, manufactura, contabilidad, proyectos y sitio web se conectan sin integraciones a medida. Se usa en pymes y mid-market para reemplazar combinaciones de hojas de c&aacute;lculo y software puntual, y tambi&eacute;n en empresas grandes como capa de procesos espec&iacute;ficos (por ejemplo, eCommerce o helpdesk) integrada con un ERP corporativo. Es especialmente popular en Europa, Latinoam&eacute;rica, India y &Aacute;frica del Norte.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Cu&aacute;l es la historia y evoluci&oacute;n de Odoo (TinyERP, OpenERP, Odoo)?</p>
+        <p class="a">El proyecto naci&oacute; en 2005 como <strong>TinyERP</strong>, creado por Fabien Pinckaers; en 2008 se renombr&oacute; <strong>OpenERP</strong> y en 2014, con la versi&oacute;n 8, pas&oacute; a llamarse <strong>Odoo</strong> para reflejar que ya no era solo un ERP sino una plataforma de aplicaciones de negocio (incluyendo sitio web, eCommerce y POS). Hitos t&eacute;cnicos relevantes: la introducci&oacute;n del nuevo API de m&oacute;dulos y de la web moderna en v8/v9, la aparici&oacute;n de Odoo.sh, el framework de frontend <strong>OWL</strong> a partir de v14/v15 (reemplazando el antiguo sistema de widgets), y la incorporaci&oacute;n de Spreadsheet, Knowledge y mejoras profundas de contabilidad y de la interfaz en las versiones m&aacute;s recientes. Odoo publica una versi&oacute;n mayor cada a&ntilde;o, normalmente presentada en el evento Odoo Experience (octubre).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Qu&eacute; diferencia a Odoo Community de Odoo Enterprise?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Community:</strong> gratuita, c&oacute;digo abierto bajo LGPL-3. Incluye el n&uacute;cleo funcional: ventas, compras, inventario, MRP b&aacute;sico, CRM, proyectos, sitio web, eCommerce, POS, facturaci&oacute;n, recursos humanos b&aacute;sico y el framework completo de desarrollo (ORM, vistas, QWeb, OWL).</li>
+                <li><strong>Enterprise:</strong> de pago, licenciada bajo la Odoo Enterprise Edition License; se instala <em>sobre</em> Community y a&ntilde;ade m&oacute;dulos cerrados. Aporta contabilidad completa (informes financieros din&aacute;micos, activos, diferidos, presupuestos, conciliaci&oacute;n avanzada, cheques y localizaciones contables), <strong>Odoo Studio</strong> (personalizaci&oacute;n sin c&oacute;digo), PLM, mantenimiento, calidad, helpdesk avanzado, documentos, firmas, suscripciones, alquiler, c&oacute;digo de barras, IoT, marketing automation, VoIP, informes con Spreadsheet y la aplicaci&oacute;n m&oacute;vil, adem&aacute;s del servicio de upgrades y de soporte funcional.</li>
+            </ul>
+            La elecci&oacute;n depende sobre todo de si se necesita contabilidad anal&iacute;tica/financiera completa y herramientas de personalizaci&oacute;n sin desarrollo.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Qu&eacute; opciones de despliegue y hospedaje existen?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Odoo Online (SaaS):</strong> gestionado por Odoo, sin servidor propio; ideal para est&aacute;ndar, pero <em>no permite m&oacute;dulos personalizados de terceros</em> (solo desarrollos propios limitados seg&uacute;n el plan), lo que restringe proyectos con customizaciones profundas.</li>
+                <li><strong>Odoo.sh (PaaS):</strong> plataforma de Odoo integrada con GitHub: ramas, builds autom&aacute;ticos, entornos de desarrollo/staging/producci&oacute;n, backups, logs, SSH y workers configurables. S&iacute; permite m&oacute;dulos custom y es la opci&oacute;n habitual para partners.</li>
+                <li><strong>On-premise / nube propia:</strong> instalaci&oacute;n en servidor propio, Docker, Kubernetes o nube p&uacute;blica (AWS, Azure, GCP). M&aacute;ximo control y flexibilidad t&eacute;cnica, pero el equipo asume sistema operativo, base de datos, nginx, backups, monitoreo y upgrades.</li>
+            </ul>
+            En proyectos con integraciones complejas, requisitos de datos locales o personalizaciones extensas, on-premise o nube propia suele ser la v&iacute;a; Odoo.sh acelera el ciclo de entrega cuando el stack est&aacute;ndar es suficiente.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;C&oacute;mo funciona el licenciamiento y el modelo de precios?</p>
+        <p class="a">Community es gratuita y est&aacute; bajo <strong>LGPL-3</strong>, lo que permite usarla, modificarla y redistribuirla respetando la licencia; los m&oacute;dulos Enterprise usan una licencia de uso por suscripci&oacute;n (Odoo Enterprise Edition License) asociada al n&uacute;mero de usuarios. El modelo comercial actual de Odoo se organiza por usuario y plan: un plan gratuito para una sola app u Online, un plan <strong>Standard</strong> y un plan <strong>Custom</strong> (que a&ntilde;ade Odoo.sh, el servicio de upgrades y m&aacute;s soporte). Los m&oacute;dulos de terceros de la Odoo Apps Store tienen licencias propias (muchos bajo LGPL u OPL). En un proyecto real hay que presupuestar: licencias por usuario, hosting, partner de implementaci&oacute;n, m&oacute;dulos de terceros y el costo de mantenimiento y upgrades entre versiones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;C&oacute;mo se versiona Odoo y qu&eacute; implica el ciclo anual de releases?</p>
+        <p class="a">Odoo publica una versi&oacute;n mayor al a&ntilde;o (v16, v17, v18, v19 y siguientes), cada una con soporte oficial durante tres versiones mayores. Cada release trae cambios en el framework (ORM, vistas, OWL), en los m&oacute;dulos funcionales (especialmente contabilidad e inventario) y en el esquema de base de datos, por lo que <strong>migrar no es autom&aacute;tico</strong>: hay que ejecutar scripts de migraci&oacute;n y adaptar los desarrollos propios. En la pr&aacute;ctica los equipos deciden entre: mantenerse en una versi&oacute;n estable y migrar cada 2&ndash;3 releases, o seguir el ritmo anual. Antes de migrar se eval&uacute;an los m&oacute;dulos custom, los m&oacute;dulos de terceros (que deben existir para la versi&oacute;n destino) y el esfuerzo de pruebas de regresi&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;C&oacute;mo se compara Odoo con otros ERP (SAP, Oracle NetSuite, Microsoft Dynamics)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Odoo:</strong> modular, open source, r&aacute;pido de implementar y de personalizar (Python + PostgreSQL), con UI moderna y costo total bajo; su punto d&eacute;bil hist&oacute;rico es la profundidad en contabilidad regulatoria de algunos pa&iacute;ses y en procesos industriales muy complejos, y la necesidad de disciplina en upgrades.</li>
+                <li><strong>SAP (S/4HANA, Business One):</strong> muy robusto y auditable para grandes corporaciones, pero caro, r&iacute;gido y con ciclos de proyecto largos; Business One compite m&aacute;s directamente con Odoo en pymes.</li>
+                <li><strong>Oracle NetSuite:</strong> SaaS nativo, fuerte en finanzas multi-subsidiaria (OneWorld), personalizaci&oacute;n con SuiteScript; costo por usuario/m&oacute;dulo elevado.</li>
+                <li><strong>Microsoft Dynamics 365:</strong> buena integraci&oacute;n con el ecosistema Microsoft y Power Platform.</li>
+            </ul>
+            Odoo gana cuando se priorizan velocidad de cambio, integraci&oacute;n nativa de eCommerce/POS/CRM y control del c&oacute;digo; los ERP tradicionales ganan en profundidad financiera regulatoria, gobernanza corporativa y ecosistema de partners globales.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Qu&eacute; es la OCA y c&oacute;mo es el ecosistema de m&oacute;dulos de terceros?</p>
+        <p class="a">La <strong>OCA (Odoo Community Association)</strong> es una organizaci&oacute;n sin &aacute;nimo de lucro que mantiene miles de m&oacute;dulos gratuitos y de c&oacute;digo abierto, con est&aacute;ndares de calidad, revisi&oacute;n por pares, gu&iacute;as de mantenibilidad y procesos de migraci&oacute;n colaborativa (OpenUpgrade). Sus repositorios est&aacute;n organizados por dominio: <em>account-financial-tools, stock-logistics-warehouse, sale-workflow, server-tools, web, l10n-spain / l10n-colombia / l10n-mexico</em> (localizaciones), entre otros. Junto a la OCA existe la <strong>Odoo Apps Store</strong> con m&oacute;dulos comerciales de pago. En un proyecto conviene priorizar m&oacute;dulos OCA antes que desarrollar desde cero, verificando siempre: mantenimiento activo para la versi&oacute;n usada, licencia, calidad del c&oacute;digo y que no dupliquen funcionalidad est&aacute;ndar.</p>
+    </div>
+
+    <h2 id="s2">2. Arquitectura t&eacute;cnica y despliegue</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;Cu&aacute;l es el stack tecnol&oacute;gico de Odoo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Backend:</strong> Python 3 (las versiones recientes requieren 3.10 o superior), servidor WSGI propio sobre Werkzeug, con capa HTTP, sesiones y controladores.</li>
+                <li><strong>Base de datos:</strong> PostgreSQL (una base de datos por instancia l&oacute;gica de Odoo), con metadatos del ORM almacenados en tablas del sistema (<em>ir.model</em>, <em>ir.model.fields</em>, <em>ir.ui.view</em>, <em>ir.actions.*</em>, <em>ir.rule</em>, <em>ir.cron</em>).</li>
+                <li><strong>Frontend:</strong> OWL (Odoo Web Library), un framework de componentes en JavaScript moderno, m&aacute;s QWeb como motor de plantillas tanto del lado del servidor como del cliente; SASS/CSS y bundles de assets.</li>
+                <li><strong>Infraestructura:</strong> nginx o similar como reverse proxy, workers multiproceso, canal de longpolling (gevent) para notificaciones y bus en vivo, y un <em>filestore</em> en disco para adjuntos.</li>
+                <li><strong>Extras:</strong> wkhtmltopdf para PDFs, Redis/cache externa en escenarios de alta demanda, Docker, y herramientas de correo (SMTP/entrantes), IAP y OAuth.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;C&oacute;mo est&aacute; estructurada la arquitectura interna?</p>
+        <p class="a">En capas, de arriba hacia abajo: <strong>(1)</strong> el cliente web (navegador con OWL, la app m&oacute;vil o el POS) consume el <strong>(2)</strong> servidor HTTP de Odoo, que enruta peticiones JSON-RPC hacia controladores o hacia el ORM; <strong>(3)</strong> el <strong>ORM</strong> traduce operaciones de alto nivel (<em>create, write, search, unlink</em>) a SQL, aplicando permisos, reglas de registro, campos computed y constraints; <strong>(4)</strong> <strong>PostgreSQL</strong> persiste los datos. Toda la configuraci&oacute;n de negocio (vistas, acciones, men&uacute;s, reglas de acceso, trabajos programados) es tambi&eacute;n dato en la base, no solo c&oacute;digo: por eso un cambio de UI puede hacerse desde la interfaz sin desplegar. Los adjuntos y assets generados viven en el <em>filestore</em>, fuera de la base de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Qu&eacute; es un &laquo;addon&raquo; y c&oacute;mo se resuelve el <em>addons_path</em>?</p>
+        <p class="a">Un addon (o m&oacute;dulo) es una carpeta autocontenida con un manifiesto (<em>__manifest__.py</em>), c&oacute;digo Python (<em>__init__.py</em>, <em>models/</em>, <em>wizards/</em>, <em>controllers/</em>), datos (<em>data/</em>, <em>security/</em>, <em>views/</em>, <em>report/</em>) y recursos est&aacute;ticos (<em>static/</em>). Odoo busca m&oacute;dulos en la lista de rutas configurada en <em>addons_path</em> (par&aacute;metro de <em>odoo.conf</em> o de l&iacute;nea de comandos), en orden: la primera coincidencia gana, de modo que un addon propio puede &laquo;sombrear&raquo; a uno est&aacute;ndar si comparte nombre (pr&aacute;ctica desaconsejada; es mejor heredar). Buenas pr&aacute;cticas: separar addons est&aacute;ndar, OCA y desarrollos propios en rutas distintas, versionar los custom en Git y no modificar nunca el c&oacute;digo core.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Qu&eacute; son el <em>registry</em>, el <em>environment</em> (<code>env</code>) y el <em>cursor</em>?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Cursor (<code>cr</code>):</strong> la conexi&oacute;n/cursores de base de datos; delimita la transacci&oacute;n. Odoo hace commit al finalizar la petici&oacute;n y rollback ante cualquier excepci&oacute;n.</li>
+                <li><strong>Registry:</strong> registro por base de datos con la definici&oacute;n cargada de todos los modelos y campos de los m&oacute;dulos instalados. Se (re)construye al instalar o actualizar m&oacute;dulos; por eso un cambio de c&oacute;digo requiere reinicio del proceso o actualizaci&oacute;n del m&oacute;dulo.</li>
+                <li><strong>Environment (<code>env</code>):</strong> objeto que combina cursor + usuario + contexto (<code>env.cr</code>, <code>env.user</code>, <code>env.company</code>, <code>env.context</code>, <code>env.company_ids</code>). Todo acceso al ORM pasa por &eacute;l; <code>env['sale.order']</code> devuelve un recordset vac&iacute;o del modelo, sobre el que se opera.</li>
+            </ul>
+            Los recordsets son conjuntos de registros del mismo modelo sobre los que se puede iterar, filtrar (<em>filtered</em>), mapear (<em>mapped</em>), ordenar (<em>sorted</em>) y operar en bloque (<em>create/write</em> aceptan listas).
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;C&oacute;mo funciona el modelo de workers y el longpolling?</p>
+        <p class="a">En producci&oacute;n Odoo corre en modo multiproceso (<em>prefork</em>): un proceso maestro lanza <strong>workers HTTP</strong> que atienden peticiones y workers <strong>cron</strong> que ejecutan acciones programadas. Se configuran con <em>workers</em>, <em>max_cron_threads</em>, <em>limit_memory_soft/hard</em>, <em>limit_time_cpu</em>, <em>limit_time_real</em> y <em>limit_request</em>. Adem&aacute;s hay un worker <strong>gevent/longpolling</strong> para notificaciones en tiempo real (bus, live chat, POS en tiempo real), normalmente expuesto en el puerto 8072 y proxificado bajo la ruta <em>/longpolling</em> o <em>/websocket</em>. Regla pr&aacute;ctica de dimensionamiento: varios workers por n&uacute;cleo de CPU seg&uacute;n memoria disponible, l&iacute;mites de tiempo acordes a los procesos m&aacute;s largos (importaciones, informes) y workers cron separados para que un trabajo pesado no degrade la respuesta de la UI.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo se configura nginx / reverse proxy y TLS en producci&oacute;n?</p>
+        <p class="a">Se activa el modo proxy en Odoo (<em>proxy_mode = True</em>) para que lea las cabeceras <em>X-Forwarded-For</em>/<em>X-Forwarded-Proto</em>, y se configuran en nginx: TLS (certificados, idealmente renovaci&oacute;n autom&aacute;tica con Let's Encrypt), redirecci&oacute;n HTTP&rarr;HTTPS, <em>proxy_pass</em> al puerto 8069 y al puerto de longpolling (8072) seg&uacute;n la ruta, cabeceras de forwarded, timeouts generosos (<em>proxy_read_timeout</em>) para informes e importaciones, l&iacute;mite de tama&ntilde;o de cuerpo (<em>client_max_body_size</em>) acorde a adjuntos, cache/compresi&oacute;n de assets est&aacute;ticos (<em>/web/static</em>, <em>/longpolling</em> sin cach&eacute;) y bloqueo de rutas sensibles (<em>/web/database</em> en producci&oacute;n, <em>list_db = False</em>). Tambi&eacute;n conviene cabeceras de seguridad (HSTS, X-Content-Type-Options, X-Frame-Options/CSP) y logging separado para auditor&iacute;a.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;Qu&eacute; es OWL y c&oacute;mo se organiza el frontend?</p>
+        <p class="a"><strong>OWL</strong> (Odoo Web Library) es el framework de componentes en el que est&aacute; construido el cliente web moderno de Odoo: componentes con estado reactivo, plantillas QWeb compiladas en el navegador, hooks (<em>useState, onWillStart, onMounted</em>) y un sistema de servicios inyectados por el entorno. Sustituye al antiguo sistema de <em>widgets</em>. Para personalizar UI se usan: <em>patches</em> sobre componentes o servicios existentes (m&eacute;todo est&aacute;ndar para extender sin duplicar), registros en el registry del cliente web (por ejemplo, campos personalizados con componente propio, vistas personalizadas), templates QWeb heredados con <em>t-extend</em>/<em>xpath</em> y bundles de assets declarados en el manifiesto (<em>assets</em>). En integraciones headless se puede consumir el ORM directamente por JSON-RPC/XML-RPC y construir el frontend fuera de Odoo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;C&oacute;mo se administra multi-base de datos en una misma instancia?</p>
+        <p class="a">Un proceso Odoo puede servir varias bases de datos: se selecciona por URL (<em>/web?db=nombre</em>), por el selector de bases o por filtro. En producci&oacute;n se recomienda <em>list_db = False</em> y <em>dbfilter</em> con expresi&oacute;n regular (por ejemplo <em>^%h$</em> para una base por hostname, o <em>db_name</em> para fijar una sola), de modo que no se exponga el listado ni se pueda entrar a otra base. Cada base tiene su propio <em>registry</em>, su <em>filestore</em> (carpeta por base dentro del directorio de datos) y su conjunto de m&oacute;dulos instalados. Es &uacute;til para entornos dev/test/productivo en un mismo servidor o para clientes multi-tenant de un partner, pero exige cuidar backups por separado, consumo de memoria (un registry por base cargada) y aislamiento de rendimiento.</p>
+    </div>
+
+    <h2 id="s3">3. Modelo de datos y ORM</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;C&oacute;mo se define un modelo en Odoo?</p>
+        <p class="a">Con una clase Python que hereda de <code>models.Model</code> y declara <code>_name</code> (nombre t&eacute;cnico, que genera la tabla SQL con guiones bajos), <code>_description</code>, los campos como atributos de clase y opcionalmente <code>_order</code>, <code>_rec_name</code>, <code>_rec_names_search</code>, <code>_sql_constraints</code> y <code>_inherit</code>. Por ejemplo: <code>class Visita(models.Model): _name = 'crm.visita'; _description = 'Visita comercial'; fecha = fields.Date(required=True); partner_id = fields.Many2one('res.partner', required=True, index=True)</code>. Sobre esa declaraci&oacute;n Odoo crea la tabla, los &iacute;ndices, las constraints y expone autom&aacute;ticamente el modelo a vistas, permisos, exportaci&oacute;n e importaci&oacute;n, sin necesidad de escribir SQL ni endpoints.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; tipos de modelos existen y cu&aacute;ndo se usa cada uno?</p>
+        <p class="a">
+            <ul>
+                <li><strong>models.Model:</strong> modelo persistente con tabla propia; la opci&oacute;n por defecto para entidades de negocio.</li>
+                <li><strong>models.TransientModel:</strong> datos temporales usados por wizards; se almacenan en tabla pero un proceso autom&aacute;tico de vaciado los elimina peri&oacute;dicamente. Ideal para di&aacute;logos de acci&oacute;n (&laquo;crear factura&raquo;, &laquo;publicar en el sitio web&raquo;).</li>
+                <li><strong>models.AbstractModel:</strong> sin tabla; sirve para l&oacute;gica y campos reutilizables mediante mixins, por ejemplo <em>mail.thread</em> (chatter y seguimiento), <em>mail.activity.mixin</em> (actividades), <em>portal.mixin</em> (acceso al portal).</li>
+            </ul>
+            Elegir bien evita tablas in&uacute;tiles y fugas de datos: un formulario de entrada puntual debe ser TransientModel; una entidad que se consulta hist&oacute;ricamente debe ser Model.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; tipos de campos hay y qu&eacute; atributos son importantes?</p>
+        <p class="a">Tipos b&aacute;sicos: <em>Char, Text, Html, Integer, Float, Monetary, Boolean, Date, Datetime, Selection, Binary, Image</em>; relacionales: <em>Many2one, One2many, Many2many, Reference</em>. Atributos clave: <em>string</em> (etiqueta), <em>required</em>, <em>readonly</em>, <em>default</em> (valor o funci&oacute;n), <em>help</em>, <em>index</em>, <em>copy</em>, <em>translate</em>, <em>groups</em> (restringe el campo a ciertos grupos), <em>tracking</em> (registra cambios en el chatter), <em>company_dependent</em>, <em>digits</em>/<em>rounding</em> en num&eacute;ricos, <em>selection</em> con opci&oacute;n din&aacute;mica y <em>attachment</em> en binarios. En <em>Many2one</em>: <em>domain</em>, <em>ondelete</em> (<em>set null / restrict / cascade</em>), <em>delegate</em>, <em>check_company</em>. En x2many: <em>comodel_name</em>, <em>inverse_name</em>, <em>domain</em>, <em>context</em> (por ejemplo <em>default_*</em>) y <em>auto_join</em> para optimizar b&uacute;squedas. Definir bien los atributos evita validaciones duplicadas en la UI y en el c&oacute;digo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;C&oacute;mo funcionan los campos <em>computed</em>, almacenados e <em>inverse</em>?</p>
+        <p class="a">Un campo con <code>compute='_compute_x'</code> se calcula con un m&eacute;todo decorado con <code>@api.depends('campo1','campo2')</code>, que recibe un recordset y asigna el valor a cada registro; debe asignar siempre un valor a todos los registros para evitar errores en registros nuevos. Con <code>store=True</code> el resultado se persiste y se recalcula cuando cambian las dependencias, lo que permite buscar y ordenar por &eacute;l (&uacute;til para totales o estados derivados), a cambio de costo de escritura y de migraciones cuando cambian las dependencias. Con <code>inverse='_inverse_x'</code> se define qu&eacute; hacer cuando el usuario escribe en el campo calculado. Tambi&eacute;n existe <code>search=</code> para hacer buscables campos no almacenados y <code>precompute=True</code> para calcular antes del insert. Regla pr&aacute;ctica: almacenar solo lo que se filtra/agrega en listados o informes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; son los campos <em>related</em> y <em>company_dependent</em>?</p>
+        <p class="a"><strong>related:</strong> expone un campo de un modelo enlazado a trav&eacute;s de una cadena de relaciones, por ejemplo <code>partner_email = fields.Char(related='partner_id.email')</code>; puede ser de solo lectura o editable (con <em>inverse</em> impl&iacute;cito), y si se almacena (<em>store=True</em>) con sus <em>depends</em> correspondientes permite filtrar sin joins costosos. Sirve para evitar l&oacute;gica duplicada y para dar visibilidad en formularios. <strong>company_dependent:</strong> el valor se guarda por compa&ntilde;&iacute;a (en una tabla de propiedades/JSON seg&uacute;n la versi&oacute;n), de modo que el mismo producto o contacto puede tener cuenta contable, precio o responsable distinto en cada empresa del grupo; es esencial en configuraciones multi-compa&ntilde;&iacute;a y requiere que el contexto lleve la compa&ntilde;&iacute;a correcta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;C&oacute;mo funcionan las relaciones x2many y sus comandos?</p>
+        <p class="a">En <em>One2many</em> y <em>Many2many</em> las escrituras se expresan como lista de comandos triples: <strong>(0, 0, valores)</strong> crear nuevo registro; <strong>(1, id, valores)</strong> actualizar uno existente; <strong>(2, id, 0)</strong> eliminar y desvincular (unlink); <strong>(3, id, 0)</strong> desvincular sin eliminar; <strong>(4, id, 0)</strong> vincular existente; <strong>(5, 0, 0)</strong> desvincular todos; <strong>(6, 0, [ids])</strong> reemplazar el conjunto completo por esa lista. En versiones recientes existen constantes legibles (<em>Command.create, Command.update, Command.delete, Command.unlink, Command.link, Command.clear, Command.set</em>). Conocerlos evita bugs cl&aacute;sicos al editar l&iacute;neas de pedidos o etiquetas desde c&oacute;digo, sobre todo la diferencia entre <em>unlink</em> (2) y <em>clear</em> (5) y el efecto destructivo de <em>set</em> (6).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;C&oacute;mo se hace herencia de modelos en Odoo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Herencia cl&aacute;sica (extensi&oacute;n):</strong> <code>_inherit = 'sale.order'</code> sin <code>_name</code> a&ntilde;ade campos y sobrescribe m&eacute;todos al modelo existente en la misma tabla. Es la forma est&aacute;ndar de customizar el core.</li>
+                <li><strong>Herencia por prototipo:</strong> <code>_inherit = 'mail.thread'</code> junto a <code>_name</code> propio copia campos y m&eacute;todos del modelo padre al nuevo (mixins).</li>
+                <li><strong>Herencia por delegaci&oacute;n:</strong> <code>_inherits = {'res.partner': 'partner_id'}</code> compone una tabla nueva que referencia a otra; el registro hijo expone los campos del padre como propios (por ejemplo <em>res.users</em> delega en <em>res.partner</em>).</li>
+            </ul>
+            Al sobrescribir m&eacute;todos se usa <code>super()</code> respetando el MRO para no romper la cadena de extensiones de otros m&oacute;dulos; el orden de carga lo determinan las dependencias del manifiesto.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Qu&eacute; m&eacute;todos y decoradores del ORM hay que dominar?</p>
+        <p class="a">CRUD y consultas: <em>create</em> (decorado con <code>@api.model_create_multi</code> para lotes), <em>write</em>, <em>unlink</em>, <em>search</em>, <em>search_count</em>, <em>browse</em>, <em>read</em>, <em>read_group</em> (agregados, base de muchos informes), <em>name_search</em>, <em>default_get</em>, <em>copy</em>. De recordset: <em>filtered, mapped, sorted, exists, ensure_one</em>. Decoradores: <code>@api.model</code> (m&eacute;todos sin registro, p. ej. utilidades), <code>@api.depends</code> (campos computed), <code>@api.depends_context</code> (dependencias de contexto), <code>@api.onchange</code> (reacci&oacute;n en el formulario, no persiste l&oacute;gica de negocio), <code>@api.constrains</code> (validaciones Python que lanzan <em>ValidationError</em>), <code>@api.autovacuum</code> (limpieza peri&oacute;dica). Adem&aacute;s: overrides de <em>create/write/unlink</em> para efectos laterales, y gesti&oacute;n de dominios (<em>&amp;, |, !</em> y listas de tuplas) que es el lenguaje de filtrado del ORM. Diferencia cr&iacute;tica: <em>onchange</em> solo afecta a la UI; la validaci&oacute;n real va en <em>constrains</em> o en el override de <em>create/write</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;C&oacute;mo se cargan datos iniciales y qu&eacute; son los XML IDs?</p>
+        <p class="a">Los m&oacute;dulos declaran datos en archivos XML (o CSV) listados en <em>data</em> del manifiesto. Cada registro lleva un <strong>id externo</strong> (<em>xml_id</em>), &uacute;nico por m&oacute;dulo, que se guarda en <em>ir.model.data</em> y permite referenciarlo desde otros archivos con <em>ref()</em> o desde c&oacute;digo con <em>env.ref('modulo.xml_id')</em>. Con <em>noupdate="1"</em> el registro no se sobrescribe en actualizaciones posteriores (t&iacute;pico en secuencias, plantillas de correo o configuraci&oacute;n que el usuario puede editar). Para permisos se usa <strong>ir.model.access.csv</strong> (grupos y CRUD por modelo) y para reglas de registro <em>ir.rule</em> en XML. Al instalar se cargan todos los datos; al actualizar (<em>-u</em>) se recargan respetando <em>noupdate</em>. Los datos demo (<em>demo</em> del manifiesto) solo se cargan si la base se crea con datos de demostraci&oacute;n.</p>
+    </div>
+
+    <h2 id="s4">4. Desarrollo de m&oacute;dulos, vistas y l&oacute;gica de negocio</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Cu&aacute;l es la estructura recomendada de un m&oacute;dulo Odoo?</p>
+        <p class="a">
+            <ul>
+                <li><em>__init__.py</em> e <em>__manifest__.py</em> en la ra&iacute;z.</li>
+                <li><em>models/</em> (modelos y extensiones), <em>wizards/</em> (TransientModel), <em>controllers/</em> (rutas HTTP/JSON), <em>report/</em> (plantillas QWeb e informes).</li>
+                <li><em>views/</em> (form, list/tree, kanban, search, acciones y men&uacute;s), <em>data/</em> (datos iniciales, secuencias, plantillas de correo, crons), <em>security/</em> (<em>ir.model.access.csv</em>, <em>ir.rule</em>, grupos).</li>
+                <li><em>static/</em> (src con componentes OWL, scss, xml de plantillas del cliente, descripci&oacute;n e icono), <em>tests/</em>, <em>i18n/</em> (archivos .po), <em>doc/</em> y <em>README.rst</em> (los est&aacute;ndares OCA exigen README generado y changelog).</li>
+            </ul>
+            El orden de carga importa: los archivos del manifiesto se procesan en el orden declarado, por lo que seguridad y datos maestros van antes que vistas que los referencian.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;Qu&eacute; contiene el <em>__manifest__.py</em>?</p>
+        <p class="a">Es un diccionario Python con: <em>name</em>, <em>summary</em>, <em>description</em>, <em>author</em>, <em>website</em>, <em>category</em>, <em>version</em> (se recomienda seguir la convenci&oacute;n <em>versi&oacute;n_de_odoo.m&oacute;dulo.parche</em>, por ejemplo 17.0.1.2.0), <em>license</em> (LGPL-3, AGPL-3, OEEL-1, OPL-1), <em>depends</em> (m&oacute;dulos requeridos: determina el orden de carga y la disponibilidad de modelos), <em>data</em> (archivos XML/CSV a cargar siempre), <em>demo</em>, <em>assets</em> (bundles de JS/CSS/XML del cliente web), <em>application</em>, <em>auto_install</em>, <em>installable</em>, <em>external_dependencies</em> (librer&iacute;as Python o binarios), <em>post_init_hook</em>/<em>uninstall_hook</em> y <em>sequence</em>. Un <em>depends</em> preciso evita errores de carga y acoplamientos innecesarios: solo se declara lo que el c&oacute;digo usa realmente.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;C&oacute;mo se instala, actualiza y desinstala un m&oacute;dulo?</p>
+        <p class="a">Desde la interfaz (Apps, tras activar el modo desarrollador y &laquo;Actualizar lista de m&oacute;dulos&raquo;) o por l&iacute;nea de comandos con <em>odoo-bin -d basededatos -i nombre_modulo</em> (instalar) y <em>-u nombre_modulo</em> (actualizar; <em>-u base</em> o <em>-u all</em> para todo). En desarrollo se usa <em>--dev=all</em> o <em>--dev=reload,qweb,xml</em> para recargar c&oacute;digo y plantillas sin reiniciar, y en pruebas <em>--test-enable</em> con <em>--stop-after-init</em>. La actualizaci&oacute;n re-carga los datos XML/CSV no marcados <em>noupdate</em>, recrea vistas y actualiza la estructura de tablas si hay campos nuevos; <strong>no</strong> ejecuta migraciones de datos complejas (para eso existen los scripts en <em>migrations/</em> con la versi&oacute;n del manifiesto). La desinstalaci&oacute;n borra datos del m&oacute;dulo y puede arrastrar dependencias inversas, por lo que en producci&oacute;n siempre se prueba antes en staging.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;Qu&eacute; tipos de vistas hay y c&oacute;mo se configuran?</p>
+        <p class="a">Vistas principales: <strong>form</strong> (formulario con <em>sheet</em>, <em>group</em>, <em>notebook</em>/<em>page</em>, <em>chatter</em>, botones, <em>statusbar</em>), <strong>list/tree</strong> (columnas, decoraciones, editable=&quot;top|bottom&quot;, agregados en el pie), <strong>kanban</strong> (tablero por etapas con plantillas QWeb), <strong>search</strong> (campos, <em>filter</em> y <em>group</em> para agrupar), <strong>calendar</strong>, <strong>gantt</strong> (Enterprise), <strong>pivot</strong> y <strong>graph</strong> (an&aacute;lisis), <strong>activity</strong>, <strong>cohort</strong> (Enterprise), <strong>graph</strong>/<em>dashboard</em> y vistas del portal/web con QWeb. Atributos frecuentes: <em>domain</em> (filtrado), <em>context</em> (valores por defecto <em>default_*</em>, agrupaciones), <em>attrs</em>/<em>invisible</em>/<em>readonly</em>/<em>required</em> (en versiones modernas se usan directamente expresiones Python en esos atributos), <em>groups</em> (visibilidad por grupo) y <em>widget</em> (por ejemplo <em>many2many_tags</em>, <em>monetary</em>, <em>selection_badge</em>, <em>percentpie</em>). Cada vista tiene prioridad e id externo; la UI puede modificarlas (modo desarrollador &rarr; editar vista).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;C&oacute;mo funciona la herencia de vistas con <em>xpath</em>?</p>
+        <p class="a">Se declara una vista con <em>inherit_id</em> apuntando a la vista base y un cuerpo de <em>xpath</em> con posiciones: <strong>inside</strong> (a&ntilde;adir al final del nodo), <strong>after</strong>/<strong>before</strong> (hermano siguiente/anterior), <strong>replace</strong> (sustituir el nodo, puede usar <em>t-call</em> o mantener parte del contenido) y <strong>attributes</strong> (modificar atributos, con <em>attribute name=&quot;invisible&quot;</em>, <em>separator</em>, o <em>add</em>/<em>remove</em> para listas como <em>groups</em>). Tambi&eacute;n existe la herencia por posici&oacute;n con <em>position=&quot;move&quot;</em> y las vistas QWeb heredadas con <em>t-extend</em>/<em>t-call</em> en el frontend. Buenas pr&aacute;cticas: usar selectores estables (<em>//field[@name='x']</em> o <em>//div[hasclass('oe_title')]</em>) en lugar de &iacute;ndices fr&aacute;giles, mantener la prioridad correcta y no reemplazar bloques completos cuando basta con a&ntilde;adir.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; son las acciones y c&oacute;mo se estructuran los men&uacute;s?</p>
+        <p class="a">Las acciones (<em>ir.actions.*</em>) describen qu&eacute; debe hacer el cliente: <strong>act_window</strong> (abre un modelo con vistas, dominio, contexto y modo), <strong>server</strong> (ejecuta c&oacute;digo Python, crea/actualiza registros, lanza otra acci&oacute;n o env&iacute;a notificaciones), <strong>client</strong> (acciones predefinidas del cliente como <em>display_notification</em>), <strong>report</strong> (genera PDF/documento) y <strong>url</strong> (redirige). Los men&uacute;s (<em>ir.ui.menu</em>) son registros con padre, secuencia, acci&oacute;n asociada y <em>groups</em> que controlan la visibilidad. Toda la navegaci&oacute;n es dato en base, por eso se puede reorganizar desde la interfaz. Al extender un ERP existente, definir acciones y men&uacute;s coherentes con la app anfitriona mejora la adopci&oacute;n por parte de los usuarios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; diferencia hay entre <em>server actions</em>, <em>automated actions</em> y <em>scheduled actions</em>?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Server actions (<em>ir.actions.server</em>):</strong> c&oacute;digo Python reutilizable que se ejecuta bajo demanda (desde un bot&oacute;n, un men&uacute; contextual o encadenado a otra acci&oacute;n).</li>
+                <li><strong>Automated actions (<em>base_automation</em>):</strong> se disparan por eventos del ciclo de vida de un modelo: creaci&oacute;n, actualizaci&oacute;n, cambio de estado, llegada de un correo, actividad vencida o temporizador sobre el registro; pueden actualizar campos, enviar notificaciones, ejecutar c&oacute;digo o crear actividades. Es la herramienta no-code para reglas de negocio simples.</li>
+                <li><strong>Scheduled actions (<em>ir.cron</em>):</strong> trabajos programados con periodicidad (intervalo + pr&oacute;xima ejecuci&oacute;n) que corren en los workers cron: sincronizaciones, env&iacute;os masivos, c&aacute;lculos peri&oacute;dicos, limpieza, integraciones nocturnas.</li>
+            </ul>
+            En producci&oacute;n los crons deben ser idempotentes, acotados en tiempo, con logging y con control de concurrencia (<em>numbercall</em>, <em>doall</em>, bloqueos), ya que compiten por los mismos recursos que la UI.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;C&oacute;mo se crea un wizard y c&oacute;mo se devuelve el resultado?</p>
+        <p class="a">Se define un <em>TransientModel</em> con los campos de entrada, una vista <em>form</em> y una acci&oacute;n <em>act_window</em> con <em>target='new'</em> para abrirlo como di&aacute;logo; se invoca desde un bot&oacute;n (<em>type=&quot;action&quot;</em>) o desde una acci&oacute;n de servidor. El m&eacute;todo de confirmaci&oacute;n (bot&oacute;n <em>type=&quot;object&quot;</em>) procesa los datos usando <em>self.env.context.get('active_ids')</em>/<em>active_id</em>/<em>active_model</em> y devuelve: <em>None</em> (cierra el di&aacute;logo), <em>True/False</em>, un diccionario de acci&oacute;n (para navegar a los registros creados, por ejemplo <em>ir.actions.act_window</em> con <em>res_id</em>), o una notificaci&oacute;n mediante <em>display_notification</em>. Los campos relacionados con el modelo origen se suelen poblar con <em>default_get</em> y el wizard puede tener varias pantallas usando un campo de estado y <em>invisible</em> en la vista.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;C&oacute;mo se generan reportes PDF y documentos personalizados?</p>
+        <p class="a">Con <strong>QWeb</strong>: se declara un informe (<em>ir.actions.report</em>) y una plantilla <em>&lt;template id=&quot;report_x&quot;&gt;</em> que hereda de <em>web.external_layout</em> (o un layout propio) e itera sobre los registros con <em>t-foreach=&quot;docs&quot;</em>, usando <em>t-field</em> (respeta formato de fecha/moneda), <em>t-esc/t-out</em>, <em>t-if</em> y llamadas a m&eacute;todos del modelo (<em>t-call</em> a sub-plantillas). Odoo renderiza el HTML y lo convierte a PDF con <strong>wkhtmltopdf</strong>, por lo que hay que cuidar CSS de paginaci&oacute;n (<em>page-break-inside</em>, <em>@page</em>), cabeceras/pies por p&aacute;gina y el tama&ntilde;o de los datasets. Existen adem&aacute;s informes financieros din&aacute;micos (Enterprise) exportables a Spreadsheet/PDF, informes XLSX (m&oacute;dulos OCA como <em>report_xlsx</em>) y dise&ntilde;adores visuales (Studio, o editores de plantillas de documentos). Para documentos transaccionales tambi&eacute;n se usan plantillas de correo QWeb.</p>
+    </div>
+
+    <h2 id="s5">5. M&oacute;dulos funcionales: ventas, compras, inventario y manufactura</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;Qu&eacute; apps funcionales trae Odoo y c&oacute;mo se integran entre s&iacute;?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Comercial:</strong> CRM, Ventas (sale), Suscripciones, Punto de Venta (POS), eCommerce, Citas, Marketing/Email marketing, Helpdesk, Encuestas, Eventos, eLearning.</li>
+                <li><strong>Cadena de suministro:</strong> Compras (purchase), Acuerdos de compra/licitaciones, Inventario (stock), C&oacute;digo de barras, Fabricaci&oacute;n (mrp), PLM, Mantenimiento, Calidad, Subcontrataci&oacute;n.</li>
+                <li><strong>Finanzas:</strong> Facturaci&oacute;n (account), Contabilidad completa (Enterprise), Gastos, Documentos.</li>
+                <li><strong>Personas y proyectos:</strong> Empleados, Reclutamiento, Asistencia, Tiempo libre, Evaluaciones, N&oacute;mina (localizaciones), Proyectos, Partes de horas (timesheets), Planning.</li>
+                <li><strong>Plataforma:</strong> Sitio web, Blog, Foros, Live chat, Knowledge, Studio, IoT, WhatsApp, Tableros y Spreadsheet.</li>
+            </ul>
+            La integraci&oacute;n es nativa porque comparten modelos: un pedido de venta crea entregas y movimientos de stock, que al facturar generan <em>account.move</em> con sus asientos; una compra crea recepci&oacute;n y factura de proveedor; un parte de horas alimenta el proyecto y la facturaci&oacute;n por tiempo consumido. Esa trazabilidad de punta a punta es el principal argumento de negocio frente a sistemas aislados.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;C&oacute;mo es el flujo <em>order-to-cash</em> en Odoo?</p>
+        <p class="a">Presupuesto (<em>sale.order</em> en estado <em>draft</em>) &rarr; env&iacute;o por correo con portal del cliente y firma electr&oacute;nica/pago en l&iacute;nea &rarr; confirmaci&oacute;n a pedido (<em>state='sale'</em>), momento en el que se generan las <strong>entregas</strong> (<em>stock.picking</em>) seg&uacute;n la ruta del producto y, si aplica, pedidos de compra u &oacute;rdenes de fabricaci&oacute;n &rarr; picking con confirmaci&oacute;n de cantidades (lotes/series) &rarr; <strong>facturaci&oacute;n</strong> seg&uacute;n la pol&iacute;tica del producto (cantidades pedidas o entregadas, manual o autom&aacute;tica, por hitos o por consumo en proyectos) &rarr; <em>account.move</em> validado que genera el asiento contable &rarr; <strong>registro de pago</strong> (manual, pasarela, adeudo SEPA/NACHA) &rarr; <strong>conciliaci&oacute;n</strong> con el extracto bancario &rarr; seguimiento de cobranza (niveles de recordatorio). Cada paso deja trazabilidad en el chatter y en los documentos vinculados del pedido.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;C&oacute;mo es el flujo <em>procure-to-pay</em> y qu&eacute; es el 3-way matching?</p>
+        <p class="a">Necesidad de abastecimiento (regla de reorden, MTO desde una venta, o solicitud manual) &rarr; <strong>solicitud de presupuesto (RFQ)</strong> <em>purchase.order</em> &rarr; opci&oacute;n de acuerdos de compra/licitaciones para comparar proveedores &rarr; confirmaci&oacute;n del pedido (genera recepci&oacute;n <em>stock.picking</em> entrante) &rarr; <strong>recepci&oacute;n</strong> con validaci&oacute;n de cantidades, lotes y posibles devoluciones &rarr; <strong>factura de proveedor</strong> creada desde el pedido o importada por OCR/correo &rarr; <strong>3-way matching</strong>: Odoo compara pedido, recepci&oacute;n y factura para permitir facturar solo lo recibido y detectar diferencias de precio o cantidad &rarr; pago y conciliaci&oacute;n bancaria &rarr; impacto en el costeo de inventario y en la contabilidad. Los controles de aprobaci&oacute;n (por importe, por grupo de usuario) y las variantes de proveedor (precio, plazo, cantidad m&iacute;nima) se configuran en la ficha del producto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;C&oacute;mo funciona el inventario: ubicaciones, <em>quants</em> y la &laquo;doble entrada&raquo;?</p>
+        <p class="a">Odoo modela el stock como un sistema de <strong>doble entrada</strong>: no hay &laquo;borrado&raquo; de existencias sino movimientos entre ubicaciones, igual que los asientos contables. Una ubicaci&oacute;n (<em>stock.location</em>) puede ser f&iacute;sica (almac&eacute;n/zona/estante), virtual (proveedores, clientes, producci&oacute;n, p&eacute;rdidas, inventario) o de tr&aacute;nsito. El movimiento (<em>stock.move</em>) representa la transferencia de un producto entre dos ubicaciones; <em>stock.move.line</em> es la ejecuci&oacute;n concreta con cantidades, lotes y empaques; <em>stock.quant</em> guarda la cantidad disponible por producto/ubicaci&oacute;n/lote. Los <em>pickings</em> agrupan movimientos en un documento operativo (recepci&oacute;n, entrega, transferencia interna). Esto da trazabilidad completa, permite reservas parciales, gestiona cantidades reservadas/disponibles/a la mano y hace que el inventario cuadre con la contabilidad cuando la valoraci&oacute;n es autom&aacute;tica.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;Qu&eacute; son las rutas y las reglas push/pull?</p>
+        <p class="a">Una <strong>ruta</strong> (<em>stock.route</em>) es un conjunto de reglas que define el camino de un producto desde el origen hasta el destino; se asigna a producto, categor&iacute;a de producto, almac&eacute;n o l&iacute;nea de pedido. Las reglas <strong>pull</strong> generan un movimiento cuando hay demanda (por ejemplo, entregar desde stock, o fabricar/comprar si no hay: <em>MTO</em>), y las reglas <strong>push</strong> mueven el producto despu&eacute;s de recepcionarlo (por ejemplo, de recepci&oacute;n a zona de control de calidad y luego a existencias). Combinaciones t&iacute;picas: <strong>MTS</strong> (make to stock, desde existencias), <strong>MTO</strong> (make to order, dispara compra o fabricaci&oacute;n), <strong>Buy</strong>, <strong>Manufacture</strong>, <strong>Dropship</strong> (el proveedor entrega directo al cliente), <strong>Cross-dock</strong>, rutas de dos o tres pasos con picking/packing, subcontrataci&oacute;n y rutas multi-almac&eacute;n. Configurar mal las rutas es la causa m&aacute;s frecuente de incidencias operativas, por lo que conviene documentarlas y probarlas con casos reales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;C&oacute;mo se gestionan lotes, n&uacute;meros de serie, caducidad y trazabilidad?</p>
+        <p class="a">Se activa en la ficha del producto la trazabilidad por <strong>lotes</strong> (un identificador para varias unidades, com&uacute;n en alimentos o farmacia) o por <strong>n&uacute;meros de serie</strong> (uno por unidad, para garant&iacute;as y activos). En los movimientos se capturan lotes/series con fechas de fabricaci&oacute;n y caducidad, y Odoo permite reglas de retirada (<em>removal strategies</em>) como FEFO, FIFO o LIFO por ubicaci&oacute;n. Con eso se obtiene trazabilidad ascendente y descendente: desde un lote se ven clientes y proveedores afectados, y desde una entrega se rastrea el lote. A esto se suman empaques (<em>packages</em>), unidades de medida (con categor&iacute;as y factores de conversi&oacute;n), y en Enterprise la app de c&oacute;digo de barras para operaci&oacute;n con lectores. Los procesos de retirada (<em>recalls</em>) y de control de calidad se apoyan en esta trazabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;C&oacute;mo funcionan el reabastecimiento y la planificaci&oacute;n de la demanda?</p>
+        <p class="a">Con <strong>reglas de reorden</strong> (<em>stock.warehouse.orderpoint</em>): cantidad m&iacute;nima y m&aacute;xima por producto y ubicaci&oacute;n; cuando el stock previsto cae bajo el m&iacute;nimo, el planificador genera la necesidad y, seg&uacute;n la ruta, un RFQ de compra o una orden de fabricaci&oacute;n. Odoo incluye una vista de <strong>Previsi&oacute;n/Reabastecimiento</strong> que muestra necesidades por fecha, permite ajustar cantidades, agrupar en un solo pedido por proveedor y considerar plazos de compra/fabricaci&oacute;n, cantidades m&iacute;ntimas y m&uacute;ltiplos de empaque. En Enterprise existen el planificador MPS (<em>Master Production Schedule</em>) y el forecast con predicciones de venta. Buenas pr&aacute;cticas: revisar la frecuencia del cron de planificaci&oacute;n, mantener limpios los plazos y m&iacute;nimos, y controlar las &oacute;rdenes canceladas para no duplicar compras.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo funciona MRP: listas de materiales, centros de trabajo y &oacute;rdenes?</p>
+        <p class="a">La <strong>lista de materiales (BoM)</strong> define componentes, cantidades y tipo: <em>manufacture</em> (produce un producto), <em>kit</em> (conjunto que se descompone en l&iacute;neas de venta/compra sin paso por producci&oacute;n) o <em>subcontracting</em>. Puede tener variantes de producto, componentes alternativos y operaciones. Los <strong>centros de trabajo</strong> (work centers) modelan m&aacute;quinas o l&iacute;neas con capacidad, eficiencia, costo por hora y calendario (OEE y tiempos alternativos en Enterprise), y las <strong>operaciones</strong> (rutas de fabricaci&oacute;n) asignan tiempo y centros a cada paso. La <strong>orden de fabricaci&oacute;n (MO)</strong> reserva componentes, genera movimientos de consumo y de producto terminado, y registra &oacute;rdenes de trabajo con tablet/kanban, tiempos reales, desperdicio (scrap) y subproductos. Con PLM, mantenimiento y calidad (Enterprise) se a&ntilde;aden versiones de BoM, &oacute;rdenes de cambio de ingenier&iacute;a, avisos de mantenimiento y puntos/control de calidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;Qu&eacute; m&eacute;todos de costeo y valoraci&oacute;n de inventario existen?</p>
+        <p class="a">En la categor&iacute;a de producto se define el <strong>m&eacute;todo de costeo</strong>: <em>Standard</em> (precio fijo manual), <em>FIFO</em> (primeras entradas, primeras salidas) o <em>AVCO</em> (coste medio ponderado); y la <strong>valoraci&oacute;n</strong>: <em>manual</em> (sin asientos autom&aacute;ticos) o <em>autom&aacute;tica/anglo-sajona</em> (cada movimiento genera asientos contables en tiempo real contra cuentas de existencias y de variaci&oacute;n, usando <em>stock.valuation.layer</em>). Sobre el coste se pueden aplicar <strong>landed costs</strong> (fletes, seguros, aranceles) que se reparten por peso, volumen, cantidad o valor y actualizan el coste de los productos recibidos. La contabilidad anglo-sajona separa el ingreso del coste en el momento de la entrega, necesario para m&aacute;rgenes correctos. Cambiar de m&eacute;todo en producci&oacute;n requiere depuraci&oacute;n y migraci&oacute;n de capas de valoraci&oacute;n, por lo que debe decidirse al inicio del proyecto.</p>
+    </div>
+
+    <h2 id="s6">6. Contabilidad, facturaci&oacute;n y finanzas</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;Qu&eacute; incluye la contabilidad en Odoo y en qu&eacute; se diferencia Community de Enterprise?</p>
+        <p class="a">El n&uacute;cleo (<em>account</em>) gestiona el plan contable, diarios, impuestos, asientos (<em>account.move</em>), facturas de cliente y proveedor, pagos, conciliaci&oacute;n b&aacute;sica, multi-moneda y contabilidad anal&iacute;tica. En <strong>Community</strong> la app se presenta como <em>Invoicing</em>: emite facturas y registra pagos, pero no trae los informes financieros din&aacute;micos completos ni muchas herramientas avanzadas (muchas se cubren con m&oacute;dulos OCA del repositorio <em>account-financial-tools</em>). <strong>Enterprise</strong> a&ntilde;ade contabilidad completa: balances y PyG din&aacute;micos, flujo de caja, libro mayor interactivo, informes de impuestos, activos, ingresos y gastos diferidos, presupuestos, cheques y &oacute;rdenes de pago, sincronizaci&oacute;n bancaria, OCR de facturas de proveedor, seguimiento de cobranza con niveles y recordatorios, y localizaciones contables mantenidas por Odoo. En implementaciones financieras regulatorias es la diferencia decisiva.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;C&oacute;mo se configura el plan contable, los diarios y los impuestos?</p>
+        <p class="a">Se instala la <strong>localizaci&oacute;n contable</strong> del pa&iacute;s (por ejemplo <em>l10n_co</em>, <em>l10n_mx</em>, <em>l10n_es</em>, <em>l10n_us</em>), que trae el plan de cuentas (paquete fiscal), los impuestos predefinidos, los informes legales y, donde aplica, la facturaci&oacute;n electr&oacute;nica. Sobre eso se ajustan: cuentas por tipo (por pagar, por cobrar, existencias, variaciones, ingresos y gastos por categor&iacute;a de producto), <strong>diarios</strong> (ventas, compras, banco, caja, miscel&aacute;neos, con numeraci&oacute;n y cuentas por defecto), <strong>secuencias</strong> de numeraci&oacute;n, <strong>posiciones fiscales</strong> (mapean impuestos y cuentas seg&uacute;n el pa&iacute;s del cliente, esencial en comercio internacional) y grupos de impuestos (retenciones). Adem&aacute;s se configuran condiciones de pago, cuentas por defecto en categor&iacute;as de producto/partner y el cierre fiscal (bloqueo de fechas y periodos).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; es <em>account.move</em> y c&oacute;mo se relaciona con facturas y asientos?</p>
+        <p class="a">Desde Odoo 13 las facturas y los asientos comparten el mismo modelo <strong>account.move</strong>, diferenciado por <em>move_type</em>: <em>out_invoice</em> (factura de cliente), <em>out_refund</em> (nota cr&eacute;dito), <em>in_invoice</em> (factura de proveedor), <em>in_refund</em>, <em>out_receipt</em>, <em>in_receipt</em> y <em>entry</em> (asiento contable manual). Sus l&iacute;neas son <em>account.move.line</em>, que llevan cuenta, importe, impuestos, anal&iacute;tica y vencimiento. Al validar (<em>action_post</em>) el documento se convierte en asiento con estado <em>posted</em> y ya no es editable; las correcciones se hacen con notas cr&eacute;dito/d&eacute;bito o con la funcionalidad de reversi&oacute;n. Los pagos (<em>account.payment</em>) se concilian contra las l&iacute;neas de vencimiento. Entender este modelo es clave para desarrollos: casi toda la customizaci&oacute;n financiera toca <em>account.move</em> y sus constraints.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;C&oacute;mo funcionan la conciliaci&oacute;n bancaria y la sincronizaci&oacute;n de bancos?</p>
+        <p class="a">Existen dos v&iacute;as: <strong>importaci&oacute;n de extractos</strong> (archivos CAMT.053, OFX, QIF, CSV) o <strong>sincronizaci&oacute;n autom&aacute;tica</strong> con agregadores bancarios soportados (seg&uacute;n pa&iacute;s y plan). Con el extracto en Odoo se <strong>concilia</strong>: cada l&iacute;nea bancaria se empareja con asientos existentes (facturas, pagos) o se crea un asiento nuevo, usando reglas de conciliaci&oacute;n autom&aacute;ticas por concepto, importe, referencia o partner, y sugerencias basadas en hist&oacute;rico. Las diferencias se llevan a cuentas de descuadre o a ganancias/p&eacute;rdidas por cambio. Tambi&eacute;n existe la conciliaci&oacute;n de cuentas transitarias y de pagos m&uacute;ltiples. Automatizar reglas reduce dr&aacute;sticamente el trabajo mensual; conviene revisar peri&oacute;dicamente que las reglas no oculten errores (por ejemplo, comisiones bancarias mal imputadas).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo se maneja multi-moneda y diferencias de cambio?</p>
+        <p class="a">Se activan las monedas necesarias y se actualizan sus tasas (manual o autom&aacute;ticamente desde el BCE u otras fuentes). Cada documento guarda <em>currency_id</em> y la tasa aplicada; los importes en moneda de la compa&ntilde;&iacute;a se calculan con esa tasa. Las diferencias surgen entre el momento de la factura, el del pago y el del cierre, y Odoo genera asientos de <strong>diferencia de cambio</strong> (realizadas al conciliar, y no realizadas en la revalorizaci&oacute;n de saldos al cierre, funcionalidad seg&uacute;n versi&oacute;n/edici&oacute;n). Puntos de atenci&oacute;n: cuentas con <em>currency_id</em> forzada, tasas hist&oacute;ricas correctas, redondeos por moneda (<em>decimal_places</em>) y pol&iacute;ticas de cobertura. En grupos multi-compa&ntilde;&iacute;a con monedas distintas tambi&eacute;n interviene la conversi&oacute;n para informes consolidados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;Qu&eacute; es la contabilidad anal&iacute;tica y c&oacute;mo se configura?</p>
+        <p class="a">La contabilidad anal&iacute;tica reparte ingresos y gastos por dimensiones de gesti&oacute;n sin afectar la contabilidad legal. Desde v16 se organiza con <strong>planes anal&iacute;ticos</strong> (<em>account.analytic.plan</em>) que pueden combinarse (por proyecto, por centro de coste, por l&iacute;nea de negocio, por canal) y <strong>cuentas anal&iacute;ticas</strong> (<em>account.analytic.account</em>) dentro de cada plan. Las l&iacute;neas anal&iacute;ticas (<em>account.analytic.line</em>) registran los importes por dimensi&oacute;n; partes de horas, gastos y facturas pueden distribuirlas autom&aacute;ticamente, y las reglas de distribuci&oacute;n permiten imputar porcentajes. Con esto se obtienen PyG por proyecto, margen por cliente o coste por centro, y es la base de la facturaci&oacute;n por proyectos y del control presupuestario.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo funcionan activos, diferidos y presupuestos?</p>
+        <p class="a"><strong>Activos</strong> (<em>account.asset</em>, Enterprise/OCA en Community): se crean desde la factura de proveedor o manualmente, con m&eacute;todo de depreciaci&oacute;n (lineal, degresivo, degresivo-lineal), vida &uacute;til o n&uacute;mero de depreciaciones, cuenta de activo, de depreciaci&oacute;n y de gasto; Odoo genera el plan de depreciaci&oacute;n y los asientos peri&oacute;dicos, y gestiona bajas y ventas del activo. <strong>Diferidos</strong>: ingresos o gastos reconocidos en varios periodos (por ejemplo una suscripci&oacute;n anual) con plantillas de diferido que generan los asientos de reconocimiento mes a mes. <strong>Presupuestos</strong>: se define un presupuesto por cuenta anal&iacute;tica y periodo, y los informes comparan lo presupuestado con lo comprometido (pedidos) y lo real (asientos), permitiendo alertas. Los tres bloques dependen de una buena configuraci&oacute;n anal&iacute;tica y de fechas de bloqueo correctas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;Qu&eacute; informes financieros y fiscales existen y c&oacute;mo se personalizan?</p>
+        <p class="a">Informes est&aacute;ndar (Enterprise o m&oacute;dulos OCA): balance de situaci&oacute;n, p&eacute;rdidas y ganancias, balance de sumas y saldos, libro mayor y diario, balances de terceros (aged partner balance de cobros y pagos), estado de flujo de caja, informes de impuestos (IVA/IGIC/retenciones seg&uacute;n localizaci&oacute;n), informes intrastat, an&aacute;lisis de facturaci&oacute;n y los tableros con Spreadsheet. Se personalizan con: filtros de fecha/periodo/comparativa (varios periodos en columnas), jerarqu&iacute;as de cuentas definidas por el usuario, agrupaciones por dimensi&oacute;n anal&iacute;tica, y exportaci&oacute;n a PDF/XLSX/CSV. Adem&aacute;s, los informes de Odoo est&aacute;n definidos como modelos con f&oacute;rmulas por l&iacute;nea, de modo que se pueden crear informes propios con c&oacute;digo o, en Enterprise, editarlos con la interfaz. Para requisitos regulatorios locales siempre hay que validar con el contador y la localizaci&oacute;n oficial.</p>
+    </div>
+
+    <h2 id="s7">7. Integraciones</h2>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;Qu&eacute; mecanismos ofrece Odoo para integrarse con sistemas externos?</p>
+        <p class="a">
+            <ul>
+                <li><strong>API externa ORM</strong> sobre <em>XML-RPC</em> (<em>/xmlrpc/2/common</em> y <em>/xmlrpc/2/object</em>) y <em>JSON-RPC</em> (<em>/jsonrpc</em>): permite ejecutar cualquier m&eacute;todo de cualquier modelo con <em>execute_kw</em>.</li>
+                <li><strong>Controladores HTTP propios</strong> (<em>@http.route</em>): endpoints REST/JSON, webhooks de entrada, descargas, p&aacute;ginas del portal.</li>
+                <li><strong>Conectores nativos:</strong> pasarelas de pago, transportistas, marketplaces, correo entrante/saliente, VoIP, WhatsApp, bancarios, EDI/facturaci&oacute;n electr&oacute;nica y servicios IAP (OCR, validaci&oacute;n de VAT, SMS).</li>
+                <li><strong>Acceso directo a base de datos</strong> (solo lectura para BI, r&eacute;plicas, vistas materializadas): v&aacute;lido con cuidado, evitando escribir fuera del ORM.</li>
+                <li><strong>M&oacute;dulos de integraci&oacute;n:</strong> conectores OCA (por ejemplo para colas de trabajos, <em>queue_job</em>), middlewares/ESB, iPaaS, y scripts Python/Node externos.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;C&oacute;mo funciona la API externa (<em>execute_kw</em>)?</p>
+        <p class="a">El flujo es: <strong>(1)</strong> autenticar con <em>common.authenticate(db, login, api_key/password, {})</em>, que devuelve el <em>uid</em>; <strong>(2)</strong> invocar <em>object.execute_kw(db, uid, key, model, method, args, kwargs)</em>. Ejemplos de m&eacute;todos: <em>search</em> (con dominio y kwargs como <em>fields, limit, offset, order</em>), <em>search_read</em>, <em>read</em>, <em>create</em> (lista de dicts), <em>write</em> (ids + dict), <em>unlink</em>, <em>name_search</em>, <em>read_group</em> y cualquier m&eacute;todo p&uacute;blico de los modelos. Desde Python se usa <em>xmlrpc.client.ServerProxy</em>; desde otros lenguajes, peticiones JSON-RPC con <em>jsonrpc: '2.0'</em>, <em>method: 'call'</em> y los par&aacute;metros en <em>params</em>. Buenas pr&aacute;cticas: operaciones por lotes (nunca un <em>write</em> por registro), <em>fields</em> expl&iacute;citos para no traer todo, manejo de <em>AccessError</em>/<em>ValidationError</em>, y versionado del c&oacute;digo de integraci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;Qu&eacute; son las API keys y c&oacute;mo se autentica un sistema externo?</p>
+        <p class="a">Desde versiones recientes la autenticaci&oacute;n por API se hace con <strong>claves de API</strong> generadas por el usuario en sus preferencias (en lugar de la contrase&ntilde;a), lo que permite revocarlas individualmente, auditarlas y no exponer credenciales en scripts. Adem&aacute;s Odoo soporta <strong>OAuth2</strong> como cliente (<em>auth_oauth</em>, para iniciar sesi&oacute;n con Google/Microsoft u otro IdP) y, en versiones nuevas, como proveedor para aplicaciones externas, junto con SSO/SAML mediante m&oacute;dulos. En integraciones hay que: crear usuarios t&eacute;cnicos dedicados con permisos m&iacute;nimos (grupos espec&iacute;ficos por modelo, no administraci&oacute;n), almacenar las claves en un gestor de secretos, rotarlas peri&oacute;dicamente, limitar por IP donde sea posible y registrar los accesos. Nunca se debe incrustar la contrase&ntilde;a de un usuario real en un sistema externo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo se desarrollan controladores HTTP y endpoints propios?</p>
+        <p class="a">En <em>controllers/</em> se declaran clases con <code>@http.route('/ruta', type='json'|'http', auth='public'|'user'|'none', methods=['POST','GET'], csrf=True|False, cors='*')</code>. <em>type='json'</em> usa JSON-RPC y devuelve datos serializables; <em>type='http'</em> devuelve respuestas HTTP normales (JSON manual, archivos, redirecciones, p&aacute;ginas QWeb con <em>request.render</em>). <em>auth</em> determina qui&eacute;n puede llamar: <em>public</em> (usuario p&uacute;blico), <em>user</em> (sesi&oacute;n requerida) o <em>none</em> (sin usuario; se debe abrir cursor expl&iacute;citamente con <em>odoo.api.Environment</em>). Para <strong>webhooks</strong> entrantes se valida la firma o el token en cabecera, se responde r&aacute;pido y se delega el proceso pesado a un cron o a una cola de trabajos. Seguridad: CSRF activo en rutas con sesi&oacute;n de navegador, validaci&oacute;n estricta de entradas, rate limiting en el proxy y logs de cada llamada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;C&oacute;mo se integran pagos, env&iacute;os y servicios IAP?</p>
+        <p class="a"><strong>Pagos:</strong> Odoo tiene proveedores de pago configurables (por ejemplo Stripe, PayPal, Adyen, Authorize.Net, Buckaroo, Mollie, Razorpay, Sips, Mercado Pago y otros seg&uacute;n versi&oacute;n y localizaci&oacute;n) que se usan en eCommerce, POS, portal de facturas y pagos recurrentes en suscripciones; manejan tokens, webhooks de confirmaci&oacute;n y conciliaci&oacute;n autom&aacute;tica del pago con la factura. <strong>Env&iacute;os/transportistas:</strong> conectores con UPS, FedEx, DHL, USPS, Bpost, Sendcloud y otros para obtener tarifas, generar etiquetas y numeraci&oacute;n de seguimiento desde el picking. <strong>IAP (In-App Purchase):</strong> servicios de Odoo por cr&eacute;ditos: OCR y digitalizaci&oacute;n de facturas de proveedor, validaci&oacute;n de n&uacute;meros de IVA, env&iacute;o de SMS, correo postal (Snailmail), b&uacute;squeda de leads y llamadas telef&oacute;nicas VoIP. En todos los casos hay que dise&ntilde;ar el manejo de fallos: reintentos, estados intermedios y alertas cuando el proveedor no responde.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;C&oacute;mo se maneja EDI y facturaci&oacute;n electr&oacute;nica?</p>
+        <p class="a">Odoo soporta formatos y esquemas est&aacute;ndar a trav&eacute;s del marco <strong>EDI</strong> (<em>account_edi</em> en Enterprise): UBL 2.1, CII, Factur-X/ZUGFeRD (PDF h&iacute;brido), PEPPOL para intercambio entre empresas en Europa, y exportaciones bancarias SEPA/ISO 20022 y NACHA. Adem&aacute;s, las <strong>localizaciones</strong> implementan requisitos fiscales nacionales (por ejemplo CFDI en M&eacute;xico, SII/Verifactu en Espa&ntilde;a, facturaci&oacute;n electr&oacute;nica en Colombia, Chile, Per&uacute;, India GST/e-invoicing, EET, etc.), algunas mantenidas por Odoo y otras por partners u OCA. En la pr&aacute;ctica el dise&ntilde;o incluye: numeraci&oacute;n y prefijos correctos, representaci&oacute;n PDF/A exigida, firma y sello con el proveedor autorizado (PAC/DIAN/SAT seg&uacute;n pa&iacute;s), reintentos ante rechazo, almacenamiento de los XML de respuesta y trazabilidad del estado del documento. Cuando un pa&iacute;s no tiene localizaci&oacute;n oficial, se integra con un proveedor externo v&iacute;a API.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;C&oacute;mo se dise&ntilde;an integraciones robustas (colas, reintentos, idempotencia)?</p>
+        <p class="a">Principios: <strong>idempotencia</strong> (clave &uacute;nica de negocio o <em>constraint</em> SQL para no duplicar pedidos/facturas al reintentar), <strong>procesamiento as&iacute;ncrono</strong> (cola de trabajos como <em>queue_job</em> de OCA, crons con lotes acotados, o un middleware externo) para no bloquear la UI ni superar <em>limit_time_real</em>, <strong>reintentos con backoff</strong> y l&iacute;mite, <strong>registro de cada mensaje</strong> (modelo propio de log de integraci&oacute;n con payload, estado, error y n&uacute;mero de intentos) y <strong>alertas</strong> al superar umbrales. Tambi&eacute;n: transacciones peque&ntilde;as con commit expl&iacute;cito por lote, manejo de concurrencia (bloqueos, <em>SELECT ... FOR UPDATE</em> si es imprescindible), validaci&oacute;n de datos antes de escribir, y pruebas de contrato con datos reales. En integraciones bidireccionales se define una fuente de verdad por campo para evitar ciclos de actualizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;C&oacute;mo se integra Odoo con un data warehouse o herramientas de BI?</p>
+        <p class="a">Opciones habituales: <strong>(1)</strong> lectura directa de PostgreSQL con un usuario de solo lectura y vistas o consultas SQL (r&aacute;pido, pero acoplado al esquema interno, que cambia entre versiones); <strong>(2)</strong> extracci&oacute;n por API externa (<em>search_read</em>/<em>read_group</em>) hacia un ETL (Airflow, Fivetran, scripts Python) que carga un warehouse (BigQuery, Snowflake, Redshift); <strong>(3)</strong> CDC/r&eacute;plica l&oacute;gica de PostgreSQL (Debezium, r&eacute;plicas de lectura) para latencias bajas; <strong>(4)</strong> exportaciones programadas a CSV/XLSX. Dentro de Odoo se pueden construir tableros con vistas pivot/graph y con Spreadsheet (Enterprise). Recomendaciones: modelar en capas (raw &rarr; staging &rarr; marts), documentar el mapeo de modelos clave (<em>sale.order, account.move, stock.move</em>), versionar las extracciones y aislar el reporting pesado del OLTP para no degradar la operaci&oacute;n.</p>
+    </div>
+
+    <h2 id="s8">8. Seguridad y usuarios</h2>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; tipos de usuarios existen en Odoo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Usuarios internos</strong> (<em>res.users</em> con share=False): empleados con acceso al backend; consumen licencia en Enterprise y se asocian a grupos por app.</li>
+                <li><strong>Usuarios portal</strong> (share=True): clientes o proveedores que solo ven el portal (sus pedidos, facturas, tickets, proyectos) y pueden firmar o pagar en l&iacute;nea; no consumen licencia de usuario interno.</li>
+                <li><strong>Usuario p&uacute;blico:</strong> identidad an&oacute;nima del sitio web/eCommerce.</li>
+                <li><strong>Usuario de sistema/administrador:</strong> con el grupo <em>Settings</em> y acceso total; conviene limitarlo a pocas personas y usarlo solo para configuraci&oacute;n.</li>
+            </ul>
+            Todo usuario est&aacute; vinculado a un contacto (<em>res.partner</em>) por delegaci&oacute;n, y su perfil se define con grupos, idioma, zona horaria, compa&ntilde;&iacute;as permitidas y clave de API.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo funcionan los grupos de seguridad (<em>res.groups</em>)?</p>
+        <p class="a">Los grupos son el mecanismo central de permisos: cada app define grupos de nivel (por ejemplo <em>sales.user</em> propio, <em>sales.manager</em>, <em>stock.user</em>, <em>account.group_account_invoice</em>, <em>account.group_account_manager</em>, <em>base.group_user</em>, <em>base.group_system</em>, <em>base.group_portal</em>). Los grupos pueden tener <strong>implied_ids</strong> (heredan permisos de otros), <strong>categor&iacute;as</strong> (selecci&oacute;n exclusiva dentro de una app: usuario/manager) y <strong>usuarios</strong>. Se usan en: permisos de acceso a modelos (<em>ir.model.access</em>), reglas de registro (<em>ir.rule</em>), atributo <em>groups</em> de campos, vistas, men&uacute;s y acciones, y en c&oacute;digo con <em>self.env.user.has_group('...')</em>. La configuraci&oacute;n se hace desde Ajustes con el modo desarrollador; en Enterprise tambi&eacute;n se gestionan con Studio. Buen dise&ntilde;o: pocos grupos propios, reutilizar los est&aacute;ndar y documentar la matriz rol-permiso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;Qu&eacute; son los <em>access rights</em> y las <em>record rules</em>?</p>
+        <p class="a">Dos capas complementarias. <strong>Access rights (<em>ir.model.access</em>):</strong> permisos CRUD a nivel de <em>modelo</em> por grupo (read, write, create, unlink); se mantienen normalmente en <em>security/ir.model.access.csv</em>. Si no hay permiso para el modelo, la operaci&oacute;n falla con <em>AccessError</em> sin importar el registro. <strong>Record rules (<em>ir.rule</em>):</strong> restricciones a nivel de <em>registro</em>, definidas con un dominio evaluado en el contexto del usuario, por ejemplo <em>[('user_id','=',user.id)]</em> (solo mis registros), <em>[('company_id','in',company_ids)]</em> (multi-compa&ntilde;&iacute;a) o reglas por equipo de ventas; pueden ser globales (aplican a todos) o por grupo, y se combinan con OR dentro del mismo modelo y AND entre globales y de grupo. Odoo las aplica autom&aacute;ticamente a search/read/write/unlink, por lo que son la forma correcta de implementar visibilidad por rol sin filtrar en la UI.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo se protege el acceso a campos y vistas?</p>
+        <p class="a">Con el atributo <strong>groups</strong> en campos, botones, p&aacute;ginas de <em>notebook</em>, men&uacute;s y acciones: solo los usuarios de esos grupos los ven. En el formulario, el atributo se combina con <em>invisible</em>, <em>readonly</em> y <em>required</em> evaluados como expresiones Python sobre el registro y el contexto. Importante: la ocultaci&oacute;n en la vista es <em>cosm&eacute;tica</em>; la protecci&oacute;n real de datos sensibles se hace con record rules, access rights y validaci&oacute;n en el servidor, porque un usuario con acceso al modelo puede leer campos v&iacute;a API aunque la vista no los muestre. Para datos cr&iacute;ticos (costes, m&aacute;rgenes, n&oacute;mina) se usan grupos espec&iacute;ficos y, si hace falta, campos <em>company_dependent</em> o modelos separados con permisos propios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;Qu&eacute; es <em>sudo()</em> y cu&aacute;ndo debe usarse con cuidado?</p>
+        <p class="a"><em>sudo()</em> devuelve un recordset cuyo entorno usa el usuario administrador, salt&aacute;ndose access rights y record rules; <em>with_user(user)</em> y <em>with_company(company)</em>/<em>with_context(...)</em> cambian el usuario o el contexto de forma controlada. <em>sudo()</em> es leg&iacute;timo en casos concretos: procesos autom&aacute;ticos (crons) que necesitan leer configuraci&oacute;n, creaci&oacute;n de registros desde el portal o el sitio web, y operaciones donde el usuario no tiene permisos pero la acci&oacute;n est&aacute; autorizada por dise&ntilde;o. Riesgos: usarlo en m&eacute;todos expuestos a la UI o a controladores puede permitir escalar privilegios o filtrar datos entre compa&ntilde;&iacute;as. Reglas: minimizar el alcance (<em>self.env['modelo'].sudo().browse(id).campo</em>), nunca aplicar <em>sudo()</em> a un recordset que despu&eacute;s se usa para escrituras sensibles, validar siempre los par&aacute;metros de entrada y documentar por qu&eacute; se elevan permisos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;C&oacute;mo se configura SSO y autenticaci&oacute;n reforzada?</p>
+        <p class="a">Odoo incluye <em>auth_oauth</em> para iniciar sesi&oacute;n con proveedores OAuth2 (Google, Microsoft/Entra ID, y cualquier IdP compatible configurando client id, secret y endpoints), y existen m&oacute;dulos para <strong>SAML 2.0</strong>/<strong>OIDC</strong> y para integraci&oacute;n con LDAP (<em>auth_ldap</em>) en entornos corporativos. Tambi&eacute;n soporta <strong>autenticaci&oacute;n en dos pasos</strong> (TOTP con apps como Google Authenticator) activable por usuario u obligada por pol&iacute;tica. Para el acceso al portal y al sitio web se puede usar magic link/invitaci&oacute;n por correo. Recomendaciones: centralizar identidades en el IdP corporativo, deshabilitar el alta libre de usuarios, forzar MFA a administradores y usuarios con permisos financieros, revisar peri&oacute;dicamente la lista de usuarios activos y sus claves de API, y registrar los intentos fallidos en el logging del proxy.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Qu&eacute; trazabilidad y auditor&iacute;a ofrece Odoo?</p>
+        <p class="a">El mixin <em>mail.thread</em> a&ntilde;ade el <strong>chatter</strong> a cualquier modelo: mensajes, notas internas, seguidores y, con <em>tracking=True</em> en los campos, un historial de cambios con valor anterior y nuevo (<em>mail.tracking.value</em>). <em>mail.activity.mixin</em> registra actividades y asignaciones. Adem&aacute;s: logs del servidor (nivel <em>info/debug</em>, con usuario y petici&oacute;n), logs de PostgreSQL, registros de acceso a documentos del portal, historial de trabajos cron y de las acciones automatizadas, y en Odoo.sh logs por entorno con retenci&oacute;n. Para auditor&iacute;a formal se suele complementar con: pol&iacute;tica de separaci&oacute;n de funciones (quien crea un proveedor no aprueba su pago), bloqueo de fechas contables, informes de usuarios y permisos, y retenci&oacute;n de backups. Los cambios de configuraci&oacute;n sensibles conviene gobernarlos con proceso y aprobaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;Qu&eacute; pr&aacute;cticas de seguridad deben aplicarse en producci&oacute;n?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Infraestructura:</strong> TLS en todo el tr&aacute;fico, <em>proxy_mode</em>, <em>list_db=False</em> y <em>dbfilter</em>, bloqueo de <em>/web/database/*</em>, SSH por clave, parcheo del SO, fail2ban o rate limiting en nginx, red privada para PostgreSQL (nunca expuesto a Internet) y usuarios de BD espec&iacute;ficos.</li>
+                <li><strong>Aplicaci&oacute;n:</strong> m&iacute;nimo privilegio en grupos, MFA para administradores, claves de API en gestor de secretos, revisi&oacute;n de m&oacute;dulos de terceros antes de instalar (c&oacute;digo malicioso o con <em>sudo()</em> indebido), CSRF activo, validaci&oacute;n de entradas en controladores y CORS restringido.</li>
+                <li><strong>Datos:</strong> backups cifrados y probados (dump + filestore), retenci&oacute;n y borrado seg&uacute;n normativa, anonimizado en entornos no productivos, cifrado en reposo y control de acceso a adjuntos.</li>
+                <li><strong>Operaci&oacute;n:</strong> monitoreo y alertas, registro de accesos, plan de respuesta a incidentes y pruebas de restauraci&oacute;n peri&oacute;dicas.</li>
+            </ul>
+        </p>
+    </div>
+
+    <h2 id="s9">9. Multi-compa&ntilde;&iacute;a, datos maestros, migraci&oacute;n y calidad</h2>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo funciona multi-compa&ntilde;&iacute;a en Odoo?</p>
+        <p class="a">Cada compa&ntilde;&iacute;a es un registro <em>res.company</em> (asociado a un <em>res.partner</em>), con su moneda, plan contable, direcciones, datos fiscales y usuarios. Un usuario tiene una compa&ntilde;&iacute;a principal y puede tener varias permitidas; el conmutador de la barra superior define el contexto <em>allowed_company_ids</em>. Los registros llevan <em>company_id</em> y las <strong>record rules multi-compa&ntilde;&iacute;a</strong> restringen la visibilidad a las compa&ntilde;&iacute;as del contexto. Existen compa&ntilde;&iacute;as padre/hijo para jerarqu&iacute;as. Las operaciones entre empresas (ventas/compras intragrupo, transferencias entre almacenes de distintas compa&ntilde;&iacute;as, notas de cr&eacute;dito cruzadas) se configuran con reglas y rutas espec&iacute;ficas. Es una arquitectura de base de datos compartida con aislamiento l&oacute;gico: m&aacute;s simple de operar que instancias separadas, pero exige rigor en la configuraci&oacute;n de permisos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;Qu&eacute; cuidados requiere la configuraci&oacute;n multi-compa&ntilde;&iacute;a?</p>
+        <p class="a">Puntos cr&iacute;ticos: campos <strong>company_dependent</strong> (cuentas contables, listas de precio, responsables) para que cada empresa tenga su valor; <em>check_company=True</em> en relaciones Many2one para impedir mezclar registros de compa&ntilde;&iacute;as distintas; record rules correctas en todos los modelos nuevos (si un modelo custom no las declara, los datos se filtran mal); diarios, secuencias y numeraci&oacute;n por compa&ntilde;&iacute;a; impuestos y posiciones fiscales por pa&iacute;s/compa&ntilde;&iacute;a; almacenes y ubicaciones asignados; monedas y tasas; y pruebas espec&iacute;ficas de cada flujo con usuarios de una sola compa&ntilde;&iacute;a. Errores frecuentes: documentos creados en la compa&ntilde;&iacute;a equivocada por contexto heredado de un cron, y reportes consolidados mal interpretados. Se recomienda documentar la matriz de compa&ntilde;&iacute;as/usuarios y validar con los responsables financieros antes del go-live.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;C&oacute;mo se gestionan los datos maestros y la deduplicaci&oacute;n?</p>
+        <p class="a">Los maestros clave son <em>res.partner</em> (contactos, con jerarqu&iacute;a padre-hijo, direcciones y tipo de contacto), <em>product.product</em>/<em>product.template</em> (con variantes, categor&iacute;as, c&oacute;digos internos y de proveedor/cliente, UoM), cuentas contables, impuestos, almacenes/ubicaciones, listas de precio y empleados. Buenas pr&aacute;cticas: definir <strong>due&ntilde;o</strong> de cada maestro, reglas de alta (campos obligatorios, unicidad de NIF/documento, validaci&oacute;n con VIES u OCR), pol&iacute;tica de variantes, categor&iacute;as de producto alineadas con contabilidad y anal&iacute;tica, y limpieza previa a la migraci&oacute;n (duplicados, inactivos, direcciones). Odoo trae herramientas de fusi&oacute;n de contactos duplicados y se pueden crear constraints SQL o acciones automatizadas para prevenir duplicados. La calidad del dato maestro determina el &eacute;xito del proyecto m&aacute;s que cualquier desarrollo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo se importan y exportan datos masivamente?</p>
+        <p class="a">Desde la UI: cualquier vista list tiene <strong>Importar</strong> (asistente con mapeo de columnas, detecci&oacute;n de campos, previsualizaci&oacute;n y prueba en seco) y <strong>Exportar</strong> (selecci&oacute;n de campos, inclusi&oacute;n de id externos, formatos CSV/XLSX). La clave es usar el <strong>id externo</strong> (<em>External ID</em>) para actualizaciones idempotentes y referencias cruzadas entre archivos (por ejemplo, importar productos con <em>id</em> propio y luego l&iacute;neas que los referencian). Para vol&uacute;menes grandes o procesos repetidos: scripts con la API externa por lotes, carga directa con <em>odoo-bin shell</em> o CSV en <em>data/</em> del m&oacute;dulo. Cuidados: orden de carga (maestros antes que transaccionales), validaciones y constraints (se ejecutan en cada create), rendimiento (lotes de miles de registros, desactivar crons y notificaciones durante la carga, <em>mail_create_nolog</em> en contexto) y plan de rollback. Siempre se prueba la importaci&oacute;n en staging con datos reales antes del go-live.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;C&oacute;mo se afronta una migraci&oacute;n de versi&oacute;n (upgrade) de Odoo?</p>
+        <p class="a">Secuencia t&iacute;pica: <strong>(1)</strong> inventario: versi&oacute;n origen y destino, m&oacute;dulos custom, m&oacute;dulos de terceros (verificar disponibilidad en destino), integraciones, informes y volumen de datos; <strong>(2)</strong> limpiar la base (datos hu&eacute;rfanos, registros in&uacute;tiles, m&oacute;dulos sin usar); <strong>(3)</strong> preparar entorno de prueba con copia de producci&oacute;n y ejecutar la migraci&oacute;n (servicio de upgrade de Odoo para Enterprise, OpenUpgrade o scripts propios); <strong>(4)</strong> adaptar el c&oacute;digo custom a los cambios de API/vistas/modelos de la versi&oacute;n destino (deprecaciones, campos renombrados, cambios en contabilidad e inventario son los m&aacute;s habituales); <strong>(5)</strong> pruebas de regresi&oacute;n funcionales y de integraciones, con usuarios clave; <strong>(6)</strong> plan de corte: congelaci&oacute;n, dump final, migraci&oacute;n, validaci&oacute;n de saldos y existencias, y <strong>rollback</strong> definido; <strong>(7)</strong> estabilizaci&oacute;n post go-live. Los upgrades se presupuestan y planifican como proyecto, no como tarea t&eacute;cnica suelta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;Qu&eacute; es OpenUpgrade y cu&aacute;ndo conviene usarlo?</p>
+        <p class="a"><strong>OpenUpgrade</strong> es el proyecto de la OCA que publica scripts de migraci&oacute;n entre versiones para la edici&oacute;n Community: renombra/mueve tablas y campos, transforma datos y adapta la estructura para que una base de una versi&oacute;n anterior quede utilizable en la siguiente. Se ejecuta con m&oacute;dulos de migraci&oacute;n y utilidades propias, en un entorno controlado y por saltos de versi&oacute;n soportados. Conviene cuando: se usa Community y no se quiere depender del servicio de pago de Odoo, se necesita auditor&iacute;a y control del script, o hay bases muy personalizadas. El <strong>servicio de upgrade de Odoo</strong> (Enterprise) es la v&iacute;a soportada en suscripciones: se sube la base, ellos ejecutan la migraci&oacute;n y entregan un resultado para validar; incluye soporte para la prueba. En ambos casos el esfuerzo real suele estar en adaptar desarrollos propios y m&oacute;dulos de terceros, no en la migraci&oacute;n del core.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;C&oacute;mo se implementa calidad: pruebas, linting y revisi&oacute;n de c&oacute;digo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Pruebas:</strong> framework propio de Odoo con <em>TransactionCase</em> (l&oacute;gica y ORM, en transacci&oacute;n que se revierte), <em>HttpCase</em> (pruebas de extremo a extremo con navegador/tours), <em>SavepointCase</em> y etiquetas <em>at_install</em>/<em>post_install</em>; se ejecutan con <em>--test-enable</em> y <em>--test-tags</em>.</li>
+                <li><strong>Tours:</strong> recorridos de UI en JavaScript &uacute;tiles para validar flujos completos (comprar, recepcionar, facturar).</li>
+                <li><strong>Linting y est&aacute;ndares:</strong> <em>pylint-odoo</em>, flake8/black/ruff, y las gu&iacute;as de la OCA (nomenclatura, README, changelog, estructura de m&oacute;dulos, i18n).</li>
+                <li><strong>CI/CD:</strong> pipelines que instalen la base con los addons, ejecuten pruebas y validen manifiestos; Runbot de la OCA como referencia p&uacute;blica; en Odoo.sh los checks se ejecutan en cada build.</li>
+                <li><strong>Proceso:</strong> revisi&oacute;n por pares, ramas por tarea, entornos de staging, criterios de aceptaci&oacute;n funcionales y registro de deuda t&eacute;cnica.</li>
+            </ul>
+            En proyectos con muchos m&oacute;dulos custom, la falta de pruebas es la causa principal de regresiones en cada upgrade.
+        </p>
+    </div>
+
+    <h2 id="s10">10. Administraci&oacute;n, rendimiento y operaciones</h2>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se configura <em>odoo.conf</em> y qu&eacute; par&aacute;metros son cr&iacute;ticos?</p>
+        <p class="a">Par&aacute;metros principales: <em>addons_path</em> (rutas separadas por coma), <em>db_host/db_port/db_user/db_password/db_name/dbfilter</em>, <em>data_dir</em> (filestore y sesiones), <em>http_port</em> (8069) y <em>gevent_port/longpolling_port</em> (8072), <em>workers</em> y <em>max_cron_threads</em>, <em>limit_memory_soft/limit_memory_hard</em>, <em>limit_time_cpu/limit_time_real</em>, <em>limit_request</em>, <em>proxy_mode</em>, <em>list_db</em>, <em>admin_passwd</em> (contrase&ntilde;a maestra de gesti&oacute;n de bases: debe cambiarse y protegerse), <em>logfile/log_level/log_handler</em>, <em>smtp_*</em> (servidor de correo saliente, TLS/SSL), <em>without_demo</em>, <em>server_wide_modules</em> (por ejemplo <em>web,web_kanban_gauge</em> o m&oacute;dulos de monitoreo) y par&aacute;metros de rendimiento de PostgreSQL (<em>db_maxconn</em>). Todo lo sensible (contrase&ntilde;as, claves) va en variables de entorno o gestor de secretos, no en repositorio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;C&oacute;mo se dimensiona y afina el rendimiento?</p>
+        <p class="a">Frentes: <strong>Aplicaci&oacute;n</strong>: workers acorde a CPU/memoria (cada worker consume un registry por base cargada), l&iacute;mites de tiempo y memoria correctos, crons separados y con lotes acotados, evitar m&oacute;dulos in&uacute;tiles, y c&oacute;digo eficiente (operaciones en lote, <em>read_group</em> para agregados, <em>prefetch</em>, campos almacenados solo cuando se filtran, dominios indexados). <strong>Base de datos</strong>: PostgreSQL con <em>shared_buffers</em>, <em>work_mem</em>, <em>effective_cache_size</em> y <em>maintenance_work_mem</em> ajustados, <em>max_connections</em> coherente con <em>db_maxconn</em> y los workers, autovacuum activo y monitoreado, &iacute;ndices en campos de b&uacute;squeda frecuente, y an&aacute;lisis de consultas lentas (<em>pg_stat_statements</em>). <strong>Infraestructura</strong>: discos SSD/NVMe, nginx con cache de assets y compresi&oacute;n, filestore en almacenamiento r&aacute;pido, CDN para el sitio web, y separaci&oacute;n de BD y aplicaci&oacute;n en servidores distintos cuando el volumen lo justifica. <strong>Datos</strong>: purga de logs, sesiones, adjuntos hu&eacute;rfanos y registros transient antiguos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;C&oacute;mo se diagnostica un problema de lentitud?</p>
+        <p class="a">M&eacute;todo: <strong>(1)</strong> caracterizar: &iquest;lentitud general o en una pantalla/proceso concreto?, &iquest;afecta a todos los usuarios o a uno, en qu&eacute; horarios? <strong>(2)</strong> medir: logs con nivel <em>debug</em>/<em>debug_sql</em> para ver consultas y tiempos, tiempos de respuesta en nginx, m&eacute;tricas de CPU/memoria/IO del servidor, <em>pg_stat_statements</em> y <em>EXPLAIN ANALYZE</em> de las consultas sospechosas; en desarrollo, el profiler de Odoo (modo desarrollador) muestra tiempo por m&eacute;todo y n&uacute;mero de consultas. <strong>(3)</strong> causas frecuentes: N+1 por llamadas a <em>search</em>/<em>browse</em> dentro de bucles, campos computed sin almacenar recalculados en listados grandes, vistas kanban/pivot con datasets enormes, informes PDF con miles de registros, crons concurrentes, &iacute;ndices ausentes, adjuntos en disco lento, y locks o colisiones con la integraci&oacute;n. <strong>(4)</strong> corregir por lotes, cachear, indexar y acotar dominios; despu&eacute;s re-medir para comprobar la mejora.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo se gestionan backups y recuperaci&oacute;n ante desastres?</p>
+        <p class="a">Un backup completo de Odoo son <strong>dos piezas</strong>: el dump de PostgreSQL (<em>pg_dump</em> en formato custom o filestore incluido seg&uacute;n herramienta) y el <strong>filestore</strong> (adjuntos y assets, en <em>data_dir/filestore/&lt;basededatos&gt;</em>). Sin el filestore faltan documentos e im&aacute;genes. Buenas pr&aacute;cticas: backups autom&aacute;ticos diarios (Odoo.sh los incluye; en on-premise con scripts, <em>odoo-backup</em> o herramientas del gestor), copia fuera del servidor y en otra regi&oacute;n, cifrado, retenci&oacute;n definida (por ejemplo 7 diarios, 4 semanales, 12 mensuales), verificaci&oacute;n peri&oacute;dica restaurando en un entorno de pruebas y midiendo el tiempo. Definir <strong>RPO/RTO</strong> con el negocio, documentar el procedimiento de restauraci&oacute;n y ensayarlo. En sistemas cr&iacute;ticos, considerar r&eacute;plica en caliente de PostgreSQL y snapshot de almacenamiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;Qu&eacute; es Odoo.sh y c&oacute;mo funciona su flujo de ramas y entornos?</p>
+        <p class="a">Odoo.sh es la plataforma PaaS de Odoo conectada a un repositorio de GitHub: cada <strong>rama</strong> genera un <strong>build</strong> con su propia base de datos y entorno. Las ramas de desarrollo se etiquetan como <em>development</em>; una rama puede marcarse como <strong>staging</strong> (para pruebas con datos clonados de producci&oacute;n) y existe una rama de <strong>producci&oacute;n</strong>. La plataforma se encarga de: builds autom&aacute;ticos al hacer push, despliegue, workers y recursos configurables por entorno, backups diarios con descarga, logs por build, consola de correo saliente, SSH, editor en l&iacute;nea, monitoreo de rendimiento, actualizaciones de versi&oacute;n asistidas y dominios/certificados TLS. Facilita mucho el ciclo dev&rarr;test&rarr;prod sin montar infraestructura, con la contrapartida de menos control sobre el sistema operativo y de costos por workers/entornos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;C&oacute;mo se hace CI/CD y despliegue fuera de Odoo.sh?</p>
+        <p class="a">Alternativas habituales: <strong>Docker</strong> (im&aacute;genes oficiales de Odoo o propias con los addons), orquestadas con docker-compose o Kubernetes, montando addons y filestore en vol&uacute;menes persistentes y usando PostgreSQL externo; <strong>Ansible/Terraform</strong> para aprovisionar servidores, nginx y PostgreSQL y desplegar la versi&oacute;n del c&oacute;digo; y pipelines de <strong>CI</strong> (GitHub Actions, GitLab CI, Jenkins) que: instalan dependencias, ejecutan linting (<em>pylint-odoo</em>, flake8), crean una base con <em>--stop-after-init -i mis_modulos --test-enable</em>, corren pruebas y publican artefactos. El despliegue a producci&oacute;n suele ser: merge a la rama release, etiqueta de versi&oacute;n, actualizaci&oacute;n del c&oacute;digo en el servidor, <em>-u</em> de los m&oacute;dulos afectados, verificaci&oacute;n de humo y rollback guardando el commit anterior y un dump previo. La inmutabilidad del contenedor y las migraciones versionadas son las claves para evitar entornos que &laquo;solo funcionan en producci&oacute;n&raquo;.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;C&oacute;mo se monitorea y se da soporte a una instancia en producci&oacute;n?</p>
+        <p class="a">Capas de monitoreo: <strong>infraestructura</strong> (CPU, memoria, disco, IO, red; Prometheus + Grafana, Datadog, CloudWatch o el panel de Odoo.sh), <strong>aplicaci&oacute;n</strong> (logs con <em>log_handler</em>, errores 500, tiempos de respuesta por ruta, workers reiniciados por l&iacute;mites de memoria, jobs cron atrasados o fallidos, tama&ntilde;o de la cola de correo), <strong>base de datos</strong> (conexiones activas, locks, consultas lentas, crecimiento de tablas, vacuum), y <strong>negocio</strong> (pedidos sin facturar, entregas bloqueadas, pagos no conciliados, interfaces con errores). Alertas con umbrales y canales (correo, Slack/Teams, PagerDuty). Soporte: mesa con niveles (funcional L1, t&eacute;cnico L2, proveedor L3), base de conocimiento, gesti&oacute;n de cambios con ventanas y aprobaciones, revisi&oacute;n peri&oacute;dica de usuarios/permisos y plan de actualizaciones de seguridad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;Qu&eacute; buenas pr&aacute;cticas de gobierno funcional y adopci&oacute;n recomiendas en un proyecto Odoo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Alcance y est&aacute;ndar primero:</strong> adaptar el proceso a Odoo antes que Odoo al proceso; cada customizaci&oacute;n es deuda que se paga en cada upgrade.</li>
+                <li><strong>Fases por dominio:</strong> salir en vivo por olas (por ejemplo finanzas + compras + inventario primero, luego manufactura y eCommerce) reduce riesgo.</li>
+                <li><strong>Due&ntilde;os de proceso:</strong> un responsable funcional por &aacute;rea que valida configuraci&oacute;n, datos maestros y criterios de aceptaci&oacute;n.</li>
+                <li><strong>Gesti&oacute;n del cambio:</strong> formaci&oacute;n por rol, manuales y videos cortos, usuarios clave (superusuarios) y soporte intensivo en las primeras semanas.</li>
+                <li><strong>Calidad de datos:</strong> limpieza y carga temprana, validaci&oacute;n con los usuarios, controles de duplicidad.</li>
+                <li><strong>Gobierno t&eacute;cnico:</strong> repositorio &uacute;nico, revisi&oacute;n por pares, entorno de staging, pruebas, documentaci&oacute;n de customizaciones y plan de upgrades.</li>
+                <li><strong>M&eacute;tricas:</strong> tiempos de ciclo, % de pedidos sin errores, d&iacute;as de inventario, cierre contable, adopci&oacute;n de la herramienta.</li>
+            </ul>
+        </p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Odoo en una entrevista (plantilla)</h2>
+
+    <div class="note">
+        <p><strong>Pregunta t&iacute;pica:</strong> &laquo;&iquest;Cu&aacute;l es su experiencia con Odoo (ERP de gesti&oacute;n empresarial) en configuraci&oacute;n, desarrollo, integraciones y administraci&oacute;n?&raquo;</p>
+    </div>
+
+    <h3>Respuesta modelo (adapta los corchetes con tu experiencia real)</h3>
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Odoo [Community/Enterprise] versi&oacute;n [16/17/18] durante [X] a&ntilde;os en proyectos de [sector], cubriendo tres frentes: configuraci&oacute;n funcional de los m&oacute;dulos del ERP, desarrollo de m&oacute;dulos personalizados con Python y el ORM, y administraci&oacute;n/integraciones en producci&oacute;n&raquo;.</p>
+        <p><strong>Configuraci&oacute;n funcional:</strong> &laquo;He implementado flujos de [ventas, compras, inventario, manufactura y contabilidad]: rutas y reglas de reabastecimiento, lotes y trazabilidad, costeo [FIFO/AVCO] con valoraci&oacute;n autom&aacute;tica, localizaci&oacute;n contable de [pa&iacute;s], posiciones fiscales, multi-compa&ntilde;&iacute;a y anal&iacute;tica por [proyecto/centro de coste]&raquo;.</p>
+        <p><strong>Desarrollo:</strong> &laquo;Desarrollo m&oacute;dulos con la estructura est&aacute;ndar (<em>models, views, security, data, wizards, controllers</em>): modelos y campos computed almacenados, herencia de modelos y de vistas con xpath, reglas de registro por grupo, acciones automatizadas y crons, informes QWeb/PDF y componentes OWL cuando hace falta UI a medida. Uso el modo desarrollador, <em>--dev=reload</em> y pruebas con <em>TransactionCase</em>&raquo;.</p>
+        <p><strong>Integraciones:</strong> &laquo;He integrado Odoo con [SAP/NetSuite/Shopify/transportistas/pasarelas de pago/BI] usando la API externa XML-RPC/JSON-RPC con claves de API, controladores HTTP propios para webhooks, colas de trabajo con reintentos e idempotencia, y cargas masivas por importaci&oacute;n y scripts&raquo;.</p>
+        <p><strong>Administraci&oacute;n y seguridad:</strong> &laquo;Administro la plataforma: <em>odoo.conf</em>, workers y longpolling, nginx con TLS, PostgreSQL, backups (dump + filestore) con pruebas de restauraci&oacute;n, y despliegue en [Odoo.sh / Docker / servidor propio]. En seguridad aplico m&iacute;nimo privilegio con grupos y record rules, SSO/MFA, control de <em>sudo()</em> y trazabilidad con el chatter&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [ejemplo cuantificado: reducir el cierre contable de X a Y d&iacute;as, automatizar N procesos, integrar N sistemas, disminuir errores de inventario en Z%]. En este rol aportar&iacute;a [configuraci&oacute;n funcional / desarrollo / arquitectura de integraciones] y ayudar&iacute;a a priorizar est&aacute;ndar frente a customizaciones&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Configuraci&oacute;n funcional</td><td>M&oacute;dulos implantados (ventas, compras, stock, MRP, contabilidad, CRM, POS), flujos order-to-cash y procure-to-pay, rutas, localizaci&oacute;n contable</td><td>Go-live por fases, procesos operando en producci&oacute;n, usuarios activos</td></tr>
+        <tr><td>Desarrollo de m&oacute;dulos</td><td>Modelos, herencias, vistas xpath, wizards, crons, informes QWeb, componentes OWL, m&oacute;dulos OCA</td><td>Repositorio con addons propios, m&oacute;dulos versionados y probados</td></tr>
+        <tr><td>Integraciones</td><td>XML-RPC/JSON-RPC con <em>execute_kw</em>, controladores y webhooks, colas, EDI/facturaci&oacute;n electr&oacute;nica, pagos y transportistas</td><td>Integraciones estables con log y reintentos, volumen de transacciones</td></tr>
+        <tr><td>Datos y migraci&oacute;n</td><td>Limpieza e importaci&oacute;n masiva (CSV/API), ids externos, migraci&oacute;n de versi&oacute;n, OpenUpgrade</td><td>Migraciones exitosas, saldos y existencias cuadradas, downtime acotado</td></tr>
+        <tr><td>Contabilidad y finanzas</td><td>Plan contable, impuestos, conciliaci&oacute;n bancaria, multi-moneda, anal&iacute;tica, activos y presupuestos</td><td>Cierre mensual m&aacute;s r&aacute;pido, informes regulatorios al d&iacute;a</td></tr>
+        <tr><td>Seguridad</td><td>Grupos, access rights, record rules, SSO/MFA, multi-compa&ntilde;&iacute;a, auditor&iacute;a y hardening</td><td>Hallazgos remediados, matriz rol-permiso documentada</td></tr>
+        <tr><td>Administraci&oacute;n</td><td>odoo.conf, workers, nginx/TLS, PostgreSQL, backups (dump + filestore), Odoo.sh/Docker</td><td>Disponibilidad, RTO/RPO cumplidos, restauraciones probadas</td></tr>
+        <tr><td>Rendimiento</td><td>Profiling, consultas N+1, &iacute;ndices, lotes, tuning de workers y PostgreSQL</td><td>Reducci&oacute;n medible de tiempos de respuesta o de duraci&oacute;n de procesos</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica siempre: n&uacute;mero de usuarios, m&oacute;dulos implantados, integraciones, registros migrados, tiempo de cierre.</li>
+        <li>Nombra con precisi&oacute;n: Odoo Community vs Enterprise, versi&oacute;n (16/17/18), Odoo.sh vs on-premise, ORM, OWL, QWeb, OCA, OpenUpgrade.</li>
+        <li>Muestra criterio: &laquo;primero est&aacute;ndar, despu&eacute;s m&oacute;dulos OCA, al final desarrollo a medida&raquo;, y explica por qu&eacute; (costo de upgrades).</li>
+        <li>Prep&aacute;rate para preguntas t&eacute;cnicas concretas: herencia de vistas con xpath, campos computed almacenados, comandos x2many, record rules, multi-compa&ntilde;&iacute;a, backup con filestore.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento s&oacute;lido del framework y un plan (certificaciones y formaci&oacute;n oficial de Odoo, m&oacute;dulos OCA, proyecto propio).</li>
+        <li>Conecta con el negocio: trazabilidad de punta a punta, menos trabajo manual, cierre financiero m&aacute;s r&aacute;pido y control de inventario.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Documentaci&oacute;n oficial de Odoo (odoo.com/documentation)</td><td>Gu&iacute;as de usuario por app, documentaci&oacute;n de desarrollo (ORM, vistas, informes, seguridad), administraci&oacute;n y tutoriales.</td></tr>
+        <tr><td>C&oacute;digo fuente en GitHub (odoo/odoo, odoo/enterprise)</td><td>Referencia definitiva de modelos, campos, vistas y m&eacute;todos; &uacute;til para herencias y para entender flujos internos.</td></tr>
+        <tr><td>Odoo Community Association (odoo-community.org)</td><td>Miles de m&oacute;dulos gratuitos por dominio, gu&iacute;as de calidad y mantenibilidad, y repositorios de localizaciones.</td></tr>
+        <tr><td>OpenUpgrade (github.com/OCA/OpenUpgrade)</td><td>Scripts y documentaci&oacute;n para migrar bases Community entre versiones.</td></tr>
+        <tr><td>Odoo.sh (odoo.sh)</td><td>Plataforma PaaS: ramas, builds, staging, backups, logs, SSH y despliegue continuo.</td></tr>
+        <tr><td>Odoo Apps Store (apps.odoo.com)</td><td>Cat&aacute;logo de m&oacute;dulos comerciales y gratuitos de terceros con licencias por m&oacute;dulo.</td></tr>
+        <tr><td>Odoo eLearning / Academia (odoo.com/slides, scale-up)</td><td>Cursos oficiales por app y rutas funcionales, y certificaciones de Odoo.</td></tr>
+        <tr><td>Odoo Experience (evento anual)</td><td>Novedades de la versi&oacute;n anual, roadmap y talleres t&eacute;cnicos y funcionales.</td></tr>
+        <tr><td>Foro oficial de Odoo (odoo.com/forum)</td><td>Preguntas funcionales y t&eacute;cnicas respondidas por la comunidad y el equipo de Odoo.</td></tr>
+        <tr><td>Documentaci&oacute;n de OWL (github.com/odoo/owl)</td><td>Framework de componentes del cliente web: hooks, servicios, plantillas y patches.</td></tr>
+        <tr><td>PostgreSQL Docs</td><td>Tuning (<em>shared_buffers</em>, <em>work_mem</em>), <em>pg_stat_statements</em>, vacuum y backups con <em>pg_dump</em>.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
