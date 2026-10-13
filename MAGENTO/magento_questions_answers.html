@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magento / Adobe Commerce - Fundamentos, Arquitectura, EAV, DI y Plugins, Layout, Comercio, Rendimiento, APIs, Seguridad y Administracion | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Magento / Adobe Commerce &mdash; Fundamentos, Arquitectura, EAV, DI y Plugins, Layout, Funcionalidad de Comercio, Rendimiento, APIs, Seguridad y Administraci&oacute;n</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Magento (Adobe Commerce) en configuraci&oacute;n funcional, desarrollo de m&oacute;dulos y storefront, integraciones, seguridad y administraci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos, ediciones y versiones (Q1&ndash;Q8), arquitectura t&eacute;cnica (Q9&ndash;Q16), m&oacute;dulos, Composer y ciclo de despliegue (Q17&ndash;Q25), modelo de datos y EAV (Q26&ndash;Q34), inyecci&oacute;n de dependencias, plugins y eventos (Q35&ndash;Q43), frontend: layout, temas y storefront (Q44&ndash;Q52), funcionalidad de comercio (Q53&ndash;Q61), rendimiento, indexaci&oacute;n y cach&eacute; (Q62&ndash;Q69), integraciones y APIs (Q70&ndash;Q77) y seguridad, multi-store, calidad y administraci&oacute;n (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos, ediciones y versiones &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Arquitectura t&eacute;cnica &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. M&oacute;dulos, Composer y ciclo de despliegue &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Modelo de datos y EAV &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. Inyecci&oacute;n de dependencias, plugins y eventos &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. Frontend: layout, temas y storefront &mdash; 9 preguntas</a></li>
+        <li><a href="#s7">7. Funcionalidad de comercio &mdash; 9 preguntas</a></li>
+        <li><a href="#s8">8. Rendimiento, indexaci&oacute;n y cach&eacute; &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Integraciones y APIs &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. Seguridad, multi-store, calidad y administraci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Magento en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos, ediciones y versiones</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Magento / Adobe Commerce y para qu&eacute; se usa?</p>
+        <p class="a">Magento es una plataforma de comercio electr&oacute;nico open source escrita en PHP sobre MySQL/MariaDB, hoy producto de Adobe: la edici&oacute;n gratuita se llama <strong>Magento Open Source</strong> y la de pago <strong>Adobe Commerce</strong> (con variante gestionada <strong>Adobe Commerce Cloud</strong>). Se usa para tiendas B2C y B2B de tama&ntilde;o medio y grande que necesitan cat&aacute;logos extensos, reglas de precio y promoci&oacute;n complejas, multi-tienda/multi-pa&iacute;s/multi-moneda, checkout personalizable e integraciones profundas con ERP, PIM, OMS y medios de pago. Su fortaleza es la flexibilidad: casi todo es extensible sin modificar el core, gracias a la inyecci&oacute;n de dependencias, plugins, eventos y layout XML. Su costo es la complejidad: requiere equipo t&eacute;cnico y una infraestructura bien dimensionada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Cu&aacute;l es la historia y evoluci&oacute;n de la plataforma?</p>
+        <p class="a">Magento naci&oacute; en Varien y su primera versi&oacute;n estable se public&oacute; en 2008; eBay la adquiri&oacute; en 2011 y en 2015 pas&oacute; a Permira, momento en el que se lanz&oacute; <strong>Magento 2</strong> (2.0, noviembre de 2015): reescritura completa con DI, plugins, composer, nuevos patrones de frontend y stack moderno. <strong>Magento 1 lleg&oacute; a su fin de soporte en junio de 2020</strong>. En 2018 Adobe compr&oacute; la compa&ntilde;a y renombr&oacute; las ediciones: Magento Community &rarr; <em>Magento Open Source</em>, Magento Commerce &rarr; <em>Adobe Commerce</em>, y Magento Commerce Cloud &rarr; <em>Adobe Commerce Cloud</em>. Desde entonces la plataforma se integra con el ecosistema Adobe (Experience Manager, Analytics, Target, Journey Optimizer) y con servicios como Live Search y Product Recommendations.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Qu&eacute; diferencias hay entre Magento Open Source, Adobe Commerce y Adobe Commerce Cloud?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Magento Open Source:</strong> gratuito (licencia OSL 3.0 / AFL para extensiones), con el n&uacute;cleo completo de eCommerce: cat&aacute;logo, checkout, promociones b&aacute;sicas, clientes, CMS, APIs REST/GraphQL, MSI y el framework de desarrollo. La infraestructura, el hosting y los parches corren por cuenta del equipo.</li>
+                <li><strong>Adobe Commerce:</strong> licencia comercial que a&ntilde;ade B2B completo (empresas, cotizaciones, listas de requisici&oacute;n, cat&aacute;logos compartidos, cr&eacute;dito), segmentaci&oacute;n de clientes, Content Staging &amp; Preview, Page Builder, Visual Merchandiser, RMA, gift cards y reward points, atributos de cliente, soporte t&eacute;cnico y acceso a parches y herramientas de calidad.</li>
+                <li><strong>Adobe Commerce Cloud:</strong> Adobe Commerce en una infraestructura gestionada (AWS) con despliegue por Git, <em>ece-tools</em>, entornos integration/staging/production, Fastly como CDN y cach&eacute;, New Relic, Blackfire, snapshots/backups y parches aplicados por la plataforma.</li>
+            </ul>
+            La decisi&oacute;n depende del presupuesto, de la necesidad de B2B/merchandising avanzado y de si el equipo quiere operar la infraestructura.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Qu&eacute; aporta el m&oacute;dulo B2B de Adobe Commerce?</p>
+        <p class="a">El conjunto B2B (m&oacute;dulos <em>Magento_*</em> de la suite B2B) cubre: <strong>Company accounts</strong> con estructura jer&aacute;rquica de usuarios y roles, <strong>Shared Catalogs</strong> (cat&aacute;logo y precios espec&iacute;ficos por empresa), <strong>Quotes</strong> (negociaci&oacute;n de cotizaciones entre comprador y vendedor con historial), <strong>Requisition Lists</strong> (listas de recompra), <strong>Quick Order</strong> por SKU/CSV, <strong>credit limits</strong> y pago a cr&eacute;dito (Purchase Order), aprobaciones internas, y gesti&oacute;n de precios por volumen (tier prices). Tambi&eacute;n se apoya en atributos de cliente, grupos de clientes y reglas de impuestos/env&iacute;o por empresa. En proyectos B2B conviene validar desde el inicio estos flujos porque condicionan el modelo de datos, las integraciones con el ERP (cr&eacute;dito, precios contractuales) y la experiencia de checkout.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;C&oacute;mo es el ciclo de versiones y de parches? &iquest;Qu&eacute; se debe tener en cuenta?</p>
+        <p class="a">Adobe publica la l&iacute;nea <strong>2.4.x</strong> con releases funcionales (t&iacute;picamente dos al a&ntilde;o) y <strong>parches de seguridad y de calidad</strong> entre medias; cada versi&oacute;n 2.4.x recibe soporte por un periodo definido y despu&eacute;s solo parches de calidad/seguridad durante una ventana adicional. Puntos pr&aacute;cticos: verificar la versi&oacute;n soportada vigente y su fecha de fin de soporte antes de iniciar un proyecto; los parches se aplican con el paquete <em>magento/quality-patches</em> (o <em>magento/magento-cloud-components</em> en Cloud) declar&aacute;ndolos en el Composer; y los cambios de requisitos de PHP/OpenSearch por versi&oacute;n obligan a actualizar el stack. Planificar el upgrade anual o bianual es parte del costo total de propiedad: dejar la plataforma sin soporte implica riesgo de seguridad y de compatibilidad con extensiones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Qu&eacute; requisitos de infraestructura tiene Magento 2?</p>
+        <p class="a">
+            <ul>
+                <li><strong>PHP:</strong> versiones soportadas seg&uacute;n release (por ejemplo 8.1/8.2 en 2.4.6 y 8.2/8.3 en 2.4.7 y posteriores), con extensiones obligatorias (bcmath, ctype, curl, dom, gd/imagick, intl, mbstring, openssl, pdo_mysql, soap, xsl, zip, sockets) y l&iacute;mites de <em>memory_limit</em> (2G o m&aacute;s) y <em>max_execution_time</em>.</li>
+                <li><strong>Base de datos:</strong> MySQL 8.0 o MariaDB soportada por la versi&oacute;n.</li>
+                <li><strong>B&uacute;squeda:</strong> Elasticsearch u OpenSearch obligatorio desde 2.4.4 (se elimin&oacute; la b&uacute;squeda MySQL); en Cloud se usa OpenSearch/Elasticsearch gestionado.</li>
+                <li><strong>Cach&eacute;/sesiones:</strong> Redis para cache, page cache y sesiones en producci&oacute;n.</li>
+                <li><strong>Cach&eacute; HTTP:</strong> Varnish (o Fastly en Cloud) para full page cache.</li>
+                <li><strong>Colas:</strong> RabbitMQ (o MySQL como broker) para message queue y APIs as&iacute;ncronas.</li>
+                <li><strong>Web:</strong> Nginx (recomendado) o Apache con PHP-FPM, Composer 2.x, cron configurado y un servidor de est&aacute;ticos/CDN.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;C&oacute;mo se compara con otras plataformas de eCommerce?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Shopify / BigCommerce (SaaS):</strong> mucho menor costo operativo y time-to-market, pero personalizaci&oacute;n acotada al modelo del proveedor y dependencia de apps; menos adecuadas para l&oacute;gicas B2B complejas o cat&aacute;logos enormes.</li>
+                <li><strong>Salesforce Commerce Cloud:</strong> SaaS enterprise fuerte en marketing y personalizaci&oacute;n; costo alto y ecosistema cerrado.</li>
+                <li><strong>SAP Commerce (Hybris):</strong> muy potente para B2B complejo integrado con SAP; proyectos largos y costosos.</li>
+                <li><strong>commercetools / arquitecturas composable:</strong> API-first headless, gran flexibilidad pero hay que construir el frontend y la orquestaci&oacute;n.</li>
+                <li><strong>WooCommerce:</strong> r&aacute;pido y barato para tiendas peque&ntilde;as; se queda corto en escala y gobierno.</li>
+                <li><strong>Magento/Adobe Commerce:</strong> equilibrio entre flexibilidad open source, profundidad funcional (multi-store, B2B, promoci&oacute;n, MSI) y ecosistema de extensiones; exige equipo t&eacute;cnico y cuidado del rendimiento.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;C&oacute;mo es el ecosistema Magento (Marketplace, partners, comunidad)?</p>
+        <p class="a">El ecosistema incluye: <strong>Adobe Commerce Marketplace</strong> (extensiones y temas certificados, con revisi&oacute;n de c&oacute;digo y compatibilidad), <strong>partners de implementaci&oacute;n</strong> (Solution Partners certificados, con niveles), <strong>desarrolladores certificados</strong> (Adobe Certified Professional / Expert - Commerce Developer), <strong>Magento Open Source Project Governance</strong> y la comunidad (foros, Slack, meetups, Magento Stack Exchange, Magento DevBlog), y <strong>Packagist</strong> para paquetes Composer. Buenas pr&aacute;cticas al elegir extensiones: verificar compatibilidad con la versi&oacute;n, reputaci&oacute;n del vendor, soporte y actualizaciones, impacto en rendimiento, calidad del c&oacute;digo (idealmente disponible para revisar) y licencia. Cada extensi&oacute;n es deuda de mantenimiento en cada upgrade, por lo que conviene preferir el est&aacute;ndar cuando cubre el requisito.</p>
+    </div>
+
+    <h2 id="s2">2. Arquitectura t&eacute;cnica</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;C&oacute;mo est&aacute; estructurada la arquitectura de Magento 2 por capas?</p>
+        <p class="a">De abajo hacia arriba: <strong>Persistence layer</strong> (MySQL + modelos, resource models, colecciones y EAV), <strong>Domain layer</strong> (l&oacute;gica de negocio en los modelos y en las clases de dominio, sin dependencia de la presentaci&oacute;n), <strong>Service layer</strong> (Service Contracts: interfaces <em>Api</em> + <em>Api/Data</em>, expuestas como Web API REST/SOAP/GraphQL y usadas internamente), <strong>Presentation layer</strong> (bloques, ViewModels, templates, layout XML, UI Components del admin) y, transversal, la <strong>capa de infraestructura</strong> (DI container, plugins, eventos, cache, indexers, colas). El principio rector es la extensibilidad: en lugar de modificar el core se interviene con preferencias, plugins, eventos, layout y temas, y todo se resuelve en tiempo de compilaci&oacute;n (<em>setup:di:compile</em>) generando interceptors y la configuraci&oacute;n de DI.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;Cu&aacute;l es la estructura de directorios del proyecto?</p>
+        <p class="a">
+            <ul>
+                <li><em>app/code/</em>: m&oacute;dulos propios o de terceros no distribuidos por Composer.</li>
+                <li><em>app/design/</em>: temas de frontend (<em>frontend/Vendor/tema</em>) y de admin (<em>adminhtml/Vendor/tema</em>).</li>
+                <li><em>app/etc/</em>: <em>env.php</em> (conexiones, cach&eacute;, sesiones, crypt key &mdash; fuera de versionado), <em>config.php</em> (estado de m&oacute;dulos), <em>di.xml</em> global.</li>
+                <li><em>vendor/magento/</em>: core y librer&iacute;as Composer (incluye <em>magento2-base</em>, frameworks y m&oacute;dulos).</li>
+                <li><em>pub/</em>: docroot con <em>index.php</em>, <em>static/</em> (assets generados), <em>media/</em> (im&aacute;genes y archivos subidos), <em>errors/</em>.</li>
+                <li><em>var/</em>: cache, sessions, log, report, generated code (en developer mode), <em>var/di</em>.</li>
+                <li><em>generated/code/</em>: factories, proxies e interceptors generados.</li>
+                <li><em>dev/</em>: tests (unitarios, integraci&oacute;n, MFTF, est&aacute;ticos) y herramientas.</li>
+                <li><em>setup/</em>, <em>bin/magento</em>, <em>composer.json</em>, <em>.magento*</em> (Cloud).</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Qu&eacute; modos de despliegue existen y en qu&eacute; se diferencian?</p>
+        <p class="a">
+            <ul>
+                <li><strong>default:</strong> sin configurar; mezcla comportamientos, muestra errores en pantalla y genera est&aacute;ticos al vuelo. No debe usarse.</li>
+                <li><strong>developer:</strong> est&aacute;ticos generados bajo demanda (symlinks a <em>pub/static</em>), excepciones detalladas, profiling y template hints disponibles, compilaci&oacute;n de DI opcional. Es el modo de trabajo diario; es lento en producci&oacute;n.</li>
+                <li><strong>production:</strong> est&aacute;ticos pre-desplegados con <em>setup:static-content:deploy</em>, DI compilado (<em>setup:di:compile</em>), errores registrados en <em>var/report</em> sin detalle al usuario y mejor rendimiento. Es el modo obligatorio en producci&oacute;n.</li>
+            </ul>
+            Se cambia con <em>bin/magento deploy:mode:set production</em> (o <em>developer</em>). Adem&aacute;s, <em>MAGE_MODE</em> puede fijarse por entorno. Un error cl&aacute;sico es desplegar en production sin recompilar DI y sin regenerar est&aacute;ticos, lo que produce pantallas rotas o 500.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Qu&eacute; es el Object Manager y por qu&eacute; se considera un anti-patr&oacute;n usarlo directamente?</p>
+        <p class="a">El <strong>Object Manager</strong> es el contenedor de DI de Magento: lee la configuraci&oacute;n de <em>di.xml</em> (global, por &aacute;rea y por m&oacute;dulo), resuelve constructores, aplica preferencias, argumentos, plugins y tipos virtuales, y crea proxies/factories. Usarlo directamente (<em>$this-&gt;_objectManager-&gt;get(...)</em>) es un anti-patr&oacute;n porque: oculta las dependencias reales de la clase (rompe el principio de dependencias expl&iacute;citas), impide probar con dobles/mock, hace imposible detectar errores en <em>setup:di:compile</em> y dificulta que plugins/preferencias se apliquen correctamente. La forma correcta es <strong>inyecci&oacute;n por constructor</strong> (con <em>Factory</em> para objetos din&aacute;micos) y, cuando la dependencia es opcional o circular, usar interfaces y <em>virtualType</em>. Solo hay contextos muy concretos donde el framework lo requiere (por ejemplo, algunas clases legacy del core).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Qu&eacute; son los Service Contracts y por qu&eacute; importan?</p>
+        <p class="a">Un <strong>Service Contract</strong> es un contrato p&uacute;blico y estable formado por interfaces <em>Vendor\Module\Api\*</em> (operaciones: <em>save, get, getList, delete</em>) e interfaces de datos <em>Vendor\Module\Api\Data\*Interface</em> (getters/setters), implementadas por los <em>Repository</em>. Ventajas: desacoplan a los consumidores de la implementaci&oacute;n interna (el core puede cambiar tablas o l&oacute;gica sin romper integraciones), se exponen autom&aacute;ticamente como Web API declarando la ruta en <em>webapi.xml</em>, permiten cachear y versionar el contrato, y facilitan pruebas. En desarrollo custom conviene definir service contracts para todo lo que consuma otra capa (frontend, integraciones, m&oacute;dulos de terceros) y usar <em>SearchCriteria</em> en los m&eacute;todos <em>getList</em>, que es el est&aacute;ndar de consulta en Magento 2.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo funciona el flujo de una petici&oacute;n HTTP?</p>
+        <p class="a"><em>pub/index.php</em> arranca la aplicaci&oacute;n (bootstrap, &aacute;rea, modo), el <strong>front controller</strong> recibe la petici&oacute;n y la pasa por la cadena de <strong>routers</strong>: el router est&aacute;ndar resuelve <em>routeId/controller/action</em> contra <em>routes.xml</em> y las clases <em>Controller\...\Index</em>; existen routers adicionales (URL rewrite, dise&ntilde;o, admin). El <strong>controller</strong> ejecuta la l&oacute;gica m&iacute;nima y devuelve un objeto <strong>Result</strong> (<em>ResultInterface</em>: <em>page</em> con layout, <em>json</em>, <em>redirect</em>, <em>forward</em>, <em>raw</em>). Si es una p&aacute;gina, el <strong>layout</strong> se construye a partir de los <em>handles</em> (por ejemplo <em>default</em>, <em>catalog_product_view</em>, <em>checkout_index_index</em>), se crean los bloques/ViewModels, se renderizan los templates PHTML y se aplican los wrappers. Antes de responder act&uacute;an los plugins, y el resultado puede guardarse en full page cache. Las peticiones de admin usan el &aacute;rea <em>adminhtml</em> con su propia configuraci&oacute;n y validaci&oacute;n de CSRF/ACL.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;C&oacute;mo funciona la configuraci&oacute;n por scopes y c&oacute;mo se resuelve?</p>
+        <p class="a">Magento tiene una jerarqu&iacute;a de <strong>scopes</strong>: <em>global</em> (default) &rarr; <em>website</em> &rarr; <em>store</em> &rarr; <em>store view</em>. Cada par&aacute;metro de configuraci&oacute;n se declara en <em>etc/config.xml</em> (valores por defecto) y <em>etc/adminhtml/system.xml</em> (campos del admin con su <em>scope</em> permitido), y se guarda en <em>core_config_data</em> con <em>scope</em> y <em>scope_id</em>. Se lee con <em>ScopeConfigInterface::getValue('seccion/grupo/campo', ScopeInterface::SCOPE_STORE, $storeId)</em>, que hace fallback hacia arriba si no hay valor en el scope pedido. Implicaciones pr&aacute;cticas: precios, impuestos, m&eacute;todos de env&iacute;o/pago y contenido suelen configurarse a nivel website o store view; atributos de producto pueden ser globales o por store view (por ejemplo, nombre y descripci&oacute;n traducidos); y los &iacute;ndices y cach&eacute;s deben considerar el scope para no servir contenido equivocado entre tiendas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;C&oacute;mo se gestiona la configuraci&oacute;n entre entornos (config.php, env.php, app:config:import)?</p>
+        <p class="a">Tres piezas distintas: <strong>env.php</strong> guarda credenciales, cach&eacute;/sesiones, crypt key y opciones de entorno &mdash; nunca se versiona y se inyecta por entorno (variables de entorno en Cloud). <strong>config.php</strong> lista los m&oacute;dulos y su estado (activado/desactivado) y, cuando se exporta con <em>bin/magento app:config:export</em>, incluye la configuraci&oacute;n compartida de tiendas/scopes y themes; s&iacute; se versiona para que los despliegues sean reproducibles. <strong>core_config_data</strong> guarda los valores del admin: los que se marcan como &laquo;compartidos&raquo; se exportan a <em>config.php</em> y el resto se gestiona por entorno (o con <em>config:set</em> / scripts). En el despliegue se ejecuta <em>app:config:import</em> (autom&aacute;tico en el pipeline) para aplicar el estado exportado, evitando sobreescribir valores espec&iacute;ficos de producci&oacute;n. Esta separaci&oacute;n es clave para pasar de dev a staging a producci&oacute;n sin romper la configuraci&oacute;n.</p>
+    </div>
+
+    <h2 id="s3">3. M&oacute;dulos, Composer y ciclo de despliegue</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;Cu&aacute;l es la estructura de un m&oacute;dulo Magento 2?</p>
+        <p class="a">Un m&oacute;dulo se identifica como <em>Vendor_Module</em> y vive en <em>app/code/Vendor/Module</em> o en <em>vendor/</em> si se distribuye por Composer. Estructura t&iacute;pica: <em>registration.php</em>, <em>composer.json</em>, <em>etc/</em> (<em>module.xml</em>, <em>di.xml</em>, <em>config.xml</em>, <em>events.xml</em>, <em>crontab.xml</em>, <em>indexer.xml</em>, <em>db_schema.xml</em>, <em>webapi.xml</em>, <em>acl.xml</em>, <em>adminhtml/system.xml</em>, <em>frontend/routes.xml</em>, <em>adminhtml/routes.xml</em>, <em>view/</em>), <em>Api/</em> y <em>Api/Data/</em> (contratos), <em>Model/</em> (dominio, repositorios, resource models), <em>Controller/</em> (acciones frontend/admin), <em>Block/</em> y <em>ViewModel/</em>, <em>Observer/</em>, <em>Plugin/</em>, <em>Setup/Patch/</em>, <em>Console/</em>, <em>view/frontend</em> y <em>view/adminhtml</em> (templates, layout, web/js, web/css, i18n), <em>Test/</em> y <em>i18n/</em>. La separaci&oacute;n por &aacute;reas (frontend/adminhtml/webapi) permite cargar configuraci&oacute;n distinta seg&uacute;n el contexto de la petici&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; declaran <em>registration.php</em>, <em>module.xml</em> y <em>composer.json</em>?</p>
+        <p class="a">
+            <ul>
+                <li><strong>registration.php:</strong> registra el m&oacute;dulo en el componente (<em>ComponentRegistrar::register(MODULE, 'Vendor_Module', __DIR__)</em>) para que Magento lo descubra.</li>
+                <li><strong>etc/module.xml:</strong> declara el nombre y la versi&oacute;n del m&oacute;dulo (<em>setup_version</em> en versiones antiguas) y las <strong>secuencias</strong> (<em>&lt;sequence&gt;</em>) con los m&oacute;dulos que deben cargarse antes; es la base del orden de carga.</li>
+                <li><strong>composer.json:</strong> metadatos del paquete, tipo (<em>magento2-module</em>), autoload PSR-4, dependencias PHP y de otros paquetes, y versi&oacute;n compatible de Magento (<em>magento/product-*</em>).</li>
+                <li><strong>etc/config.xml:</strong> valores por defecto de configuraci&oacute;n; <strong>etc/acl.xml:</strong> recursos de permisos del admin.</li>
+            </ul>
+            Un <em>sequence</em> mal declarado produce errores de instalaci&oacute;n o de DI; es uno de los primeros puntos a revisar cuando un m&oacute;dulo falla al activarse.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;C&oacute;mo se gestiona el orden de carga y las dependencias entre m&oacute;dulos?</p>
+        <p class="a">Magento construye un grafo con: <strong>dependencias Composer</strong> (paquetes requeridos), <strong>secuencias</strong> declaradas en <em>module.xml</em> y el orden de carga de configuraci&oacute;n. Cada &aacute;rea (global, frontend, adminhtml, webapi, crontab) tiene su propio <em>di.xml</em> y sus <em>events.xml</em>, y la configuraci&oacute;n se <strong>fusiona</strong> entre m&oacute;dulos: por eso un plugin o una preferencia declarada en tu m&oacute;dulo afecta a todas las clases del &aacute;rea correspondiente. El orden de los plugins se controla con <em>sortOrder</em>, no con el orden de carga. Buenas pr&aacute;cticas: declarar el m&iacute;nimo de dependencias (si solo necesitas una interfaz, no dependas del m&oacute;dulo completo), usar <em>sequence</em> solo cuando sea imprescindible y comprobar el resultado con <em>bin/magento module:status</em> y <em>setup:di:compile</em>, que detecta ciclos y clases inexistentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;C&oacute;mo se instala, habilita, deshabilita y actualiza un m&oacute;dulo?</p>
+        <p class="a">Flujo est&aacute;ndar: instalar el paquete con Composer (<em>composer require vendor/module</em>) o colocar el c&oacute;digo en <em>app/code</em>; luego <em>bin/magento module:status Vendor_Module</em> para verlo, <em>module:enable</em> (modifica <em>app/etc/config.php</em>), y ejecutar el despliegue de esquema/datos: en 2.4.x se usa <em>bin/magento setup:upgrade</em> (que aplica <em>db_schema.xml</em> y los parches de datos) o, en pipelines modernos, <em>setup:db-declaration:generate-whitelist</em> + declarative schema; despu&eacute;s <em>setup:di:compile</em> (production), <em>setup:static-content:deploy</em>, <em>cache:clean</em> y reindexar si hace falta. Para desactivar: <em>module:disable</em> + <em>setup:upgrade</em> + recompilar; la desinstalaci&oacute;n real (<em>module:uninstall</em>) solo funciona con m&oacute;dulos que traen esquema de desinstalaci&oacute;n y requiere cuidado porque puede borrar tablas y datos. En producci&oacute;n todo esto se automatiza en el pipeline, no a mano.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; comandos CLI son esenciales?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Instalaci&oacute;n/config:</strong> <em>setup:install</em>, <em>deploy:mode:set</em>, <em>config:set</em>, <em>config:show</em>, <em>app:config:import</em>, <em>app:config:export</em>, <em>info:adminuri</em>, <em>admin:user:create</em>.</li>
+                <li><strong>M&oacute;dulos:</strong> <em>module:status</em>, <em>module:enable/disable</em>, <em>setup:upgrade</em>, <em>setup:uninstall</em>.</li>
+                <li><strong>Build:</strong> <em>setup:di:compile</em>, <em>setup:static-content:deploy</em>, <em>dev:source-theme:deploy</em>, <em>dev:tests:run</em>.</li>
+                <li><strong>Runtime:</strong> <em>cache:clean</em>, <em>cache:flush</em>, <em>cache:status</em>, <em>cache:enable/disable</em>, <em>indexer:info</em>, <em>indexer:show-mode</em>, <em>indexer:set-mode</em>, <em>indexer:reindex</em>, <em>indexer:reset</em>, <em>cron:run</em>, <em>cron:install</em>.</li>
+                <li><strong>Diagn&oacute;stico:</strong> <em>setup:db:status</em>, <em>setup:db-declaration:generate-whitelist</em>, <em>i18n:collect-phrases</em>, <em>dev:query-log:enable</em>, <em>sampledata:deploy</em>.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;Qu&eacute; es el <em>declarative schema</em> y c&oacute;mo se aplican los parches de datos?</p>
+        <p class="a">Desde 2.3 el esquema de base de datos se declara en <strong>db_schema.xml</strong> (tablas, columnas, &iacute;ndices, constraints, claves for&aacute;neas), y Magento calcula la diferencia con el esquema real y lo aplica de forma idemp&oacute;ntica, reemplazando los antiguos <em>InstallSchema/UpgradeSchema</em>. Para cambios de datos se usan <strong>Data Patches</strong> (<em>Setup/Patch/Data/ClasePatch.php</em> implementando <em>DataPatchInterface</em> con <em>apply()</em> y <em>getAliases()</em>), registrados en <em>patch_list</em> para no ejecutarse dos veces. Adem&aacute;s existe el <strong>whitelist</strong> (<em>db_schema_whitelist.json</em>) que controla qu&eacute; elementos puede eliminar el schema declarativo (protege tablas/columnas creadas por otros m&oacute;dulos o por upgrades). Buenas pr&aacute;cticas: parches at&oacute;micos y reversibles, sin l&oacute;gica de negocio pesada, y probados en staging con datos reales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;C&oacute;mo se maneja Composer y c&oacute;mo se aplican los parches de calidad?</p>
+        <p class="a">El proyecto se instala desde el metapaquete Composer (<em>magento/product-community-edition</em> o <em>magento/product-enterprise-edition</em>) con las claves de acceso del repositorio de Adobe (<em>repo.magento.com</em>). La estructura recomendada es <strong>Magento Cloud / composer-based</strong>: el c&oacute;digo del core en <em>vendor/</em>, los m&oacute;dulos propios como paquetes Composer en repositorios privados (mejor que <em>app/code</em> para proyectos grandes) y un <em>composer.lock</em> versionado para garantizar reproducibilidad. Los parches se aplican con <em>magento/quality-patches</em> (plugin de Composer) list&aacute;ndolos en <em>composer.json</em> bajo <em>extra &rarr; magento-quality-patches</em>, o con parches propios v&iacute;a <em>cweagans/composer-patches</em>. Conviene documentar cada parche aplicado (motivo, ticket, versi&oacute;n en la que queda incorporado) para poder retirarlo tras el upgrade.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;C&oacute;mo se despliega en producci&oacute;n con el menor riesgo?</p>
+        <p class="a">Pipeline t&iacute;pico: <strong>(1)</strong> build de artefactos con <em>composer install --no-dev</em>; <strong>(2)</strong> <em>setup:di:compile</em> (genera interceptors y config compilada); <strong>(3)</strong> <em>setup:static-content:deploy</em> por locales y temas (<em>-f</em>, con <em>--jobs</em> para paralelizar); <strong>(4)</strong> <em>setup:upgrade</em> / aplicaci&oacute;n de esquema y parches de datos; <strong>(5)</strong> <em>app:config:import</em>; <strong>(6)</strong> <em>cache:flush</em> y reindexado (idealmente con indexers en modo schedule y reindexado en un proceso aparte); <strong>(7)</strong> verificaci&oacute;n de humo (checkout de prueba, b&uacute;squeda, admin). Cero downtime: en infraestructura propia se despliega en un directorio nuevo y se cambia el symlink de la docroot; en Cloud se hace blue/green por entorno. Imprescindible: backup/snapshot previo, plan de rollback (c&oacute;digo + base de datos), ventana comunicada y evitar reindexados pesados en horas pico.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;C&oacute;mo se organiza el repositorio y el CI/CD en un proyecto Magento?</p>
+        <p class="a">Opciones habituales: <strong>(a)</strong> repositorio &uacute;nico del proyecto con <em>composer.json</em> + m&oacute;dulos propios en <em>app/code</em> (simple, r&aacute;pido para equipos peque&ntilde;os); <strong>(b)</strong> m&oacute;dulos propios como <strong>paquetes Composer privados</strong> versionados por separado (mejor aislamiento, reutilizaci&oacute;n entre proyectos y control de versiones, requiere registry privado y disciplina de release); <strong>(c)</strong> en Adobe Commerce Cloud, repositorio Git conectado a la plataforma con ramas por entorno y despliegue autom&aacute;tico con <em>ece-tools</em>. El pipeline debe ejecutar: instalaci&oacute;n de dependencias, tests est&aacute;ticos (PHP_CodeSniffer con <em>magento/magento-coding-standard</em>, PHPMD, PHP compatibility), unitarios y de integraci&oacute;n, MFTF para flujos cr&iacute;ticos, build de est&aacute;ticos y despliegue a staging con smoke tests. Ramas: feature &rarr; develop &rarr; release/staging &rarr; main/production, con revisi&oacute;n por pares y <em>composer.lock</em> siempre versionado.</p>
+    </div>
+
+    <h2 id="s4">4. Modelo de datos y EAV</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; es EAV y c&oacute;mo se estructura en Magento?</p>
+        <p class="a"><strong>EAV (Entity-Attribute-Value)</strong> es el modelo que permite a&ntilde;adir atributos desde el admin sin alterar el esquema. Por cada entidad EAV hay una tabla base (<em>catalog_product_entity</em>, <em>customer_entity</em>, <em>sales_order</em> no es EAV) y tablas de valores por tipo de dato: <em>*_entity_varchar</em>, <em>*_entity_int</em>, <em>*_entity_decimal</em>, <em>*_entity_text</em>, <em>*_entity_datetime</em>. La definici&oacute;n vive en <em>eav_entity_type</em>, <em>eav_attribute</em> (c&oacute;digo, backend_type, source_model, frontend_input, is_required, scope), <em>eav_attribute_set</em>, <em>eav_attribute_group</em> y <em>eav_attribute_option</em>/<em>_value</em> para las opciones. Cada fila de valor lleva <em>entity_id</em>, <em>attribute_id</em> y <em>store_id</em>, lo que da soporte nativo a valores por store view. Entender este modelo explica tanto la flexibilidad de Magento como su costo en consultas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;Qu&eacute; tipos de atributos, <em>backend types</em> y <em>attribute sets</em> existen?</p>
+        <p class="a">Los <strong>backend types</strong> (donde se guarda el valor) son <em>varchar, int, decimal, text, datetime, static</em>; <em>static</em> guarda el valor en la tabla base de la entidad (mejor rendimiento, usado por ejemplo en SKU). Los <strong>frontend inputs</strong> (c&oacute;mo se captura) incluyen <em>text, textarea, date, boolean, multiselect, select, price, media_image, gallery, swatch_visual, swatch_text</em>, y tipos espec&iacute;ficos como <em>tier price</em> o <em>weee</em>. Los <strong>attribute sets</strong> agrupan atributos en grupos y se asignan por producto: definen qu&eacute; atributos existen para cada tipo de producto (los atributos de sistema como <em>sku</em>, <em>price</em>, <em>status</em>, <em>visibility</em> son obligatorios). El <strong>scope</strong> del atributo puede ser <em>global</em>, <em>website</em> o <em>store view</em>. Un atributo custom se crea en el admin o por <em>db_schema</em>/<em>data patch</em> con <em>AttributeManagement</em>, y para usarlo en listados/b&uacute;squeda hay que marcarlo como <em>used_in_product_listing</em> y <em>searchable/filterable</em>, lo que implica reindexado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;Por qu&eacute; EAV es flexible pero lento, y c&oacute;mo se mitiga?</p>
+        <p class="a">Leer un producto con 100 atributos exige unir decenas de filas en varias tablas (una por backend type y por store view, con fallback), lo que genera consultas grandes y poco cacheables. Mitigaciones: <strong>(1)</strong> indexadores que materializan datos planos para listados y precios (<em>catalog_product_index_eav</em>, <em>catalog_product_index_price</em>); <strong>(2)</strong> <strong>Elasticsearch/OpenSearch</strong>, que desde 2.4 asume las consultas de cat&aacute;logo y b&uacute;squeda (los atributos se indexan como campos del documento, evitando joins en runtime); <strong>(3)</strong> cach&eacute; de colecciones y de EAV (<em>eav</em>, <em>collections</em>, <em>full_page</em>); <strong>(4)</strong> cargar solo los atributos necesarios (<em>addAttributeToSelect</em> con campos espec&iacute;ficos, no <em>'*'</em>); <strong>(5)</strong> usar <em>static</em> para atributos muy consultados y <strong>(6)</strong> tablas planas propias para integraciones/reportes. La regla: EAV para flexibilidad de administraci&oacute;n; &iacute;ndices y buscador para rendimiento de lectura.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;Qu&eacute; pas&oacute; con el <em>flat catalog</em> y qu&eacute; alternativas hay?</p>
+        <p class="a">Magento 1 y las primeras versiones de Magento 2 ten&iacute;an la opci&oacute;n de <strong>cat&aacute;logo plano</strong> (tablas <em>catalog_product_flat</em>) para acelerar listados. Fue <strong>deprecado y eliminado</strong> en la l&iacute;nea 2.3/2.4 porque era incompatible con las nuevas arquitecturas de b&uacute;squeda, generaba tablas enormes con muchos atributos y complicaba el reindexado. Desde 2.4 la b&uacute;squeda y los listados se resuelven con <strong>Elasticsearch/OpenSearch</strong>, y los precios/atributos filtrables con indexadores propios. Si un proyecto necesita lecturas masivas planas (feeds, integraciones, BI), la pr&aacute;ctica correcta es generar tablas o vistas propias alimentadas por indexadores/observadores o extraer los datos con la API/GraphQL, sin reactivar mecanismos obsoletos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;C&oacute;mo se trabaja con modelos, <em>resource models</em> y colecciones?</p>
+        <p class="a">Patr&oacute;n cl&aacute;sico: <strong>Model</strong> (<em>extends \Magento\Framework\Model\AbstractModel</em>, con <em>_init(ResourceModel)</em>), <strong>ResourceModel</strong> (<em>extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb</em>, define <em>_init('tabla','pk')</em> y consultas SQL) y <strong>Collection</strong> (<em>extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection</em>). Para entidades EAV se usan las variantes <em>AbstractEntity</em>/<em>Entity\AbstractCollection</em> con <em>addAttributeToSelect/Filter/Sort</em>. Desde Magento 2 se recomienda exponer <strong>Repositorios</strong> con <em>SearchCriteria</em> en lugar de usar colecciones directamente fuera del modelo, porque las colecciones acoplan la l&oacute;gica a SQL y no funcionan tras los service contracts ni en APIs. Para consultas complejas (reportes, feeds) sigue siendo leg&iacute;timo usar <em>ResourceConnection</em> con <em>Select</em> del framework (nunca concatenar SQL sin escapar) o vistas de base de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; tipos de producto existen y c&oacute;mo se modelan?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Simple:</strong> SKU con stock propio; la base de todo.</li>
+                <li><strong>Configurable:</strong> producto &laquo;padre&raquo; con variantes por atributos (talla, color) asociadas a simples; tabla <em>catalog_product_super_link</em> y matriz de precios por variante; los swatches muestran las opciones.</li>
+                <li><strong>Grouped:</strong> agrupaci&oacute;n de varios simples que se compran juntos con cantidades individuales.</li>
+                <li><strong>Bundle:</strong> paquete con opciones y selecciones (precio fijo o din&aacute;mico seg&uacute;n componentes).</li>
+                <li><strong>Virtual:</strong> sin env&iacute;o (servicios, garant&iacute;as).</li>
+                <li><strong>Downloadable:</strong> archivos descargables con enlaces, l&iacute;mites y caducidad.</li>
+                <li><strong>Gift card / custom types:</strong> en Adobe Commerce y extensiones.</li>
+            </ul>
+            Cada tipo tiene su <em>type_id</em>, clases <em>Product\Type\*</em> con l&oacute;gica de precio/peso/preparaci&oacute;n para el carrito, y tablas espec&iacute;ficas. Elegir el tipo correcto impacta en inventario, precios, env&iacute;o e integraciones con el ERP.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;C&oacute;mo funcionan las categor&iacute;as, la navegaci&oacute;n por capas y el posicionamiento?</p>
+        <p class="a">Las categor&iacute;as (<em>catalog_category_entity</em>, EAV) forman un &aacute;rbol con <em>path</em>, <em>level</em>, <em>position</em> y <em>include_in_menu</em>; cada categor&iacute;a tiene <em>display_mode</em> (productos, bloque CMS o ambos), reglas de visualizaci&oacute;n y anchors. La relaci&oacute;n producto-categor&iacute;a est&aacute; en <em>catalog_category_product</em> y su &iacute;ndice en <em>catalog_category_product_index</em>. La <strong>navegaci&oacute;n por capas</strong> (layered navigation) usa los atributos marcados como <em>filterable</em> con sus &iacute;ndices EAV (<em>catalog_product_index_eav</em>) y el motor de b&uacute;squeda para calcular los conteos por faceta; en Adobe Commerce, <strong>Live Search</strong> mejora relevancia y facetas con servicios de Adobe. El orden dentro de la categor&iacute;a se controla con <em>position</em>, reglas de producto (Visual Merchandiser en Commerce) y la configuraci&oacute;n de orden por precio/nombre/novedad. Cambios en categor&iacute;as requieren reindexar para reflejarse en frontend.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;C&oacute;mo se modelan clientes, direcciones y sus atributos?</p>
+        <p class="a">El cliente es una entidad EAV (<em>customer_entity</em> + tablas de valores) con direcciones en <em>customer_address_entity</em> (tambi&eacute;n EAV). Se organizan por <strong>grupos de clientes</strong> (que afectan precios, impuestos y reglas de carrito) y por <strong>website</strong> (un cliente pertenece a un website, clave en multi-tienda). Los atributos custom se crean en el admin o por patch y pueden marcarse como visibles en registro, cuenta, checkout o admin, con validaci&oacute;n (<em>input_validation</em>) y reglas por store view. Adobe Commerce a&ntilde;ade <strong>Customer Attributes</strong> (atributos gestionables por el merchandiser), <strong>segmentaci&oacute;n</strong> (segmentos din&aacute;micos por comportamiento/datos usados para promociones y contenido) y <strong>RMA</strong>. Consideraciones: contrase&ntilde;as hasheadas con el mecanismo nativo (Argon2ID en versiones recientes), cumplimiento de GDPR (exportaci&oacute;n/borrado y <em>anonimizado</em>), y cuidado con la cache de p&aacute;ginas con contenido de cliente (agujeros de FPC).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;Qu&eacute; son los <em>extension attributes</em> y cu&aacute;ndo usarlos?</p>
+        <p class="a">Los <strong>extension attributes</strong> permiten a&ntilde;adir campos a los contratos de datos del core (<em>Api\Data\*Interface</em>) sin modificarlos: se declaran en <em>etc/extension_attributes.xml</em> indicando la interfaz base, el c&oacute;digo y el tipo (<em>type="string"</em>, <em>type="Magento\Catalog\Api\Data\ProductInterface[]"</em>, etc.), y se acceden con <em>getExtensionAttributes()/setExtensionAttributes()</em>. Se usan t&iacute;picamente para exponer datos adicionales en las Web API (por ejemplo, informaci&oacute;n de inventario MSI en el quote, o campos custom en el order) y en plugins sobre <em>afterGetList/afterGet</em> para poblarlos. A diferencia de los atributos EAV (visibles para el usuario en el admin y configurables), los extension attributes son estructurales y viven en el contrato t&eacute;cnico: se usan para datos que no deben gestionarse por el administrador de la tienda, y para mantener la compatibilidad de las APIs.</p>
+    </div>
+
+    <h2 id="s5">5. Inyecci&oacute;n de dependencias, plugins y eventos</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;C&oacute;mo funciona la inyecci&oacute;n de dependencias y <em>di.xml</em>?</p>
+        <p class="a">El contenedor resuelve las dependencias del constructor leyendo la configuraci&oacute;n acumulada de <em>di.xml</em> (global en <em>app/etc</em>, por m&oacute;dulo en <em>etc/</em>, y por &aacute;rea en <em>etc/frontend</em> o <em>etc/adminhtml</em>). Etiquetas principales: <strong>&lt;preference&gt;</strong> (asocia una interfaz a una implementaci&oacute;n), <strong>&lt;type&gt; + &lt;arguments&gt;</strong> (injecta valores o cambia argumentos de un constructor), <strong>&lt;virtualType&gt;</strong> (crea un &laquo;alias&raquo; de una clase con argumentos distintos sin duplicar c&oacute;digo, muy usado en bloques, colecciones y fuentes de datos del admin), <strong>&lt;plugin&gt;</strong> (interceptores), <strong>&lt;arguments&gt; con xsi:type</strong> (<em>object, string, boolean, number, array, const, null, init_parameter</em>). En <em>setup:di:compile</em> se genera el c&oacute;digo compilado (<em>generated/code</em>) con factories, proxies e interceptors, y se validan errores de resoluci&oacute;n. Preferencias y plugins deben usarse con criterio: cada uno a&ntilde;ade complejidad al grafo y al debugging.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; son las <em>factories</em>, los <em>proxies</em> y los <em>virtual types</em>?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Factory:</strong> clase generada autom&aacute;ticamente (<em>Vendor\Module\Model\FooFactory</em>) para crear instancias de objetos no-singleton con <em>create(['data' =&gt; ...])</em>. Se usa cuando el ciclo de vida es din&aacute;mico (modelos de entidad, objetos por registro); inyectar la f&aacute;brica, no el Object Manager.</li>
+                <li><strong>Proxy:</strong> clase generada que retrasa la instanciaci&oacute;n de una dependencia costosa hasta que se llama a un m&eacute;todo (<em>lazy loading</em>); evita instanciar servicios pesados en cada petici&oacute;n.</li>
+                <li><strong>Virtual type:</strong> declaraci&oacute;n en <em>di.xml</em> que define una &laquo;clase&raquo; con argumentos espec&iacute;ficos sin crear archivo PHP; se usa para reutilizar una clase base con configuraciones distintas (por ejemplo, un <em>GridDataProvider</em> con otra colecci&oacute;n, o un logger con otro nombre de archivo).</li>
+            </ul>
+            Conocer estos tres mecanismos evita escribir clases duplicadas &laquo;solo para cambiar un argumento&raquo;, una de las causas m&aacute;s comunes de c&oacute;digo inflado en proyectos Magento.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Qu&eacute; es una <em>preference</em> y cu&aacute;ndo usarla frente a un plugin?</p>
+        <p class="a">Una <strong>preference</strong> reemplaza globalmente una interfaz o clase por tu implementaci&oacute;n: <em>&lt;preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Vendor\Module\Model\ProductRepository"/&gt;</em>. Tu clase suele extender la original y llamar a <em>parent::</em>. Ventajas: control total del comportamiento. Riesgos: solo puede haber una resoluci&oacute;n efectiva por interfaz en cada &aacute;rea, y si dos m&oacute;dulos declaran preferencias distintas se rompe la composici&oacute;n (el &uacute;ltimo gana), lo que genera conflictos dif&iacute;ciles de depurar y problemas en upgrades. Un <strong>plugin</strong> en cambio intercepta un m&eacute;todo concreto y convive con otros plugins (encadenados por <em>sortOrder</em>). Regla pr&aacute;ctica: <strong>plugin</strong> para modificar o ampliar el comportamiento de un m&eacute;todo existente; <strong>preferencia</strong> solo cuando necesitas sustituir toda la implementaci&oacute;n (y documentarlo), nunca para a&ntilde;adir un campo o un paso adicional.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;C&oacute;mo funcionan los plugins y cu&aacute;les son sus limitaciones?</p>
+        <p class="a">Un plugin intercepta llamadas a m&eacute;todos p&uacute;blicos de clases instanciadas por el contenedor DI, con tres tipos: <strong>before</strong> (modifica argumentos antes de la llamada, devuelve array de args), <strong>after</strong> (modifica el resultado o ejecuta efectos tras la llamada, recibe <em>$result</em>) y <strong>around</strong> (envuelve la llamada y decide si/ejecutar <em>$proceed</em>; el m&aacute;s potente y el m&aacute;s costoso). Se declaran en <em>di.xml</em> con <em>&lt;plugin name="..." type="Clase" sortOrder="10" disabled="false"/&gt;</em> y se implementan como <em>beforeMetodo/afterMetodo/aroundMetodo</em>. Limitaciones: <strong>no</strong> interceptan m&eacute;todos no p&uacute;blicos, <strong>final</strong>, est&aacute;ticos, m&eacute;todos m&aacute;gicos (<em>__call, __get</em>), el constructor, ni objetos creados con <em>new</em> o por el Object Manager fuera del flujo de DI. Tambi&eacute;n hay que evitar efectos laterales en <em>after</em> sobre objetos que no se devuelven, y no usar <em>around</em> cuando basta con <em>before/after</em> (rompe la cadena si no se llama a <em>$proceed</em>).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;C&oacute;mo se ordenan los plugins y c&oacute;mo se depuran los conflictos?</p>
+        <p class="a">El orden lo fija <em>sortOrder</em> dentro de <em>di.xml</em> (menor = m&aacute;s externo en <em>around</em>, y el orden de ejecuci&oacute;n en before/after); los plugins de distintos m&oacute;dulos sobre el mismo m&eacute;todo se encadenan formando una &laquo;cebolla&raquo;. Para depurar: <strong>(1)</strong> revisar la configuraci&oacute;n compilada en <em>generated/code/.../Interceptor.php</em> y en <em>var/di</em>/<em>app/etc</em> (o ejecutar <em>setup:di:compile</em> y mirar el orden resultante); <strong>(2)</strong> listar los plugins que afectan a una clase con el profiler o con herramientas como el plugin debugger de extensiones conocidas; <strong>(3)</strong> usar <em>disabled="true"</em> para desactivar selectivamente y aislar el culpable; <strong>(4)</strong> evitar plugins sobre m&eacute;todos muy calientes (getPrice, toHtml, afterGetList en repositorios) porque multiplican el costo por registro; <strong>(5)</strong> documentar los plugins propios con su intenci&oacute;n. Los conflictos t&iacute;picos: dos m&oacute;dulos que modifican el mismo resultado (por ejemplo, precio o stock) y dependen de ejecutarse en un orden que nadie declar&oacute;.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;C&oacute;mo funcionan los eventos y observadores? &iquest;Cu&aacute;ndo conviene usarlos?</p>
+        <p class="a">Magento despacha eventos con <em>EventManager::dispatch('nombre_evento', ['objeto' =&gt; $objeto])</em>; los observadores se declaran en <em>etc/events.xml</em> (global), <em>etc/frontend/events.xml</em> o <em>etc/adminhtml/events.xml</em> con el nombre del evento, la instancia y opcionalmente <em>disabled</em>. El observador implementa <em>ObserverInterface::execute(Observer $observer)</em> y obtiene los datos con <em>$observer-&gt;getEvent()-&gt;getData('...')</em>. Eventos frecuentes: <em>catalog_product_save_after, sales_order_place_after, checkout_submit_all_after, customer_login, cms_page_render_after</em>. Cu&aacute;ndo usarlos: cuando el core ya publica el evento y necesitas reaccionar sin alterar el flujo principal (notificaciones, sincronizaciones, logging). Cu&aacute;ndo no: para modificar el resultado de un m&eacute;todo (mejor plugin) o para l&oacute;gica cr&iacute;tica de negocio que deba ser transaccional. Desde Magento 2 se recomienda minimizar el uso de eventos nuevos en desarrollos propios y preferir service contracts/plugins, porque los eventos dificultan el rastreo del flujo y el testing.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;C&oacute;mo se configuran los cron jobs y los grupos de cron?</p>
+        <p class="a">En <em>etc/crontab.xml</em> se declaran trabajos con <em>id</em>, <em>instance</em> (clase con m&eacute;todo <em>execute</em>), <em>method</em>, <em>schedule</em> (expresi&oacute;n cron o <em>config_path</em> para que sea configurable desde el admin) y <em>group</em>. Los <strong>cron groups</strong> (<em>etc/cron_groups.xml</em>) definen <em>schedule_generate_every, schedule_ahead_for, schedule_lifetime, history_cleanup_every, history_success_lifetime, history_failure_lifetime</em> y si se ejecutan en proceso paralelo o por separado (<em>default</em>, <em>index</em>, <em>consumers</em>, <em>custom</em>). El cron del sistema operativo debe invocar <em>bin/magento cron:run</em> cada minuto (o usar <em>cron:install</em>); en producci&oacute;n es habitual separar el grupo <em>index</em> (reindexadores en schedule) y <em>consumers</em> (colas). Buenas pr&aacute;cticas: trabajos idempotentes y con timeouts, monitorear la tabla <em>cron_schedule</em> (jobs pendientes, fallidos, atrasados), y no ejecutar tareas largas en el grupo default porque bloquean el resto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo se consultan datos con repositorios y <em>SearchCriteria</em>?</p>
+        <p class="a">El est&aacute;ndar es <em>SearchCriteriaBuilder</em> + repositorio: se a&ntilde;aden <strong>filters</strong> (<em>addFieldToFilter('campo','valor')</em> con condiciones <em>eq, neq, gt, lt, like, in, from, to, null, notnull</em>), <strong>filter groups</strong> (los grupos se combinan con AND y los filtros dentro del grupo con OR), <strong>sort orders</strong> (<em>addSortOrder</em> por campo y direcci&oacute;n) y <strong>paginaci&oacute;n</strong> (<em>setCurrentPage/setSetPageSize</em>). El resultado es un <em>SearchResultsInterface</em> con <em>getItems()</em> y <em>getTotalCount()</em>. En Web API se traduce a par&aacute;metros <em>searchCriteria[filter_groups][0][filters][0][field]=...</em>, y en GraphQL a argumentos de filtro/orden/p&aacute;gina. Ventajas: independiza la consulta de SQL, funciona igual en REST/SOAP/interno y permite cachear. Para consultas agregadas o reportes grandes, <em>read_group</em>-style no existe: se usa SQL del resource model o vistas, evitando cargar miles de entidades en memoria.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;C&oacute;mo se implementan validaciones y reglas de negocio en un m&oacute;dulo custom?</p>
+        <p class="a">En capas, de m&aacute;s cercana al usuario a m&aacute;s robusta: <strong>(1)</strong> validaci&oacute;n de entrada en formularios con <em>validation classes</em> del JS y reglas del admin (UI Components); <strong>(2)</strong> validaci&oacute;n de dominio en el modelo/servicio: clases <em>Validator</em> inyectadas que lanzan <em>\Magento\Framework\Exception\LocalizedException</em> (con frases traducibles), <em>InputException</em>, <em>NoSuchEntityException</em> o <em>CouldNotSaveException</em>; <strong>(3)</strong> constraints de base declarados en <em>db_schema.xml</em> (&uacute;nicos, FK, not null) como &uacute;ltima l&iacute;nea; <strong>(4)</strong> rules de negocio en servicios espec&iacute;ficos (por ejemplo, reglas de elegibilidad de una promoci&oacute;n) y no dispersas en bloques o controllers. Adem&aacute;s: mantener las operaciones transaccionales (una operaci&oacute;n = una transacci&oacute;n), evitar escrituras parciales, usar <em>ValidationException</em> con mensajes por campo cuando el consumidor es un formulario, y cubrir cada regla con tests unitarios.</p>
+    </div>
+
+    <h2 id="s6">6. Frontend: layout, temas y storefront</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;C&oacute;mo funciona el sistema de layout XML?</p>
+        <p class="a">El layout se construye por <strong>handles</strong>: cada petici&oacute;n activa un conjunto de handles (<em>default</em> para todas, m&aacute;s los espec&iacute;ficos como <em>catalog_product_view</em>, <em>catalog_category_view</em>, <em>checkout_index_index</em>, <em>cms_page_view</em>, <em>customer_account</em>, y handles por id como <em>catalog_product_view_id_123</em>). Los archivos viven en <em>view/&lt;&aacute;rea&gt;/layout/&lt;handle&gt;.xml</em> de cada m&oacute;dulo y tema, y se fusionan por orden de m&oacute;dulos y temas. Dentro se declaran: <strong>containers</strong> (estructura, con <em>label</em>, <em>htmlTag</em>, <em>htmlClass</em>), <strong>bloques</strong> (clase + template), <strong>references</strong> (<em>referenceContainer/referenceBlock</em>) con acciones (<em>&lt;action method="..."&gt;</em>, <em>arguments</em>), <em>move</em> y <em>remove</em>, y <strong>updates</strong> (<em>&lt;update handle="..."/&gt;</em>) para reutilizar definiciones. Conocer los handles y el &aacute;rbol de contenedores del tema padre (Luma/Blank) es la base para posicionar cualquier elemento sin tocar PHP.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;Qu&eacute; son los bloques y los ViewModels, y por qu&eacute; se prefieren los ViewModels?</p>
+        <p class="a">Un <strong>block</strong> es una clase PHP asociada a un template PHTML que prepara datos y los expone al render; hereda de <em>AbstractBlock</em> (con <em>_toHtml</em>, cach&eacute; de bloque, identidad de cache key). Un <strong>ViewModel</strong> implementa <em>ViewModelInterface</em> y se inyecta en el bloque mediante <em>arguments</em> del layout; el template lo obtiene con <em>$block-&gt;getViewModel()</em> y le pide los datos. Ventajas del ViewModel: es una clase de dominio sin acoplamiento con el framework de bloques (f&aacute;cil de probar con PHPUnit puro), no depende del ciclo de vida del bloque ni de su cach&eacute;, permite reutilizar la misma l&oacute;gica en varios templates y evita la tentaci&oacute;n de meter consultas y l&oacute;gica de negocio en el bloque o en el PHTML. Buenas pr&aacute;cticas: templates sin l&oacute;gica (solo formato y bucles), escape de salida (<em>$block-&gt;escapeHtml/escapeUrl/escapeHtmlAttr</em>) y datos por ViewModel.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;C&oacute;mo funcionan los templates PHTML y el <em>fallback</em> de temas?</p>
+        <p class="a">Los templates (<em>.phtml</em>) son PHP con variables <em>$block</em>, <em>$escaper</em>, <em>$viewModel</em> (seg&uacute;n versi&oacute;n) y m&eacute;todos de traducci&oacute;n (<em>__('texto')</em>). La resoluci&oacute;n sigue un <strong>fallback</strong>: primero el tema activo, luego el tema padre, luego el m&oacute;dulo (<em>view/frontend/templates</em>). El mismo mecanismo aplica a layout, <em>web/</em>, <em>i18n</em> e im&aacute;genes (<em>Magento_Catalog::images/...</em> con notaci&oacute;n <em>Vendor_Modulo::ruta</em>). Para sobrescribir un template basta copiarlo a tu tema respetando la ruta del m&oacute;dulo; para heredar sin duplicar, es mejor a&ntilde;adir un bloque nuevo o usar plugins/ViewModels. El exceso de overrides crea deuda: cada archivo copiado debe revisarse en cada upgrade. En frontend moderno (Hyvä o PWA) los PHTML se sustituyen por componentes propios o por datos consumidos v&iacute;a GraphQL.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; son los UI Components del admin?</p>
+        <p class="a">Los <strong>UI Components</strong> son una capa declarativa (XML + componentes Knockout/JS) para construir grids y formularios del panel de administraci&oacute;n: <em>&lt;listing&gt;</em> (con <em>dataSource</em> basado en <em>GridDataProvider</em>/<em>Reporting</em>, columnas, filtros, acciones masivas, exportaci&oacute;n y bookmark de vistas) y <em>&lt;form&gt;</em> (fieldsets, campos tipados con validaci&oacute;n, scope labels, y dependencia de campos con <em>switcherConfig</em>/<em>dataScope</em>). Se configuran en <em>view/adminhtml/ui_component/*.xml</em> y se conectan al modelo mediante <em>virtualType</em> de <em>CollectionFactory</em> o con clases <em>DataProvider</em> propias. A&ntilde;adir una columna custom a un grid del core se hace con un XML de extensi&oacute;n y, si el dato no est&aacute; en la colecci&oacute;n, con un plugin al <em>prepareItems</em>/<em>Collection</em> o con una tabla de &iacute;ndice. Conocerlos ahorra escribir grids a mano y mantiene la consistencia visual del admin.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo se maneja JavaScript: RequireJS, mixins y Knockout?</p>
+        <p class="a">El frontend cl&aacute;sico (tema Luma/Blank) usa <strong>RequireJS</strong> como cargador AMD: cada widget/componente es un m&oacute;dulo JS definido con <em>define([...], function(){...})</em>, inicializado desde el template con <em>data-mage-init='{"componente":{...}}'</em> o con <em>&lt;script type="text/x-magento-init"&gt;</em>. La configuraci&oacute;n de paths/aliases vive en <em>requirejs-config.js</em> del tema o m&oacute;dulo. Los <strong>mixins</strong> permiten extender m&oacute;dulos JS existentes sin sobrescribirlos (<em>mixins: {'Magento_Checkout/js/model/quote': {...}}</em>). El <strong>checkout</strong> y el <strong>minicart</strong> est&aacute;n construidos con <strong>Knockout.js</strong> y templates HTML (<em>view/frontend/web/template</em>), con datos inyectados por <em>window.checkoutConfig</em> desde un <em>CheckoutConfigProvider</em>. Alternativas actuales: <strong>Hyvä</strong> (Alpine.js + Tailwind, sin RequireJS/Knockout, mucho m&aacute;s liviano) y <strong>PWA/headless</strong> con React consumiendo GraphQL, donde el JS del core deja de usarse.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;C&oacute;mo se crea un tema y qu&eacute; convenciones tiene?</p>
+        <p class="a">Un tema vive en <em>app/design/frontend/Vendor/tema</em> con: <em>theme.xml</em> (nombre y <em>&lt;parent&gt;</em>, normalmente Magento/blank), <em>registration.php</em>, <em>composer.json</em> (si se distribuye como paquete, tipo <em>magento2-theme</em>), <em>etc/view.xml</em> (dimensiones de im&aacute;genes por tipo, <em>Magento_Catalog::etc/view.xml</em>), <em>Magento_*/</em> carpetas por m&oacute;dulo para overrides de layout/templates/web, <em>web/css</em> (LESS en el tema cl&aacute;sico, con <em>source/</em>, <em>theme.less</em> y variables), <em>web/js</em>, <em>web/fonts</em>, <em>web/images</em>, <em>i18n/</em> y <em>media/preview.jpg</em>. Se activa en <em>Content &rarr; Design &rarr; Configuration</em> por store view, y se compila con <em>setup:static-content:deploy</em> (o en developer mode con <em>dev:source-theme:deploy</em> para LESS). La herencia permite sobrescribir solo lo necesario; cuanto m&aacute;s overrides, mayor costo de upgrade. En Hyvä el tema se estructura de forma distinta (componentes Tailwind/Alpine, sin LESS ni RequireJS).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;Qu&eacute; opciones hay para un storefront moderno: PWA Studio, Hyvä y headless?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Frontend cl&aacute;sico (Luma/tema propio):</strong> m&aacute;xima compatibilidad con extensiones y menor esfuerzo inicial, pero rendimiento limitado por el JS heredado.</li>
+                <li><strong>Hyvä Themes:</strong> tema comercial de terceros ampliamente adoptado: Alpine.js + Tailwind, sin RequireJS/Knockout/LESS, mucho menos JavaScript y mejores Core Web Vitals; usa el mismo backend y layout XML adaptado, con gran ecosistema de extensiones compatibles.</li>
+                <li><strong>PWA Studio (Venia):</strong> storefront React que consume GraphQL, con Service Workers para cach&eacute; y experiencia offline; m&aacute;s flexible para experiencias a medida, pero requiere equipo frontend y no cubre todo el admin/checkout sin trabajo adicional.</li>
+                <li><strong>Headless a medida:</strong> Next.js/Remix u otro framework consumiendo la API GraphQL (y BFF propio), separando por completo frontend y comercio; encaja en arquitecturas composable junto con servicios de Adobe (Edge Delivery, AEM).</li>
+            </ul>
+            La elecci&oacute;n depende del equipo disponible, del n&uacute;mero de extensiones cr&iacute;ticas (algunas solo funcionan en el frontend cl&aacute;sico) y de los objetivos de rendimiento/SEO.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;C&oacute;mo se manejan internacionalizaci&oacute;n, traducciones y locales?</p>
+        <p class="a">Las frases se envuelven con <em>__('Texto')</em> en PHP y con <em>data-bind="i18n: '...'"</em>/<em>i18n</em> en JS/HTML. Cada m&oacute;dulo y tema tiene <em>i18n/es_ES.csv</em> (y <em>i18n/es_MX.csv</em>, etc.) con pares &laquo;original,traducci&oacute;n&raquo;; se recolectan con <em>bin/magento i18n:collect-phrases</em> y se pueden generar diccionarios por tema con <em>i18n:pack</em>. Los <strong>locales</strong> se asignan por store view (<em>general/locale/code</em>) e influyen en formatos de fecha, moneda y n&uacute;meros; las traducciones del admin se resuelven por el idioma del usuario. Consideraciones: textos con variables posicionales (<em>%1</em>), plurales, traducciones por store view de atributos EAV (nombre, descripci&oacute;n) y de contenido CMS (bloques y p&aacute;ginas por store view o con Content Staging), y la generaci&oacute;n de est&aacute;ticos por locale en el despliegue (<em>setup:static-content:deploy es_ES</em>).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;C&oacute;mo se depura el frontend?</p>
+        <p class="a">Herramientas y t&eacute;cnicas: <strong>Template Path Hints</strong> (Developer &rarr; Debug, por store view) para saber qu&eacute; archivo se est&aacute; renderizando y de qu&eacute; m&oacute;dulo/tema; <strong>Layout handles y bloques</strong> con el hint de layout o imprimiendo <em>$this-&gt;getRequest()-&gt;getFullActionName()</em>; <strong>Profiler</strong> integrado (<em>Mage::profiler</em> / habilitar en <em>index.php</em> o en Cloud con Blackfire) para ver tiempos por bloque; <strong>cache de layout y block_html deshabilitados</strong> mientras se desarrolla (<em>cache:disable layout block_html full_page</em>); <strong>developer mode</strong> para ver excepciones y regeneraci&oacute;n de assets; <strong>devtools del navegador</strong> para RequireJS (errores de paths, m&oacute;dulos no cargados) y para Knockout en checkout; y <strong>var/log</strong> (<em>system.log, debug.log, exception.log</em>) con el logger configurado. En problemas de CSS/LESS suele bastar con borrar <em>var/view_preprocessed</em> y <em>pub/static</em> del tema y volver a desplegar.</p>
+    </div>
+
+    <h2 id="s7">7. Funcionalidad de comercio</h2>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;C&oacute;mo funciona el flujo de compra de punta a punta?</p>
+        <p class="a"><strong>Quote</strong> (<em>quote</em>, <em>quote_item</em>, <em>quote_address</em>): el carrito acumula &iacute;tems, direcciones (billing/shipping, con modo multishipping), m&eacute;todo de env&iacute;o, m&eacute;todo de pago, reglas de descuento e impuestos; los <strong>total collectors</strong> (<em>subtotal, discount, shipping, tax, grand_total</em>) se ejecutan en orden definido y pueden extenderse con collectores custom. Al confirmar, el quote se convierte en <strong>Order</strong> (<em>sales_order</em>) mediante el servicio <em>CartManagementInterface::placeOrder</em>, se reserva inventario (reservations en MSI) y se emiten eventos. Despu&eacute;s: <strong>Invoice</strong> (captura del pago, parcial o total), <strong>Shipment</strong> (con tracking, packing slips y, en MSI, selecci&oacute;n de source), y <strong>Credit Memo</strong> (devoluciones/reembolsos, con RMA en Commerce). Cada documento tiene su numeraci&oacute;n incremental y sus estados/estados de orden configurables por <em>state</em> (new, processing, complete, closed, canceled, holded, payment_review) con transiciones y notificaciones por correo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;C&oacute;mo se configuran los m&eacute;todos de pago y qu&eacute; consideraciones PCI aplican?</p>
+        <p class="a">Magento trae m&eacute;todos offline (cheque, transferencia, contra reembolso, purchase order en B2B) y conectores con pasarelas; en las versiones recientes Adobe impulsa <strong>Payment Services</strong> y los conectores de terceros (Stripe, Adyen, PayPal/Braintree, Mercado Pago y locales de LATAM) se distribuyen como extensiones del Marketplace o paquetes Composer. Cada m&eacute;todo implementa una interfaz del modelo de pago (<em>MethodInterface</em>: <em>isAvailable, authorize, capture, refund, void, canUseForCurrency/Country</em>) con su propio <em>config provider</em> para el checkout. Consideraciones PCI: <strong>no almacenar PAN</strong> en la base de datos; usar tokenizaci&oacute;n y campos hospedados/redirect del proveedor para quedar en SAQ-A/A-EP; cifrar credenciales del m&eacute;todo (Magento cifra los valores de configuraci&oacute;n sensibles con la <em>crypt key</em> de <em>env.php</em>); registrar sin exponer datos de tarjeta; y validar 3-D Secure donde aplique. En auditor&iacute;as se revisa tambi&eacute;n el alcance del CDE: separar el entorno de pago y limitar el acceso al admin.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo funcionan los m&eacute;todos de env&iacute;o y las <em>table rates</em>?</p>
+        <p class="a">M&eacute;todos nativos: <strong>Flat Rate</strong> (tarifa fija por pedido o por &iacute;tem), <strong>Free Shipping</strong> (con umbral de subtotal), <strong>Table Rates</strong> (matriz CSV por website con combinaciones de pa&iacute;s/regi&oacute;n/c&oacute;digo postal contra peso, subtotal o n&uacute;mero de &iacute;tems) y <strong>In-Store Pickup</strong> (con MSI). Los transportistas (UPS, FedEx, USPS, DHL) exist&iacute;an en el core y en versiones recientes se distribuyen como m&oacute;dulos separados; en proyectos LATAM se suelen integrar operadores locales o agregadores (por ejemplo, servicios de &uacute;ltima milla) mediante extensiones o desarrollo propio implementando <em>CarrierInterface</em> con <em>collectRates</em>. El c&aacute;lculo de tarifas ocurre durante el quote (por direcci&oacute;n de destino, peso volum&eacute;trico, dimensiones del producto y reglas de caja), y las restricciones de pa&iacute;s/regi&oacute;n y los <em>handling fees</em> se configuran por scope. Puntos cr&iacute;ticos: mantener limpias las tablas de tarifas, validar pesos/dimensiones del cat&aacute;logo y probar m&uacute;ltiples direcciones y multishipping.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;Qu&eacute; es MSI (Multi-Source Inventory) y c&oacute;mo gestiona el stock?</p>
+        <p class="a">MSI, introducido en 2.3 y est&aacute;ndar en 2.4, desacopla el inventario de la noci&oacute;n de &laquo;un solo almac&eacute;n&raquo;: define <strong>Sources</strong> (ubicaciones f&iacute;sicas con cantidad y estado habilitado), <strong>Stocks</strong> (agrupaciones l&oacute;gicas de sources asociadas a un website, con reglas de priorizaci&oacute;n y de selecci&oacute;n de source) y <strong>Salable Quantity</strong> (cantidad vendible calculada por source/stock). Los movimientos generan <strong>reservations</strong> (no bloqueos f&iacute;sicos) que descuentan la cantidad vendible al reservar y se liberan/consumen con el env&iacute;o o la cancelaci&oacute;n, con comandos de consistencia (<em>inventory:reservation:*</em>) para corregir desfases. Adem&aacute;s soporta <strong>in-store pickup</strong>, entregas parciales desde varios sources y transferencias internas. Para integraciones con ERP/WMS es crucial decidir la fuente de verdad del stock y c&oacute;mo se sincronizan (API de <em>StockItem</em>/<em>SourceItem</em> o bulk API) y gestionar la concurrencia para no vender stock inexistente.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;C&oacute;mo funcionan las reglas de precio de carrito y de cat&aacute;logo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Cart Price Rules (<em>salesrule</em>):</strong> descuentos aplicados en el checkout: porcentaje, cantidad fija por carrito o por &iacute;tem, compra X lleva Y, env&iacute;o gratis; con condiciones sobre atributos del carrito, cliente, producto y direcci&oacute;n, cupones (por uso total, por cliente, con caducidad), prioridades y <em>stop further processing</em>.</li>
+                <li><strong>Catalog Price Rules:</strong> modifican el precio mostrado del producto por grupo de clientes, website y periodo; se materializan en el &iacute;ndice de precios (<em>catalog_product_index_price</em>) y requieren reindexado/cron para activarse y expirar.</li>
+                <li><strong>Tier prices, precios especiales y <em>special_from/to_date</em>:</strong> precios por cantidad, por grupo y por fecha.</li>
+                <li><strong>Adobe Commerce:</strong> Content Staging para programar reglas por campa&ntilde;a, Visual Merchandiser y <em>Related Product Rules</em>, adem&aacute;s de Shared Catalogs para precios B2B.</li>
+            </ul>
+            Buenas pr&aacute;cticas: documentar la matriz de promociones, probar combinaciones (impuestos, env&iacute;o, MSI, multi-store) y vigilar el impacto en el &iacute;ndice de <em>sales_rule</em> y en el rendimiento del carrito cuando hay muchas reglas activas.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;C&oacute;mo se configuran los impuestos?</p>
+        <p class="a">El motor nativo combina: <strong>product tax classes</strong> (qu&eacute; tipo de producto), <strong>customer tax classes</strong> (qu&eacute; tipo de cliente), <strong>tax zones/rates</strong> (por pa&iacute;s, regi&oacute;n y c&oacute;digo postal, con rangos y porcentajes) y <strong>tax rules</strong> que cruzan las tres dimensiones; adem&aacute;s se define si los precios se ingresan incluyendo o excluyendo impuestos (<em>price_includes_tax</em>), el c&aacute;lculo de env&iacute;o y descuentos (antes/despu&eacute;s de impuesto), y el redondeo por &iacute;tem o por direcci&oacute;n. El <strong>Fixed Product Tax (FPT)</strong> y <strong>Weee</strong> cubren tasas por unidad (RAEE). Para IVA europeo existen <em>VAT ID</em> validation, grupos de clientes autom&aacute;ticos por validez del n&uacute;mero y reglas intra-comunitarias. En pa&iacute;ses de LATAM con reg&iacute;menes complejos (retenciones, percepciones, facturas electr&oacute;nicas) se suele requerir una extensi&oacute;n de localizaci&oacute;n que integre impuestos adicionales, numeraci&oacute;n y documentos fiscales con el ERP.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;C&oacute;mo se gestiona el contenido: CMS, Page Builder y Content Staging?</p>
+        <p class="a">El CMS nativo incluye <strong>p&aacute;ginas</strong> (<em>cms_page</em>) con layout XML personalizado por p&aacute;gina, <strong>bloques est&aacute;ticos</strong> reutilizables, <strong>widgets</strong> (bloques con par&aacute;metros insertables en contenido: productos, categor&iacute;as, banners) y jerarqu&iacute;a de URL. <strong>Page Builder</strong> (Adobe Commerce) ofrece edici&oacute;n visual drag-and-drop con tipos de contenido (filas, columnas, tabs, sliders, video, mapas, productos) guardados como contenido estructurado; en Open Source hay editores WYSIWYG est&aacute;ndar y m&oacute;dulos de terceros. <strong>Content Staging &amp; Preview</strong> (Commerce) permite programar campa&ntilde;as: cambios de p&aacute;ginas, bloques, reglas de precio, categor&iacute;as y productos con fecha de inicio/fin y previsualizaci&oacute;n. Buenas pr&aacute;cticas: versionar el contenido cr&iacute;tico, cuidar el impacto en cach&eacute; (contenido din&aacute;mico rompe el FPC) y validar el rendimiento de p&aacute;ginas con mucho Page Builder.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;C&oacute;mo se trabaja el SEO t&eacute;cnico en Magento?</p>
+        <p class="a">Elementos nativos: <strong>URL keys</strong> por producto/categor&iacute;a/CMS con <strong>URL rewrites</strong> (<em>url_rewrite</em>) que preservan rutas antiguas con 301, <strong>canonical tags</strong> configurables por tipo de p&aacute;gina, <strong>meta t&iacute;tulo/descripci&oacute;n/keywords</strong> por producto, categor&iacute;a y p&aacute;gina, <strong>sitemap XML</strong> generable programado por store view (con im&aacute;genes), <strong>atributos <em>alt</em></strong> de im&aacute;genes, <strong>breadcrumbs</strong>, <strong>paginaci&oacute;n</strong> con rel prev/next seg&uacute;n versi&oacute;n, control de p&aacute;ginas indexables (<em>robots.txt</em>, meta robots por handle), y <strong>rich snippets</strong> (schema.org JSON-LD para producto, precio, disponibilidad y reviews, a menudo reforzado con extensiones). Buenas pr&aacute;cticas: evitar contenido duplicado entre store views y par&aacute;metros de filtro (canonical hacia la categor&iacute;a base, <em>noindex</em> en facetas paginadas), cuidar los Core Web Vitals (LCP/CLS/INP) con temas livianos e im&aacute;genes optimizadas, y gestionar correctamente las redirecciones en cada cambio de cat&aacute;logo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo son las operaciones de back-office: &oacute;rdenes, devoluciones, facturaci&oacute;n e informes?</p>
+        <p class="a">El admin (<em>Sales</em>) permite crear &oacute;rdenes manualmente (con precios personalizados y notas), ponerlas en <em>hold</em>, cancelar, facturar (parcial o total, con captura online/offline), generar env&iacute;os con tracking y packing slips, y crear notas de cr&eacute;dito; los correos transaccionales son plantillas configurables por store view. <strong>RMA</strong> (Commerce) gestiona solicitudes de devoluci&oacute;n con motivos, autorizaci&oacute;n, recepci&oacute;n y reembolso/cambio. <strong>Informes</strong>: ventas, impuestos, env&iacute;os, productos m&aacute;s vendidos/vistos/a&ntilde;adidos, clientes, carritos abandonados, b&uacute;squedas y t&eacute;rminos, cupones y stock bajo; se alimentan de tablas de estad&iacute;sticas que deben actualizarse por cron. Tambi&eacute;n hay operaciones masivas (exportaci&oacute;n de &oacute;rdenes, actualizaci&oacute;n de atributos por lote, import/export de productos y precios por CSV) y flujos de aprobaci&oacute;n B2B. En implementaciones grandes estos procesos se automatizan con integraciones al ERP y se reservan en Magento las tareas de atenci&oacute;n al cliente.</p>
+    </div>
+
+    <h2 id="s8">8. Rendimiento, indexaci&oacute;n y cach&eacute;</h2>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;C&oacute;mo funcionan los indexadores y qu&eacute; modos tienen?</p>
+        <p class="a">Los indexadores materializan datos calculados (precios, categor&iacute;a-producto, EAV para filtros, b&uacute;squeda, reglas de venta, inventario) en tablas o en el motor de b&uacute;squeda, porque calcularlos en cada petici&oacute;n ser&iacute;a inviable. Se declaran en <em>etc/indexer.xml</em> con su <em>IndexerInterface</em> (<em>executeFull, executeList, executeRow</em>) y vistas de datos. Cada indexador tiene un <strong>modo</strong>: <em>Update on Save</em> (se recalcula inmediatamente tras cada cambio, adecuado en cat&aacute;logos peque&ntilde;os o en desarrollo) o <em>Schedule</em> (los cambios se registran en tablas <em>*_cl</em> de changelog y un cron los procesa por lotes, usando MVIEW; es lo recomendado en producci&oacute;n). Comandos: <em>indexer:info, indexer:show-mode, indexer:set-mode, indexer:status, indexer:reindex [id], indexer:reset</em>. Buenas pr&aacute;cticas: reindexar fuera de horas pico, vigilar <em>cron_schedule</em> del grupo <em>index</em>, revisar el tama&ntilde;o de las tablas de changelog y de las de &iacute;ndice, y evitar reindexados completos innecesarios (rompen la cach&eacute; y saturan la BD).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;Qu&eacute; tipos de cach&eacute; hay y c&oacute;mo se gestionan?</p>
+        <p class="a">Magento define tipos de cach&eacute; (visibles en <em>System &rarr; Cache Management</em> y en <em>app/etc/env.php</em>): <em>config</em>, <em>layout</em>, <em>block_html</em>, <em>collections</em>, <em>reflection</em>, <em>db_ddl</em>, <em>compiled_config</em>, <em>eav</em>, <em>config_integration</em>, <em>config_integration_api</em>, <em>full_page</em>, <em>config_webservice</em> y <em>translate</em>. Cada entrada tiene <strong>tags</strong> que permiten invalidaci&oacute;n selectiva cuando cambia un producto, categor&iacute;a, bloque CMS o configuraci&oacute;n. El backend por defecto es el filesystem (<em>var/cache</em>), pero en producci&oacute;n se usa <strong>Redis</strong> (o Varnish para <em>full_page</em>). Comandos: <em>cache:status</em>, <em>cache:enable/disable</em>, <em>cache:clean</em> (invalida por tipos) y <em>cache:flush</em> (vac&iacute;a todo el storage). Errores frecuentes: tener cach&eacute; deshabilitada en producci&oacute;n, mezclar entornos con el mismo Redis (usar prefijos distintos), y no invalidar tras cambios de configuraci&oacute;n importada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;C&oacute;mo se configura Varnish y c&oacute;mo se manejan los agujeros del full page cache?</p>
+        <p class="a">Se activa <em>full_page</em> con Varnish (Admin &rarr; Full Page Cache &rarr; Varnish Caching, que genera el VCL con backend, TTL, reglas de bypass para admin/checkout/usuario logueado y purga por tags). El FPC almacena el HTML completo y devuelve la p&aacute;gina sin ejecutar PHP, con mejoras enormes en TTFB. Los contenidos que <strong>no</strong> pueden cachearse (carrito, minicart, mensajes, wishlist, precios por cliente logueado) se resuelven con <strong>agujeros</strong>: bloques marcados con <em>cacheable="false"</em> o con <em>getCacheKeyInfo/getEsi</em> y renderizado por AJAX/ESI en el navegador. En arquitecturas con CDN (Fastly en Cloud) se usan reglas equivalentes de edge y <em>surrogate keys</em>. Buenas pr&aacute;cticas: revisar los tags para que una actualizaci&oacute;n de producto no purgue toda la cach&eacute;, medir el <em>hit rate</em>, no cachear respuestas con cookies de sesi&oacute;n y probar el comportamiento de checkout y de p&aacute;ginas con contenido personalizado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;C&oacute;mo se usa Redis para cache, page cache y sesiones?</p>
+        <p class="a">En <em>app/etc/env.php</em> se configuran los backends: <em>cache &rarr; frontend</em> con <em>idPrefix</em> propio por entorno/instalaci&oacute;n, servidor, puerto, base de datos, <em>compression_lib</em>, y opciones de <strong>two-tier</strong> (cach&eacute; local en memoria del worker + Redis compartido) para reducir latencia; un frontend espec&iacute;fico para <em>page_cache</em> (si no se usa Varnish) y <strong>session save = redis</strong> con sus propios <em>idPrefix</em>, <em>disable_locking</em>, <em>max_concurrency</em> y <em>break_after_*</em>. Ajustes clave: <em>maxmemory-policy</em> (<em>allkeys-lru</em> para cache, <em>noeviction</em> para sesiones), timeouts y reintentos, monitoreo de <em>evicted_keys</em> y del <em>hit rate</em>, y no compartir la misma base Redis entre staging y producci&oacute;n. Una sesi&oacute;n mal configurada produce cuelgues por lock (varios requests concurrentes del mismo usuario) y problemas de login intermitentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Qu&eacute; papel juegan Elasticsearch/OpenSearch y c&oacute;mo se optimizan?</p>
+        <p class="a">Desde 2.4.4 el motor de b&uacute;squeda es obligatorio y externo: Elasticsearch u OpenSearch. Se usa para: b&uacute;squeda del cat&aacute;logo (relevancia, sin&oacute;nimos, correcci&oacute;n de errores, sugerencias), facetas/filtros de la navegaci&oacute;n por capas y los listados de categor&iacute;a. El indexador <em>catalogsearch_fulltext</em> construye el &iacute;ndice con los atributos marcados como searchables/filterable, mapeados por tipo. Optimizaci&oacute;n: dimensionar memoria (heap) y shards/r&eacute;plicas seg&uacute;n el cat&aacute;logo, ajustar <em>refresh_interval</em>, revisar la relevancia (pesos por atributo, sin&oacute;nimos y stopwords por idioma), monitorear consultas lentas y el tama&ntilde;o del &iacute;ndice, y evitar reindexados completos innecesarios. En Adobe Commerce existe adem&aacute;s <strong>Live Search</strong> (servicio de Adobe con SaaS de b&uacute;squeda, mejor relevancia y facets en el edge). S&iacute;ntomas de un mal setup: resultados incorrectos, timeouts en listados y picos de CPU en el nodo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;C&oacute;mo se optimiza el rendimiento del frontend (assets, im&aacute;genes, CDN)?</p>
+        <p class="a">Acciones de mayor impacto: <strong>(1)</strong> producci&oacute;n con <em>setup:di:compile</em> y <em>setup:static-content:deploy</em>, minificaci&oacute;n y bundling de JS/CSS (<em>Advanced JavaScript/CSS Processing</em>), y firma de est&aacute;ticos para cache agresiva; <strong>(2)</strong> CDN para <em>pub/static</em> y <em>pub/media</em> (base URL de est&aacute;ticos en otro dominio, Fastly/CloudFront/Cloudflare) con TTL largos y purga por versi&oacute;n; <strong>(3)</strong> im&aacute;genes: dimensiones definidas en <em>view.xml</em>, formatos modernos (WebP/AVIF) y <em>lazy loading</em>, sin servir la imagen original en listados; <strong>(4)</strong> reducir JavaScript del storefront (Hyvä o headless ayudan notablemente), deferir scripts y evitar extensiones que inyecten c&oacute;digo en cada p&aacute;gina; <strong>(5)</strong> FPC + Varnish con buen hit rate; <strong>(6)</strong> opcache de PHP-FPM activado y afinado, y <strong>(7)</strong> medir con Core Web Vitals (LCP, CLS, INP) y RUM real, no solo con pruebas de laboratorio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo se diagnostica un problema de lentitud?</p>
+        <p class="a">M&eacute;todo: <strong>(1)</strong> caracterizar (p&aacute;ginas afectadas, usuarios, horarios, si el problema es TTFB o render o backend/checkout/admin); <strong>(2)</strong> medir: profiler integrado o <strong>Blackfire</strong>/<strong>New Relic</strong> (en Cloud vienen incluidos) para ver tiempo por funci&oacute;n; <strong>slow query log</strong> de MySQL y <em>EXPLAIN</em> de las consultas repetidas; logs de PHP-FPM (<em>slowlog</em>, <em>request_slowlog_timeout</em>); <strong>(3)</strong> causas habituales: N+1 por cargar colecciones dentro de bucles, plugins sobre m&eacute;todos calientes (precio, stock, <em>getList</em>), indexadores en modo <em>Update on Save</em> con cat&aacute;logo grande, cach&eacute; deshabilitada o mal invalidada, sesiones en disco, Elasticsearch saturado, cron acumulado, y extensiones que inyectan JS/bloques en todas las p&aacute;ginas; <strong>(4)</strong> corregir: consultas por lotes, cach&eacute; por bloque, indexers en schedule, opcache, y retirar m&oacute;dulos in&uacute;tiles (<em>module:disable</em>). Despu&eacute;s se vuelve a medir para validar la mejora con n&uacute;meros.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;C&oacute;mo se dimensiona la infraestructura y qu&eacute; buenas pr&aacute;cticas de base de datos aplican?</p>
+        <p class="a">Dimensionamiento seg&uacute;n tr&aacute;fico y cat&aacute;logo: separar <strong>web</strong> (PHP-FPM + nginx, escalado horizontal detr&aacute;s de load balancer con sesiones en Redis), <strong>base de datos</strong> (instancia dedicada, discos NVMe/SSD, r&eacute;plica de lectura para reporting), <strong>Elasticsearch/OpenSearch</strong> (nodos propios con heap adecuado), <strong>Redis</strong> (cache y sesiones, idealmente instancias separadas) y <strong>Varnish/CDN</strong> en el edge. En MySQL: <em>innodb_buffer_pool_size</em> (60&ndash;80% de RAM en servidor dedicado), <em>max_connections</em> coherente con workers PHP-FPM (<em>pm.max_children</em>), <em>innodb_log_file_size</em>, y an&aacute;lisis peri&oacute;dico de &iacute;ndices. Buenas pr&aacute;cticas: limpieza de tablas crecientes (<em>report_*</em>, <em>customer_log</em>, <em>catalog_product_entity_varchar</em> hu&eacute;rfanos, sesiones y logs), archiving de &oacute;rdenes antiguas si el volumen lo exige, backups con pruebas de restauraci&oacute;n y separaci&oacute;n de entornos para no competir por recursos.</p>
+    </div>
+
+    <h2 id="s9">9. Integraciones y APIs</h2>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;Qu&eacute; APIs expone Magento y cu&aacute;ndo usar cada una?</p>
+        <p class="a">
+            <ul>
+                <li><strong>REST (<em>/rest/V1/...</em>):</strong> la m&aacute;s completa y estable; cubre productos, categor&iacute;as, atributos, stock, clientes, carritos, &oacute;rdenes, facturas, env&iacute;os, CMS, impuestos y configuraci&oacute;n. Ideal para integraciones sistema a sistema (ERP, PIM, OMS).</li>
+                <li><strong>SOAP (<em>/soap?wsdl</em>):</strong> expone los mismos service contracts con contrato WSDL; &uacute;til cuando el sistema consumidor exige SOAP (algunos ERP legacy).</li>
+                <li><strong>GraphQL (<em>/graphql</em>):</strong> API orientada al storefront, con queries y mutations para cat&aacute;logo, carrito, checkout, cliente y contenido; es la v&iacute;a recomendada para headless/PWA y permite pedir exactamente los campos necesarios.</li>
+                <li><strong>Async/Bulk REST (<em>/async/rest/V1/...</em> y <em>/async/bulk/V1/...</em>):</strong> operaciones masivas encoladas (message queue) con estado consultable por operation/bulk id.</li>
+                <li><strong>Webhooks (Adobe Commerce):</strong> notificaciones push de eventos del negocio hacia sistemas externos.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo se autentica una integraci&oacute;n?</p>
+        <p class="a">Mecanismos: <strong>(1) Admin token</strong>: <em>POST /rest/V1/integration/admin/token</em> con usuario y contrase&ntilde;a del admin, devuelve un token usado como <em>Bearer</em>; el token expira (configurable en <em>Stores &rarr; Configuration &rarr; Services &rarr; OAuth &rarr; Access Token Expiration</em>). <strong>(2) Customer token</strong>: <em>POST /rest/V1/integration/customer/token</em> para APIs de cliente. <strong>(3) Integration tokens</strong>: se crea una <em>Integration</em> en el admin, se eligen los permisos por recurso API y se generan tokens de acceso (flujo OAuth 1.0a), lo que permite m&iacute;nimo privilegio y auditor&iacute;a. <strong>(4) JWT</strong>: desde 2.4.7 hay soporte de tokens JWT para admin y cliente (verificar en la versi&oacute;n concreta), que facilita validaci&oacute;n sin estado. Buenas pr&aacute;cticas: usuarios e integraciones dedicadas por sistema, permisos m&iacute;nimos por recurso, rotaci&oacute;n peri&oacute;dica, almacenamiento en gestor de secretos, HTTPS obligatorio, rate limiting y registro de llamadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;C&oacute;mo funciona GraphQL y c&oacute;mo se crean esquemas y resolvers custom?</p>
+        <p class="a">El esquema se declara en <strong>schema.graphqls</strong> dentro de cada m&oacute;dulo: se a&ntilde;aden tipos, campos extendidos de tipos existentes (<em>extend type ProductInterface</em>), queries/mutations y argumentos, y se asocia cada campo a un <strong>resolver</strong> (<em>ResolverInterface::resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)</em>) que devuelve datos o un callable diferido. Los m&oacute;dulos se fusionan, por lo que varios m&oacute;dulos pueden extender el mismo tipo. Existen <strong>resolvers por lotes</strong> (<em>BatchResolverInterface</em>) para evitar N+1 al resolver campos de listas, y soporte de cach&eacute; de identidad (<em>IdentityInterface</em>) para invalidar con el FPC/edge. Buenas pr&aacute;cticas: delegar en service contracts en el resolver (no acceder directo a modelos), paginar siempre, controlar la complejidad/profundidad de las queries (<em>query depth/complexity limits</em>) y exponer solo lo que el storefront necesita.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;C&oacute;mo se consume la API REST para cat&aacute;logo, stock y &oacute;rdenes desde un ERP/PIM?</p>
+        <p class="a">Endpoints habituales: productos (<em>GET/POST/PUT /V1/products</em>, con <em>searchCriteria</em> para consultas y <em>custom_attributes</em> para EAV), atributos y attribute sets (<em>/V1/products/attributes</em>), categor&iacute;as y asignaciones (<em>/V1/categories</em>, <em>/V1/categories/:id/products</em>), im&aacute;genes (<em>/V1/products/:sku/media</em> con upload base64), precios y tier prices, <strong>stock</strong> (<em>/V1/stockItems/:sku</em> y en MSI <em>/V1/inventory/source-items</em> y <em>/V1/inventory/bulk-product-source-assign</em>), clientes (<em>/V1/customers</em>) y ventas (<em>/V1/orders</em>, <em>/V1/invoices</em>, <em>/V1/shipments</em>, <em>/V1/creditmemos</em>, m&aacute;s <em>/V1/orders/create</em> para &oacute;rdenes desde el ERP). Patrones recomendados: paginaci&oacute;n con <em>searchCriteria</em> y <em>pageSize</em>, actualizaciones parciales (PUT con solo los campos que cambian), sincronizaci&oacute;n incremental por <em>updated_at</em>, y bulk API para vol&uacute;menes altos. Definir la fuente de verdad por campo (por ejemplo, precio y stock en el ERP, descripciones en el PIM) es la decisi&oacute;n m&aacute;s importante del dise&ntilde;o.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;Qu&eacute; es la API as&iacute;ncrona/bulk y c&oacute;mo funcionan las message queues?</p>
+        <p class="a">La <strong>async/bulk API</strong> permite enviar operaciones masivas (por ejemplo, crear o actualizar cientos de productos) que se encolan en lugar de ejecutarse en la petici&oacute;n: se responde con un <em>bulkId</em>/lista de <em>operationIds</em> y el estado se consulta en <em>/V1/bulk/:bulkId</em>. Por debajo est&aacute; el framework de <strong>message queue</strong>: t&oacute;picos declarados en <em>etc/communication.xml</em>, publishers (<em>etc/queue_publisher.xml</em>) y consumers (<em>etc/queue_consumer.xml</em>) que procesan mensajes desde RabbitMQ o MySQL como broker. El core lo usa para indexaci&oacute;n, env&iacute;o de correos, exportaciones, sincronizaci&oacute;n de inventario y operaciones de Adobe Commerce Cloud. En producci&oacute;n se ejecutan los consumers como procesos dedicados (systemd/supervisor o <em>bin/magento queue:consumers:start</em>), con configuraci&oacute;n de <em>maxMessages</em>, reintentos y dead-letter. Ventajas: no bloquear la petici&oacute;n HTTP, reintentos autom&aacute;ticos y picos de carga absorbidos por la cola.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se implementan webhooks y notificaciones de eventos hacia sistemas externos?</p>
+        <p class="a">Opciones: <strong>(1)</strong> el m&oacute;dulo de <strong>Webhooks</strong> de Adobe Commerce (configurable en el admin) que publica eventos de negocio (orden creada, cliente actualizado, producto guardado) hacia URLs externas con firma y reintentos; <strong>(2)</strong> desarrollo propio: un observador o plugin que publica un mensaje en una cola y un consumer que hace el <em>POST</em> al sistema destino con retry/backoff y registro del resultado; <strong>(3)</strong> endpoints de recepci&oacute;n: controladores custom (clase que implementa <em>HttpRequestHandlerInterface</em> y se expone en <em>etc/webapi.xml</em> o en <em>etc/frontend/di.xml</em> con routers) para recibir callbacks de pasarelas de pago o transportistas. Dise&ntilde;o seguro y robusto: validar firma/token del callback, responder r&aacute;pido (202) y procesar en cola, verificar idempotencia con el id del evento, no exponer datos sensibles en la URL y registrar cada intento para auditor&iacute;a y reproceso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;C&oacute;mo se dise&ntilde;a una integraci&oacute;n robusta con Magento?</p>
+        <p class="a">Principios: <strong>idempotencia</strong> (usar SKU/order increment id/external id como clave natural y upsert en lugar de create; Magento rechaza SKUs duplicados, lo que ayuda), <strong>lotes</strong> (bulk API o paginaci&oacute;n con <em>searchCriteria</em>, nunca un request por registro), <strong>asincron&iacute;a</strong> (colas para no chocar con timeouts HTTP ni con <em>limit_time_real</em>), <strong>reintentos con backoff</strong> y l&iacute;mite m&aacute;ximo + dead letter, <strong>logging por mensaje</strong> (payload resumido, estado, error, intentos) y <strong>alertas</strong>, <strong>gesti&oacute;n de concurrencia</strong> (evitar dos procesos actualizando el mismo producto/stock), <strong>manejo de errores espec&iacute;ficos</strong> (<em>NoSuchEntityException, InputException, CouldNotSaveException</em>, 401/403, 429/503) y <strong>contratos versionados</strong>. Adem&aacute;s: probar con datos reales en staging, definir ventanas de sincronizaci&oacute;n y un mecanismo de reconciliaci&oacute;n peri&oacute;dica (full sync nocturno) para corregir desviaciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;C&oacute;mo se integra Magento con ERP, PIM, OMS y sistemas locales de pago/log&iacute;stica?</p>
+        <p class="a">Patrones habituales: <strong>ERP</strong> (SAP, Oracle, Dynamics, NetSuite, Odoo) como fuente de precios contractuales, stock, clientes/cr&eacute;dito y facturas, sincronizando por API o por archivos intermedios con un middleware/iPaaS (MuleSoft, Boomi, Celigo, n8n, Kafka Connect); <strong>PIM</strong> (Akeneo, Pimcore, inRiver) como fuente de datos de producto y medios, publicando hacia Magento con bulk API; <strong>OMS/WMS</strong> para orquestar fulfillment multi-almac&eacute;n y actualizar env&iacute;os y tracking; <strong>pasarelas y agregadores locales</strong> (en LATAM: Mercado Pago, dLocal, EBANX, PayU, Culqi, Wompi, entre otros) mediante extensiones del Marketplace o desarrollo propio del m&eacute;todo de pago; y <strong>transportistas/last-mile</strong> con generaci&oacute;n de gu&iacute;as y webhooks de tracking. La arquitectura recomendada es un middleware con colas y trazabilidad por mensaje, y no integraciones punto a punto entre todos los sistemas, porque multiplican el mantenimiento y dificultan la reconciliaci&oacute;n.</p>
+    </div>
+
+    <h2 id="s10">10. Seguridad, multi-store, calidad y administraci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;Qu&eacute; pr&aacute;cticas de seguridad son cr&iacute;ticas en Magento?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Parcheo:</strong> mantener la versi&oacute;n soportada y aplicar parches de seguridad apenas se publican; Magento es objetivo frecuente de exploits automatizados (skimming/Magecart).</li>
+                <li><strong>Admin:</strong> 2FA obligatorio (desde 2.4), URL de admin personalizada, cuentas nominales (nunca compartidas), grupos de permisos con m&iacute;nimo privilegio, y restricci&oacute;n por IP/VPN cuando sea posible.</li>
+                <li><strong>Aplicaci&oacute;n:</strong> escapar salidas en templates, validar entradas, no usar <em>eval</em>/unserialize con datos externos, CSP activa, permisos de archivos correctos (docroot en <em>pub/</em>), y <em>env.php</em> fuera del control de versiones con la <em>crypt key</em> protegida.</li>
+                <li><strong>Infraestructura:</strong> TLS con HSTS, cabeceras de seguridad, base de datos no expuesta, Redis/OpenSearch en red privada, WAF y rate limiting, monitoreo de integridad de archivos (Adobe Security Scan) y logs centralizados.</li>
+                <li><strong>Pagos:</strong> tokenizaci&oacute;n/hosted fields para minimizar el alcance PCI, y detecci&oacute;n de skimming (SRI, monitoreo de cambios en JS servido).</li>
+                <li><strong>Extensiones:</strong> auditar el c&oacute;digo de terceros antes de instalar y mantener el inventario actualizado.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;C&oacute;mo se gestionan los parches de seguridad y de calidad?</p>
+        <p class="a">Con el paquete <strong>magento/quality-patches</strong> (plugin de Composer) se listan y aplican parches sin subir de versi&oacute;n: en <em>composer.json</em> se declaran bajo <em>extra &rarr; magento-quality-patches &rarr; patches</em> y se aplican autom&aacute;ticamente durante <em>composer install/update</em> y al ejecutar <em>setup:upgrade</em> (en Adobe Commerce Cloud se gestionan con <em>vendor/bin/ece-patches</em>). Comandos &uacute;tiles: <em>vendor/bin/magento-quality-patches status</em> (ver aplicados/disponibles) y <em>list-patches</em>. Cada parche se documenta (ID, motivo, ticket de Adobe, versi&oacute;n en la que se incluye) y se retira al actualizar. En Cloud los parches de seguridad cr&iacute;ticos pueden aplicarse por la plataforma. Alternativa hist&oacute;rica: parches sueltos con <em>cweagans/composer-patches</em>. Lo importante es tener un proceso: monitoreo del bolet&iacute;n de seguridad de Adobe, ventana de aplicaci&oacute;n, prueba en staging y despliegue r&aacute;pido.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;Qu&eacute; es la CSP (Content Security Policy) y c&oacute;mo afecta a los desarrollos?</p>
+        <p class="a">Magento incorpora un m&oacute;dulo de <strong>Content Security Policy</strong> que en versiones recientes opera en modo <em>report-only</em> por defecto y puede pasar a modo <em>restrict</em>: limita qu&eacute; dominios pueden servir/ser cargados por scripts, iframes, im&aacute;genes, estilos y conexiones, mitigando XSS y skimming. Impacto en desarrollo: los <strong>inline scripts</strong> y estilos quedan bloqueados, por lo que hay que moverlos a archivos o usar nonces/hash seg&uacute;n la implementaci&oacute;n; y cada dominio de terceros (pasarelas de pago, analytics, chat, CDNs, mapas) debe declararse en <em>csp_whitelist.xml</em> del m&oacute;dulo correspondiente. Buenas pr&aacute;cticas: empezar en report-only, revisar los reportes para identificar violaciones, ajustar la whitelist al m&iacute;nimo necesario, verificar checkout y widgets de terceros antes de pasar a restrict, y documentar los dominios permitidos por qu&eacute; lo est&aacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;C&oacute;mo se configura multi-website, multi-store, multi-idioma y multi-moneda?</p>
+        <p class="a">La jerarqu&iacute;a es <strong>Website &rarr; Store &rarr; Store View</strong>: los websites separan cat&aacute;logos, clientes, precios base, m&eacute;todos de pago/env&iacute;o y dominios; las stores agrupan categor&iacute;as/estructuras de navegaci&oacute;n dentro de un website; las store views varian idioma, moneda de visualizaci&oacute;n y contenido traducido. Se configura en <em>Stores &rarr; All Stores</em>, asignando dominios/carpetas y c&oacute;digos, y creando variables de servidor (<em>MAGE_RUN_CODE</em>, <em>MAGE_RUN_TYPE</em>) o reglas en nginx para enrutar por dominio. Los precios pueden fijarse por website (scope del atributo <em>price</em>), las monedas se habilitan con tasas (manuales o por servicio) y las traducciones por store view. Consideraciones: URL rewrites y canonical por store view, sitemap separados, reglas de impuestos/env&iacute;o por website, y pruebas espec&iacute;ficas de cada tienda porque los bugs de scope son frecuentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se gestiona la calidad: tests y est&aacute;ndares de c&oacute;digo?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Unit tests (PHPUnit):</strong> l&oacute;gica aislada en <em>Test/Unit</em>; r&aacute;pidos, sin base de datos.</li>
+                <li><strong>Integration tests:</strong> framework propio (<em>dev/tests/integration</em>) que arranca la aplicaci&oacute;n con base de datos de prueba; validan DI, plugins, repositorios, observers y Web API.</li>
+                <li><strong>MFTF (Magento Functional Testing Framework):</strong> pruebas end-to-end de UI basadas en Codeception con XML de acciones y data; usadas para flujos cr&iacute;ticos (checkout, admin).</li>
+                <li><strong>Static tests:</strong> PHP_CodeSniffer con <em>magento/magento-coding-standard</em>, PHPMD, verificador de compatibilidad PHP y an&aacute;lisis est&aacute;tico (PHPStan/Psalm) en proyectos maduros.</li>
+                <li><strong>JS/CSS:</strong> tests de frontend y linting seg&uacute;n el stack del tema.</li>
+            </ul>
+            En CI se ejecutan al menos est&aacute;ticos + unitarios en cada PR, y los de integraci&oacute;n/MFTF en merges o nightly por su costo. A esto se suman revisiones de c&oacute;digo con criterios Magento (nada de Object Manager directo, sin overrides innecesarios, contratos p&uacute;blicos para lo que se expone).
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;C&oacute;mo se afronta un upgrade de versi&oacute;n y qu&eacute; se debe validar?</p>
+        <p class="a">Plan: <strong>(1)</strong> inventario (versi&oacute;n actual, extensiones y su compatibilidad con la versi&oacute;n destino, m&oacute;dulos propios, temas, integraciones, volumen de datos); <strong>(2)</strong> preparar entorno de prueba con copia de producci&oacute;n y ejecutar el upgrade con Composer (<em>composer require magento/product-*:2.4.x</em> + <em>composer update</em>), luego <em>setup:upgrade</em>, <em>setup:di:compile</em>, <em>setup:static-content:deploy</em>; <strong>(3)</strong> corregir c&oacute;digo propio por deprecaciones, cambios de interfaces, cambios en el esquema y en requisitos de PHP/OpenSearch; <strong>(4)</strong> regresi&oacute;n funcional: checkout completo (todos los m&eacute;todos de pago y env&iacute;o), b&uacute;squeda y facetas, precios y promociones, admin (grids y formularios), APIs e integraciones (ERP/PIM/pasarelas), correos y cron; <strong>(5)</strong> rendimiento comparado antes/despu&eacute;s; <strong>(6)</strong> plan de corte con snapshot y rollback definido. Los upgrades se presupuestan como proyecto y no deben dejarse para &uacute;ltimo momento: una versi&oacute;n sin soporte es riesgo de seguridad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;Qu&eacute; se monitorea y c&oacute;mo se administra una tienda en producci&oacute;n?</p>
+        <p class="a">Monitoreo: <strong>disponibilidad y latencia</strong> (uptime sint&eacute;tico del home, PLP, PDP y checkout), <strong>APM</strong> (New Relic/Blackfire/Datadog: tiempo por transacci&oacute;n, errores PHP, consultas lentas), <strong>infraestructura</strong> (CPU, RAM, disco, red de web/BD/Redis/OpenSearch), <strong>aplicaci&oacute;n</strong> (jobs cron atrasados o fallidos en <em>cron_schedule</em>, consumers de cola con backlog, hit rate de Varnish/Redis, errores 5xx en nginx, tama&ntilde;o de logs), <strong>negocio</strong> (&oacute;rdenes por hora, tasa de conversi&oacute;n, carritos abandonados, fallos de pago) y <strong>seguridad</strong> (intentos de login al admin, cambios de archivos, tr&aacute;fico de bots). Operaci&oacute;n: backups/snapshots autom&aacute;ticos con prueba de restauraci&oacute;n, gesti&oacute;n de cambios con ventanas y aprobaci&oacute;n, runbooks para incidentes comunes (ca&iacute;da de OpenSearch, Redis lleno, cron bloqueado), y revisiones peri&oacute;dicas de usuarios, permisos, integraciones y extensiones instaladas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;Qu&eacute; buenas pr&aacute;cticas de proyecto y gobierno recomiendas en una implementaci&oacute;n Magento?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Est&aacute;ndar primero:</strong> adaptar el proceso a lo que Magento ya hace antes que customizar; cada override y plugin es costo en cada upgrade.</li>
+                <li><strong>Arquitectura de integraciones clara:</strong> fuente de verdad por dato, middleware con colas y trazabilidad, contratos versionados.</li>
+                <li><strong>Ambientes y despliegue:</strong> dev/staging/producci&oacute;n con datos anonimizados en staging, pipeline reproducible, feature flags para cambios de riesgo.</li>
+                <li><strong>Calidad y deuda t&eacute;cnica:</strong> tests en CI, code review, registro de extensiones y customizaciones con su justificaci&oacute;n.</li>
+                <li><strong>Rendimiento desde el dise&ntilde;o:</strong> presupuesto de performance (Core Web Vitals), revisi&oacute;n de extensiones pesadas, indexadores en schedule.</li>
+                <li><strong>Gobierno funcional:</strong> due&ntilde;os de proceso (cat&aacute;logo, pricing, fulfillment), pol&iacute;ticas de alta de productos y de promociones, capacitaci&oacute;n del equipo de negocio.</li>
+                <li><strong>Operaci&oacute;n:</strong> plan de parcheo, monitoreo con alertas accionables, backups probados y plan de continuidad.</li>
+            </ul>
+        </p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Magento en una entrevista (plantilla)</h2>
+
+    <div class="note">
+        <p><strong>Pregunta t&iacute;pica:</strong> &laquo;&iquest;Cu&aacute;l es su experiencia con Magento / Adobe Commerce en desarrollo, configuraci&oacute;n, integraciones y administraci&oacute;n?&raquo;</p>
+    </div>
+
+    <h3>Respuesta modelo (adapta los corchetes con tu experiencia real)</h3>
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Magento [Open Source / Adobe Commerce] versi&oacute;n [2.4.x] durante [X] a&ntilde;os en tiendas de [sector/pa&iacute;s], cubriendo configuraci&oacute;n funcional, desarrollo de m&oacute;dulos y temas, integraciones con [ERP/PIM/pasarelas] y administraci&oacute;n de la plataforma en [on-premise / Adobe Commerce Cloud]&raquo;.</p>
+        <p><strong>Desarrollo:</strong> &laquo;Desarrollo m&oacute;dulos con la estructura est&aacute;ndar (<em>registration.php, module.xml, di.xml, db_schema.xml, webapi.xml</em>): modelos y repositorios con service contracts, plugins (before/after/around) en lugar de preferencias siempre que es posible, observers para eventos del core, cron jobs y patches de datos. Uso inyecci&oacute;n por constructor, factories y virtual types, y evito el Object Manager directo&raquo;.</p>
+        <p><strong>Frontend y experiencia:</strong> &laquo;He trabajado con layout XML (handles, containers, referenceBlock), bloques con ViewModels, templates PHTML y UI Components en el admin; en JavaScript con RequireJS y mixins [y con Hyvä / PWA Studio consumiendo GraphQL en proyectos headless]&raquo;.</p>
+        <p><strong>Configuraci&oacute;n funcional:</strong> &laquo;He configurado cat&aacute;logo con productos [simples/configurables/bundle], reglas de precio de carrito y de cat&aacute;logo, impuestos por [pa&iacute;s], m&eacute;todos de env&iacute;o y pago, MSI con m&uacute;ltiples sources, y multi-store con [N] websites y store views en varios idiomas y monedas&raquo;.</p>
+        <p><strong>Integraciones:</strong> &laquo;He integrado con [ERP/PIM/OMS] usando la API REST con tokens de integraci&oacute;n, SearchCriteria para consultas, bulk/async API para vol&uacute;menes altos y colas (RabbitMQ) con reintentos e idempotencia; tambi&eacute;n GraphQL para storefront headless&raquo;.</p>
+        <p><strong>Rendimiento y operaci&oacute;n:</strong> &laquo;Administro indexadores en modo schedule, Redis para cache/sesiones, Varnish/CDN para full page cache y OpenSearch; he optimizado [ejemplo: TTFB, LCP, tiempo de reindexado] y opero despliegues con <em>di:compile</em> y <em>static-content:deploy</em>, backups y monitoreo (New Relic/Blackfire/logs)&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [m&eacute;trica: conversi&oacute;n +X%, tiempo de carga -Y%, integraci&oacute;n de N sistemas, upgrade de versi&oacute;n sin incidentes]. En este rol aportar&iacute;a [desarrollo/arquitectura de integraciones/optimizaci&oacute;n] y ayudar&iacute;a a priorizar est&aacute;ndar frente a customizaciones para reducir la deuda de upgrades&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Desarrollo de m&oacute;dulos</td><td>Estructura de m&oacute;dulo, DI, plugins, service contracts, db_schema, patches de datos</td><td>M&oacute;dulos en producci&oacute;n, repositorio propio, extensiones publicadas</td></tr>
+        <tr><td>Frontend/temas</td><td>Layout XML, bloques y ViewModels, temas hijos, RequireJS/mixins, Hyvä o PWA</td><td>Mejoras de Core Web Vitals, storefront personalizado</td></tr>
+        <tr><td>Cat&aacute;logo y merchandising</td><td>Tipos de producto, atributos EAV, categor&iacute;as, reglas de precio, MSI</td><td>Cat&aacute;logos de N SKUs operando, campa&ntilde;as de promoci&oacute;n</td></tr>
+        <tr><td>Checkout y pagos</td><td>M&eacute;todos de pago/env&iacute;o, total collectors, tokenizaci&oacute;n, alcance PCI</td><td>Conversi&oacute;n mejorada, menos fallos de pago</td></tr>
+        <tr><td>Integraciones</td><td>REST/GraphQL/SOAP, bulk API, colas, webhooks, middleware</td><td>Sincronizaciones estables con ERP/PIM, volumen de transacciones</td></tr>
+        <tr><td>Rendimiento</td><td>Indexers en schedule, Redis, Varnish/Fastly, OpenSearch, profiling</td><td>Reducciones medibles de TTFB/LCP y de tiempo de reindexado</td></tr>
+        <tr><td>Seguridad</td><td>Parches de calidad, 2FA, CSP, hardening, auditor&iacute;a de extensiones</td><td>Hallazgos remediados, cumplimiento PCI, cero incidentes</td></tr>
+        <tr><td>DevOps y administraci&oacute;n</td><td>Modos de despliegue, pipelines, Cloud/ece-tools, backups, monitoreo</td><td>Releases predecibles, upgrades sin incidentes cr&iacute;ticos</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: SKUs, &oacute;rdenes/d&iacute;a, n&uacute;mero de store views, tiempos de respuesta y mejoras logradas.</li>
+        <li>Nombra con precisi&oacute;n: Magento Open Source vs Adobe Commerce vs Commerce Cloud, versi&oacute;n 2.4.x, DI/plugins/service contracts, MSI, GraphQL, Varnish/Redis/OpenSearch, MFTF.</li>
+        <li>Muestra criterio: preferir est&aacute;ndar y extensiones mantenidas; plugins antes que preferencias; contratos p&uacute;blicos para lo que se integra.</li>
+        <li>Prep&aacute;rate para preguntas de detalle: EAV y su rendimiento, <em>declarative schema</em>, modos de despliegue, agujeros del FPC, <em>SearchCriteria</em>, tipos de producto y MSI.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento s&oacute;lido del framework y un plan (certificaci&oacute;n Adobe Commerce Developer, proyecto propio, lectura del core).</li>
+        <li>Conecta con el negocio: conversi&oacute;n, costo de operaci&oacute;n, velocidad de lanzamiento de campa&ntilde;as y riesgo de seguridad.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Adobe Commerce Developer Documentation (developer.adobe.com/commerce)</td><td>Gu&iacute;as oficiales: arquitectura, DI, plugins, EAV, layout, UI Components, Web API, GraphQL, MSI, testing y despliegue.</td></tr>
+        <tr><td>Magento DevDocs - Best practices y coding standards</td><td>Convenciones de c&oacute;digo, patrones recomendados y anti-patrones (Object Manager, overrides excesivos).</td></tr>
+        <tr><td>C&oacute;digo fuente en GitHub (magento/magento2)</td><td>Referencia definitiva de interfaces, m&eacute;todos y flujos internos; esencial para herencias y plugins.</td></tr>
+        <tr><td>Magento Coding Standard (paquete Composer)</td><td>Reglas de PHP_CodeSniffer espec&iacute;ficas de Magento para an&aacute;lisis est&aacute;tico en CI.</td></tr>
+        <tr><td>MFTF (Magento Functional Testing Framework)</td><td>Pruebas funcionales end-to-end de UI con acciones en XML y datos generados.</td></tr>
+        <tr><td>Adobe Commerce Cloud docs (ece-tools)</td><td>Configuraci&oacute;n de entornos, <em>.magento.app.yaml</em>, despliegue, Fastly, snapshots y monitoreo.</td></tr>
+        <tr><td>Adobe Commerce Marketplace</td><td>Extensiones y temas certificados, con informaci&oacute;n de compatibilidad por versi&oacute;n.</td></tr>
+        <tr><td>Boletines y p&aacute;gina de seguridad de Adobe Commerce</td><td>Parches de seguridad, versiones soportadas y fechas de fin de soporte.</td></tr>
+        <tr><td>magento/quality-patches</td><td>Cat&aacute;logo y aplicaci&oacute;n de parches de seguridad y calidad por versi&oacute;n.</td></tr>
+        <tr><td>Hyvä Themes / PWA Studio</td><td>Documentaci&oacute;n de storefronts modernos: rendimiento, componentes y consumo de GraphQL.</td></tr>
+        <tr><td>OpenSearch / Elasticsearch y Redis / Varnish docs</td><td>Tuning de b&uacute;squeda, cach&eacute; distribuida y cach&eacute; HTTP de p&aacute;gina completa.</td></tr>
+        <tr><td>Certificaciones Adobe (Commerce Developer / Architect)</td><td>Rutas de certificaci&oacute;n oficial con los temarios de arquitectura y desarrollo.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
