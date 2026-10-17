@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terraform - Fundamentos, HCL, Providers, Estado, Modulos, Testing, Seguridad y Operacion | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Terraform &mdash; Fundamentos, HCL, Providers, Recursos, Estado, M&oacute;dulos, Testing, Seguridad y Operaci&oacute;n</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Terraform (infraestructura como c&oacute;digo, aprovisionamiento multi-cloud, gesti&oacute;n de estado y m&oacute;dulos) en dise&ntilde;o, automatizaci&oacute;n, seguridad y operaci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos e IaC (Q1&ndash;Q8), instalaci&oacute;n y CLI (Q9&ndash;Q16), HCL y expresiones (Q17&ndash;Q25), recursos, providers y dependencias (Q26&ndash;Q34), estado y backend (Q35&ndash;Q43), m&oacute;dulos y organizaci&oacute;n (Q44&ndash;Q52), variables, outputs y entornos (Q53&ndash;Q60), provisioners y configuraci&oacute;n (Q61&ndash;Q68), testing y CI/CD (Q69&ndash;Q77) y seguridad, gobierno y operaci&oacute;n (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos, IaC y ecosistema &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Instalaci&oacute;n, configuraci&oacute;n y CLI &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. HCL, sintaxis y expresiones &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Recursos, providers y dependencias &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. Estado, backend y colaboraci&oacute;n &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. M&oacute;dulos, workspaces y organizaci&oacute;n &mdash; 9 preguntas</a></li>
+        <li><a href="#s7">7. Variables, outputs, validaci&oacute;n y entornos &mdash; 8 preguntas</a></li>
+        <li><a href="#s8">8. Provisioners y gesti&oacute;n de configuraci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Testing, validaci&oacute;n y CI/CD &mdash; 9 preguntas</a></li>
+        <li><a href="#s10">10. Seguridad, gobierno, costos y operaci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Terraform en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos, IaC y ecosistema</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Terraform y para qu&eacute; se usa?</p>
+        <p class="a">Terraform es una herramienta de <strong>infraestructura como c&oacute;digo (IaC)</strong> desarrollada por HashiCorp que permite definir, aprovisionar y gestionar recursos de nube y servicios mediante archivos de configuraci&oacute;n declarativos en HCL. Con un mismo flujo (<em>init</em>, <em>plan</em>, <em>apply</em>) se administran m&uacute;ltiples proveedores (AWS, Azure, GCP, Kubernetes, Databricks, Cloudflare, GitHub, etc.), se versiona la infraestructura en Git y se mantiene un <strong>estado</strong> que reconcilia lo deseado con lo existente. Se usa para crear redes, c&oacute;mputo, bases de datos, permisos IAM, clusters, DNS y servicios SaaS; tambi&eacute;n para entornos ef&iacute;meros, recuperaci&oacute;n ante desastres y promoci&oacute;n entre dev/staging/prod. Su valor es la reproducibilidad, la revisi&oacute;n por pares y la reducci&oacute;n de cambios manuales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Qu&eacute; significa que Terraform sea declarativo y cu&aacute;les son sus ventajas frente a la infraestructura manual?</p>
+        <p class="a">En un enfoque declarativo se describe el <strong>estado final deseado</strong>, no los pasos para llegar; Terraform calcula el diff contra el estado real y ejecuta las acciones necesarias. Ventajas: reproducibilidad (el mismo c&oacute;digo crea el mismo entorno), revisi&oacute;n de cambios con <em>plan</em> antes de aplicar, versionado y auditor&iacute;a en Git, reducci&oacute;n de errores manuales, capacidad de recrear entornos y destruirlos de forma controlada. Tambi&eacute;n facilita la colaboraci&oacute;n y el cumplimiento, porque la infraestructura queda documentada y revisable. L&iacute;mites: no elimina la necesidad de entender el proveedor, el estado puede desincronizarse si hay cambios manuales, y no es ideal para configurar software dentro de servidores (para eso se usan cloud-init, Ansible o im&aacute;genes). La clave es tratar la infraestructura como c&oacute;digo de producci&oacute;n: revisada, probada y con due&ntilde;o.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Cu&aacute;l es la historia y evoluci&oacute;n de Terraform?</p>
+        <p class="a">HashiCorp lanz&oacute; Terraform en 2014 como una herramienta multi-proveedor basada en HCL. El salto importante fue <strong>Terraform 0.12</strong> (2019), que introdujo HCL2 con expresiones y tipos m&aacute;s potentes; <strong>Terraform 1.0</strong> lleg&oacute; en 2021 con estabilidad de lenguaje y flujo. En 2023 HashiCorp cambi&oacute; la licencia de MPL 2.0 a <strong>BSL 1.1</strong>, lo que impuls&oacute; el fork <strong>OpenTofu</strong> bajo la Linux Foundation; en 2025 IBM adquiri&oacute; HashiCorp. Terraform Cloud pas&oacute; a llamarse <strong>HCP Terraform</strong>, con ejecuci&oacute;n remota, pol&iacute;ticas y gesti&oacute;n de workspaces. En versiones 1.x recientes se han a&ntilde;adido <em>terraform test</em>, bloques <em>import</em>, <em>moved</em> y <em>removed</em>, valores ef&iacute;meros, <em>write-only arguments</em> y mejoras de flujo. Conocer esta evoluci&oacute;n ayuda a elegir versi&oacute;n, licencia y estrategia de migraci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Terraform u OpenTofu? &iquest;Qu&eacute; implica el cambio de licencia?</p>
+        <p class="a">Terraform usa la licencia <strong>BSL 1.1</strong> desde 2023, que permite uso interno y comercial pero restringe ofrecer un producto competidor basado en Terraform. <strong>OpenTofu</strong> es un fork open source (MPL 2.0) bajo la Linux Foundation, compatible con HCL, providers y estado, con su propio roadmap (por ejemplo, cifrado de estado y algunas mejoras). La elecci&oacute;n depende de pol&iacute;tica de licencias, soporte, ecosistema y funciones requeridas: Terraform tiene el ecosistema m&aacute;s amplio y HCP Terraform; OpenTofu ofrece una alternativa comunitaria y evita la BSL. Muchos providers funcionan en ambos. En una entrevista conviene explicar la compatibilidad t&eacute;cnica, los riesgos de lock-in, la estrategia de migraci&oacute;n y que la decisi&oacute;n suele ser organizacional, no solo t&eacute;cnica. Probar el flujo con una copia del estado antes de cambiar de binario.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;C&oacute;mo se compara Terraform con CloudFormation, Bicep, Pulumi y Ansible?</p>
+        <p class="a">
+            <ul>
+                <li><strong>CloudFormation:</strong> nativo de AWS, muy integrado y con drift detection, pero ligado a AWS y con YAML/JSON verboso; los cambios r&aacute;pidos dependen de AWS.</li>
+                <li><strong>Bicep:</strong> IaC moderna para Azure, m&aacute;s legible que ARM, pero espec&iacute;fica de Azure.</li>
+                <li><strong>Pulumi:</strong> usa lenguajes de programaci&oacute;n (TypeScript, Python, Go) con estado gestionado; muy flexible, pero requiere disciplina de programaci&oacute;n y su modelo es distinto.</li>
+                <li><strong>Ansible:</strong> gesti&oacute;n de configuraci&oacute;n imperativa/procedural; excelente para software dentro de servidores, no para aprovisionar infraestructura multi-cloud con estado.</li>
+                <li><strong>Terraform:</strong> multi-proveedor, declarativo, HCL, gran ecosistema y estado; no es ideal para configuraci&oacute;n de aplicaciones.</li>
+            </ul>
+            La elecci&oacute;n depende de la nube, el equipo y el alcance; es com&uacute;n combinar Terraform para infraestructura con Ansible/cloud-init para configuraci&oacute;n.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Qu&eacute; casos de uso y antipatrones son t&iacute;picos en Terraform?</p>
+        <p class="a">Casos de uso: aprovisionar redes y c&oacute;mputo, crear clusters de Kubernetes y servicios gestionados, configurar IAM y pol&iacute;ticas, entornos ef&iacute;meros de pruebas, recuperaci&oacute;n ante desastres, gesti&oacute;n de DNS/CDN y recursos SaaS. Antipatrones: usar Terraform para instalar software dentro de m&aacute;quinas; editar manualmente recursos gestionados; un &uacute;nico estado gigante con todo; <em>force push</em> del estado; secretos en texto plano; providers sin fijar versi&oacute;n; m&oacute;dulos que configuran providers internamente; <em>provisioners</em> para tareas repetibles; <em>count</em> en listas que cambian de orden; <em>target</em> como forma habitual de trabajar; y aplicar sin revisar el plan. Tambi&eacute;n es un antipatr&oacute;n copiar/pegar bloques en lugar de modularizar, o crear una abstracci&oacute;n propia tan compleja que nadie la entiende. La regla es simple: infraestructura declarativa, estados peque&ntilde;os, revisi&oacute;n y automatizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;Qu&eacute; es el ecosistema de providers y el registry?</p>
+        <p class="a">Un <strong>provider</strong> es un plugin que traduce HCL a llamadas de API de un servicio: AWS, AzureRM, Google, Kubernetes, Helm, Databricks, Cloudflare, GitHub, Snowflake, etc. El <strong>Terraform Registry</strong> publica providers oficiales, verificados y de la comunidad, con documentaci&oacute;n de recursos y data sources; tambi&eacute;n aloja m&oacute;dulos reutilizables. Cada provider tiene su ciclo de versiones y se declara en el bloque <em>required_providers</em> con restricciones de versi&oacute;n. Adem&aacute;s de los oficiales, existen providers partner y community; en entornos regulados se pueden usar mirrors internos. La calidad y el mantenimiento var&iacute;an: revisar releases, issues, licencia y soporte antes de adoptar uno. Los providers se descargan en <em>terraform init</em> y quedan registrados en el lock file; fijar versiones y actualizar de forma controlada es parte de la gesti&oacute;n de dependencias.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Cu&aacute;l es el flujo de trabajo b&aacute;sico de Terraform?</p>
+        <p class="a">El ciclo es <strong>write &rarr; init &rarr; plan &rarr; apply</strong>. Se escribe la configuraci&oacute;n (recursos, variables, providers), se ejecuta <em>terraform init</em> para descargar providers/m&oacute;dulos e inicializar el backend, <em>terraform plan</em> para ver el diff entre el estado deseado, el estado guardado y la realidad, y <em>terraform apply</em> para ejecutar los cambios (idealmente sobre un plan guardado y revisado). <em>terraform destroy</em> elimina lo gestionado. En equipos se a&ntilde;aden <em>fmt</em>, <em>validate</em>, an&aacute;lisis est&aacute;tico, tests, revisi&oacute;n por pares, bloqueo de estado y promoci&oacute;n entre entornos. El estado remoto es imprescindible para colaborar; sin &eacute;l, dos personas pueden pisarse. El flujo debe ser reproducible en CI/CD y no depender de la m&aacute;quina local de una persona.</p>
+    </div>
+
+    <h2 id="s2">2. Instalaci&oacute;n, configuraci&oacute;n y CLI</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;C&oacute;mo se instala Terraform y c&oacute;mo se fija la versi&oacute;n?</p>
+        <p class="a">Se descarga el binario oficial desde releases.hashicorp.com o se usa un gestor de paquetes (apt, brew, choco, winget) o una herramienta de versiones como <strong>tfenv</strong>/<strong>tofuenv</strong>. El binario es autocontenido. Para equipos y CI conviene fijar la versi&oacute;n en un archivo (<em>.terraform-version</em>, <em>required_version</em> en HCL) y verificar checksums; as&iacute; se evita que una actualizaci&oacute;n cambie el comportamiento entre locales y pipelines. La restricci&oacute;n <em>required_version</em> debe ser compatible con el backend y los providers. En contenedores se usa una imagen oficial o una imagen interna con la versi&oacute;n pinneada; en Windows se puede usar WSL. Mantener una versi&oacute;n &uacute;nica por repositorio y actualizarla de forma planificada, leyendo el changelog y probando en un entorno no productivo, es parte de la higiene de IaC.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;Cu&aacute;les son los comandos de CLI m&aacute;s importantes?</p>
+        <p class="a">
+            <ul>
+                <li><em>terraform init</em>: inicializa el directorio, descarga providers/m&oacute;dulos y configura el backend.</li>
+                <li><em>terraform plan</em>: calcula el diff y muestra qu&eacute; se crear&aacute;, cambiar&aacute; o destruir&aacute;.</li>
+                <li><em>terraform apply</em>: aplica el plan; <em>destroy</em> elimina los recursos gestionados.</li>
+                <li><em>terraform fmt / validate</em>: formato y validaci&oacute;n sint&aacute;ctica/sem&aacute;ntica.</li>
+                <li><em>terraform state</em>: inspecciona y manipula el estado (list, show, mv, rm).</li>
+                <li><em>terraform output / show / graph</em>: consulta outputs, estado y dependencias.</li>
+                <li><em>terraform import</em>: incorpora recursos existentes al estado.</li>
+                <li><em>terraform providers / version</em>: informaci&oacute;n de providers y versiones.</li>
+                <li><em>terraform test / console / workspace</em>: pruebas, REPL y gesti&oacute;n de workspaces.</li>
+            </ul>
+            Conocer las opciones de plan (<em>-out</em>, <em>-target</em>, <em>-replace</em>, <em>-refresh-only</em>) y los c&oacute;digos de salida es clave para CI/CD.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Qu&eacute; hace exactamente terraform init y qu&eacute; es el lock file?</p>
+        <p class="a"><em>init</em> prepara el directorio de trabajo: lee la configuraci&oacute;n, instala los providers y m&oacute;dulos necesarios, configura el backend remoto y escribe metadatos en <em>.terraform/</em>. Si existe <em>.terraform.lock.hcl</em>, respeta las versiones y checksums registrados; con <em>-upgrade</em> busca versiones nuevas dentro de las restricciones. El <strong>lock file</strong> fija versiones exactas y hashes de providers para que todos (y el CI) usen lo mismo; debe versionarse en Git. En equipos multi-plataforma puede contener hashes de varias arquitecturas; conviene generarlo/actualizarlo de forma controlada. El directorio <em>.terraform/</em> (binarios y cach&eacute;) no se versiona. Si se cambia el backend, <em>init -migrate-state</em> ayuda a mover el estado. Revisar el lock file en los PR es una defensa contra cambios silenciosos de providers.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;C&oacute;mo se usan plan, apply y destroy de forma segura?</p>
+        <p class="a">El flujo seguro: <em>terraform plan -out=tfplan</em> en un entorno con credenciales de solo lectura (idealmente), revisar el diff y aprobar; luego <em>terraform apply tfplan</em> con credenciales de escritura y sin regenerar el plan. <em>-target</em> sirve para emergencias, no como flujo habitual (puede dejar el estado parcial). <em>-replace=address</em> fuerza la recreaci&oacute;n de un recurso concreto; <em>-refresh-only</em> solo reconcilia el estado con la realidad. Antes de <em>destroy</em>, revisar qu&eacute; se eliminar&aacute; (protecciones <em>prevent_destroy</em>, backups, dependencias) y usar entornos separados. En CI conviene guardar el plan como artefacto, aplicar exactamente ese plan y registrar qui&eacute;n aprob&oacute;. Nunca aplicar a producci&oacute;n desde una laptop sin revisi&oacute;n; y evitar <em>auto-approve</em> en prod salvo en flujos muy controlados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Para qu&eacute; sirven fmt, validate, graph, show y output?</p>
+        <p class="a"><em>fmt</em> aplica el formato can&oacute;nico de HCL (con <em>-check</em> en CI); <em>validate</em> comprueba sintaxis, tipos y referencias sin contactar APIs (requiere init); <em>graph</em> genera el grafo de dependencias (DOT) para entender relaciones y ciclos; <em>show</em> muestra el estado o un plan guardado en formato legible/JSON; <em>output</em> consulta los outputs (con <em>-json</em> para automatizaci&oacute;n); <em>providers</em> lista providers y sus versiones; <em>version</em> muestra la versi&oacute;n de Terraform y providers. En CI, <em>fmt -check</em>, <em>validate</em> y <em>show -json</em> son &uacute;tiles para lint, validaci&oacute;n y an&aacute;lisis de pol&iacute;ticas. <em>graph</em> no sustituye entender el plan, pero ayuda a diagnosticar dependencias y ciclos. Estas comprobaciones son baratas y atrapan errores antes de tocar infraestructura.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;Qu&eacute; es HCP Terraform (antes Terraform Cloud) y cu&aacute;ndo conviene?</p>
+        <p class="a"><strong>HCP Terraform</strong> es la plataforma gestionada de HashiCorp: ejecuci&oacute;n remota de planes/applies, estado remoto, gesti&oacute;n de workspaces y variables, control de acceso, pol&iacute;ticas (Sentinel/OPA), registry privado de m&oacute;dulos/providers, detecci&oacute;n de drift y auditor&iacute;a. <strong>Terraform Enterprise</strong> es la versi&oacute;n autogestionada para organizaciones con requisitos de red o cumplimiento. Conviene cuando se quiere delegar la ejecuci&oacute;n, centralizar credenciales, aplicar pol&iacute;ticas y evitar que cada equipo monte su propio backend. Alternativas: backend S3/GCS/Azure con CI propio, o plataformas como Spacelift, Env0, Scalr o Atlantis. La decisi&oacute;n depende de coste, control, requisitos de red y si se prefiere una soluci&oacute;n gestionada o autogestionada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;Qu&eacute; variables de entorno y configuraci&oacute;n global usa Terraform?</p>
+        <p class="a"><em>TF_VAR_nombre</em> define variables de entrada; <em>TF_LOG</em> (TRACE/DEBUG/INFO/WARN/ERROR) y <em>TF_LOG_PATH</em> habilitan logs; <em>TF_WORKSPACE</em> selecciona workspace; <em>TF_CLI_ARGS</em> y <em>TF_CLI_ARGS_plan/apply</em> a&ntilde;aden argumentos; <em>TF_PLUGIN_CACHE_DIR</em> configura cach&eacute; de providers; <em>TF_IN_AUTOMATION</em> ajusta la salida para CI; <em>TF_INPUT=0</em> evita prompts. Las credenciales se pasan seg&uacute;n el provider (AWS_ACCESS_KEY_ID, AWS_PROFILE, ARM_CLIENT_ID, GOOGLE_APPLICATION_CREDENTIALS) o, mejor, mediante roles/OIDC de corta duraci&oacute;n. Cuidado con imprimir logs en CI porque pueden contener datos sensibles. Para depurar, usar <em>TF_LOG</em> en local y con precauci&oacute;n; en automatizaci&oacute;n, preferir variables seguras del pipeline y no dejarlas en el historial.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;Qu&eacute; es el plugin cache y c&oacute;mo acelera CI?</p>
+        <p class="a">Terraform descarga providers en cada <em>init</em> si no est&aacute;n en cach&eacute;; el <strong>plugin cache</strong> (<em>TF_PLUGIN_CACHE_DIR</em>) reutiliza binarios entre m&oacute;dulos y ejecuciones, reduciendo tiempo y llamadas al registry. En CI se puede cachear ese directorio entre jobs, siempre que se respete el lock file y los checksums. Alternativas: <strong>provider mirror</strong> interno o network mirror para entornos sin salida a Internet, y contenedores preconstruidos con providers. Precauciones: no compartir cach&eacute; entre versiones incompatibles, limpiar si hay corrupci&oacute;n, y mantener el lock file en Git. El cache no sustituye fijar versiones; solo acelera. En un pipeline t&iacute;pico, cachear <em>.terraform.d/plugin-cache</em> y <em>.terraform/</em> puede ahorrar minutos, pero no cachear el estado ni credenciales.</p>
+    </div>
+
+    <h2 id="s3">3. HCL, sintaxis y expresiones</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;C&oacute;mo se estructura un proyecto Terraform y qu&eacute; es HCL?</p>
+        <p class="a">HCL (HashiCorp Configuration Language) es un lenguaje declarativo con bloques, argumentos y expresiones. Un proyecto t&iacute;pico separa archivos por responsabilidad: <em>versions.tf</em> (versiones y providers), <em>providers.tf</em>, <em>variables.tf</em>, <em>main.tf</em>, <em>outputs.tf</em>, <em>locals.tf</em>, <em>terraform.tfvars</em> y m&oacute;dulos en carpetas. Los bloques tienen tipo y etiquetas (<em>resource "aws_s3_bucket" "this" { ... }</em>); dentro van argumentos y bloques anidados. Se permiten comentarios con <em>#</em>, <em>//</em> y <em>/* */</em>. Terraform carga todos los <em>.tf</em> del directorio como un solo m&oacute;dulo ra&iacute;z, as&iacute; que el orden de archivos no importa. La convenci&oacute;n y la separaci&oacute;n l&oacute;gica mejoran la legibilidad y las revisiones; evitar archivos gigantes y nombres ambiguos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; tipos de datos soporta HCL?</p>
+        <p class="a">Tipos primitivos: <strong>string</strong>, <strong>number</strong>, <strong>bool</strong>. Colecciones: <strong>list</strong> (ordenada, admite duplicados), <strong>set</strong> (sin duplicados), <strong>map</strong> (claves string) y <strong>object</strong> (estructura con atributos con nombre y tipos). Estructurales: <strong>tuple</strong> (secuencia con tipos por posici&oacute;n) y <strong>object</strong>. Tambi&eacute;n existe <strong>null</strong> para representar ausencia de valor y <em>any</em> para tipos din&aacute;micos en variables. Los tipos se declaran en variables y outputs; HCL convierte valores cuando es seguro. Para colecciones heterog&eacute;neas, usar <em>object</em> o <em>map(object({...}))</em>; para iterar, <em>for_each</em> sobre map/set y <em>count</em> sobre listas. Elegir bien el tipo evita errores de &iacute;ndice y cambios inesperados cuando se reordena una lista; los sets y maps son m&aacute;s estables para identidades.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Cu&aacute;les son las expresiones m&aacute;s usadas (interpolaci&oacute;n, condicionales, for, splat, funciones)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Interpolaci&oacute;n:</strong> <em>"${var.entorno}-app"</em>; en HCL2 muchas veces basta <em>"${...}"</em> o referencias directas.</li>
+                <li><strong>Condicional:</strong> <em>var.prod ? "m5.large" : "t3.micro"</em>; evitar anidarlos en exceso.</li>
+                <li><strong>For:</strong> <em>[for s in var.subnets : s.cidr]</em> y <em>{for k, v in var.map : k =&gt; v.name}</em>; tambi&eacute;n <em>for</em> con condici&oacute;n (<em>if</em>).</li>
+                <li><strong>Splat:</strong> <em>aws_instance.web[*].id</em> para proyectar atributos de una lista.</li>
+                <li><strong>Funciones:</strong> <em>lookup, merge, concat, flatten, distinct, coalesce, try, can, format, join, split, jsonencode, yamldecode, file, templatefile</em>.</li>
+            </ul>
+            Usar funciones con moderaci&oacute;n y nombres claros; la l&oacute;gica compleja se vuelve dif&iacute;cil de revisar. <em>try</em> y <em>can</em> ayudan con valores opcionales, pero pueden ocultar errores; preferir validaciones expl&iacute;citas cuando el dato es obligatorio.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;C&oacute;mo funcionan las referencias y las dependencias impl&iacute;citas?</p>
+        <p class="a">Al referenciar un atributo de otro recurso (<em>aws_subnet.this.id</em>), Terraform crea una <strong>dependencia impl&iacute;cita</strong> y ordena la creaci&oacute;n/actualizaci&oacute;n/destrucci&oacute;n en consecuencia. As&iacute; se evita hardcodear IDs y se construye el grafo. Las dependencias expl&iacute;citas con <em>depends_on</em> solo se necesitan cuando no hay referencia de atributo pero s&iacute; una relaci&oacute;n de orden (por ejemplo, permisos que deben existir antes). Para m&oacute;dulos, las referencias a outputs crean dependencias entre m&oacute;dulos. Entender el grafo ayuda a diagnosticar ciclos (<em>Cycle: ...</em>), destrucciones en orden incorrecto y recursos que se recrean antes de tiempo. Evitar <em>depends_on</em> indiscriminado: oculta relaciones y puede forzar esperas innecesarias. Si hay un ciclo, normalmente hay que romperlo con un data source, un recurso intermedio o redise&ntilde;ando la dependencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Cu&aacute;ndo usar variables, locals y outputs?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Variables:</strong> par&aacute;metros de entrada del m&oacute;dulo, con tipo, descripci&oacute;n, default y validaciones; permiten reutilizar el c&oacute;digo entre entornos.</li>
+                <li><strong>Locals:</strong> valores calculados o constantes internas para evitar repetici&oacute;n (nombres, tags, combinaciones); no son parametrizables desde fuera.</li>
+                <li><strong>Outputs:</strong> exponen valores del m&oacute;dulo (IDs, endpoints, ARNs) para otros m&oacute;dulos o para el usuario/CI; pueden marcarse <em>sensitive</em>.</li>
+            </ul>
+            Regla pr&aacute;ctica: si debe cambiar entre entornos o consumidores, variable; si es un c&aacute;lculo interno, local; si otro m&oacute;dulo o pipeline lo necesita, output. Evitar variables para todo (dificulta el uso) y outputs innecesarios (ampl&iacute;an la interfaz). Documentar cada variable/output en <em>variables.tf</em>/<em>outputs.tf</em> con descripci&oacute;n y tipo. Los locals no deben convertirse en un lenguaje de programaci&oacute;n oculto; si la l&oacute;gica es muy compleja, quiz&aacute; corresponda un m&oacute;dulo o un dato precalculado.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;Qu&eacute; son los bloques dynamic y cu&aacute;ndo usarlos?</p>
+        <p class="a">Un bloque <strong>dynamic</strong> genera bloques anidados repetidos a partir de una colecci&oacute;n, por ejemplo reglas de seguridad, tags o argumentos de un recurso. Sintaxis: <em>dynamic "ingress" { for_each = var.reglas content = { from_port = ingress.value.puerto ... } }</em>. Es &uacute;til cuando el n&uacute;mero de bloques es variable; para estructuras fijas, escribir los bloques expl&iacute;citos suele ser m&aacute;s legible. Limitaciones: complica el plan y los mensajes de error, y no todos los bloques anidados se comportan igual; en algunos casos conviene usar el argumento de lista/mapa directamente. Evitar dynamic anidados y nombres gen&eacute;ricos; documentar la estructura esperada. Si el provider ofrece un argumento equivalente en mapa/lista, preferirlo. La prioridad es que el c&oacute;digo sea comprensible para quien revisa el PR y para quien lee el plan.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;C&oacute;mo se leen archivos y plantillas (file, templatefile, jsonencode, yamldecode)?</p>
+        <p class="a"><em>file("${path.module}/user_data.sh")</em> lee un archivo de texto; <em>templatefile("${path.module}/init.tpl", { ... })</em> renderiza una plantilla con variables; <em>jsonencode(var.objeto)</em> serializa a JSON (muy usado en pol&iacute;ticas IAM); <em>yamldecode(file(...))</em> lee YAML; <em>jsondecode</em> hace lo propio con JSON. <em>path.module</em>, <em>path.root</em> y <em>path.cwd</em> ayudan a construir rutas portables. Patr&oacute;n t&iacute;pico: generar <em>user_data</em> o un ConfigMap de Kubernetes desde una plantilla. Consideraciones: las plantillas deben versionarse, no contener secretos y ser deterministas; los cambios en un archivo referenciado con <em>file</em> no siempre se detectan si no se usa <em>filehash</em> o un trigger. Para JSON/YAML complejos, validar el resultado y evitar concatenaciones fr&aacute;giles; <em>jsonencode</em> es preferible a construir strings a mano.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Cu&aacute;les son los meta-argumentos count, for_each, depends_on, provider y lifecycle?</p>
+        <p class="a">
+            <ul>
+                <li><strong>count:</strong> crea N instancias y se referencia con <em>count.index</em>; adecuado para cantidades estables.</li>
+                <li><strong>for_each:</strong> itera sobre un map o set y usa <em>each.key/value</em>; preferible para recursos con identidad estable (nombres, AZs).</li>
+                <li><strong>depends_on:</strong> fuerza orden expl&iacute;cito cuando no hay referencia de atributo.</li>
+                <li><strong>provider:</strong> asigna un provider alternativo (alias) a un recurso/m&oacute;dulo, por ejemplo multi-regi&oacute;n.</li>
+                <li><strong>lifecycle:</strong> <em>create_before_destroy</em>, <em>prevent_destroy</em>, <em>ignore_changes</em>, <em>replace_triggered_by</em>, <em>precondition/postcondition</em>.</li>
+            </ul>
+            <em>for_each</em> sobre mapas evita recreaciones cuando se a&ntilde;ade/elimina un elemento en medio de una lista; con <em>count</em>, reordenar cambia los &iacute;ndices y puede recrear recursos. Usar <em>lifecycle</em> con criterio: <em>ignore_changes</em> puede ocultar drift y <em>prevent_destroy</em> debe tener un proceso de excepci&oacute;n.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;Qu&eacute; patrones de bucles y transformaci&oacute;n de colecciones conviene dominar?</p>
+        <p class="a">Para construir mapas estables: <em>{ for s in var.subnets : s.name =&gt; s }</em> y luego <em>for_each = local.subnets_map</em>. Para aplanar estructuras: <em>flatten([for g in var.grupos : g.miembros])</em>. Para combinar listas: <em>setproduct</em>, <em>concat</em>, <em>merge</em>. Para deduplicar: <em>distinct</em> o convertir a <em>toset</em>. Para valores opcionales: <em>coalesce</em>, <em>try</em>, <em>lookup</em> con default. Para transformar tipos: <em>tomap</em>, <em>tolist</em>, <em>toset</em>. Para agrupar: <em>group_by</em> no existe de forma nativa; se construye con <em>for</em>. La clave es que las claves de <em>for_each</em> sean estables y significativas (nombre l&oacute;gico, no &iacute;ndice). Evitar expresiones de varias l&iacute;neas sin nombres intermedios en <em>locals</em>; documentar la forma de los datos. Probar con <em>terraform console</em> ayuda a validar transformaciones antes de aplicarlas.</p>
+    </div>
+
+    <h2 id="s4">4. Recursos, providers y dependencias</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;C&oacute;mo funciona el ciclo de vida de un recurso y qu&eacute; significa que un cambio fuerce reemplazo?</p>
+        <p class="a">Terraform compara la configuraci&oacute;n deseada con el estado y el recurso real, y decide crear, actualizar en sitio o reemplazar. Algunos atributos son <strong>ForceNew</strong>: el provider no puede cambiarlos sin destruir y recrear (por ejemplo, el nombre de una instancia o la zona de una base de datos). El plan lo muestra como <em>-/+</em> (replace); si el recurso tiene dependencias, el reemplazo puede propagarse. Para controlar el orden se usa <em>create_before_destroy</em>; para forzar un reemplazo puntual, <em>terraform apply -replace=...</em>. Entender qu&eacute; cambios son destructivos es clave para revisar planes y evitar downtime. En recursos con nombre &uacute;nico o IPs, el reemplazo puede fallar si el nuevo se crea antes de destruir el viejo; ah&iacute; ayuda <em>create_before_destroy</em> o un nombre intermedio. Documentar los atributos inmutables en los m&oacute;dulos y probar en staging.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;C&oacute;mo se configuran los providers, alias y restricciones de versi&oacute;n?</p>
+        <p class="a">En <em>terraform { required_providers { aws = { source = "hashicorp/aws", version = "~&gt; 5.0" } } }</em> se declara el provider y su restricci&oacute;n; en un bloque <em>provider "aws" { region = ... }</em> se configura. Los <strong>alias</strong> permiten varias configuraciones en el mismo m&oacute;dulo (por ejemplo, <em>aws.east</em> y <em>aws.west</em>), y se asignan con el meta-argumento <em>provider</em> en recursos o m&oacute;dulos. Las restricciones deben ser lo bastante amplias para recibir parches pero acotadas para evitar saltos mayores; el lock file fija la versi&oacute;n exacta. Los providers se heredan a los m&oacute;dulos hijos; lo recomendable es que un m&oacute;dulo no configure providers internamente, sino que los reciba. En multi-cloud se declaran varios providers y se a&iacute;sla cada uno; revisar compatibilidad de versiones y deprecaciones al actualizar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;C&oacute;mo se autentican los providers de forma segura?</p>
+        <p class="a">Evitar credenciales est&aacute;ticas en el c&oacute;digo o en <em>.tfvars</em>. Opciones: variables de entorno del proveedor, perfiles locales para desarrollo, roles IAM asumibles, y en CI/CD <strong>federaci&oacute;n OIDC</strong> (GitHub Actions, GitLab, Azure DevOps) para obtener credenciales de corta duraci&oacute;n sin secretos de larga vida. En AWS se usa <em>assume_role</em> con un rol por entorno; en Azure, federated credentials/managed identity; en GCP, Workload Identity Federation. Los service principals/roles deben tener m&iacute;nimo privilegio y separaci&oacute;n por entorno. Para HCP Terraform se usan variables sensibles y dynamic provider credentials. Rotar credenciales, auditar su uso y nunca imprimir tokens en logs. La autenticaci&oacute;n del provider es una superficie de ataque: si el pipeline puede asumir un rol de administrador, cualquier PR malicioso es un riesgo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;C&oacute;mo se resuelven las dependencias y el paralelismo?</p>
+        <p class="a">Terraform construye un grafo dirigido ac&iacute;clico (DAG) con las referencias entre recursos, m&oacute;dulos y data sources; los nodos sin dependencias se ejecutan en paralelo (por defecto hasta 10 operaciones, ajustable con <em>-parallelism</em>). Las dependencias impl&iacute;citas surgen de referencias a atributos; las expl&iacute;citas, de <em>depends_on</em>. Si hay un ciclo, el plan falla con <em>Cycle</em>; se rompe eliminando la referencia circular, usando un data source, un recurso intermedio o separando en m&oacute;dulos/estados. El paralelismo mejora la velocidad pero puede saturar APIs o provocar l&iacute;mites de rate; en esos casos se reduce o se aplican reintentos. Entender el grafo tambi&eacute;n ayuda a prever el orden de destrucci&oacute;n y a diagnosticar por qu&eacute; un recurso se recrea antes de que otro exista. <em>terraform graph</em> visualiza el DAG.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; diferencia hay entre data sources y resources? &iquest;Qu&eacute; es el drift?</p>
+        <p class="a">Un <strong>resource</strong> crea y gestiona un objeto (Terraform es due&ntilde;o de su ciclo de vida). Un <strong>data source</strong> solo lee informaci&oacute;n existente (AMI m&aacute;s reciente, VPC, secreto, zona DNS) sin crearla ni destruirla; se eval&uacute;a durante el plan/apply y puede cambiar entre ejecuciones. El <strong>drift</strong> es la diferencia entre el estado guardado y la realidad, normalmente por cambios manuales o por otros sistemas; se detecta con <em>plan</em> (refresh) y se corrige aplicando de nuevo o reconciliando. Un data source que devuelve algo distinto puede provocar cambios inesperados; fijar versiones/IDs cuando la estabilidad importa. Para recursos existentes que se quieren gestionar, usar <em>import</em> (o bloques <em>import</em>); para solo consultarlos, data source. Revisar el plan tras un drift y no aplicar a ciegas; el drift recurrente indica un proceso manual que hay que corregir.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; opciones de lifecycle existen y cu&aacute;ndo usarlas?</p>
+        <p class="a">
+            <ul>
+                <li><strong>create_before_destroy:</strong> crea el reemplazo antes de destruir el antiguo; &uacute;til para minimizar downtime, aunque puede requerir nombres temporales.</li>
+                <li><strong>prevent_destroy:</strong> bloquea la destrucci&oacute;n; protege bases de datos o recursos cr&iacute;ticos, pero complica <em>destroy</em> y requiere un proceso para retirarlo.</li>
+                <li><strong>ignore_changes:</strong> ignora cambios en atributos concretos (por ejemplo, tags gestionados por otra herramienta); puede ocultar drift real, usar con cuidado.</li>
+                <li><strong>replace_triggered_by:</strong> fuerza reemplazo cuando cambia otro recurso/atributo; &uacute;til para recrear instancias al cambiar un user_data o una AMI.</li>
+                <li><strong>precondition/postcondition:</strong> validan supuestos antes/despu&eacute;s de una operaci&oacute;n; fallan el plan/apply con mensajes claros.</li>
+            </ul>
+            El lifecycle debe responder a una necesidad concreta y documentada; no es un sustituto de un buen dise&ntilde;o de dependencias.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;C&oacute;mo se refactoriza sin recrear recursos (moved, import, removed)?</p>
+        <p class="a">Renombrar un recurso o moverlo a un m&oacute;dulo cambia su direcci&oacute;n en el estado y, sin ayuda, Terraform lo destruir&iacute;a y recrear&iacute;a. Los bloques <strong>moved</strong> indican el cambio de direcci&oacute;n (<em>from = aws_instance.old</em>, <em>to = module.app.aws_instance.this</em>) y Terraform actualiza el estado sin tocar la infraestructura. Los bloques <strong>import</strong> declaran recursos existentes con su ID para incorporarlos al estado de forma reproducible; <em>terraform import</em> manual sigue existiendo, pero el bloque es preferible en c&oacute;digo. Los bloques <strong>removed</strong> permiten dejar de gestionar un recurso sin destruirlo (con <em>lifecycle { destroy = false }</em>) o destruirlo de forma controlada. Buenas pr&aacute;cticas: hacer refactors en PR peque&ntilde;os, revisar el plan (debe ser <em>no changes</em> o solo movimientos), y probar en un entorno con copia del estado. Estas herramientas son clave para evolucionar m&oacute;dulos sin downtime.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; son los provisioners y por qu&eacute; se considera un antipatr&oacute;n?</p>
+        <p class="a">Los <strong>provisioners</strong> ejecutan acciones despu&eacute;s de crear/destruir un recurso: <em>file</em> copia archivos, <em>remote-exec</em> ejecuta comandos por SSH/WinRM, <em>local-exec</em> ejecuta en la m&aacute;quina donde corre Terraform. Se consideran &uacute;ltimo recurso porque: no son declarativos ni idempotentes por s&iacute; mismos, dependen de conectividad y credenciales, complican el estado y los reintentos, y si fallan dejan recursos a medias. Para configuraci&oacute;n de software se prefieren im&aacute;genes preconstruidas (Packer), <em>cloud-init</em>/user_data, Ansible o un sistema de configuraci&oacute;n/GitOps. Los provisioners pueden ser aceptables para tareas puntuales de bootstrap (obtener una clave, registrar un nodo) o cuando el proveedor no ofrece otra v&iacute;a, siempre con <em>when = destroy</em>/<em>on_failure</em> expl&iacute;citos. La infraestructura debe ser inmutable y reproducible; los provisioners tienden a hacerla fr&aacute;gil.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;Para qu&eacute; sirven null_resource, terraform_data, time y random?</p>
+        <p class="a">
+            <ul>
+                <li><strong>null_resource / terraform_data:</strong> recursos sin objeto real que sirven para disparar provisioners o guardar triggers. <em>terraform_data</em> es la alternativa moderna, con <em>triggers_replace</em> e <em>input</em>; evita depender del provider null.</li>
+                <li><strong>time_sleep:</strong> espera entre recursos cuando una API tarda en propagar (por ejemplo, permisos IAM); usar con moderaci&oacute;n porque aumenta el tiempo de apply.</li>
+                <li><strong>time_static/time_offset:</strong> genera timestamps reproducibles o calculados.</li>
+                <li><strong>random_id/random_password/random_string:</strong> genera valores aleatorios; se guardan en el estado (cuidado con secretos) y <em>keepers</em> controla cu&aacute;ndo se regeneran.</li>
+            </ul>
+            Son &uacute;tiles para casos concretos, pero abusar de ellos indica que la l&oacute;gica deber&iacute;a estar en otro nivel. Evitar <em>null_resource</em> para orquestar pasos que deber&iacute;an ser recursos; y no usar random para secretos que deban rotarse sin recrear.
+        </p>
+    </div>
+
+    <h2 id="s5">5. Estado, backend y colaboraci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;Qu&eacute; es el estado de Terraform y por qu&eacute; es tan importante?</p>
+        <p class="a">El <strong>estado</strong> (terraform.tfstate) es el registro que mapea los recursos declarados en HCL con los objetos reales del proveedor, guardando atributos e identificadores. Permite calcular el diff, saber qu&eacute; existe, planificar destrucciones y detectar drift. Sin estado, Terraform no puede gestionar recursos existentes de forma segura. Es un archivo sensible: contiene IDs, atributos y a veces secretos; debe almacenarse en un <strong>backend remoto</strong> con cifrado, bloqueo y control de acceso, nunca en Git. Se puede inspeccionar con <em>state list/show</em> y manipular con cuidado. El estado no es la verdad absoluta: la realidad manda, y <em>refresh</em> lo reconcilia. Perderlo o corromperlo puede implicar reimportar recursos o recrearlos; por eso se versiona/backupea y se protege como un secreto de producci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; backends existen y c&oacute;mo se configura el bloqueo?</p>
+        <p class="a">Backends: <strong>local</strong> (solo para pruebas), <strong>S3</strong> (con bloqueo nativo o DynamoDB), <strong>azurerm</strong>, <strong>gcs</strong>, <strong>remote</strong> (HCP Terraform), <strong>consul</strong>, <strong>kubernetes</strong>, entre otros. Se configuran en <em>terraform { backend "s3" { bucket = ... key = ... region = ... } }</em> o con <em>-backend-config</em> para parametrizar. El <strong>state locking</strong> evita que dos ejecuciones modifiquen el estado a la vez: en S3 se usaba DynamoDB y hoy existe bloqueo nativo con <em>use_lockfile</em>; en Azure/GCS hay mecanismos propios. Adem&aacute;s, el bucket debe tener versionado, cifrado, acceso restringido y logs. Nunca usar local en producci&oacute;n ni compartir credenciales de estado entre equipos. Si el bloqueo queda atascado, investigar el proceso antes de forzar <em>-lock=false</em>; forzar puede corromper el estado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;C&oacute;mo se colabora con estado remoto y qu&eacute; papel tienen los workspaces?</p>
+        <p class="a">Con backend remoto, cada ejecuci&oacute;n lee/escribe el mismo estado y el bloqueo serializa los cambios; los equipos comparten una fuente de verdad. Para separar entornos se puede usar una <strong>key/prefix distinta</strong> por entorno o <strong>workspaces</strong> (estado separado dentro del mismo backend). Los workspaces son c&oacute;modos para entornos ef&iacute;meros o pruebas, pero no son un aislamiento fuerte: comparten configuraci&oacute;n y credenciales, y un error puede afectar a varios. Para producci&oacute;n suele ser mejor un directorio/estado por entorno con backend y credenciales separadas. HCP Terraform gestiona workspaces con variables, permisos y ejecuci&oacute;n remota. Convenci&oacute;n: nombres claros (<em>app-network-prod</em>), permisos por workspace y pol&iacute;tica de qui&eacute;n puede aplicar. Documentar qu&eacute; estado contiene qu&eacute; y c&oacute;mo se recupera.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;Qu&eacute; es refresh, drift y c&oacute;mo se reconcilia?</p>
+        <p class="a">Antes del plan, Terraform consulta las APIs para actualizar el estado (<strong>refresh</strong>). Si alguien cambi&oacute; un recurso por fuera, el plan muestra el <strong>drift</strong> y propone volver a la configuraci&oacute;n deseada. <em>terraform plan -refresh-only</em> solo actualiza el estado sin proponer cambios de infraestructura; <em>terraform apply -refresh-only</em> acepta esa reconciliaci&oacute;n. Si el cambio manual es deseado, se actualiza el c&oacute;digo para reflejarlo; si no, se aplica para revertirlo. El drift recurrente indica procesos manuales, consolas o automatizaciones paralelas que hay que eliminar. En CI se programan <em>plans</em> peri&oacute;dicos para detectarlo. Cuidado con <em>ignore_changes</em>: puede ocultar drift leg&iacute;timo. La meta es que la realidad converja con el c&oacute;digo y que cualquier cambio pase por el repositorio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;Qu&eacute; datos sensibles contiene el estado y c&oacute;mo se protegen?</p>
+        <p class="a">El estado puede contener contrase&ntilde;as, claves, tokens, certificados y atributos sensibles de recursos, incluso si se marcan como <em>sensitive</em> (la marca evita mostrarlos en la CLI, no los elimina del estado). Protecci&oacute;n: backend remoto cifrado (SSE-KMS/CMK), acceso m&iacute;nimo, bloqueo, versionado y auditor&iacute;a; nunca en Git ni en artefactos de CI; cuidado con <em>terraform show -json</em> y logs. Para secretos, preferir generarlos y almacenarlos en un gestor (Vault, Secrets Manager, SSM) y referenciarlos con data sources ef&iacute;meros, en lugar de dejarlos en el estado. Las versiones recientes incorporan <em>ephemeral values</em> y <em>write-only arguments</em> para reducir la exposici&oacute;n. Adem&aacute;s, restringir qui&eacute;n puede leer el bucket de estado y rotar credenciales. El estado debe tratarse como un secreto de nivel producci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;C&oacute;mo se manipula el estado de forma segura (mv, rm, pull, push, taint)?</p>
+        <p class="a">
+            <ul>
+                <li><em>state list</em> / <em>state show</em>: inspeccionar direcciones y atributos.</li>
+                <li><em>state mv</em>: renombrar/mover un recurso en el estado; preferir bloques <em>moved</em> para que quede en c&oacute;digo.</li>
+                <li><em>state rm</em>: dejar de gestionar un recurso sin destruirlo; luego se puede importar en otro estado.</li>
+                <li><em>state pull/push</em>: descargar/subir el estado; &uacute;til para inspecci&oacute;n o recuperaci&oacute;n, riesgoso si se hace a mano.</li>
+                <li><em>taint</em> / <em>untaint</em>: marcar un recurso para recreaci&oacute;n; hoy se prefiere <em>apply -replace</em>.</li>
+            </ul>
+            Antes de cualquier manipulaci&oacute;n: backup, bloqueo, revisar el plan y hacerlo en una ventana controlada. Nunca editar el JSON del estado a mano salvo emergencia y con respaldo. Documentar el cambio y verificar con <em>plan</em> que no hay destrucciones inesperadas. Estas operaciones son quir&uacute;rgicas, no parte del flujo diario.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;Qu&eacute; hacer ante problemas de bloqueo o migraci&oacute;n de backend?</p>
+        <p class="a">Si el estado est&aacute; bloqueado, primero identificar qui&eacute;n lo tiene (CI, otra persona, un proceso colgado); esperar o cancelar la ejecuci&oacute;n. Forzar <em>-lock=false</em> solo si se est&aacute; seguro de que nadie est&aacute; escribiendo; puede provocar corrupci&oacute;n. En S3/DynamoDB, revisar el lock item; en HCP Terraform, el lock del workspace. Para migrar de backend: configurar el nuevo, ejecutar <em>init -migrate-state</em>, verificar que el estado se copi&oacute; y que el plan es coherente, y luego retirar el antiguo con cuidado (mantener backup). Si se cambia la key/prefix, el nuevo backend puede parecer vac&iacute;o; revisar la configuraci&oacute;n. Documentar el procedimiento y probarlo en un entorno no productivo. La migraci&oacute;n de estado es una operaci&oacute;n de riesgo: backup y ventana de mantenimiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo se decide el tama&ntilde;o y la separaci&oacute;n de los estados?</p>
+        <p class="a">El estado define el <strong>blast radius</strong>: un estado gigante tarda en planificar, concentra riesgos y bloquea a muchos equipos; demasiados estados peque&ntilde;os complican las dependencias y la visibilidad. Un patr&oacute;n com&uacute;n: separar por entorno (dev/staging/prod) y por dominio o capa (red, datos, aplicaci&oacute;n, identidad), con dependencias expl&iacute;citas mediante <em>terraform_remote_state</em> o data sources. Mantener juntos los recursos que cambian juntos y se despliegan juntos; separar lo que tiene ciclos de vida o equipos distintos. Evitar que un cambio de red requiera tocar la aplicaci&oacute;n. Medir el tiempo de plan y la frecuencia de cambios. La decisi&oacute;n debe documentarse; no hay una &uacute;nica respuesta, pero s&iacute; principios: menor riesgo, claridad de propiedad y autonom&iacute;a de equipos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;C&oacute;mo se respalda y recupera el estado ante corrupci&oacute;n o desastre?</p>
+        <p class="a">Habilitar <strong>versionado</strong> en el bucket de estado (S3/GCS) y, si aplica, replicaci&oacute;n entre regiones; conservar versiones y registrar cambios. En HCP Terraform, usar las capacidades de historial/backup de la plataforma. Antes de operaciones riesgosas, hacer <em>state pull</em> y guardar una copia fuera del pipeline. Si el estado se corrompe: restaurar la &uacute;ltima versi&oacute;n buena, verificar con <em>plan</em>, y si es necesario reimportar recursos. Mantener la configuraci&oacute;n en Git permite reconstruir; el estado se puede regenerar importando, aunque es costoso. Documentar RPO/RTO del estado y probar la restauraci&oacute;n. Evitar ediciones manuales y accesos amplios. El estado es un activo cr&iacute;tico: su p&eacute;rdida puede dejar la infraestructura &laquo;hu&eacute;rfana&raquo; y obligar a un trabajo manual peligroso.</p>
+    </div>
+
+    <h2 id="s6">6. M&oacute;dulos, workspaces y organizaci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;Qu&eacute; es un m&oacute;dulo y qu&eacute; tipos existen?</p>
+        <p class="a">Un <strong>m&oacute;dulo</strong> es un conjunto reutilizable de archivos Terraform con una interfaz de variables y outputs. El <strong>m&oacute;dulo ra&iacute;z</strong> es el directorio donde se ejecuta Terraform; los <strong>m&oacute;dulos hijos</strong> se invocan con <em>module "nombre" { source = ... }</em>. Fuentes: ruta local, registry p&uacute;blico/privado, repositorio Git (con ref/tag) o bucket. Los m&oacute;dulos encapsulan l&oacute;gica com&uacute;n (red, cl&uacute;ster, base de datos), reducen duplicaci&oacute;n y estandarizan. No todos los directorios son m&oacute;dulos reutilizables: el c&oacute;digo de un entorno concreto es el root. Un buen m&oacute;dulo tiene una responsabilidad clara, documentaci&oacute;n, ejemplos, versionado y tests. Evitar m&oacute;dulos que lo hacen todo o que ocultan decisiones cr&iacute;ticas; la abstracci&oacute;n debe simplificar, no sorprender. Los m&oacute;dulos tambi&eacute;n son una unidad de gobierno: se revisan, versionan y consumen como dependencias.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;C&oacute;mo se estructura y documenta un m&oacute;dulo?</p>
+        <p class="a">Estructura habitual: <em>main.tf</em> (recursos), <em>variables.tf</em> (entradas con tipo, descripci&oacute;n, default y validaciones), <em>outputs.tf</em> (salidas), <em>versions.tf</em> (required_version y providers), <em>README.md</em> (uso, ejemplos, requisitos, inputs/outputs) y una carpeta <em>examples/</em>. Opcional: <em>tests/</em> con <em>terraform test</em> o Terratest, y <em>CHANGELOG.md</em>. La documentaci&oacute;n se puede generar con <strong>terraform-docs</strong> para mantener tablas de variables/outputs actualizadas. Convenciones: nombres en snake_case, descripciones claras, evitar variables ambiguas, y outputs solo los necesarios. El m&oacute;dulo no debe configurar providers ni backend; debe recibirlos. Versionar con tags semver y publicar en un registry privado si se reutiliza. Un m&oacute;dulo sin README ni ejemplos es dif&iacute;cil de adoptar y tiende a duplicarse; la documentaci&oacute;n es parte del producto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; buenas pr&aacute;cticas de interfaz y encapsulamiento aplicar en m&oacute;dulos?</p>
+        <p class="a">Definir una interfaz m&iacute;nima y estable: pocas variables obligatorias, defaults sensatos, validaciones y outputs &uacute;tiles. Evitar exponer detalles internos (nombres de recursos, estructuras complejas) que impidan refactorizar. No configurar providers dentro del m&oacute;dulo; recibir <em>providers</em> desde el root para permitir alias y evitar acoplamiento. Evitar <em>depends_on</em> sobre m&oacute;dulos si se puede expresar con datos; y no usar <em>count</em> dentro de un m&oacute;dulo para &laquo;apagar&raquo; recursos de forma impl&iacute;cita. Documentar supuestos y limitaciones. En lo posible, un m&oacute;dulo debe poder probarse de forma aislada con ejemplos. Si un m&oacute;dulo requiere 40 variables, quiz&aacute; est&aacute; mal dividido. La se&ntilde;al de un buen dise&ntilde;o es que el consumidor entiende qu&eacute; pasar y qu&eacute; obtiene sin leer toda la implementaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;C&oacute;mo se versionan y distribuyen los m&oacute;dulos?</p>
+        <p class="a">Los m&oacute;dulos se versionan con <strong>tags semver</strong> (por ejemplo, v1.2.0) y se referencian con <em>source</em> + <em>version</em> en el registry, o con <em>ref</em> en Git. Fijar versiones exactas o rangos acotados; actualizar deliberadamente y leer el changelog. Un <strong>registry privado</strong> (HCP Terraform, GitLab, Artifactory) centraliza m&oacute;dulos internos, controla acceso y publica documentaci&oacute;n. Alternativas: repositorios Git con tags y subm&oacute;dulos, o buckets. Buenas pr&aacute;cticas: mantener compatibilidad semver, deprecar variables con aviso, pruebas por versi&oacute;n y ejemplos actualizados. Evitar referencias a <em>main</em> o ramas m&oacute;viles en producci&oacute;n: un cambio no revisado puede romper todos los consumidores. El versionado de m&oacute;dulos es gesti&oacute;n de dependencias: merece el mismo rigor que las librer&iacute;as de c&oacute;digo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;Workspaces, directorios separados o stacks? &iquest;C&oacute;mo separar entornos?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Workspaces:</strong> mismo c&oacute;digo y backend, distinto estado por workspace; r&aacute;pido para entornos ef&iacute;meros, pero comparten credenciales/configuraci&oacute;n y no son aislamiento fuerte.</li>
+                <li><strong>Directorios/estados separados:</strong> cada entorno tiene su root, backend, credenciales y variables; m&aacute;s aislamiento y claridad, con algo de duplicaci&oacute;n (se mitiga con m&oacute;dulos).</li>
+                <li><strong>Stacks (HCP Terraform):</strong> agrupan componentes con dependencias y despliegues orquestados; &uacute;til para arquitecturas grandes, pero a&ntilde;ade complejidad y dependencia de la plataforma.</li>
+            </ul>
+            Para producci&oacute;n se suele preferir separaci&oacute;n por estado/credenciales; para pruebas temporales, workspaces. La decisi&oacute;n debe considerar blast radius, qui&eacute;n aplica, requisitos de auditor&iacute;a y coste operativo. No mezclar entornos en el mismo estado.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;Qu&eacute; es Terragrunt y cu&aacute;ndo conviene?</p>
+        <p class="a"><strong>Terragrunt</strong> es un wrapper de Terraform que reduce duplicaci&oacute;n: genera backends y providers, organiza m&oacute;dulos por entorno, permite dependencias entre m&oacute;dulos (<em>dependency</em>) y ejecuta comandos en varios directorios (<em>run-all</em>). Es &uacute;til en repositorios con muchos entornos y configuraciones repetidas. Costos: una capa adicional de abstracci&oacute;n y herramienta que el equipo debe conocer; <em>run-all</em> puede ampliar el blast radius; y no sustituye un buen dise&ntilde;o de estados. Alternativas: m&oacute;dulos + roots por entorno, HCP Terraform Stacks, o generaci&oacute;n con plantillas. Conviene cuando la duplicaci&oacute;n es dolorosa y el equipo ya domina Terraform; no como primer paso para un proyecto peque&ntilde;o. Documentar c&oacute;mo se ejecuta y c&oacute;mo se promociona entre entornos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;Monorepo o polyrepo? &iquest;C&oacute;mo se asignan owners y se controla el cambio?</p>
+        <p class="a"><strong>Monorepo:</strong> toda la IaC en un repositorio, con ventajas de visibilidad, cambios at&oacute;micos y reutilizaci&oacute;n; riesgos de acoplamiento, pipelines lentos y permisos amplios. <strong>Polyrepo:</strong> un repositorio por dominio/equipo, con autonom&iacute;a y permisos m&aacute;s finos; riesgos de dependencias descoordinadas y duplicaci&oacute;n. En ambos casos: c&oacute;digo de m&oacute;dulos separado del c&oacute;digo de entornos, revisi&oacute;n por pares, CODEOWNERS, ramas protegidas y pipelines que validen. Asignar owner por m&oacute;dulo/estado, documentar contratos y usar versionado. El cambio de infraestructura debe tener el mismo rigor que el de aplicaci&oacute;n: PR, plan, aprobaci&oacute;n y auditor&iacute;a. La elecci&oacute;n depende de tama&ntilde;o, cultura y herramientas; lo importante es que la propiedad y el flujo de aprobaci&oacute;n sean claros.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;Qu&eacute; convenciones de nombres, tags y estructura conviene establecer?</p>
+        <p class="a">Nombres: <em>{empresa}-{entorno}-{dominio}-{recurso}</em>, en min&uacute;sculas y guiones, respetando l&iacute;mites del proveedor; evitar nombres que codifiquen informaci&oacute;n vol&aacute;til. Tags obligatorios: entorno, owner/equipo, aplicaci&oacute;n, cost_center, data_classification, managed_by=terraform. Los tags permiten cost allocation, inventario y automatizaci&oacute;n; definirlos como locals y aplicarlos de forma consistente (merge de tags comunes + espec&iacute;ficos). Estructura: <em>environments/</em>, <em>modules/</em>, <em>shared/</em>, <em>docs/</em>; archivos por responsabilidad. Documentar convenciones en un README/ADRs y validarlas con pol&iacute;ticas (por ejemplo, que todo recurso etiquetable tenga tags). Unificar nombres de variables/outputs y evitar abreviaturas cr&iacute;pticas. La consistencia reduce errores y facilita la b&uacute;squeda; la convenci&oacute;n debe ser &uacute;til, no burocr&aacute;tica.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;Qu&eacute; patrones de composici&oacute;n y antipatrones de m&oacute;dulos existen?</p>
+        <p class="a">Patrones: m&oacute;dulos por dominio (red, c&oacute;mputo, datos, observabilidad), composici&oacute;n en el root, m&oacute;dulos &laquo;opinionated&raquo; para est&aacute;ndares corporativos, y m&oacute;dulos de datos que solo consultan. Antipatrones: mega-m&oacute;dulo que crea toda la plataforma; m&oacute;dulos que configuran providers/backends; exponer todos los atributos; usar <em>count</em> para habilitar/deshabilitar secciones; condicionales anidados que generan planes ilegibles; depends_on excesivo; versiones flotantes; duplicar recursos en lugar de componer; y m&oacute;dulos sin tests. Tambi&eacute;n es un antipatr&oacute;n envolver un &uacute;nico recurso sin aportar valor. La composici&oacute;n debe equilibrar reutilizaci&oacute;n y claridad: si el consumidor no entiende el plan, la abstracci&oacute;n fall&oacute;. Preferir interfaces peque&ntilde;as, ejemplos y versionado.</p>
+    </div>
+
+    <h2 id="s7">7. Variables, outputs, validaci&oacute;n y entornos</h2>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;C&oacute;mo se declaran variables y qu&eacute; opciones tienen?</p>
+        <p class="a">Sintaxis: <em>variable "region" { type = string description = "..." default = "us-east-1" sensitive = false nullable = false validation { condition = ... error_message = "..." } }</em>. Opciones clave: <strong>type</strong> (string, number, bool, list, map, object, set, tuple, any), <strong>default</strong> (si falta, la variable es obligatoria), <strong>description</strong>, <strong>sensitive</strong> (oculta en salida, no en el estado), <strong>nullable</strong> (si acepta null) y <strong>validation</strong> (reglas con <em>condition</em> y <em>error_message</em>). Para estructuras complejas, definir un <em>object</em> con atributos tipados y defaults por atributo (con <em>optional</em>). Evitar variables de tipo <em>any</em> salvo justificaci&oacute;n; documentar cada una. Las variables son la interfaz p&uacute;blica del m&oacute;dulo: cambiarlas es un cambio de contrato. En lo posible, defaults seguros y validaciones que fallen temprano en el plan.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;Cu&aacute;l es la precedencia de valores de variables?</p>
+        <p class="a">De menor a mayor prioridad: <strong>defaults</strong> de la variable &rarr; <strong>terraform.tfvars</strong> y <strong>*.auto.tfvars</strong> (orden alfab&eacute;tico) &rarr; variables de entorno <strong>TF_VAR_</strong> &rarr; archivo <strong>-var-file</strong> &rarr; <strong>-var</strong> en la l&iacute;nea de comandos. Los archivos <em>*.auto.tfvars</em> se cargan autom&aacute;ticamente; <em>terraform.tfvars</em> tambi&eacute;n. Si una variable no tiene default ni valor, Terraform la pide interactivamente (o falla en CI). En automatizaci&oacute;n, usar <em>-var-file</em> por entorno y variables del pipeline; evitar <em>-var</em> en scripts largos. Cuidado con m&uacute;ltiples archivos que definen la misma variable: el &uacute;ltimo gana, y puede ser confuso. Documentar la fuente de cada valor y no versionar secretos. La precedencia explica muchos comportamientos inesperados; revisar <em>plan</em> y el valor efectivo antes de aplicar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo se organizan tfvars y secretos por entorno?</p>
+        <p class="a">Una convenci&oacute;n com&uacute;n: <em>env/dev.tfvars</em>, <em>env/staging.tfvars</em>, <em>env/prod.tfvars</em>, con valores no sensibles; los secretos se inyectan desde el gestor de secretos o variables del CI, no se versionan. Para secretos en tfvars, usar SOPS/age o un mecanismo de cifrado, pero aun as&iacute; hay que controlar el acceso. Otra opci&oacute;n: generar variables desde SSM/Secrets Manager con data sources (cuidado con el estado). Los archivos de entorno deben contener solo diferencias y ser revisables; evitar copiar/pegar bloques enormes. En HCP Terraform, variables por workspace con marca sensitive. Validar que prod no herede valores de dev y que los defaults sean seguros. Separar credenciales de configuraci&oacute;n. Si un secreto termina en el estado, tratarlo como comprometido y rotarlo; el objetivo es que el repositorio no sea la fuente de secretos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;C&oacute;mo funcionan los outputs y qu&eacute; significa sensitive?</p>
+        <p class="a">Los <strong>outputs</strong> exponen valores (IDs, endpoints, ARNs, nombres) para el usuario, el CI u otros m&oacute;dulos. Sintaxis: <em>output "endpoint" { value = aws_lb.this.dns_name description = "..." sensitive = true }</em>. <em>sensitive</em> evita mostrarlos en la CLI y en la UI, pero no los elimina del estado; si un output sensible se usa en otro recurso, el plan puede ocultar el valor. <em>depends_on</em> en outputs fuerza orden si no hay referencia. En m&oacute;dulos, los outputs son la interfaz de salida: mantenerlos estables y documentados. Para valores que no deben persistir, versiones recientes ofrecen <em>ephemeral</em>. En CI se consumen con <em>terraform output -json</em>. No exponer secretos innecesariamente ni usar outputs como almac&eacute;n de configuraci&oacute;n; para integraci&oacute;n entre estados, preferir <em>terraform_remote_state</em> o data sources con permisos acotados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;Cu&aacute;ndo usar locals y c&oacute;mo evitar complejidad excesiva?</p>
+        <p class="a">Los <strong>locals</strong> sirven para calcular valores repetidos (tags comunes, nombres, mapas derivados) y dar nombres a expresiones complejas. Ayudan a la legibilidad si se usan con moderaci&oacute;n: <em>locals { nombre = "${var.app}-${var.env}" tags = merge(local.tags_base, var.tags) }</em>. Antipatr&oacute;n: construir una capa de &laquo;programaci&oacute;n&raquo; con decenas de locals anidados, condicionales y transformaciones que nadie puede seguir. Si la l&oacute;gica es muy compleja, dividir en m&oacute;dulos, precalcular datos o usar un lenguaje de programaci&oacute;n (Pulumi) si el equipo lo prefiere. Documentar la forma de los datos y mantener expresiones simples. Los locals no se pueden sobrescribir desde fuera; si un valor debe variar por entorno, variable. Evitar locals que dependan de recursos no creados (provocan errores de plan) y recordar que se eval&uacute;an en cada plan. La claridad del plan es el mejor indicador.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;C&oacute;mo se valida la configuraci&oacute;n antes de aplicar (validations, preconditions, check blocks)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Variable validation:</strong> valida tipos, formatos y rangos en la entrada, con mensajes claros; falla en <em>plan</em>.</li>
+                <li><strong>Preconditions:</strong> dentro de <em>lifecycle</em>, comprueban supuestos antes de crear/actualizar (por ejemplo, que un CIDR no se solape).</li>
+                <li><strong>Postconditions:</strong> verifican el resultado despu&eacute;s de la operaci&oacute;n (por ejemplo, que un endpoint exista).</li>
+                <li><strong>check blocks:</strong> validaciones continuas que no bloquean el apply; generan warnings y pueden usarse para assertions de salud.</li>
+            </ul>
+            Complementar con <em>validate</em>, an&aacute;lisis est&aacute;tico (Checkov/tfsec/Trivy), pol&iacute;ticas (OPA/Sentinel) y tests. Las validaciones deben dar mensajes accionables y no depender de APIs externas si pueden ser locales. Evitar duplicar la misma regla en muchos sitios; centralizar en m&oacute;dulos y pol&iacute;ticas. Una validaci&oacute;n que no se prueba puede ser tan peligrosa como su ausencia; incluir casos v&aacute;lidos e inv&aacute;lidos en los tests.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;Qu&eacute; son los valores ef&iacute;meros y write-only arguments?</p>
+        <p class="a">Son mecanismos recientes para manejar datos sensibles sin persistirlos en el estado/plan. Los <strong>ephemeral values</strong> existen durante la operaci&oacute;n pero no se guardan; los <strong>ephemeral resources</strong> abren conexiones o generan credenciales de corta duraci&oacute;n (por ejemplo, un token de base de datos) para usarlas en el apply. Los <strong>write-only arguments</strong> permiten enviar un valor al provider sin almacenarlo en el estado (por ejemplo, una contrase&ntilde;a inicial). Se combinan con gestores de secretos y data sources ef&iacute;meros. Limitaciones: no todos los providers/atributos los soportan y el comportamiento depende de la versi&oacute;n de Terraform; verificar compatibilidad. La ventaja es reducir la exposici&oacute;n de secretos en estado y planes. Aun as&iacute;, el estado sigue siendo sensible: cifrado, acceso m&iacute;nimo y rotaci&oacute;n siguen siendo necesarios. No asumir que &laquo;sensitive&raquo; basta; entender d&oacute;nde se persiste cada valor.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; estrategia seguir para entornos y promoci&oacute;n?</p>
+        <p class="a">Definir entornos con propos&iacute;tos claros (dev, staging, prod), configuraciones y credenciales separadas, y un flujo de promoci&oacute;n: el mismo c&oacute;digo/m&oacute;dulo versionado se prueba en dev, se valida en staging y se aplica en prod con aprobaci&oacute;n. Las diferencias deben ser datos (tfvars/variables), no copias divergentes del c&oacute;digo. Usar estados y backends separados; para prod, permisos m&aacute;s estrictos y ventanas de cambio. Evitar que staging sea &laquo;prod con otro nombre&raquo; sin datos representativos. Automatizar planes en PR y aplicar solo tras aprobaci&oacute;n; registrar qui&eacute;n aprob&oacute;. Para entornos ef&iacute;meros, workspaces o stacks temporales con TTL. Documentar el flujo y los criterios de promoci&oacute;n. La paridad entre entornos reduce sorpresas, pero no siempre es total; identificar y aceptar las diferencias conscientemente. La promoci&oacute;n debe ser reproducible y auditable.</p>
+    </div>
+
+    <h2 id="s8">8. Provisioners y gesti&oacute;n de configuraci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo funcionan los connection blocks y remote-exec?</p>
+        <p class="a">Para <em>remote-exec</em> o <em>file</em>, Terraform necesita un bloque <em>connection</em> con tipo (ssh/winrm), host, usuario, clave o certificado, timeout y basti&oacute;n si aplica. Ejemplo: <em>connection { type = "ssh" host = self.public_ip user = "ubuntu" private_key = file(...) }</em>. Terraform espera a que el host est&eacute; accesible y ejecuta los comandos; si falla, el recurso queda en estado <em>tainted</em> y puede requerir intervenci&oacute;n. Riesgos: credenciales en el estado/plan, dependencia de red, comandos no idempotentes, cambios fuera de Terraform y dificultad para reproducir. Adem&aacute;s, las claves privadas pueden quedar en el estado. Alternativas: user_data/cloud-init para bootstrap, im&aacute;genes con Packer, Ansible o un agente de configuraci&oacute;n. Si se usa remote-exec, limitarlo a tareas de emergencia o bootstrap m&iacute;nimo, con scripts versionados y idempotentes, y sin secretos incrustados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;cloud-init o user_data frente a provisioners?</p>
+        <p class="a"><strong>cloud-init</strong> es el est&aacute;ndar de inicializaci&oacute;n de instancias cloud: configura usuarios, paquetes, archivos, servicios y scripts al primer arranque. Se pasa como <em>user_data</em> (o equivalente) y es declarativo, reproducible y no requiere SSH desde Terraform. Es preferible a <em>remote-exec</em> para bootstrap. Limitaciones: se ejecuta en el arranque (no en cada apply), los cambios posteriores no se aplican solos, y los logs/errores requieren revisar la instancia. Para cambios continuos, usar gesti&oacute;n de configuraci&oacute;n (Ansible, SSM) o reemplazar la instancia con una imagen nueva. Patr&oacute;n inmutable: construir una AMI/imagen con Packer que ya traiga la aplicaci&oacute;n, y usar user_data solo para datos din&aacute;micos. Evitar scripts enormes en user_data; versionarlos y probarlos. La combinaci&oacute;n imagen + cloud-init reduce el uso de provisioners y mejora la trazabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo se integran Packer y Ansible con Terraform?</p>
+        <p class="a"><strong>Packer</strong> construye im&aacute;genes (AMI, imagen de GCP/Azure, Docker) de forma reproducible; Terraform selecciona la imagen (por ID o data source) y crea la infraestructura. As&iacute; el software queda horneado y el arranque es r&aacute;pido. <strong>Ansible</strong> configura servidores existentes o tareas posteriores; puede ejecutarse desde un pipeline o desde un <em>local-exec</em> (no recomendado como patr&oacute;n principal). La separaci&oacute;n clara es: Packer construye artefactos, Terraform aprovisiona infraestructura, Ansible/SSM gestiona configuraci&oacute;n continua. Evitar que Terraform sea el orquestador de Ansible en cada apply: acopla herramientas y complica el estado. Integrar en CI/CD: build de imagen &rarr; test &rarr; publicaci&oacute;n &rarr; Terraform actualiza la referencia &rarr; despliegue. Versionar las plantillas y fijar versiones de Ansible/Packer. Esta divisi&oacute;n mejora la inmutabilidad y reduce el uso de remote-exec.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;Cu&aacute;ndo usar el provider external o un provider propio?</p>
+        <p class="a">El <strong>provider external</strong> ejecuta un programa y consume su salida JSON como data source; sirve para integrar scripts existentes o APIs sin provider. Riesgos: dependencia de entorno, manejo de errores, seguridad (el script corre con privilegios del pipeline) y falta de idempotencia. Para recursos que no tienen provider, se puede escribir un <strong>provider personalizado</strong> (Go, Terraform Plugin Framework), lo que es costoso y requiere mantenimiento; alternativas: usar la API con un recurso <em>http</em>, un operador de Kubernetes, o separar esa parte del ciclo de Terraform. Antes de escribir un provider, comprobar si existe uno oficial/comunitario o si el recurso puede gestionarse con otra herramienta. Los providers propios deben versionarse, documentarse y probarse; no son un proyecto trivial. En general, external/provider propio son &uacute;ltimos recursos, no la primera opci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;C&oacute;mo se seleccionan im&aacute;genes/AMIs con data sources?</p>
+        <p class="a">Los data sources permiten buscar la AMI/imagen m&aacute;s reciente que cumple filtros (owner, nombre, arquitectura, tags) en lugar de hardcodear IDs. Patr&oacute;n: <em>data "aws_ami" "app" { most_recent = true owners = ["self"] filter { name = "name" values = ["app-*"] } }</em>. Ventajas: no hay IDs m&oacute;viles en el c&oacute;digo y se integra con el pipeline de im&aacute;genes. Riesgos: <em>most_recent</em> puede cambiar y forzar reemplazos inesperados; fijar versiones/tags y usar <em>lifecycle</em> para controlar. Para producci&oacute;n, es com&uacute;n pasar la AMI como variable desde el pipeline (ID inmutable) y dejar el data source para desarrollo. Documentar qui&eacute;n publica la imagen y c&oacute;mo se versiona. Combinar con pruebas de la imagen y un proceso de rollback. La inmutabilidad de la referencia es clave para que un apply no cambie la flota sin una decisi&oacute;n expl&iacute;cita.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Terraform debe gestionar Kubernetes y Helm?</p>
+        <p class="a">Terraform puede crear el cl&uacute;ster y, con los providers <strong>kubernetes</strong> y <strong>helm</strong>, desplegar namespaces, RBAC, operadores y charts. Es &uacute;til para el bootstrap y para recursos de plataforma que deben existir antes de GitOps. Limitaciones: el estado de Terraform no es un buen lugar para workloads muy din&aacute;micos; los CRDs/operadores pueden entrar en conflicto; y aplicar Terraform con frecuencia sobre el cl&uacute;ster puede chocar con controladores. Patr&oacute;n com&uacute;n: Terraform aprovisiona el cl&uacute;ster y componentes base; <strong>Argo CD/Flux</strong> (GitOps) gestiona aplicaciones y configuraciones continuas. Si se usa Helm con Terraform, fijar versiones de charts, revisar <em>values</em> y evitar secretos en el estado. Definir la frontera entre infraestructura y aplicaciones para que dos herramientas no gestionen el mismo objeto; el conflicto de ownership es una fuente t&iacute;pica de drift.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;C&oacute;mo se integran artefactos de build (Lambda, Docker) con Terraform?</p>
+        <p class="a">Terraform debe desplegar artefactos inmutables, no construirlos en el apply. Patr&oacute;n: el CI compila y publica (por ejemplo, un ZIP en S3 o una imagen en ECR con tag de commit), y Terraform recibe la referencia (bucket/key/version o image URI) como variable, la usa en el recurso y, si es necesario, fuerza actualizaci&oacute;n con <em>source_code_hash</em> o <em>replace_triggered_by</em>. Evitar <em>local-exec</em> que ejecute <em>docker build</em> o <em>zip</em> dentro del apply: acopla entornos, requiere herramientas locales y hace el plan impredecible. Para Lambda, empaquetar en CI y subir a S3; para contenedores, construir y escanear la imagen antes de desplegar. Versionar y firmar artefactos; mantener Terraform enfocado en infraestructura y referencias. As&iacute; el despliegue es reproducible y se puede hacer rollback cambiando la referencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;D&oacute;nde est&aacute; la frontera entre Terraform y la gesti&oacute;n de configuraci&oacute;n?</p>
+        <p class="a">Terraform aprovisiona y gestiona el ciclo de vida de la infraestructura (redes, c&oacute;mputo, permisos, servicios gestionados); la gesti&oacute;n de configuraci&oacute;n (Ansible, Chef, Puppet, SSM) instala y mantiene software dentro de servidores. La frontera recomendada: usar im&aacute;genes preconstruidas y cloud-init para bootstrap, Ansible/SSM para cambios continuos, y Terraform solo para recursos del proveedor. Evitar que Terraform ejecute comandos remotos en cada apply; si una configuraci&oacute;n cambia con frecuencia, no deber&iacute;a vivir en el estado de Terraform. En Kubernetes, la frontera es cl&uacute;ster/plataforma vs aplicaciones (GitOps). Documentar la responsabilidad de cada herramienta y el flujo de cambios; as&iacute; se evitan conflictos, drift y dependencias ocultas. La pregunta clave: &iquest;este cambio debe recrear infraestructura o solo actualizar software? La respuesta define la herramienta.</p>
+    </div>
+
+    <h2 id="s9">9. Testing, validaci&oacute;n y CI/CD</h2>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;Qu&eacute; controles ejecutar antes de un plan/apply?</p>
+        <p class="a">Un pipeline serio no se limita a <em>terraform apply</em>. Orden recomendado: (1) <em>terraform fmt -check -recursive</em>; (2) <em>terraform init</em> con backend remoto (o <em>-backend=false</em> si solo se valida sintaxis); (3) <em>terraform validate</em>; (4) lint espec&iacute;fico (TFLint) y escaneo de seguridad (Checkov, Trivy/tfsec); (5) <em>terraform test</em> y pruebas de m&oacute;dulos; (6) <em>terraform plan -out=tfplan</em> y revisi&oacute;n del diff; (7) pol&iacute;ticas sobre el JSON del plan (OPA/Conftest/Sentinel); (8) aprobaci&oacute;n y <em>terraform apply tfplan</em> exacto. <em>validate</em> comprueba la configuraci&oacute;n, pero no garantiza que el apply funcione: permisos, cuotas, APIs y estado solo se ven en el plan/apply. El plan debe generarse con las mismas credenciales y entorno que el apply, y el apply no debe volver a planificar. Guardar el plan como artefacto con retenci&oacute;n y trazabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;Qu&eacute; es <em>terraform test</em> y c&oacute;mo funcionan los mocks?</p>
+        <p class="a">Desde Terraform 1.6 existe un framework nativo de pruebas: archivos <em>.tftest.hcl</em> (en <em>tests/</em> o junto a la configuraci&oacute;n) con bloques <em>run</em>. Cada <em>run</em> puede usar <em>command = plan</em> o <em>command = apply</em>, definir <em>variables</em> y validar con <em>assert { condition = ... error_message = ... }</em>. Con <em>mock_provider</em> (1.7+) se simulan providers para pruebas unitarias sin crear recursos reales; <em>mock_resource</em>, <em>mock_data</em>, <em>override_resource</em> y <em>override_data</em> permiten fijar valores. <em>expect_failures</em> comprueba que una validaci&oacute;n o precondition falla cuando debe. Se ejecuta con <em>terraform test</em> y admite filtros con <em>-filter</em>. Ventajas: r&aacute;pido, sin costo y integrado en CI. L&iacute;mite: no valida el comportamiento real del cloud; para eso se necesitan pruebas de integraci&oacute;n en una cuenta sandbox.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo se prueba la infraestructura con Terratest o Kitchen-Terraform?</p>
+        <p class="a"><strong>Terratest</strong> (Gruntwork) es una librer&iacute;a de Go para pruebas de infraestructura: crea un directorio temporal, ejecuta <em>terraform init/apply</em> contra una cuenta sandbox, valida con SDKs (AWS/GCP/Azure), HTTP o comandos, y destruye con <em>defer terraform.Destroy(...)</em>. Usa nombres &uacute;nicos (<em>random.UniqueId</em>) y tags para aislar y limpiar. <strong>Kitchen-Terraform</strong> combina Terraform con InSpec para verificar recursos y propiedades. Son pruebas de integraci&oacute;n reales: detectan problemas de permisos, cuotas, im&aacute;genes, redes y comportamiento del provider, pero son lentas, cuestan dinero y pueden ser inestables por dependencias externas. Patr&oacute;n: pruebas unitarias con <em>terraform test</em> y mocks en cada PR; integraci&oacute;n de m&oacute;dulos cr&iacute;ticos en nightly o pre-release, con cuenta sandbox, TTL y limpieza garantizada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;Qu&eacute; es policy as code y c&oacute;mo se aplica con Sentinel, OPA o Checkov?</p>
+        <p class="a">Policy as code convierte reglas de la organizaci&oacute;n en c&oacute;digo versionado y testeado: regiones permitidas, cifrado obligatorio, tags, buckets privados, tipos de instancia, IAM sin admin. Opciones: <strong>OPA/Rego</strong> con Conftest sobre <em>terraform show -json tfplan</em>; <strong>Sentinel</strong> en HCP Terraform/Terraform Enterprise; scanners est&aacute;ticos como <strong>Checkov</strong> o <strong>Trivy</strong> (que absorbi&oacute; tfsec); y validaciones nativas (<em>validation</em>, <em>precondition</em>, <em>postcondition</em>). Se aplican en el PR (shift-left) y otra vez sobre el plan antes del apply (defensa en profundidad). Las pol&iacute;ticas deben tener tests propios, niveles (advisory vs blocking), excepciones con justificaci&oacute;n y fecha, y mensajes claros. No sustituyen la revisi&oacute;n humana: evitan clases enteras de errores y hacen el cumplimiento reproducible.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;C&oacute;mo se dise&ntilde;a un pipeline CI/CD para Terraform?</p>
+        <p class="a">En cada PR: <em>fmt</em>, <em>validate</em>, lint, tests, escaneo de seguridad, <em>plan</em> con comentario del diff, pol&iacute;ticas y estimaci&oacute;n de costo; al fusionar en la rama protegida, aprobaci&oacute;n y <em>apply</em> del plan guardado. Backend remoto con locking (S3 + DynamoDB, Azure Storage, GCS, HCP Terraform) y concurrencia limitada a un run por estado. Credenciales por entorno con OIDC y roles separados; nunca claves est&aacute;ticas en el repositorio. El apply corre solo desde el pipeline, no desde laptops. Los entornos se promueven con el mismo c&oacute;digo y versiones fijas (dev &rarr; staging &rarr; prod), con aprobaciones y ventanas de cambio. A&ntilde;adir drift detection programado, retenci&oacute;n de planes/logs y auditor&iacute;a. Herramientas: GitHub Actions/GitLab CI, Atlantis, HCP Terraform, Spacelift, env0 o Scalr. La regla clave: el plan revisado es el plan que se aplica.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;C&oacute;mo se autentica el pipeline sin secretos de larga duraci&oacute;n?</p>
+        <p class="a">Con <strong>OIDC</strong>: el pipeline solicita un token de identidad ef&iacute;mero y lo intercambia por credenciales cloud. En GitHub Actions se usa <em>permissions: id-token: write</em> y <em>aws-actions/configure-aws-credentials</em> con <em>role-to-assume</em>; en AWS se configura un IAM OIDC provider y un rol cuya trust policy limite el <em>sub</em> a repositorio, rama o environment (por ejemplo, solo <em>refs/heads/main</em> del repo de infraestructura). Equivalentes: Workload Identity Federation en GCP y federated credentials en Azure. Ventajas: sin claves en secrets, rotaci&oacute;n autom&aacute;tica, alcance por entorno y trazabilidad en CloudTrail. Complementar con roles distintos por entorno, permisos m&iacute;nimos, environment protection rules y revisi&oacute;n de la trust policy como c&oacute;digo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se detecta y gestiona el drift?</p>
+        <p class="a">Drift es la diferencia entre la infraestructura real y el estado. Se detecta con <em>terraform plan -detailed-exitcode</em> (0 sin cambios, 2 con cambios) o <em>terraform plan -refresh-only</em>, y se corrige con <em>terraform apply</em> (reconciliar a lo declarado) o <em>terraform apply -refresh-only</em> (adoptar el cambio en el estado, solo si es intencional). En equipos: ejecutar planes programados y alertar si hay drift; investigar el origen (clickops, autoscaling, operadores, otro pipeline) antes de decidir. Si un atributo lo gestiona otro sistema, documentarlo y usar <em>lifecycle.ignore_changes</em> de forma deliberada, no como parche. El drift no debe silenciarse: puede indicar incidentes, cambios manuales o conflictos de ownership. Para recursos cr&iacute;ticos, <em>prevent_destroy</em> y backups.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;Qu&eacute; aportan Atlantis, Spacelift, env0, Scalr o HCP Terraform?</p>
+        <p class="a">Plataformas de automatizaci&oacute;n: <strong>HCP Terraform/Terraform Cloud</strong> (runs remotos, registry privado, pol&iacute;ticas Sentinel, run tasks, estimaci&oacute;n de costo, SSO y auditor&iacute;a), <strong>Atlantis</strong> (open source, self-hosted, comenta plan/apply en el PR y bloquea por estado), <strong>Spacelift</strong> (pol&iacute;ticas Rego, drift, workers, RBAC), <strong>env0</strong> y <strong>Scalr</strong> (gesti&oacute;n multi-equipo/multi-cloud), <strong>Digger</strong> o <strong>Terrakube</strong> como alternativas open source, y pipelines propios con GitHub Actions/GitLab CI. Criterios de elecci&oacute;n: SaaS vs self-hosted, soporte multi-cloud, control de acceso, pol&iacute;ticas, auditor&iacute;a, locking, costo, integraci&oacute;n con VCS y esfuerzo operativo. Lo importante no es la herramienta sino el flujo: PR con plan revisado, apply aprobado, estado remoto bloqueado y trazabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;C&oacute;mo se versiona, promueve y hace rollback de la infraestructura?</p>
+        <p class="a">Versionar: repositorio Git para la configuraci&oacute;n, m&oacute;dulos con tags semver, providers y m&oacute;dulos fijados, lock file comprometido y changelog. Promover: el mismo commit y las mismas versiones pasan de dev a staging a prod; el plan se genera una vez y se aplica el artefacto aprobado. Rollback: revertir el commit y aplicar (forward fix) suele ser lo correcto para cambios declarativos; para despliegues inmutables, volver a la imagen/artefacto anterior; para datos, restaurar un backup (Terraform no revierte datos). El estado tambi&eacute;n se versiona: habilitar versionado en el bucket del backend y probar la restauraci&oacute;n. Evitar <em>terraform destroy</em> como rollback y <em>state</em> manual salvo emergencia documentada. Los cambios destructivos requieren ventana, backup y aprobaci&oacute;n.</p>
+    </div>
+
+    <h2 id="s10">10. Seguridad, gobierno, costos y operaci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo se manejan secretos en Terraform?</p>
+        <p class="a">Reglas: no escribir secretos en <em>.tf</em>, <em>.tfvars</em> ni en el repositorio; usar un gestor (Vault, AWS Secrets Manager, SSM Parameter Store, GCP Secret Manager, Azure Key Vault) y leerlos con data sources o inyectarlos como variables desde el pipeline. <em>sensitive = true</em> solo oculta el valor en la salida; el secreto sigue en el estado y en el plan. Por eso: backend cifrado (SSE-KMS/CMEK), bucket privado, acceso auditado, versionado y sin lectura amplia; nunca <em>terraform output</em> sin control. Terraform moderno ofrece valores ef&iacute;meros (<em>ephemeral</em>) y argumentos write-only para que ciertos secretos no se persistan en el estado; verificar la versi&oacute;n y el soporte del provider. Cifrar estado y plan con las capacidades disponibles y restringir los artefactos de CI. Rotar credenciales, no reutilizar las de humanos y eliminar secretos del historial si se filtraron.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;C&oacute;mo se aplica el m&iacute;nimo privilegio en Terraform?</p>
+        <p class="a">Separar cuentas/proyectos por entorno y dominio; un rol de pipeline por stack, con permisos solo sobre los servicios y recursos que gestiona; trust policy OIDC limitada a repo, rama o environment; permission boundaries y SCPs para prohibir acciones peligrosas (organizations, borrado de logs, cambios de billing). Evitar <em>Action: "*"</em> y <em>Resource: "*"</em>; usar condiciones y tags. Humanos con SSO/MFA y acceso temporal; break-glass auditado; sin access keys de larga duraci&oacute;n. Revisar permisos con IAM Access Analyzer, CloudTrail e informes de acceso; el rol que aplica Terraform no debe poder elevar privilegios ni tocar otros equipos. Recordar que leer el estado tambi&eacute;n es sensible: quien lo lee ve atributos y a veces secretos. La revisi&oacute;n de cambios IAM debe ser parte del PR.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;C&oacute;mo se protege la cadena de suministro de providers y m&oacute;dulos?</p>
+        <p class="a">Fijar providers con restricciones (<em>~&gt;</em> o versi&oacute;n exacta en producci&oacute;n) y comprometer <em>.terraform.lock.hcl</em>; ejecutar <em>terraform providers lock</em> para las plataformas del equipo/CI y verificar checksums; usar el registry oficial o un mirror/registry privado; revisar providers de terceros. M&oacute;dulos: referenciar tags o commits inmutables, nunca ramas m&oacute;viles; revisar el c&oacute;digo y los recursos que crea; mantener un registry interno de m&oacute;dulos aprobados. Actualizaciones controladas: <em>terraform init -upgrade</em>, revisar changelog, plan en entorno inferior, pruebas y promoci&oacute;n. Firmar commits y artefactos cuando sea posible, generar SBOM y restringir qui&eacute;n publica m&oacute;dulos. Evitar <em>latest</em>, descargas sin verificaci&oacute;n y scripts remotos sin pin. La reproducibilidad depende de versiones y hashes, no de la suerte.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;Qu&eacute; controles de gobierno y compliance se implementan?</p>
+        <p class="a">Definir est&aacute;ndares (nombres, tags obligatorios, regiones, cifrado, retenci&oacute;n), publicar m&oacute;dulos aprobados y golden paths, y automatizar guardrails con policy as code. Separar responsabilidades: quien escribe el cambio no aprueba producci&oacute;n; accesos por rol; auditor&iacute;a de runs y de estado. Tags m&iacute;nimos: owner, aplicaci&oacute;n, entorno, centro de costo y clasificaci&oacute;n de datos. Aplicar <em>default_tags</em> del provider y validar que existan. Mapear controles a marcos (CIS, ISO 27001, SOC 2, PCI) y evidenciar con logs, planes aprobados y reportes de pol&iacute;tica. Excepciones con justificaci&oacute;n, responsable y caducidad. La gobernanza debe facilitar el camino correcto (m&oacute;dulos y pipelines) en vez de depender solo de revisiones manuales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se controlan y estiman los costos?</p>
+        <p class="a">Estimar el impacto en el PR con <strong>Infracost</strong> (diff de costo por cambio), etiquetar para allocation/showback, presupuestos y alertas, y pol&iacute;ticas que limiten tipos, regiones o SKUs costosos. Derecho de tama&ntilde;o (right-sizing), autoscaling, spot cuando aplique, lifecycle de almacenamiento y limpieza de im&aacute;genes y logs. Entornos ef&iacute;meros con TTL y destrucci&oacute;n autom&aacute;tica; apagar no productivos fuera de horario. Revisar data transfer, recursos hu&eacute;rfanos y vol&uacute;menes sin adjuntar. Ojo: la estimaci&oacute;n de Infracost es aproximada y no cubre todo (soporte, descuentos, transferencia). El costo es una consecuencia del dise&ntilde;o: estado peque&ntilde;o, recursos apagados y arquitectura adecuada importan m&aacute;s que microoptimizar el precio de una instancia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;C&oacute;mo se limita el blast radius y se organiza el estado?</p>
+        <p class="a">Dividir el estado por dominio y ciclo de vida (red, datos, IAM, aplicaci&oacute;n), en cuentas/proyectos separados por entorno. Un estado monol&iacute;tico hace planes lentos, aumenta el riesgo de destruir algo no relacionado y concentra permisos. Dependencias expl&iacute;citas v&iacute;a outputs/remote state; evitar referencias ocultas. Aprobaciones y pol&iacute;ticas para producci&oacute;n; <em>prevent_destroy</em> y deletion protection en recursos cr&iacute;ticos; backups y pruebas de restauraci&oacute;n. <em>-target</em> solo para emergencias y seguido de un plan completo. Roles acotados por estado; l&iacute;mites de concurrencia; ventanas de cambio. Refactorizar con bloques <em>moved</em>/<em>removed</em> en vez de recrear. Un estado comprometido es acceso a toda la infraestructura que gestiona: tratarlo como un secreto cr&iacute;tico.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;C&oacute;mo se diagnostican los errores t&iacute;picos de Terraform?</p>
+        <p class="a">(1) <strong>Lock</strong>: <em>terraform force-unlock &lt;ID&gt;</em> solo tras confirmar que no hay un run activo; revisar backend y lock ID. (2) <strong>403/denied</strong>: credenciales o rol equivocado, regi&oacute;n o cuenta incorrecta, trust OIDC, SCP, KMS o permisos faltantes; revisar CloudTrail. (3) <strong>Ciclos</strong>: <em>terraform graph</em> y refactorizar dependencias; <em>depends_on</em> solo cuando aporta. (4) <strong>Conflictos de versi&oacute;n</strong>: restricciones, lock file, <em>init -upgrade</em>. (5) <strong>Drift</strong>: <em>plan -refresh-only</em>. (6) <strong>Direcciones cambiadas o recursos sin importar</strong>: <em>moved</em>, <em>state mv</em>, <em>state rm</em> + import (con backup). (7) <strong>Throttling o errores intermitentes</strong>: <em>-parallelism=1</em> o menor, reintentos del provider. (8) <strong>Depuraci&oacute;n</strong>: <em>TF_LOG=DEBUG/TRACE</em> y <em>TF_LOG_PATH</em>, <em>terraform console</em>, <em>terraform show -json</em>; nunca editar el estado a mano sin copia. (9) Plan guardado y <em>-replace</em> para recrear un recurso concreto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;C&oacute;mo se importan recursos, se actualizan providers y qu&eacute; antipatrones evitar?</p>
+        <p class="a">Importar: bloque <em>import { to = aws_instance.web id = "i-123" }</em> (Terraform 1.5+) y luego escribir la configuraci&oacute;n; <em>terraform plan -generate-config-out=generated.tf</em> ayuda a generarla (revisar y limpiar). El comando <em>terraform import</em> sigue existiendo, pero el bloque es declarativo y versionable. Refactorizar: bloques <em>moved</em> para cambiar direcciones sin recrear; <em>removed</em> para dejar de gestionar sin destruir. Actualizar providers: leer changelog, subir restricciones, <em>init -upgrade</em>, plan en dev, probar y promover; hacer backup del estado. Antipatrones: clickops, secretos en c&oacute;digo o estado sin cifrar, estado local compartido, <em>-target</em> habitual, un estado gigante, m&oacute;dulos sin versi&oacute;n, providers sin pin, provisioners para configuraci&oacute;n, <em>ignore_changes</em> indiscriminado, applies desde laptops y ausencia de tests o pol&iacute;ticas. Buenas pr&aacute;cticas: cambios peque&ntilde;os, revisi&oacute;n, CI/CD, backend remoto, m&oacute;dulos reutilizables, documentaci&oacute;n y drift detection.</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Terraform en una entrevista (plantilla)</h2>
+
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Terraform durante [X] a&ntilde;os en [AWS/Azure/GCP/multi-cloud], gestionando [redes, c&oacute;mputo, Kubernetes, datos e IAM] como c&oacute;digo. He dise&ntilde;ado m&oacute;dulos, backends remotos y pipelines de plan/apply con pol&iacute;ticas de seguridad, y he operado [N] entornos con varios equipos&raquo;.</p>
+        <p><strong>Fundamentos e IaC:</strong> &laquo;Entiendo Terraform como una herramienta declarativa e idempotente: describo el estado deseado, Terraform calcula el diff contra el estado y aplica solo lo necesario. El plan es el contrato: se revisa, se aprueba y se aplica el mismo artefacto. La ventaja frente a scripts es la reproducibilidad, la revisi&oacute;n por pares y la capacidad de detectar drift&raquo;.</p>
+        <p><strong>Estado y colaboraci&oacute;n:</strong> &laquo;Uso backend remoto con locking (por ejemplo, S3 + DynamoDB o HCP Terraform), versionado y cifrado; separo estados por dominio y entorno para reducir el blast radius. Nunca aplico desde laptops ni edito el estado a mano sin backup; los cambios de direcci&oacute;n se hacen con bloques moved e import&raquo;.</p>
+        <p><strong>M&oacute;dulos y entornos:</strong> &laquo;Estructuro m&oacute;dulos peque&ntilde;os con interfaces claras (variables, outputs y validaciones), versionados con semver y publicados en un registry interno. Promuevo el mismo c&oacute;digo y las mismas versiones entre entornos; uso directorios o workspaces de forma deliberada y mantengo los valores por entorno fuera del m&oacute;dulo&raquo;.</p>
+        <p><strong>Testing y CI/CD:</strong> &laquo;En cada PR ejecuto fmt, validate, lint, escaneo de seguridad, terraform test con mocks y un plan revisado; aplico pol&iacute;ticas sobre el JSON del plan y estimaci&oacute;n de costo. El apply corre en el pipeline, solo desde la rama principal y con aprobaci&oacute;n; para m&oacute;dulos cr&iacute;ticos hago pruebas de integraci&oacute;n con Terratest en una cuenta sandbox&raquo;.</p>
+        <p><strong>Seguridad y gobierno:</strong> &laquo;Autentico con OIDC y credenciales ef&iacute;meras, aplico m&iacute;nimo privilegio por stack, cifro el estado y mantengo los secretos fuera del c&oacute;digo y del estado cuando es posible. Uso policy as code para regiones, cifrado, tags e IAM, con excepciones documentadas y auditadas&raquo;.</p>
+        <p><strong>Operaci&oacute;n y costos:</strong> &laquo;Detecto drift con planes programados, mantengo backups y versionado del estado, y tengo un proceso de rollback basado en revertir el cambio o volver al artefacto anterior. Controlo costos con tags, Infracost, TTL en entornos ef&iacute;meros y pol&iacute;ticas de tipos/regiones&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [m&eacute;trica: reducci&oacute;n de errores de despliegue, tiempo de aprovisionamiento, recursos gestionados, ahorro de costo, disminuci&oacute;n de MTTR]. En este rol aportar&iacute;a [dise&ntilde;o de IaC/estandarizaci&oacute;n/automatizaci&oacute;n] y ayudar&iacute;a a construir una plataforma reproducible, segura y f&aacute;cil de operar&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Fundamentos e IaC</td><td>Declarativo, idempotencia, plan/apply, drift, ciclo de vida</td><td>Reproducibilidad, menos errores manuales, auditor&iacute;a</td></tr>
+        <tr><td>HCL y providers</td><td>Expresiones, for_each, dynamic, providers m&uacute;ltiples, data sources</td><td>C&oacute;digo reutilizable y legible, menor duplicaci&oacute;n</td></tr>
+        <tr><td>Recursos y dependencias</td><td>Implicit/explicit dependencies, lifecycle, moved, replace</td><td>Cambios seguros, menos recreaciones accidentales</td></tr>
+        <tr><td>Estado y backend</td><td>Backend remoto, locking, cifrado, versionado, separaci&oacute;n</td><td>Colaboraci&oacute;n sin conflictos, recuperaci&oacute;n ante fallos</td></tr>
+        <tr><td>M&oacute;dulos y entornos</td><td>Composici&oacute;n, semver, variables/outputs, promoci&oacute;n</td><td>Estandarizaci&oacute;n, velocidad de entrega, menos deuda</td></tr>
+        <tr><td>Testing y CI/CD</td><td>fmt/validate, terraform test, Terratest, OPA/Checkov, plan en PR</td><td>Menos fallos en producci&oacute;n, trazabilidad, rapidez</td></tr>
+        <tr><td>Seguridad y gobierno</td><td>OIDC, m&iacute;nimo privilegio, secretos, cifrado, policy as code, tags</td><td>Cumplimiento, menor superficie de ataque</td></tr>
+        <tr><td>Costos y operaci&oacute;n</td><td>Infracost, budgets, TTL, right-sizing, drift detection, troubleshooting</td><td>Ahorro, menor MTTR, estabilidad operativa</td></tr>
+        <tr><td>Migraci&oacute;n y adopci&oacute;n</td><td>Import blocks, moved/removed, state mv, provider upgrades</td><td>Adopci&oacute;n sin downtime y sin recrear recursos</td></tr>
+        <tr><td>Liderazgo t&eacute;cnico</td><td>Est&aacute;ndares, revisi&oacute;n de c&oacute;digo, formaci&oacute;n, documentaci&oacute;n</td><td>Equipos aut&oacute;nomos, consistencia y buenas pr&aacute;cticas</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: n&uacute;mero de recursos, cuentas y entornos gestionados, tiempo de aprovisionamiento, reducci&oacute;n de errores, ahorro y MTTR.</li>
+        <li>Nombra con precisi&oacute;n: state, backend, locking, for_each, moved/import, OIDC, policy as code, drift, blast radius, plan guardado.</li>
+        <li>Muestra criterio y trade-offs: monorepo vs varios repos, un estado vs estados separados, workspaces vs directorios, Terraform vs Pulumi/CDK/CloudFormation/Ansible.</li>
+        <li>Prep&aacute;rate para detalle: por qu&eacute; evitar provisioners, c&oacute;mo se protege y recupera el estado, c&oacute;mo se hace rollback, c&oacute;mo se gestionan secretos y c&oacute;mo se evita el drift.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona un laboratorio propio, la certificaci&oacute;n HashiCorp Terraform Associate y un plan de aprendizaje.</li>
+        <li>Conecta con el negocio: velocidad de entrega, reducci&oacute;n de riesgo, cumplimiento, costo y capacidad de recuperaci&oacute;n.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>HashiCorp Developer &mdash; Terraform Documentation (developer.hashicorp.com/terraform)</td><td>Gu&iacute;as oficiales de configuraci&oacute;n, CLI, estado, backends, m&oacute;dulos, pruebas e importaci&oacute;n.</td></tr>
+        <tr><td>Terraform Registry (registry.terraform.io)</td><td>Providers y m&oacute;dulos oficiales y de la comunidad, versiones y documentaci&oacute;n.</td></tr>
+        <tr><td>HCL Configuration Language</td><td>Sintaxis, expresiones, funciones, tipos, bloques y estilo recomendado.</td></tr>
+        <tr><td>Terraform CLI Commands</td><td>init, plan, apply, destroy, state, import, test, graph, console y opciones avanzadas.</td></tr>
+        <tr><td>State y Backends</td><td>Remote state, locking, cifrado, versionado, workspaces y separaci&oacute;n de estados.</td></tr>
+        <tr><td>Module Development y Best Practices</td><td>Dise&ntilde;o de m&oacute;dulos, composici&oacute;n, versionado, interfaces y publicaci&oacute;n.</td></tr>
+        <tr><td>Terraform Testing</td><td>Framework nativo .tftest.hcl, asserts, mocks y pruebas de integraci&oacute;n.</td></tr>
+        <tr><td>Import, moved y removed blocks</td><td>Adopci&oacute;n de recursos existentes y refactorizaci&oacute;n sin recrear.</td></tr>
+        <tr><td>HCP Terraform / Terraform Enterprise</td><td>Runs remotos, registry privado, Sentinel, run tasks, SSO y auditor&iacute;a.</td></tr>
+        <tr><td>Google Cloud &mdash; Terraform best practices</td><td>Estructura de repositorios, entornos, estado, CI/CD y seguridad.</td></tr>
+        <tr><td>AWS Prescriptive Guidance &mdash; Terraform best practices</td><td>Patrones de colaboraci&oacute;n, backend, m&oacute;dulos y automatizaci&oacute;n.</td></tr>
+        <tr><td>Open Policy Agent y Conftest</td><td>Policy as code con Rego sobre planes de Terraform.</td></tr>
+        <tr><td>Checkov y Trivy (tfsec)</td><td>Escaneo est&aacute;tico de configuraciones IaC y detecci&oacute;n de malas pr&aacute;cticas.</td></tr>
+        <tr><td>Terratest, Atlantis e Infracost</td><td>Pruebas de integraci&oacute;n, automatizaci&oacute;n de PR y estimaci&oacute;n de costos.</td></tr>
+        <tr><td>Terraform: Up &amp; Running (Yevgeniy Brikman)</td><td>Fundamentos, patrones de producci&oacute;n, m&oacute;dulos, testing y equipos.</td></tr>
+        <tr><td>HashiCorp Certified: Terraform Associate</td><td>Objetivos del examen y repaso de fundamentos, CLI, estado y m&oacute;dulos.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
