@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moodle - Cursos, Actividades, Evaluacion, Administracion, Seguridad e Integraciones | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Moodle &mdash; Cursos, Actividades, Evaluaci&oacute;n, Administraci&oacute;n, Seguridad e Integraciones</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Moodle (LMS, cursos, actividades, evaluaci&oacute;n, administraci&oacute;n, seguridad e integraciones) en dise&ntilde;o, implementaci&oacute;n y operaci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos y e-learning (Q1&ndash;Q8), instalaci&oacute;n e infraestructura (Q9&ndash;Q16), cursos y estructura (Q17&ndash;Q25), actividades y recursos (Q26&ndash;Q34), evaluaci&oacute;n y calificaciones (Q35&ndash;Q43), usuarios, roles y matr&iacute;cula (Q44&ndash;Q52), seguridad y accesibilidad (Q53&ndash;Q61), rendimiento y operaci&oacute;n (Q62&ndash;Q69), integraciones y desarrollo (Q70&ndash;Q77) y migraci&oacute;n y buenas pr&aacute;cticas (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos de Moodle y e-learning &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Instalaci&oacute;n, infraestructura y mantenimiento &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. Cursos, categor&iacute;as y estructura &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Actividades y recursos &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. Evaluaci&oacute;n y calificaciones &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. Usuarios, roles y matr&iacute;cula &mdash; 9 preguntas</a></li>
+        <li><a href="#s7">7. Seguridad, privacidad y accesibilidad &mdash; 9 preguntas</a></li>
+        <li><a href="#s8">8. Rendimiento, escalabilidad y operaci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Integraciones, APIs y desarrollo &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. Migraci&oacute;n, adopci&oacute;n y buenas pr&aacute;cticas &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Moodle en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos de Moodle y e-learning</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Moodle y qu&eacute; problema resuelve?</p>
+        <p class="a">Moodle es un <strong>LMS open source</strong> (licencia GPL) escrito en PHP que permite crear entornos virtuales de aprendizaje: cursos, actividades, recursos, evaluaciones, comunicaci&oacute;n y seguimiento. Resuelve la necesidad de impartir formaci&oacute;n presencial, blended o 100% online con una plataforma flexible, extensible y multiling&uuml;e. Se usa en universidades, empresas y organismos p&uacute;blicos. Al ser open source se puede personalizar y desplegar on-premise o en la nube; a cambio, requiere administraci&oacute;n t&eacute;cnica y gobierno.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Qu&eacute; diferencia hay entre Moodle LMS, Moodle Workplace y MoodleCloud?</p>
+        <p class="a"><strong>Moodle LMS</strong> es el n&uacute;cleo open source para gestionar cursos y usuarios. <strong>Moodle Workplace</strong> es una distribuci&oacute;n empresarial de pago sobre Moodle LMS, con organizaciones, certificaciones, planes de aprendizaje, onboarding y automatizaciones. <strong>MoodleCloud</strong> es el servicio SaaS oficial, con planes gestionados y menos control de infraestructura. La elecci&oacute;n depende de requisitos de multi-tenancy, cumplimiento, personalizaci&oacute;n y equipo. Todas comparten el modelo de cursos, actividades y roles, lo que facilita migrar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Cu&aacute;l es la arquitectura t&eacute;cnica de Moodle?</p>
+        <p class="a">Es una aplicaci&oacute;n web PHP con arquitectura de <strong>plugins</strong>. El c&oacute;digo vive en el directorio ra&iacute;z (<em>dirroot</em>), la configuraci&oacute;n en <em>config.php</em> y los archivos de usuario en <em>dataroot</em> (fuera del webroot). Usa una base de datos relacional (MySQL/MariaDB, PostgreSQL, SQL Server u Oracle), un servidor web (Apache/Nginx) y PHP con extensiones. El core se organiza en m&oacute;dulos y subsistemas; los plugins (actividades, bloques, temas, autenticaci&oacute;n, matriculaci&oacute;n, filtros, etc.) extienden la funcionalidad. Cron ejecuta las tareas programadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Cu&aacute;les son los conceptos b&aacute;sicos de un curso en Moodle?</p>
+        <p class="a">Categor&iacute;as (organizaci&oacute;n jer&aacute;rquica de cursos), cursos (contenedor de actividades y recursos), secciones o temas, actividades (foro, tarea, cuestionario, etc.), recursos (archivo, p&aacute;gina, URL, libro), usuarios y roles, grupos y agrupaciones, m&eacute;todos de matriculaci&oacute;n, finalizaci&oacute;n (<em>completion</em>) e insignias. Los cursos pueden ser visibles u ocultos y usar formato por temas, semanas o actividad &uacute;nica. La estructura debe responder a objetivos de aprendizaje, no a la herramienta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;Qu&eacute; tipos de despliegue existen?</p>
+        <p class="a">On-premise (servidor propio o VPC), IaaS (AWS, Azure, GCP), contenedores orquestados, hosting gestionado o MoodleCloud. Factores: control, cumplimiento, presupuesto, escalabilidad, backups, seguridad y equipo de operaci&oacute;n. En todos los casos se necesita un entorno de pruebas, monitoreo, plan de upgrades y gesti&oacute;n de plugins. Para alta disponibilidad se usan balanceadores, sesiones compartidas (Redis), almacenamiento compartido o S3 y base de datos gestionada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Qu&eacute; es un rol en Moodle y cu&aacute;les son los arquetipos?</p>
+        <p class="a">Un <strong>rol</strong> es un conjunto de permisos (<em>capabilities</em>) que se asigna en un contexto. Arquetipos: manager, coursecreator, editingteacher, teacher, non-editingteacher, student, guest, user y frontpage. Los permisos se heredan por contexto (sistema, categor&iacute;a, curso, m&oacute;dulo, bloque, usuario) y se pueden permitir, prohibir o dejar sin definir. Se recomienda usar los roles est&aacute;ndar y crear roles personalizados solo si es necesario, documentando el principio de m&iacute;nimo privilegio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;Moodle es solo para educaci&oacute;n formal?</p>
+        <p class="a">No. Se usa en educaci&oacute;n (K-12 y universidad), formaci&oacute;n corporativa, compliance, onboarding, certificaciones y comunidades de pr&aacute;ctica. Las actividades, la finalizaci&oacute;n, las insignias y los informes sirven para rutas de aprendizaje y evidencias. Moodle Workplace a&ntilde;ade herramientas para empresas. La clave es dise&ntilde;ar la experiencia seg&uacute;n el p&uacute;blico: no trasladar un curso acad&eacute;mico tal cual a un entorno corporativo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;C&oacute;mo se compara Moodle con otros LMS?</p>
+        <p class="a">Ventajas: open source, flexibilidad, ecosistema enorme de plugins, comunidad, multiling&uuml;e, control de los datos y costo de licencia. Desventajas: requiere administraci&oacute;n t&eacute;cnica, la experiencia de usuario puede ser menos pulida que la de SaaS modernos y el rendimiento depende de la infraestructura. Canvas, Blackboard o Google Classroom ofrecen experiencias gestionadas y menor carga operativa, con otros costos y l&iacute;mites de personalizaci&oacute;n. La elecci&oacute;n depende de requisitos pedag&oacute;gicos, integraciones, presupuesto total y equipo.</p>
+    </div>
+
+    <h2 id="s2">2. Instalaci&oacute;n, infraestructura y mantenimiento</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;Qu&eacute; requisitos necesita una instalaci&oacute;n de Moodle?</p>
+        <p class="a">PHP con las extensiones requeridas (entre otras: mbstring, curl, gd, xml, zip, intl, openssl, sodium), una base de datos soportada (MySQL/MariaDB, PostgreSQL, SQL Server u Oracle), servidor web (Apache o Nginx), HTTPS, memoria y disco suficientes, y un directorio <em>dataroot</em> fuera del webroot. Adem&aacute;s se necesita cron cada minuto, correo saliente y backups. La p&aacute;gina de comprobaci&oacute;n del entorno del instalador se&ntilde;ala extensiones y l&iacute;mites que deben corregirse antes de continuar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;C&oacute;mo se instala Moodle?</p>
+        <p class="a">Se puede usar el instalador web o la CLI: <em>php admin/cli/install.php</em> con los par&aacute;metros de <em>wwwroot</em>, <em>dataroot</em>, base de datos y usuario admin. El proceso crea <em>config.php</em> y el esquema de la base de datos. Buenas pr&aacute;cticas: <em>dataroot</em> fuera del webroot, permisos correctos, HTTPS, correo configurado, cron activo y un backup inicial. En producci&oacute;n conviene automatizar la instalaci&oacute;n con configuraci&oacute;n como c&oacute;digo y validar el entorno antes de exponer el sitio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Qu&eacute; contiene <em>config.php</em> y qu&eacute; cuidados requiere?</p>
+        <p class="a">Define <em>wwwroot</em>, <em>dataroot</em>, conexi&oacute;n a la base de datos (tipo, host, nombre, usuario, contrase&ntilde;a, prefijo), rutas y opciones como proxy inverso o depuraci&oacute;n. Contiene secretos, por lo que no debe estar en el repositorio ni ser accesible p&uacute;blicamente; permisos restringidos y backup seguro. En entornos gestionados se usan variables de entorno o gestores de secretos. Evitar editar <em>config.php</em> a mano en producci&oacute;n sin control de cambios. Cualquier cambio debe probarse en staging.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Por qu&eacute; es cr&iacute;tico el cron en Moodle?</p>
+        <p class="a">Cron ejecuta tareas programadas y <em>adhoc</em>: env&iacute;o de correos y notificaciones, procesamiento de calificaciones, finalizaci&oacute;n, insignias, backups, informes, limpieza y sincronizaciones. Debe ejecutarse cada minuto con el usuario adecuado: <em>php admin/cli/cron.php</em>. Si falla, los usuarios ven acciones que no se completan y las tareas se acumulan. Monitorear el resultado, la duraci&oacute;n y las tareas fallidas desde la administraci&oacute;n; evitar ejecuciones solapadas y revisar l&iacute;mites de tiempo y memoria.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;C&oacute;mo se actualiza Moodle de forma segura?</p>
+        <p class="a">Leer las notas de la versi&oacute;n, verificar compatibilidad de PHP, base de datos y plugins, hacer backup completo (base de datos, dataroot y config), entrar en mantenimiento, actualizar el c&oacute;digo y ejecutar <em>php admin/cli/upgrade.php</em>; despu&eacute;s purgar cach&eacute;s y probar. Las versiones mayores pueden requerir pasos intermedios. Mantener un plan de rollback y un entorno de staging con datos representativos. No actualizar plugins y core a la vez sin pruebas; revisar plugins abandonados antes de la actualizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo se gestionan los plugins?</p>
+        <p class="a">Los plugins extienden actividades, bloques, temas, autenticaci&oacute;n, matriculaci&oacute;n, filtros, informes, etc. Se instalan desde el directorio oficial o subiendo un ZIP, y deben cumplir dependencias y versi&oacute;n de Moodle. Antes de instalar: revisar mantenimiento, valoraciones, seguridad, licencia, compatibilidad y soporte; probar en staging. Documentar el inventario, actualizar de forma controlada y eliminar los que no se usan. Evitar plugins abandonados o con c&oacute;digo sospechoso; el core debe permanecer sin modificaciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;C&oacute;mo funcionan el backup y la restauraci&oacute;n?</p>
+        <p class="a">El backup del sitio incluye la base de datos, el <em>dataroot</em> y <em>config.php</em>; deben respaldarse de forma consistente y coordinada, porque los archivos y la base se referencian entre s&iacute;. Los backups de curso (MBZ) incluyen contenido y ajustes, con opci&oacute;n de incluir datos de usuarios. Automatizar, cifrar, almacenar fuera del servidor y <strong>probar restauraciones</strong> peri&oacute;dicamente. Definir RPO y RTO; conservar versiones compatibles con la versi&oacute;n actual. Un backup que nunca se restaura no es una garant&iacute;a.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;C&oacute;mo se organizan los entornos de desarrollo, staging y producci&oacute;n?</p>
+        <p class="a">Cada entorno debe tener su propia base de datos, <em>dataroot</em> y <em>wwwroot</em>; no compartir archivos ni base entre ellos. Staging se usa para probar actualizaciones, plugins y cambios de tema con datos anonimizados. El c&oacute;digo propio (plugins, temas) se versiona en Git y se despliega con un pipeline; el <em>dataroot</em> no se versiona. Mantener ventanas de mantenimiento, control de cambios y un plan de rollback. Nunca probar en producci&oacute;n ni copiar datos personales sin protecci&oacute;n.</p>
+    </div>
+
+    <h2 id="s3">3. Cursos, categor&iacute;as y estructura</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;C&oacute;mo se organizan las categor&iacute;as de cursos?</p>
+        <p class="a">Las <strong>categor&iacute;as</strong> forman una jerarqu&iacute;a para organizar cursos y delegar administraci&oacute;n. Se pueden anidar (facultad &rarr; departamento &rarr; programa), asignar roles por contexto y usar plantillas. Una estructura clara facilita la gesti&oacute;n, los permisos y los informes. Evitar categor&iacute;as duplicadas o demasiado profundas; definir convenciones de nombres y un owner. Las categor&iacute;as tambi&eacute;n afectan la visibilidad y la navegaci&oacute;n del usuario.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; formatos de curso existen y cu&aacute;ndo usar cada uno?</p>
+        <p class="a">Los formatos m&aacute;s comunes son <strong>temas</strong> (secciones por contenido), <strong>semanas</strong> (secuencia temporal), <strong>social</strong> (basado en un foro) y <strong>actividad &uacute;nica</strong> (todo el curso es una actividad). La elecci&oacute;n depende del dise&ntilde;o: un curso autoguiado suele funcionar con temas; un curso con cohortes y fechas, con semanas. Se pueden a&ntilde;adir restricciones de acceso y finalizaci&oacute;n por secci&oacute;n. El formato debe facilitar la navegaci&oacute;n, no complicarla.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; ajustes definen un curso?</p>
+        <p class="a">Nombre y nombre corto, categor&iacute;a, visibilidad, fechas de inicio y fin, formato, n&uacute;mero m&aacute;ximo de estudiantes, idioma, apariencia, archivos, finalizaci&oacute;n, grupos, renombrado de roles y etiquetas. Tambi&eacute;n se definen el resumen, la imagen y las competencias. Los ajustes deben alinearse con la pol&iacute;tica institucional (visibilidad por defecto, matriculaci&oacute;n, retenci&oacute;n). Documentar las plantillas y evitar que cada docente cambie configuraciones cr&iacute;ticas sin control.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;Qu&eacute; m&eacute;todos de matriculaci&oacute;n existen?</p>
+        <p class="a">Manual, auto-matriculaci&oacute;n (con clave o aprobaci&oacute;n), sincronizaci&oacute;n de cohortes, base de datos externa, LDAP, archivo plano, IMS Enterprise, LTI y pago, entre otros. Se pueden combinar varios m&eacute;todos con orden y reglas. Definir la fuente de verdad (SIS, RRHH, SSO) y c&oacute;mo se desmatricula. Configurar duraci&oacute;n, fechas de inicio y fin, notificaciones y suspensi&oacute;n. La sincronizaci&oacute;n debe ser idempotente y monitoreada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; son los grupos y las agrupaciones?</p>
+        <p class="a">Los <strong>grupos</strong> dividen a los estudiantes dentro de un curso para actividades, foros o tareas. Las <strong>agrupaciones</strong> agrupan varios grupos y permiten restringir el acceso a una secci&oacute;n o actividad a una agrupaci&oacute;n. Los modos de grupo (sin grupos, grupos separados, grupos visibles) cambian lo que cada estudiante ve. Se pueden crear manualmente, importar o sincronizar. Usarlos para trabajo colaborativo, cohortes o diferenciaci&oacute;n; documentar la l&oacute;gica para no fragmentar el curso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;Qu&eacute; son las cohortes y para qu&eacute; sirven?</p>
+        <p class="a">Las <strong>cohortes</strong> son grupos a nivel de sitio que se usan para matricular o asignar roles de forma masiva. Se pueden crear manualmente, importar o sincronizar desde fuentes externas. Con <em>cohort sync</em> se matriculan autom&aacute;ticamente en cursos y se desmatriculan al salir. Son &uacute;tiles para onboarding, promociones, programas y permisos por departamento. Requieren gobierno: altas y bajas autom&aacute;ticas, revisi&oacute;n y una fuente de verdad clara.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;C&oacute;mo funciona la finalizaci&oacute;n (completion)?</p>
+        <p class="a">La <strong>finalizaci&oacute;n de actividad</strong> se marca manualmente o cuando se cumple una condici&oacute;n (ver, entregar, recibir una calificaci&oacute;n, etc.). La <strong>finalizaci&oacute;n de curso</strong> agrega criterios: actividades completadas, calificaci&oacute;n m&iacute;nima, fecha, duraci&oacute;n. Se usa para restringir acceso a contenidos, emitir insignias, certificados y reportes. Configurar con cuidado y probar con un usuario de prueba; si se cambia la estructura, revisar criterios. Es una herramienta pedag&oacute;gica, no solo un checkbox.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Qu&eacute; son las insignias (badges) y c&oacute;mo se gobiernan?</p>
+        <p class="a">Las <strong>insignias</strong> reconocen logros con criterios definidos (actividad, calificaci&oacute;n, finalizaci&oacute;n o asignaci&oacute;n manual). Pueden ser de sitio o de curso, emitirse autom&aacute;ticamente y exportarse como Open Badges. Sirven para motivaci&oacute;n y evidencias, pero deben tener valor real y criterios claros. Evitar insignias triviales o duplicadas; documentar qui&eacute;n las dise&ntilde;a y aprueba. Revisar privacidad y visibilidad del perfil.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;C&oacute;mo se reutilizan cursos y plantillas?</p>
+        <p class="a">Se puede usar backup/restore (MBZ), importaci&oacute;n de contenido, copia del curso o plantillas institucionales. Para reutilizar, restaurar sin datos de usuarios en un curso nuevo y ajustar fechas, nombres y contenidos. Las plantillas reducen trabajo y estandarizan la calidad, pero deben revisarse para no arrastrar contenido obsoleto o enlaces rotos. Versionar las plantillas y documentar los cambios. Evitar duplicar cursos a mano sin control.</p>
+    </div>
+
+    <h2 id="s4">4. Actividades y recursos</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; tipos de recursos ofrece Moodle y cu&aacute;ndo usarlos?</p>
+        <p class="a">Archivo (descarga o visualizaci&oacute;n), carpeta (colecci&oacute;n), p&aacute;gina (HTML editable), URL (enlace), libro (cap&iacute;tulos) y etiqueta (texto en la p&aacute;gina del curso). Elegir seg&uacute;n el formato y la accesibilidad: una p&aacute;gina es mejor que un PDF para contenido breve; un libro para material estructurado; una carpeta para recursos descargables. Cuidar tama&ntilde;os, nombres, licencias y formato m&oacute;vil. Los recursos no generan interacci&oacute;n por s&iacute; solos: combinarlos con actividades.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;C&oacute;mo funciona la actividad de tarea (assignment)?</p>
+        <p class="a">Permite recibir entregas (archivo, texto en l&iacute;nea o ambos), calificar con comentarios, r&uacute;bricas o gu&iacute;as, y devolver retroalimentaci&oacute;n. Configura fechas de entrega y de cierre, intentos, extensiones, trabajo en grupo, env&iacute;o ciego y flujo de calificaci&oacute;n. Puede calificar sin conexi&oacute;n o anotar PDF. La configuraci&oacute;n debe comunicar expectativas y plazos. Revisar la visibilidad de calificaciones y la pol&iacute;tica de reintentos; usar la tarea adecuada para el tipo de evidencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;C&oacute;mo se configura un cuestionario (quiz)?</p>
+        <p class="a">Se compone de preguntas de un banco, con categor&iacute;as y etiquetas. Se configuran intentos, tiempo, calificaci&oacute;n (mayor, promedio, primero, &uacute;ltimo), comportamiento de preguntas, retroalimentaci&oacute;n, aleatorizaci&oacute;n, revisi&oacute;n, contrase&ntilde;a, restricciones de red y Safe Exam Browser. Las preguntas aleatorias y los bancos compartidos reducen copia. Probar el cuestionario como estudiante y revisar la calificaci&oacute;n autom&aacute;tica. La calidad de las preguntas importa m&aacute;s que la configuraci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;Qu&eacute; tipos de foro existen y cu&aacute;ndo usarlos?</p>
+        <p class="a">Foro est&aacute;ndar (debate general), foro de preguntas y respuestas (el estudiante debe responder antes de ver respuestas), debate &uacute;nico simple, una discusi&oacute;n por persona y formato tipo blog. Se configuran suscripciones, grupos, calificaciones, bloqueo y finalizaci&oacute;n. El foro es una herramienta de interacci&oacute;n as&iacute;ncrona; para anuncios es preferible el foro de novedades. Moderar y establecer normas de participaci&oacute;n. Evitar foros vac&iacute;os o sin consigna clara.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; es el taller (workshop) y c&oacute;mo funciona?</p>
+        <p class="a">Es una actividad de <strong>evaluaci&oacute;n entre pares</strong> con fases: configuraci&oacute;n, env&iacute;o, evaluaci&oacute;n, calificaci&oacute;n y cierre. Los estudiantes env&iacute;an trabajos, eval&uacute;an los de otros con criterios definidos y reciben una calificaci&oacute;n por su evaluaci&oacute;n y su trabajo. Se pueden usar ejemplos y autoevaluaci&oacute;n. Es potente para r&uacute;bricas y feedback, pero complejo de configurar; requiere instrucciones claras y tiempos. Probar el flujo completo antes de abrirlo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; es la lecci&oacute;n (lesson) y para qu&eacute; sirve?</p>
+        <p class="a">La <strong>lecci&oacute;n</strong> permite crear rutas ramificadas: p&aacute;ginas de contenido, preguntas y saltos condicionales. Sirve para escenarios, simulaciones, refuerzo y aprendizaje autoguiado. Se pueden definir clusters y ramas, y calificar respuestas. Es m&aacute;s adecuada para decisiones que para contenido lineal. Requiere dise&ntilde;o instruccional y pruebas de navegaci&oacute;n; si solo se necesita presentar contenido, usar p&aacute;gina o libro.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; diferencia hay entre SCORM y H5P?</p>
+        <p class="a"><strong>SCORM</strong> es un est&aacute;ndar de paquetes de contenido con seguimiento (completion, score) en Moodle; es com&uacute;n en cursos importados y herramientas de autor. <strong>H5P</strong> permite crear contenido interactivo (v&iacute;deo interactivo, presentaciones, quizzes, arrastrar y soltar) dentro de Moodle, con seguimiento y sin empaquetar. Ambos pueden registrar intentos y calificaciones, con limitaciones. Elegir seg&uacute;n interactividad, accesibilidad, autor&iacute;a y necesidades de reporting. Probar en m&oacute;vil.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; otras actividades conviene conocer?</p>
+        <p class="a">Consulta (choice), encuesta (feedback), base de datos, glosario, wiki, chat, herramienta externa (LTI), BigBlueButton, paquete SCORM, H5P y taller. Cada una responde a una pedagog&iacute;a: encuesta para diagn&oacute;stico, glosario para construcci&oacute;n colectiva, wiki para colaboraci&oacute;n, LTI para herramientas externas. No usar todas: elegir las que aporten al objetivo. Documentar la finalidad y evitar la sobrecarga cognitiva. Revisar privacidad y dependencias externas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;C&oacute;mo se dise&ntilde;an actividades efectivas?</p>
+        <p class="a">Alinear cada actividad con un objetivo de aprendizaje y con la evaluaci&oacute;n; dar instrucciones claras, criterios y plazos; usar aprendizaje activo y retroalimentaci&oacute;n; cuidar la accesibilidad y el m&oacute;vil; y evitar muros de texto. Dosificar la carga y usar scaffolding. Incluir una actividad de cierre o reflexi&oacute;n. Revisar el dise&ntilde;o con un usuario real y medir participaci&oacute;n. La herramienta es un medio: la calidad depende del dise&ntilde;o pedag&oacute;gico y del acompa&ntilde;amiento.</p>
+    </div>
+
+    <h2 id="s5">5. Evaluaci&oacute;n y calificaciones</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;C&oacute;mo funciona el libro de calificaciones?</p>
+        <p class="a">El <strong>gradebook</strong> contiene &iacute;tems de calificaci&oacute;n y categor&iacute;as, con pesos y m&eacute;todos de agregaci&oacute;n. Las actividades env&iacute;an sus notas a &iacute;tems; tambi&eacute;n se pueden crear &iacute;tems manuales. Incluye escalas, letras, resultados, importaci&oacute;n y exportaci&oacute;n, historial de cambios, anulaci&oacute;n y ocultaci&oacute;n. Configurar la agregaci&oacute;n antes de cargar notas y probar con datos de ejemplo. Documentar la f&oacute;rmula y comunicar d&oacute;nde se ve cada nota; la transparencia reduce reclamos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; m&eacute;todos de agregaci&oacute;n existen y cu&aacute;l elegir?</p>
+        <p class="a">Media de notas, media ponderada, media ponderada simple, mediana, m&iacute;nimo, m&aacute;ximo, suma y media natural, entre otros. La elecci&oacute;n depende del dise&ntilde;o: una media ponderada si los pesos importan; media natural si todos los &iacute;tems valen igual; mediana para reducir el efecto de valores extremos. Revisar el tratamiento de notas vac&iacute;as, el cr&eacute;dito extra y los &iacute;tems ocultos. Simular el resultado con un alumno antes de publicar; los errores de agregaci&oacute;n son costosos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Qu&eacute; son los resultados, escalas y competencias?</p>
+        <p class="a">Los <strong>resultados</strong> (outcomes) describen lo que el estudiante debe lograr y se califican con una escala; las <strong>escalas</strong> son niveles personalizados (por ejemplo, insuficiente, suficiente, notable). Las <strong>competencias</strong> permiten mapear actividades a marcos y evaluar su desarrollo. Son &uacute;tiles para acreditaci&oacute;n y curr&iacute;culo, pero a&ntilde;aden complejidad. Definir pocos resultados, con descriptores claros y un plan de evaluaci&oacute;n. Reportar y revisar con el equipo acad&eacute;mico; no confundir con la calificaci&oacute;n num&eacute;rica.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;Qu&eacute; son las r&uacute;bricas y las gu&iacute;as de evaluaci&oacute;n?</p>
+        <p class="a">Una <strong>r&uacute;brica</strong> define criterios y niveles de desempe&ntilde;o con descriptores; una <strong>gu&iacute;a</strong> (marking guide) define criterios con comentarios y puntos. Se usan para calificar de forma consistente y para comunicar expectativas. Se configuran en tareas y otros m&oacute;dulos; pueden ser visibles antes de la entrega. Dise&ntilde;ar criterios observables, pocos y alineados con los objetivos; compartir ejemplos. Validar la r&uacute;brica con el equipo y revisar la calificaci&oacute;n final. Son clave para la equidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;Qu&eacute; tipos de preguntas se usan en un cuestionario?</p>
+        <p class="a">Opci&oacute;n m&uacute;ltiple, verdadero/falso, emparejamiento, respuesta corta, num&eacute;rica, calculada, ensayo, arrastrar y soltar, cloze (rellenar huecos), descripci&oacute;n y aleatoria, entre otras. Se organizan en un banco de preguntas con categor&iacute;as y etiquetas. Elegir seg&uacute;n el objetivo: conocimiento, c&aacute;lculo, aplicaci&oacute;n o redacci&oacute;n. Cuidar la calidad, la retroalimentaci&oacute;n y la accesibilidad; revisar la calificaci&oacute;n autom&aacute;tica. Usar bancos compartidos con control de versiones y evitar preguntas ambiguas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;Qu&eacute; ajustes de cuestionario afectan la evaluaci&oacute;n?</p>
+        <p class="a">Intentos permitidos, tiempo l&iacute;mite, m&eacute;todo de calificaci&oacute;n (mayor, promedio, primero, &uacute;ltimo), comportamiento de las preguntas (retroalimentaci&oacute;n diferida, inmediata, adaptativa), orden aleatorio, opciones de revisi&oacute;n, contrase&ntilde;a, restricci&oacute;n por red y Safe Exam Browser. Tambi&eacute;n afectan las anulaciones por usuario o grupo y la fecha de apertura y cierre. Configurar seg&uacute;n el prop&oacute;sito y comunicar las reglas. Probar el flujo completo, incluyendo la revisi&oacute;n posterior.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;C&oacute;mo se califica y se da retroalimentaci&oacute;n?</p>
+        <p class="a">Depende de la actividad: calificaci&oacute;n autom&aacute;tica en cuestionarios objetivos, calificaci&oacute;n manual en tareas y ensayos, r&uacute;bricas o gu&iacute;as, comentarios generales y por criterio, anotaciones en PDF y flujo de revisi&oacute;n. Se puede ocultar la nota hasta liberar la retroalimentaci&oacute;n, usar env&iacute;o ciego y moderaci&oacute;n. La retroalimentaci&oacute;n debe ser oportuna, espec&iacute;fica y accionable. Configurar notificaciones y plazos; revisar que el estudiante vea lo que corresponde.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo se aborda la integridad acad&eacute;mica?</p>
+        <p class="a">Combinar dise&ntilde;o de evaluaci&oacute;n (preguntas de aplicaci&oacute;n, bancos amplios, tareas aut&eacute;nticas), aleatorizaci&oacute;n, l&iacute;mites de tiempo, Safe Exam Browser, supervisi&oacute;n y herramientas de similitud o proctoring cuando est&eacute;n aprobadas. Revisar logs y patrones, pero evitar vigilancia invasiva o sesgos. La tecnolog&iacute;a no garantiza honestidad: la cultura, las expectativas y el dise&ntilde;o importan. Documentar las reglas y el tratamiento de incidentes, con privacidad y debido proceso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;Qu&eacute; reportes y anal&iacute;tica de evaluaci&oacute;n ofrece Moodle?</p>
+        <p class="a">Exportaci&oacute;n del libro de calificaciones, informes de finalizaci&oacute;n, participaci&oacute;n, actividad y logs; estad&iacute;sticas por actividad y por pregunta; y modelos de anal&iacute;tica del aprendizaje. Se complementan con dashboards externos v&iacute;a base de datos o API. Definir indicadores &uacute;tiles (aprobaci&oacute;n, abandono, tiempo, brechas) y actuar sobre ellos. Cuidar la privacidad y el sesgo; no usar la anal&iacute;tica para etiquetar sin contexto. La anal&iacute;tica debe mejorar la ense&ntilde;anza, no solo medir.</p>
+    </div>
+
+    <h2 id="s6">6. Usuarios, roles y matr&iacute;cula</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;Qu&eacute; m&eacute;todos de autenticaci&oacute;n soporta Moodle?</p>
+        <p class="a">Manual, auto-registro por correo, LDAP, SAML2, OAuth2, CAS y base de datos externa, adem&aacute;s de plugins. Para instituciones se recomienda SSO (SAML2 u OAuth2) con el IdP corporativo y aprovisionamiento coherente. Se pueden combinar m&eacute;todos, pero conviene una fuente de verdad. Configurar mapeo de atributos, MFA en el IdP, desactivaci&oacute;n de cuentas y revisi&oacute;n de cuentas de servicio. Probar login, logout, expiraci&oacute;n y recuperaci&oacute;n antes de habilitarlo masivamente.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;C&oacute;mo funcionan los permisos y las <em>capabilities</em>?</p>
+        <p class="a">Cada acci&oacute;n est&aacute; protegida por una <em>capability</em>; los roles la permiten, proh&iacute;ben o dejan sin definir en un contexto. La herencia y las anulaciones determinan el permiso efectivo. Se puede asignar un rol a un usuario en sistema, categor&iacute;a, curso, m&oacute;dulo o bloque. Probar con la cuenta real y usar el informe de permisos. Aplicar m&iacute;nimo privilegio: no dar editingteacher o manager a quien no lo necesita. Documentar roles personalizados y revisarlos peri&oacute;dicamente.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;C&oacute;mo se integra la matr&iacute;cula con sistemas externos?</p>
+        <p class="a">Mediante plugins de matr&iacute;cula (base de datos externa, LDAP, archivo plano, cohort sync, LTI) o la API. El sistema de origen (SIS, RRHH) debe ser la fuente de verdad: altas, bajas y cambios se sincronizan, con idempotencia y logs. Definir la frecuencia, el manejo de errores y el desmatriculamiento. Evitar duplicados y matr&iacute;culas manuales paralelas. Probar con datos reales y monitorear la sincronizaci&oacute;n; documentar el mapeo de campos y roles.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; son las cohortes y c&oacute;mo se usan para matricular?</p>
+        <p class="a">Las cohortes agrupan usuarios a nivel de sitio y se sincronizan a cursos con <em>cohort sync</em>. Al agregar o quitar un usuario de la cohorte, la matr&iacute;cula se actualiza. Son &uacute;tiles para programas, departamentos, promociones e incorporaci&oacute;n. Se pueden cargar por CSV o sincronizar desde un sistema externo. Requieren una fuente de verdad y revisi&oacute;n; una cohorte mal mantenida genera accesos indebidos o p&eacute;rdida de acceso. Documentar su prop&oacute;sito y owner.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo se gestionan los usuarios?</p>
+        <p class="a">Alta manual, carga CSV, aprovisionamiento por SSO o API. Se pueden editar perfiles, campos personalizados, preferencias, suspender o eliminar cuentas. Suspender conserva datos y bloquea el acceso; eliminar borra seg&uacute;n la pol&iacute;tica de privacidad. Evitar cuentas duplicadas y compartidas; usar nombres &uacute;nicos y correo institucional. Revisar cuentas inactivas, roles y permisos. La gesti&oacute;n debe alinearse con RRHH y con el ciclo de vida del usuario (alta, cambio, baja).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;C&oacute;mo funciona el acceso de invitado y el acceso p&uacute;blico?</p>
+        <p class="a">Se puede permitir acceso de invitado a un curso con o sin clave, y habilitar la auto-matriculaci&oacute;n. El rol guest tiene permisos limitados y no suele poder entregar actividades. Es &uacute;til para cat&aacute;logos o contenidos abiertos, pero riesgoso para datos sensibles. Revisar la visibilidad del curso, las restricciones y la pol&iacute;tica de privacidad. Evitar que el acceso de invitado permita ver participantes o calificaciones. Documentar y monitorear; deshabilitarlo si no es necesario.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;Qu&eacute; es LTI y c&oacute;mo se usa en Moodle?</p>
+        <p class="a"><strong>LTI</strong> (Learning Tools Interoperability) permite integrar herramientas externas. Moodle puede ser <em>consumidor</em> (actividad External tool) o <em>proveedor</em> (publicar cursos o actividades LTI). LTI 1.3 con Deep Linking es el est&aacute;ndar recomendado; incluye autenticaci&oacute;n, roles y devoluci&oacute;n de calificaciones. Se configura con claves y endpoints, y se prueba con el proveedor. Revisar privacidad y dependencia del proveedor; documentar la integraci&oacute;n y los datos que se comparten.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;C&oacute;mo se cumple con privacidad y GDPR en Moodle?</p>
+        <p class="a">Moodle incluye la <strong>Privacy API</strong> y herramientas de solicitudes de datos, retenci&oacute;n y pol&iacute;ticas. Configurar avisos de privacidad, consentimiento, plazos de conservaci&oacute;n y procesos de exportaci&oacute;n o eliminaci&oacute;n. Revisar plugins de terceros y proveedores (DPA), minimizaci&oacute;n de datos, acceso y cifrado. Los logs y backups tambi&eacute;n contienen datos personales. Documentar el registro de actividades de tratamiento y el contacto del DPO. La privacidad se dise&ntilde;a, no se a&ntilde;ade al final.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;C&oacute;mo se gobierna el ciclo de vida de accesos?</p>
+        <p class="a">Definir alta, cambio y baja (joiner, mover, leaver) con RRHH y el IdP; roles por funci&oacute;n; revisiones peri&oacute;dicas; cuentas admin nominativas con MFA; separaci&oacute;n de funciones; registro de auditor&iacute;a; procedimiento de emergencia. Evitar cuentas compartidas y privilegios permanentes. Automatizar la suspensi&oacute;n al salir y transferir la propiedad de cursos. Documentar la matriz de accesos y probar con auditor&iacute;as. El gobierno de identidades es parte de la seguridad del LMS.</p>
+    </div>
+
+    <h2 id="s7">7. Seguridad, privacidad y accesibilidad</h2>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;Cu&aacute;les son las buenas pr&aacute;cticas de seguridad para Moodle?</p>
+        <p class="a">HTTPS en todo el sitio, contrase&ntilde;as fuertes y MFA, m&iacute;nimo privilegio, actualizaciones de core y plugins, backups probados, permisos de archivos correctos, <em>dataroot</em> fuera del webroot, base de datos separada y con permisos acotados, WAF y monitoreo de logs. Deshabilitar funciones que no se usan y revisar el informe de seguridad del sitio. Vetting de plugins y gesti&oacute;n de secretos. La seguridad es un proceso continuo: parchear, revisar accesos, detectar y responder.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;C&oacute;mo se endurece (hardening) una instalaci&oacute;n de Moodle?</p>
+        <p class="a">Proteger <em>config.php</em> y el <em>dataroot</em>; bloquear listados de directorios y acceso directo a archivos sensibles; cookies seguras y <em>httponly</em>; proxy inverso bien configurado; sesiones en Redis; usuario de base de datos con permisos m&iacute;nimos; deshabilitar depuraci&oacute;n en producci&oacute;n; limitar admin; cuentas nominativas y MFA. Revisar el informe de seguridad y los chequeos del entorno. Automatizar con configuraci&oacute;n como c&oacute;digo y escaneos. Documentar excepciones y revisarlas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;Qu&eacute; controles de privacidad y protecci&oacute;n de datos se aplican?</p>
+        <p class="a">Minimizaci&oacute;n de datos, base legal y avisos de privacidad, consentimiento cuando corresponde, plazos de retenci&oacute;n, acceso restringido, cifrado en tr&aacute;nsito y en reposo, exportaci&oacute;n y eliminaci&oacute;n de datos, y contratos con proveedores. Revisar logs y backups, anonimizar datos para pruebas y limitar la anal&iacute;tica. Moodle ofrece herramientas de privacidad y solicitudes de datos. Documentar el registro de tratamientos, el DPO y el proceso de incidentes. Cumplir GDPR, CCPA u otras normas aplicables.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;C&oacute;mo se garantiza la accesibilidad?</p>
+        <p class="a">Aplicar WCAG 2.1/2.2 AA: contenido sem&aacute;ntico, texto alternativo, contraste, navegaci&oacute;n por teclado, subt&iacute;tulos y transcripciones, no depender solo del color, formularios etiquetados y contenido responsive. Elegir temas accesibles y probar con lector de pantalla y usuarios reales. Revisar documentos PDF y H5P; ofrecer formatos alternativos. La accesibilidad es requisito legal en muchos contextos y mejora la experiencia de todos. Incluir criterios de accesibilidad en la revisi&oacute;n de calidad del curso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;Qu&eacute; considerar para el acceso m&oacute;vil y la experiencia de usuario?</p>
+        <p class="a">Usar un tema responsive y probar en la app oficial de Moodle; contenido breve, im&aacute;genes optimizadas, v&iacute;deos con subt&iacute;tulos y navegaci&oacute;n clara. Configurar los web services m&oacute;viles y las notificaciones; revisar el comportamiento offline y los enlaces externos. La app tiene limitaciones frente a la web; validar las actividades cr&iacute;ticas. La experiencia m&oacute;vil importa porque muchos estudiantes acceden solo desde el tel&eacute;fono. Medir y simplificar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;C&oacute;mo se registran y auditan los eventos?</p>
+        <p class="a">Los <em>log stores</em> (est&aacute;ndar o base de datos) registran accesos, visualizaciones, env&iacute;os, calificaciones y acciones administrativas. Los informes permiten filtrar por usuario, curso, actividad y fecha. Para seguridad se revisan inicios de sesi&oacute;n fallidos, cambios de permisos y exportaciones. Definir retenci&oacute;n, proteger los logs y, si es necesario, enviarlos a un SIEM. La auditor&iacute;a debe cumplir privacidad y servir para investigar incidentes. No recolectar m&aacute;s de lo necesario.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;C&oacute;mo se dise&ntilde;a una estrategia de backup y recuperaci&oacute;n?</p>
+        <p class="a">Regla 3-2-1: tres copias, dos medios, una fuera del sitio. Respaldar base de datos, <em>dataroot</em> y <em>config.php</em> de forma consistente; cifrar y restringir el acceso. Definir RPO y RTO, automatizar, monitorear y <strong>probar restauraciones</strong> peri&oacute;dicamente. Considerar la compatibilidad de versi&oacute;n y los plugins. Los backups tambi&eacute;n son datos personales: aplicar retenci&oacute;n y protecci&oacute;n. Documentar el runbook de recuperaci&oacute;n y asignar responsables. Un backup no probado es una falsa sensaci&oacute;n de seguridad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; riesgos existen con archivos y contenido subido?</p>
+        <p class="a">Archivos maliciosos, XSS en contenido HTML, enlaces a sitios no confiables, filtraciones por permisos incorrectos y almacenamiento sin l&iacute;mites. Configurar tipos de archivo permitidos, tama&ntilde;o m&aacute;ximo, antivirus/escaneo, filtros de HTML y permisos del <em>dataroot</em>. Revisar plugins que muestran contenido externo. Capacitar a los docentes y monitorear. No confiar en la extensi&oacute;n del archivo; validar el contenido. Aplicar cuarentena y procedimientos de limpieza ante incidentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo se demuestra cumplimiento y se prepara una auditor&iacute;a?</p>
+        <p class="a">Mantener pol&iacute;ticas, matriz de roles, registro de tratamientos, inventario de plugins y proveedores, evidencias de backups y restauraciones, logs, planes de formaci&oacute;n y pruebas de accesibilidad. Definir controles y responsables; revisar accesos y cambios. Documentar incidentes y respuestas. Alinear con ISO 27001, SOC 2, GDPR o normativa educativa seg&uacute;n aplique. La auditor&iacute;a se facilita con evidencia continua, no con documentos improvisados. Revisar y actualizar el marco cada a&ntilde;o.</p>
+    </div>
+
+    <h2 id="s8">8. Rendimiento, escalabilidad y operaci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;C&oacute;mo se mejora el rendimiento de Moodle?</p>
+        <p class="a">Usar cach&eacute;s (MUC) con stores adecuados (Redis o Memcached), OPcache, PHP-FPM, un tema ligero y purgar cach&eacute;s tras cambios. Activar la cach&eacute; de JavaScript, evitar el modo de dise&ntilde;o de temas en producci&oacute;n y revisar el informe de rendimiento. Optimizar la base de datos y las consultas; separar servicios. Medir una l&iacute;nea base y comparar. No optimizar a ciegas: identificar el cuello de botella (PHP, base de datos, disco, red) antes de cambiar configuraciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo se operan el cron y las tareas programadas a escala?</p>
+        <p class="a">Ejecutar cron cada minuto con un usuario dedicado, sin solapamientos y con logs. Revisar tareas fallidas o lentas, tareas <em>adhoc</em> y picos de correo o backups. Separar tareas pesadas y ajustar l&iacute;mites de tiempo y memoria. Monitorizar la cola y alertar si crece. En alta disponibilidad, asegurar que solo una instancia ejecute cada tarea o usar bloqueos. Documentar las tareas cr&iacute;ticas y su impacto; probar cambios en staging. El cron es el coraz&oacute;n operativo de Moodle.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;Qu&eacute; arquitectura de infraestructura soporta carga alta?</p>
+        <p class="a">Web tier con PHP-FPM y Nginx/Apache, base de datos gestionada y ajustada, Redis para sesiones y cach&eacute;, almacenamiento compartido o S3 para el <em>dataroot</em>, CDN para est&aacute;ticos y balanceador. Las sesiones deben ser compartidas para evitar p&eacute;rdidas al cambiar de nodo. Monitorizar y escalar horizontalmente; definir l&iacute;mites y pruebas de carga. La base de datos suele ser el cuello de botella: indexar, revisar consultas y separar servicios. Documentar la topolog&iacute;a y los puntos &uacute;nicos de fallo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;C&oacute;mo se gestiona el almacenamiento de archivos?</p>
+        <p class="a">El <em>dataroot</em> puede estar en disco local, NFS o almacenamiento de objetos (S3) mediante plugins. Debe ser compartido si hay varios nodos, con permisos correctos y backup. Considerar cuotas, ciclo de vida, cifrado, antivirus y limpieza de archivos hu&eacute;rfanos. Migrar el almacenamiento requiere planificaci&oacute;n y pruebas de rendimiento. Medir latencia y costo de egreso. Proteger el acceso directo y auditar. La consistencia entre base de datos y archivos es cr&iacute;tica para la restauraci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;C&oacute;mo se manejan sesiones y autenticaci&oacute;n a escala?</p>
+        <p class="a">Configurar un <em>session handler</em> compartido (Redis) para que cualquier nodo valide la sesi&oacute;n; ajustar cookies seguras y tiempo de vida; usar SSO para reducir credenciales locales; aplicar MFA y l&iacute;mites de intentos. Un balanceador sin sesiones compartidas provoca cierres de sesi&oacute;n y errores. Revisar logout, expiraci&oacute;n y concurrencia. Monitorizar sesiones y errores de autenticaci&oacute;n. Documentar la configuraci&oacute;n y probar con varios nodos; la experiencia de login debe ser estable.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;Qu&eacute; monitorear y alertar en producci&oacute;n?</p>
+        <p class="a">Disponibilidad y latencia del sitio, errores de PHP y del servidor web, conexiones y consultas lentas de la base de datos, uso de CPU/memoria/disco, ejecuci&oacute;n de cron y tareas fallidas, colas de correo, certificados TLS, backups y espacio del <em>dataroot</em>. Configurar alertas con umbrales y dashboards; revisar logs de seguridad. Definir on-call, runbooks y escalado. Monitorear la experiencia real (login, curso, quiz) adem&aacute;s de la infraestructura. La observabilidad permite anticipar incidentes en picos de ex&aacute;menes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo se escala Moodle para picos de ex&aacute;menes?</p>
+        <p class="a">Planificar con pruebas de carga (k6, JMeter), dimensionar base de datos y PHP-FPM, usar cach&eacute; y sesiones compartidas, distribuir est&aacute;ticos por CDN y escalar horizontalmente. Evitar tareas pesadas durante el pico; programar backups y cron intensivo fuera de horario. Revisar l&iacute;mites de conexiones y timeouts. Preparar un plan de contingencia y comunicaci&oacute;n. Medir despu&eacute;s del evento y ajustar. La capacidad debe validarse con el patr&oacute;n real de uso, no solo con n&uacute;meros de usuarios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;C&oacute;mo se gestionan releases, mantenimiento y cambios?</p>
+        <p class="a">Definir una cadencia de actualizaciones (seguridad y menores) y ventanas de mantenimiento; probar en staging; comunicar a los usuarios; hacer backup y plan de rollback. Usar control de cambios para plugins, temas y configuraci&oacute;n. Revisar el ciclo de vida y el fin de soporte de la versi&oacute;n. Automatizar despliegues y validaciones. Documentar runbooks e incidentes. No acumular actualizaciones durante a&ntilde;os: los saltos grandes son m&aacute;s riesgosos. La gesti&oacute;n de releases es parte de la confiabilidad.</p>
+    </div>
+
+    <h2 id="s9">9. Integraciones, APIs y desarrollo</h2>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;C&oacute;mo funcionan los web services de Moodle?</p>
+        <p class="a">Se habilitan en administraci&oacute;n, se elige el protocolo (REST o SOAP), se crea un servicio y se autorizan funciones. Los clientes se autentican con un token asociado a un usuario y a un servicio; los permisos dependen de las <em>capabilities</em> de ese usuario. La app m&oacute;vil usa el servicio <em>moodle_mobile_app</em>. Exponer solo las funciones necesarias, con cuentas de servicio de m&iacute;nimo privilegio, HTTPS y monitoreo. Documentar endpoints, l&iacute;mites y manejo de errores. No usar tokens de admin para integraciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo se consume la API REST desde una aplicaci&oacute;n externa?</p>
+        <p class="a">Se env&iacute;a una petici&oacute;n a <em>/webservice/rest/server.php</em> con <em>wstoken</em>, <em>wsfunction</em> y par&aacute;metros; la respuesta es JSON o XML. Se puede usar Postman para explorar y un SDK o cliente HTTP en la aplicaci&oacute;n. Manejar errores, timeouts, paginaci&oacute;n y reintentos; validar permisos y datos. Versionar la integraci&oacute;n y registrar llamadas. Evitar llamadas masivas sin control; usar tareas as&iacute;ncronas o procesos batch. La API es potente, pero no sustituye un buen dise&ntilde;o de integraci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;Qu&eacute; est&aacute;ndares de interoperabilidad conviene conocer?</p>
+        <p class="a"><strong>LTI 1.3</strong> para integraci&oacute;n de herramientas y devoluci&oacute;n de calificaciones; <strong>SCORM</strong> para paquetes de contenido; <strong>H5P</strong> para contenido interactivo; <strong>xAPI</strong> (mediante plugins) para experiencias de aprendizaje; <strong>Common Cartridge</strong> para importar contenido; y <strong>Open Badges</strong> para credenciales. Cada est&aacute;ndar resuelve un problema distinto; elegir el que el proveedor soporte y probar el flujo completo. Documentar privacidad y datos compartidos. La interoperabilidad reduce el lock-in, pero a&ntilde;ade configuraci&oacute;n y dependencias.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;C&oacute;mo se implementa SSO con SAML u OAuth2?</p>
+        <p class="a">Se configura el plugin de autenticaci&oacute;n con los metadatos del IdP, el entity ID, los certificados y el mapeo de atributos (usuario, correo, nombre, grupos). Se prueba login, logout, expiraci&oacute;n y aprovisionamiento; se define qu&eacute; hacer con cuentas existentes y con el desaprovisionamiento. Rotar certificados antes de que expiren. El SSO no reemplaza la autorizaci&oacute;n: los roles y matr&iacute;culas siguen gestion&aacute;ndose en Moodle o en el sistema de origen. Documentar y monitorear errores de autenticaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;C&oacute;mo se habilita y configura la app m&oacute;vil?</p>
+        <p class="a">Activar los web services m&oacute;viles, configurar la app (nombre, logo, colores, idioma), habilitar notificaciones y SSO, y probar en iOS y Android. La app ofrece acceso a cursos, actividades, mensajes y offline limitado; algunas actividades o plugins no funcionan igual que en la web. Revisar la pol&iacute;tica de privacidad y el soporte. Comunicar a los usuarios y monitorear errores. La app es un canal adicional, no un reemplazo de la experiencia web; validar las actividades cr&iacute;ticas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se desarrolla un plugin de Moodle?</p>
+        <p class="a">Elegir el tipo (local, actividad, bloque, tema, auth, etc.) y crear la estructura con <em>version.php</em>, <em>lang/en</em>, clases, <em>db/install.xml</em>, <em>db/access.php</em>, <em>upgrade.php</em> y, si aplica, <em>privacy/provider.php</em>. Usar la API de Moodle (output, forms, DML, capabilities, tareas) y las convenciones de c&oacute;digo; incluir tests. Evitar modificar el core. Documentar la instalaci&oacute;n y el soporte. Probar en staging con datos reales y revisar seguridad/privacidad. Para personalizaciones peque&ntilde;as, un plugin local suele ser m&aacute;s sostenible que un parche.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;C&oacute;mo se personaliza el tema y la interfaz?</p>
+        <p class="a">Usar un tema basado en Boost y, preferiblemente, un tema hijo para no modificar el original. Personalizar SCSS, logotipos, colores, navegaci&oacute;n y textos de idioma; revisar accesibilidad y responsive. Evitar cambios directos en el core o en temas de terceros que se pierdan al actualizar. Probar en staging y validar contraste, teclado y lectores de pantalla. Documentar la personalizaci&oacute;n y su compatibilidad con la versi&oacute;n. La marca no debe sacrificar usabilidad ni accesibilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;Qu&eacute; integraciones externas suelen implementarse?</p>
+        <p class="a">SIS/RRHH para altas y matr&iacute;culas, SSO con el IdP, proveedores de contenido (LTI/SCORM/H5P), videoconferencia (BigBlueButton, Zoom, Teams), similitud/proctoring, anal&iacute;tica y CRM. Tambi&eacute;n API/web services para aplicaciones propias. Definir el sistema de origen, el mapeo de datos, la idempotencia y el monitoreo; usar middleware cuando reduzca acoplamiento. Documentar contratos y responsables. Probar altas, bajas y errores. Evitar integraciones punto a punto sin gobierno; la complejidad se acumula.</p>
+    </div>
+
+    <h2 id="s10">10. Migraci&oacute;n, adopci&oacute;n y buenas pr&aacute;cticas</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo se migra desde otro LMS a Moodle?</p>
+        <p class="a">Inventariar cursos, usuarios, matr&iacute;culas, calificaciones, finalizaci&oacute;n e integraciones; definir el mapeo y las prioridades; exportar/importar contenido (Common Cartridge, SCORM, backups) y reconstruir lo que no se migra autom&aacute;ticamente. Ejecutar un piloto, validar con usuarios, capacitar y migrar por olas. Planificar privacidad, retenci&oacute;n y comunicaci&oacute;n. No trasladar deuda pedag&oacute;gica: aprovechar para limpiar y estandarizar. Medir calidad y adopci&oacute;n; tener plan de contingencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;C&oacute;mo se importa contenido y se valida?</p>
+        <p class="a">Mediante backup/restore (MBZ), importaci&oacute;n de curso, Common Cartridge, SCORM o H5P. Revisar enlaces, archivos, fechas, finalizaci&oacute;n, calificaciones, permisos y licencias; probar como estudiante. Los backups entre versiones pueden requerir conversi&oacute;n; restaurar sin datos de usuarios cuando corresponda. Limpiar contenido duplicado u obsoleto y documentar el origen. Validar accesibilidad y m&oacute;vil. La importaci&oacute;n t&eacute;cnica es solo el inicio: la calidad pedag&oacute;gica debe revisarse despu&eacute;s.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;Qu&eacute; principios de dise&ntilde;o instruccional aplicar?</p>
+        <p class="a">Dise&ntilde;o inverso: objetivos de aprendizaje, evidencias y actividades alineadas. Chunking, aprendizaje activo, pr&aacute;ctica con retroalimentaci&oacute;n, UDL (m&uacute;ltiples formas de representaci&oacute;n y expresi&oacute;n), consistencia visual y navegaci&oacute;n. Evaluar con r&uacute;bricas y ofrecer oportunidades de mejora. Dise&ntilde;ar para m&oacute;vil y accesibilidad. Usar plantillas y QA. La tecnolog&iacute;a debe reducir fricci&oacute;n, no a&ntilde;adir carga cognitiva. Validar con estudiantes reales y iterar; el dise&ntilde;o es un ciclo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;C&oacute;mo se impulsa la adopci&oacute;n y la capacitaci&oacute;n?</p>
+        <p class="a">Plan de cambio con patrocinio, formaci&oacute;n de docentes y estudiantes, documentaci&oacute;n, plantillas, horas de consulta, comunidad de pr&aacute;cticas y soporte. Identificar campeones y casos de &eacute;xito; recoger feedback y ajustar. Medir adopci&oacute;n, satisfacci&oacute;n y resultados de aprendizaje, no solo logins. Comunicar beneficios y responder r&aacute;pido a incidentes. La adopci&oacute;n no termina en el lanzamiento: requiere acompa&ntilde;amiento continuo y mejoras. Un LMS vac&iacute;o no transforma la ense&ntilde;anza.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se gobierna el ciclo de vida de cursos y plugins?</p>
+        <p class="a">Definir solicitud, aprobaci&oacute;n, plantilla, revisi&oacute;n de calidad, publicaci&oacute;n, archivo y eliminaci&oacute;n; naming y owner; accesos por rol; pol&iacute;tica de plugins (aprobados, vetting, actualizaci&oacute;n, retirada) y de upgrades. Coordinar con privacidad, accesibilidad y seguridad. Documentar RACI y SLA de soporte. Revisar cursos inactivos y contenido obsoleto. Un gobierno liviano pero claro evita caos y deuda t&eacute;cnica; debe facilitar el trabajo, no burocratizarlo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;Qu&eacute; KPIs y anal&iacute;tica usar para evaluar la plataforma?</p>
+        <p class="a">Finalizaci&oacute;n, participaci&oacute;n, calificaciones, tiempo en actividad, entregas, satisfacci&oacute;n, retenci&oacute;n, tickets de soporte, disponibilidad y rendimiento. Segmentar por curso, cohorte y rol; cuidar la privacidad y evitar m&eacute;tricas vanidosas. Usar dashboards y revisiones peri&oacute;dicas; convertir hallazgos en acciones. La anal&iacute;tica debe informar decisiones pedag&oacute;gicas y operativas, no solo reportar. Definir una l&iacute;nea base y medir el impacto de los cambios. Documentar definiciones para que los n&uacute;meros sean comparables.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;C&oacute;mo se diagnostican los problemas t&iacute;picos?</p>
+        <p class="a">Revisar logs de PHP, servidor web y Moodle; activar depuraci&oacute;n solo en staging; comprobar cron y tareas fallidas; verificar permisos del <em>dataroot</em> y <em>config.php</em>; validar versi&oacute;n de plugins y compatibilidad; purgar cach&eacute;s; revisar sesiones y SSO. Para base de datos, usar los chequeos y logs del motor. Reproducir en staging, cambiar una cosa a la vez y documentar. Los problemas comunes incluyen cron ca&iacute;do, permisos, cach&eacute;, plugins incompatibles, correo y l&iacute;mites de subida. Tener runbooks acelera la resoluci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;Qu&eacute; checklist de producci&oacute;n y buenas pr&aacute;cticas recomiendas?</p>
+        <p class="a">HTTPS, MFA, m&iacute;nimo privilegio, SSO, backups probados, staging, actualizaciones y plugins aprobados, cron monitoreado, cach&eacute; y sesiones compartidas, almacenamiento protegido, monitoreo y alertas, retenci&oacute;n y privacidad, accesibilidad, plantillas y documentaci&oacute;n, plan de incidentes y capacidad probada. Antes de un lanzamiento: revisar permisos, probar cursos y actividades cr&iacute;ticas, validar correo y notificaciones, y comunicar. Medir adopci&oacute;n y rendimiento, y revisar peri&oacute;dicamente. La excelencia operativa es continua: el LMS debe ser seguro, accesible, r&aacute;pido y confiable.</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Moodle en una entrevista (plantilla)</h2>
+
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Moodle durante [X] a&ntilde;os en [instituci&oacute;n/empresa], administrando la plataforma y dise&ntilde;ando cursos para [N] usuarios. He gestionado instalaciones y actualizaciones, configuraci&oacute;n de roles y matriculaci&oacute;n, actividades y evaluaci&oacute;n, integraciones con SSO y SIS, y seguridad y privacidad&raquo;.</p>
+        <p><strong>Arquitectura y operaci&oacute;n:</strong> &laquo;Conozco la arquitectura PHP + base de datos + <em>dataroot</em>, el papel del cron y la importancia de staging, backups y control de cambios. He gestionado actualizaciones de core y plugins, cach&eacute;, sesiones y almacenamiento, y he monitoreado disponibilidad, rendimiento y tareas programadas&raquo;.</p>
+        <p><strong>Dise&ntilde;o de cursos y actividades:</strong> &laquo;Estructuro cursos por objetivos, con formatos y secciones coherentes, actividades alineadas a la evaluaci&oacute;n y finalizaci&oacute;n configurada. Uso foros, tareas, cuestionarios, H5P y LTI seg&uacute;n el objetivo, cuido la accesibilidad y el m&oacute;vil, y trabajo con plantillas y revisi&oacute;n de calidad&raquo;.</p>
+        <p><strong>Evaluaci&oacute;n y calificaciones:</strong> &laquo;Configuro el libro de calificaciones con categor&iacute;as, pesos y agregaci&oacute;n adecuada; dise&ntilde;o cuestionarios con bancos de preguntas y retroalimentaci&oacute;n; uso r&uacute;bricas y gu&iacute;as para calificar de forma consistente. Reviso integridad acad&eacute;mica con dise&ntilde;o de evaluaci&oacute;n y herramientas aprobadas, y valido todo con un usuario de prueba&raquo;.</p>
+        <p><strong>Usuarios, roles y matriculaci&oacute;n:</strong> &laquo;Trabajo con SSO, cohorts y matr&iacute;cula sincronizada desde el SIS, roles y <em>capabilities</em> con m&iacute;nimo privilegio, y revisiones peri&oacute;dicas de acceso. Automatizo altas y bajas y documento la matriz de permisos. Distingo entre suspender y eliminar, y aplico la pol&iacute;tica de privacidad&raquo;.</p>
+        <p><strong>Seguridad, privacidad y accesibilidad:</strong> &laquo;Aplico hardening, MFA, HTTPS, backups probados y gesti&oacute;n de secretos; reviso plugins y logs. Uso las herramientas de privacidad de Moodle para retenci&oacute;n y solicitudes de datos, y valido accesibilidad WCAG con pruebas reales. La seguridad y la privacidad se dise&ntilde;an con el equipo y se evidencian&raquo;.</p>
+        <p><strong>Integraciones y desarrollo:</strong> &laquo;He integrado Moodle con SSO, SIS, LTI 1.3, SCORM/H5P y web services; tambi&eacute;n he desarrollado o adaptado plugins y temas sin modificar el core. Documento contratos, permisos y monitoreo, y pruebo los flujos completos en staging&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [m&eacute;trica: disponibilidad, adopci&oacute;n, finalizaci&oacute;n, reducci&oacute;n de tickets, migraci&oacute;n de cursos, tiempos de actualizaci&oacute;n]. En este rol aportar&iacute;a [administraci&oacute;n/dise&ntilde;o/seguridad] y ayudar&iacute;a a ofrecer una plataforma de aprendizaje confiable, accesible y gobernada&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Administraci&oacute;n y arquitectura</td><td>Instalaciones, PHP/DB, <em>dataroot</em>, cron, backups, staging</td><td>Disponibilidad, recuperaci&oacute;n y estabilidad</td></tr>
+        <tr><td>Actualizaciones y plugins</td><td>Ciclo de releases, compatibilidad, vetting, rollback</td><td>Menos incidentes y deuda t&eacute;cnica</td></tr>
+        <tr><td>Cursos y dise&ntilde;o</td><td>Categor&iacute;as, formatos, plantillas, finalizaci&oacute;n, accesibilidad</td><td>Cursos consistentes y mejor experiencia</td></tr>
+        <tr><td>Actividades y recursos</td><td>Tareas, foros, cuestionarios, H5P, SCORM, LTI, taller</td><td>Interacci&oacute;n y aprendizaje activo</td></tr>
+        <tr><td>Evaluaci&oacute;n</td><td>Gradebook, agregaci&oacute;n, r&uacute;bricas, bancos de preguntas</td><td>Calificaciones justas y trazables</td></tr>
+        <tr><td>Usuarios y roles</td><td>SSO, cohorts, matr&iacute;cula, capabilities, revisiones</td><td>Accesos correctos y menos soporte</td></tr>
+        <tr><td>Seguridad y privacidad</td><td>Hardening, MFA, privacy API, retenci&oacute;n, auditor&iacute;a</td><td>Cumplimiento y menor riesgo</td></tr>
+        <tr><td>Rendimiento</td><td>Cach&eacute;, sesiones, almacenamiento, monitoreo, carga</td><td>Latencia y capacidad en picos</td></tr>
+        <tr><td>Integraciones</td><td>Web services, LTI, SIS, SSO, app m&oacute;vil</td><td>Ecosistema conectado y automatizado</td></tr>
+        <tr><td>Migraci&oacute;n y adopci&oacute;n</td><td>Importaci&oacute;n, validaci&oacute;n, capacitaci&oacute;n, KPIs</td><td>Migraciones exitosas y adopci&oacute;n sostenida</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: usuarios, cursos, actividades, disponibilidad, tiempos de actualizaci&oacute;n, tickets y adopci&oacute;n.</li>
+        <li>Nombra con precisi&oacute;n: <em>dataroot</em>, cron, capabilities, cohorts, completion, gradebook, H5P, SCORM, LTI 1.3, privacy API.</li>
+        <li>Muestra criterio y trade-offs: Moodle vs SaaS, on-premise vs cloud, plugin vs desarrollo propio, autoservicio vs gobierno.</li>
+        <li>Prep&aacute;rate para detalle: backups consistentes, actualizaciones, roles, f&oacute;rmulas de calificaci&oacute;n, seguridad, accesibilidad y rendimiento en ex&aacute;menes.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona un laboratorio, la documentaci&oacute;n oficial y un plan de certificaci&oacute;n.</li>
+        <li>Conecta con el negocio o la instituci&oacute;n: aprendizaje, cumplimiento, experiencia del usuario, costo y continuidad.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Moodle Documentation (docs.moodle.org)</td><td>Gu&iacute;as oficiales de administraci&oacute;n, cursos, actividades, plugins y desarrollo.</td></tr>
+        <tr><td>Moodle Academy</td><td>Cursos, certificaciones y recursos de formaci&oacute;n para administradores y docentes.</td></tr>
+        <tr><td>Moodle Plugins Directory</td><td>Cat&aacute;logo de plugins, valoraciones, compatibilidad y mantenimiento.</td></tr>
+        <tr><td>Moodle Security y Security Report</td><td>Buenas pr&aacute;cticas, avisos de seguridad y revisi&oacute;n de la configuraci&oacute;n.</td></tr>
+        <tr><td>Upgrading Moodle</td><td>Proceso de actualizaci&oacute;n, compatibilidad y soluci&oacute;n de problemas.</td></tr>
+        <tr><td>Performance Recommendations</td><td>Cach&eacute;, sesiones, cron, infraestructura y escalabilidad.</td></tr>
+        <tr><td>Web Services Documentation</td><td>Protocolos, servicios, tokens, funciones externas y app m&oacute;vil.</td></tr>
+        <tr><td>LTI Documentation</td><td>LTI 1.3, Deep Linking, registro y devoluci&oacute;n de calificaciones.</td></tr>
+        <tr><td>Privacy API y GDPR Documentation</td><td>Solicitudes de datos, retenci&oacute;n, pol&iacute;ticas y cumplimiento.</td></tr>
+        <tr><td>Accessibility Documentation y WCAG</td><td>Pautas de accesibilidad, contenido y pruebas.</td></tr>
+        <tr><td>Moodle Community Forums</td><td>Discusiones, soluciones y experiencias de la comunidad.</td></tr>
+        <tr><td>MoodleCloud y Moodle Workplace</td><td>Opciones gestionadas y funcionalidades empresariales.</td></tr>
+        <tr><td>IMS Global &mdash; LTI y Common Cartridge</td><td>Est&aacute;ndares de interoperabilidad y contenido.</td></tr>
+        <tr><td>Open Badges</td><td>Credenciales digitales, criterios y verificaci&oacute;n.</td></tr>
+        <tr><td>PHP y bases de datos soportadas</td><td>Requisitos, extensiones y configuraci&oacute;n del entorno.</td></tr>
+        <tr><td>Moodle 4 Administration (Packt)</td><td>Administraci&oacute;n, configuraci&oacute;n y buenas pr&aacute;cticas de plataforma.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
