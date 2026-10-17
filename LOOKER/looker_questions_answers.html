@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Looker - LookML, Explores, Dashboards, Persistencia, Seguridad, API y Operacion | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Looker &mdash; LookML, Explores, Dashboards, Persistencia, Seguridad, API y Operaci&oacute;n</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Looker (modelado LookML, explores, dashboards, persistencia, seguridad y gobierno) en dise&ntilde;o, implementaci&oacute;n y operaci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos y BI (Q1&ndash;Q8), arquitectura, conexiones y proyectos (Q9&ndash;Q16), LookML (Q17&ndash;Q25), explores y joins (Q26&ndash;Q34), l&oacute;gica de negocio y medidas (Q35&ndash;Q43), dashboards y visualizaci&oacute;n (Q44&ndash;Q52), persistencia y rendimiento (Q53&ndash;Q61), seguridad y gobierno (Q62&ndash;Q69), API e integraci&oacute;n (Q70&ndash;Q77) y operaci&oacute;n, migraci&oacute;n y buenas pr&aacute;cticas (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos de Looker y BI &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Arquitectura, conexiones y proyectos &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. LookML: models, views y campos &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Explores, joins y relaciones &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. L&oacute;gica de negocio, dimensiones y medidas &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. Dashboards, Looks y visualizaci&oacute;n &mdash; 9 preguntas</a></li>
+        <li><a href="#s7">7. Persistencia, cach&eacute; y rendimiento &mdash; 9 preguntas</a></li>
+        <li><a href="#s8">8. Seguridad, gobierno y acceso &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. API, embebido e integraci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. Operaci&oacute;n, migraci&oacute;n y buenas pr&aacute;cticas &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Looker en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos de Looker y BI</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Looker y c&oacute;mo se diferencia de otras herramientas de BI?</p>
+        <p class="a">Looker es la plataforma de BI y modelado sem&aacute;ntico de Google Cloud. Se diferencia porque el modelo vive en <strong>LookML</strong> (c&oacute;digo versionado) y las consultas se ejecutan en el <em>data warehouse</em>, no en un motor propio. Eso ofrece una definici&oacute;n &uacute;nica de las m&eacute;tricas para dashboards, entregas, embeds y API, con gobierno centralizado y escalabilidad. Frente a herramientas de descubrimiento autoservicio, exige un equipo que modele; a cambio reduce la ambig&uuml;edad de m&eacute;tricas y el retrabajo. Se usa para anal&iacute;tica empresarial, anal&iacute;tica embebida y aplicaciones internas de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Qu&eacute; es LookML y por qu&eacute; es importante?</p>
+        <p class="a">LookML es el lenguaje declarativo de Looker para definir modelos, vistas, explores, dimensiones, medidas, joins y pol&iacute;ticas. Es c&oacute;digo: se versiona en Git, se revisa en pull requests, se promueve entre entornos y se valida. Describe qu&eacute; significa un campo y c&oacute;mo se calcula en SQL, no solo una consulta puntual. Beneficios: reutilizaci&oacute;n, consistencia, testeo y auditor&iacute;a. Es la fuente de verdad del <strong>semantic layer</strong>: los usuarios ven nombres de negocio y no tablas crudas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Qu&eacute; significa que Looker tenga arquitectura <em>in-database</em>?</p>
+        <p class="a">Significa que Looker traduce el modelo y la consulta a SQL nativo y lo ejecuta en el warehouse (BigQuery, Snowflake, Redshift, etc.). Looker no almacena los datos: solo metadatos, cach&eacute; y PDTs. Ventajas: se aprovecha el motor y el gobierno del warehouse, no se duplica la data y se escala con el <em>compute</em>. Implicaciones: el rendimiento y el costo dependen del warehouse; se necesitan permisos de base de datos y un esquema temporal para PDTs; la latencia incluye la ejecuci&oacute;n SQL.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Looker y Looker Studio son lo mismo?</p>
+        <p class="a">No. <strong>Looker</strong> es la plataforma empresarial con LookML, semantic layer, gobierno, embedding y API; <strong>Looker Studio</strong> es una herramienta de visualizaci&oacute;n y reporting autoservicio (antes Data Studio) que se conecta a fuentes y se usa para dashboards &aacute;giles, con menos modelado central. Looker Studio Pro a&ntilde;ade gobierno y colaboraci&oacute;n de Google Cloud. Se complementan: Looker para m&eacute;tricas gobernadas y aplicaciones; Looker Studio para reportes departamentales o prototipos. No comparten LookML.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;C&oacute;mo es el ciclo de vida de una consulta en Looker?</p>
+        <p class="a">El usuario abre un explore y elige campos y filtros; Looker valida el LookML, genera SQL con los joins y agregaciones necesarios, aplica seguridad (access filters, user attributes) y lo env&iacute;a al warehouse; el warehouse ejecuta y devuelve filas; Looker aplica table calculations, formato y visualizaci&oacute;n; el resultado se cachea seg&uacute;n la pol&iacute;tica. Si hay PDTs, primero se materializan o se reutilizan seg&uacute;n el datagroup. Finalmente la consulta se registra en System Activity para auditor&iacute;a y an&aacute;lisis de rendimiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Qu&eacute; es el <em>semantic layer</em> y qu&eacute; problemas resuelve?</p>
+        <p class="a">Es una capa que define m&eacute;tricas, dimensiones, relaciones y reglas de negocio una sola vez, de forma reutilizable y gobernada. Evita que cada analista recalcule &laquo;ventas&raquo; o &laquo;cliente activo&raquo; con SQL distinto. En Looker se implementa con LookML: nombres, descripciones, tipos, agregaciones, joins y seguridad. Beneficios: consistencia, menor tiempo de desarrollo, autoservicio seguro, auditor&iacute;a y una API com&uacute;n para dashboards, embeds y herramientas externas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;Qu&eacute; tipos de contenido se crean en Looker?</p>
+        <p class="a">Los principales son <strong>Looks</strong> (una consulta y visualizaci&oacute;n guardada), <strong>dashboards</strong> (colecci&oacute;n de tiles, filtros y textos), <strong>explores</strong> (interfaz de consulta sobre un modelo), <strong>PDTs</strong> (tablas persistidas), <strong>alerts</strong> y <strong>scheduled deliveries</strong> (entregas programadas), y experiencias <strong>embedded</strong> o aplicaciones. Los usuarios guardan contenido en carpetas, lo comparten y lo programan. Los developers crean modelos, vistas y explores; los usuarios de negocio consumen y exploran dentro de los l&iacute;mites del modelo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Qu&eacute; roles y responsabilidades existen en un proyecto Looker?</p>
+        <p class="a">Roles t&iacute;picos: administrador (usuarios, conexiones, seguridad, releases), developer de LookML (modelado, Git, rendimiento), analytics engineer (semantic layer y calidad de datos), analista/BI developer (dashboards y Looks), data steward u owner de m&eacute;tricas (definiciones y certificaci&oacute;n) y usuario de negocio (autoservicio). En equipos peque&ntilde;os se combinan. La separaci&oacute;n de responsabilidades importa: quien modela no deber&iacute;a aprobar producci&oacute;n sin revisi&oacute;n, y el acceso a conexiones y credenciales debe ser restringido.</p>
+    </div>
+
+    <h2 id="s2">2. Arquitectura, conexiones y proyectos</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;C&oacute;mo se conecta Looker a un data warehouse?</p>
+        <p class="a">Se configura una conexi&oacute;n en Looker Admin con el dialecto del warehouse, host o proyecto, base de datos, credenciales y esquema temporal. Looker usa esa conexi&oacute;n para todas las consultas del modelo. Debe tener permisos de lectura sobre las tablas y de escritura/creaci&oacute;n en el esquema temporal (<em>scratch</em>) para PDTs. Las credenciales pueden ser una cuenta de servicio, OAuth o un usuario de base de datos; se recomienda una cuenta dedicada, con m&iacute;nimo privilegio y rotaci&oacute;n. La conexi&oacute;n se prueba y se monitorea.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;Qu&eacute; dialectos y consideraciones de conexi&oacute;n existen?</p>
+        <p class="a">Looker soporta BigQuery, Snowflake, Redshift, Synapse/SQL Server, PostgreSQL, MySQL, Databricks, Trino/Presto, Oracle y otros. Consideraciones: m&eacute;todo de autenticaci&oacute;n (service account, key pair, OAuth, IAM), host/regi&oacute;n, proyecto/dataset o base de datos, costo y almacenamiento del esquema temporal, l&iacute;mites de concurrencia y timeouts. En BigQuery se suele usar una service account con permisos de lectura y de job user; en Snowflake, un warehouse y rol dedicados. Validar dialecto, driver y versi&oacute;n antes de modelar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;C&oacute;mo se asegura la conectividad de red?</p>
+        <p class="a">En Looker hospedado por Google, el tr&aacute;fico a un warehouse privado requiere Private IP/Private Service Connect, VPC peering o allowlists, seg&uacute;n el proveedor. En customer-hosted, Looker se despliega en la VPC del cliente y se controlan red, cifrado y acceso. Adem&aacute;s se restringen IPs de salida, se usa TLS y se revisan reglas de firewall y DNS privado. Para BigQuery se usa Private Google Access o PSC. Documentar rangos y probar la conectividad desde la instancia, no solo desde una laptop.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;C&oacute;mo se estructura un proyecto LookML?</p>
+        <p class="a">Un proyecto es la unidad de desarrollo versionada en Git y contiene archivos <em>.model.lkml</em>, <em>.view.lkml</em>, <em>.explore.lkml</em>, dashboards LookML, el manifiesto y documentaci&oacute;n. El <em>manifest.lkml</em> declara el proyecto y constantes; los <em>include</em> traen archivos; el modelo define conexi&oacute;n, datagroups, explores y vistas; las vistas definen campos. Se organiza por dominio (ventas, finanzas), con nombres claros, carpetas y un README. El proyecto se valida en el IDE y se despliega a producci&oacute;n desde Git.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;C&oacute;mo se gestionan los entornos de desarrollo y producci&oacute;n?</p>
+        <p class="a">Looker separa <strong>Development Mode</strong> y <strong>Production</strong>. En Development cada developer trabaja en su rama con cambios aislados; en Production se sirve a los usuarios la versi&oacute;n desplegada. Se promueve mediante commit, revisi&oacute;n y deploy del proyecto o modelo a producci&oacute;n. Los usuarios no ven cambios sin desplegar. Las PDTs y la cach&eacute; se comportan distinto en cada entorno. Un buen flujo incluye validaci&oacute;n, pruebas y aprobaci&oacute;n antes del deploy.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo se integra Looker con Git y qu&eacute; flujo de ramas se usa?</p>
+        <p class="a">Looker se integra con GitHub, GitLab, Bitbucket o Azure DevOps a nivel de proyecto. Flujo recomendado: rama <em>feature</em> desde main, commits peque&ntilde;os, pull request con revisi&oacute;n y validaci&oacute;n de LookML, merge a main y deploy a producci&oacute;n desde main. Proteger main, exigir revisi&oacute;n y checks. Evitar editar directamente en producci&oacute;n o hacer force push. El historial de Git es la auditor&iacute;a del modelo; cada cambio debe tener descripci&oacute;n y contexto. Para un hotfix, rama corta y revisi&oacute;n expresa.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;Qu&eacute; es el esquema temporal y para qu&eacute; sirve?</p>
+        <p class="a">Looker necesita un esquema temporal (<em>scratch/temp schema</em>) en el warehouse para PDTs, tablas temporales y algunos procesos. El usuario de la conexi&oacute;n debe poder crear y borrar objetos all&iacute;. Se configura por conexi&oacute;n, con retenci&oacute;n y limpieza. No debe ser un esquema de producci&oacute;n ni compartirse con otras aplicaciones. El <em>connection pooling</em> administra conexiones concurrentes a la base y se ajusta seg&uacute;n los l&iacute;mites del warehouse. Monitorear espacio y permisos del scratch evita fallos de PDTs.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;Looker hospedado por Google o customer-hosted?</p>
+        <p class="a">Looker hospedado por Google es gestionado por el proveedor: infraestructura, parches y releases; el cliente configura conexiones, red y seguridad. Customer-hosted se instala en la nube o VPC del cliente y este opera la instancia, versiones y backups. Implicaciones: costo, control, cumplimiento, latencia, esfuerzo operativo y responsabilidad de actualizaciones. En ambos casos hay que gestionar usuarios, conexiones, proyectos, releases y monitoreo. La elecci&oacute;n depende de requisitos regulatorios, red y equipo de plataforma.</p>
+    </div>
+
+    <h2 id="s3">3. LookML: models, views y campos</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;Qu&eacute; es un model y qu&eacute; contiene?</p>
+        <p class="a">Un <strong>model</strong> es el archivo que define una conexi&oacute;n y agrupa explores, vistas, datagroups y reglas. Declara <em>connection</em>, <em>include</em>, <em>explore</em>, <em>datagroup</em>, <em>access_grant</em>, etc. Puede haber varios modelos (ventas, marketing) para separar dominios y permisos. El <em>model set</em> controla qu&eacute; modelos ve cada rol. Un modelo bien dise&ntilde;ado expone solo los explores necesarios, con nombres de negocio y documentaci&oacute;n; no es un volcado de todas las tablas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; es una view y c&oacute;mo se define?</p>
+        <p class="a">Una <strong>view</strong> representa una tabla o consulta y define sus campos: dimensiones, medidas, dimension_groups, sets, par&aacute;metros, filtros y tests. Se declara con <em>view: nombre { sql_table_name: ... }</em> o con SQL derivado. Cada campo tiene nombre, tipo, SQL, etiqueta y descripci&oacute;n. La view es reutilizable en varios explores y debe tener una clave primaria para que funcionen bien los symmetric aggregates y los joins. Convenci&oacute;n: una view por tabla l&oacute;gica, con nombres en snake_case.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; es un explore y c&oacute;mo se relaciona con las views?</p>
+        <p class="a">Un <strong>explore</strong> es la interfaz de consulta que ve el usuario: define la view base, los joins permitidos, filtros, orden, l&iacute;mites y campos expuestos. Se declara con <em>explore: ventas { from: view_ventas; join: ... }</em>. Los usuarios eligen dimensiones y medidas y Looker genera SQL. Un explore debe responder a un caso de uso concreto (ventas por cliente, inventario); demasiados joins o campos lo vuelven lento y confuso. Se agrupan por modelo y se controlan con model sets.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;Qu&eacute; es una dimension y qu&eacute; tipos existen?</p>
+        <p class="a">Una <strong>dimension</strong> es un atributo descriptivo o una expresi&oacute;n que se agrupa o filtra: texto, n&uacute;mero, fecha, booleano, tier. Tipos comunes: <em>string</em>, <em>number</em>, <em>yesno</em>, <em>date</em>, <em>date_time</em>, <em>time</em>, <em>tier</em>, <em>duration</em>, <em>location</em>. Se define con <em>dimension: nombre { type: string; sql: ${TABLE}.columna;; }</em>. Puede ser calculada con SQL, CASE, concat, etc. Debe tener label y descripci&oacute;n; los tipos correctos habilitan filtros, formatos y drills adecuados. Las dimensiones no se agregan.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; es una measure y qu&eacute; tipos principales existen?</p>
+        <p class="a">Una <strong>measure</strong> es una m&eacute;trica agregada: <em>count</em>, <em>count_distinct</em>, <em>sum</em>, <em>average</em>, <em>min</em>, <em>max</em>, <em>median</em>, <em>percentile</em>, <em>list</em>, <em>sum_distinct</em>, <em>average_distinct</em>, <em>percent_of_total</em>, <em>running_total</em>. Se define con <em>measure: total_ventas { type: sum; sql: ${TABLE}.monto;; }</em>. La elecci&oacute;n depende de la pregunta y del grano; sumar ratios o promedios de promedios es un error cl&aacute;sico. Las measures se calculan en el warehouse y se benefician de symmetric aggregates. Documentar la definici&oacute;n y la fuente es clave para la confianza.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;Qu&eacute; son los dimension_group y para qu&eacute; sirven?</p>
+        <p class="a">Un <strong>dimension_group</strong> agrupa dimensiones de fecha u hora derivadas de una sola columna: <em>date</em>, <em>week</em>, <em>month</em>, <em>quarter</em>, <em>year</em>, <em>day_of_week</em>, <em>hour</em>, etc. Se define con <em>dimension_group: created { type: time; timeframes: [date, week, month, quarter, year]; sql: ${TABLE}.created_at;; }</em>. Evita duplicar campos y estandariza el an&aacute;lisis temporal. Se pueden a&ntilde;adir timeframes personalizados y <em>convert_tz</em>. Cuidado con zonas horarias y con el grano: definir si la fecha es local o UTC.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;C&oacute;mo se usan <em>sql</em>, <em>sql_table_name</em> y <em>sql_on</em>?</p>
+        <p class="a"><em>sql_table_name</em> indica la tabla f&iacute;sica de una view; <em>sql</em> define la expresi&oacute;n de un campo; <em>sql_on</em> define la condici&oacute;n de join entre views. Ejemplo: <em>join: clientes { sql_on: ${ventas.cliente_id} = ${clientes.id};; relationship: many_to_one; }</em>. <em>sql_on</em> es flexible para joins complejos; <em>foreign_key</em> es una alternativa declarativa cuando existe una FK. Usar referencias <em>${view.campo}</em> para que Looker resuelva nombres y dialectos. Evitar SQL hardcodeado espec&iacute;fico del dialecto cuando se pueda.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Qu&eacute; son <em>include</em>, <em>extends</em> y <em>refinements</em>?</p>
+        <p class="a"><em>include</em> trae archivos al proyecto (vistas, modelos, dashboards). <em>extends</em> hereda y especializa una view o explore (por ejemplo, una view base y variantes por pa&iacute;s). <em>refinements</em> permite modificar una view o explore existente sin editarla, &uacute;til para customizaciones por cliente o entorno. Sirven para DRY y reutilizaci&oacute;n, pero abusar de extends y refinements hace el modelo dif&iacute;cil de seguir: documentar la jerarqu&iacute;a y validar el resultado. Preferir composici&oacute;n clara a cadenas largas de herencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;Qu&eacute; son los <em>parameters</em> y <em>Liquid</em> en LookML?</p>
+        <p class="a">Los <strong>parameters</strong> permiten que el usuario elija un valor (por ejemplo, una m&eacute;trica o una fecha de corte) y se usa en Liquid (<em>{% parameter %}</em>) o en filtros. <strong>Liquid</strong> permite l&oacute;gica condicional y variables en LookML (<em>{% if %}</em>, <em>{{ }}</em>). Casos: columnas din&aacute;micas, filtros opcionales, c&aacute;lculos que cambian seg&uacute;n el par&aacute;metro. Riesgos: inyecci&oacute;n SQL si se interpola entrada no validada, complejidad y planes de consulta variables. Validar valores permitidos (<em>allowed_value</em>) y documentar. No usar Liquid para l&oacute;gica de negocio que deber&iacute;a ser una measure.</p>
+    </div>
+
+    <h2 id="s4">4. Explores, joins y relaciones</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;C&oacute;mo funcionan los joins en Looker?</p>
+        <p class="a">Los joins se declaran dentro de un explore con <em>join: view { sql_on: ...; relationship: ...; type: left_outer; }</em>. Looker genera el SQL con el orden y tipo definidos; por defecto <em>left_outer</em>. La relaci&oacute;n debe reflejar la cardinalidad real para que las agregaciones sean correctas. Se pueden limitar campos (<em>fields</em>), a&ntilde;adir <em>required_joins</em> y usar <em>always_join</em>. Los joins innecesarios degradan el rendimiento y pueden duplicar filas; modelar explores por caso de uso y revisar el SQL generado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;Qu&eacute; significan las relaciones one_to_one, many_to_one, one_to_many y many_to_many?</p>
+        <p class="a"><em>one_to_one</em>: una fila de cada lado. <em>many_to_one</em>: muchas filas de la view base apuntan a una de la view unida (por ejemplo, ventas &rarr; cliente). <em>one_to_many</em>: una fila base tiene muchas hijas (por ejemplo, pedido &rarr; l&iacute;neas). <em>many_to_many</em>: cardinalidad N:M. La relaci&oacute;n correcta es cr&iacute;tica: si se declara mal, Looker puede agregar incorrectamente o duplicar. En muchos casos <em>many_to_one</em> es la relaci&oacute;n t&iacute;pica de una dimensi&oacute;n; <em>one_to_many</em> requiere cuidado con medidas y fan-out. Validar con conteos y primary keys.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;Qu&eacute; es el fan-out y c&oacute;mo lo resuelve Looker?</p>
+        <p class="a">Fan-out ocurre cuando un join <em>one_to_many</em> multiplica las filas de la base y una suma se duplica. Looker evita esto con <strong>symmetric aggregates</strong>: si la view base tiene primary key y la relaci&oacute;n est&aacute; bien declarada, calcula la medida en una subconsulta sobre las claves distintas antes de agregar. Requisitos: primary key en las views involucradas, relaci&oacute;n correcta y medidas definidas como agregaciones (no SQL manual que agregue). Si falta la PK o se usa SQL custom, el resultado puede ser incorrecto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;Qu&eacute; son los symmetric aggregates y qu&eacute; requisitos tienen?</p>
+        <p class="a">Es el mecanismo de Looker para calcular medidas correctamente cuando los joins multiplican filas. Genera subconsultas que agregan por la clave primaria de la view base y luego combinan, en lugar de sumar filas duplicadas. Requiere que cada view tenga <em>primary_key: yes</em> en la dimensi&oacute;n correcta y que las relaciones sean correctas. No aplica si la medida usa SQL agregado manual o si el grano es ambiguo. Es una raz&oacute;n clave para modelar claves y relaciones con cuidado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; es un chasm trap y c&oacute;mo se evita?</p>
+        <p class="a">Un <strong>chasm trap</strong> ocurre cuando dos joins <em>one_to_many</em> desde una misma base (por ejemplo, ventas con l&iacute;neas y con pagos) generan un producto cartesiano y duplican m&eacute;tricas. Soluciones: usar explores separados, declarar correctamente la relaci&oacute;n, preagregar con derived tables por grano o aplicar aggregate awareness. Tambi&eacute;n ayuda declarar <em>many_to_one</em> cuando corresponda y evitar medir a trav&eacute;s de dos ramas one_to_many. Detectar con conteos manuales y comparar totales; documentar el grano de cada explore.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Cu&aacute;ndo usar <em>foreign_key</em> y cu&aacute;ndo <em>sql_on</em>?</p>
+        <p class="a"><em>foreign_key</em> es declarativo: indica la columna FK en la view base y Looker infiere la condici&oacute;n con la primary key de la view unida; es simple y legible. <em>sql_on</em> permite condiciones complejas (rangos, m&uacute;ltiples columnas, l&oacute;gica adicional). Usar <em>foreign_key</em> cuando el join es una FK est&aacute;ndar; <em>sql_on</em> para casos no triviales (fechas entre rangos, claves compuestas, filtros). En ambos, declarar <em>relationship</em> y <em>type</em>. Revisar el SQL generado y el plan del warehouse.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; son <em>required_joins</em>, <em>always_join</em> y los joins condicionales?</p>
+        <p class="a"><em>required_joins</em> en una view fuerza que ciertos joins se incluyan cuando se usan campos de esa view. <em>always_join</em> en un explore hace que un join se aplique siempre, aunque no se usen sus campos; es &uacute;til para filtros de seguridad o deduplicaci&oacute;n, pero puede encarecer las consultas. Los joins condicionales con Liquid permiten incluir tablas seg&uacute;n par&aacute;metros, pero complican el plan y el mantenimiento. Preferir <em>required_joins</em> o <em>always_join</em> solo cuando la sem&aacute;ntica lo exige y documentarlo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; son <em>sql_always_where</em> y <em>conditionally_filter</em>?</p>
+        <p class="a"><em>sql_always_where</em> aplica una condici&oacute;n fija al explore (por ejemplo, excluir borrados o limitar por seguridad); <em>sql_always_having</em> hace lo an&aacute;logo sobre agregados. <em>conditionally_filter</em> obliga al usuario a filtrar por un campo si no aplica otro, y evita consultas masivas. <em>access_filter</em> aplica seguridad por user attribute. Los filtros <em>always</em> se combinan con los del usuario y afectan todos los Looks y dashboards; usarlos con cuidado para no sorprender ni degradar el rendimiento. Documentar su efecto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;Se pueden hacer joins din&aacute;micos con par&aacute;metros?</p>
+        <p class="a">S&iacute;: se puede usar Liquid o un <em>parameter</em> dentro de <em>sql_on</em> para cambiar la condici&oacute;n (por ejemplo, unir por id o por email seg&uacute;n el par&aacute;metro). Es potente pero riesgoso: el SQL generado var&iacute;a, el plan puede ser malo, la validaci&oacute;n es m&aacute;s dif&iacute;cil y aumentan los errores. Alternativas: crear explores separados, usar una derived table que unifique claves o resolver la l&oacute;gica aguas arriba (dbt). Si se usa, validar valores permitidos y probar cada variante.</p>
+    </div>
+
+    <h2 id="s5">5. L&oacute;gica de negocio, dimensiones y medidas</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;Cu&aacute;ndo usar una measure y cu&aacute;ndo un table calculation?</p>
+        <p class="a"><strong>Measure</strong>: se define en LookML, se calcula en el warehouse, es reutilizable y consistente para todos los usuarios; puede aprovechar symmetric aggregates y aggregate awareness. <strong>Table calculation</strong>: se calcula en el navegador sobre el resultado de la consulta, es flexible y r&aacute;pida de crear, pero no es gobernada ni reutilizable y puede ser costosa con muchos datos. Regla: m&eacute;tricas de negocio centrales &rarr; measure; an&aacute;lisis ad hoc o c&aacute;lculos sobre el resultado visible &rarr; table calculation. Si un c&aacute;lculo se repite, moverlo al modelo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; medidas permiten porcentajes, totales acumulados y listas?</p>
+        <p class="a"><em>percent_of_total</em> calcula el porcentaje sobre el total del resultado; <em>running_total</em> acumula; <em>list</em> concatena valores; <em>median</em> y <em>percentile</em> devuelven estad&iacute;sticos; <em>count_distinct</em> cuenta &uacute;nicos; <em>sum_distinct</em> y <em>average_distinct</em> agregan valores distintos. Se combinan con filtros y granularidad. Cuidado: <em>percent_of_total</em> depende del conjunto de filas y de los filtros; <em>running_total</em> requiere orden. Documentar la sem&aacute;ntica y validar contra SQL. Para c&aacute;lculos muy espec&iacute;ficos, evaluar table calculations o una PDT.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;C&oacute;mo se crean dimensiones derivadas y <em>tiers</em>?</p>
+        <p class="a">Los <strong>tiers</strong> agrupan valores num&eacute;ricos en rangos (por ejemplo, edad: 0&ndash;17, 18&ndash;34, 35&ndash;54, 55+). Se definen con <em>dimension: rango_edad { type: tier; tiers: [0, 18, 35, 55, 100]; sql: ${TABLE}.edad;; }</em> o con CASE. Las dimensiones derivadas usan SQL: concat, CASE, date_diff, regexp, etc. Mantener la l&oacute;gica en el modelo para reutilizarla; evitar duplicar CASE en cada dashboard. Probar l&iacute;mites y valores nulos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;C&oacute;mo se implementan par&aacute;metros interactivos en LookML?</p>
+        <p class="a">Un <strong>parameter</strong> define una opci&oacute;n seleccionable por el usuario; se referencia en Liquid (<em>{% parameter nombre %}</em>) o como filtro. Casos: elegir una columna, un periodo de comparaci&oacute;n o un modo de c&aacute;lculo. Se declaran <em>type</em>, <em>allowed_value</em> y <em>default_value</em>; validar para evitar inyecci&oacute;n. Ejemplo: <em>parameter: metrica { type: unquoted; allowed_value: { label: "Ventas" value: "ventas" } }</em>. Para c&aacute;lculos m&aacute;s complejos, combinar con measures condicionales o PDTs. Documentar y probar cada combinaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;Qu&eacute; son las derived tables y cu&aacute;ndo usarlas?</p>
+        <p class="a">Una <strong>derived table</strong> es una subconsulta definida en LookML que se usa como una view. Puede ser <em>SQL derived table</em> (escribes el SQL) o <em>native derived table</em> (defines el explore y los campos; Looker genera el SQL). Sirve para preagregar, unir fuentes complejas, aplicar l&oacute;gica reutilizable o mejorar el rendimiento. Si se persiste, es una PDT. No abusar: cada derived table a&ntilde;ade complejidad y puede duplicar l&oacute;gica. Preferir vistas sobre tablas del warehouse cuando sea posible y documentar el grano.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;Qu&eacute; es una native derived table y c&oacute;mo se diferencia de una SQL derived table?</p>
+        <p class="a">Una <strong>NDT</strong> se define con <em>derived_table: { explore_source: ...; column: ... }</em> y Looker genera el SQL a partir de un explore existente; es declarativa, reutiliza la l&oacute;gica del modelo y es m&aacute;s f&aacute;cil de mantener. Una <em>SQL derived table</em> usa <em>sql: SELECT ...</em> y da control total, pero duplica l&oacute;gica y dialecto. La NDT es ideal para preagregar m&eacute;tricas gobernadas; la SQL DT para casos que el modelo no cubre. Ambas pueden persistirse con datagroup o <em>persist_for</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;C&oacute;mo se formatean valores, etiquetas y descripciones?</p>
+        <p class="a"><em>value_format_name</em> aplica formatos est&aacute;ndar (usd, eur, percent, decimal, etc.) o <em>value_format</em> con formato custom; <em>label</em> es el nombre visible; <em>description</em> documenta el campo y aparece en el tooltip; <em>group_label</em> agrupa campos en la UI; <em>hidden: yes</em> oculta campos t&eacute;cnicos. Una buena documentaci&oacute;n y nombres de negocio mejoran el autoservicio y reducen preguntas. Mantener consistencia de formato por tipo de m&eacute;trica y revisar que los porcentajes no se muestren como decimales.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo se implementan campos calculados reutilizables y <em>yesno</em>?</p>
+        <p class="a">Campos reutilizables: definir dimensiones y measures en la view base y extenderlos; usar <em>extends</em> o refinements para variantes; evitar duplicar SQL. <em>yesno</em> convierte una condici&oacute;n en booleano (por ejemplo, <em>type: yesno; sql: ${TABLE}.activo = 1;;</em>) y se puede usar para filtros y conteos condicionales. Para etiquetas legibles, combinar CASE y <em>html</em> con cuidado. Los c&aacute;lculos condicionales se pueden expresar como measures con <em>filters</em> o <em>CASE WHEN</em>, manteniendo la l&oacute;gica centralizada y testeada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;C&oacute;mo se evita duplicar l&oacute;gica entre explores y dashboards?</p>
+        <p class="a">Centralizar la l&oacute;gica en LookML: una definici&oacute;n de m&eacute;trica, una view por entidad, explores por caso de uso y campos documentados. Reutilizar con <em>extends</em> y refinements, no copiando SQL en cada dashboard. Los dashboards deben usar campos del modelo, no table calculations que redefinan m&eacute;tricas. Para variantes por pa&iacute;s o cliente, usar refinements o par&aacute;metros controlados. Revisar duplicados con b&uacute;squedas de nombres y mantener un glosario de m&eacute;tricas con owner y definici&oacute;n.</p>
+    </div>
+
+    <h2 id="s6">6. Dashboards, Looks y visualizaci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;Qu&eacute; diferencia hay entre un Look y un dashboard?</p>
+        <p class="a">Un <strong>Look</strong> es una consulta guardada con una visualizaci&oacute;n (tabla, gr&aacute;fico) y sus filtros; es simple y reutilizable. Un <strong>dashboard</strong> agrupa varios tiles (Looks, queries, texto) con filtros comunes, layout y programaci&oacute;n. Los dashboards cuentan una historia y permiten monitorear; los Looks responden una pregunta concreta. Ambos consumen el modelo y heredan su seguridad. Se organizan en carpetas y se comparten con roles o grupos. Para productos embebidos se usan dashboards y Looks v&iacute;a embed.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;C&oacute;mo funcionan los filtros de dashboard?</p>
+        <p class="a">Los filtros de dashboard se aplican a varios tiles y pueden ser <em>field filters</em> (se mapean a un campo del explore) o filtros por tile. Al cambiar un filtro, Looker reejecuta las consultas afectadas. Los field filters permiten valores sugeridos y condiciones; los filtros de fecha tienen opciones relativas. Dise&ntilde;ar filtros con campos comunes y evitar duplicarlos. Cuidado con filtros que obligan a escanear tablas enormes; usar particiones y valores por defecto razonables.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; es el cross-filtering y c&oacute;mo se configura?</p>
+        <p class="a"><strong>Cross-filtering</strong> permite hacer clic en un valor de un tile (por ejemplo, pa&iacute;s) y filtrar los dem&aacute;s tiles del dashboard. Se configura en el tile o la visualizaci&oacute;n, eligiendo el campo y el comportamiento; requiere que los dem&aacute;s tiles tengan un campo compatible y que el dashboard est&eacute; en modo edici&oacute;n. Es potente para exploraci&oacute;n, pero puede confundir si no se indica el filtro activo. Documentar y probar; en dashboards muy grandes puede aumentar el n&uacute;mero de consultas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; son los merged results y cu&aacute;ndo usarlos?</p>
+        <p class="a"><strong>Merged results</strong> combinan los resultados de dos o m&aacute;s explores en una sola tabla o visualizaci&oacute;n, uniendo por campos comunes (join en memoria). Sirven cuando las fuentes no se pueden unir en el warehouse o para comparar m&eacute;tricas de modelos distintos. Limitaciones: se ejecutan consultas separadas, el join ocurre en Looker, no hay symmetric aggregates entre ellas y el rendimiento depende del volumen. Para datos grandes, preferir una PDT o una tabla unificada en el warehouse.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo funcionan los drills y los links?</p>
+        <p class="a">Los <strong>drills</strong> permiten navegar desde un valor a otro contenido: ver registros, abrir otro dashboard o Look, o una URL personalizada. Se configuran con <em>drill_fields</em>, <em>link</em> y <em>drill</em> en LookML; los usuarios tambi&eacute;n pueden crear drills ad hoc si tienen permiso. Los links pueden incluir par&aacute;metros y filtros. Son clave para pasar de una m&eacute;trica a la acci&oacute;n. Cuidado con URLs que expongan informaci&oacute;n o con links a contenido no gobernado; validar permisos y par&aacute;metros.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;C&oacute;mo se comparten y programan entregas y alertas?</p>
+        <p class="a">Las <strong>scheduled deliveries</strong> env&iacute;an Looks o dashboards por email, Slack, webhook o almacenamiento, con formato y filtros; las <strong>alerts</strong> notifican cuando una m&eacute;trica cruza un umbral. Se configuran por contenido, con destinatarios, frecuencia, zona horaria y condiciones. Requieren permisos y pueden consumir recursos si son muy frecuentes. Monitorear fallos, l&iacute;mites y datos vac&iacute;os. Para integraciones, preferir API y webhooks y documentar el contrato; evitar duplicar entregas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo se dise&ntilde;an dashboards performantes y usables?</p>
+        <p class="a">Una pregunta por dashboard, jerarqu&iacute;a visual clara, t&iacute;tulos y descripciones, filtros necesarios (no todos), valores por defecto &uacute;tiles, colores consistentes y unidades visibles. Limitar el n&uacute;mero de tiles y filas; usar agregaciones y filtros que aprovechen particiones. Probar en el tama&ntilde;o real y con datos representativos; incluir fecha de actualizaci&oacute;n y definiciones. Evitar gr&aacute;ficos 3D, exceso de decimales y tablas gigantes. Medir el uso y retirar contenido obsoleto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;Qu&eacute; son los dashboards definidos por el usuario y los LookML dashboards?</p>
+        <p class="a">Los <strong>user-defined dashboards</strong> se crean en la UI, son editables por usuarios con permiso y viven como contenido. Los <strong>LookML dashboards</strong> se definen en archivos <em>.dashboard.lkml</em> (o en el modelo) y se versionan y despliegan con el proyecto. Los LookML dashboards son &uacute;tiles para contenido est&aacute;ndar, embebido o reproducible; los user-defined para autoservicio. Ambos pueden compartirse y programarse. Elegir seg&uacute;n gobierno y ciclo de vida; no duplicar el mismo dashboard en ambos formatos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;C&oacute;mo se gobierna el contenido y se evita la proliferaci&oacute;n de dashboards?</p>
+        <p class="a">Carpetas y convenciones de nombres, ownership, certificaci&oacute;n de dashboards y Looks, revisi&oacute;n antes de publicar, descripciones y fecha de actualizaci&oacute;n, y limpieza peri&oacute;dica del contenido sin uso (System Activity). Evitar que cada usuario cree su versi&oacute;n de la misma m&eacute;trica; ofrecer un cat&aacute;logo de dashboards aprobados y un proceso para solicitar cambios. Roles y grupos controlan la edici&oacute;n. La proliferaci&oacute;n se combate con autoservicio gobernado, no solo con restricciones.</p>
+    </div>
+
+    <h2 id="s7">7. Persistencia, cach&eacute; y rendimiento</h2>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;Qu&eacute; es una PDT y cu&aacute;ndo usarla?</p>
+        <p class="a">Una <strong>PDT</strong> (persistent derived table) es una derived table materializada en el warehouse (esquema temporal o tabla persistente) que se reutiliza entre consultas y usuarios. Se usa para preagregar, unir fuentes costosas, aplicar l&oacute;gica compleja o mejorar la latencia. Se define en una view con <em>derived_table</em> y un trigger (<em>datagroup_trigger</em>, <em>sql_trigger_value</em> o <em>persist_for</em>). Beneficios: rendimiento y consistencia; costos: almacenamiento, tiempo de rebuild y complejidad. No reemplaza un buen modelo de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;C&oacute;mo se decide cu&aacute;ndo refrescar una PDT?</p>
+        <p class="a">El refresco se controla con <em>persist_for</em> (tiempo desde la creaci&oacute;n), <em>datagroup_trigger</em> (un datagroup con <em>sql_trigger</em> y <em>max_cache_age</em>) o <em>sql_trigger_value</em> (consulta que devuelve un valor; si cambia, se reconstruye). Elegir seg&uacute;n la fuente: si hay un <em>updated_at</em> fiable, usar trigger; si no, datagroup por tiempo. Evitar <em>persist_for</em> muy corto (rebuilods constantes) o muy largo (datos obsoletos). Monitorear fallos y duraci&oacute;n; alinear con el SLA de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;Qu&eacute; es un datagroup?</p>
+        <p class="a">Un <strong>datagroup</strong> agrupa pol&iacute;ticas de cach&eacute; y refresco para PDTs y consultas. Se define en el modelo con <em>datagroup: nombre { sql_trigger: SELECT max(updated_at) FROM ...;; max_cache_age: "1 hour" }</em>; las PDTs lo referencian con <em>datagroup_trigger</em>. Si el trigger cambia o se supera <em>max_cache_age</em>, se invalida. Permite coordinar varias PDTs y evitar reconstrucciones innecesarias. Debe basarse en una fuente fiable y barata; documentar la frecuencia y el impacto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;Qu&eacute; son las PDTs incrementales?</p>
+        <p class="a">Las PDTs incrementales solo procesan datos nuevos o modificados, en lugar de reconstruir todo. Se configuran con <em>incremental: yes</em>, <em>increment_key</em> (columna de fecha o ID) e <em>incremental_start</em>; Looker inserta o actualiza seg&uacute;n la clave. Requieren que la fuente tenga una marca fiable y que el SQL sea idempotente para el rango. No sirven para cambios retroactivos o borrados sin l&oacute;gica adicional. Reducen costo y tiempo en tablas grandes, pero a&ntilde;aden complejidad y riesgo de duplicados; probar y monitorear.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;C&oacute;mo funciona la cach&eacute; de consultas y c&oacute;mo se controla?</p>
+        <p class="a">Looker cachea resultados de consultas para acelerar y reducir costo. La pol&iacute;tica se define por datagroup (<em>max_cache_age</em>) o por configuraci&oacute;n de la conexi&oacute;n o del explore; tambi&eacute;n hay cach&eacute; de PDTs. Un cambio en el modelo o un deploy invalida cach&eacute;; los usuarios pueden forzar refresh si tienen permiso. La cach&eacute; no debe ocultar la frescura: documentar el SLA y usar datagroups alineados. En dashboards muy consultados, la cach&eacute; y las PDTs bien dise&ntilde;adas son la diferencia de costo y latencia.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;Qu&eacute; es aggregate awareness y c&oacute;mo mejora el rendimiento?</p>
+        <p class="a"><strong>Aggregate awareness</strong> permite que Looker use una tabla agregada (<em>aggregate_table</em>) cuando la consulta coincide con sus dimensiones y medidas, en lugar de escanear la tabla base. Se define con <em>aggregate_table</em> y <em>materialization</em> en la view, con dimensiones, medidas y claves. Looker reescribe la consulta si puede; si no, usa la base. Reduce costo y latencia en exploraciones repetidas. Requiere mantener la tabla y sus agregaciones, validar que los resultados coincidan y que las pol&iacute;ticas de acceso se respeten.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;C&oacute;mo se diagnostican consultas lentas en Looker?</p>
+        <p class="a">Revisar <strong>System Activity</strong> (Query History, Performance, User Activity) para ver consultas lentas, usuarios, explores y patrones; usar el SQL Runner para ejecutar el SQL generado y el <em>EXPLAIN</em> o plan del warehouse; comparar con la misma consulta fuera de Looker. Revisar joins innecesarios, filtros no aplicados, PDTs desactualizadas, falta de particiones o clustering y c&aacute;lculos en el navegador. Medir antes y despu&eacute;s; priorizar por impacto y costo. Documentar hallazgos y cerrar el ciclo con cambios en el modelo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; buenas pr&aacute;cticas de modelado y SQL mejoran el rendimiento?</p>
+        <p class="a">Modelado: una view por entidad, claves primarias, relaciones correctas, evitar joins <em>one_to_many</em> innecesarios y usar symmetric aggregates. SQL: filtrar por particiones, evitar <em>SELECT *</em>, limitar columnas, preagregar con PDTs o aggregate tables, usar <em>WHERE</em> en lugar de filtros posteriores cuando sea posible y revisar funciones no deterministas. UI: limitar filas, usar filtros por defecto y evitar table calculations costosas. Medir con System Activity y con el plan del warehouse.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo afectan las particiones, el clustering y BI Engine?</p>
+        <p class="a">Particiones y clustering reducen el escaneo: en BigQuery, particionar por fecha y agrupar por columnas de filtro; en Snowflake, <em>clustering keys</em>; en Redshift, <em>sort/dist keys</em>. Looker debe generar filtros que permitan <em>pruning</em> (por ejemplo, filtros de fecha sobre la columna particionada). <strong>BI Engine</strong> acelera consultas en BigQuery para ciertos patrones, pero no sustituye un buen modelo. Revisar el plan y el costo por query; coordinar el modelado con el equipo de datos.</p>
+    </div>
+
+    <h2 id="s8">8. Seguridad, gobierno y acceso</h2>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;Qu&eacute; m&eacute;todos de autenticaci&oacute;n soporta Looker?</p>
+        <p class="a">Looker soporta Google OAuth, SAML 2.0, LDAP, OIDC y autenticaci&oacute;n embebida con SSO (JWT). La elecci&oacute;n depende del IdP y del caso: SAML u OIDC para SSO corporativo, Google OAuth para Workspace, LDAP para directorios existentes, embed SSO para usuarios externos. Configurar MFA en el IdP, mapear grupos y atributos y definir roles. Mantener una cuenta de admin de emergencia y revisar el aprovisionamiento y desaprovisionamiento. La autenticaci&oacute;n no sustituye la autorizaci&oacute;n por roles y model sets.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo funcionan roles, permisos y model sets?</p>
+        <p class="a">Los <strong>roles</strong> agrupan permisos (ver, crear o editar contenido, administrar usuarios, conexiones, etc.); los <strong>model sets</strong> definen qu&eacute; modelos ve un rol. Se asignan roles a usuarios o grupos; el principio es m&iacute;nimo privilegio. Roles comunes: Admin, Developer y User; se pueden crear roles personalizados combinando permisos. Revisar peri&oacute;dicamente qui&eacute;n tiene Admin y acceso a conexiones. La separaci&oacute;n entre desarrollo y producci&oacute;n tambi&eacute;n se refleja en permisos. Documentar la matriz rol-permiso y auditarla.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;Qu&eacute; son los grupos y c&oacute;mo se usan para administrar acceso?</p>
+        <p class="a">Los <strong>grupos</strong> (de Looker o del IdP sincronizados) simplifican la administraci&oacute;n: se asignan roles, model sets, carpetas y acceso a contenido al grupo, no usuario por usuario. Se sincronizan v&iacute;a SAML, OIDC o API. Buenas pr&aacute;cticas: grupos por funci&oacute;n o equipo, nombres claros, owner, revisi&oacute;n peri&oacute;dica y evitar grupos gigantes con privilegios amplios. Los grupos tambi&eacute;n se usan en access filters y user attributes. La gesti&oacute;n por grupos reduce errores y facilita altas y bajas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;Qu&eacute; son los user attributes?</p>
+        <p class="a">Son pares clave-valor asociados a usuarios o grupos que LookML puede usar para seguridad y personalizaci&oacute;n: regi&oacute;n, pa&iacute;s, departamento, cliente, idioma. Se referencian en <em>access_filter</em>, <em>sql_always_where</em>, Liquid y embed. Se pueden definir a nivel de usuario o grupo y sincronizar desde el IdP. Son la base de row-level security y de experiencias personalizadas. Cuidado con valores no confiables y con la consistencia entre atributos y datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;C&oacute;mo se implementa row-level security con access filters?</p>
+        <p class="a">Definir un <em>access_filter</em> en el explore que compare un campo con un user attribute, por ejemplo <em>access_filter: { field: ventas.pais user_attribute: pais }</em>. Looker a&ntilde;ade la condici&oacute;n a toda consulta del usuario, incluidos dashboards y API. Alternativas: <em>sql_always_where</em> con Liquid o <em>conditionally_filter</em>. Requiere atributos poblados y consistentes; probar con usuarios de prueba y auditar. No confundir con permisos de contenido: el access filter protege filas aunque el usuario vea el dashboard.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;C&oacute;mo se ocultan campos o explores (field-level security)?</p>
+        <p class="a">Ocultar campos con <em>hidden: yes</em> (no accesibles en la UI, pero cuidado con la API), restringir explores y campos con <em>required_access_grants</em> y access grants, o usar <em>fields</em> en joins para limitar lo expuesto. Para ocultar datos sensibles, es mejor no exponer el campo o aplicar una medida segura; <em>hidden</em> no es un control de seguridad fuerte si el usuario tiene API. Combinar con permisos, model sets y auditor&iacute;a. Probar que un usuario sin acceso no pueda consultar el campo ni el explore.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo se protege la conexi&oacute;n a la base de datos?</p>
+        <p class="a">La conexi&oacute;n debe usar una cuenta de servicio dedicada con permisos m&iacute;nimos: lectura de las tablas necesarias, escritura en el scratch schema y nada m&aacute;s. Rotar credenciales, almacenarlas de forma segura (no en Git), restringir qui&eacute;n puede ver o editar la conexi&oacute;n (Admin) y usar redes privadas y TLS. En el warehouse, aplicar roles y row policies adicionales si existen. Revisar logs de acceso y queries. La seguridad de Looker no reemplaza la del warehouse: ambas capas deben alinearse.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;Qu&eacute; auditor&iacute;a y monitoreo de accesos ofrece Looker?</p>
+        <p class="a"><strong>System Activity</strong> ofrece historial de consultas, accesos a contenido, usuarios, dashboards y rendimiento; los <em>audit logs</em> de la plataforma o de Google Cloud registran eventos administrativos y de autenticaci&oacute;n; la API permite extraer datos. Configurar retenci&oacute;n y monitoreo de accesos an&oacute;malos, cambios de permisos y consultas costosas. Revisar qui&eacute;n exporta datos y a d&oacute;nde. Para cumplimiento, documentar controles y evidencias. Las alertas de uso y costo complementan la revisi&oacute;n peri&oacute;dica.</p>
+    </div>
+
+    <h2 id="s9">9. API, embebido e integraci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;Qu&eacute; ofrece la API de Looker y c&oacute;mo se autentica?</p>
+        <p class="a">La API REST de Looker (API 4.0) permite administrar usuarios, grupos, roles, conexiones, proyectos, contenido y ejecutar consultas. Autenticaci&oacute;n: API keys (client_id y client_secret) u OAuth; para integraciones se recomienda una cuenta de servicio con permisos m&iacute;nimos y rotaci&oacute;n. Los SDKs oficiales (Python, JavaScript, etc.) y el API Explorer facilitan el desarrollo. Respetar los rate limits, manejar errores y versionar el cliente. La API es la base de automatizaciones, embeds y CI/CD.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo se ejecutan consultas, Looks y dashboards v&iacute;a API?</p>
+        <p class="a">Flujo t&iacute;pico: <em>create_query</em> define la consulta (modelo, explore, campos, filtros, sorts, limit); <em>run_query</em> la ejecuta y devuelve resultados; <em>run_inline_query</em> ejecuta una consulta ad hoc sin guardarla; para consultas largas, <em>create_query_task</em> y polling. <em>run_look</em> ejecuta un Look guardado; <em>run_dashboard</em> o <em>run_dashboard_element</em> para dashboards. Usar el <em>result_format</em> adecuado (json, csv, etc.), manejar paginaci&oacute;n y cachear cuando aplique. Respetar los permisos del usuario o de la API key.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;Qu&eacute; es el Embed SDK y c&oacute;mo funciona el signed embedding?</p>
+        <p class="a">El <strong>Embed SDK</strong> permite insertar dashboards, Looks y explores en una aplicaci&oacute;n propia con controles (filtros, navegaci&oacute;n, eventos). El <strong>signed embedding</strong> genera una URL firmada con el secreto de embed, con par&aacute;metros y tiempo de expiraci&oacute;n; el SSO embed usa JWT para autenticar al usuario y pasar atributos. Se configura el dominio permitido, los permisos de embed y los user attributes. Es ideal para productizar anal&iacute;tica; requiere gestionar sesiones, seguridad y experiencia. Probar expiraci&oacute;n y aislamiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;C&oacute;mo se implementa SSO embed y qu&eacute; atributos se pasan?</p>
+        <p class="a">La aplicaci&oacute;n genera un JWT firmado con el embed secret que incluye usuario, permisos, modelos, user attributes y expiraci&oacute;n; Looker valida la firma y crea la sesi&oacute;n. Se usa para usuarios externos sin cuenta Looker. Hay que sincronizar altas y bajas, limitar atributos y validar el dominio. El token no debe exponerse ni reutilizarse indefinidamente. Combinar con access filters para row-level security. Documentar el flujo y rotar el secreto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;Qu&eacute; es el Extension Framework y cu&aacute;ndo usarlo?</p>
+        <p class="a">El <strong>Extension Framework</strong> permite construir aplicaciones y extensiones dentro de Looker con React y TypeScript, usando la API y componentes de Looker. Sirve para workflows personalizados, herramientas internas y experiencias integradas. Se despliega como un proyecto de extensi&oacute;n y se controla con permisos. Alternativas: una app externa con Embed SDK y API. Elegir seg&uacute;n d&oacute;nde vive la experiencia y el gobierno. Requiere desarrollo frontend y mantenimiento; no es necesario para dashboards est&aacute;ndar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se automatizan entregas, alertas y webhooks?</p>
+        <p class="a">Entregas: <em>schedules</em> de Looks y dashboards por email, Slack, webhook o almacenamiento, con filtros y formato. Alertas: condiciones sobre m&eacute;tricas con notificaci&oacute;n. Webhooks: Looker puede llamar a un endpoint ante eventos (por ejemplo, un schedule o una query) seg&uacute;n configuraci&oacute;n; tambi&eacute;n se puede orquestar con la API. Para integraciones robustas, usar colas, reintentos e idempotencia. Documentar destinatarios, frecuencia y manejo de fallos; evitar bucles y cargas excesivas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;C&oacute;mo se integra Looker con CI/CD y testing?</p>
+        <p class="a">El proyecto vive en Git; se trabaja en ramas, se valida LookML en el IDE o v&iacute;a API y se revisa en un pull request. Al mergear, se despliega a producci&oacute;n (manual o automatizado con la API) y se ejecuta el Content Validator para detectar referencias rotas. Se pueden correr tests de datos y validaciones de campos. Para automatizar, usar la API o el SDK desde GitHub Actions o GitLab CI con credenciales m&iacute;nimas; promover el mismo commit. Monitorear el deploy y tener rollback (revertir commit y redeploy).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;C&oacute;mo se integra Looker con orquestadores y herramientas de datos?</p>
+        <p class="a">Orquestadores como Airflow, dbt Cloud o Cloud Composer pueden refrescar PDTs o disparar consultas v&iacute;a API; dbt construye tablas y Looker modela encima. Reverse ETL y activaci&oacute;n suelen hacerse con herramientas externas que consumen la API o el warehouse. Para eventos, webhooks. Definir contratos, credenciales, l&iacute;mites y monitoreo. Evitar que Looker sea el orquestador principal de pipelines; su rol es semantic layer y consumo. Coordinar horarios de refresh con las PDTs y los SLA.</p>
+    </div>
+
+    <h2 id="s10">10. Operaci&oacute;n, migraci&oacute;n y buenas pr&aacute;cticas</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo se monitorea el uso y la adopci&oacute;n de Looker?</p>
+        <p class="a"><strong>System Activity</strong> y los dashboards de Usage muestran usuarios activos, consultas, contenido m&aacute;s visto, adopci&oacute;n por grupo, errores y rendimiento. Se complementa con auditor&iacute;a y encuestas. Definir KPIs de adopci&oacute;n (usuarios activos, explores usados, dashboards certificados, tiempo de respuesta) y revisarlos mensualmente. Identificar contenido sin uso para retirarlo y oportunidades de formaci&oacute;n. La adopci&oacute;n no es solo n&uacute;mero de logins: importa el uso recurrente y la confianza en las m&eacute;tricas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;C&oacute;mo se administra una instancia de Looker?</p>
+        <p class="a">Gestionar usuarios, grupos y roles, conexiones, proyectos, schedules, alerts, API keys y ajustes de la instancia. Revisar releases y mantenimiento (Looker hospedado sigue un calendario; customer-hosted requiere planificar upgrades), backups y configuraci&oacute;n, l&iacute;mites de consulta y cuotas. Monitorear salud, latencia y errores. Documentar runbooks para altas y bajas, incidentes y cambios. Mantener una instancia de desarrollo o pruebas para validar releases y cambios de modelo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;C&oacute;mo se controlan los costos en Looker y el warehouse?</p>
+        <p class="a">Costos: licencias y edici&oacute;n, usuarios y, sobre todo, el warehouse (bytes escaneados, slots, cr&eacute;ditos). Medir consultas costosas en System Activity, usar cach&eacute;, datagroups, PDTs y aggregate awareness, particiones y clustering, limitar filas y evitar exploraciones masivas. Revisar schedules y alertas frecuentes y dashboards con muchas queries. Etiquetar cargas en el warehouse para allocation. Optimizar no es solo Looker: el modelo de datos y las tablas del warehouse importan. Revisar costo por equipo y por caso de uso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;C&oacute;mo se migra de otra herramienta de BI a Looker?</p>
+        <p class="a">Inventariar reportes, m&eacute;tricas, fuentes y usuarios; definir el modelo sem&aacute;ntico y el glosario; priorizar casos de alto valor; construir LookML (vistas, explores, medidas), validar contra los reportes originales, migrar contenido y capacitar. Ejecutar en paralelo y comparar resultados; documentar diferencias. Planificar permisos, embeds y entregas. Evitar replicar el desorden de la herramienta anterior: aprovechar para estandarizar m&eacute;tricas y retirar reportes obsoletos. Trabajar por fases con hitos y feedback.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se migra entre Looker Studio y Looker?</p>
+        <p class="a">De <strong>Looker Studio a Looker</strong>: Looker Studio es autoservicio y visual; Looker requiere modelado LookML y gobierno. Migrar implica reconstruir fuentes y modelo, no solo copiar dashboards; priorizar m&eacute;tricas gobernadas y casos empresariales. De <strong>Looker a Looker Studio</strong>: es &uacute;til para reportes simples o prototipos, pero se pierde el semantic layer y parte del gobierno. Pueden convivir: Looker como fuente de m&eacute;tricas gobernadas (API o export) y Looker Studio para presentaci&oacute;n. Definir el est&aacute;ndar y evitar duplicidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;C&oacute;mo se gobiernan los datos y se documenta el modelo?</p>
+        <p class="a">Glosario de m&eacute;tricas con definici&oacute;n, owner, fuente y f&oacute;rmula; descripciones en LookML; convenciones de nombres; revisi&oacute;n de cambios; certificaci&oacute;n de contenido; control de acceso por grupos y atributos; auditor&iacute;a. Mantener un cat&aacute;logo de explores y dashboards y un proceso para nuevas m&eacute;tricas. Documentar limitaciones y frescura. La documentaci&oacute;n debe vivir cerca del modelo (LookML) y actualizarse con el c&oacute;digo, no en un documento aparte desactualizado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;Cu&aacute;les son los antipatrones m&aacute;s comunes en Looker?</p>
+        <p class="a">Un explore gigante con todos los joins; duplicar m&eacute;tricas en table calculations; no declarar primary keys ni relaciones; usar SQL manual agregado y romper symmetric aggregates; PDTs sin trigger o con refresh excesivo; campos sin documentaci&oacute;n; acceso Admin para todos; usar <em>hidden</em> como &uacute;nica seguridad; contenido duplicado; schedules masivos; no versionar ni validar LookML; ignorar costos y rendimiento. Tambi&eacute;n usar Looker como ETL o motor de datos. Detectar y corregir con revisi&oacute;n y m&eacute;tricas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;Qu&eacute; buenas pr&aacute;cticas y checklist de producci&oacute;n recomiendas?</p>
+        <p class="a">Checklist: modelo versionado y validado; claves y relaciones correctas; medidas documentadas; seguridad por grupos, user attributes y access filters; entornos dev y prod; CI/CD con revisi&oacute;n; PDTs y datagroups monitoreados; cach&eacute; y aggregate awareness; rendimiento revisado; contenido certificado y con owner; alertas y schedules controlados; backups y runbooks; costos monitoreados; formaci&oacute;n y adopci&oacute;n. Antes de producci&oacute;n: probar con datos reales, validar m&eacute;tricas contra la fuente, revisar permisos y tener plan de rollback. Medir e iterar.</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Looker en una entrevista (plantilla)</h2>
+
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Looker durante [X] a&ntilde;os en [sector/equipo], construyendo el semantic layer con LookML para [ventas, finanzas, operaciones], con explores, dashboards y embeds. He dise&ntilde;ado modelos y m&eacute;tricas, optimizado consultas y PDTs, y definido seguridad y gobierno para [N] usuarios y [N] equipos&raquo;.</p>
+        <p><strong>Modelado y semantic layer:</strong> &laquo;Trabajo con una view por entidad, claves primarias y relaciones expl&iacute;citas, medidas documentadas y explores por caso de uso. Uso extends y refinements para reutilizar sin duplicar, y mantengo el proyecto en Git con revisi&oacute;n y validaci&oacute;n antes de desplegar. La prioridad es una definici&oacute;n &uacute;nica de m&eacute;tricas para todos los consumidores&raquo;.</p>
+        <p><strong>Explores y performance:</strong> &laquo;Cuido la cardinalidad de los joins para evitar fan-out y chasm traps, uso symmetric aggregates y PDTs/datagroups para preagregar y cachear, y aggregate awareness cuando aplica. Diagnostico con System Activity y el plan del warehouse, y optimizo filtros, particiones y cl&uacute;steres antes de a&ntilde;adir capas&raquo;.</p>
+        <p><strong>Dashboards y experiencia:</strong> &laquo;Dise&ntilde;o dashboards con una pregunta clara, filtros &uacute;tiles y buen rendimiento; uso Looks para preguntas puntuales y dashboards para monitoreo. Gobierno el contenido con carpetas, owners y certificaci&oacute;n, y reviso la adopci&oacute;n para retirar lo que no se usa&raquo;.</p>
+        <p><strong>Seguridad y gobierno:</strong> &laquo;Configuro SSO con SAML/OIDC, roles y model sets por grupo, y row-level security con user attributes y access filters. Las conexiones usan cuentas de servicio con m&iacute;nimo privilegio y redes privadas; audito accesos y cambios con System Activity y logs. La seguridad se dise&ntilde;a con el equipo de datos y cumplimiento&raquo;.</p>
+        <p><strong>API, embed e integraci&oacute;n:</strong> &laquo;He usado la API y el Embed SDK para llevar Looker a portales y aplicaciones internas, con SSO embed y atributos de usuario. Para CI/CD valido LookML, despliego desde Git y ejecuto Content Validator; para pipelines coordino las PDTs con dbt/Airflow y monitoreo dependencias&raquo;.</p>
+        <p><strong>Operaci&oacute;n y costos:</strong> &laquo;Monitoreo consultas, usuarios y costos, ajusto cach&eacute;, datagroups y PDTs, y reviso schedules y dashboards pesados. Mantengo runbooks, backups y una instancia de pruebas para releases. El objetivo es confiabilidad y costo sostenible, no solo velocidad de consulta&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [m&eacute;trica: reducci&oacute;n de tiempo de consulta, adopci&oacute;n, reducci&oacute;n de costo, n&uacute;mero de usuarios, migraci&oacute;n de dashboards]. En este rol aportar&iacute;a [modelado/estandarizaci&oacute;n/performance] y ayudar&iacute;a a construir una plataforma de anal&iacute;tica gobernada y confiable&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>LookML y semantic layer</td><td>Views, explores, dimensiones, medidas, extends/refinements, Git</td><td>M&eacute;tricas consistentes, reutilizaci&oacute;n y menos retrabajo</td></tr>
+        <tr><td>Explores y joins</td><td>Relaciones, primary keys, symmetric aggregates, fan-out/chasm</td><td>Resultados correctos y consultas confiables</td></tr>
+        <tr><td>M&eacute;tricas y l&oacute;gica</td><td>Tipos de measure, filtros, par&aacute;metros, derived tables, tiers</td><td>Definiciones gobernadas y autoservicio seguro</td></tr>
+        <tr><td>Dashboards y Looks</td><td>Filtros, cross-filtering, drills, programaci&oacute;n, dise&ntilde;o</td><td>Adopci&oacute;n, claridad y decisiones m&aacute;s r&aacute;pidas</td></tr>
+        <tr><td>Performance y persistencia</td><td>PDTs, datagroups, cach&eacute;, aggregate awareness, particiones</td><td>Menor latencia y costo, mejor experiencia</td></tr>
+        <tr><td>Seguridad y gobierno</td><td>SSO, roles, model sets, user attributes, access filters</td><td>Cumplimiento, acceso m&iacute;nimo y datos protegidos</td></tr>
+        <tr><td>API y embed</td><td>API 4.0, SDK, signed/SSO embed, Extension Framework</td><td>Anal&iacute;tica integrada en productos y portales</td></tr>
+        <tr><td>CI/CD y testing</td><td>Ramas, validaci&oacute;n, deploy, Content Validator, API</td><td>Menos errores, trazabilidad y releases seguros</td></tr>
+        <tr><td>Operaci&oacute;n y costos</td><td>System Activity, schedules, releases, runbooks, monitoreo</td><td>Estabilidad, MTTR y costos controlados</td></tr>
+        <tr><td>Migraci&oacute;n y adopci&oacute;n</td><td>Inventario, modelo, validaci&oacute;n, capacitaci&oacute;n, gobierno</td><td>Migraci&oacute;n ordenada y usuarios productivos</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: usuarios, dashboards, explores, consultas, reducci&oacute;n de latencia o costo, migraciones y adopci&oacute;n.</li>
+        <li>Nombra con precisi&oacute;n: LookML, semantic layer, explores, symmetric aggregates, PDTs, datagroups, aggregate awareness, access filters, user attributes, Embed SDK, Content Validator.</li>
+        <li>Muestra criterio y trade-offs: Looker vs Looker Studio, measure vs table calculation, PDT vs aggregate table, explore &uacute;nico vs varios, self-service vs gobierno.</li>
+        <li>Prep&aacute;rate para detalle: fan-out/chasm, refresco de PDTs, seguridad row-level, rendimiento en BigQuery/Snowflake, CI/CD y migraci&oacute;n.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona un laboratorio, la documentaci&oacute;n oficial y un plan de certificaci&oacute;n.</li>
+        <li>Conecta con el negocio: confianza en las m&eacute;tricas, velocidad de an&aacute;lisis, gobierno, costo y adopci&oacute;n.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Looker Documentation (cloud.google.com/looker/docs)</td><td>Gu&iacute;as oficiales de modelado, explores, dashboards, seguridad, API y administraci&oacute;n.</td></tr>
+        <tr><td>LookML Reference</td><td>Sintaxis de models, views, explores, dimensiones, medidas, joins y par&aacute;metros.</td></tr>
+        <tr><td>Looker API 4.0 y SDKs</td><td>Endpoints REST, autenticaci&oacute;n, ejecuci&oacute;n de consultas y automatizaci&oacute;n.</td></tr>
+        <tr><td>Embed SDK y SSO Embedding</td><td>Signed embedding, JWT, user attributes, eventos y buenas pr&aacute;cticas de integraci&oacute;n.</td></tr>
+        <tr><td>Looker Best Practices y Style Guide</td><td>Convenciones de nombres, estructura de proyectos, documentaci&oacute;n y revisi&oacute;n.</td></tr>
+        <tr><td>System Activity y Usage Dashboards</td><td>Consulta de historial, adopci&oacute;n, performance, usuarios y auditor&iacute;a.</td></tr>
+        <tr><td>Persistent Derived Tables, Datagroups y Aggregate Awareness</td><td>Persistencia, refresco, cach&eacute; y optimizaci&oacute;n de consultas.</td></tr>
+        <tr><td>Looker Security y Access Controls</td><td>Autenticaci&oacute;n, roles, model sets, user attributes, access filters y auditor&iacute;a.</td></tr>
+        <tr><td>Looker Release Notes</td><td>Novedades, cambios y deprecaciones de la plataforma.</td></tr>
+        <tr><td>Google Cloud Architecture Center &mdash; Looker</td><td>Arquitecturas de referencia, redes, seguridad y gobierno en Google Cloud.</td></tr>
+        <tr><td>BigQuery BI Engine</td><td>Aceleraci&oacute;n de consultas, l&iacute;mites y consideraciones de costo.</td></tr>
+        <tr><td>dbt + Looker</td><td>Integraci&oacute;n entre transformaciones y semantic layer; documentaci&oacute;n y linaje.</td></tr>
+        <tr><td>Looker Studio Documentation</td><td>Diferencias con Looker, fuentes de datos, reportes y gobierno b&aacute;sico.</td></tr>
+        <tr><td>Looker Community y Looker Marketplace</td><td>Patrones, extensiones, bloques y experiencias de la comunidad.</td></tr>
+        <tr><td>Looker Certification (Business Analyst / Developer)</td><td>Objetivos de certificaci&oacute;n y repaso de modelado, an&aacute;lisis y administraci&oacute;n.</td></tr>
+        <tr><td>Google Cloud Security Best Practices</td><td>M&iacute;nimo privilegio, redes privadas, cifrado, auditor&iacute;a y gesti&oacute;n de secretos.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
