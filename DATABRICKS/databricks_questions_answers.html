@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Databricks - Lakehouse, Arquitectura, Delta Lake, Unity Catalog, Spark, SQL, Pipelines, ML e IA, Rendimiento, Seguridad y DevOps | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Databricks &mdash; Fundamentos, Arquitectura, Delta Lake, Unity Catalog, Spark, SQL, Pipelines, Machine Learning, Rendimiento, Seguridad y DevOps</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Databricks (lakehouse, ingenier&iacute;a de datos, anal&iacute;tica, machine learning y gobierno) en arquitectura, desarrollo de pipelines, optimizaci&oacute;n, seguridad y despliegues?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos y lakehouse (Q1&ndash;Q8), arquitectura y compute (Q9&ndash;Q16), almacenamiento y Delta Lake (Q17&ndash;Q25), Unity Catalog y gobierno (Q26&ndash;Q34), Apache Spark (Q35&ndash;Q43), SQL, notebooks y desarrollo (Q44&ndash;Q52), ingesta, Lakeflow y orquestaci&oacute;n (Q53&ndash;Q61), machine learning e IA generativa (Q62&ndash;Q69), rendimiento y costos (Q70&ndash;Q77) y seguridad, administraci&oacute;n y CI/CD (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos, lakehouse y ecosistema &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Arquitectura de la plataforma y compute &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. Almacenamiento y Delta Lake &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Unity Catalog y gobierno de datos &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. Apache Spark y procesamiento distribuido &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. SQL, notebooks y desarrollo &mdash; 9 preguntas</a></li>
+        <li><a href="#s7">7. Ingesta, Lakeflow y orquestaci&oacute;n &mdash; 9 preguntas</a></li>
+        <li><a href="#s8">8. Machine Learning, MLOps e IA generativa &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Rendimiento, optimizaci&oacute;n y costos &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. Seguridad, administraci&oacute;n, CI/CD y operaci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Databricks en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos, lakehouse y ecosistema</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Databricks y para qu&eacute; tipo de soluciones se usa?</p>
+        <p class="a">Databricks es una plataforma de datos e IA en la nube, construida sobre Apache Spark y el paradigma <strong>lakehouse</strong>, que unifica ingenier&iacute;a de datos, anal&iacute;tica SQL, ciencia de datos y machine learning sobre un &uacute;nico almacenamiento abierto. Ofrece workspaces gestionados con notebooks colaborativos, clusters el&aacute;sticos, SQL warehouses, Delta Lake, Unity Catalog para gobierno, pipelines declarativos, orquestaci&oacute;n, MLflow y servicios de IA generativa. Se usa en banca, seguros, retail, salud, telecomunicaciones y sector p&uacute;blico para construir lagos de datos gobernados, ETL/ELT a escala, anal&iacute;tica en tiempo real, feature engineering, modelos predictivos y aplicaciones RAG sobre datos corporativos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;Qu&eacute; es el lakehouse y c&oacute;mo se diferencia de un data lake y de un data warehouse?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Data lake:</strong> almacenamiento barato y flexible (S3, ADLS, GCS) con formatos abiertos, pero sin transacciones, esquema fuerte ni gobierno consistente; tiende a convertirse en un pantano de datos.</li>
+                <li><strong>Data warehouse:</strong> esquema y SQL muy optimizados para BI, pero costoso para datos crudos, semiestructurados o cargas de ML, y con formatos propietarios.</li>
+                <li><strong>Lakehouse:</strong> capa de almacenamiento abierto (Parquet + Delta Lake) con una capa de metadatos y transacciones que aporta ACID, esquema, time travel, gobierno y rendimiento de warehouse, permitiendo BI y ML sobre los mismos datos sin duplicarlos.</li>
+            </ul>
+            La clave es <strong>una sola copia de los datos</strong>, abierta y gobernada, con motores que la consultan de forma eficiente (Spark, Photon, SQL) y workloads de streaming y batch conviviendo.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Cu&aacute;l es la historia y evoluci&oacute;n de Databricks?</p>
+        <p class="a">Databricks naci&oacute; en 2013 de la mano de los creadores de Apache Spark (UC Berkeley AMPLab) para comercializar Spark como servicio. En 2019 abri&oacute; el c&oacute;digo de <strong>Delta Lake</strong>, que aport&oacute; transacciones ACID al data lake; en 2021 public&oacute; el paper del <strong>lakehouse</strong> y lanz&oacute; SQL, Unity Catalog y Photon. La compa&ntilde;&iacute;a creci&oacute; con servicios gestionados en AWS, Azure y Google Cloud, la suite de MLflow y Mosaic AI, y adquisiciones como MosaicML (2023), Tabular (2024) y Neon (2025) para reforzar IA generativa, interoperabilidad con Iceberg y bases de datos serverless. Su propuesta actual abarca todo el ciclo del dato: ingesta, ingenier&iacute;a, anal&iacute;tica, ciencia de datos, IA generativa y gobierno.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Cu&aacute;les son los componentes principales de la plataforma?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Workspace:</strong> entorno colaborativo con notebooks, repositorios Git, SQL editor, jobs, dashboards y permisos.</li>
+                <li><strong>Compute:</strong> clusters interactivos, clusters de jobs, SQL warehouses, pools y opciones serverless.</li>
+                <li><strong>Delta Lake:</strong> formato transaccional abierto sobre el almacenamiento del cliente.</li>
+                <li><strong>Unity Catalog:</strong> metastore y gobierno unificado de tablas, vistas, vol&uacute;menes, funciones, modelos y conexiones, con privilegios, linaje y auditor&iacute;a.</li>
+                <li><strong>Lakeflow:</strong> ingesta (Connect), pipelines declarativos y jobs/orquestaci&oacute;n.</li>
+                <li><strong>Databricks SQL:</strong> warehouses, consultas, dashboards y alertas para analistas.</li>
+                <li><strong>Mosaic AI / MLflow:</strong> experimentos, registro de modelos, serving, vector search y aplicaciones de IA.</li>
+                <li><strong>Account console:</strong> administraci&oacute;n de cuentas, workspaces, identidades, redes y facturaci&oacute;n.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;Qu&eacute; ediciones, nubes y modalidades de despliegue existen?</p>
+        <p class="a">Databricks est&aacute; disponible en <strong>AWS, Microsoft Azure y Google Cloud</strong>, con regiones en muchos pa&iacute;ses. Las ediciones tradicionales son <strong>Standard, Premium y Enterprise</strong>, que a&ntilde;aden capacidades de seguridad, gobierno, Unity Catalog, Private Link, auditor&iacute;a y soporte; sobre ellas se contratan servicios serverless y unidades de consumo (DBUs). Existen modalidades de <strong>compute cl&aacute;sico</strong> (clusters en la cuenta del cliente, con VPC/VNet injection opcional) y <strong>serverless</strong> (gestionado por Databricks), adem&aacute;s de <strong>Databricks Free Edition</strong> y pruebas para aprender. La elecci&oacute;n de edici&oacute;n y modalidad depende de requisitos de gobierno, residencia de datos, red y costo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;Cu&aacute;les son los casos de uso m&aacute;s habituales?</p>
+        <p class="a">Ingenier&iacute;a de datos y ETL/ELT por lotes y en streaming; construcci&oacute;n de lakehouses con arquitectura medallion (bronce, plata, oro); anal&iacute;tica y BI con SQL y dashboards; ciencia de datos y feature engineering a escala; entrenamiento y despliegue de modelos con MLflow y Model Serving; detecci&oacute;n de fraude, riesgo, recomendadores y segmentaci&oacute;n; procesamiento de datos semiestructurados y logs; gobierno y compartici&oacute;n de datos entre &aacute;reas o empresas (Delta Sharing, clean rooms); y aplicaciones de IA generativa con RAG, Vector Search y agentes sobre datos gobernados. Tambi&eacute;n se usa como plataforma de migraci&oacute;n de Hadoop/Spark on-premise a la nube.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;C&oacute;mo se compara Databricks con Snowflake, BigQuery, Microsoft Fabric y un stack EMR + Glue?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Snowflake:</strong> excelente warehouse SQL y marketplace; su fortaleza es BI y SQL, con menos foco nativo en Spark/ML y notebooks, aunque ha incorporado Iceberg y cargas de ML.</li>
+                <li><strong>BigQuery:</strong> serverless y muy integrado en GCP, con BigQuery ML y Spark opcional; gran simplicidad, pero menor control de infraestructura y un modelo de costos por consulta/ranuras.</li>
+                <li><strong>Microsoft Fabric:</strong> suite integrada con Power BI, OneLake y Spark; muy atractiva si la organizaci&oacute;n ya vive en el ecosistema Microsoft.</li>
+                <li><strong>EMR + Glue + Athena:</strong> piezas de AWS muy flexibles y econ&oacute;micas, pero exigen ensamblar y operar el stack (cat&aacute;logo, gobierno, orquestaci&oacute;n, notebooks).</li>
+            </ul>
+            Databricks destaca cuando se necesita <strong>Spark a escala, ingenier&iacute;a y ML en la misma plataforma, almacenamiento abierto y gobierno unificado</strong>. La decisi&oacute;n depende de nube, equipo, casos de uso, costo total y requisitos de gobierno.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;Qu&eacute; roles intervienen y c&oacute;mo se organiza un proyecto de datos en Databricks?</p>
+        <p class="a">Suelen convivir <strong>data engineers</strong> (ingesta, pipelines, modelado), <strong>analistas/BI</strong> (SQL, dashboards), <strong>data scientists</strong> (experimentos, modelos), <strong>ML engineers</strong> (serving, MLOps), <strong>platform admins</strong> (workspaces, redes, identidades, costos) y <strong>data stewards/governance</strong> (cat&aacute;logo, calidad, accesos). Un patr&oacute;n habitual es la <strong>arquitectura medallion</strong>: bronce (datos crudos), plata (limpios y conformados) y oro (agregados de negocio), con cat&aacute;logos y esquemas por dominio. Se recomienda separar entornos (dev, staging, prod) por workspace o por cat&aacute;logos/entornos dentro de Unity Catalog, definir convenciones de nombres, usar IaC y bundles, y establecer revisiones de c&oacute;digo y de acceso.</p>
+    </div>
+
+    <h2 id="s2">2. Arquitectura de la plataforma y compute</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;Qu&eacute; son el control plane y el data plane?</p>
+        <p class="a">El <strong>control plane</strong> es la capa gestionada por Databricks: interfaz web, APIs, notebooks, scheduler, gesti&oacute;n de clusters, Unity Catalog y metadatos. El <strong>data plane</strong> es donde se ejecuta el c&oacute;mputo y se accede a los datos. En el modelo cl&aacute;sico, los clusters corren en la cuenta cloud del cliente (VPC/VNet propia) y los datos permanecen en su almacenamiento; en serverless, Databricks gestiona el c&oacute;mputo en su cuenta y accede al almacenamiento del cliente mediante credenciales controladas. La separaci&oacute;n permite escalar sin mover datos, aislar cargas y aplicar controles de red, pero exige entender d&oacute;nde vive cada componente para dise&ntilde;ar seguridad y residencia de datos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;Qu&eacute; diferencia hay entre un cluster all-purpose y un job cluster?</p>
+        <p class="a">Un <strong>all-purpose cluster</strong> es interactivo, se crea y configura para que varios usuarios ejecuten notebooks y consultas, y puede permanecer encendido (con auto-stop configurable); es c&oacute;modo para desarrollo y exploraci&oacute;n, pero tambi&eacute;n m&aacute;s caro si se descuida. Un <strong>job cluster</strong> se crea autom&aacute;ticamente para una ejecuci&oacute;n de Workflows, se destruye al terminar y solo ejecuta ese job; es m&aacute;s eficiente y aislado para producci&oacute;n. Ambos pueden usar autoscaling, instancias spot, Photon y librer&iacute;as. La recomendaci&oacute;n es desarrollar en clusters interactivos peque&ntilde;os y ejecutar producci&oacute;n con job clusters o serverless, con pol&iacute;ticas de cluster que limiten tama&ntilde;os y tipos de nodo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;Qu&eacute; es el compute serverless y cu&aacute;ndo conviene?</p>
+        <p class="a">El compute <strong>serverless</strong> lo gestiona Databricks: no hay que elegir ni mantener clusters, el arranque es r&aacute;pido y se escala autom&aacute;ticamente por carga, con facturaci&oacute;n por uso. Aplica a <strong>SQL warehouses serverless</strong> para BI, <strong>jobs serverless</strong> para pipelines y notebooks serverless para desarrollo. Conviene cuando se quiere reducir administraci&oacute;n, tener cargas intermitentes o picos, o acelerar el time-to-value; puede no convenir para configuraciones muy espec&iacute;ficas de red, librer&iacute;as o GPUs, o cuando el volumen constante hace m&aacute;s econ&oacute;mico un cluster dedicado. Hay que revisar limitaciones de runtime, init scripts, acceso a VPC y costo por DBU frente a instancias reservadas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Qu&eacute; es Databricks Runtime y qu&eacute; aporta Photon?</p>
+        <p class="a"><strong>Databricks Runtime (DBR)</strong> es la distribuci&oacute;n optimizada de Apache Spark con mejoras de rendimiento, seguridad y compatibilidad, disponible en versiones est&aacute;ndar, <strong>LTS</strong> (soporte extendido, recomendadas para producci&oacute;n) y <strong>ML Runtime</strong> (con librer&iacute;as de machine learning preinstaladas). <strong>Photon</strong> es un motor de ejecuci&oacute;n vectorizado en C++ que acelera consultas SQL y operaciones de DataFrame, especialmente agregaciones, joins y escaneos; se activa por defecto en muchos tipos de compute y suele reducir el tiempo y el costo. La elecci&oacute;n de versi&oacute;n debe considerar compatibilidad de librer&iacute;as, soporte, caracter&iacute;sticas de Delta y el ciclo de upgrades; conviene fijar una LTS y probar antes de actualizar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Qu&eacute; son los pools y qu&eacute; tipos de compute existen?</p>
+        <p class="a">Un <strong>pool</strong> es un conjunto de instancias preaprobadas y ociosas que reduce el tiempo de arranque de clusters y jobs; los nodos se reutilizan y se facturan mientras est&aacute;n disponibles. Tipos de compute: <strong>all-purpose clusters</strong> (interactivo), <strong>job clusters</strong> (ef&iacute;meros), <strong>SQL warehouses</strong> (optimizados para SQL/BI, con tama&ntilde;o y auto-stop), <strong>serverless</strong> (SQL, jobs, notebooks) y clusters con <strong>GPUs</strong> para ML. Tambi&eacute;n existen <strong>instance pools</strong> y <strong>cluster policies</strong> para estandarizar configuraciones. La elecci&oacute;n depende de interacci&oacute;n, latencia, concurrencia, tipo de carga y gobierno; para BI conviene un warehouse; para ETL, job clusters o serverless; para ML, clusters con GPU y runtime ML.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo se dise&ntilde;a la red y el aislamiento?</p>
+        <p class="a">En el modelo cl&aacute;sico se puede desplegar el data plane en la <strong>VPC/VNet del cliente</strong> (VPC injection / VNet injection), con subredes p&uacute;blicas y privadas, security groups, NAT y endpoints privados. Se recomienda <strong>Private Link</strong> para el tr&aacute;fico al control plane y a los servicios cloud (S3, ADLS, GCS, KMS), <strong>IP access lists</strong> para restringir el acceso al workspace, <strong>no public IP</strong> en los nodos y salida controlada. En serverless, Databricks gestiona la red pero se configuran <strong>network connectivity configurations</strong>, private endpoints y reglas de firewall para acceder al almacenamiento del cliente. Hay que documentar flujos, rangos CIDR, DNS y requisitos de residencia; probar conectividad y monitorizar con flow logs.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;C&oacute;mo se accede al almacenamiento (DBFS, mounts, external locations, volumes)?</p>
+        <p class="a"><strong>DBFS</strong> es el sistema de archivos del workspace; hoy se usa sobre todo para archivos temporales y utilidades, no como almac&eacute;n principal de datos. Los <strong>mounts</strong> (/mnt/...) montan contenedores cloud, pero Unity Catalog los desaconseja porque el acceso no queda gobernado por privilegios de cat&aacute;logo. La forma recomendada es usar <strong>external locations</strong> (con storage credentials) para tablas externas y <strong>volumes</strong> para archivos no tabulares (documentos, im&aacute;genes, modelos, CSV sueltos), con permisos de Unity Catalog y rutas gobernadas. Las tablas managed de Unity Catalog viven en el almacenamiento del metastore o en locations definidas. La elecci&oacute;n afecta gobierno, rendimiento y portabilidad; conviene evitar rutas f&iacute;sicas hardcodeadas en el c&oacute;digo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;Qu&eacute; considerar en alta disponibilidad, regiones y recuperaci&oacute;n ante desastres?</p>
+        <p class="a">Databricks gestiona la disponibilidad del control plane, pero el dise&ntilde;o de continuidad depende del cliente: datos en almacenamiento cloud con replicaci&oacute;n entre regiones, clusters recreables por IaC, c&oacute;digo en Git y configuraciones versionadas. No hay un failover autom&aacute;tico de workspace entre regiones; en un desastre se aprovisiona un workspace en otra regi&oacute;n, se reasocia al metastore o se restaura desde backups, y se reconfiguran jobs, secretos y redes. Conviene definir RPO/RTO, probar restauraciones, documentar dependencias (Unity Catalog, metastore, Delta Sharing, modelos) y mantener artefactos (bundles, Terraform, notebooks) en repositorios. Los datos en Delta Lake con time travel y backups cloud facilitan la recuperaci&oacute;n l&oacute;gica, no sustituyen un plan de DR.</p>
+    </div>
+
+    <h2 id="s3">3. Almacenamiento y Delta Lake</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;Qu&eacute; es Delta Lake y c&oacute;mo funciona?</p>
+        <p class="a">Delta Lake es un formato de tabla abierto que combina archivos <strong>Parquet</strong> con un <strong>transaction log</strong> (<em>_delta_log</em>) en JSON y checkpoints Parquet. El log registra cada commit de forma at&oacute;mica y ordenada, lo que aporta transacciones <strong>ACID</strong>, control de concurrencia, esquema, time travel, evoluci&oacute;n de esquema y operaciones como MERGE, UPDATE y DELETE. Los lectores consultan el log para saber qu&eacute; archivos componen la versi&oacute;n de la tabla, y los escritores usan bloqueo optimista para resolver conflictos. Al ser abierto, lo pueden leer Spark, Databricks SQL, Trino, Flink y otros motores. En Databricks es el formato por defecto del lakehouse y la base de streaming, tablas gobernadas por Unity Catalog y muchas optimizaciones (Photon, liquid clustering, deletion vectors).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;C&oacute;mo se hacen upserts y otras operaciones en Delta?</p>
+        <p class="a">El upsert se hace con <strong>MERGE INTO</strong>: se define la tabla destino, una fuente (tabla, vista o subconsulta) y la condici&oacute;n de match, con cl&aacute;usulas <em>WHEN MATCHED THEN UPDATE</em>, <em>WHEN NOT MATCHED THEN INSERT</em> y <em>WHEN NOT MATCHED BY SOURCE THEN DELETE</em>. Es la base de CDC y SCD. Tambi&eacute;n se usan <em>UPDATE</em>, <em>DELETE</em>, <em>INSERT INTO/OVERWRITE</em>, <em>COPY INTO</em> y <em>OPTIMIZE</em>. Para MERGE eficiente: limitar la fuente a lo necesario, incluir particiones o claves de clustering en la condici&oacute;n, evitar m&uacute;ltiples matches por fila y controlar el tama&ntilde;o de archivos. En streaming, <em>foreachBatch</em> o <em>APPLY CHANGES</em> simplifican los upserts. La idempotencia es clave: el mismo lote reprocesado no debe duplicar filas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; son OPTIMIZE, Z-ORDER y liquid clustering?</p>
+        <p class="a"><strong>OPTIMIZE</strong> compacta archivos peque&ntilde;os en archivos de mayor tama&ntilde;o (por defecto ~1 GB) para reducir el overhead de listado y mejorar escaneos; puede ejecutarse completo o con <em>WHERE</em> por partici&oacute;n. <strong>Z-ORDER</strong> ordena los datos por varias columnas para agrupar valores relacionados y mejorar el data skipping; se aplica con <em>OPTIMIZE ... ZORDER BY (col1, col2)</em>. <strong>Liquid clustering</strong> es la evoluci&oacute;n recomendada: define claves de clustering en la tabla y Databricks las mantiene incrementalmente sin particiones f&iacute;jas ni reescrituras completas, adapt&aacute;ndose a cambios de volumen; se combina con <em>OPTIMIZE</em>. En tablas nuevas conviene liquid clustering en lugar de particionar por columnas de baja cardinalidad; medir el skipping y el costo antes de elegir claves.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;Qu&eacute; es VACUUM y c&oacute;mo se gestiona la retenci&oacute;n?</p>
+        <p class="a"><strong>VACUUM</strong> elimina los archivos f&iacute;sicos que ya no referencia la tabla (versiones antiguas, archivos reemplazados por OPTIMIZE o MERGE) y libera almacenamiento. Por defecto respeta un per&iacute;odo de retenci&oacute;n de <strong>7 d&iacute;as</strong> para no romper lectores concurrentes ni time travel; se puede cambiar con <em>delta.deletedFileRetentionDuration</em> y <em>delta.logRetentionDuration</em>, pero reducirlo puede invalidar consultas hist&oacute;ricas y jobs que leen versiones anteriores. <em>VACUUM</em> no debe ejecutarse mientras hay escrituras o lectores de versiones antiguas; en tablas con <strong>deletion vectors</strong>, los borrados l&oacute;gicos se materializan al compactar. La estrategia habitual: OPTIMIZE peri&oacute;dico, VACUUM programado fuera de ventanas cr&iacute;ticas y retenci&oacute;n alineada con auditor&iacute;a y recuperaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;C&oacute;mo funcionan el schema enforcement y la evoluci&oacute;n de esquema?</p>
+        <p class="a">Delta aplica <strong>schema enforcement</strong>: rechaza escrituras cuyos tipos o columnas no coinciden con el esquema de la tabla, evitando corrupci&oacute;n silenciosa. La <strong>evoluci&oacute;n</strong> se habilita expl&iacute;citamente: <em>mergeSchema</em> en escrituras batch, <em>cloudFiles.schemaEvolutionMode</em> en Auto Loader, <em>write.mergeSchema</em> o <em>ALTER TABLE ADD COLUMNS</em>. Se pueden a&ntilde;adir columnas y promover tipos compatibles (por ejemplo int a bigint), pero no se debe confiar en cambios destructivos; para renombrar o cambiar tipo conviene reescribir con <em>overwriteSchema</em> o una migraci&oacute;n controlada. En producci&oacute;n, definir el esquema esperado, validar tipos en la ingesta, documentar cambios y evitar <em>inferSchema</em> sin control en fuentes inestables. Unity Catalog a&ntilde;ade gobierno y linaje sobre esos cambios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;Qu&eacute; diferencia hay entre tablas managed y external?</p>
+        <p class="a">En una <strong>managed table</strong> (gestionada), Databricks controla la ubicaci&oacute;n y, al hacer <em>DROP TABLE</em>, tambi&eacute;n elimina los datos subyacentes; es el modo recomendado para tablas creadas y mantenidas por la plataforma, con Unity Catalog gestionando la ubicaci&oacute;n. En una <strong>external table</strong>, el dato vive en una ruta del almacenamiento del cliente y la tabla solo registra metadatos; al hacer DROP se elimina el metadato pero no los archivos. Las external tables se usan cuando otros sistemas escriben/leen el dato, cuando hay que conservarlo fuera del ciclo de vida de Databricks o por requisitos de propiedad. Con Unity Catalog, tambi&eacute;n existen <strong>external locations</strong> y <strong>volumes</strong>. La elecci&oacute;n afecta gobierno, borrado, migraciones y costo; documentar qui&eacute;n es due&ntilde;o del dato y c&oacute;mo se elimina.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;Qu&eacute; son las streaming tables y las materialized views?</p>
+        <p class="a">Son objetos declarativos de Lakeflow (antes Delta Live Tables) y Databricks SQL. Una <strong>streaming table</strong> se alimenta de una fuente en streaming o de una consulta incremental y procesa solo datos nuevos, con checkpoints y sem&aacute;ntica exactly-once; es adecuada para ingesta continua y transformaciones incrementales. Una <strong>materialized view</strong> se recalcula total o incrementalmente seg&uacute;n la consulta y sirve resultados precalculados para BI; es &uacute;til para agregaciones y joins costosos. Se definen en SQL o Python dentro de pipelines declarativos, con expectations de calidad y dependencias gestionadas por el motor. La diferencia clave es el modo de actualizaci&oacute;n: incremental/streaming frente a refresco de resultados. Elegir mal puede multiplicar costos; revisar freshness, volumen y patrones de consulta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Qu&eacute; es la arquitectura medallion?</p>
+        <p class="a">Es un patr&oacute;n de organizaci&oacute;n del lakehouse en capas con calidad creciente: <strong>bronce</strong> guarda datos crudos de fuentes (a menudo append-only, con metadatos de ingesta), <strong>plata</strong> limpia, deduplica, conforma tipos y aplica reglas de negocio, y <strong>oro</strong> expone agregados y modelos listos para BI/ML. Cada capa puede implementarse con tablas Delta, streaming tables o vistas, y gobernarse con esquemas y privilegios distintos. Ventajas: trazabilidad, reprocesamiento, separaci&oacute;n de responsabilidades y reutilizaci&oacute;n. No es obligatorio tener exactamente tres capas; el principio es que cada una tenga un prop&oacute;sito y contrato claro. Complementar con quality gates/expectations, linaje, cat&aacute;logo y documentaci&oacute;n; evitar copiar datos sin necesidad y controlar el costo de almacenamiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;Delta Lake, Parquet, Iceberg o Hudi? &iquest;Qu&eacute; papel juega UniForm?</p>
+        <p class="a"><strong>Parquet</strong> es un formato de archivo columnar sin transacciones ni metadatos de tabla; sirve para datos simples o intercambio, pero no para un lakehouse gobernado. <strong>Delta Lake</strong> a&ntilde;ade ACID, time travel y operaciones DML sobre Parquet y es el formato nativo de Databricks. <strong>Apache Iceberg</strong> es otro formato de tabla abierto con gran adopci&oacute;n en el ecosistema; <strong>Hudi</strong> se usa para upserts y CDC en ecosistemas Hadoop. Databricks soporta leer/escribir Iceberg y ofrece <strong>Delta Lake UniForm</strong>, que escribe metadatos compatibles para que motores Iceberg/Hudi lean tablas Delta sin duplicar datos. La elecci&oacute;n depende del ecosistema, de los motores que deban leer y del gobierno; para un lakehouse Databricks, Delta + UniForm suele dar interoperabilidad sin perder las optimizaciones nativas.</p>
+    </div>
+
+    <h2 id="s4">4. Unity Catalog y gobierno de datos</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; es Unity Catalog y qu&eacute; problemas resuelve?</p>
+        <p class="a"><strong>Unity Catalog</strong> es el cat&aacute;logo y la capa de gobierno unificada de Databricks: un &uacute;nico metastore por regi&oacute;n que centraliza el acceso a datos y activos de IA en todos los workspaces. Resuelve la dispersi&oacute;n de metadatos (Hive metastore por workspace), la falta de privilegios consistentes, la ausencia de linaje y auditor&iacute;a, y la dificultad de compartir datos entre equipos. Aporta un modelo de nombres de tres niveles (<em>catalog.schema.table</em>), permisos granulares (incluidos row filters y column masks), linaje a nivel de columna, b&uacute;squeda y tags, gesti&oacute;n de vol&uacute;menes y modelos, y compartici&oacute;n mediante Delta Sharing. Es la base para un lakehouse gobernado y para cumplir requisitos de seguridad y auditor&iacute;a.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;Cu&aacute;l es el modelo de objetos de Unity Catalog?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Metastore:</strong> contenedor de nivel superior, asociado a una regi&oacute;n y a uno o varios workspaces; guarda los metadatos.</li>
+                <li><strong>Catalog:</strong> agrupaci&oacute;n l&oacute;gica (por dominio, entorno o equipo), por ejemplo <em>prod</em>, <em>dev</em>, <em>ventas</em>.</li>
+                <li><strong>Schema:</strong> base de datos dentro del cat&aacute;logo; agrupa tablas, vistas, funciones y vol&uacute;menes.</li>
+                <li><strong>Tablas y vistas:</strong> Delta, external, streaming, materialized; las vistas pueden ser normales o materializadas.</li>
+                <li><strong>Volumes:</strong> archivos no tabulares gobernados (documentos, im&aacute;genes, modelos).</li>
+                <li><strong>Funciones, modelos, conexiones y shares:</strong> l&oacute;gica reutilizable, modelos registrados, conexiones a fuentes externas y comparticiones.</li>
+            </ul>
+            El nombre completo <em>catalog.schema.object</em> evita ambig&uuml;edades y permite aplicar privilegios y linaje de forma uniforme. La organizaci&oacute;n debe reflejar el dominio y el ciclo de vida, no la estructura de carpetas f&iacute;sica.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;C&oacute;mo funcionan los privilegios y la herencia en Unity Catalog?</p>
+        <p class="a">Los privilegios se conceden con <em>GRANT</em> sobre objetos (metastore, cat&aacute;logo, esquema, tabla, vista, volumen, funci&oacute;n) o con <em>DENY</em> expl&iacute;cito; los principales son usuarios, grupos y service principals. La herencia es jer&aacute;rquica: un privilegio sobre un cat&aacute;logo aplica a sus esquemas y objetos, y el propietario (<em>owner</em>) tiene control total y puede transferirlo. Existen privilegios como <em>USE CATALOG</em>, <em>USE SCHEMA</em>, <em>SELECT</em>, <em>MODIFY</em>, <em>CREATE TABLE</em>, <em>EXECUTE</em> y <em>READ VOLUME</em>. Buenas pr&aacute;cticas: conceder a grupos (no a usuarios), aplicar m&iacute;nimo privilegio, separar prod/dev, usar <em>DENY</em> con cuidado (puede sorprender por la herencia), auditar cambios y revisar accesos peri&oacute;dicamente. Los privilegios de Unity Catalog son la fuente de verdad aunque el acceso f&iacute;sico al storage tambi&eacute;n exista.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;C&oacute;mo se gestionan identidades, grupos y service principals?</p>
+        <p class="a">Las identidades se administran en la <strong>account console</strong> y se sincronizan desde el IdP corporativo con <strong>SCIM</strong> (Entra ID, Okta, Google Workspace), de modo que altas y bajas se reflejen autom&aacute;ticamente. Se recomienda organizar el acceso con <strong>grupos</strong> (por rol/dominio) y no usuario a usuario, y usar <strong>service principals</strong> para automatizaci&oacute;n, jobs, CI/CD y aplicaciones, con tokens OAuth o secretos rotables. Los usuarios humanos se autentican con SSO y MFA; los permisos de workspace se combinan con los de Unity Catalog. Hay que definir owners de grupos, revisar membres&iacute;as, evitar cuentas compartidas, documentar qu&eacute; service principal usa cada pipeline y monitorizar la creaci&oacute;n de tokens. La gesti&oacute;n de identidades es la base del modelo de seguridad: si el grupo est&aacute; mal, los privilegios heredados tambi&eacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; son los row filters y las column masks?</p>
+        <p class="a">Son mecanismos de seguridad a nivel de fila y columna en Unity Catalog. Un <strong>row filter</strong> es una funci&oacute;n SQL que se aplica a una tabla (por ejemplo, <em>region = current_user_region()</em>) y hace que cada usuario vea solo las filas permitidas. Una <strong>column mask</strong> transforma el valor de una columna seg&uacute;n el usuario o rol (por ejemplo, mostrar el email completo a RRHH y enmascararlo al resto). Se implementan con funciones y <em>ALTER TABLE ... SET ROW FILTER</em> / <em>SET MASK</em>, y aplican a consultas SQL, DataFrames y vistas; requieren que el usuario tenga <em>SELECT</em> y <em>EXECUTE</em> sobre la funci&oacute;n. Ventajas: control fino sin duplicar tablas; consideraciones: rendimiento (la funci&oacute;n se eval&uacute;a por fila), pruebas rigurosas y gobierno de las funciones, y cuidado con exponer datos sensibles en logs o modelos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; aporta Unity Catalog en linaje, auditor&iacute;a, tags y b&uacute;squeda?</p>
+        <p class="a"><strong>Linaje</strong> muestra el origen y las transformaciones de tablas, columnas, vistas, notebooks y jobs, y ayuda a evaluar impacto antes de cambiar algo. Los <strong>audit logs</strong> registran accesos y operaciones (queries, cambios de permisos, descargas) y se env&iacute;an al almacenamiento del cliente para an&aacute;lisis y cumplimiento. Los <strong>tags</strong> (incluidos tags gobernados) clasifican datos (PII, dominio, sensibilidad) y pueden usarse para b&uacute;squeda y pol&iacute;ticas. El <strong>cat&aacute;logo/b&uacute;squeda</strong> permite descubrir tablas y entender su descripci&oacute;n, owner y columnas. Complementos: comentarios, documentaci&oacute;n, certificaci&oacute;n de tablas, quality monitoring y permisos por grupo. Para un gobierno s&oacute;lido, definir taxonom&iacute;a, owners, procesos de alta y revisi&oacute;n, y usar el linaje en Change Advisory/impact analysis.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; son external locations, storage credentials y volumes?</p>
+        <p class="a">Para acceder a almacenamiento cloud de forma gobernada, Unity Catalog usa:
+            <ul>
+                <li><strong>Storage credential:</strong> un objeto que encapsula la autorizaci&oacute;n (IAM role, managed identity, service account) para acceder al storage; evita poner claves en el c&oacute;digo.</li>
+                <li><strong>External location:</strong> ruta de storage (bucket/prefijo) asociada a una credencial; permite crear tablas externas y vol&uacute;menes y aplicar privilegios.</li>
+                <li><strong>Volume:</strong> espacio gobernado para archivos no tabulares (documentos, im&aacute;genes, modelos, CSV), con rutas <em>/Volumes/catalog/schema/volume/...</em> y permisos de lectura/escritura.</li>
+            </ul>
+            Con esto se evita el uso de mounts y rutas f&iacute;sicas, se centraliza la rotaci&oacute;n de credenciales y se audita el acceso. Conviene separar ubicaciones por entorno y dominio, limitar credenciales a un prefijo y probar que un usuario sin privilegios no puede leer la ruta directamente.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; es Delta Sharing y para qu&eacute; sirven los clean rooms?</p>
+        <p class="a"><strong>Delta Sharing</strong> es un protocolo abierto para compartir datos en vivo entre organizaciones o entre equipos sin copiarlos: el proveedor crea un <em>share</em>, el receptor lo monta como cat&aacute;logo y consulta las tablas con permisos y auditor&iacute;a. Funciona con Databricks, otros motores compatibles y clientes que implementan el protocolo; permite compartir tablas, vistas, vol&uacute;menes y modelos con control de revocaci&oacute;n. Los <strong>clean rooms</strong> permiten a dos o m&aacute;s partes analizar datos combinados sin exponer los registros crudos (por ejemplo, medir el impacto de una campa&ntilde;a con un socio). Consideraciones: gobierno de lo compartido, licencias/privacidad, identificadores, calidad y trazabilidad. Es &uacute;til en banca, retail, salud y publicidad, donde compartir datos es valioso pero sensible.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;C&oacute;mo se migra de Hive metastore a Unity Catalog y qu&eacute; convenciones adoptar?</p>
+        <p class="a">La migraci&oacute;n implica inventariar tablas y permisos, crear el metastore y los cat&aacute;logos, definir external locations/credenciales, y usar el <strong>Unity Catalog migration tool</strong> o <em>SYNC</em>/<em>UPGRADE</em> para registrar tablas existentes. Hay que mapear bases de datos Hive a esquemas, revisar rutas, propietarios y privilegios, y validar lecturas/escrituras antes de cambiar jobs. Convenciones: nombres en <em>snake_case</em>, cat&aacute;logo por entorno o dominio, esquemas por capa (bronce/plata/oro) o dominio, comentarios y tags obligatorios, owners claros y privilegios a grupos. Evitar depender de <em>hive_metastore</em> y de mounts; planificar la convivencia temporal, comunicar cambios y actualizar documentaci&oacute;n/linaje. La migraci&oacute;n es tambi&eacute;n una oportunidad para limpiar tablas duplicadas y definir est&aacute;ndares.</p>
+    </div>
+
+    <h2 id="s5">5. Apache Spark y procesamiento distribuido</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;C&oacute;mo funciona la arquitectura de Apache Spark?</p>
+        <p class="a">Spark sigue un modelo maestro-trabajador: el <strong>driver</strong> ejecuta el programa, construye el plan l&oacute;gico y coordina; el <strong>cluster manager</strong> (Databricks, YARN, Kubernetes) asigna recursos; y los <strong>executors</strong> en los workers ejecutan tareas y almacenan datos en memoria/disco. El driver divide el trabajo en <strong>jobs</strong> (una acci&oacute;n), <strong>stages</strong> (separadas por shuffles) y <strong>tasks</strong> (una por partici&oacute;n). En Databricks, el driver corre en el nodo driver del cluster y los executors en los workers; el n&uacute;mero de cores y memoria determina el paralelismo. Entender esta jerarqu&iacute;a explica por qu&eacute; un shuffle es caro, por qu&eacute; un skew concentra tareas y por qu&eacute; el tama&ntilde;o de partici&oacute;n afecta el rendimiento y la estabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;Qu&eacute; diferencia hay entre RDD, DataFrame y Dataset? &iquest;Qu&eacute; hacen Catalyst y Tungsten?</p>
+        <p class="a">
+            <ul>
+                <li><strong>RDD:</strong> abstracci&oacute;n de bajo nivel, tolerante a fallos, sin esquema ni optimizador; se usa para control fino o c&oacute;digo no estructurado, pero es m&aacute;s lento y verboso.</li>
+                <li><strong>DataFrame:</strong> colecci&oacute;n distribuida con esquema, API declarativa y optimizaciones; es la opci&oacute;n habitual en PySpark/SQL.</li>
+                <li><strong>Dataset:</strong> tipado y orientado a objetos, disponible en Scala/Java; en Python no existe con tipos estrictos.</li>
+            </ul>
+            <strong>Catalyst</strong> es el optimizador de consultas: analiza, aplica reglas (predicate pushdown, column pruning, constant folding) y genera un plan f&iacute;sico. <strong>Tungsten</strong> optimiza la ejecuci&oacute;n (c&oacute;digo generado, gesti&oacute;n de memoria off-heap, formatos binarios). Photon en Databricks sustituye parte del motor de ejecuci&oacute;n con c&oacute;digo vectorizado en C++. Usar DataFrames/SQL suele permitir que el optimizador haga m&aacute;s trabajo que con RDDs o UDFs opacas.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Qu&eacute; es la evaluaci&oacute;n perezosa y c&oacute;mo se relaciona con jobs, stages y tasks?</p>
+        <p class="a">Las <strong>transformaciones</strong> (select, filter, join, groupBy) son perezosas: Spark solo construye un plan y no ejecuta nada hasta que aparece una <strong>acci&oacute;n</strong> (count, collect, write, show). Al ejecutar, Catalyst optimiza el plan y lo divide en stages separados por shuffles; cada stage contiene tasks que procesan particiones en paralelo. La evaluaci&oacute;n perezosa permite optimizar globalmente (por ejemplo, empujar filtros antes de un join) y evitar c&aacute;lculos innecesarios, pero tambi&eacute;n puede sorprender: un error de esquema no aparece hasta la acci&oacute;n, y encadenar acciones sin cachear recalcula todo. Para depurar, leer el plan f&iacute;sico (<em>explain()</em>) y el Spark UI, donde se ven jobs, stages, tasks, shuffles y spills. Cachear solo resultados reutilizados y no como remedio universal.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;Qu&eacute; tipos de join usa Spark y c&oacute;mo se evita el skew?</p>
+        <p class="a">Spark elige el join seg&uacute;n tama&ntilde;os y estad&iacute;sticas: <strong>broadcast hash join</strong> cuando una tabla es peque&ntilde;a (se replica en cada executor, sin shuffle), <strong>sort-merge join</strong> para tablas grandes (requiere shuffle y orden), <strong>shuffle hash join</strong> en ciertos casos y <strong>nested loop</strong> para condiciones no equi. El <strong>skew</strong> ocurre cuando unas pocas claves concentran muchas filas: algunas tasks tardan mucho m&aacute;s y el job queda limitado por la cola. Soluciones: <strong>AQE</strong> (Adaptive Query Execution) activo, <em>skew join</em> y <em>coalesce partitions</em>; salting de claves; separar claves calientes; broadcast si aplica; o pre-agregar. Tambi&eacute;n ayuda revisar el plan y las estad&iacute;sticas de tabla. En Databricks, AQE y Photon suelen estar activos por defecto; aun as&iacute;, un join mal dise&ntilde;ado o una clave desbalanceada degradan el rendimiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;C&oacute;mo se particionan los datos y qu&eacute; diferencia hay entre repartition y coalesce?</p>
+        <p class="a"><strong>Particionar tablas</strong> (<em>PARTITIONED BY</em>) organiza archivos por columnas de baja cardinalidad (fecha, regi&oacute;n) para que las consultas lean solo las particiones relevantes; un exceso de particiones o columnas de alta cardinalidad genera archivos peque&ntilde;os y sobrecarga. <strong>Liquid clustering</strong> es hoy preferible para muchas tablas porque evita particiones r&iacute;gidas y mantiene agrupamiento incremental. En el c&oacute;digo, <strong>repartition(n, col)</strong> redistribuye y hace shuffle completo; <strong>coalesce(n)</strong> reduce particiones sin shuffle (puede dejar particiones desbalanceadas). Para escribir archivos de tama&ntilde;o sano (~128 MB&ndash;1 GB), controlar <em>maxRecordsPerFile</em> y evitar <em>coalesce(1)</em> en datasets grandes. La estrategia debe equilibrar n&uacute;mero de archivos, skipping y concurrencia; medir con <em>DESCRIBE DETAIL</em> y el historial de la tabla.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;C&oacute;mo funcionan shuffle, memoria y cach&eacute; en Spark?</p>
+        <p class="a">El <strong>shuffle</strong> redistribuye datos entre executors para agrupar por clave (joins, groupBy, repartition); implica serializaci&oacute;n, escritura en disco y red, y es la operaci&oacute;n m&aacute;s costosa. La memoria se divide entre ejecuci&oacute;n y storage; si no alcanza, hay <strong>spills</strong> a disco y posible OOM. <em>spark.sql.shuffle.partitions</em> (o AQE) define el paralelismo tras un shuffle; demasiadas particiones generan overhead y demasiadas pocas, tareas gigantes. <strong>Cache/persist</strong> guarda un DataFrame en memoria/disco para reutilizarlo entre acciones, pero consume recursos y puede impedir que otros datasets se cacheen; usar solo cuando se reutiliza de verdad y liberar con <em>unpersist()</em>. <strong>Broadcast</strong> replica tablas peque&ntilde;as para evitar shuffle. En Databricks, el <strong>disk cache</strong> acelera lecturas de Parquet/Delta en nodos con SSD; no sustituye un buen modelado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;Cu&aacute;ndo usar UDFs y c&oacute;mo evitar su costo?</p>
+        <p class="a">Las <strong>UDFs</strong> permiten l&oacute;gica personalizada que SQL no cubre, pero las UDF de Python (serializadas fila a fila) rompen las optimizaciones de Catalyst/Tungsten y a&ntilde;aden overhead de serializaci&oacute;n. Alternativas: funciones SQL nativas, <em>higher-order functions</em> (transform, filter, aggregate), expresiones de columna y <strong>pandas UDF / Arrow UDF</strong> vectorizadas, que procesan lotes y son mucho m&aacute;s r&aacute;pidas. Para l&oacute;gica compleja, considerar <em>mapInPandas</em>, <em>applyInPandas</em> o una librer&iacute;a nativa. Buenas pr&aacute;cticas: definir UDFs con tipos expl&iacute;citos, evitar capturar objetos grandes, no usarlas en columnas de join/filtro si hay alternativa, y medir con y sin UDF. En Databricks, las UDF de Scala/Java pueden ser m&aacute;s eficientes, pero siguen siendo cajas negras para el optimizador; la mejor UDF suele ser la que no se necesita.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;C&oacute;mo funciona Structured Streaming y qu&eacute; garant&iacute;as ofrece?</p>
+        <p class="a">Structured Streaming trata un stream como una tabla que se actualiza incrementalmente: se define una consulta sobre una fuente (Kafka, Auto Loader, Delta, socket, rate) y se escribe en un sink (Delta, Kafka, memoria, foreachBatch) con <em>writeStream</em>. El <strong>checkpoint</strong> guarda el progreso y el estado; con fuentes/sinks transaccionales y procesamiento idempotente se logra <strong>exactly-once</strong> (o at-least-once con sinks no transaccionales). Los <strong>triggers</strong> controlan la cadencia (processingTime, availableNow, once, continuous experimental). <strong>Watermarks</strong> limitan el estado para datos tard&iacute;os en agregaciones; las operaciones stateful (deduplicaci&oacute;n, joins de stream, agregaciones con ventana) requieren gesti&oacute;n de estado. En Databricks conviene usar Delta como sink y revisar latencia, costo y tama&ntilde;o de estado; para CDC, <em>APPLY CHANGES</em> simplifica.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;C&oacute;mo se depuran problemas de rendimiento y errores en Spark?</p>
+        <p class="a">Primero el <strong>Spark UI</strong> (o Spark UI del job en Databricks): revisar duraci&oacute;n de stages, n&uacute;mero de tasks, shuffle read/write, spills, skew y GC. Luego el plan f&iacute;sico con <em>explain()</em> para detectar escaneos completos, joins costosos, falta de poda de columnas/particiones o UDFs. Errores comunes: <strong>OOM</strong> del driver (collect/tail de datasets grandes, broadcast demasiado grande), OOM de executor (particiones enormes, skew), <em>FileNotFoundException</em> por VACUUM concurrente, conflictos de escritura Delta (<em>ConcurrentAppendException</em>), datos corruptos o esquemas incompatibles. Soluciones: aumentar/ajustar particiones, evitar collect, usar broadcast con cuidado, activar AQE, corregir skew, aislar jobs, controlar concurrencia y revisar logs del driver/executors. En Databricks tambi&eacute;n ayudan el query profile y las recomendaciones del Advisor.</p>
+    </div>
+
+    <h2 id="s6">6. SQL, notebooks y desarrollo</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;C&oacute;mo se trabaja con notebooks en Databricks?</p>
+        <p class="a">Los notebooks combinan c&oacute;digo (Python, SQL, Scala, R), texto Markdown y visualizaciones; permiten colaboraci&oacute;n en tiempo real, widgets para par&aacute;metros, resultados interactivos y ejecuci&oacute;n por celdas. Se organizan en el workspace o en <strong>Git folders</strong> (Repos) para versionar con Git y trabajar con ramas/PRs. Buenas pr&aacute;cticas: separar l&oacute;gica reutilizable en m&oacute;dulos o paquetes en lugar de copiar celdas, usar widgets para par&aacute;metros, fijar la versi&oacute;n del runtime y las librer&iacute;as, documentar entradas/salidas y evitar estado oculto entre celdas. Para producci&oacute;n, convertir la l&oacute;gica en un job, pipeline o bundle reproducible; el notebook es una herramienta de desarrollo y exploraci&oacute;n, no un artefacto de despliegue &uacute;nico. Cuidado con credenciales en celdas y con outputs que persisten datos sensibles.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;Qu&eacute; ofrece Databricks SQL para analistas y BI?</p>
+        <p class="a"><strong>Databricks SQL</strong> incluye un editor SQL con autocompletado, historial, par&aacute;metros y visualizaciones; <strong>SQL warehouses</strong> (cl&aacute;sicos o serverless) optimizados para consultas concurrentes; <strong>dashboards</strong> y alertas; y un modelo de permisos gobernado por Unity Catalog. Se conecta con herramientas de BI (Power BI, Tableau, Looker, Metabase) por JDBC/ODBC y APIs. Los warehouses tienen tama&ntilde;o, auto-stop y escalado; para BI conviene serverless o warehouses con escalado y revisar el <strong>query history</strong> y el query profile para detectar consultas costosas. Se pueden crear vistas y materialized views para acelerar. Un antipatr&oacute;n com&uacute;n es usar un warehouse enorme para todo; mejor ajustar tama&ntilde;o, cachear resultados y optimizar las consultas y el modelo f&iacute;sico.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; tipos de tablas y vistas existen en Databricks?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Managed/external tables:</strong> Databricks gestiona el ciclo de vida o solo los metadatos; en Unity Catalog ambas se gobiernan igual.</li>
+                <li><strong>Vistas:</strong> consultas guardadas; no almacenan datos y se recalculan al consultar.</li>
+                <li><strong>Materialized views:</strong> resultados precalculados y refrescables, &uacute;tiles para BI y agregaciones costosas.</li>
+                <li><strong>Streaming tables:</strong> procesamiento incremental con checkpoints.</li>
+                <li><strong>Vistas temporales:</strong> viven en la sesi&oacute;n de Spark; las <strong>global temp views</strong> son visibles entre sesiones del mismo cluster pero no persisten.</li>
+                <li><strong>Tablas Delta, Parquet, Iceberg, Hudi:</strong> seg&uacute;n formato; Delta es el recomendado para el lakehouse.</li>
+            </ul>
+            La elecci&oacute;n depende de persistencia, frescura, costo de c&aacute;lculo y gobierno. Las vistas y materialized views deben tener owners y comentarios; las tablas temporales no sustituyen un modelo gobernado.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; particularidades tiene el SQL de Databricks?</p>
+        <p class="a">Databricks SQL sigue el dialecto Spark SQL con extensiones: soporta CTEs, funciones de ventana, <strong>QUALIFY</strong> para filtrar resultados de ventanas, <strong>higher-order functions</strong> (transform, filter, exists, aggregate), tipos complejos (struct, array, map), <em>MERGE</em>, <em>LATERAL VIEW</em>, <em>PIVOT/UNPIVOT</em>, <em>GROUP BY ALL</em>, <em>QUALIFY</em>, par&aacute;metros con <em>:param</em> y funciones de IA. El modo <strong>ANSI</strong> est&aacute; recomendado: hace que operaciones inv&aacute;lidas (divisi&oacute;n por cero, conversiones) fallen en lugar de devolver null, lo que mejora la calidad pero puede romper c&oacute;digo heredado. Conocer el motor ayuda a escribir consultas que aprovechen predicate pushdown, particiones y Photon; evitar funciones no deterministas en joins y revisar el plan. Databricks SQL y Spark SQL comparten gran parte del dialecto, con diferencias en gobernanza y ejecuci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo se parametrizan consultas y notebooks?</p>
+        <p class="a">En notebooks se usan <strong>widgets</strong> (<em>dbutils.widgets.text/dropdown/combobox</em>) para par&aacute;metros de fecha, entorno o tabla; se leen con <em>dbutils.widgets.get</em> y se pasan a SQL/DataFrames. En Databricks SQL hay <strong>par&aacute;metros de consulta</strong> (<em>:fecha</em>) y par&aacute;metros de dashboard. En jobs, los par&aacute;metros se definen en la tarea y llegan como <em>widgets</em> o argumentos. Para SQL din&aacute;mico se puede usar <em>IDENTIFIER(:tabla)</em> en lugar de concatenar strings, lo que evita inyecci&oacute;n y permite nombres parametrizados. Buenas pr&aacute;cticas: validar valores, usar defaults seguros, no incrustar credenciales, separar entornos por par&aacute;metro y documentar cada par&aacute;metro. En pipelines declarativos, los par&aacute;metros se definen en la configuraci&oacute;n y se reutilizan entre tareas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;Qu&eacute; es dbutils y para qu&eacute; se usa?</p>
+        <p class="a"><em>dbutils</em> es la utilidad de Databricks para interactuar con el entorno desde notebooks y scripts: <strong>fs</strong> (listar, copiar, mover, eliminar archivos), <strong>widgets</strong> (par&aacute;metros), <strong>secrets</strong> (leer secretos de &aacute;mbitos gestionados), <strong>notebook</strong> (ejecutar o salir con valor), <strong>jobs</strong> (ejecutar jobs desde un notebook), <strong>library</strong> (instalar librer&iacute;as) y <strong>credentials</strong> (en algunos contextos). No est&aacute; pensado para transformar datos a escala; para eso se usa Spark/SQL. Consideraciones: <em>fs</em> opera sobre DBFS/mounts y no siempre respeta los privilegios de Unity Catalog; para datos gobernados usar SQL, vol&uacute;menes o APIs. <em>secrets</em> requiere un scope y permisos; nunca imprimir secretos. Las llamadas a dbutils en c&oacute;digo compartido deben aislarse para facilitar pruebas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo se gestionan librer&iacute;as y entornos?</p>
+        <p class="a">Las librer&iacute;as se instalan a nivel de <strong>cluster</strong> (todas las ejecuciones), de <strong>notebook</strong> (<em>%pip install</em>, solo la sesi&oacute;n) o en el <strong>runtime ML</strong> que ya incluye muchas. Para reproducibilidad, fijar versiones, usar <em>requirements.txt</em> o un wheel interno, y evitar instalar desde notebooks en producci&oacute;n. Los <strong>init scripts</strong> configuran el sistema al arrancar el cluster (paquetes del SO, variables, certificados), pero no funcionan en serverless y deben versionarse. En Databricks Runtime ML se dispone de CUDA, PyTorch, TensorFlow, XGBoost, etc.; aun as&iacute; conviene alinear versiones con el modelo. Buenas pr&aacute;cticas: artefacto inmutable, entorno declarado, pruebas de compatibilidad y separar dependencias de desarrollo/producci&oacute;n. Para jobs, usar env specs o bundles y evitar <em>latest</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;C&oacute;mo se integra Databricks con Git y CI/CD?</p>
+        <p class="a"><strong>Git folders</strong> (antes Repos) permiten clonar un repositorio, trabajar con ramas, hacer commit/pull y abrir PRs desde el workspace. Para automatizaci&oacute;n se usa <strong>Databricks Asset Bundles</strong> (definici&oacute;n YAML de jobs, pipelines, notebooks y permisos) o el <strong>Terraform provider</strong>; el bundle se valida y despliega desde GitHub Actions, GitLab CI o Azure DevOps. El flujo t&iacute;pico: PR &rarr; tests/lint &rarr; deploy a dev &rarr; validaci&oacute;n &rarr; aprobaci&oacute;n &rarr; deploy a prod. Los secretos se gestionan con secret scopes o el gestor del CI; los entornos se parametrizan (workspace, cat&aacute;logo, rutas). No conviene editar producci&oacute;n a mano: todo cambio deber&iacute;a pasar por c&oacute;digo revisado y un pipeline reproducible. Los bundles tambi&eacute;n facilitan rollback y promoci&oacute;n entre entornos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;C&oacute;mo se prueba y asegura la calidad de los datos y del c&oacute;digo?</p>
+        <p class="a">En pipelines declarativos se usan <strong>expectations</strong> (reglas de calidad con acciones warn/drop/fail) para validar nulos, rangos, unicidad y referencias. Para c&oacute;digo, tests unitarios de funciones puras (pytest con SparkSession local), tests de integraci&oacute;n sobre datos de muestra y tests de contrato de esquema. Herramientas: <strong>Great Expectations</strong>, <strong>dbt tests</strong> (si se usa dbt), <strong>Chispa</strong> para comparar DataFrames, <strong>hypothesis</strong> para propiedades y monitoreo de calidad con <strong>Lakehouse Monitoring</strong>. En producci&oacute;n, cuarentena de datos inv&aacute;lidos, alertas, m&eacute;tricas de frescura/volumen/distribuci&oacute;n y revisi&oacute;n de linaje. La calidad no es solo un test al final: se dise&ntilde;a en la ingesta (esquema, deduplicaci&oacute;n, idempotencia) y se monitoriza de forma continua.</p>
+    </div>
+
+    <h2 id="s7">7. Ingesta, Lakeflow y orquestaci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;Qu&eacute; es Auto Loader y c&oacute;mo funciona?</p>
+        <p class="a"><strong>Auto Loader</strong> (<em>cloudFiles</em>) ingiere archivos nuevos de un directorio de cloud storage de forma incremental y escalable. Detecta archivos por <strong>directory listing</strong> o por <strong>file notification</strong> (SQS/SNS, Event Grid, Pub/Sub) y mantiene un checkpoint con los ya procesados, evitando reprocesar. Infiere y evoluciona el esquema (<em>schemaEvolutionMode</em>), admite <em>rescue data</em> para registros corruptos y se ejecuta en streaming o batch con <em>trigger availableNow</em>. Es la opci&oacute;n recomendada para ingesta continua de archivos en bronce; para vol&uacute;menes peque&ntilde;os o cargas manuales, COPY INTO puede ser suficiente. Buenas pr&aacute;cticas: esquema expl&iacute;cito cuando sea posible, ruta de esquema/checkpoint estable, control de archivos peque&ntilde;os, y no mover/renombrar archivos ya ingeridos sin gestionar el checkpoint.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;COPY INTO o Auto Loader? &iquest;Cu&aacute;ndo usar cada uno?</p>
+        <p class="a"><strong>COPY INTO</strong> es una carga SQL idempotente que procesa archivos de una ruta y recuerda los ya cargados; es sencillo para cargas programadas, vol&uacute;menes moderados y escenarios donde se quiere controlar expl&iacute;citamente el lote. <strong>Auto Loader</strong> est&aacute; dise&ntilde;ado para ingesta continua y grandes vol&uacute;menes, con notificaciones, evoluci&oacute;n de esquema y mejor escalabilidad; se integra con streaming y pipelines. Regla pr&aacute;ctica: si necesitas latencia baja, muchos archivos o esquema cambiante, Auto Loader; si son cargas batch sencillas y pocas, COPY INTO. Ambos evitan duplicados con su propio mecanismo y conviene no mezclarlos sobre la misma ruta sin coordinaci&oacute;n. Para bases de datos y SaaS, usar conectores o CDC, no archivos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;Qu&eacute; son los pipelines declarativos de Lakeflow (antes Delta Live Tables)?</p>
+        <p class="a"><strong>Lakeflow Declarative Pipelines</strong> (anteriormente <strong>Delta Live Tables</strong> o DLT) permite definir datasets en SQL o Python declarando dependencias entre streaming tables, materialized views y vistas; el motor construye el DAG, gestiona la orquestaci&oacute;n, los checkpoints, la escalabilidad y las actualizaciones. Incorpora <strong>expectations</strong> de calidad (warn, drop, fail) y modos de ejecuci&oacute;n triggered o continuous, con serverless o compute dedicado. Es ideal para medallion, CDC y pipelines con muchas dependencias; reduce c&oacute;digo de orquestaci&oacute;n y facilita el linaje. Consideraciones: entender el modelo de refresco (incremental vs completo), el costo de las materialized views, la gesti&oacute;n de estado y las limitaciones de librer&iacute;as/init scripts. Para l&oacute;gica muy imperativa o dependencias externas complejas, puede convenir Workflows con notebooks.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;C&oacute;mo funcionan los jobs y Workflows de Databricks?</p>
+        <p class="a"><strong>Lakeflow Jobs</strong> (Workflows) permite definir un job con m&uacute;ltiples <strong>tasks</strong> en un DAG: notebooks, scripts Python, SQL, pipelines, dbt, jars o tareas de copia; cada tarea puede tener dependencias, par&aacute;metros, reintentos, timeouts y compute propio (job cluster o serverless). Los <strong>triggers</strong> pueden ser programados (cron), por llegada de archivos, continuos o manuales; tambi&eacute;n se puede disparar por API/CLI. Incluye notificaciones, reparaci&oacute;n de ejecuciones fallidas, historial y l&iacute;neas de tiempo. Para producci&oacute;n: idempotencia, par&aacute;metros por entorno, alertas, l&iacute;mites de concurrencia y pol&iacute;ticas de cluster; versionar la definici&oacute;n con Asset Bundles. Evitar jobs monol&iacute;ticos y usar tareas con responsabilidades claras y dependencias expl&iacute;citas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;Databricks Workflows, Airflow o dbt? &iquest;C&oacute;mo se orquesta un lakehouse?</p>
+        <p class="a">No son excluyentes: <strong>Workflows</strong> es el orquestador nativo, ideal para tareas dentro de Databricks y pipelines; <strong>Airflow</strong> (o Dagster/Prefect) aporta orquestaci&oacute;n entre sistemas heterog&eacute;neos, dependencias externas y observabilidad centralizada; <strong>dbt</strong> modela transformaciones SQL y se ejecuta como una tarea m&aacute;s (hay task nativa de dbt en Workflows). Un patr&oacute;n com&uacute;n: Airflow dispara jobs de Databricks y espera, mientras Workflows organiza las tareas internas; dbt se usa para la capa de transformaci&oacute;n cuando el equipo ya lo domina. La clave es evitar dos orquestadores compitiendo por el mismo DAG, definir el due&ntilde;o de cada dependencia, centralizar alertas y mantener idempotencia y trazabilidad. Para equipos peque&ntilde;os, Workflows suele bastar y reduce infraestructura.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;C&oacute;mo se implementa CDC y SCD en Databricks?</p>
+        <p class="a">Para <strong>CDC</strong> se ingieren cambios (inserts, updates, deletes) desde Debezium, Kafka, bases de datos o archivos, y se aplican con <strong>MERGE</strong> o con <strong>APPLY CHANGES / AUTO CDC</strong> en pipelines declarativos. <em>APPLY CHANGES</em> permite definir claves, secuencia (<em>SEQUENCE BY</em>), columnas de delete y el tipo de SCD: <strong>SCD 1</strong> (sobrescribe) o <strong>SCD 2</strong> (guarda versiones con v&aacute;lidos desde/hasta y flag actual). Para SCD 2 se a&ntilde;aden columnas de vigencia y se filtran las consultas por la versi&oacute;n actual. Consideraciones: ordenar eventos por timestamp/versi&oacute;n, manejar late data, deletes l&oacute;gicos, duplicados y reinicios de la fuente; elegir claves estables; y validar que el reprocesamiento no duplique historia. En tablas Delta, las escrituras MERGE deben ser idempotentes y la fuente debe estar limpia antes de aplicar cambios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;Qu&eacute; conectores y patrones de ingesta existen?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Archivos:</strong> Auto Loader, COPY INTO sobre S3/ADLS/GCS, con formatos Parquet, JSON, CSV, Avro, ORC, XML (con librer&iacute;as).</li>
+                <li><strong>Streaming:</strong> Kafka, Kinesis, Event Hubs, Pulsar y sockets, con Structured Streaming; para CDC, Debezium hacia Kafka.</li>
+                <li><strong>Bases de datos:</strong> JDBC (PostgreSQL, MySQL, SQL Server, Oracle), con lecturas batch; para CDC, herramientas como Debezium/Fivetran/Qlik Replicate.</li>
+                <li><strong>SaaS:</strong> <strong>Lakeflow Connect</strong> ofrece conectores gestionados (Salesforce, Workday, ServiceNow, NetSuite, SQL Server, etc.) y tambi&eacute;n se usan Fivetran, Airbyte o Stitch.</li>
+                <li><strong>Federaci&oacute;n:</strong> Lakehouse Federation para consultar fuentes externas sin copiarlas.</li>
+            </ul>
+            El patr&oacute;n medallion suele aterrizar crudo en bronce, con metadatos de ingesta y control de esquema; la limpieza se hace en plata. Elegir gesti&oacute;n gestionada o propia depende de conectividad, volumen, costo y gobierno.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;Qu&eacute; es Lakehouse Federation y cu&aacute;ndo usarla?</p>
+        <p class="a"><strong>Lakehouse Federation</strong> permite consultar bases de datos externas desde Databricks mediante <strong>foreign catalogs</strong> en Unity Catalog, sin mover los datos: se crea una <em>connection</em> con credenciales, se registra el cat&aacute;logo y se consultan tablas con SQL (con pushdown cuando el motor lo soporta). Fuentes habituales: PostgreSQL, MySQL, SQL Server, Oracle, Snowflake, BigQuery, Redshift y otras. Es &uacute;til para joins puntuales, exploraci&oacute;n, migraciones graduales o datos que deben quedarse en su sistema por latencia o regulaci&oacute;n. Limitaciones: rendimiento dependiente de la red y del origen, menos optimizaciones que una tabla local, y gobierno compartido entre sistemas. Para cargas frecuentes o grandes vol&uacute;menes, suele ser mejor ingerir y modelar en el lakehouse; la federaci&oacute;n complementa, no sustituye, una estrategia de integraci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo se gestionan idempotencia, datos tard&iacute;os y reprocesamientos?</p>
+        <p class="a">La idempotencia se dise&ntilde;a: MERGE por clave, deduplicaci&oacute;n con <em>dropDuplicates</em>/ROW_NUMBER, checkpoints estables y escrituras transaccionales en Delta. Para <strong>datos tard&iacute;os</strong>, usar watermarks en streaming y ventanas; en batch, reprocesar por fecha/partici&oacute;n y volver a calcular agregados afectados. Los <strong>backfills</strong> deben ejecutarse sobre bronce (fuente de verdad), con par&aacute;metros de rango y sin reutilizar checkpoints incompatibles; para streaming, crear un checkpoint nuevo o una tabla destino temporal. Evitar sobrescribir tablas de producci&oacute;n sin transacci&oacute;n; preferir escribir a staging y hacer swap/merge. Documentar la l&oacute;gica de negocio y las claves; probar reprocesos en dev; y monitorizar duplicados, frescura y conteos. Un pipeline que no se puede reprocesar de forma segura es un riesgo operativo.</p>
+    </div>
+
+    <h2 id="s8">8. Machine Learning, MLOps e IA generativa</h2>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;Qu&eacute; es MLflow y c&oacute;mo se usa en Databricks?</p>
+        <p class="a"><strong>MLflow</strong> es la plataforma open source de MLOps integrada en Databricks: <strong>Tracking</strong> registra par&aacute;metros, m&eacute;tricas, artefactos y versiones de c&oacute;digo/entorno; <strong>Models</strong> empaqueta el modelo con su firma y dependencias; el <strong>Model Registry</strong> (en Unity Catalog) versiona, documenta y promueve modelos con alias (champion/challenger) y permisos; <strong>Projects</strong> empaqueta el c&oacute;digo reproducible. Se usa con autologging (<em>mlflow.autolog()</em>) o instrumentaci&oacute;n manual, y se integra con serving, batch inference y evaluaci&oacute;n. Buenas pr&aacute;cticas: experimentos nombrados por proyecto, runs con tags y versi&oacute;n de datos, registro de m&eacute;tricas de negocio adem&aacute;s de t&eacute;cnicas, y promover modelos solo tras validaci&oacute;n. El modelo debe poder reproducirse: c&oacute;digo, datos, entorno y par&aacute;metros.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;Qu&eacute; es Feature Engineering / Feature Store en Databricks?</p>
+        <p class="a">Es la capa que centraliza la definici&oacute;n, el c&aacute;lculo y el acceso a <strong>features</strong> para que entrenamiento y serving usen la misma l&oacute;gica. En Unity Catalog, las feature tables se registran como tablas Delta con una <strong>primary key</strong> y una <strong>timestamp key</strong>, lo que permite <em>point-in-time lookups</em> y evitar leakage; se pueden publicar en un <strong>online store</strong> (online tables) para baja latencia en serving. La ventaja es la consistencia training/serving y la reutilizaci&oacute;n entre modelos. Consideraciones: gobierno de features, linaje, frescura, costo del online store y due&ntilde;o de las definiciones. Alternativas: calcular features en el pipeline y servirlas desde Delta/Serving; para equipos peque&ntilde;os puede bastar una tabla de features bien documentada. Lo importante es evitar dos implementaciones divergentes de la misma feature.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;C&oacute;mo se entrena a escala en Databricks?</p>
+        <p class="a">El patr&oacute;n habitual: preparar y agregar datos con Spark/SQL, entrenar en un nodo con sklearn/XGBoost/PyTorch y, si el modelo no cabe, usar entrenamiento distribuido. Databricks ofrece <strong>clusters con GPU</strong> (runtime ML con CUDA), <strong>TorchDistributor</strong> para data-parallel con PyTorch, <strong>Spark MLlib</strong> para algoritmos distribuidos, <strong>XGBoost Spark</strong> y <strong>Ray</strong> para escalar c&oacute;mputo. Para hiperpar&aacute;metros se usa <strong>Optuna</strong> o Hyperopt con MLflow tracking y, si aplica, jobs en paralelo. Buenas pr&aacute;cticas: fijar semillas, versionar datos y entornos, separar train/validation/test por tiempo o entidad, controlar el costo de GPU, y registrar todo en MLflow. En muchos casos el cuello de botella es la preparaci&oacute;n de datos, no el entrenamiento; optimizar primero el pipeline y el feature engineering.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;C&oacute;mo se despliegan modelos con Model Serving?</p>
+        <p class="a"><strong>Mosaic AI Model Serving</strong> expone modelos como endpoints HTTP en tiempo real, con escalado autom&aacute;tico, scale-to-zero y opci&oacute;n de GPU; puede servir modelos de MLflow, modelos personalizados o foundation models. Para <strong>batch inference</strong> se usan jobs con <em>mlflow.pyfunc.spark_udf</em> o <em>predict_batch</em>, que evitan mantener un endpoint encendido. Caracter&iacute;sticas &uacute;tiles: versiones y aliases, split de tr&aacute;fico para A/B/canary, inference tables para registrar peticiones/respuestas, y monitoring. Consideraciones: latencia, concurrencia, costo, tama&ntilde;o del modelo, dependencias y seguridad de los datos. Para cargas intermitentes, batch suele ser m&aacute;s econ&oacute;mico; para aplicaciones interactivas, serving. Documentar contrato de entrada/salida, versionado y rollback; probar con carga realista antes de exponer a producci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;Qu&eacute; es Lakehouse Monitoring y qu&eacute; se puede monitorizar?</p>
+        <p class="a"><strong>Lakehouse Monitoring</strong> crea perfiles y m&eacute;tricas de calidad sobre tablas Delta e inference tables: distribuci&oacute;n de columnas, nulos, cardinalidad, rangos, frescura y volumen; tambi&eacute;n puede comparar contra una l&iacute;nea base o ventana anterior para detectar <strong>drift</strong>. En modelos, monitoriza la distribuci&oacute;n de features y predicciones y, si hay ground truth, la performance. Genera dashboards y tablas de m&eacute;tricas que se pueden alertar. Se complementa con expectations en pipelines, tests y observabilidad de jobs. Consideraciones: definir qu&eacute; m&eacute;tricas importan al negocio, evitar alertas ruidosas, gestionar el costo de perfilar tablas grandes y proteger datos sensibles en los perfiles. No sustituye la validaci&oacute;n humana ni las pruebas de causalidad; es una se&ntilde;al temprana de problemas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;Qu&eacute; ofrece Databricks para IA generativa y RAG?</p>
+        <p class="a">Databricks integra <strong>Foundation Model APIs</strong> (modelos gestionados como Llama, Mistral, Claude o GPT, seg&uacute;n disponibilidad, con pago por token o throughput aprovisionado), modelos externos v&iacute;a AI Gateway, y herramientas para construir <strong>RAG</strong>: ingesta y chunking de documentos, embeddings, <strong>Vector Search</strong> (con &iacute;ndices sincronizados desde Delta), recuperaci&oacute;n, prompting y serving del agente. El flujo t&iacute;pico: documentos en un volume o tabla &rarr; parsing/chunking &rarr; embeddings &rarr; &iacute;ndice vectorial &rarr; retrieval + prompt &rarr; endpoint. Se a&ntilde;aden evaluaci&oacute;n, guardrails, trazabilidad y control de acceso a los datos. Buenas pr&aacute;cticas: gobernar las fuentes, medir calidad de recuperaci&oacute;n, controlar costo/latencia, versionar prompts y modelos, y no asumir que el LLM conoce datos internos. Databricks Assistant y AI Playground ayudan a prototipar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo se ajusta, eval&uacute;a y protege un modelo de IA generativa?</p>
+        <p class="a"><strong>Ajuste:</strong> fine-tuning supervisado o adaptadores con Mosaic AI Model Training, o modelos propios; requiere dataset curado, formato de conversaci&oacute;n, particiones y control de costo de GPU. <strong>Evaluaci&oacute;n:</strong> MLflow Evaluate / Mosaic AI Agent Evaluation con m&eacute;tricas de correcci&oacute;n, fidelidad a la recuperaci&oacute;n, relevancia, toxicidad, latencia y costo; usar datasets de evaluaci&oacute;n representativos y LLM-as-judge con revisi&oacute;n humana. <strong>Guardrails:</strong> filtros de contenido, validaci&oacute;n de entrada/salida, AI Gateway para pol&iacute;ticas, rate limits, PII redaction, prompt injection defenses y permisos sobre las fuentes. Buenas pr&aacute;cticas: versionar prompts/modelos, registrar trazas, hacer A/B y canary, definir criterios de aceptaci&oacute;n y rollback, y documentar limitaciones. La evaluaci&oacute;n continua importa tanto como la del modelo cl&aacute;sico.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;C&oacute;mo se construyen agentes y aplicaciones de IA en Databricks?</p>
+        <p class="a">El <strong>Mosaic AI Agent Framework</strong> permite definir agentes con herramientas (b&uacute;squeda vectorial, funciones SQL, APIs, modelos), memoria y l&oacute;gica de planificaci&oacute;n, y desplegarlos como endpoints de Model Serving; <strong>Agent Bricks</strong> ofrece plantillas de bajo c&oacute;digo para casos comunes. Se integra con <strong>Unity Catalog</strong> para gobernar datos, funciones y modelos, con <strong>MLflow</strong> para trazas/evaluaci&oacute;n y con <strong>AI Gateway</strong> para control de acceso, l&iacute;mites y observabilidad. Consideraciones: dise&ntilde;ar herramientas seguras y con m&iacute;nimo privilegio, validar argumentos, evitar que el agente ejecute acciones destructivas sin confirmaci&oacute;n, gestionar contexto y costo, y evaluar con casos reales. Los agentes son &uacute;tiles para tareas multietapa, pero a&ntilde;aden no determinismo y superficie de ataque; empezar con un caso acotado, medir y escalar.</p>
+    </div>
+
+    <h2 id="s9">9. Rendimiento, optimizaci&oacute;n y costos</h2>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;C&oacute;mo se optimiza el rendimiento con Photon, AQE y particiones de shuffle?</p>
+        <p class="a"><strong>Photon</strong> acelera SQL/DataFrames con ejecuci&oacute;n vectorizada; conviene dejarlo activo salvo incompatibilidades. <strong>AQE</strong> (Adaptive Query Execution) ajusta el plan en tiempo de ejecuci&oacute;n: coalesce particiones, convierte sort-merge en broadcast si detecta tablas peque&ntilde;as y maneja skew joins; en Databricks suele estar activo. <em>spark.sql.shuffle.partitions</em> controla el paralelismo tras un shuffle; con AQE, un valor inicial alto y coalesce autom&aacute;tico funciona mejor que fijar un n&uacute;mero m&aacute;gico. Adem&aacute;s: podar columnas y particiones, filtrar temprano, evitar UDFs opacas, revisar el plan f&iacute;sico y el query profile, y usar cache solo cuando se reutiliza. Medir antes y despu&eacute;s con la misma carga; optimizar sin medir suele mover el cuello de botella, no eliminarlo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;C&oacute;mo se optimiza el layout f&iacute;sico de las tablas?</p>
+        <p class="a">El objetivo es reducir archivos peque&ntilde;os, mejorar el data skipping y evitar reescrituras innecesarias. Herramientas: <strong>OPTIMIZE</strong> para compactar, <strong>liquid clustering</strong> para agrupar por columnas de filtro/join sin particiones r&iacute;gidas, <strong>Z-ORDER</strong> en tablas heredadas con particiones, y <strong>VACUUM</strong> para limpiar archivos obsoletos. El particionamiento cl&aacute;sico debe reservarse para columnas de baja cardinalidad y consultas que filtran por ellas; partir por columnas de alta cardinalidad produce miles de carpetas y archivos diminutos. Controlar el tama&ntilde;o al escribir (<em>maxRecordsPerFile</em>, repartition), elegir claves de clustering seg&uacute;n patrones de consulta y revisar <em>DESCRIBE DETAIL</em> (n&uacute;mero/tama&ntilde;o de archivos). En streaming, la compactaci&oacute;n programada y el control de frecuencia de commits son clave para no degradar el rendimiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;Qu&eacute; opciones de cach&eacute; existen y cu&aacute;ndo usarlas?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Disk cache (Databricks):</strong> cach&eacute; autom&aacute;tica en SSD local de los nodos para datos Parquet/Delta le&iacute;dos; acelera consultas repetidas y se gestiona por el runtime. Requiere nodos con disco suficiente y no aplica igual en serverless.</li>
+                <li><strong>Spark cache (persist):</strong> guarda un DataFrame/RDD en memoria/disco entre acciones; &uacute;til si se reutiliza mucho, pero consume recursos y puede empeorar la presi&oacute;n de memoria. Liberar con <em>unpersist()</em>.</li>
+                <li><strong>Result cache (Databricks SQL):</strong> reutiliza resultados de consultas id&eacute;nticas en warehouses; se invalida cuando cambian los datos o la consulta.</li>
+                <li><strong>Materialized views:</strong> precalculan resultados para BI; no son una cach&eacute; de sesi&oacute;n, sino objetos gobernados con refresco.</li>
+            </ul>
+            La cach&eacute; no corrige un mal modelo f&iacute;sico; primero optimizar layout, joins y filtros. Medir hit rate y costo; en cargas &uacute;nicas, cachear puede ser puro desperdicio.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;C&oacute;mo se dimensiona un SQL warehouse y se analizan consultas?</p>
+        <p class="a">El <strong>tama&ntilde;o</strong> del warehouse determina n&uacute;mero de workers y concurrencia; se puede escalar y configurar auto-stop. Un warehouse demasiado peque&ntilde;o encola consultas; uno demasiado grande desperdicia DBUs. Para BI, considerar <strong>serverless</strong> y el escalado autom&aacute;tico, y separar cargas (dashboards vs ETL/ad-hoc) para no competir. Analizar con <strong>query history</strong> y <strong>query profile</strong>: tiempo de ejecuci&oacute;n, bytes le&iacute;dos, spills, operadores costosos, pruning y uso de cach&eacute;. Optimizar SQL (filtros, joins, agregaciones, evitar <em>SELECT *</em> y funciones costosas), crear materialized views si aplica y revisar el modelo f&iacute;sico. Configurar alertas de consultas lentas y revisar el costo por query; no todas las consultas necesitan el mismo warehouse ni la misma prioridad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;C&oacute;mo se dimensionan clusters y se reduce el costo de c&oacute;mputo?</p>
+        <p class="a">Elegir el <strong>tipo de instancia</strong> seg&uacute;n CPU, memoria, GPU y disco; usar <strong>autoscaling</strong> con m&iacute;nimos y m&aacute;ximos realistas; activar <strong>auto-stop</strong> en clusters interactivos; usar <strong>job clusters</strong> o serverless para producci&oacute;n; y aprovechar <strong>instancias spot</strong> para cargas tolerantes a fallos (con fallback on-demand). Los <strong>pools</strong> reducen el arranque; las <strong>cluster policies</strong> limitan tama&ntilde;os y tipos; las <strong>reserved instances</strong> o compromisos de uso reducen el precio por DBU. Medir utilizaci&oacute;n (CPU, memoria, workers ociosos) y ajustar; el error t&iacute;pico es sobredimensionar &laquo;por si acaso&raquo; o dejar clusters encendidos. Separar cargas (ETL, BI, ML) y usar el compute adecuado; Photon y optimizaciones de runtime tambi&eacute;n reducen el tiempo facturable.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se monitorizan y controlan los costos?</p>
+        <p class="a">Usar las <strong>system tables</strong> de facturaci&oacute;n (<em>system.billing.usage</em>, <em>list_prices</em>) y de compute para atribuir consumo por workspace, cluster, job, usuario o tag; combinar con <strong>tags</strong> de recursos y cl&uacute;steres para cost allocation. Configurar <strong>budgets y alertas</strong> en la account console, <strong>budget policies</strong> y <strong>cluster policies</strong> que limiten SKUs, tama&ntilde;os y auto-stop. Revisar los dashboards de uso, los jobs m&aacute;s caros, warehouses ociosos y consultas que escanean m&aacute;s de lo necesario. Pr&aacute;cticas: apagar recursos, serverless para cargas intermitentes, spot para batch, Photon, compactar archivos, evitar reprocesos innecesarios y elegir el tama&ntilde;o correcto. El costo es una m&eacute;trica de ingenier&iacute;a: debe revisarse en el dise&ntilde;o y en la operaci&oacute;n, no solo a fin de mes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;Cu&aacute;les son los cuellos de botella m&aacute;s comunes y c&oacute;mo se diagnostican?</p>
+        <p class="a">Los habituales: <strong>skew</strong> en joins/agrupaciones (unas pocas tasks eternas), <strong>shuffle</strong> excesivo (joins mal filtrados, repartition innecesario), <strong>archivos peque&ntilde;os</strong> (listado y apertura costosos), <strong>UDFs de Python</strong> fila a fila, <strong>collect</strong> al driver, <strong>spills</strong>/OOM por particiones gigantes, y <strong>consultas que escanean columnas/particiones innecesarias</strong>. Diagn&oacute;stico: Spark UI (stages, tasks, shuffle, spill, skew), query profile en SQL, <em>explain()</em>, system tables de query history y m&eacute;tricas de cluster. Soluciones: filtrar temprano, podar columnas, broadcast de tablas peque&ntilde;as, AQE, salting, reparticionar por clave, compactar, reemplazar UDFs por funciones nativas, y evitar traer datos al driver. Priorizar el cuello de botella dominante; optimizar lo dem&aacute;s puede no mover la aguja.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;Qu&eacute; buenas pr&aacute;cticas de modelado y benchmarking aplicar?</p>
+        <p class="a">Modelar seg&uacute;n el consumo: hechos y dimensiones para BI (star schema), tablas desnormalizadas o wide para cargas anal&iacute;ticas, y agregados/materialized views para consultas repetidas; evitar un &uacute;nico modelo gigante para todos los casos. Usar nombres y comentarios claros, tipos correctos, claves y relaciones documentadas, y capas medallion con contratos. Elegir claves de clustering por patrones de filtro/join, controlar granularidad y evitar duplicaci&oacute;n. Para benchmarking, definir una carga representativa, medir latencia, costo y frescura con y sin cambios, y probar en un entorno comparable; no comparar consultas con cach&eacute; caliente contra fr&iacute;as. Documentar decisiones y revisar el modelo peri&oacute;dicamente con los consumidores. La optimizaci&oacute;n es un ciclo: medir, cambiar una cosa, volver a medir.</p>
+    </div>
+
+    <h2 id="s10">10. Seguridad, administraci&oacute;n, CI/CD y operaci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;C&oacute;mo se gestionan identidades y credenciales en Databricks?</p>
+        <p class="a">Usuarios humanos con <strong>SSO</strong> (SAML/OIDC) y MFA a trav&eacute;s del IdP; aprovisionamiento con <strong>SCIM</strong>; grupos para permisos; <strong>service principals</strong> para automatizaci&oacute;n, con OAuth (recomendado) o secretos rotables; <strong>personal access tokens</strong> (PAT) solo cuando sea necesario, con caducidad y alcance m&iacute;nimo. Las credenciales de almacenamiento se encapsulan en <strong>storage credentials</strong> de Unity Catalog y los secretos en <strong>secret scopes</strong> (respaldados por Key Vault/Secrets Manager) o en el gestor de secretos del CI. Buenas pr&aacute;cticas: evitar PAT de usuario para pipelines, no incrustar secretos en notebooks/c&oacute;digo, rotar credenciales, revisar tokens y service principals peri&oacute;dicamente, y aplicar m&iacute;nimo privilegio. La autenticaci&oacute;n es el primer control; sin ella, el resto del gobierno es decorativo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;Qu&eacute; pr&aacute;cticas de gobierno, privacidad y cumplimiento aplicar?</p>
+        <p class="a">Clasificar datos (PII, sensibles, financieros) con tags y cat&aacute;logo; aplicar <strong>row filters y column masks</strong>; restringir privilegios por grupo y dominio; mantener <strong>linaje</strong> y <strong>audit logs</strong> centralizados; definir retenci&oacute;n y borrado; y documentar owners y contratos de datos. Para cumplimiento (GDPR, HIPAA, PCI, SOX), mapear controles a la plataforma: cifrado, acceso, auditor&iacute;a, segregaci&oacute;n de entornos, gesti&oacute;n de cambios y backups. Minimizar la copia de datos sensibles, enmascarar en desarrollo, evitar datos reales en notebooks p&uacute;blicos, y revisar permisos de vol&uacute;menes/models. La privacidad tambi&eacute;n aplica a IA: no enviar datos sensibles a modelos externos sin control, y gobernar prompts y trazas. El gobierno debe ser continuo: revisiones, certificaciones de tablas y m&eacute;tricas de cumplimiento.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;Qu&eacute; controles de red y cifrado existen?</p>
+        <p class="a">Red: <strong>VPC/VNet injection</strong> para el data plane en la cuenta del cliente, subredes privadas, <strong>Private Link</strong> para el control plane y servicios cloud, <strong>IP access lists</strong>, <em>no public IP</em> en nodos y reglas de firewall/egress. En serverless, configuraciones de conectividad y private endpoints. Cifrado: en reposo con claves gestionadas por el proveedor o <strong>customer-managed keys</strong> (CMK) en el almacenamiento y, seg&uacute;n el servicio, en el control plane; en tr&aacute;nsito con TLS. Los secretos se guardan en secret scopes respaldados por KMS/Key Vault. Consideraciones: rotaci&oacute;n de claves, residencia de datos, separaci&oacute;n de entornos, logs de flujo y pruebas de conectividad. La seguridad de red no sustituye la autorizaci&oacute;n: un usuario con privilegios excesivos sigue siendo un riesgo aunque la red sea privada.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;Qu&eacute; se administra desde la account console y qu&eacute; pol&iacute;ticas conviene definir?</p>
+        <p class="a">La <strong>account console</strong> gestiona workspaces, metastore de Unity Catalog y su asignaci&oacute;n, usuarios/grupos/service principals, redes y private access, IP access lists, presupuestos y credenciales de almacenamiento. Pol&iacute;ticas clave: <strong>cluster policies</strong> (limitar tipos de nodo, tama&ntilde;os, auto-stop, uso de spot, librer&iacute;as), <strong>budget policies</strong> y alertas, convenciones de nombres de workspaces/cat&aacute;logos, separaci&oacute;n dev/staging/prod, y permisos de workspace alineados con grupos. Definir qui&eacute;n puede crear clusters, warehouses o service principals; revisar la configuraci&oacute;n con Terraform/IaC; y documentar el modelo de responsabilidad. La administraci&oacute;n debe ser reproducible y auditada; los cambios manuales en producci&oacute;n son una fuente t&iacute;pica de desviaciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se implementa CI/CD e infraestructura como c&oacute;digo?</p>
+        <p class="a"><strong>Databricks Asset Bundles</strong> define en YAML jobs, pipelines, notebooks, permisos y variables por entorno; se valida y despliega con la CLI (<em>databricks bundle validate/deploy</em>) desde GitHub Actions, GitLab CI o Azure DevOps. El <strong>Terraform provider</strong> cubre infraestructura (workspaces, clusters, jobs, permisos, cat&aacute;logos) y es &uacute;til en equipos que ya usan Terraform. Flujo recomendado: rama/PR &rarr; lint/tests &rarr; deploy a dev &rarr; pruebas de integraci&oacute;n &rarr; aprobaci&oacute;n &rarr; deploy a prod; secretos desde el CI o secret scopes; promoci&oacute;n de artefactos inmutables. Probar los bundles en un workspace de desarrollo antes de producci&oacute;n, versionar cambios y usar entornos separados. Con esto se reduce el riesgo, se facilita el rollback y se evita configurar a mano.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;Qu&eacute; observabilidad ofrece la plataforma?</p>
+        <p class="a">Las <strong>system tables</strong> exponen auditor&iacute;a (<em>system.access.audit</em>), facturaci&oacute;n (<em>system.billing</em>), compute, query history y ejecuciones de jobs/pipelines; permiten construir dashboards y alertas SQL. Adem&aacute;s: <strong>query history</strong> y query profile en SQL, <strong>Spark UI</strong> y logs de driver/executors, m&eacute;tricas de cluster, <strong>diagnostic logs</strong> enviados a S3/ADLS/GCS, y notificaciones de jobs. Se integra con herramientas externas (Datadog, Splunk, New Relic, PagerDuty) y con el proveedor cloud. Buenas pr&aacute;cticas: centralizar logs, definir SLOs (frescura, &eacute;xito de jobs, latencia de consultas), alertar sobre fallos y desviaciones de costo, y revisar tendencias. La observabilidad debe cubrir datos, c&oacute;digo y costo; un job verde puede estar produciendo datos incorrectos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;Qu&eacute; considerar en continuidad de negocio, backups y migraciones?</p>
+        <p class="a">Definir RPO/RTO por dominio; replicar datos cr&iacute;ticos en otra regi&oacute;n (almacenamiento cloud); mantener c&oacute;digo, bundles y Terraform en Git para recrear workspaces; documentar dependencias de Unity Catalog, metastore, redes, secretos e identidades. Databricks no ofrece failover autom&aacute;tico entre regiones: el plan debe incluir aprovisionar un workspace alternativo, reasociar cat&aacute;logos o restaurar metadatos, y reconfigurar jobs. Los backups l&oacute;gicos (tablas, vol&uacute;menes, modelos) y el time travel de Delta ayudan, pero no cubren metadatos fuera de UC ni configuraciones. Probar restauraciones y simulacros; documentar el orden de recuperaci&oacute;n; y para migraciones entre nubes/regiones, planificar redes, permisos, datos y validaciones. La continuidad se prueba, no se declara.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;Qu&eacute; buenas pr&aacute;cticas de arquitectura y antipatrones conviene conocer?</p>
+        <p class="a">Buenas pr&aacute;cticas: lakehouse con Delta y Unity Catalog; medallion con contratos; IaC/bundles; idempotencia y reprocesabilidad; liquid clustering y OPTIMIZE; compute adecuado (serverless/job clusters); gobierno por grupos y m&iacute;nimo privilegio; observabilidad y cost allocation; tests y expectations; documentaci&oacute;n y linaje. Antipatrones: <em>mounts</em> y rutas f&iacute;sicas en lugar de UC; sobredimensionar clusters o dejarlos encendidos; particionar en exceso; archivos peque&ntilde;os; <em>collect</em> al driver; UDFs de Python innecesarias; un &uacute;nico warehouse para todo; permisos a usuarios en vez de grupos; cambios manuales en producci&oacute;n; pipelines no idempotentes; y datos sin owner. La mejor arquitectura es la que el equipo puede operar y evolucionar con seguridad; la simplicidad bien gobernada suele vencer a la complejidad prematura.</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Databricks en una entrevista (plantilla)</h2>
+
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Databricks en [AWS/Azure/GCP] durante [X] a&ntilde;os, construyendo lakehouses para [sector/casos], con Delta Lake y Unity Catalog, pipelines batch y streaming, y workloads de anal&iacute;tica y machine learning. He participado en [dise&ntilde;o de arquitectura / implementaci&oacute;n / optimizaci&oacute;n / migraci&oacute;n] y en la operaci&oacute;n de la plataforma&raquo;.</p>
+        <p><strong>Arquitectura:</strong> &laquo;Dise&ntilde;o con arquitectura medallion (bronce, plata, oro) sobre almacenamiento cloud, Delta Lake para ACID y time travel, y Unity Catalog para gobierno, linaje y permisos. Separo compute de almacenamiento, uso job clusters o serverless para producci&oacute;n y SQL warehouses para BI, y defino redes con Private Link y aislamiento por entorno&raquo;.</p>
+        <p><strong>Ingenier&iacute;a de datos:</strong> &laquo;Implemento ingesta con Auto Loader o conectores gestionados, transformaciones con Spark/SQL y pipelines declarativos con expectations de calidad; aplico CDC con MERGE/AUTO CDC, controlo idempotencia, checkpoints, datos tard&iacute;os y backfills. Orquesto con Lakeflow Jobs y versiono todo con Asset Bundles o Terraform&raquo;.</p>
+        <p><strong>Rendimiento y costo:</strong> &laquo;Optimizo layout con liquid clustering, OPTIMIZE y VACUUM, ajusto AQE y particiones, evito skew, archivos peque&ntilde;os y UDFs innecesarias, y dimensiono clusters/warehouses con autoscaling, spot y auto-stop. Reviso query profile, system tables y costos por tag para mantener el costo bajo control&raquo;.</p>
+        <p><strong>Gobierno y seguridad:</strong> &laquo;Gestiono identidades con SSO/SCIM, grupos y service principals; aplico privilegios de Unity Catalog, row filters y column masks; centralizo auditor&iacute;a y linaje; uso secret scopes, cifrado con CMK y controles de red. Defino pol&iacute;ticas de acceso, retenci&oacute;n y separaci&oacute;n de entornos&raquo;.</p>
+        <p><strong>ML e IA:</strong> &laquo;He trabajado con MLflow para tracking y registro de modelos, Feature Engineering, Model Serving y batch inference; en IA generativa, con Foundation Model APIs, Vector Search y RAG, evaluaci&oacute;n y guardrails. Gobierno los datos y modelos con Unity Catalog y mido calidad, latencia y costo&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [m&eacute;trica: reducci&oacute;n de costo, mejora de latencia/frescura, migraci&oacute;n de N pipelines, gobierno de N tablas]. En este rol aportar&iacute;a [dise&ntilde;o de plataforma/ingenier&iacute;a/optimizaci&oacute;n] y ayudar&iacute;a a construir un lakehouse gobernado, confiable y sostenible en costo&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Arquitectura lakehouse</td><td>Medallion, Delta Lake, almacenamiento cloud, separaci&oacute;n compute/storage, serverless</td><td>Plataforma unificada, menor duplicaci&oacute;n, time-to-value</td></tr>
+        <tr><td>Ingesta</td><td>Auto Loader, COPY INTO, Kafka/Event Hubs, CDC, conectores gestionados</td><td>Pipelines fiables, frescura, volumen procesado</td></tr>
+        <tr><td>Transformaci&oacute;n</td><td>Spark/SQL, pipelines declarativos, expectations, dbt</td><td>Calidad, reutilizaci&oacute;n, menor deuda t&eacute;cnica</td></tr>
+        <tr><td>Gobierno</td><td>Unity Catalog, privilegios, row filters/masks, linaje, tags, auditor&iacute;a</td><td>Cumplimiento, accesos auditables, datos descubribles</td></tr>
+        <tr><td>Rendimiento y costo</td><td>Photon, AQE, liquid clustering, OPTIMIZE/VACUUM, right-sizing</td><td>Reducci&oacute;n de latencia y DBUs, mejor eficiencia</td></tr>
+        <tr><td>BI y SQL</td><td>SQL warehouses, dashboards, materialized views, query profile</td><td>Consultas m&aacute;s r&aacute;pidas, menor costo por query</td></tr>
+        <tr><td>ML/MLOps</td><td>MLflow, Feature Engineering, Model Serving, batch inference, monitoring</td><td>Modelos en producci&oacute;n, reproducibilidad, drift controlado</td></tr>
+        <tr><td>IA generativa</td><td>Foundation Model APIs, Vector Search, RAG, evaluaci&oacute;n, guardrails</td><td>Aplicaciones RAG &uacute;tiles, calidad y costo medidos</td></tr>
+        <tr><td>CI/CD e IaC</td><td>Asset Bundles, Terraform, GitHub Actions, entornos y promoci&oacute;n</td><td>Despliegues reproducibles, rollback, menos errores manuales</td></tr>
+        <tr><td>Operaci&oacute;n y seguridad</td><td>System tables, alertas, SSO/SCIM, service principals, redes y cifrado</td><td>Menor MTTR, auditor&iacute;a, incidentes reducidos</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: TB procesados, n&uacute;mero de pipelines/tablas, latencia, disponibilidad, ahorro de costo y usuarios atendidos.</li>
+        <li>Nombra con precisi&oacute;n: Delta Lake, Unity Catalog, Lakeflow (DLT), Auto Loader, Photon, AQE, liquid clustering, MLflow, Vector Search, Asset Bundles.</li>
+        <li>Muestra criterio: cu&aacute;ndo serverless vs clusters, cu&aacute;ndo materialized view vs tabla, cu&aacute;ndo MERGE vs append, cu&aacute;ndo federar vs ingerir.</li>
+        <li>Prep&aacute;rate para detalle: arquitectura Spark, shuffles/skew, Delta y time travel, privilegios de UC, idempotencia, CDC, costos y seguridad.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento s&oacute;lido y un plan (certificaci&oacute;n, proyecto propio, laboratorio).</li>
+        <li>Conecta con el negocio: confianza en los datos, velocidad de entrega, cumplimiento, costo y capacidad de escalar.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Databricks Documentation (docs.databricks.com)</td><td>Gu&iacute;as oficiales de arquitectura, compute, Delta Lake, Unity Catalog, Lakeflow, SQL, ML e IA.</td></tr>
+        <tr><td>Databricks Academy y certificaciones</td><td>Cursos y ex&aacute;menes de Data Engineer, Data Analyst, Machine Learning y Generative AI Engineer.</td></tr>
+        <tr><td>Apache Spark Documentation</td><td>Arquitectura, DataFrames, SQL, Structured Streaming, tuning y despliegue.</td></tr>
+        <tr><td>Delta Lake Documentation</td><td>Formato, ACID, time travel, MERGE, optimizaci&oacute;n, UniForm y compartici&oacute;n.</td></tr>
+        <tr><td>Unity Catalog Documentation</td><td>Modelo de objetos, privilegios, linaje, auditor&iacute;a, vol&uacute;menes y federaci&oacute;n.</td></tr>
+        <tr><td>Lakeflow Documentation</td><td>Ingesta, pipelines declarativos, expectations, jobs/orquestaci&oacute;n y conectores.</td></tr>
+        <tr><td>MLflow Documentation</td><td>Tracking, modelos, registry, evaluaci&oacute;n y despliegue.</td></tr>
+        <tr><td>Mosaic AI Documentation</td><td>Model Serving, Vector Search, Foundation Model APIs, agentes, evaluaci&oacute;n y AI Gateway.</td></tr>
+        <tr><td>Databricks Asset Bundles y Terraform Provider</td><td>Infraestructura como c&oacute;digo, despliegue por entornos y automatizaci&oacute;n de CI/CD.</td></tr>
+        <tr><td>Databricks SQL Reference</td><td>Dialecto SQL, funciones, tipos, DDL/DML y optimizaci&oacute;n de consultas.</td></tr>
+        <tr><td>Databricks Engineering Blog y blog oficial</td><td>Dise&ntilde;o interno, casos de uso, nuevas capacidades y buenas pr&aacute;cticas.</td></tr>
+        <tr><td>Apache Iceberg Documentation</td><td>Formato de tabla abierto, cat&aacute;logos y convivencia con Delta/UniForm.</td></tr>
+        <tr><td>Databricks Security y Trust Center</td><td>Controles de seguridad, cumplimiento, cifrado, redes y privacidad.</td></tr>
+        <tr><td>OWASP Top 10 y gu&iacute;as de seguridad cloud</td><td>Riesgos de aplicaciones y datos, control de acceso, secretos y protecci&oacute;n de informaci&oacute;n.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
