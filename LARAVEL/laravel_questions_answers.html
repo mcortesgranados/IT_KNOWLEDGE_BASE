@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laravel - Fundamentos, Ciclo de Peticion, Eloquent, Blade, Autenticacion, APIs, Colas, Testing, Rendimiento y Despliegue | Preguntas y Respuestas</title>
+<style>
+    body {
+        font-family: Arial, Calibri, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 40px;
+        color: #333;
+    }
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        text-decoration: none;
+    }
+    .back:hover { color: #1abc9c; text-decoration: underline; }
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+    }
+    h2 {
+        color: #1a5276;
+        margin-top: 40px;
+        border-bottom: 1px solid #dcdde1;
+        padding-bottom: 6px;
+    }
+    h3 {
+        color: #00796b;
+        margin-top: 24px;
+    }
+    .note {
+        background: #e3f2fd;
+        border-left: 4px solid #1976d2;
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 7px;
+    }
+    .note p { margin: 0 0 6px 0; line-height: 1.5; }
+    .toc { list-style: none; padding-left: 0; }
+    .toc li { margin: 6px 0; }
+    a { color: #2980b9; text-decoration: none; }
+    a:hover { color: #1abc9c; text-decoration: underline; }
+    .card {
+        border-left: 4px solid #2980b9;
+        background: #f8fbff;
+        padding: 10px 16px;
+        border-radius: 6px;
+        margin: 10px 0;
+    }
+    .q { font-weight: bold; color: #1a5276; margin: 0 0 6px 0; }
+    .a { margin: 0; line-height: 1.55; }
+    .a ul, .a ol { margin: 6px 0; padding-left: 22px; }
+    .a li { margin: 3px 0; line-height: 1.5; }
+    table.ref { border-collapse: collapse; width: 100%; margin: 14px 0; }
+    table.ref th { background-color: #006699; color: #ffffff; padding: 10px; text-align: left; }
+    table.ref td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; line-height: 1.5; }
+    table.ref tr:nth-child(even) { background-color: #f2f2f2; }
+    .answer-template {
+        background: #fffde7;
+        border-left: 4px solid #fbc02d;
+        padding: 14px 18px;
+        border-radius: 6px;
+        margin: 14px 0;
+    }
+    .answer-template p { margin: 6px 0; line-height: 1.55; }
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .container { padding: 16px; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../IT.html">&larr; IT Knowledge Base Home</a>
+
+    <h1>Laravel &mdash; Fundamentos, Ciclo de Petici&oacute;n, Routing, Eloquent, Blade, Frontend, Autenticaci&oacute;n, APIs, Colas, Testing, Rendimiento y Despliegue</h1>
+
+    <div class="note">
+        <p><strong>Pregunta de origen (entrevista / cuestionario):</strong> &iquest;Cu&aacute;l es su experiencia con Laravel (framework PHP) en desarrollo de aplicaciones, modelado de datos, APIs, seguridad, pruebas y despliegue en producci&oacute;n?</p>
+        <p>Esta p&aacute;gina cubre 10 bloques del temario: fundamentos y ecosistema (Q1&ndash;Q8), arquitectura y ciclo de vida (Q9&ndash;Q16), routing, controladores y middleware (Q17&ndash;Q25), Eloquent y datos (Q26&ndash;Q34), Blade y frontend (Q35&ndash;Q43), autenticaci&oacute;n, autorizaci&oacute;n y seguridad (Q44&ndash;Q52), APIs e integraciones (Q53&ndash;Q61), colas, eventos y cach&eacute; (Q62&ndash;Q69), testing y calidad (Q70&ndash;Q77) y rendimiento, despliegue y administraci&oacute;n (Q78&ndash;Q85), m&aacute;s una plantilla de respuesta para entrevista y referencias.</p>
+    </div>
+
+    <h2>Contenido</h2>
+    <ul class="toc">
+        <li><a href="#s1">1. Fundamentos, versiones y ecosistema &mdash; 8 preguntas</a></li>
+        <li><a href="#s2">2. Arquitectura y ciclo de vida de la petici&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s3">3. Routing, controladores y middleware &mdash; 9 preguntas</a></li>
+        <li><a href="#s4">4. Eloquent ORM, migraciones y datos &mdash; 9 preguntas</a></li>
+        <li><a href="#s5">5. Blade, frontend y componentes &mdash; 9 preguntas</a></li>
+        <li><a href="#s6">6. Autenticaci&oacute;n, autorizaci&oacute;n y seguridad &mdash; 9 preguntas</a></li>
+        <li><a href="#s7">7. APIs, validaci&oacute;n e integraciones &mdash; 9 preguntas</a></li>
+        <li><a href="#s8">8. Colas, eventos, cach&eacute; y tareas programadas &mdash; 8 preguntas</a></li>
+        <li><a href="#s9">9. Testing, calidad y depuraci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s10">10. Rendimiento, despliegue y administraci&oacute;n &mdash; 8 preguntas</a></li>
+        <li><a href="#s11">11. C&oacute;mo responder preguntas de Laravel en una entrevista (plantilla)</a></li>
+        <li><a href="#s12">12. Referencias</a></li>
+    </ul>
+
+    <h2 id="s1">1. Fundamentos, versiones y ecosistema</h2>
+
+    <div class="card">
+        <p class="q">Q1. &iquest;Qu&eacute; es Laravel y para qu&eacute; tipo de aplicaciones se usa?</p>
+        <p class="a">Laravel es un framework de desarrollo web en PHP, de c&oacute;digo abierto (licencia MIT), creado por Taylor Otwell en 2011. Su propuesta es un desarrollo full-stack productivo con una sintaxis expresiva: enrutamiento, ORM (Eloquent), motor de plantillas (Blade), autenticaci&oacute;n/autorizaci&oacute;n, colas, cach&eacute;, eventos, validaci&oacute;n, testing y CLI (Artisan) integrados y con convenciones claras. Se usa para aplicaciones web monol&iacute;ticas (SaaS, back-office, portales, eCommerce), APIs REST y proyectos que necesitan entregar r&aacute;pido con un ecosistema enorme (Livewire, Inertia, Sanctum, Horizon, Forge, Vapor). Es una opci&oacute;n muy fuerte para pymes y startups, y tambi&eacute;n para empresas que necesitan un framework maduro y mantenido con una comunidad activa.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q2. &iquest;C&oacute;mo evolucionan las versiones y qu&eacute; soporte ofrecen?</p>
+        <p class="a">Laravel publica una <strong>versi&oacute;n mayor al a&ntilde;o</strong> (Laravel 9 en 2022, 10 en 2023, 11 en 2024, 12 en 2025 y siguientes), con correcciones de errores durante aproximadamente 18 meses y correcciones de seguridad durante 2 a&ntilde;os desde el lanzamiento; las versiones LTS hist&oacute;ricas (6 LTS, 9 LTS) ya no son el esquema actual. Cada release mayor puede introducir cambios estructurales: Laravel 11, por ejemplo, simplific&oacute; la estructura de la aplicaci&oacute;n (sin <em>app/Http/Kernel.php</em> ni <em>app/Console/Kernel.php</em>, configuraci&oacute;n en <em>bootstrap/app.php</em>), exigi&oacute; PHP 8.2+ y puso SQLite como base por defecto; Laravel 12 mantuvo ese esquema con mejoras en los starter kits (React, Vue, Livewire) y en el ecosistema. Planificar el upgrade anual es parte del mantenimiento: dependencias actualizadas, tests en verde y revisi&oacute;n de deprecaciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q3. &iquest;Qu&eacute; requisitos y stack necesita Laravel?</p>
+        <p class="a">PHP 8.2 o superior para las versiones 11/12 (verificar la matriz de cada release), Composer 2 para dependencias, y extensiones habituales (mbstring, openssl, pdo, tokenizer, xml, ctype, json, bcmath, fileinfo). Base de datos: MySQL/MariaDB, PostgreSQL, SQLite o SQL Server. En desarrollo se puede usar <strong>Laravel Sail</strong> (Docker) o <strong>Herd</strong> (entorno local r&aacute;pido); en producci&oacute;n, Nginx o Apache con PHP-FPM, Redis para cach&eacute;/colas/sesiones (opcional pero recomendado), y Supervisor o systemd para los workers de cola. El frontend puede compilarse con Vite (est&aacute;ndar desde Laravel 9/10) y desplegarse como est&aacute;ticos. Para correo, almacenamiento y colas en la nube se configuran drivers espec&iacute;ficos (SES, S3, SQS, etc.).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q4. &iquest;Cu&aacute;l es el ecosistema oficial de Laravel?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Desarrollo y despliegue:</strong> Sail (Docker), Herd (local), Forge (gesti&oacute;n de servidores), Envoyer (despliegue cero downtime), Vapor (serverless en AWS Lambda), Octane (servidor de aplicaci&oacute;n de alto rendimiento).</li>
+                <li><strong>Producto:</strong> Fortify (autenticaci&oacute;n backend), Breeze y los starter kits (React/Vue/Livewire) para scaffolding, Sanctum (tokens/SPA), Passport (OAuth2), Socialite (login social), Cashier (pagos con Stripe/Paddle), Scout (b&uacute;squeda), Pennant (feature flags), Pulse (monitoreo), Reverb (WebSockets), Horizon (colas Redis), Nova (panel de administraci&oacute;n de pago).</li>
+                <li><strong>Frontend:</strong> Blade, Livewire, Inertia.js, Vite, Tailwind.</li>
+                <li><strong>Calidad:</strong> Pest, PHPUnit, Dusk, Telescope, Pint, Larastan.</li>
+            </ul>
+            Tambi&eacute;n existe un ecosistema comunitario enorme (Spatie, Filament, Laracasts) que cubre permisos, administraci&oacute;n, medios, multitenancy y m&aacute;s.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q5. &iquest;C&oacute;mo se compara Laravel con Symfony y otros frameworks?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Symfony:</strong> conjunto de componentes reutilizables y framework muy flexible y desacoplado; Laravel usa muchos componentes de Symfony (HttpFoundation, Routing, Console, VarDumper). Symfony es m&aacute;s &laquo;empresarial y configurable&raquo;; Laravel es m&aacute;s opinionado y r&aacute;pido de arrancar.</li>
+                <li><strong>CodeIgniter / Yii / CakePHP:</strong> alternativas PHP m&aacute;s ligeras o con menos ecosistema moderno.</li>
+                <li><strong>Django (Python) / Rails (Ruby):</strong> filosof&iacute;a similar de &laquo;bater&iacute;as incluidas&raquo;; la elecci&oacute;n depende del stack del equipo y del ecosistema.</li>
+                <li><strong>Node.js (Express, NestJS):</strong> mejor para tiempo real y equipos JS, pero requiere ensamblar m&aacute;s piezas y no tiene un ORM/ecosistema full-stack tan integrado.</li>
+            </ul>
+            Laravel destaca por productividad, documentaci&oacute;n excelente, comunidad y herramientas oficiales de ciclo completo (desde el entorno local hasta el despliegue y el monitoreo).
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q6. &iquest;C&oacute;mo se estructura una aplicaci&oacute;n Laravel moderna?</p>
+        <p class="a">En Laravel 11/12: <em>app/</em> (Http/Controllers, Http/Middleware, Http/Requests, Models, Providers, Services si se usa esa capa, Console/Commands, Events, Listeners, Jobs, Policies, Rules, View/Components), <em>bootstrap/</em> (app.php, providers.php, cache), <em>config/</em> (archivos por dominio: app, auth, cache, database, queue, mail, filesystems, session, services), <em>database/</em> (migrations, seeders, factories), <em>public/</em> (index.php, assets compilados), <em>resources/</em> (views, css, js), <em>routes/</em> (web.php, console.php; <em>api.php</em> se genera al instalar Sanctum con <em>php artisan install:api</em>), <em>storage/</em> (app, framework, logs), <em>tests/</em> (Feature, Unit), <em>vendor/</em>, <em>.env.example</em> y <em>composer.json</em>. La estructura busca que el framework no estorbe: las carpetas de dominio (Services, Actions, DTOs) se a&ntilde;aden seg&uacute;n la complejidad del proyecto, no por obligaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q7. &iquest;Qu&eacute; es el &laquo;Laravel way&raquo; y qu&eacute; convenciones conviene respetar?</p>
+        <p class="a">Laravel favorece <strong>convenci&oacute;n sobre configuraci&oacute;n</strong>: nombres de tablas en plural y snake_case para modelos en singular (<em>User</em> &rarr; <em>users</em>), claves <em>id</em> autoincrementales, timestamps <em>created_at/updated_at</em>, rutas RESTful, controladores de recursos, validaci&oacute;n en Form Requests, l&oacute;gica de negocio fuera del controlador (servicios/acciones/jobs), eventos para efectos secundarios y colas para tareas lentas. Tambi&eacute;n: usar el contenedor y la inyecci&oacute;n de dependencias en lugar de instanciar clases a mano, Eloquent con relaciones bien definidas y eager loading, migraciones versionadas (nunca cambios manuales en la base), configuraci&oacute;n en <em>config/</em> le&iacute;da desde <em>.env</em>, y pruebas de feature para los flujos cr&iacute;ticos. Respetar estas convenciones hace que cualquier desarrollador Laravel entienda el proyecto r&aacute;pido; pelearse con ellas suele costar m&aacute;s de lo que ahorra.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q8. &iquest;C&oacute;mo se crea un proyecto Laravel?</p>
+        <p class="a">Con el instalador oficial (<em>laravel new mi-app</em>, que permite elegir starter kit y base de datos) o con Composer (<em>composer create-project laravel/laravel mi-app</em>). Luego se configura <em>.env</em> (credenciales de base de datos, <em>APP_KEY</em> generada con <em>php artisan key:generate</em>, mail, cache, queue), se ejecutan las migraciones (<em>php artisan migrate</em>) y se levanta el servidor de desarrollo con <em>php artisan serve</em> o, preferiblemente, <em>./vendor/bin/sail up</em> si se usa Docker. Para el frontend: <em>npm install &amp;&amp; npm run dev</em> (Vite). En Laravel 11/12 el instalador pregunta por base de datos y starter kit, y genera la estructura m&iacute;nima; el comando <em>php artisan install:api</em> a&ntilde;ade rutas de API y Sanctum cuando se necesita una API.</p>
+    </div>
+
+    <h2 id="s2">2. Arquitectura y ciclo de vida de la petici&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q9. &iquest;C&oacute;mo es el ciclo de vida de una petici&oacute;n HTTP en Laravel?</p>
+        <p class="a">El servidor web dirige todas las peticiones a <strong>public/index.php</strong> (front controller). Este carga el autoload de Composer y arranca la aplicaci&oacute;n con <em>bootstrap/app.php</em>, que construye el contenedor de servicios y registra los service providers. La petici&oacute;n entra al <strong>kernel HTTP</strong>, que la envuelve en un <em>Request</em> de Symfony, la pasa por la cadena de <strong>middleware global</strong> (incluyendo los de grupo web/api), la entrega al <strong>router</strong>, que resuelve la ruta y ejecuta el controlador (o closure) con sus dependencias inyectadas; el controlador devuelve una <em>Response</em> (vista, JSON, redirect, archivo). La respuesta atraviesa el middleware en orden inverso (modific&aacute;ndola si aplica) y se env&iacute;a al cliente; finalmente se ejecutan los <em>terminable middleware</em> y tareas de cierre (por ejemplo, enviar respuestas en cola o registrar m&eacute;tricas). En Laravel 11 el kernel se configura en <em>bootstrap/app.php</em> con <em>-&gt;withMiddleware()</em>, <em>-&gt;withRouting()</em> y <em>-&gt;withExceptions()</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q10. &iquest;Qu&eacute; papel cumplen <em>bootstrap/app.php</em> y los kernels?</p>
+        <p class="a"><em>bootstrap/app.php</em> es el punto de composici&oacute;n de la aplicaci&oacute;n: crea la instancia (<em>Application::configure(basePath: ...)</em>), define el routing (web, api, commands, health check <em>/up</em>), registra middleware globales y alias, configura el manejo de excepciones (<em>withExceptions</em>: reportables, renderables, <em>dontReport</em>) y los service providers (en Laravel 11/12, <em>bootstrap/providers.php</em> lista los providers de la app). Antes de Laravel 11 exist&iacute;an <em>app/Http/Kernel.php</em> (middleware, grupos y prioridad) y <em>app/Console/Kernel.php</em> (comandos y scheduler); ahora esa configuraci&oacute;n vive en <em>bootstrap/app.php</em> y <em>routes/console.php</em>. Entender este archivo es clave para depurar problemas de middleware, rutas o excepciones que &laquo;no se comportan como se espera&raquo;.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q11. &iquest;C&oacute;mo funciona el service container?</p>
+        <p class="a">El contenedor es un registro de c&oacute;mo construir objetos y resolver sus dependencias. Mediante <em>bind</em> se registra un closure o clase; <em>singleton</em> devuelve siempre la misma instancia; <em>scoped</em> crea una instancia por ciclo de vida (petici&oacute;n o job, clave con Octane); <em>instance</em> registra un objeto ya creado. Si una clase no est&aacute; registrada, Laravel la resuelve por <strong>autowiring</strong>: inspecciona el constructor y resuelve recursivamente sus tipos (interfaces deben estar vinculadas a una implementaci&oacute;n). Tambi&eacute;n existe el <strong>contextual binding</strong> (<em>when(Clase)-&gt;needs(Interface)-&gt;give(Implementacion)</em>) para dar implementaciones distintas seg&uacute;n el consumidor. En la pr&aacute;ctica: inyectar interfaces en constructores o m&eacute;todos de controladores, registrar bindings en un service provider y evitar el uso directo de <em>app()</em>/<em>resolve()</em> salvo en puntos de entrada justificados.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q12. &iquest;Qu&eacute; son los service providers y cu&aacute;l es la diferencia entre <em>register</em> y <em>boot</em>?</p>
+        <p class="a">Los <strong>service providers</strong> son el lugar donde se registra y configura todo: bindings del contenedor, event listeners, middleware, rutas, directivas de Blade, componentes, observers, gates, comandos y publicaciones. <em>register()</em> se ejecuta primero para <strong>solo registrar</strong> cosas en el contenedor (no debe depender de otros servicios ya resueltos ni de la base de datos); <em>boot()</em> se ejecuta despu&eacute;s de registrar todos los providers y es donde se puede usar el contenedor y el framework ya inicializado (registrar observers, vistas, gates, etc.). Se registran en <em>bootstrap/providers.php</em> (Laravel 11+) o <em>config/app.php</em> (anteriores) y los paquetes los declaran en su <em>composer.json</em> (<em>extra.laravel.providers</em>). Un error com&uacute;n es hacer consultas a base de datos o resolver servicios en <em>register()</em>, lo que provoca fallos durante el arranque y en comandos de consola.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q13. &iquest;Qu&eacute; son las facades y c&oacute;mo funcionan?</p>
+        <p class="a">Una <strong>facade</strong> es una clase que expone est&aacute;ticamente un servicio del contenedor: <em>Cache::get()</em> llama en realidad al m&eacute;todo <em>get</em> de la instancia registrada con la clave <em>cache</em>. Cada facade define <em>getFacadeAccessor()</em> y hereda <em>__callStatic</em>, que resuelve el servicio y delega. Ventajas: sintaxis corta y legible; desventajas: ocultan dependencias y complican el testing si se abusa (aunque Laravel permite <em>Facade::shouldReceive()</em> y existen las <strong>real-time facades</strong> para usar cualquier clase como si fuera facade). Buenas pr&aacute;cticas: usar facades en controladores/vistas para servicios de infraestructura (Cache, Log, DB, Storage, Http, Auth) e inyectar dependencias en servicios y clases de dominio; en c&oacute;digo testeable, preferir inyecci&oacute;n. No hay que confundirlas con el patr&oacute;n Facade de GoF: aqu&iacute; son un proxy est&aacute;tico al contenedor.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q14. &iquest;C&oacute;mo funciona el pipeline de middleware?</p>
+        <p class="a">El middleware es una capa alrededor de la petici&oacute;n: recibe <em>$request</em> y un <em>$next</em>, ejecuta l&oacute;gica antes/despu&eacute;s y decide si pasa la petici&oacute;n, la modifica o corta la cadena (por ejemplo, autenticaci&oacute;n, CSRF, throttle). Se registran como globales (<em>withMiddleware -&gt; append/prepend</em>), en grupos (<em>web</em>, <em>api</em>) o por alias (<em>auth</em>, <em>verified</em>, <em>throttle:60,1</em>, <em>can:update,post</em>) y se aplican en rutas o controladores. Los <strong>terminable middleware</strong> implementan <em>terminate($request, $response)</em> y se ejecutan despu&eacute;s de enviar la respuesta (ideal para logging o m&eacute;tricas sin penalizar al usuario). El orden importa: Laravel define una prioridad (por ejemplo, <em>EnsureTokenIsValid</em> antes de <em>StartSession</em>), y un middleware que dependa de la sesi&oacute;n debe ejecutarse despu&eacute;s de <em>StartSession</em>. En Laravel 11 los alias y grupos se configuran en <em>bootstrap/app.php</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q15. &iquest;C&oacute;mo funciona la configuraci&oacute;n y por qu&eacute; no usar <em>env()</em> fuera de <em>config/</em>?</p>
+        <p class="a">Los archivos de <em>config/</em> leen variables de entorno con <em>env()</em> y devuelven arrays; el resto de la aplicaci&oacute;n debe leer con <em>config('app.name')</em>. Motivo: al ejecutar <em>php artisan config:cache</em>, Laravel compila la configuraci&oacute;n en un solo archivo y <strong>las llamadas a <em>env()</em> fuera de <em>config/</em> dejan de funcionar</strong> (devuelven <em>null</em>), porque el archivo <em>.env</em> no se carga en ese modo. Adem&aacute;s, centralizar en <em>config/</em> permite valores por defecto (<em>env('X', 'default')</em>), tipado y organizaci&oacute;n l&oacute;gica. El <em>.env</em> nunca se versiona (solo <em>.env.example</em>) y en producci&oacute;n los valores se inyectan por el servidor/plataforma. Tras cambiar config en producci&oacute;n: <em>config:clear</em> y <em>config:cache</em> en el despliegue, y reiniciar workers de cola y Octane para que tomen los cambios.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q16. &iquest;Qu&eacute; implicaciones tiene Octane para el estado de la aplicaci&oacute;n?</p>
+        <p class="a">Octane mantiene la aplicaci&oacute;n en memoria entre peticiones (usando RoadRunner, Swoole o FrankenPHP), lo que elimina el bootstrap por petici&oacute;n y mejora mucho el rendimiento. Consecuencia: el <strong>estado persiste</strong> entre peticiones, algo que en PHP-FPM no ocurr&iacute;a. Riesgos: singletons con datos de usuario, propiedades est&aacute;ticas que acumulan informaci&oacute;n, configuraciones mutadas en runtime, conexiones o caches por usuario. Soluciones: usar <em>scoped</em> bindings (se reinician por petici&oacute;n), evitar estado mutable en singletons, limpiar propiedades en listeners de eventos de Octane (<em>RequestReceived</em>, <em>RequestTerminated</em>), no guardar el usuario actual en el contenedor y revisar paquetes de terceros (algunos no son compatibles). Adem&aacute;s, Octane requiere reiniciarse en cada despliegue (<em>octane:reload</em>) y vigilar fugas de memoria en procesos de larga vida.</p>
+    </div>
+
+    <h2 id="s3">3. Routing, controladores y middleware</h2>
+
+    <div class="card">
+        <p class="q">Q17. &iquest;C&oacute;mo se define el routing y qu&eacute; diferencia hay entre <em>web.php</em> y <em>api.php</em>?</p>
+        <p class="a">Las rutas se declaran con los helpers (<em>Route::get/post/put/patch/delete</em>) o con recursos, en <em>routes/web.php</em> (middleware <em>web</em>: sesiones, CSRF, cookies, vistas) y <em>routes/api.php</em> (middleware <em>api</em>, sin sesi&oacute;n ni CSRF; en Laravel 11 se crea con <em>php artisan install:api</em> e incluye Sanctum). Tambi&eacute;n existen <em>routes/console.php</em> (comandos y scheduler) y <em>routes/channels.php</em> (broadcasting). En <em>bootstrap/app.php</em> se registran los archivos; se pueden a&ntilde;adir rutas con <em>Route::middleware(...)-&gt;prefix(...)-&gt;group(base_path('routes/admin.php'))</em>. La elecci&oacute;n web/api determina qu&eacute; middleware se aplica: un error com&uacute;n es poner una API en <em>web.php</em> y sufrir CSRF/sesiones innecesarias, o poner una ruta que necesita sesi&oacute;n en <em>api.php</em> y no tenerla.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q18. &iquest;Qu&eacute; es el route model binding?</p>
+        <p class="a">Es la resoluci&oacute;n autom&aacute;tica de modelos a partir de par&aacute;metros de ruta. <strong>Impl&iacute;cito:</strong> si el tipo del par&aacute;metro es un modelo Eloquent, Laravel busca por la clave primaria (<em>{user}</em> &rarr; <em>User::findOrFail($id)</em>); se puede personalizar con <em>getRouteKeyName()</em> (por ejemplo, <em>slug</em>) o resolviendo por otro campo con <em>Route::bind</em>. <strong>Expl&iacute;cito:</strong> se registra un closure en <em>RouteServiceProvider</em>/<em>bootstrap/app.php</em> que recibe el valor y devuelve el modelo (o lanza 404). Si el modelo no existe, se devuelve 404 autom&aacute;ticamente. Tambi&eacute;n se puede usar <strong>scoped binding</strong> para anidar recursos (<em>/users/{user}/posts/{post}</em> resuelve el post solo si pertenece al usuario, con <em>-&gt;scopeBindings()</em>). Es una de las caracter&iacute;sticas que m&aacute;s reduce c&oacute;digo repetitivo y errores de autorizaci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q19. &iquest;Qu&eacute; son las resource routes y los resource controllers?</p>
+        <p class="a"><em>Route::resource('posts', PostController::class)</em> genera las siete rutas RESTful: <em>index, create, store, show, edit, update, destroy</em>, con nombres (<em>posts.index</em>, etc.) y par&aacute;metros; <em>Route::apiResource</em> omite <em>create</em> y <em>edit</em> (formularios) para APIs. El controlador puede generarse con <em>php artisan make:controller PostController --resource --model=Post</em> y usa route model binding. Se puede limitar con <em>-&gt;only([...])</em> o <em>-&gt;except([...])</em>, y a&ntilde;adir rutas anidadas con <em>Route::resource('posts.comments', ...)</em> (con shallow nesting cuando conviene). Para acciones &uacute;nicas existe el controlador invocable (<em>__invoke</em>). Es la forma est&aacute;ndar de mantener APIs y formularios coherentes; si el recurso necesita m&aacute;s acciones, se a&ntilde;aden rutas expl&iacute;citas con nombres claros en lugar de forzar el recurso.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q20. &iquest;C&oacute;mo se organizan grupos de rutas, prefijos y nombres?</p>
+        <p class="a">Con <em>Route::prefix('admin')-&gt;name('admin.')-&gt;middleware(['auth','can:admin'])-&gt;group(function () { ... })</em>. Se pueden combinar <em>domain</em> (subdominios o dominios distintos), <em>controller</em> (agrupar rutas de un mismo controlador), <em>where</em> (restricciones con expresiones regulares en par&aacute;metros), <em>scopeBindings</em> y <em>withoutMiddleware</em>. Para rutas comunes a varios archivos se usan <em>Route::middleware(...)-&gt;group(base_path('routes/admin.php'))</em> en <em>bootstrap/app.php</em>. Convenci&oacute;n &uacute;til: prefijo de nombre por &aacute;rea (<em>admin.</em>, <em>api.v1.</em>) para que <em>route('admin.posts.index')</em> sea predecible; y helper <em>route()</em> en vistas/controladores en lugar de URLs a mano. Un grupo mal dise&ntilde;ado complica la autorizaci&oacute;n: conviene que el middleware del grupo sea el m&iacute;nimo com&uacute;n y que cada ruta a&ntilde;ada lo espec&iacute;fico.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q21. &iquest;Qu&eacute; es el route caching y qu&eacute; limitaciones tiene?</p>
+        <p class="a"><em>php artisan route:cache</em> compila todas las rutas en un archivo PHP para que el registro sea mucho m&aacute;s r&aacute;pido en producci&oacute;n (se ejecuta en el despliegue, junto con <em>config:cache</em> y <em>view:cache</em>). Limitaciones: las rutas deben ser serializables, por lo que <strong>no se permiten closures</strong> como acci&oacute;n (hay que usar controladores o controladores invocables), y cualquier cambio de rutas exige regenerar la cach&eacute;. En desarrollo no se usa (se limpia con <em>route:clear</em>). Si un despliegue falla con &laquo;Unable to prepare route for serialization&raquo;, la causa suele ser un closure en <em>routes/*.php</em>. Tambi&eacute;n existen cach&eacute;s de eventos (<em>event:cache</em>), vistas (<em>view:cache</em>) y configuraci&oacute;n (<em>config:cache</em>); todas deben regenerarse en cada release y limpiarse (<em>optimize:clear</em>) cuando algo se comporta de forma extra&ntilde;a.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q22. &iquest;C&oacute;mo se crea y registra un middleware?</p>
+        <p class="a">Con <em>php artisan make:middleware EnsureTokenIsValid</em>, que genera una clase con <em>handle(Request $request, Closure $next)</em>; se implementa la l&oacute;gica y se devuelve <em>$next($request)</em> o una respuesta alternativa (redirect, 403, JSON). Registro: en Laravel 11/12 se a&ntilde;ade el alias en <em>bootstrap/app.php</em> (<em>-&gt;withMiddleware(fn ($middleware) =&gt; $middleware-&gt;alias(['token' =&gt; EnsureTokenIsValid::class]))</em>), se agrega a un grupo (<em>web</em>, <em>api</em>) o globalmente (<em>append</em>), y se usa en rutas (<em>-&gt;middleware('token')</em>) o en el constructor del controlador. Para middleware con par&aacute;metros se usa <em>handle($request, $next, $param)</em> y se pasa como <em>throttle:60,1</em>. En versiones anteriores el registro era en <em>app/Http/Kernel.php</em> y la prioridad se defin&iacute;a en <em>$middlewarePriority</em>. Cuidado con middleware que escriben en sesi&oacute;n o conf&iacute;an en el usuario: deben ejecutarse despu&eacute;s de <em>StartSession</em>/<em>Authenticate</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q23. &iquest;Qu&eacute; son los Form Requests y por qu&eacute; usarlos?</p>
+        <p class="a">Son clases (<em>php artisan make:request StorePostRequest</em>) que encapsulan la <strong>autorizaci&oacute;n</strong> (<em>authorize()</em>) y la <strong>validaci&oacute;n</strong> (<em>rules()</em>) de una petici&oacute;n. Al inyectarlas en el controlador, Laravel las valida autom&aacute;ticamente antes de ejecutar la acci&oacute;n: si falla, redirige con errores (web) o responde 422 (JSON/API). Ventajas: controladores m&aacute;s delgados, reglas reutilizables y testeables, mensajes y atributos personalizados (<em>messages()</em>, <em>attributes()</em>), reglas condicionales (<em>Rule::when</em>, <em>sometimes</em>, <em>after</em>), validaci&oacute;n de arrays anidados con wildcards (<em>items.*.price</em>) y autorizaci&oacute;n previa coherente con las policies. Para validaciones complejas se crean <em>Rule</em> objects o reglas custom; para APIs se combina con <em>JsonResource</em> y un formato de error consistente. Es la forma recomendada frente a validar en el controlador o, peor, en el modelo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q24. &iquest;Qu&eacute; tipos de respuestas puede devolver un controlador?</p>
+        <p class="a">Vistas (<em>return view('posts.index', compact('posts'))</em>), JSON (<em>return response()-&gt;json($data, 201)</em>), arrays/colecciones (Laravel los convierte a JSON), redirecciones (<em>redirect()-&gt;route(...)-&gt;with('status', ...)</em>, <em>back()</em>), respuestas con cabeceras o cookies, descargas (<em>response()-&gt;download($path)</em>, <em>streamDownload</em>), archivos (<em>response()-&gt;file</em>), y <strong>API Resources</strong> (<em>return new PostResource($post)</em> o <em>PostResource::collection($posts)</em>) para transformar modelos. Tambi&eacute;n se puede devolver un <em>Response</em> desde un middleware o usar <em>abort(404)</em>/<em>abort_if</em> para errores. En APIs conviene un formato uniforme (<em>data</em>, <em>meta</em>, <em>errors</em>), c&oacute;digos HTTP correctos (200, 201, 204, 422, 404, 403) y no exponer modelos completos. En Laravel 11 los redirects a rutas con par&aacute;metros y los helpers siguen igual; lo que cambia es la configuraci&oacute;n del manejo de excepciones en <em>bootstrap/app.php</em>.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q25. &iquest;C&oacute;mo funcionan el rate limiting y las URLs firmadas?</p>
+        <p class="a"><strong>Rate limiting:</strong> se define un <em>RateLimiter</em> en un service provider (<em>RateLimiter::for('api', fn (Request $request) =&gt; Limit::perMinute(60)-&gt;by($request-&gt;user()?->id ?: $request-&gt;ip()))</em>) y se aplica con el middleware <em>throttle:api</em>; soporta l&iacute;mites por minuto/hora/d&iacute;a, respuestas personalizadas (<em>response()</em>), <em>after</em> y por segmento. Laravel 11 permite l&iacute;mites por segundo. <strong>URLs firmadas:</strong> <em>URL::temporarySignedRoute('unsubscribe', now()-&gt;addMinutes(30), ['user' =&gt; $id])</em> genera una URL con firma HMAC; el middleware <em>signed</em> (<em>-&gt;middleware('signed')</em>) valida que no haya sido alterada y que no est&eacute; expirada. Se usan para enlaces de verificaci&oacute;n, descargas y acciones sin login. Nunca hay que confiar en par&aacute;metros de la URL sin firma o sin autorizaci&oacute;n: son mecanismos distintos (la firma protege integridad/origen, no permisos del usuario).</p>
+    </div>
+
+    <h2 id="s4">4. Eloquent ORM, migraciones y datos</h2>
+
+    <div class="card">
+        <p class="q">Q26. &iquest;Qu&eacute; es Eloquent y qu&eacute; convenciones sigue?</p>
+        <p class="a">Eloquent es el ORM de Laravel: cada modelo es una clase que representa una tabla y permite consultar y persistir con una API expresiva. Convenciones: tabla en plural snake_case (<em>User</em> &rarr; <em>users</em>, <em>BlogPost</em> &rarr; <em>blog_posts</em>), clave primaria <em>id</em> autoincremental (personalizable con <em>$primaryKey</em> e <em>$incrementing</em>), timestamps <em>created_at/updated_at</em> (desactivables con <em>$timestamps = false</em>), conexi&oacute;n por defecto configurable (<em>$connection</em>), y llaves for&aacute;neas <em>{modelo}_id</em>. El modelo se crea con <em>php artisan make:model Post -mfsc</em> (migraci&oacute;n, factory, seeder, controlador) y se configura con <em>$fillable</em>/<em>$guarded</em>, <em>$casts</em>, <em>$hidden</em>, <em>$appends</em> y <em>$with</em> (eager loading por defecto). Eloquent devuelve colecciones (<em>Illuminate\Support\Collection</em>), encadena scopes y relaciones, y usa el query builder por debajo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q27. &iquest;Qu&eacute; tipos de relaciones soporta Eloquent?</p>
+        <p class="a">
+            <ul>
+                <li><strong>hasOne / belongsTo:</strong> uno a uno (Usuario &harr; Perfil).</li>
+                <li><strong>hasMany / belongsTo:</strong> uno a muchos (Post &rarr; Comentarios).</li>
+                <li><strong>belongsToMany:</strong> muchos a muchos con tabla pivote (Post &harr; Etiquetas), con <em>withPivot</em>, <em>withTimestamps</em>, <em>using</em> para modelos pivote personalizados y m&eacute;todos <em>attach/detach/sync/updateExistingPivot</em>.</li>
+                <li><strong>hasManyThrough:</strong> acceso a registros lejanos a trav&eacute;s de una relaci&oacute;n intermedia (Pa&iacute;s &rarr; Usuarios &rarr; Posts).</li>
+                <li><strong>Polim&oacute;rficas:</strong> <em>morphTo/morphMany/morphOne/morphToMany</em> (Comentarios que pertenecen a Post o Video; Etiquetas en varios modelos).</li>
+                <li><strong>Otras:</strong> one-of-many (<em>latestOfMany</em>, <em>oldestOfMany</em>), relaciones anidadas con <em>with('posts.comments')</em> y relaciones condicionales.</li>
+            </ul>
+            Definir bien las relaciones (y sus &iacute;ndices en la base) evita N+1 y consultas costosas; adem&aacute;s habilita el uso de <em>whereHas</em>, <em>withCount</em> y <em>load</em>.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q28. &iquest;Qu&eacute; es el problema N+1 y c&oacute;mo se resuelve con eager loading?</p>
+        <p class="a">El N+1 ocurre al recorrer una colecci&oacute;n y consultar una relaci&oacute;n por cada elemento: una consulta para los N registros y N consultas adicionales (una por fila). Soluci&oacute;n: <strong>eager loading</strong> con <em>-&gt;with('comments')</em> (o <em>load</em>, <em>loadMissing</em>, <em>loadCount</em>), que ejecuta una consulta extra en total; se puede anidar (<em>with('comments.author')</em>) y seleccionar columnas (<em>with('comments:id,post_id,body')</em>). En desarrollo, <em>Model::preventLazyLoading(! app()-&gt;isProduction())</em> lanza excepci&oacute;n al cargar una relaci&oacute;n de forma perezosa, lo que ayuda a detectar el problema en tests. Alternativas: <em>withCount</em> para contar sin cargar, <em>withExists</em>, <em>withSum</em>/<em>withAvg</em>, y joins cuando se necesita filtrado. En APIs es especialmente importante porque el N+1 se multiplica con listados paginados. Medir con Telescope/Debugbar (n&uacute;mero de consultas) antes y despu&eacute;s es la forma de verificar la mejora.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q29. &iquest;C&oacute;mo funcionan las migraciones y el schema builder?</p>
+        <p class="a">Las migraciones son archivos PHP versionados en <em>database/migrations</em> con <em>up()</em> y <em>down()</em>; se ejecutan con <em>php artisan migrate</em> y se registran en la tabla <em>migrations</em>. El schema builder permite crear y modificar tablas con una API fluida (<em>Schema::create('posts', function (Blueprint $table) { $table-&gt;id(); $table-&gt;foreignId('user_id')-&gt;constrained()-&gt;cascadeOnDelete(); $table-&gt;string('title'); $table-&gt;timestamps(); })</em>), adem&aacute;s de &iacute;ndices, claves compuestas, columnas JSON, enums, generated columns y modificaciones (<em>$table-&gt;dropColumn</em>, <em>change()</em>). Comandos: <em>migrate:status</em>, <em>migrate:rollback</em>, <em>migrate:refresh</em>, <em>migrate:fresh</em> (borra todo y recrea), <em>migrate:reset</em>. Buenas pr&aacute;cticas: migraciones peque&ntilde;as y reversibles, nunca editar una migraci&oacute;n ya ejecutada en producci&oacute;n (crear otra), nombrar &iacute;ndices y llaves expl&iacute;citamente, y probar en una copia de datos reales los cambios costosos (a&ntilde;adir columna NOT NULL, &iacute;ndices grandes).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q30. &iquest;Qu&eacute; son los seeders y las factories?</p>
+        <p class="a">Los <strong>seeders</strong> (<em>database/seeders</em>) insertan datos iniciales o de referencia (roles, pa&iacute;ses, configuraci&oacute;n) y se ejecutan con <em>php artisan db:seed</em> o <em>migrate --seed</em>. Las <strong>factories</strong> (<em>database/factories</em>) generan datos falsos para pruebas y desarrollo usando Faker: <em>Post::factory()-&gt;count(50)-&gt;create()</em>, con estados (<em>-&gt;published()</em>), relaciones (<em>-&gt;for(User::factory())</em>, <em>-&gt;has(Comment::factory()-&gt;count(3))</em>) y atributos personalizados. Se pueden encadenar secuencias (<em>Sequence</em>) y <em>afterCreating</em>. Buenas pr&aacute;cticas: seeders idempotentes (<em>firstOrCreate</em>/<em>updateOrCreate</em>) para poder ejecutarlos varias veces, factories realistas que respeten las constraints, y no usar datos de demo en producci&oacute;n. En tests, las factories son la base para crear escenarios r&aacute;pidos y legibles.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q31. &iquest;Qu&eacute; son los <em>casts</em>, accessors y mutators?</p>
+        <p class="a">Los <strong>casts</strong> convierten atributos al leerlos/escribirlos: <em>integer, boolean, decimal:2, string, array, json, collection, datetime, date, encrypted, hashed</em>, enums PHP (<em>AsEnum</em>) y clases de valor personalizadas (<em>AsStringable</em>, cast custom). Los <strong>accessors/mutators</strong> modernos (clase <em>Attribute</em>) transforman valores al obtenerlos o asignarlos: <em>protected function title(): Attribute { return Attribute::make(get: fn ($value) =&gt; ucfirst($value), set: fn ($value) =&gt; strtolower($value)); }</em>; los cl&aacute;sicos (<em>getTitleAttribute/setTitleAttribute</em>) siguen funcionando. Con ellos se centraliza el formato (fechas, monedas, JSON, cifrado) y se evita repetir l&oacute;gica en vistas o controladores. Cuidado: los accessors no se pueden usar en consultas SQL directas (para filtros usar <em>where</em> sobre la columna real o columnas generadas), y los <em>appends</em> deben declararse expl&iacute;citamente si se quiere que aparezcan en la serializaci&oacute;n JSON.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q32. &iquest;Qu&eacute; son los scopes, observers y eventos de modelo?</p>
+        <p class="a"><strong>Scopes locales:</strong> m&eacute;todos reutilizables de consulta (<em>public function scopePublished($query) { return $query-&gt;where('published', true); }</em>) que se usan como <em>Post::published()-&gt;get()</em>. <strong>Scopes globales:</strong> se aplican autom&aacute;ticamente a todas las consultas del modelo (por ejemplo, filtro por tenant o <em>SoftDeletes</em>) y se pueden omitir con <em>withoutGlobalScope</em>. <strong>Observers:</strong> clases que escuchan eventos del ciclo de vida del modelo (<em>creating, created, updating, updated, saving, deleting, deleted, restoring, retrieved</em>) y se registran con <em>#[ObservedBy(PostObserver::class)]</em> o <em>Post::observe(...)</em>; ideales para auditor&iacute;a, generaci&oacute;n de slugs o sincronizaci&oacute;n. <strong>Eventos de modelo:</strong> el mismo mecanismo basado en eventos; se pueden escuchar con listeners. Cuidado con efectos secundarios pesados o no transaccionales dentro de observers: para tareas lentas, encolar jobs y usar <em>afterCommit</em> para no disparar antes de confirmar la transacci&oacute;n.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q33. &iquest;Qu&eacute; es el mass assignment y c&oacute;mo protegerse?</p>
+        <p class="a">Mass assignment es asignar un array de datos a un modelo (<em>Post::create($request-&gt;all())</em>); si el array incluye campos que el usuario no deber&iacute;a controlar (por ejemplo <em>is_admin</em>), se produce una vulnerabilidad de escalada de privilegios. Laravel lo mitiga con <em>$fillable</em> (lista blanca de campos asignables) o <em>$guarded</em> (lista negra; por defecto <em>['*']</em> en algunos contextos). Recomendaciones: usar <em>$fillable</em> expl&iacute;cito, pasar solo datos validados (<em>$request-&gt;validated()</em> o un DTO), no asignar campos sensibles desde formularios, y usar <em>forceFill</em>/<em>forceCreate</em> solo en c&oacute;digo interno controlado. En APIs, los Form Requests y Resources ayudan a que el contrato de entrada/salida sea expl&iacute;cito. Es una de las primeras cosas que se revisan en una auditor&iacute;a de seguridad de una app Laravel.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q34. &iquest;C&oacute;mo se manejan soft deletes, UUID/ULID y transacciones?</p>
+        <p class="a"><strong>Soft deletes:</strong> el trait <em>SoftDeletes</em> a&ntilde;ade <em>deleted_at</em>; <em>delete()</em> marca el registro, las consultas lo excluyen por defecto (<em>withTrashed</em>, <em>onlyTrashed</em>, <em>restore</em>, <em>forceDelete</em>). <strong>UUID/ULID:</strong> con el trait <em>HasUuids</em>/<em>HasUlids</em> (Laravel 9+) y columnas <em>uuid</em>/<em>ulid</em>; &uacute;tiles para IDs no predecibles, sincronizaci&oacute;n entre sistemas y merges; considerar el impacto en &iacute;ndices y en el orden de inserci&oacute;n (ULID es ordenable). <strong>Transacciones:</strong> <em>DB::transaction(function () { ... })</em> o <em>beginTransaction/commit/rollBack</em> con <em>try/catch</em>; los jobs y eventos deben ejecutarse <em>afterCommit</em> cuando dependen de datos confirmados. Adem&aacute;s, <em>lockForUpdate</em> para evitar condiciones de carrera y <em>DB::afterCommit</em>. En sistemas con alta concurrencia, definir bien la unidad transaccional evita datos hu&eacute;rfanos y efectos duplicados.</p>
+    </div>
+
+    <h2 id="s5">5. Blade, frontend y componentes</h2>
+
+    <div class="card">
+        <p class="q">Q35. &iquest;Qu&eacute; es Blade y c&oacute;mo se escapa la salida?</p>
+        <p class="a">Blade es el motor de plantillas de Laravel: compila a PHP plano y se cachea, por lo que es r&aacute;pido. Sintaxis principal: <em>{{ $variable }}</em> (escape autom&aacute;tico de HTML, protege contra XSS), <em>{!! $html !!}</em> (sin escapar, solo para HTML de confianza), directivas (<em>@if/@elseif/@else/@endif</em>, <em>@foreach/@forelse</em>, <em>@auth/@guest</em>, <em>@can</em>, <em>@csrf</em>, <em>@method</em>, <em>@include</em>, <em>@extends/@section/@yield</em>, <em>@livewire</em>, <em>@vite</em>) y comentarios <em>{{-- --}}</em>. Blade no impone l&oacute;gica de negocio: los datos deben llegar preparados desde controladores/ViewModels; para c&aacute;lculos complejos usar componentes o clases. Cuidado con <em>{!! !!}</em> sobre contenido de usuario y con atributos HTML construidos con datos no escapados (usar <em>e()</em> o bindings).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q36. &iquest;C&oacute;mo funcionan los layouts y los componentes de Blade?</p>
+        <p class="a">El enfoque moderno son los <strong>componentes</strong>: <em>php artisan make:component Alert</em> genera una clase y una vista; se usa <em>&lt;x-alert type=&quot;error&quot;&gt;Mensaje&lt;/x-alert&gt;</em> y los datos llegan como atributos/props; los <strong>slots</strong> permiten contenido e incluso slots con nombre (<em>&lt;x-slot:title&gt;</em>). Existe <em>&lt;x-layouts.app&gt;</em> (componente de layout) para envolver p&aacute;ginas y sustituir el esquema cl&aacute;sico <em>@extends('layouts.app')</em> + <em>@section('content')</em>. Tambi&eacute;n hay <strong>componentes an&oacute;nimos</strong> (<em>resources/views/components/</em>) para piezas sin clase PHP, <em>@include</em> para fragmentos simples, <em>@each</em> para listas y <em>Blade::componentNamespace</em> para paquetes. La ventaja de los componentes es encapsular markup, estilos y props con validaci&oacute;n; la desventaja, un &aacute;rbol de componentes mal dise&ntilde;ado que duplica capas. En proyectos con Tailwind, los componentes Blade son el mecanismo natural de reutilizaci&oacute;n visual.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q37. &iquest;Qu&eacute; son los componentes an&oacute;nimos y cu&aacute;ndo usarlos?</p>
+        <p class="a">Son componentes definidos solo con una vista en <em>resources/views/components/</em> (por ejemplo <em>components/button.blade.php</em>), sin clase PHP asociada; reciben props con <em>@props(['type' =&gt; 'button', 'href' =&gt; null])</em> y se usan como <em>&lt;x-button type=&quot;submit&quot;&gt;Guardar&lt;/x-button&gt;</em>. Son ideales para piezas de UI sin l&oacute;gica compleja: botones, badges, cards, inputs, alertas. Si necesitas l&oacute;gica (c&aacute;lculos, acceso a servicios, m&eacute;todos), conviene un componente de clase o un ViewModel. Se pueden organizar en subcarpetas (<em>components/forms/input.blade.php</em> &rarr; <em>&lt;x-forms.input&gt;</em>) y combinar con <em>@aware</em> para heredar datos del componente padre. Es una de las formas m&aacute;s simples de mantener consistencia visual con Tailwind y evitar duplicaci&oacute;n de clases CSS.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q38. &iquest;C&oacute;mo se compilan los assets con Vite?</p>
+        <p class="a">Laravel usa <strong>Vite</strong> como bundler (reemplaz&oacute; a Laravel Mix desde Laravel 9/10): <em>vite.config.js</em> define inputs (<em>resources/css/app.css</em>, <em>resources/js/app.js</em>) y plugins (Laravel, React/Vue), <em>package.json</em> los scripts (<em>npm run dev</em>, <em>npm run build</em>), y en las vistas se usa <em>@vite(['resources/css/app.css', 'resources/js/app.js'])</em>, que genera las etiquetas con hash y hot reload en desarrollo. En producci&oacute;n se ejecuta <em>npm run build</em> y se versiona <em>public/build/manifest.json</em> (no el contenido compilado necesariamente) para que el despliegue lo genere; <em>@vite</em> lee el manifest y emite 404 si falta. Tambi&eacute;n se pueden usar CDNs para librer&iacute;as, importar din&aacute;micamente (<em>import()</em>) y configurar <em>base</em> para servir assets desde otro dominio/CDN. Alternativa antigua: Mix (<em>webpack.mix.js</em>), que a&uacute;n se ve en proyectos legacy.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q39. &iquest;C&oacute;mo se integra Tailwind CSS en Laravel?</p>
+        <p class="a">Los starter kits modernos incluyen Tailwind configurado. El flujo t&iacute;pico: <em>tailwind.config.js</em> con <em>content</em> apuntando a <em>resources/views/**/*.blade.php</em>, <em>resources/js/**/*.js</em>, <em>resources/js/**/*.vue</em>, etc.; directivas en CSS (<em>@tailwind base; @tailwind components; @tailwind utilities;</em> o <em>@import &quot;tailwindcss&quot;;</em> en v4) y compilaci&oacute;n con Vite. Con Tailwind se estiliza directamente en el markup, lo que encaja con componentes Blade; para clases reutilizables se usan <em>@apply</em> o componentes. Ventajas: control total, sin CSS muerto (purga), dise&ntilde;o consistente con tokens; desventajas: markup m&aacute;s verboso y necesidad de disciplina. En proyectos grandes conviene definir un sistema de componentes (botones, inputs, cards) y tokens (colores, espaciados) para no dispersar clases.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q40. &iquest;Qu&eacute; es Livewire y cu&aacute;ndo conviene usarlo?</p>
+        <p class="a"><strong>Livewire</strong> permite construir interfaces din&aacute;micas con PHP y Blade sin escribir JavaScript a mano: cada componente (<em>php artisan make:livewire Counter</em>) es una clase PHP con propiedades p&uacute;blicas y m&eacute;todos, y una vista Blade; las interacciones (<em>wire:click</em>, <em>wire:model</em>, <em>wire:submit</em>) hacen peticiones AJAX que re-renderizan el componente en el servidor. Ventajas: una sola mentalidad (PHP) para front y back, validaci&oacute;n y estado en el servidor, integraci&oacute;n nativa con Eloquent y con Alpine.js para interacciones locales. Limitaciones: latencia por petici&oacute;n al servidor, necesidad de cuidar el tama&ntilde;o del estado p&uacute;blico y la seguridad (propiedades p&uacute;blicas son manipulables), y menos adecuado para UI muy interactiva o compleja. Es ideal para paneles, formularios y apps internas; en p&aacute;ginas p&uacute;blicas de alto tr&aacute;fico conviene valorar Inertia/SPA o cachear.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q41. &iquest;Qu&eacute; es Inertia.js y c&oacute;mo se usa con Laravel?</p>
+        <p class="a"><strong>Inertia.js</strong> permite construir un SPA (React, Vue o Svelte) sin API separada: los controladores Laravel devuelven <em>Inertia::render('Posts/Index', ['posts' =&gt; $posts])</em>, y el cliente Inertia navega entre p&aacute;ginas recibiendo props JSON, manteniendo el estado del componente y la URL. El servidor sigue gestionando rutas, autenticaci&oacute;n, validaci&oacute;n y sesi&oacute;n; el frontend se organiza en p&aacute;ginas (<em>resources/js/Pages</em>). Ventajas: SPA con un solo repositorio y sin construir una API p&uacute;blica, compartir datos con <em>HandleInertiaRequests</em>, formularios con <em>useForm</em> y validaci&oacute;n de Laravel, y code splitting. Se combina con los starter kits (Laravel 12 ofrece React/Vue con Inertia) y con SSR opcional. Requiere equipo c&oacute;modo con JS moderno; para equipos solo PHP, Livewire suele ser m&aacute;s directo.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q42. &iquest;Qu&eacute; starter kits y paquetes de autenticaci&oacute;n existen?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Starter kits (Laravel 12):</strong> React, Vue y Livewire, con Inertia, Tailwind, autenticaci&oacute;n completa (registro, login, recuperaci&oacute;n, verificaci&oacute;n, perfil), y opciones como WorkOS AuthKit; son la v&iacute;a recomendada para empezar un proyecto nuevo.</li>
+                <li><strong>Breeze:</strong> scaffolding minimalista de autenticaci&oacute;n (Blade o Inertia) con Tailwind; ideal cuando se quiere control total del c&oacute;digo.</li>
+                <li><strong>Jetstream:</strong> m&aacute;s completo (equipos, 2FA, API tokens, gesti&oacute;n de perfil) con Livewire o Inertia; en proyectos nuevos se ha desplazado por los starter kits.</li>
+                <li><strong>Fortify:</strong> implementaci&oacute;n backend de autenticaci&oacute;n (registro, login, 2FA, recuperaci&oacute;n) sin UI; se combina con el frontend que se elija.</li>
+                <li><strong>Sanctum:</strong> tokens de API y autenticaci&oacute;n SPA por cookies.</li>
+                <li><strong>Socialite:</strong> login con Google, GitHub, Facebook, etc.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q43. &iquest;C&oacute;mo se maneja la localizaci&oacute;n en Laravel?</p>
+        <p class="a">Los textos se envuelven con <em>__('messages.welcome')</em> o <em>@lang('...')</em> y viven en <em>lang/{locale}/*.php</em> (o JSON para traducciones por clave); el locale se configura con <em>App::setLocale()</em> por petici&oacute;n (middleware que lee la sesi&oacute;n, el usuario o la URL) y el fallback en <em>config/app.php</em>. Laravel soporta pluralizaci&oacute;n (<em>trans_choice</em>) y par&aacute;metros (<em>:name</em>), y los mensajes de validaci&oacute;n se traducen autom&aacute;ticamente si existen los archivos correspondientes (<em>lang/es/validation.php</em>). Para contenido din&aacute;mico (productos, p&aacute;ginas) la traducci&oacute;n se modela en base de datos (tablas de traducciones o paquetes como spatie/laravel-translatable). Buenas pr&aacute;cticas: no concatenar frases (rompe la traducci&oacute;n), usar claves sem&aacute;nticas, y cubrir formatos de fecha/n&uacute;mero/moneda con <em>Carbon</em> y helpers locales.</p>
+    </div>
+
+    <h2 id="s6">6. Autenticaci&oacute;n, autorizaci&oacute;n y seguridad</h2>
+
+    <div class="card">
+        <p class="q">Q44. &iquest;C&oacute;mo funciona el sistema de autenticaci&oacute;n (guards y providers)?</p>
+        <p class="a">La autenticaci&oacute;n se configura en <em>config/auth.php</em> con dos piezas: los <strong>guards</strong> (c&oacute;mo se autentica cada petici&oacute;n: <em>web</em> por sesi&oacute;n, <em>api</em> por token o guard personalizado) y los <strong>providers</strong> (de d&oacute;nde salen los usuarios: <em>EloquentUserProvider</em> sobre el modelo User o <em>DatabaseUserProvider</em> sobre una tabla). <em>Auth::attempt(['email' =&gt; ..., 'password' =&gt; ...])</em> verifica credenciales, regenera la sesi&oacute;n y marca al usuario; <em>Auth::guard('api')-&gt;user()</em> consulta un guard concreto y el middleware <em>auth:api</em> protege rutas. Se puede implementar un guard propio (por ejemplo, autenticaci&oacute;n contra un SSO o LDAP) registr&aacute;ndolo con <em>Auth::extend</em>. Detalles importantes: regenerar la sesi&oacute;n tras el login (evita fijaci&oacute;n), invalidarla en el logout, y no confundir autenticaci&oacute;n (qui&eacute;n eres) con autorizaci&oacute;n (qu&eacute; puedes hacer).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q45. &iquest;Sanctum o Passport? &iquest;Cu&aacute;ndo usar cada uno?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Sanctum:</strong> pensado para SPAs propias, aplicaciones m&oacute;viles y APIs de primera parte. Ofrece tokens personales (hash SHA-256 en <em>personal_access_tokens</em>, con habilidades/abilities y expiraci&oacute;n) y autenticaci&oacute;n por cookie de sesi&oacute;n para SPAs en dominios de confianza (stateful domains + CSRF). Es ligero, no implementa OAuth2 completo y es el que usan Jetstream y la mayor&iacute;a de APIs internas.</li>
+                <li><strong>Passport:</strong> implementaci&oacute;n completa de OAuth2 (authorization code, client credentials, password grant, refresh tokens, scopes, JWT) para APIs consumidas por terceros o cuando se necesita un servidor de autorizaci&oacute;n est&aacute;ndar. M&aacute;s potente y tambi&eacute;n m&aacute;s complejo de operar (claves, clientes, revocaci&oacute;n).</li>
+            </ul>
+            Regla pr&aacute;ctica: si la API la consumen tus propios frontends, Sanctum; si necesitas que otras empresas se integren con OAuth2 y scopes, Passport. En ambos casos, tokens con caducidad, revocaci&oacute;n en logout y HTTPS obligatorio.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q46. &iquest;Qu&eacute; diferencias hay entre Fortify, Breeze, Jetstream y Socialite?</p>
+        <p class="a">No son alternativas equivalentes: <strong>Fortify</strong> es un backend de autenticaci&oacute;n sin interfaz (login, registro, recuperaci&oacute;n de contrase&ntilde;a, verificaci&oacute;n de email, 2FA, confirmaci&oacute;n de contrase&ntilde;a) que se conecta a las vistas que t&uacute; construyas; <strong>Breeze</strong> es un scaffold m&iacute;nimo con Blade + Tailwind (o React/Vue con Inertia) que implementa los flujos m&aacute;s comunes y sirve como punto de partida; <strong>Jetstream</strong> es un scaffold m&aacute;s completo (Livewire o Inertia) con equipos, perfiles, API tokens, 2FA y gesti&oacute;n de sesiones, apoyado en Fortify y Sanctum; <strong>Socialite</strong> resuelve el login social (OAuth con Google, GitHub, Facebook, etc.) y se combina con cualquiera de los anteriores. En proyectos reales conviene elegir Breeze/Fortify si se quiere control total del dise&ntilde;o y evitar el peso de Jetstream si no se usan equipos.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q47. &iquest;Qu&eacute; son los Gates y las Policies y cu&aacute;ndo usar cada uno?</p>
+        <p class="a">Ambos responden &laquo;&iquest;puede este usuario hacer esta acci&oacute;n?&raquo;. Los <strong>Gates</strong> son closures registradas en <em>AppServiceProvider</em> (<em>Gate::define('editar-post', fn (User $u, Post $p) =&gt; ...)</em>) &uacute;tiles para permisos globales o sin modelo. Las <strong>Policies</strong> son clases por modelo (<em>PostPolicy</em> con m&eacute;todos <em>viewAny, view, create, update, delete, restore</em>) y Laravel las descubre por convenci&oacute;n o con <em>Gate::policy()</em>. Se usan con <em>$this-&gt;authorize('update', $post)</em> en controladores o Form Requests, con el middleware <em>can:update,post</em>, con <em>@can/@cannot</em> en Blade y con <em>Gate::allows()</em> en c&oacute;digo. Ejecutar la autorizaci&oacute;n en el servidor (nunca solo ocultar botones), cubrir todas las acciones sensibles y usar <em>before</em> para superadmins. Para permisos din&aacute;micos por rol, la Policy puede consultar la base de datos o integrarse con spatie/laravel-permission.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q48. &iquest;C&oacute;mo se implementan roles y permisos?</p>
+        <p class="a">La opci&oacute;n m&aacute;s com&uacute;n es <strong>spatie/laravel-permission</strong>: define roles y permisos en base de datos, los asigna a usuarios o equipos (teams) y expone <em>hasRole</em>, <em>hasPermissionTo</em>, <em>can</em> y el middleware <em>role:</em> / <em>permission:</em>. Los permisos se agrupan por m&oacute;dulo (posts.create, posts.update) y las Policies pueden delegar en ellos. Alternativas: columnas de rol en la tabla de usuarios para casos simples, enum de roles, o integraci&oacute;n con un IdP que env&iacute;e grupos/claims. Buenas pr&aacute;cticas: permisos granulares y roles como agrupaciones, no hardcodear nombres de rol en el c&oacute;digo, cachear la matriz de permisos (el paquete lo hace), invalidar cach&eacute; al cambiar asignaciones, y auditar qui&eacute;n concede permisos. Evita el antipatr&oacute;n de un rol &uacute;nico &laquo;admin&raquo; que puede todo sin trazabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q49. &iquest;C&oacute;mo funcionan CSRF y las sesiones en Laravel?</p>
+        <p class="a">Laravel genera un token CSRF por sesi&oacute;n y el middleware <em>VerifyCsrfToken</em> lo valida en cada POST/PUT/PATCH/DELETE; en Blade se incluye con <em>@csrf</em> y en peticiones AJAX/SPA con el header <em>X-CSRF-TOKEN</em> o la cookie <em>XSRF-TOKEN</em> (Sanctum lo gestiona). Las exclusiones (<em>$except</em>) deben limitarse a webhooks con verificaci&oacute;n de firma propia. Las sesiones usan drivers file, cookie, database, redis o memcached; el contenido se cifra y la cookie es HttpOnly y SameSite=Lax por defecto. En producci&oacute;n conviene Redis o base de datos para compartir sesi&oacute;n entre servidores, <em>SESSION_SECURE_COOKIE=true</em> con HTTPS, regenerar el ID tras login (<em>session()-&gt;regenerate()</em>), invalidar en logout y usar <em>logoutOtherDevices</em> para cerrar sesiones tras cambiar contrase&ntilde;a.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q50. &iquest;C&oacute;mo se previenen XSS, inyecci&oacute;n SQL y mass assignment?</p>
+        <p class="a">
+            <ul>
+                <li><strong>XSS:</strong> Blade escapa autom&aacute;ticamente con <em>{{ $value }}</em>; <em>{!! $value !!}</em> inserta HTML sin escapar y solo debe usarse con contenido saneado (HTMLPurifier, markdown renderizado con allowlist). A&ntilde;adir CSP y evitar <em>innerHTML</em> con datos de usuario en JavaScript.</li>
+                <li><strong>Inyecci&oacute;n SQL:</strong> usar Eloquent/Query Builder, que parametriza; en <em>whereRaw</em> pasar bindings (<em>whereRaw('price &gt; ?', [$min])</em>) y nunca concatenar input. Escapar identificadores de columna solo contra una allowlist.</li>
+                <li><strong>Mass assignment:</strong> declarar <em>$fillable</em> (o <em>$guarded</em>) en los modelos y usar <em>$request-&gt;validated()</em> al crear/actualizar; <em>forceCreate</em> solo en c&oacute;digo interno. Un <em>fillable</em> demasiado amplio permite que un atacante cambie <em>is_admin</em>.</li>
+            </ul>
+            Complementar con validaci&oacute;n estricta de tipos, autorizaci&oacute;n por objeto y auditor&iacute;a de dependencias.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q51. &iquest;C&oacute;mo se gestionan hashes, cifrado, APP_KEY y secretos?</p>
+        <p class="a"><em>Hash::make()</em> usa bcrypt por defecto (argon2id es configurable) y es irreversible; para verificar, <em>Hash::check()</em>, y <em>needsRehash()</em> permite migrar el algoritmo sin pedir la contrase&ntilde;a. Para datos reversibles, <em>Crypt::encryptString()/decryptString()</em> usa AES-256-GCM con la <strong>APP_KEY</strong>. Consecuencias: si se pierde o rota la APP_KEY sin re-cifrar, se pierden datos cifrados, sesiones y cookies; si se filtra, todo lo cifrado queda expuesto. Buenas pr&aacute;cticas: clave de 32 bytes generada con <em>php artisan key:generate</em>, nunca en Git, distinta por entorno, almacenada en un gestor de secretos (Vault, SSM, Doppler, variables del proveedor), y <em>.env</em> fuera del repositorio. Contrase&ntilde;as siempre con hash (nunca cifrado reversible), tokens de API hasheados y secretos rotables con procedimiento documentado.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q52. &iquest;Qu&eacute; checklist de seguridad aplicar antes de poner una app Laravel en producci&oacute;n?</p>
+        <p class="a">
+            <ul>
+                <li><em>APP_ENV=production</em>, <em>APP_DEBUG=false</em> y p&aacute;ginas de error propias; nunca exponer stack traces.</li>
+                <li>HTTPS obligatorio, HSTS, cookies <em>Secure</em>/<em>HttpOnly</em>/<em>SameSite</em>, y <em>TrustProxies</em> bien configurado detr&aacute;s de balanceador/CDN.</li>
+                <li>Autorizaci&oacute;n en cada endpoint, rate limiting, validaci&oacute;n de entrada y protecci&oacute;n CSRF; revisar rutas de depuraci&oacute;n (Telescope, Horizon, Pulse) con acceso restringido.</li>
+                <li>Dependencias actualizadas y <em>composer audit</em> en CI; parches de PHP y del framework al d&iacute;a; 2FA para administradores.</li>
+                <li>Usuario de base de datos con privilegios m&iacute;nimos, backups cifrados y probados, secretos fuera del c&oacute;digo y rotaci&oacute;n definida.</li>
+                <li>Cabeceras de seguridad/CSP, protecci&oacute;n de archivos subidos (tipo, tama&ntilde;o, almacenamiento fuera del webroot), logs sin datos sensibles y monitoreo de errores.</li>
+                <li>WAF/CDN si aplica, limitar <em>per_page</em> y tama&ntilde;os de payload, y revisar permisos de almacenamiento y cach&eacute;.</li>
+            </ul>
+        </p>
+    </div>
+
+    <h2 id="s7">7. APIs, validaci&oacute;n e integraciones</h2>
+
+    <div class="card">
+        <p class="q">Q53. &iquest;C&oacute;mo se estructuran y versionan las rutas de una API?</p>
+        <p class="a">En Laravel 11/12 el archivo <em>routes/api.php</em> se crea con <em>php artisan install:api</em> y se registra autom&aacute;ticamente con prefijo <em>/api</em> y middleware <em>api</em> (sin sesi&oacute;n ni CSRF). Las rutas se agrupan por versi&oacute;n con <em>Route::prefix('v1')-&gt;group(...)</em> o mediante archivos separados, y se nombran con prefijos (<em>api.v1.posts.index</em>). El versionado debe ser expl&iacute;cito desde el inicio: cambios incompatibles (renombrar campos, cambiar tipos, eliminar endpoints) crean <em>v2</em>, mientras que cambios aditivos (nuevos campos opcionales) pueden convivir en la misma versi&oacute;n. Documentar deprecaciones con fechas y cabeceras <em>Deprecation/Sunset</em>, mantener ambas versiones durante una ventana acordada y probar los contratos con tests. Aplicar <em>throttle:api</em>, autenticaci&oacute;n por token y respuestas consistentes.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q54. &iquest;Qu&eacute; son los API Resources y por qu&eacute; conviene usarlos?</p>
+        <p class="a">Los <strong>API Resources</strong> (<em>JsonResource</em>, <em>ResourceCollection</em>) son una capa de transformaci&oacute;n entre los modelos y el JSON de salida. Permiten controlar qu&eacute; campos se exponen, renombrar claves, formatear fechas/n&uacute;meros y a&ntilde;adir relaciones o metadatos condicionales con <em>when()</em>, <em>whenHas()</em> y <em>mergeWhen()</em>. Ventajas: no acoplar la API a la estructura interna de la base de datos, evitar filtrar columnas sensibles, mantener contratos estables ante refactors y reutilizar la misma representaci&oacute;n en varios endpoints. Se generan con <em>php artisan make:resource PostResource</em> y se devuelven desde el controlador; las colecciones paginadas incluyen <em>data</em>, <em>links</em> y <em>meta</em> autom&aacute;ticamente. En APIs grandes conviene versionar los Resources junto con las rutas y probar el JSON con tests de contrato.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q55. &iquest;C&oacute;mo se implementan paginaci&oacute;n, filtros y ordenamiento?</p>
+        <p class="a"><em>paginate($perPage)</em> devuelve paginaci&oacute;n con total y enlaces; <em>simplePaginate</em> evita el count para listados grandes; <em>cursorPaginate</em> es ideal para vol&uacute;menes altos o scroll infinito porque usa un cursor estable y no requiere offset. Los filtros se validan con Form Requests y se aplican con query scopes o un objeto de filtros dedicado, siempre con allowlist de campos (<em>?status=open&amp;created_after=...</em>); nunca interpolar nombres de columna del usuario. El ordenamiento se restringe a una lista blanca (<em>?sort=-created_at</em>), con direcci&oacute;n validada. Para relaciones se usa <em>?include=author,comments</em> con allowlist y eager loading, y se limita <em>per_page</em> (por ejemplo, m&aacute;ximo 100). Documentar par&aacute;metros, valores por defecto y c&oacute;digos de error; en listados grandes, indexar las columnas de filtro/orden y considerar cach&eacute;.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q56. &iquest;C&oacute;mo se hace validaci&oacute;n avanzada y se devuelven errores en una API?</p>
+        <p class="a">Los <strong>Form Requests</strong> centralizan <em>rules()</em>, <em>authorize()</em>, <em>messages()</em> y <em>attributes()</em>; permiten reglas condicionales (<em>sometimes</em>, <em>Rule::when</em>), validaci&oacute;n despu&eacute;s de otras reglas (<em>after</em>), objetos Rule personalizados, <em>exclude</em>, <em>prohibited</em> y validaci&oacute;n de arrays anidados con comodines. Para APIs, el exception handler debe responder JSON con c&oacute;digo 422 y una estructura estable: <em>message</em> y <em>errors</em> por campo; tambi&eacute;n conviene diferenciar 400 (petici&oacute;n mal formada), 401/403 (autenticaci&oacute;n/autorizaci&oacute;n), 404, 409 (conflicto), 422 (validaci&oacute;n), 429 (rate limit) y 500. Se puede adoptar un formato tipo Problem Details (RFC 7807) o uno propio documentado. No devolver mensajes internos de excepciones, registrar el error con un ID de correlaci&oacute;n y probar los casos l&iacute;mite con tests.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q57. &iquest;C&oacute;mo funcionan el rate limiting y la idempotencia?</p>
+        <p class="a">El rate limiting se define en <em>RateLimiter::for('api', fn (Request $r) =&gt; Limit::perMinute(60)-&gt;by($r-&gt;user()?->id ?: $r-&gt;ip()))</em> y se aplica con el middleware <em>throttle:api</em>; para endpoints sensibles (login, env&iacute;o de emails, pagos) se usan limitadores m&aacute;s estrictos y respuestas 429 con <em>Retry-After</em>. La idempotencia protege operaciones POST que no deben duplicarse (pagos, creaci&oacute;n de pedidos): el cliente env&iacute;a una clave <em>Idempotency-Key</em>, el servidor la registra junto con la respuesta y, si llega la misma clave, devuelve el resultado original en lugar de reprocesar. Se implementa con una tabla o cach&eacute; con TTL y bloqueo at&oacute;mico, m&aacute;s un &iacute;ndice &uacute;nico por clave. Conviene combinarlo con reintentos del cliente, timeouts y colas para tareas lentas; documentar el comportamiento y los c&oacute;digos de error.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q58. &iquest;Cu&aacute;ndo usar GraphQL y c&oacute;mo se implementa en Laravel?</p>
+        <p class="a">GraphQL conviene cuando m&uacute;ltiples clientes necesitan consultar formas distintas de los mismos datos y se quiere evitar el over/under-fetching de REST; no sustituye autom&aacute;ticamente a REST en todos los casos. En Laravel el paquete m&aacute;s usado es <strong>Lighthouse</strong>, que parte de un schema SDL (<em>graphql/schema.graphql</em>) y resuelve con directivas (<em>@guard</em>, <em>@can</em>, <em>@paginate</em>, <em>@hasMany</em>) y resolvers personalizados. Riesgos a controlar: consultas costosas (l&iacute;mites de complejidad/profundidad, persisted queries), N+1 (batch loading, <em>@with</em>), autorizaci&oacute;n por campo, y exposici&oacute;n accidental de datos. Alternativa: <strong>Rebing GraphQL</strong> o una capa propia. Documentar el schema como contrato, versionarlo con evoluci&oacute;n compatible y monitorear latencias por consulta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q59. &iquest;C&oacute;mo se consumen APIs externas con el cliente HTTP?</p>
+        <p class="a">El facade <em>Http</em> (basado en Guzzle) ofrece una API fluida: <em>Http::timeout(10)-&gt;connectTimeout(3)-&gt;withToken($token)-&gt;retry(3, 200, fn ($e) =&gt; $e instanceof ConnectionException)-&gt;post($url, $data)</em>. Configurar siempre timeouts (de conexi&oacute;n y total), reintentos con backoff exponencial solo para errores transitorios (5xx, timeouts), <em>throw()</em> si se quiere excepci&oacute;n ante 4xx/5xx, y registrar request/response sin datos sensibles. Para llamadas concurrentes, <em>Http::pool()</em> reduce latencia. En tests, <em>Http::fake()</em> con patrones de URL y <em>Http::assertSent()</em>; <em>preventStrayRequests()</em> evita llamadas reales. En producci&oacute;n, considerar circuit breaker, colas para procesos lentos, idempotencia y una capa de servicios que a&iacute;sle al proveedor (facilita cambiar de API y probar).</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q60. &iquest;C&oacute;mo se implementan webhooks de forma segura?</p>
+        <p class="a">Para <strong>recibir</strong> webhooks: exponer un endpoint sin CSRF (pero con autenticaci&oacute;n por firma), verificar la firma HMAC del proveedor con el secreto compartido y comparaci&oacute;n en tiempo constante, validar el payload, responder r&aacute;pido (2xx) y procesar en cola para evitar timeouts y reintentos duplicados. La idempotencia es clave: guardar el ID del evento y descartar duplicados. Para <strong>enviar</strong> webhooks: firmar el cuerpo, incluir timestamp para evitar replay, reintentar con backoff, registrar entregas y ofrecer un endpoint de reenv&iacute;o. Documentar el contrato (eventos, payload, c&oacute;digos) y monitorizar fallos. Ejemplos t&iacute;picos: Stripe (Stripe-Signature), GitHub (X-Hub-Signature-256) y Shopify. Nunca confiar en el payload sin verificar la firma ni exponer secretos en el cliente.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q61. &iquest;C&oacute;mo se documenta una API Laravel?</p>
+        <p class="a">Opciones habituales: <strong>Scramble</strong> (genera OpenAPI 3 a partir de rutas, Form Requests y Resources, sin anotaciones), <strong>Scribe</strong> (documentaci&oacute;n legible + colecci&oacute;n Postman, con anotaciones opcionales) y <strong>l5-swagger</strong> (anotaciones OpenAPI en los controladores). Lo importante es que la documentaci&oacute;n se genere desde el c&oacute;digo o se valide contra &eacute;l en CI, para que no quede desactualizada. Incluir autenticaci&oacute;n, par&aacute;metros, ejemplos de request/response, c&oacute;digos de error, paginaci&oacute;n y versionado. Un contrato OpenAPI permite generar clientes y tests de contrato, y sirve como acuerdo con los equipos consumidores. A&ntilde;adir una p&aacute;gina de estado/cambios (changelog) y mantener ejemplos reales anonimizados.</p>
+    </div>
+
+    <h2 id="s8">8. Colas, eventos, cach&eacute; y tareas programadas</h2>
+
+    <div class="card">
+        <p class="q">Q62. &iquest;C&oacute;mo funcionan las colas y los jobs?</p>
+        <p class="a">Las colas permiten diferir trabajo pesado (emails, informes, llamadas a terceros, procesamiento de im&aacute;genes) para que la petici&oacute;n responda r&aacute;pido. Se configura un driver en <em>config/queue.php</em> (database, Redis, SQS, Beanstalkd) y se crea un job con <em>php artisan make:job ProcessInvoice</em>; el job implementa <em>handle()</em> y se encola con <em>ProcessInvoice::dispatch($invoice)</em> o <em>dispatch()->onQueue('high')->delay(...)</em>. El worker se ejecuta con <em>php artisan queue:work</em>; en producci&oacute;n se supervisa con Supervisor o Horizon. Buenas pr&aacute;cticas: jobs peque&ntilde;os e idempotentes, pasar IDs y no modelos completos, <em>$tries</em>/<em>$timeout</em> definidos, <em>failed_jobs</em> monitorizado, colas separadas por prioridad y un worker por cola. En tests se usa <em>Queue::fake()</em> para verificar despachos sin ejecutar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q63. &iquest;C&oacute;mo funcionan reintentos, backoff, failed jobs y Horizon?</p>
+        <p class="a">Un job puede declarar <em>public $tries = 3</em>, <em>public $backoff = [10, 60, 300]</em> (segundos) y <em>public $timeout</em>; <em>retryUntil()</em> fija una fecha l&iacute;mite. Si supera los intentos, se registra en <em>failed_jobs</em> y se puede reintentar con <em>queue:retry</em> o <em>queue:failed</em>, o descartar. El m&eacute;todo <em>failed(Throwable $e)</em> permite limpiar o alertar. <strong>Horizon</strong> es un dashboard y supervisor para colas Redis: muestra throughput, tiempos, jobs fallidos y permite configurar procesos por cola, balanceo y m&eacute;tricas; requiere Redis y se despliega como proceso supervisado. Alternativas gestionadas: SQS + workers, Laravel Vapor (Lambda), o servicios externos. La clave operativa es distinguir errores transitorios (reintentar con backoff) de errores permanentes (fallar r&aacute;pido y alertar) y evitar jobs no idempotentes que dupliquen efectos al reintentarse.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q64. &iquest;Qu&eacute; son los batches, chains y jobs &uacute;nicos?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Batches:</strong> agrupan muchos jobs independientes y permiten callbacks al terminar (<em>then</em>, <em>catch</em>, <em>finally</em>), progreso con <em>Bus::batch([...])-&gt;dispatch()</em>, cancelaci&oacute;n y porcentaje completado. &Uacute;tiles para importaciones masivas.</li>
+                <li><strong>Chains:</strong> ejecutan jobs en secuencia, cada uno con el resultado del anterior; si uno falla, la cadena se detiene. &Uacute;tiles para pipelines (descargar &rarr; transformar &rarr; cargar).</li>
+                <li><strong>Unique jobs:</strong> implementan <em>ShouldBeUnique</em> (o <em>ShouldBeUniqueUntilProcessing</em>) para evitar duplicados mientras est&aacute;n encolados; el lock se libera al terminar. Con <em>WithoutOverlapping</em> se evita que dos ejecuciones del mismo job se solapen.</li>
+            </ul>
+            Con batches conviene definir <em>allowFailures</em> si se toleran fallos parciales y monitorizar los jobs fallidos del lote; con chains, dise&ntilde;ar compensaciones si un paso falla despu&eacute;s de efectos secundarios.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q65. &iquest;C&oacute;mo funcionan eventos, listeners y broadcasting?</p>
+        <p class="a">Los <strong>eventos</strong> desacoplan el c&oacute;digo: se crean con <em>make:event</em>, se disparan con <em>event(new OrderPlaced($order))</em> y los <strong>listeners</strong> reaccionan (enviar email, actualizar stock, notificar). Se registran en <em>EventServiceProvider</em> o por auto-descubrimiento; pueden implementar <em>ShouldQueue</em> para ejecutarse en cola y <em>ShouldBroadcast</em> para enviarse al frontend. Laravel incluye eventos de modelo (created, updated, deleted) y <em>observers</em> para agrupar l&oacute;gica. El <strong>broadcasting</strong> usa canales p&uacute;blicos, privados o de presencia y drivers como Pusher, Ably, Redis o <strong>Reverb</strong> (servidor WebSocket oficial, compatible con el protocolo Pusher). En el cliente, Laravel Echo se suscribe a canales; la autorizaci&oacute;n de canales privados se define en <em>routes/channels.php</em>. Cuidado: no poner l&oacute;gica cr&iacute;tica s&oacute;lo en listeners as&iacute;ncronos sin idempotencia ni trazabilidad.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q66. &iquest;C&oacute;mo se programan tareas con el scheduler?</p>
+        <p class="a">En Laravel 11/12 el scheduler se define en <em>routes/console.php</em> (o <em>app/Console/Kernel.php</em> en versiones anteriores) con <em>Schedule::command('reports:daily')-&gt;dailyAt('02:00')</em>, <em>Schedule::job(new Cleanup)-&gt;hourly()</em> o <em>Schedule::call(fn () =&gt; ...)-&gt;everyFiveMinutes()</em>. Frecuencias disponibles: everyMinute, hourly, daily, weekly, monthly, cron(), <em>weekdays()</em>, <em>timezone()</em>, <em>withoutOverlapping()</em>, <em>onOneServer()</em> y <em>runInBackground()</em>. En el servidor solo hay que a&ntilde;adir una entrada cron: <em>* * * * * cd /ruta &amp;&amp; php artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1</em>. Para probar: <em>schedule:list</em> y <em>schedule:test</em>. En cl&uacute;steres, <em>onOneServer()</em> requiere cach&eacute; compartida; los solapamientos se evitan con <em>withoutOverlapping()</em>, y conviene monitorizar que el cron realmente se ejecuta.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q67. &iquest;C&oacute;mo funciona la cach&eacute; (drivers, tags y locks)?</p>
+        <p class="a">La cach&eacute; se configura en <em>config/cache.php</em>: file, database, Redis, Memcached, array (tests) o DynamoDB. Se usa con <em>Cache::get/put/remember/forget</em>; <em>remember($key, $ttl, fn () =&gt; ...)</em> es el patr&oacute;n cache-aside m&aacute;s com&uacute;n. Los <strong>tags</strong> (solo soportados por Redis/Memcached) permiten invalidar grupos: <em>Cache::tags(['posts'])-&gt;flush()</em>. Los <strong>locks</strong> at&oacute;micos (<em>Cache::lock('job', 10)-&gt;get()</em>) evitan ejecuciones concurrentes y se usan en jobs y comandos. Consideraciones: claves con namespace/versi&oacute;n, TTL acorde al negocio, invalidaci&oacute;n expl&iacute;cita al escribir, cachear datos costosos y no datos por usuario en claves compartidas; en producci&oacute;n, Redis con persistencia adecuada y monitorizaci&oacute;n de memoria. Evitar cachear respuestas que dependen de permisos sin incluir al usuario en la clave.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q68. &iquest;C&oacute;mo se env&iacute;an notificaciones y correos?</p>
+        <p class="a">Los <strong>Mailables</strong> (<em>make:mail OrderShipped</em>) encapsulan asunto, vistas Blade/Markdown, adjuntos y destinatarios; se env&iacute;an con <em>Mail::to($user)-&gt;send(new OrderShipped($order))</em> o en cola con <em>queue()</em>. Las <strong>notificaciones</strong> (<em>make:notification</em>) son multicanal: mail, database, broadcast, SMS (Vonage, Twilio) y canales personalizados; se env&iacute;an con <em>$user-&gt;notify(new InvoicePaid($invoice))</em> y pueden implementar <em>ShouldQueue</em>. Los drivers de correo (SMTP, Mailgun, Postmark, SES, log/array en tests) se configuran en <em>config/mail.php</em>; conviene usar servicios transaccionales con DKIM/SPF/DMARC, plantillas y webhooks de rebotes. En tests, <em>Mail::fake()</em> y <em>Notification::fake()</em>. Para altos vol&uacute;menes, enviar en cola y separar la cola de correo del resto.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q69. &iquest;C&oacute;mo se gestionan archivos y almacenamiento?</p>
+        <p class="a">El filesystem abstraction (<em>Storage</em>) permite usar discos locales, S3, GCS, Azure o FTP con la misma API: <em>Storage::disk('s3')-&gt;putFile('avatars', $file)</em>, <em>url()</em>, <em>temporaryUrl()</em>, <em>delete()</em>, <em>exists()</em>. Los discos se definen en <em>config/filesystems.php</em>; en producci&oacute;n es habitual almacenar en S3 y servir mediante CDN o URLs firmadas. Para subidas grandes se usan direct uploads (URL prefirmada) o chunked uploads, y se valida tipo/tama&ntilde;o con Form Requests (<em>image</em>, <em>mimes</em>, <em>max</em>). Nunca confiar en la extensi&oacute;n ni ejecutar archivos subidos; almacenar fuera del webroot p&uacute;blico, con nombres aleatorios, y usar colas para procesamiento (miniaturas, virus scan). En tests, <em>Storage::fake('s3')</em> y <em>assertExists</em>. Definir pol&iacute;ticas de retenci&oacute;n y limpieza de archivos hu&eacute;rfanos.</p>
+    </div>
+
+    <h2 id="s9">9. Testing, calidad y depuraci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q70. &iquest;PHPUnit o Pest? &iquest;C&oacute;mo se estructuran los tests?</p>
+        <p class="a">Laravel incluye PHPUnit por defecto, pero desde Laravel 11 el scaffold pregunta por <strong>Pest</strong> (sintaxis m&aacute;s expresiva, basada en funciones: <em>it('creates a post')-&gt;expect(...)</em>, con <em>beforeEach</em>, datasets y plugins). Ambos usan el mismo runner y las mismas utilidades del framework. La estructura t&iacute;pica separa <strong>Feature</strong> (peticiones HTTP completas, rutas, middleware, base de datos) de <strong>Unit</strong> (clases y l&oacute;gica aislada). Se usa <em>php artisan make:test</em>, el archivo <em>phpunit.xml</em> define suites y variables de entorno (base de datos de test, cola sync, mail array), y <em>php artisan test</em> ejecuta con salida legible (Pest o PHPUnit). Buenas pr&aacute;cticas: tests r&aacute;pidos y deterministas, nombres que describan comportamiento, factories para datos, un assert claro por test y cubrir caminos felices, validaciones, autorizaci&oacute;n y errores.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q71. &iquest;Qu&eacute; hacen RefreshDatabase, las factories y los seeders en tests?</p>
+        <p class="a"><em>RefreshDatabase</em> migra la base de datos de test y la envuelve en transacciones (o la refresca) para que cada test empiece limpio; es la opci&oacute;n m&aacute;s habitual, aunque en suites grandes se puede usar <em>DatabaseTransactions</em> si el esquema ya est&aacute; migrado. Las <strong>factories</strong> (<em>User::factory()-&gt;create()</em>) generan modelos con datos falsos y permiten estados (<em>->unverified()</em>, <em>->admin()</em>) y relaciones; <em>make()</em> crea sin persistir. Los <strong>seeders</strong> cargan datos de referencia (roles, pa&iacute;ses) y pueden invocarse en tests concretos. Para tests de autorizaci&oacute;n se combinan factories con roles/permisos; para endpoints, <em>actingAs($user)</em> y <em>Sanctum::actingAs($user, ['abilities'])</em>. Evitar depender del orden de tests y de datos persistentes entre ejecuciones.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q72. &iquest;C&oacute;mo se usan los fakes y el mocking?</p>
+        <p class="a">Laravel ofrece fakes para los servicios del framework: <em>Http::fake([...])</em>, <em>Queue::fake()</em>, <em>Event::fake()</em>, <em>Mail::fake()</em>, <em>Notification::fake()</em>, <em>Storage::fake()</em>, <em>Bus::fake()</em> y <em>Cache::spy()</em>. Permiten aislar el test y verificar interacciones con <em>assertSent</em>, <em>assertPushed</em>, <em>assertDispatched</em>, <em>assertQueued</em>, etc. Para colaboradores propios se usa Mockery (<em>$this-&gt;mock(Service::class)</em>) o inyecci&oacute;n de una implementaci&oacute;n falsa; en Laravel se prefiere <em>$this-&gt;instance()</em> o bindings en el contenedor antes que mocks profundos. Regla: mockear la frontera (HTTP, colas, correo, reloj, filesystem) y no la l&oacute;gica propia; si un test necesita muchos mocks, probablemente la clase tiene demasiadas responsabilidades. <em>Carbon::setTestNow()</em> congela el tiempo para fechas deterministas.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q73. &iquest;Qu&eacute; son las pruebas de navegador con Dusk?</p>
+        <p class="a"><strong>Laravel Dusk</strong> automatiza un navegador real (Chrome/Chromium) para probar flujos end-to-end: login, formularios, JavaScript, modales, arrastrar y soltar. Se instala con <em>composer require laravel/dusk --dev</em> y <em>php artisan dusk:install</em>; los tests usan <em>$browser-&gt;visit('/')-&gt;type('email', ...)-&gt;press('Login')-&gt;assertSee('Dashboard')</em>. Dusk puede usar un entorno <em>.env.dusk.local</em>, base de datos dedicada y <em>DatabaseMigrations</em>. Es m&aacute;s lento y fr&aacute;gil que los tests Feature, as&iacute; que se reserva para flujos cr&iacute;ticos (checkout, onboarding, pago). Alternativas: Playwright o Cypress en proyectos con mucho frontend. Ejecutar en CI con Chrome headless, capturas/v&iacute;deos en fallos, y limpiar datos entre pruebas. No sustituye a tests de unidad/integraci&oacute;n: los complementa.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q74. &iquest;Para qu&eacute; sirven Telescope, Pulse y Debugbar?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Telescope:</strong> herramienta de depuraci&oacute;n en desarrollo que registra requests, consultas SQL, jobs, eventos, mails, notificaciones, cach&eacute; y logs; permite inspeccionar payloads y tiempos. Debe quedar deshabilitado o protegido en producci&oacute;n por su coste y por la informaci&oacute;n sensible que almacena.</li>
+                <li><strong>Pulse:</strong> orientado a producci&oacute;n; recoge m&eacute;tricas de rendimiento (requests lentos, uso de colas, cach&eacute;, servidores, excepciones) con un dashboard ligero y tarjetas configurables. Requiere base de datos/Redis y un <em>pulse:check</em> para servidores.</li>
+                <li><strong>Debugbar:</strong> barra de depuraci&oacute;n en el navegador (consultas, tiempos, vistas, rutas) muy &uacute;til en local; nunca activa en producci&oacute;n.</li>
+            </ul>
+            Complementar con logs estructurados, Sentry/Bugsnag para excepciones y APM (New Relic, Datadog, Blackfire) para trazas y profiling.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q75. &iquest;C&oacute;mo se configuran logging y el manejo de excepciones?</p>
+        <p class="a">El logging usa canales en <em>config/logging.php</em>: single, daily, stderr, syslog, slack, papertrail o stack (varios a la vez). En producci&oacute;n conviene <em>daily</em> o <em>stderr</em> (contenedores) con nivel <em>warning/error</em>, logs estructurados en JSON y correlaci&oacute;n por request. <em>Log::info/error</em> con contexto, y <em>Log::withContext()</em> para a&ntilde;adir request_id/user_id. El manejo de excepciones se centraliza en <em>bootstrap/app.php</em> (Laravel 11/12) con <em>withExceptions</em>: <em>render</em> para respuestas personalizadas, <em>report</em> para enviar a Sentry y <em>dontReport</em> para ruido esperado. No registrar contrase&ntilde;as, tokens ni datos personales; definir p&aacute;ginas 404/500/503; y en APIs devolver JSON consistente. Para errores de negocio, usar excepciones propias y convertirlas en respuestas 4xx.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q76. &iquest;Qu&eacute; herramientas de calidad se usan (Pint, PHPStan/Larastan, Rector)?</p>
+        <p class="a">
+            <ul>
+                <li><strong>Laravel Pint:</strong> formateador basado en PHP-CS-Fixer con presets (<em>laravel</em>, <em>per</em>, <em>psr12</em>); <em>vendor/bin/pint --test</em> en CI y <em>pint</em> en local. Elimina discusiones de estilo.</li>
+                <li><strong>PHPStan + Larastan:</strong> an&aacute;lisis est&aacute;tico con niveles progresivos; Larastan a&ntilde;ade comprensi&oacute;n de Eloquent, facades y colecciones. Detecta errores de tipos antes de ejecutar.</li>
+                <li><strong>Rector:</strong> refactorizaci&oacute;n y modernizaci&oacute;n autom&aacute;tica (actualizaciones de PHP/Laravel, cambios de API) mediante reglas; &uacute;til en upgrades.</li>
+                <li>Complementos: <strong>PHP_CodeSniffer</strong> con est&aacute;ndares propios, <strong>Psalm</strong> como alternativa a PHPStan, <strong>composer audit</strong> y Dependabot para dependencias.</li>
+            </ul>
+            Se integran en pre-commit (Husky/lint-staged o CaptainHook) y en CI; el nivel de PHPStan debe acordarse y subir gradualmente, no bloquear el equipo con miles de errores heredados.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q77. &iquest;C&oacute;mo se monta un pipeline de CI/CD para Laravel?</p>
+        <p class="a">Un pipeline t&iacute;pico (GitHub Actions, GitLab CI) ejecuta en cada PR: instalar PHP/Composer con cach&eacute;, <em>composer install --no-interaction</em>, generar <em>.env</em> y APP_KEY, crear la base de datos de test (MySQL/PostgreSQL como servicio), <em>php artisan migrate</em>, <em>php artisan test</em>, Pint en modo test, PHPStan/Larastan y <em>composer audit</em>. Opcionalmente build de assets con Node (<em>npm ci &amp;&amp; npm run build</em>) y Dusk en un job aparte. Para despliegue: construir artefacto, ejecutar migraciones, <em>config:cache</em>, <em>route:cache</em>, <em>view:cache</em>, <em>queue:restart</em> y recargar workers; en Vapor/Forge/Envoyer el flujo se integra con Git o CLI. Usar entornos separados, secretos del repositorio, ramas protegidas, revisi&oacute;n obligatoria y despliegues con rollback.</p>
+    </div>
+
+    <h2 id="s10">10. Rendimiento, despliegue y administraci&oacute;n</h2>
+
+    <div class="card">
+        <p class="q">Q78. &iquest;Qu&eacute; hacen config:cache, route:cache, view:cache y opcache?</p>
+        <p class="a">En cada petici&oacute;n Laravel carga configuraci&oacute;n, rutas y vistas; los comandos de cach&eacute; precompilan esos artefactos:</p>
+        <p class="a">
+            <ul>
+                <li><em>php artisan config:cache</em> combina todos los archivos de <em>config/</em> en un solo array. Tras ejecutarlo, <em>env()</em> fuera de los archivos de configuraci&oacute;n devuelve null: la configuraci&oacute;n debe leerse con <em>config()</em>.</li>
+                <li><em>php artisan route:cache</em> serializa las rutas; no admite closures, as&iacute; que deben usarse controladores o acciones invocables.</li>
+                <li><em>php artisan view:cache</em> precompila las vistas Blade; <em>event:cache</em> y <em>optimize</em> agrupan el resto.</li>
+            </ul>
+            En despliegues hay que limpiar (<em>optimize:clear</em>) antes de regenerar si cambian rutas/config. Adem&aacute;s, habilitar <strong>OPcache</strong> de PHP con <em>opcache.validate_timestamps=0</em> en producci&oacute;n (y reiniciar PHP-FPM al desplegar) reduce el coste de compilaci&oacute;n. Los comandos no hacen que la app sea m&aacute;s r&aacute;pida por s&iacute; solos: eliminan trabajo repetido por request.
+        </p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q79. &iquest;Qu&eacute; es Laravel Octane y qu&eacute; cuidados exige?</p>
+        <p class="a"><strong>Octane</strong> mantiene la aplicaci&oacute;n en memoria y atiende peticiones con workers persistentes usando Swoole, OpenSwoole, RoadRunner o FrankenPHP, lo que reduce el arranque por request y mejora el rendimiento. Implica que el estado del contenedor sobrevive entre peticiones: hay que evitar guardar estado de usuario en propiedades de servicios singleton, limpiar variables est&aacute;ticas y usar <em>Octane::scoped()</em> o <em>singleton</em> correctamente; los servicios con estado por request deben registrarse como <em>scoped</em> y los listeners de eventos <em>flush</em>. Tambi&eacute;n cambian cosas como <em>request()</em> global, archivos subidos y sesiones. Requiere supervisar workers, reiniciarlos en cada despliegue (<em>octane:reload</em>) y probar compatibilidad de paquetes. No es magia: primero medir, y s&oacute;lo adoptarlo si el cuello de botella es el bootstrap de PHP.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q80. &iquest;C&oacute;mo se optimizan las consultas y el acceso a datos?</p>
+        <p class="a">Primero medir: Telescope, Debugbar, Pulse, <em>DB::listen</em> o un APM para detectar consultas lentas y N+1. Luego: eager loading (<em>with('author', 'comments')</em>) y <em>preventLazyLoading()</em> en desarrollo; seleccionar solo columnas necesarias (<em>select('id','name')</em>); &iacute;ndices en columnas de filtro, join y orden; evitar <em>whereHas</em> costosos sin &iacute;ndice y preferir <em>whereIn</em>/joins cuando aplique; usar <em>chunkById</em> o <em>lazyById</em> para procesar grandes vol&uacute;menes sin cargar todo en memoria; <em>exists()</em> en lugar de <em>count() &gt; 0</em>; <em>updateOrCreate</em>/upserts para escrituras masivas; y paginaci&oacute;n por cursor en listados grandes. Revisar el plan de ejecuci&oacute;n (<em>EXPLAIN</em>), el tama&ntilde;o de las tablas y la configuraci&oacute;n de conexiones. Evitar consultas dentro de loops y cachear agregados costosos con TTL e invalidaci&oacute;n clara.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q81. &iquest;C&oacute;mo se hace un despliegue sin downtime?</p>
+        <p class="a">Patr&oacute;n general: construir la release en un directorio nuevo (<em>releases/2026-10-16</em>), instalar dependencias con <em>composer install --no-dev --optimize-autoloader</em>, compilar assets, enlazar <em>storage</em> y <em>.env</em>, ejecutar migraciones compatibles hacia atr&aacute;s y cambiar el symlink <em>current</em> de forma at&oacute;mica; luego recargar PHP-FPM/Octane y reiniciar workers. Herramientas: <strong>Envoyer</strong> (despliegue zero-downtime con rollback), <strong>Forge</strong> (servidores y recetas), <strong>Vapor</strong> (serverless en AWS Lambda con assets en S3/CloudFront), <strong>Laravel Cloud</strong>, o Docker + Kubernetes/ECS. Las migraciones deben ser seguras: a&ntilde;adir columnas nullable o con default, separar cambios destructivos en releases posteriores, y probar rollback. Mantener compatibilidad de cach&eacute; entre versiones, evitar cambios de esquema incompatibles simult&aacute;neos y monitorizar errores tras el cambio.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q82. &iquest;C&oacute;mo se operan colas y scheduler en producci&oacute;n?</p>
+        <p class="a">Los workers se gestionan con <strong>Supervisor</strong> (o systemd, Horizon, Kubernetes) para reiniciarlos si fallan, con <em>numprocs</em> por cola y logs separados. El comando base es <em>php artisan queue:work --queue=high,default --tries=3 --timeout=90 --sleep=1</em>; <em>queue:listen</em> es m&aacute;s c&oacute;modo pero menos eficiente. En cada despliegue se ejecuta <em>queue:restart</em> para que los workers carguen el c&oacute;digo nuevo; con Horizon, <em>horizon:terminate</em>. El scheduler se activa con una &uacute;nica entrada cron que ejecuta <em>schedule:run</em> cada minuto; en cl&uacute;steres, <em>onOneServer()</em>. Monitorizar longitud de colas, jobs fallidos, tiempos de espera y workers ca&iacute;dos; alertar si la cola crece. Configurar <em>failed_jobs</em>, reintentos manuales y una pol&iacute;tica de retenci&oacute;n. Cuidado con timeouts de PHP/DB y con jobs que bloquean la cola.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q83. &iquest;Qu&eacute; monitoreo y alertas necesita una aplicaci&oacute;n Laravel?</p>
+        <p class="a">Capas: <strong>infraestructura</strong> (CPU, memoria, disco, PHP-FPM, base de datos, Redis, latencia de red), <strong>aplicaci&oacute;n</strong> (throughput, latencia p95/p99, tasa de errores 5xx, excepciones, consultas lentas), <strong>negocio</strong> (pedidos, pagos, registros) y <strong>colas/scheduler</strong> (profundidad, fallos, retrasos). Herramientas: Pulse para m&eacute;tricas internas, Sentry/Bugsnag para excepciones con contexto, New Relic/Datadog/Blackfire para APM y profiling, y el proveedor cloud para infraestructura. Definir health checks (<em>/up</em>, <em>/health</em>) y alertas con umbrales accionables (no ruido), runbooks y dashboards. Centralizar logs (ELK, Loki, CloudWatch) con request_id y sin datos sensibles. Ensayar respuesta a incidentes: rollback, desactivar features, restaurar backups y comunicar.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q84. &iquest;C&oacute;mo se actualiza Laravel de versi&oacute;n y se gestionan dependencias?</p>
+        <p class="a">Seguir la gu&iacute;a oficial de upgrade (Laravel 11 &rarr; 12): revisar requisitos de PHP (12 requiere PHP 8.2+), actualizar <em>composer.json</em> (<em>laravel/framework</em>, <em>laravel/*</em>, PHPUnit/Pest, Collision), ejecutar <em>composer update</em> y resolver conflictos, revisar el changelog y los <em>UPGRADE.md</em> de los paquetes, y correr la suite de tests. Usar <em>laravel/framework</em> actualizado y <em>composer audit</em>/Dependabot para seguridad. En proyectos grandes, hacer la actualizaci&oacute;n en una rama, con Rector para cambios mec&aacute;nicos, pruebas en staging y un plan de rollback. Fijar versiones (<em>composer.lock</em> en Git), revisar dependencias abandonadas y evitar paquetes que no soporten la versi&oacute;n objetivo. Programar actualizaciones peri&oacute;dicas en lugar de saltar varias versiones a la vez.</p>
+    </div>
+
+    <div class="card">
+        <p class="q">Q85. &iquest;Qu&eacute; buenas pr&aacute;cticas de arquitectura y gobierno aplicar en un proyecto Laravel?</p>
+        <p class="a">Mantener los controladores delgados: validaci&oacute;n en Form Requests, autorizaci&oacute;n en Policies, l&oacute;gica de negocio en clases de acci&oacute;n/servicios y acceso a datos en modelos/repositorios cuando aporte. Usar route model binding, Resources para APIs, eventos para efectos secundarios desacoplados y colas para trabajo pesado. Definir convenciones (nombres, estructura de carpetas, est&aacute;ndares de c&oacute;digo con Pint, an&aacute;lisis est&aacute;tico), revisar PRs y documentar decisiones (ADRs). Evitar sobreingenier&iacute;a: no introducir DDD/CQRS si el dominio no lo justifica; priorizar claridad, tests y bajo acoplamiento. Gestionar configuraci&oacute;n por entorno, secretos fuera del c&oacute;digo, migraciones versionadas y backups. Medir rendimiento antes de optimizar y mantener dependencias y framework al d&iacute;a. En equipos, automatizar todo lo posible en CI y cuidar la experiencia de desarrollo (Sail/Docker, seeders, docs).</p>
+    </div>
+
+    <h2 id="s11">11. C&oacute;mo responder preguntas de Laravel en una entrevista (plantilla)</h2>
+
+    <div class="answer-template">
+        <p><strong>Apertura (s&iacute; + estructura):</strong> &laquo;S&iacute;. He trabajado con Laravel [versi&oacute;n 10/11/12] durante [X] a&ntilde;os en [tipo de producto: SaaS, e-commerce, API, back-office], cubriendo desarrollo backend, APIs, base de datos, pruebas y despliegue en [Forge/Envoyer/Vapor/Docker/Kubernetes]&raquo;.</p>
+        <p><strong>Ciclo de vida y arquitectura:</strong> &laquo;Conozco el recorrido de una petici&oacute;n: <em>public/index.php</em> &rarr; <em>bootstrap/app.php</em> &rarr; kernel &rarr; middleware &rarr; router &rarr; controlador; uso el contenedor de servicios y providers para desacoplar, facades con criterio y middleware para cross-cutting concerns. Los controladores delegan en Form Requests, Policies y clases de acci&oacute;n/servicio&raquo;.</p>
+        <p><strong>Datos:</strong> &laquo;Modelo con Eloquent: relaciones, casts, scopes, observers y migraciones versionadas; controlo N+1 con eager loading y <em>preventLazyLoading</em>, uso transacciones, &iacute;ndices y paginaci&oacute;n por cursor en listados grandes. Para cambios de esquema sigo el flujo <em>migrate</em>/<em>rollback</em> y pruebas con <em>RefreshDatabase</em> y factories&raquo;.</p>
+        <p><strong>APIs e integraciones:</strong> &laquo;Construyo APIs versionadas con rutas en <em>routes/api.php</em>, Sanctum o Passport, Form Requests, API Resources, c&oacute;digos de error consistentes, rate limiting e idempotencia. Consumo servicios con el cliente HTTP con timeouts/reintentos y fakes en tests, y proceso webhooks con verificaci&oacute;n de firma y colas&raquo;.</p>
+        <p><strong>Frontend:</strong> &laquo;He trabajado con Blade y componentes, Vite/Tailwind, y [Livewire o Inertia + React/Vue]; uso Breeze/Fortify o Jetstream seg&uacute;n el proyecto y cuido la autenticaci&oacute;n, la autorizaci&oacute;n y la validaci&oacute;n del lado servidor&raquo;.</p>
+        <p><strong>Calidad y operaci&oacute;n:</strong> &laquo;Escribo tests Feature/Unit con PHPUnit o Pest, uso factories y fakes, y complemento con Dusk en flujos cr&iacute;ticos. En CI ejecuto tests, Pint, PHPStan/Larastan y <em>composer audit</em>; en producci&oacute;n uso colas con Supervisor/Horizon, scheduler, cach&eacute; de configuraci&oacute;n/rutas/vistas, OPcache y monitoreo con Pulse/Sentry&raquo;.</p>
+        <p><strong>Cierre (resultados + aplicaci&oacute;n al rol):</strong> &laquo;En mis proyectos logr&eacute; [m&eacute;trica: reducci&oacute;n de latencia, aumento de cobertura, migraci&oacute;n de versi&oacute;n sin downtime, integraci&oacute;n de N servicios]. En este rol aportar&iacute;a [desarrollo de APIs/arquitectura/rendimiento] y ayudar&iacute;a a mantener un c&oacute;digo simple, probado y f&aacute;cil de desplegar&raquo;.</p>
+    </div>
+
+    <h3>Evidencia sugerida por &aacute;rea (elige lo que realmente hayas hecho)</h3>
+    <table class="ref">
+        <tr><th>&Aacute;rea</th><th>Qu&eacute; mencionar</th><th>Impacto demostrable</th></tr>
+        <tr><td>Backend y arquitectura</td><td>Contenedor/providers, middleware, servicios/acciones, eventos, patr&oacute;n de capas</td><td>M&oacute;dulos desacoplados, menor tiempo de cambio, c&oacute;digo reutilizable</td></tr>
+        <tr><td>Base de datos</td><td>Eloquent, migraciones, &iacute;ndices, transacciones, eager loading, paginaci&oacute;n</td><td>Consultas m&aacute;s r&aacute;pidas, migraciones sin downtime, integridad de datos</td></tr>
+        <tr><td>APIs</td><td>Sanctum/Passport, Resources, validaci&oacute;n, versionado, rate limiting, OpenAPI</td><td>APIs estables consumidas por N clientes, menos incidencias</td></tr>
+        <tr><td>Frontend</td><td>Blade/componentes, Vite, Tailwind, Livewire/Inertia, autenticaci&oacute;n</td><td>Interfaces funcionales, tiempos de carga mejores</td></tr>
+        <tr><td>Testing y calidad</td><td>PHPUnit/Pest, factories, fakes, Dusk, Pint, PHPStan/Larastan</td><td>Cobertura, menos regresiones, CI confiable</td></tr>
+        <tr><td>Colas y scheduler</td><td>Jobs, reintentos, batches/chains, Horizon, tareas programadas</td><td>Procesos pesados fuera de la request, fiabilidad operativa</td></tr>
+        <tr><td>Rendimiento</td><td>Cach&eacute; de config/rutas/vistas, OPcache, Redis, Octane, profiling</td><td>Reducci&oacute;n medible de latencia y coste de infraestructura</td></tr>
+        <tr><td>Despliegue y operaci&oacute;n</td><td>Forge/Envoyer/Vapor/Docker, migraciones, cero downtime, monitoreo</td><td>Releases predecibles, rollback y menor MTTR</td></tr>
+        <tr><td>Seguridad</td><td>Sanctum, Policies, CSRF, XSS/SQLi, secretos, auditor&iacute;a de dependencias</td><td>Vulnerabilidades corregidas, cumplimiento y menos riesgo</td></tr>
+    </table>
+
+    <h3>Consejos</h3>
+    <ul class="toc">
+        <li>Cuantifica: n&uacute;mero de endpoints, usuarios, peticiones/d&iacute;a, jobs procesados, cobertura de tests y mejoras de latencia.</li>
+        <li>Nombra con precisi&oacute;n: versi&oacute;n de Laravel/PHP, Sanctum vs Passport, Eloquent/Query Builder, Horizon, Octane, Vite, Pest, PHPStan/Larastan.</li>
+        <li>Muestra criterio: cu&aacute;ndo usar colas, cu&aacute;ndo cachear, cu&aacute;ndo un servicio/acci&oacute;n y cu&aacute;ndo mantenerlo simple; evita sobreingenier&iacute;a.</li>
+        <li>Prep&aacute;rate para preguntas de detalle: ciclo de vida, service container, N+1, transacciones, migraciones seguras, idempotencia, CSRF/XSS, Octane y despliegue.</li>
+        <li>Si a&uacute;n no tienes experiencia directa en alg&uacute;n punto, s&eacute; honesta: menciona conocimiento s&oacute;lido del framework y un plan (proyecto propio, certificaci&oacute;n, lectura de docs).</li>
+        <li>Conecta con el negocio: velocidad de entrega, estabilidad, seguridad, coste de infraestructura y experiencia de usuario.</li>
+    </ul>
+
+    <h2 id="s12">12. Referencias</h2>
+    <table class="ref">
+        <tr><th>Referencia</th><th>Qu&eacute; cubre</th></tr>
+        <tr><td>Laravel Documentation (laravel.com/docs)</td><td>Gu&iacute;a oficial: ciclo de vida, contenedor, Eloquent, validaci&oacute;n, autenticaci&oacute;n, colas, testing, despliegue y upgrades.</td></tr>
+        <tr><td>Laravel API Reference (api.laravel.com)</td><td>Firmas de clases, m&eacute;todos e interfaces del framework; &uacute;til para detalles exactos.</td></tr>
+        <tr><td>Laracasts</td><td>Cursos y screencasts pr&aacute;cticos sobre Laravel, PHP moderno, testing y patrones.</td></tr>
+        <tr><td>Laravel News</td><td>Novedades de versiones, paquetes y buenas pr&aacute;cticas de la comunidad.</td></tr>
+        <tr><td>Symfony Documentation</td><td>Componentes subyacentes (HttpFoundation, Routing, Console, EventDispatcher) que Laravel reutiliza.</td></tr>
+        <tr><td>PHP Manual (php.net)</td><td>Referencia de lenguaje, tipos, sesiones, seguridad y extensiones.</td></tr>
+        <tr><td>PHP-FIG PSRs</td><td>Est&aacute;ndares de interoperabilidad (PSR-4, PSR-7, PSR-12, PSR-15) usados en el ecosistema.</td></tr>
+        <tr><td>Composer Documentation</td><td>Gesti&oacute;n de dependencias, versionado sem&aacute;ntico, scripts y autoload.</td></tr>
+        <tr><td>PHPUnit / Pest Documentation</td><td>Escritura de tests, fixtures, mocking y ejecuci&oacute;n en CI.</td></tr>
+        <tr><td>Laravel Horizon, Telescope y Pulse docs</td><td>Supervisi&oacute;n de colas Redis, depuraci&oacute;n y m&eacute;tricas de producci&oacute;n.</td></tr>
+        <tr><td>Laravel Octane y Deployment docs</td><td>Workers persistentes (Swoole/RoadRunner/FrankenPHP), Forge, Envoyer, Vapor y optimizaci&oacute;n de despliegue.</td></tr>
+        <tr><td>Laravel Security Policy y advisories</td><td>Versiones soportadas, proceso de reporte y parches de seguridad.</td></tr>
+        <tr><td>OWASP Top 10 y Cheat Sheets</td><td>Riesgos web (XSS, SQLi, CSRF, control de acceso) y mitigaciones aplicables a Laravel.</td></tr>
+    </table>
+
+</div>
+</body>
+</html>
