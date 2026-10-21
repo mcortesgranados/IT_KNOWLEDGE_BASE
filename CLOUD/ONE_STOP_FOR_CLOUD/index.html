@@ -1,1002 +1,791 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ONE STOP FOR CLOUD</title>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+/* Service tables nested inside the comparison grid */
+.params > table > tbody > tr > td { vertical-align: top; }
+.params td > table { width: 100%; margin: 0; }
+.params td > table th { background: #eef3f8; color: #334155; font-size: .82em; text-align: left; }
+.params td > table td { padding: 4px 6px; vertical-align: top; }
+.params td > table td:nth-child(2) { white-space: nowrap; }
+.params td > table tbody tr td:first-child::before { content: none; }
+.params td > table tbody tr td:first-child { background: transparent; border-left: 0; }
+</style>
 </head>
 
-<body class="texto8_1">
-<table width="100%" border="0" cellpadding="5" cellspacing="5" class="texto1">
-  <tbody>
-    <tr>
-      <td><div align="center"></div></td>
-      <td>&nbsp;</td>
-      <td align="center" class="texto12"><p>AWS</p></td>
-      <td align="center" class="texto12"><p>Azure</p></td>
-      <td align="center" class="texto12">GCP</td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[1]</div></td>
-      <td class="texto20">Compute</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" height="19" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="AWS/Amazon EC2 (Elastic Compute Cloud).html" target="_blank">Amazon EC2 (Elastic Compute Cloud)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/AWS Lambda.html" target="_blank">AWS Lambda</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/AWS Batch.html" target="_blank">AWS Batch</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="Azure/Azure Virtual Machines.html" target="_blank">Azure Virtual Machines</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Functions.html" target="_blank">Azure Functions</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Batch.html" target="_blank">Azure Batch</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Compute Engine.html" target="_blank">Google Compute Engine</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Functions.html" target="_blank">Google Cloud Functions</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center">Google Cloud Dataprep (NOT EXIST)</div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[2]</div></td>
-      <td class="texto20">Storage</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="7%" class="texto18"><div align="center">1</div></td>
-            <td width="93%"><div align="center"><a href="AWS/Amazon S3 (Simple Storage Service).html" target="_blank">Amazon S3 (Simple Storage Service)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Amazon EBS (Elastic Block Store).html" target="_blank">Amazon EBS (Elastic Block Store)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Amazon EFS (Elastic File System).html" target="_blank">Amazon EFS (Elastic File System)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/Amazon Glacier.html" target="_blank">Amazon Glacier</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1"><tbody><tr><td><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="Azure/Azure Blob Storage.html" target="_blank">Azure Blob Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Disk Storage.html" target="_blank">Azure Disk Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Files.html" target="_blank">Azure Files</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="Azure/Azure Data Lake Storage.html" target="_blank">Azure Data Lake Storage</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-          </tr>
-      </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Cloud Storage.html" target="_blank">Google Cloud Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center">
-              <blockquote>
-                <p><a href="GCP/Google Persistent Disks.html" target="_blank">Google Persistent Disks</a></p>
-              </blockquote>
-            </div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google File store.html" target="_blank">Google File store</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Storage for Firebase.html" target="_blank">Google Cloud Storage for Firebase</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[3]</div></td>
-      <td class="texto20">Network</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td class="texto18"><div align="center">1</div></td>
-            <td><div align="center"><a href="AWS/Amazon VPC Peering.html" target="_blank">Amazon VPC Peering</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/AWS Site-to-Site VPN.html" target="_blank">AWS Site-to-Site VPN</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center">AWS Direct Connect</div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="Azure/Azure Virtual Network Peering.html" target="_blank">Azure Virtual Network Peering</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure ExpressRoute Global Reach.html" target="_blank">Azure ExpressRoute Global Reach</a></div></td>
-          </tr>
-          <tr>
-            <td colspan="2">&nbsp;</td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Cloud Interconnect (Dedicated Interconnect and Partner Interconnect).html">Google Cloud Interconnect (Dedicated Interconnect and Partner Interconnect)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Network Peering.html" target="_blank">Google Cloud Network Peering</a></div></td>
-          </tr>
-          <tr>
-            <td colspan="2"><div align="center"></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[4]</div></td>
-      <td class="texto20">Databases</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="8%" class="texto18"><div align="center">1</div></td>
-            <td width="92%"><div align="center"><a href="AWS/Amazon RDS (Relational Database Service).html" target="_blank">Amazon RDS (Relational Database Service)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Amazon Aurora.html" target="_blank">Amazon Aurora</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Amazon DynamoDB.html" target="_blank">Amazon DynamoDB</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/Amazon Redshift.html" target="_blank">Amazon Redshift</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="AWS/Amazon Neptune.html" target="_blank">Amazon Neptune</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="AWS/Amazon Document DB.html">Amazon Document DB</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="Azure/Azure SQL Database.html" target="_blank">Azure SQL Database</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Database for MySQL.html">Azure Database for MySQL</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Database for PostgreSQL.html" target="_blank">Azure Database for PostgreSQL</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="Azure/Azure Cosmos DB.html" target="_blank">Azure Cosmos DB</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="Azure/Azure Synapse Analytics (formerly SQL Data Warehouse).html" target="_blank">Azure Synapse Analytics (formerly SQL Data Warehouse)</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="GCP/Google Cloud SQL.html" target="_blank">Google Cloud SQL</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Spanner.html" target="_blank">Google Cloud Spanner</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Fire store.html">Google Cloud Fire store</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="GCP/Google Bigtable.html" target="_blank">Google Bigtable</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Memory store.html">Google Cloud Memory store</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[5]</div></td>
-      <td class="texto20">Content Delivery network</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="8%" class="texto18"><div align="center">1</div></td>
-            <td width="92%"><div align="center"><a href="AWS/Amazon CloudFront.html" target="_blank">Amazon CloudFront</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="Azure/Azure Content Delivery Network (CDN).html" target="_blank">Azure Content Delivery Network (CDN)</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="GCP/Google Cloud CDN.html" target="_blank">Google Cloud CDN</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[6]</div></td>
-      <td class="texto20">DNS</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="9%" class="texto18"><div align="center">1</div></td>
-            <td width="91%"><div align="center"><a href="AWS/Amazon Route 53.html" target="_blank">Amazon Route 53</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="Azure/Azure DNS.html" target="_blank">Azure DNS</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="GCP/Google Cloud DNS.html">Google Cloud DNS</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[7]</div></td>
-      <td class="texto20">Load Balancer</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" bordercolor="#FFFFFF" class="texto18"><div align="center">1</div></td>
-            <td width="90%" bordercolor="#FFFFFF"><div align="center"><a href="AWS/Application Load Balancer (ALB).html" target="_blank">Application Load Balancer (ALB)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Network Load Balancer (NLB).html" target="_blank">Network Load Balancer (NLB)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Classic Load Balancer (CLB).html" target="_blank">Classic Load Balancer (CLB)</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="4%" class="texto18"><div align="center">1</div></td>
-            <td><div align="center"><a href="Azure/Azure Load Balancer.html" target="_blank">Azure Load Balancer</a></div></td>
-            </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Cloud HTTP(S) Load Balancing.html" target="_blank">Google Cloud HTTP(S) Load Balancing</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud TCP UDP Load Balancing.html" target="_blank">Google Cloud TCP/UDP Load Balancing</a></div></td>
-          </tr>
-          <tr>
-            <td colspan="2"><div align="center"></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[8]</div></td>
-      <td class="texto20">Firewall</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" class="texto18"><div align="center">1</div></td>
-            <td width="90%"><div align="center"><a href="AWS/AWS Network Firewall.html" target="_blank">AWS Network Firewall</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/AWS WAF (Web Application Firewall).html" target="_blank">AWS WAF (Web Application Firewall)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/AWS Security Groups.html">AWS Security Groups</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/AWS NACLs (Network Access Control Lists).html" target="_blank">AWS NACLs (Network Access Control Lists)</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="Azure/Azure Firewall.html" target="_blank">Azure Firewall </a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Application Gateway.html" target="_blank">Azure Application Gateway</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Network Security Groups.html" target="_blank">Azure Network Security Groups</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="Azure/Azure DDoS Protection.html" target="_blank">Azure DDoS Protection</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Cloud Firewall.html" target="_blank">Google Cloud Firewall</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Armor.html" target="_blank">Google Cloud Armor</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud DDoS Protection.html" target="_blank">Google Cloud DDoS Protection</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[9]</div></td>
-      <td class="texto20">Containers</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="9%" class="texto18"><div align="center">1</div></td>
-            <td width="91%"><div align="center"><a href="AWS/Amazon Elastic Kubernetes Service (EKS).html" target="_blank">Amazon Elastic Kubernetes Service (EKS)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Amazon Elastic Container Service (ECS).html" target="_blank">Amazon Elastic Container Service (ECS)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/AWS Fargate.html" target="_blank">AWS Fargate</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="Azure/Azure Kubernetes Service (AKS).html" target="_blank">Azure Kubernetes Service (AKS)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Container Instances (ACI).html">Azure Container Instances (ACI)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center">Azure Container Service (ACS) (DEPRECATED)</div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Kubernetes Engine (GKE).html" target="_blank">Google Kubernetes Engine (GKE)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Run.html" target="_blank">Google Cloud Run</a></div></td>
-          </tr>
-          <tr>
-            <td colspan="2"><div align="center"></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[10]</div></td>
-      <td class="texto20">Monitoring</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="9%" class="texto18"><div align="center">1</div></td>
-            <td width="91%"><div align="center"><a href="AWS/Amazon CloudWatch.html" target="_blank">Amazon CloudWatch</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Amazon CloudWatch Logs.html" target="_blank">Amazon CloudWatch Logs</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Amazon CloudWatch Container Insights.html">Amazon CloudWatch Container Insights</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/Amazon CloudWatch Application Insights.html" target="_blank">Amazon CloudWatch Application Insights</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="AWS/Amazon X-Ray.html" target="_blank">Amazon X-Ray</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="AWS/Azure Monitor.html" target="_blank">Azure Monitor</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Azure Application Insights.html" target="_blank">Azure Application Insights</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Azure Log Analytics.html" target="_blank">Azure Log Analytics</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/Azure Network Watcher.html" target="_blank">Azure Network Watcher</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="AWS/Azure Security Center.html" target="_blank">Azure Security Center</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="GCP/Google Cloud Monitoring (formerly Stack driver).html" target="_blank">Google Cloud Monitoring (formerly Stack driver)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Logging.html" target="_blank">Google Cloud Logging</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Trace.html" target="_blank">Google Cloud Trace</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[11]</div></td>
-      <td class="texto20">Cost Management</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="11%" class="texto18"><div align="center">1</div></td>
-            <td width="89%"><div align="center"><a href="AWS/AWS Cost Explorer.html" target="_blank">AWS Cost Explorer</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/AWS Budgets.html" target="_blank">AWS Budgets</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/AWS Cost and Usage Report.html" target="_blank">AWS Cost and Usage Report</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="AWS/Azure Cost Management and Billing.html" target="_blank">Azure Cost Management and Billing</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Azure Cost Management APIs.html">Azure Cost Management APIs</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Azure Pricing Calculator.html" target="_blank">Azure Pricing Calculator</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Google Cloud Cost Management.html" target="_blank">Google Cloud Cost Management</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Pricing Calculator.html" target="_blank">Google Cloud Pricing Calculator</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Billing APIs.html" target="_blank">Google Cloud Billing APIs</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16"><div align="center">[12]</div></td>
-      <td class="texto20">Security</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" class="texto18"><div align="center">1</div></td>
-            <td width="90%"><div align="center"><a href="AWS/AWS Identity and Access Management (IAM).html" target="_blank">AWS Identity and Access Management (IAM)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/Amazon Guard Duty.html" target="_blank">Amazon Guard Duty</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/AWS WAF (Web Application Firewall).html" target="_blank">AWS WAF (Web Application Firewall)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/Amazon Inspector.html">Amazon Inspector</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="AWS/AWS Key Management Service (KMS).html" target="_blank">AWS Key Management Service (KMS)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="AWS/AWS Secrets Manager.html" target="_blank">AWS Secrets Manager</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="AWS/AWS Firewall Manager.html">AWS Firewall Manager</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="AWS/Amazon Macie.html" target="_blank">Amazon Macie</a></div></td>
-          </tr>
-          <tr>
-            <td colspan="2">&nbsp;</td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="7%" class="texto18"><div align="center">1</div></td>
-            <td width="93%"><div align="center"><a href="AWS/Azure Active Directory (Azure AD).html" target="_blank">Azure Active Directory (Azure AD) (Legacy)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Security Center.html" target="_blank">Azure Security Center</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Firewall.html" target="_blank">Azure Firewall</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="Azure/Azure Key Vault.html" target="_blank">Azure Key Vault</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="Azure/Azure Sentinel.html" target="_blank">Azure Sentinel</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="Azure/Azure Information Protection.html" target="_blank">Azure Information Protection</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="Azure/Azure Defender (formerly Azure Security Center Standard).html" target="_blank">Azure Defender (formerly Azure Security Center Standard)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="Azure/Microsoft Graph API.html" target="_blank">Microsoft Graph API</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="GCP/Google Cloud Identity and Access Management (IAM).html" target="_blank">Google Cloud Identity and Access Management (IAM)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Security Command Center.html" target="_blank">Google Cloud Security Command Center</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Firewall.html" target="_blank">Google Cloud Firewall</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Key Management Service (KMS).html" target="_blank">Google Cloud Key Management Service (KMS)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Security Scanner.html" target="_blank">Google Cloud Security Scanner</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud DDoS Protection.html" target="_blank">Google Cloud DDoS Protection</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Armor.html" target="_blank">Google Cloud Armor</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16">[13]</td>
-      <td class="texto20">ETL</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" class="texto18"><div align="center">1</div></td>
-            <td width="90%"><div align="center"><a href="AWS/AWS Glue.html" target="_blank">AWS Glue</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="AWS/AWS Step Functions.html" target="_blank">AWS Step Functions</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/Amazon EMR (Elastic Map Reduce).html" target="_blank">Amazon EMR (Elastic Map Reduce)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/AWS Data Pipeline.html" target="_blank">AWS Data Pipeline</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="AWS/Amazon Kinesis.html" target="_blank">Amazon Kinesis</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="AWS/AWS Glue DataBrew.html" target="_blank">AWS Glue DataBrew</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="AWS/AWS Glue Elasctic Views.html" target="_blank">AWS Glue Elasctic Views</a></div></td>
-          </tr>
+<body>
+<div class="container">
+<main>
 
-          <tr>
-            <td colspan="2">&nbsp;</td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" class="texto18"><div align="center">1</div></td>
-            <td width="90%"><div align="center"><a href="Azure/Azure Data Factory (ADF).html" target="_blank">Azure Data Factory (ADF)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Databricks.html" target="_blank">Azure Databricks</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Data Lake Storage.html" target="_blank">Azure Data Lake Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="Azure/Azure SQL Data Warehouse (Synapse Analytics).html" target="_blank">Azure SQL Data Warehouse (Synapse Analytics)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="Azure/Azure HDInsight.html" target="_blank">Azure HDInsight</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="Azure/Azure Stream Analytics.html" target="_blank">Azure Stream Analytics</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="Azure/Azure Logic Apps.html" target="_blank">Azure Logic Apps</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="Azure/Azure SQL Database.html" target="_blank">Azure SQL Database</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">9</div></td>
-            <td><div align="center"><a href="Azure/Azure Blob Storage.html" target="_blank">Azure Blob Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">10</div></td>
-            <td><div align="center">Azure Data Explorer</div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="5%" class="texto18"><div align="center">1</div></td>
-            <td width="95%"><div align="center"><a href="GCP/Cloud Dataflow.html" target="_blank">Cloud Dataflow</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/BigQuery.html" target="_blank">BigQuery</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Storage.html" target="_blank">Cloud Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Dataprep.html" target="_blank">Cloud Dataprep</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center">Cloud Composer</div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center">Cloud Pub/Sub</div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="GCP/Google Bigtable.html" target="_blank">Cloud Bigtable</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="Storage Transfer_references_jpg.html" target="_blank">Cloud Storage Transfer Service</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">9</div></td>
-            <td><div align="center"><a href="GCP/Cloud Dataproc.html" target="_blank">Cloud Dataproc</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">10</div></td>
-            <td><div align="center"><a href="GCP/Data Catalog.html">Data Catalog</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-    <tr>
-      <td class="texto16">[14]</td>
-      <td class="texto20">DevOps</td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" class="texto18"><div align="center">1</div></td>
-            <td width="90%"><div align="center"><a href="AWS/AWS CodePipeline.html" target="_blank">AWS CodePipeline</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="CodeBuild_references_jpg.html" target="_blank">AWS CodeBuild</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="AWS/AWS CodeDeploy.html" target="_blank">AWS CodeDeploy</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="AWS/AWS CodeCommmit.html" target="_blank">AWS CodeCommit</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="AWS/AWS CodeStar.html" target="_blank">AWS CodeStar</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="AWS/AWS CloudFormation.html">AWS CloudFormation</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="AWS/AWS CloudWatch.html" target="_blank">AWS CloudWatch</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="AWS/AWS Elastic Beanstalk.html" target="_blank">AWS Elastic Beanstalk</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">9</div></td>
-            <td><div align="center"><a href="AWS/AWS OpsWorks.html" target="_blank">AWS OpsWorks</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="10%" class="texto18"><div align="center">1</div></td>
-            <td width="90%"><div align="center"><a href="Azure/Azure DevOps Services.html" target="_blank">Azure DevOps Services</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="Azure/Azure Pipelines.html" target="_blank">Azure Pipelines</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="Azure/Azure Repos.html" target="_blank">Azure Repos</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="Azure/Azure Boards.html" target="_blank">Azure Boards</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="Azure Artifacts_references_jpg.html" target="_blank">Azure Artifacts</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center"><a href="Azure/Azure Test Plans.html" target="_blank">Azure Test Plans</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="Azure/Azure Monitor.html" target="_blank">Azure Monitor</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="Azure/Azure Security Center.html" target="_blank">Azure Security Center</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">9</div></td>
-            <td><div align="center"><a href="Azure/Azure Policy.html" target="_blank">Azure Policy</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">10</div></td>
-            <td><div align="center"><a href="CLI_references_jpg.html" target="_blank">Azure DevOps CLI</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">11</div></td>
-            <td><div align="center"><a href="Azure/Azure Kubernetes Service (AKS).html" target="_blank">Azure Kubernetes Service (AKS)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">12</div></td>
-            <td><div align="center"><a href="Azure/Azure Automation.html" target="_blank">Azure Automation</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-      <td class="texto1"><table width="100%" border="0" cellpadding="1" cellspacing="1">
-        <tbody>
-          <tr>
-            <td width="6%" class="texto18"><div align="center">1</div></td>
-            <td width="94%"><div align="center"><a href="GCP/Google Kubernetes Engine (GKE).html" target="_blank">Google Kubernetes Engine (GKE)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">2</div></td>
-            <td><div align="center"><a href="GCP/Cloud Build.html" target="_blank">Cloud Build</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">3</div></td>
-            <td><div align="center"><a href="GCP/Cloud Source Repositories.html" target="_blank">Cloud Source Repositories</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">4</div></td>
-            <td><div align="center"><a href="GCP/Cloud Deployment Manager.html" target="_blank">Cloud Deployment Manager</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">5</div></td>
-            <td><div align="center"><a href="Monitoring and Logging_references_jpg.html" target="_blank">Cloud Monitoring and Logging</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">6</div></td>
-            <td><div align="center">Cloud Operations Suite (formerly Stackdriver) NOT EXIST</div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">7</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Identity and Access Management (IAM).html" target="_blank">Cloud Identity and Access Management (IAM)</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">8</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Storage.html" target="_blank">Cloud Storage</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">9</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud SQL.html" target="_blank">Cloud SQL</a> and <a href="GCP/Google Cloud Spanner.html">Cloud Spanner</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">10</div></td>
-            <td><div align="center"><a href="GCP/Cloud Pub Sub.html" target="_blank">Cloud Pub/Sub</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">11</div></td>
-            <td><div align="center"><a href="GCP/Google Cloud Functions.html" target="_blank">Cloud Functions</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">12</div></td>
-            <td><div align="center"><a href="GCP/Cloud Deployment Manager.html" target="_blank">Deployment Manager</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">13</div></td>
-            <td><div align="center"><a href="GCP/Cloud Composer.html" target="_blank">Cloud Composer</a></div></td>
-          </tr>
-          <tr>
-            <td class="texto18"><div align="center">14</div></td>
-            <td><div align="center"><a href="GCP/Apigee.html" target="_blank">Apigee</a></div></td>
-          </tr>
-        </tbody>
-      </table></td>
-    </tr>
-  </tbody>
-</table>
- 
-</p>
+  <h1>One Stop for Cloud<span class="tag">AWS · Azure · Google Cloud</span></h1>
+
+  <div class="note">
+    <p><strong>Cross-cloud service index.</strong> The same 15 categories side by side across the three major providers. Each cell lists the services of that category with the year they became available and whether they are still running, renamed or retired.</p>
+    <ul>
+      <li><strong>AWS:</strong> 59 services &nbsp;·&nbsp; <strong>Azure:</strong> 61 &nbsp;·&nbsp; <strong>Google Cloud:</strong> 58 &nbsp;·&nbsp; <strong>Total:</strong> 178 links</li>
+      <li><strong>Launched</strong> = general availability year when documented, otherwise the first public preview.</li>
+      <li><strong>Status</strong> checked October 2026: <em>Active</em>, <em>Renamed</em> (still running under a new name) or <em>Retired</em>.</li>
+      <li><strong>&mdash;</strong> = year not verified against a source.</li>
+    </ul>
+  </div>
+
+  <h2 class="phase">Services by category</h2>
+
+  <div class="params">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Category</th>
+          <th scope="col">AWS</th>
+          <th scope="col">Azure</th>
+          <th scope="col">Google Cloud</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Compute</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon EC2 (Elastic Compute Cloud).html" target="_blank" rel="noopener">Amazon EC2 (Elastic Compute Cloud)</a></td><td>2008</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Lambda.html" target="_blank" rel="noopener">AWS Lambda</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Batch.html" target="_blank" rel="noopener">AWS Batch</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Virtual Machines.html" target="_blank" rel="noopener">Azure Virtual Machines</a></td><td>2012</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Functions.html" target="_blank" rel="noopener">Azure Functions</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Batch.html" target="_blank" rel="noopener">Azure Batch</a></td><td>2015</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Compute Engine.html" target="_blank" rel="noopener">Google Compute Engine</a></td><td>2013</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Functions.html" target="_blank" rel="noopener">Google Cloud Functions</a></td><td>2018</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Storage</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon S3 (Simple Storage Service).html" target="_blank" rel="noopener">Amazon S3 (Simple Storage Service)</a></td><td>2006</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon EBS (Elastic Block Store).html" target="_blank" rel="noopener">Amazon EBS (Elastic Block Store)</a></td><td>2008</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon EFS (Elastic File System).html" target="_blank" rel="noopener">Amazon EFS (Elastic File System)</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Glacier.html" target="_blank" rel="noopener">Amazon Glacier</a></td><td>2012</td><td><span class="time">Renamed</span></td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Blob Storage.html" target="_blank" rel="noopener">Azure Blob Storage</a></td><td>2010</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Disk Storage.html" target="_blank" rel="noopener">Azure Disk Storage</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Files.html" target="_blank" rel="noopener">Azure Files</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Data Lake Storage.html" target="_blank" rel="noopener">Azure Data Lake Storage</a></td><td>2016</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud Storage.html" target="_blank" rel="noopener">Google Cloud Storage</a></td><td>2010</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Persistent Disks.html" target="_blank" rel="noopener">Google Persistent Disks</a></td><td>2013</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google File store.html" target="_blank" rel="noopener">Google File store</a></td><td>2019</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Storage for Firebase.html" target="_blank" rel="noopener">Google Cloud Storage for Firebase</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Network</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon VPC Peering.html" target="_blank" rel="noopener">Amazon VPC Peering</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Site-to-Site VPN.html" target="_blank" rel="noopener">AWS Site-to-Site VPN</a></td><td>2011</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Virtual Network Peering.html" target="_blank" rel="noopener">Azure Virtual Network Peering</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure ExpressRoute Global Reach.html" target="_blank" rel="noopener">Azure ExpressRoute Global Reach</a></td><td>2019</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud Interconnect (Dedicated Interconnect and Partner Interconnect).html" target="_blank" rel="noopener">Google Cloud Interconnect (Dedicated Interconnect and Partner Interconnect)</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Network Peering.html" target="_blank" rel="noopener">Google Cloud Network Peering</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Databases</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon RDS (Relational Database Service).html" target="_blank" rel="noopener">Amazon RDS (Relational Database Service)</a></td><td>2009</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Aurora.html" target="_blank" rel="noopener">Amazon Aurora</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon DynamoDB.html" target="_blank" rel="noopener">Amazon DynamoDB</a></td><td>2012</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Redshift.html" target="_blank" rel="noopener">Amazon Redshift</a></td><td>2013</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Neptune.html" target="_blank" rel="noopener">Amazon Neptune</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Document DB.html" target="_blank" rel="noopener">Amazon Document DB</a></td><td>2019</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure SQL Database.html" target="_blank" rel="noopener">Azure SQL Database</a></td><td>2010</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Database for MySQL.html" target="_blank" rel="noopener">Azure Database for MySQL</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Database for PostgreSQL.html" target="_blank" rel="noopener">Azure Database for PostgreSQL</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Cosmos DB.html" target="_blank" rel="noopener">Azure Cosmos DB</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Synapse Analytics (formerly SQL Data Warehouse).html" target="_blank" rel="noopener">Azure Synapse Analytics (formerly SQL Data Warehouse)</a></td><td>2016</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud SQL.html" target="_blank" rel="noopener">Google Cloud SQL</a></td><td>2014</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Spanner.html" target="_blank" rel="noopener">Google Cloud Spanner</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Fire store.html" target="_blank" rel="noopener">Google Cloud Fire store</a></td><td>2019</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Bigtable.html" target="_blank" rel="noopener">Google Bigtable</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Memory store.html" target="_blank" rel="noopener">Google Cloud Memory store</a></td><td>2018</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Content Delivery network</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon CloudFront.html" target="_blank" rel="noopener">Amazon CloudFront</a></td><td>2008</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Content Delivery Network (CDN).html" target="_blank" rel="noopener">Azure Content Delivery Network (CDN)</a></td><td>2010</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud CDN.html" target="_blank" rel="noopener">Google Cloud CDN</a></td><td>2016</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>DNS</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon Route 53.html" target="_blank" rel="noopener">Amazon Route 53</a></td><td>2011</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure DNS.html" target="_blank" rel="noopener">Azure DNS</a></td><td>2016</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud DNS.html" target="_blank" rel="noopener">Google Cloud DNS</a></td><td>2015</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Load Balancer</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Application Load Balancer (ALB).html" target="_blank" rel="noopener">Application Load Balancer (ALB)</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Network Load Balancer (NLB).html" target="_blank" rel="noopener">Network Load Balancer (NLB)</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Classic Load Balancer (CLB).html" target="_blank" rel="noopener">Classic Load Balancer (CLB)</a></td><td>2009</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Load Balancer.html" target="_blank" rel="noopener">Azure Load Balancer</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud HTTP(S) Load Balancing.html" target="_blank" rel="noopener">Google Cloud HTTP(S) Load Balancing</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud TCP UDP Load Balancing.html" target="_blank" rel="noopener">Google Cloud TCP/UDP Load Balancing</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Firewall</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/AWS Network Firewall.html" target="_blank" rel="noopener">AWS Network Firewall</a></td><td>2020</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS WAF (Web Application Firewall).html" target="_blank" rel="noopener">AWS WAF (Web Application Firewall)</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Security Groups.html" target="_blank" rel="noopener">AWS Security Groups</a></td><td>2006</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS NACLs (Network Access Control Lists).html" target="_blank" rel="noopener">AWS NACLs (Network Access Control Lists)</a></td><td>2009</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Firewall.html" target="_blank" rel="noopener">Azure Firewall</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Application Gateway.html" target="_blank" rel="noopener">Azure Application Gateway</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Network Security Groups.html" target="_blank" rel="noopener">Azure Network Security Groups</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure DDoS Protection.html" target="_blank" rel="noopener">Azure DDoS Protection</a></td><td>2018</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud Firewall.html" target="_blank" rel="noopener">Google Cloud Firewall</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Armor.html" target="_blank" rel="noopener">Google Cloud Armor</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud DDoS Protection.html" target="_blank" rel="noopener">Google Cloud DDoS Protection</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Containers</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon Elastic Kubernetes Service (EKS).html" target="_blank" rel="noopener">Amazon Elastic Kubernetes Service (EKS)</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Elastic Container Service (ECS).html" target="_blank" rel="noopener">Amazon Elastic Container Service (ECS)</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Fargate.html" target="_blank" rel="noopener">AWS Fargate</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Kubernetes Service (AKS).html" target="_blank" rel="noopener">Azure Kubernetes Service (AKS)</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Container Instances (ACI).html" target="_blank" rel="noopener">Azure Container Instances (ACI)</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Kubernetes Engine (GKE).html" target="_blank" rel="noopener">Google Kubernetes Engine (GKE)</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Run.html" target="_blank" rel="noopener">Google Cloud Run</a></td><td>2019</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Monitoring</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/Amazon CloudWatch.html" target="_blank" rel="noopener">Amazon CloudWatch</a></td><td>2009</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon CloudWatch Logs.html" target="_blank" rel="noopener">Amazon CloudWatch Logs</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon CloudWatch Container Insights.html" target="_blank" rel="noopener">Amazon CloudWatch Container Insights</a></td><td>2019</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon CloudWatch Application Insights.html" target="_blank" rel="noopener">Amazon CloudWatch Application Insights</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon X-Ray.html" target="_blank" rel="noopener">Amazon X-Ray</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Monitor.html" target="_blank" rel="noopener">Azure Monitor</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Application Insights.html" target="_blank" rel="noopener">Azure Application Insights</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Log Analytics.html" target="_blank" rel="noopener">Azure Log Analytics</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Network Watcher.html" target="_blank" rel="noopener">Azure Network Watcher</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Security Center.html" target="_blank" rel="noopener">Azure Security Center</a></td><td>2016</td><td><span class="time">Renamed &quot;Defender for Cloud&quot;</span></td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud Monitoring (formerly Stack driver).html" target="_blank" rel="noopener">Google Cloud Monitoring (formerly Stack driver)</a></td><td>2016</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="GCP/Google Cloud Logging.html" target="_blank" rel="noopener">Google Cloud Logging</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Trace.html" target="_blank" rel="noopener">Google Cloud Trace</a></td><td>2016</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Cost Management</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/AWS Cost Explorer.html" target="_blank" rel="noopener">AWS Cost Explorer</a></td><td>2014</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Budgets.html" target="_blank" rel="noopener">AWS Budgets</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Cost and Usage Report.html" target="_blank" rel="noopener">AWS Cost and Usage Report</a></td><td>2015</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Cost Management and Billing.html" target="_blank" rel="noopener">Azure Cost Management and Billing</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Cost Management APIs.html" target="_blank" rel="noopener">Azure Cost Management APIs</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Pricing Calculator.html" target="_blank" rel="noopener">Azure Pricing Calculator</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud Cost Management.html" target="_blank" rel="noopener">Google Cloud Cost Management</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Pricing Calculator.html" target="_blank" rel="noopener">Google Cloud Pricing Calculator</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Billing APIs.html" target="_blank" rel="noopener">Google Cloud Billing APIs</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Security</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/AWS Identity and Access Management (IAM).html" target="_blank" rel="noopener">AWS Identity and Access Management (IAM)</a></td><td>2011</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Guard Duty.html" target="_blank" rel="noopener">Amazon Guard Duty</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS WAF (Web Application Firewall).html" target="_blank" rel="noopener">AWS WAF (Web Application Firewall)</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Inspector.html" target="_blank" rel="noopener">Amazon Inspector</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Key Management Service (KMS).html" target="_blank" rel="noopener">AWS Key Management Service (KMS)</a></td><td>2014</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Secrets Manager.html" target="_blank" rel="noopener">AWS Secrets Manager</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Firewall Manager.html" target="_blank" rel="noopener">AWS Firewall Manager</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Macie.html" target="_blank" rel="noopener">Amazon Macie</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Active Directory (Azure AD).html" target="_blank" rel="noopener">Azure Active Directory (Azure AD) (Legacy)</a></td><td>—</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="Azure/Azure Security Center.html" target="_blank" rel="noopener">Azure Security Center</a></td><td>2016</td><td><span class="time">Renamed &quot;Defender for Cloud&quot;</span></td></tr>
+              <tr><td><a href="Azure/Azure Firewall.html" target="_blank" rel="noopener">Azure Firewall</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Key Vault.html" target="_blank" rel="noopener">Azure Key Vault</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Sentinel.html" target="_blank" rel="noopener">Azure Sentinel</a></td><td>—</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="Azure/Azure Information Protection.html" target="_blank" rel="noopener">Azure Information Protection</a></td><td>—</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="Azure/Azure Defender (formerly Azure Security Center Standard).html" target="_blank" rel="noopener">Azure Defender (formerly Azure Security Center Standard)</a></td><td>—</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="Azure/Microsoft Graph API.html" target="_blank" rel="noopener">Microsoft Graph API</a></td><td>2015</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Cloud Identity and Access Management (IAM).html" target="_blank" rel="noopener">Google Cloud Identity and Access Management (IAM)</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Security Command Center.html" target="_blank" rel="noopener">Google Cloud Security Command Center</a></td><td>2019</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Firewall.html" target="_blank" rel="noopener">Google Cloud Firewall</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Key Management Service (KMS).html" target="_blank" rel="noopener">Google Cloud Key Management Service (KMS)</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Security Scanner.html" target="_blank" rel="noopener">Google Cloud Security Scanner</a></td><td>2015</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="GCP/Google Cloud DDoS Protection.html" target="_blank" rel="noopener">Google Cloud DDoS Protection</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Armor.html" target="_blank" rel="noopener">Google Cloud Armor</a></td><td>2017</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>ETL</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/AWS Glue.html" target="_blank" rel="noopener">AWS Glue</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Step Functions.html" target="_blank" rel="noopener">AWS Step Functions</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon EMR (Elastic Map Reduce).html" target="_blank" rel="noopener">Amazon EMR (Elastic Map Reduce)</a></td><td>2009</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Data Pipeline.html" target="_blank" rel="noopener">AWS Data Pipeline</a></td><td>2012</td><td>Active</td></tr>
+              <tr><td><a href="AWS/Amazon Kinesis.html" target="_blank" rel="noopener">Amazon Kinesis</a></td><td>2013</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Glue DataBrew.html" target="_blank" rel="noopener">AWS Glue DataBrew</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Glue Elasctic Views.html" target="_blank" rel="noopener">AWS Glue Elasctic Views</a></td><td>—</td><td><span class="time">Unknown</span></td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Data Factory (ADF).html" target="_blank" rel="noopener">Azure Data Factory (ADF)</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Databricks.html" target="_blank" rel="noopener">Azure Databricks</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Data Lake Storage.html" target="_blank" rel="noopener">Azure Data Lake Storage</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure SQL Data Warehouse (Synapse Analytics).html" target="_blank" rel="noopener">Azure SQL Data Warehouse (Synapse Analytics)</a></td><td>—</td><td><span class="time">Renamed</span></td></tr>
+              <tr><td><a href="Azure/Azure HDInsight.html" target="_blank" rel="noopener">Azure HDInsight</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Stream Analytics.html" target="_blank" rel="noopener">Azure Stream Analytics</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Logic Apps.html" target="_blank" rel="noopener">Azure Logic Apps</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure SQL Database.html" target="_blank" rel="noopener">Azure SQL Database</a></td><td>2010</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Blob Storage.html" target="_blank" rel="noopener">Azure Blob Storage</a></td><td>2010</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Cloud Dataflow.html" target="_blank" rel="noopener">Cloud Dataflow</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/BigQuery.html" target="_blank" rel="noopener">BigQuery</a></td><td>2011</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Storage.html" target="_blank" rel="noopener">Cloud Storage</a></td><td>2010</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Dataprep.html" target="_blank" rel="noopener">Cloud Dataprep</a></td><td>—</td><td><span class="error">Retired</span></td></tr>
+              <tr><td><a href="GCP/Google Bigtable.html" target="_blank" rel="noopener">Cloud Bigtable</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="Storage Transfer_references_jpg.html" target="_blank" rel="noopener">Cloud Storage Transfer Service</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Cloud Dataproc.html" target="_blank" rel="noopener">Cloud Dataproc</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Data Catalog.html" target="_blank" rel="noopener">Data Catalog</a></td><td>2020</td><td><span class="time">Renamed</span></td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>DevOps</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="AWS/AWS CodePipeline.html" target="_blank" rel="noopener">AWS CodePipeline</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="CodeBuild_references_jpg.html" target="_blank" rel="noopener">AWS CodeBuild</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS CodeDeploy.html" target="_blank" rel="noopener">AWS CodeDeploy</a></td><td>2014</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS CodeCommmit.html" target="_blank" rel="noopener">AWS CodeCommit</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS CodeStar.html" target="_blank" rel="noopener">AWS CodeStar</a></td><td>2017</td><td><span class="error">Retired</span></td></tr>
+              <tr><td><a href="AWS/AWS CloudFormation.html" target="_blank" rel="noopener">AWS CloudFormation</a></td><td>2011</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS CloudWatch.html" target="_blank" rel="noopener">AWS CloudWatch</a></td><td>2009</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS Elastic Beanstalk.html" target="_blank" rel="noopener">AWS Elastic Beanstalk</a></td><td>2011</td><td>Active</td></tr>
+              <tr><td><a href="AWS/AWS OpsWorks.html" target="_blank" rel="noopener">AWS OpsWorks</a></td><td>2013</td><td><span class="error">Retired</span></td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure DevOps Services.html" target="_blank" rel="noopener">Azure DevOps Services</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Pipelines.html" target="_blank" rel="noopener">Azure Pipelines</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Repos.html" target="_blank" rel="noopener">Azure Repos</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Boards.html" target="_blank" rel="noopener">Azure Boards</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure Artifacts_references_jpg.html" target="_blank" rel="noopener">Azure Artifacts</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Test Plans.html" target="_blank" rel="noopener">Azure Test Plans</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Monitor.html" target="_blank" rel="noopener">Azure Monitor</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Security Center.html" target="_blank" rel="noopener">Azure Security Center</a></td><td>2016</td><td><span class="time">Renamed &quot;Defender for Cloud&quot;</span></td></tr>
+              <tr><td><a href="Azure/Azure Policy.html" target="_blank" rel="noopener">Azure Policy</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="CLI_references_jpg.html" target="_blank" rel="noopener">Azure DevOps CLI</a></td><td>—</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Kubernetes Service (AKS).html" target="_blank" rel="noopener">Azure Kubernetes Service (AKS)</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="Azure/Azure Automation.html" target="_blank" rel="noopener">Azure Automation</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Google Kubernetes Engine (GKE).html" target="_blank" rel="noopener">Google Kubernetes Engine (GKE)</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Cloud Build.html" target="_blank" rel="noopener">Cloud Build</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Cloud Source Repositories.html" target="_blank" rel="noopener">Cloud Source Repositories</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Cloud Deployment Manager.html" target="_blank" rel="noopener">Cloud Deployment Manager</a></td><td>2015</td><td><span class="error">Retired</span></td></tr>
+              <tr><td><a href="Monitoring and Logging_references_jpg.html" target="_blank" rel="noopener">Cloud Monitoring and Logging</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Identity and Access Management (IAM).html" target="_blank" rel="noopener">Cloud Identity and Access Management (IAM)</a></td><td>2016</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Storage.html" target="_blank" rel="noopener">Cloud Storage</a></td><td>2010</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud SQL.html" target="_blank" rel="noopener">Cloud SQL</a></td><td>2014</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Spanner.html" target="_blank" rel="noopener">Cloud Spanner</a></td><td>2017</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Cloud Pub Sub.html" target="_blank" rel="noopener">Cloud Pub/Sub</a></td><td>2015</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Google Cloud Functions.html" target="_blank" rel="noopener">Cloud Functions</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Cloud Deployment Manager.html" target="_blank" rel="noopener">Deployment Manager</a></td><td>2015</td><td><span class="error">Retired</span></td></tr>
+              <tr><td><a href="GCP/Cloud Composer.html" target="_blank" rel="noopener">Cloud Composer</a></td><td>2018</td><td>Active</td></tr>
+              <tr><td><a href="GCP/Apigee.html" target="_blank" rel="noopener">Apigee</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Messaging</td>
+        <td class="time">&mdash;</td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="Azure/Azure Service Bus.html" target="_blank" rel="noopener">Azure Service Bus</a></td><td>—</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          <table>
+            <thead>
+              <tr><th scope="col">Service</th><th scope="col">Launched</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><a href="GCP/Cloud Pub Sub.html" target="_blank" rel="noopener">Cloud Pub/Sub</a></td><td>2015</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">IT Knowledge Base &middot; One Stop for Cloud</div>
+
+</main>
+</div>
 </body>
 </html>

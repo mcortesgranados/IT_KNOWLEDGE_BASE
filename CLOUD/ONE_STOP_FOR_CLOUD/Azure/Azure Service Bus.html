@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Azure Service Bus</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+/* Architecture Diagram styling */
+.architecture-diagram-card {
+  margin: 24px 0 28px;
+  background: #ffffff;
+  border: 1px solid #c5d8ec;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(21, 101, 192, 0.08);
+  overflow: hidden;
+  padding: 16px;
+}
+.architecture-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: 8px;
+}
+.diagram-caption {
+  margin-top: 12px;
+  font-size: 0.88em;
+  color: #546e7a;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Step-by-Step Walkthrough Styling */
+.guide-step {
+  margin: 28px 0 36px;
+  background: #ffffff;
+  border: 1px solid #d7e3f1;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 16px rgba(21, 101, 192, 0.06);
+}
+.guide-step-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.guide-step-num {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1565c0;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(21, 101, 192, 0.3);
+}
+.guide-step-header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  color: #1565c0;
+  font-size: 1.25rem;
+}
+.guide-step p.step-intro {
+  color: #455a64;
+  margin-bottom: 14px;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+.guide-step ol.actions {
+  padding-left: 22px;
+  margin-bottom: 16px;
+}
+.guide-step ol.actions li {
+  margin: 7px 0;
+  line-height: 1.5;
+}
+.ui-ref {
+  background: #eef4fc;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.88em;
+  font-weight: 700;
+  color: #0d47a1;
+  white-space: nowrap;
+}
+.portal-mockup-frame {
+  margin: 16px 0 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+.portal-screenshot-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.step-caption {
+  text-align: center;
+  font-size: 0.86rem;
+  color: #546e7a;
+  margin-top: 8px;
+  font-style: italic;
+  font-weight: 600;
+}
+.tip {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: #fff8e1;
+  border-left: 4px solid #f9a825;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.tip strong {
+  color: #b45309;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+<main>
+
+  <h1>Azure Service Bus<span class="tag">Messaging</span></h1>
+
+  <div class="note">
+    <p><strong>What it is.</strong> Azure Service Bus is a fully managed enterprise message broker: it hosts <em>queues</em> for point-to-point delivery and <em>topics</em> with subscriptions for publish-subscribe fan-out. Applications and services exchange messages through it instead of calling each other directly, which decouples producers from consumers and lets each side scale, fail and deploy on its own.</p>
+  </div>
+
+    <h2 class="phase">Architecture Diagram</h2>
+  <p>End-to-end architectural topology of Azure Service Bus, demonstrating the namespace isolation boundary, supported ingress protocols, point-to-point Queues (with duplicate detection, sessions, and Dead-Letter Queue), publish-subscribe Topics with Subscription filtering rules, competing consumer scaling, and the complete Peek-Lock message settlement lifecycle.</p>
+
+  <div class="architecture-diagram-card">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 760" width="100%" height="auto" class="architecture-svg" role="img" aria-label="Azure Service Bus Architecture Diagram">
+  <defs>
+    <!-- Shadow Filters -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="112%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <filter id="shadow-sm" x="-5%" y="-5%" width="110%" height="110%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.06" />
+    </filter>
+
+    <!-- Gradients -->
+    <linearGradient id="grad-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d47a1" />
+      <stop offset="100%" stop-color="#1976d2" />
+    </linearGradient>
+    <linearGradient id="grad-ns-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8fbff" />
+      <stop offset="100%" stop-color="#f0f7ff" />
+    </linearGradient>
+    <linearGradient id="grad-producer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f1f8e9" />
+      <stop offset="100%" stop-color="#e8f5e9" />
+    </linearGradient>
+    <linearGradient id="grad-consumer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f3e5f5" />
+      <stop offset="100%" stop-color="#ede7f6" />
+    </linearGradient>
+    <linearGradient id="grad-queue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e3f2fd" />
+      <stop offset="100%" stop-color="#bbdefb" />
+    </linearGradient>
+    <linearGradient id="grad-topic" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fff3e0" />
+      <stop offset="100%" stop-color="#ffe0b2" />
+    </linearGradient>
+    <linearGradient id="grad-sub" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f3e5f5" />
+      <stop offset="100%" stop-color="#e1bee7" />
+    </linearGradient>
+    <linearGradient id="grad-dlq" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffebee" />
+      <stop offset="100%" stop-color="#ffcdd2" />
+    </linearGradient>
+    <linearGradient id="grad-settle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#faf5ff" />
+      <stop offset="100%" stop-color="#f3e8ff" />
+    </linearGradient>
+
+    <!-- Arrow Markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1565c0" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2e7d32" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7b1fa2" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c62828" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef6c00" />
+    </marker>
+  </defs>
+
+  <style>
+    .arch-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; }
+    .arch-subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: #475569; }
+    .arch-code { font-family: Consolas, 'Courier New', monospace; font-size: 11px; }
+    .arch-badge { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 700; }
+    .arch-label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-weight: 600; fill: #334155; }
+    .flow-line { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  /* Step-by-Step Walkthrough Styling */
+.guide-step {
+  margin: 28px 0 36px;
+  background: #ffffff;
+  border: 1px solid #d7e3f1;
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 16px rgba(21, 101, 192, 0.06);
+}
+.guide-step-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.guide-step-num {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1565c0;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(21, 101, 192, 0.3);
+}
+.guide-step-header h3 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  color: #1565c0;
+  font-size: 1.25rem;
+}
+.guide-step p.step-intro {
+  color: #455a64;
+  margin-bottom: 14px;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+.guide-step ol.actions {
+  padding-left: 22px;
+  margin-bottom: 16px;
+}
+.guide-step ol.actions li {
+  margin: 7px 0;
+  line-height: 1.5;
+}
+.ui-ref {
+  background: #eef4fc;
+  border: 1px solid #bfdbfe;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.88em;
+  font-weight: 700;
+  color: #0d47a1;
+  white-space: nowrap;
+}
+.portal-mockup-frame {
+  margin: 16px 0 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+.portal-screenshot-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.step-caption {
+  text-align: center;
+  font-size: 0.86rem;
+  color: #546e7a;
+  margin-top: 8px;
+  font-style: italic;
+  font-weight: 600;
+}
+.tip {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: #fff8e1;
+  border-left: 4px solid #f9a825;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.tip strong {
+  color: #b45309;
+}
+
+</style>
+
+  <!-- Background Canvas -->
+  <rect x="0" y="0" width="1060" height="760" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+
+  <!-- Top Banner / Title -->
+  <rect x="16" y="14" width="1028" height="42" rx="8" fill="url(#grad-header)" />
+  <text x="32" y="39" font-family="'Segoe UI', Arial, sans-serif" font-size="16" font-weight="800" fill="#ffffff">
+    AZURE SERVICE BUS &#8212; ENTERPRISE MESSAGING ARCHITECTURE
+  </text>
+  <text x="1024" y="39" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#e3f2fd">
+    Fully Managed Enterprise Broker &#8226; AMQP 1.0 / HTTPS &#8226; Entra ID &amp; SAS
+  </text>
+
+  <!-- ==================== LEFT COLUMN: PRODUCERS ==================== -->
+  <g id="producers-column">
+    <rect x="20" y="68" width="170" height="615" rx="10" fill="url(#grad-producer)" stroke="#a5d6a7" stroke-width="1.5" filter="url(#shadow-sm)" />
+    
+    <rect x="20" y="68" width="170" height="34" rx="10" fill="#2e7d32" />
+    <rect x="20" y="92" width="170" height="10" fill="#2e7d32" />
+    <text x="105" y="90" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="800" fill="#ffffff">
+      PRODUCERS (Senders)
+    </text>
+
+    <!-- Producer 1 -->
+    <g transform="translate(30, 114)">
+      <rect x="0" y="0" width="150" height="74" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#1b5e20">&#x1F310; Web Applications</text>
+      <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#4b5563">ASP.NET Core / Node.js</text>
+      <rect x="10" y="47" width="128" height="18" rx="4" fill="#e8f5e9" />
+      <text x="15" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="700" fill="#2e7d32">Sends: Orders, Checkouts</text>
+    </g>
+
+    <!-- Producer 2 -->
+    <g transform="translate(30, 202)">
+      <rect x="0" y="0" width="150" height="74" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#1b5e20">&#x2699;&#xFE0F; Microservices</text>
+      <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#4b5563">Java / Spring / .NET / Go</text>
+      <rect x="10" y="47" width="128" height="18" rx="4" fill="#e8f5e9" />
+      <text x="15" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="700" fill="#2e7d32">Commands &amp; Batch jobs</text>
+    </g>
+
+    <!-- Producer 3 -->
+    <g transform="translate(30, 420)">
+      <rect x="0" y="0" width="150" height="74" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#1b5e20">&#x26A1; Event Publishers</text>
+      <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#4b5563">Azure Functions / SaaS</text>
+      <rect x="10" y="47" width="128" height="18" rx="4" fill="#e8f5e9" />
+      <text x="15" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="700" fill="#2e7d32">Emits: Business Events</text>
+    </g>
+
+    <!-- Producer 4: External Systems -->
+    <g transform="translate(30, 508)">
+      <rect x="0" y="0" width="150" height="74" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#1b5e20">&#x1F50C; Integration APIs</text>
+      <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#4b5563">Partners / Webhooks</text>
+      <rect x="10" y="47" width="128" height="18" rx="4" fill="#e8f5e9" />
+      <text x="15" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="700" fill="#2e7d32">REST / HTTPS Ingress</text>
+    </g>
+
+    <!-- Protocols badge at bottom of producers -->
+    <g transform="translate(28, 606)">
+      <rect x="0" y="0" width="154" height="66" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-dasharray="3 3" />
+      <text x="8" y="17" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#1b5e20">&#x1F511; Security &amp; Protocol</text>
+      <text x="8" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#2e7d32">&#8226; AMQP 1.0 (Port 5671 TLS)</text>
+      <text x="8" y="46" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#2e7d32">&#8226; HTTPS / REST (Port 443)</text>
+      <text x="8" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#2e7d32">&#8226; Entra ID RBAC / SAS Tokens</text>
+    </g>
+  </g>
+
+  <!-- ==================== MIDDLE CONTAINER: NAMESPACE ==================== -->
+  <g id="namespace-boundary">
+    <!-- Outer Namespace Box -->
+    <rect x="215" y="68" width="590" height="615" rx="12" fill="url(#grad-ns-bg)" stroke="#1976d2" stroke-width="2" filter="url(#shadow)" />
+
+    <!-- Namespace Header -->
+    <rect x="215" y="68" width="590" height="42" rx="12" fill="#1565c0" />
+    <rect x="215" y="98" width="590" height="12" fill="#1565c0" />
+    <text x="232" y="92" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="800" fill="#ffffff">
+      &#x2601;&#xFE0F; AZURE SERVICE BUS NAMESPACE
+    </text>
+    <text x="500" y="92" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#bbdefb">
+      &lt;namespace&gt;.servicebus.windows.net
+    </text>
+    <rect x="715" y="78" width="76" height="22" rx="11" fill="#0d47a1" />
+    <text x="753" y="93" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#ffffff">
+      STANDARD / PREMIUM
+    </text>
+
+    <!-- Namespace Info Bar -->
+    <rect x="228" y="116" width="564" height="24" rx="4" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" />
+    <text x="238" y="132" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#0d47a1">
+      &#x1F6E1;&#xFE0F; Perimeter: Private Endpoint (VNet) &#8226; TLS 1.2/1.3 &#8226; IP Filtering &#8226; Availability Zones &amp; Geo-DR
+    </text>
+
+    <!-- ==================== PATTERN A: QUEUES ==================== -->
+    <g id="section-queues" transform="translate(228, 148)">
+      <rect x="0" y="0" width="564" height="240" rx="8" fill="#ffffff" stroke="#90caf9" stroke-width="1.4" filter="url(#shadow-sm)" />
+      
+      <!-- Sub-section Header -->
+      <rect x="0" y="0" width="564" height="28" rx="8" fill="#e3f2fd" />
+      <rect x="0" y="20" width="564" height="8" fill="#e3f2fd" />
+      <text x="12" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#1565c0">
+        PATTERN 1: QUEUE &#8212; POINT-TO-POINT (Competing Consumers 1:1)
+      </text>
+      <text x="552" y="19" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#2e7d32">
+        Temporal Decoupling &#8226; Load Leveling
+      </text>
+
+      <!-- Main Queue Box -->
+      <g transform="translate(14, 38)">
+        <rect x="0" y="0" width="310" height="92" rx="8" fill="url(#grad-queue)" stroke="#1565c0" stroke-width="1.6" />
+        <text x="12" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="800" fill="#0d47a1">
+          &#x1F4E6; Queue: <tspan font-family="Consolas, monospace">orders-queue</tspan>
+        </text>
+
+        <!-- Message Pipeline Graphic -->
+        <g transform="translate(12, 32)">
+          <!-- Message items inside queue -->
+          <rect x="0" y="0" width="46" height="26" rx="4" fill="#ffffff" stroke="#1976d2" stroke-width="1.2" />
+          <text x="23" y="17" text-anchor="middle" font-family="Consolas, monospace" font-size="9" font-weight="700" fill="#1565c0">Msg 3</text>
+
+          <rect x="52" y="0" width="46" height="26" rx="4" fill="#ffffff" stroke="#1976d2" stroke-width="1.2" />
+          <text x="75" y="17" text-anchor="middle" font-family="Consolas, monospace" font-size="9" font-weight="700" fill="#1565c0">Msg 2</text>
+
+          <rect x="104" y="0" width="46" height="26" rx="4" fill="#ffffff" stroke="#1976d2" stroke-width="1.2" />
+          <text x="127" y="17" text-anchor="middle" font-family="Consolas, monospace" font-size="9" font-weight="700" fill="#1565c0">Msg 1</text>
+
+          <!-- FIFO Arrow -->
+          <path d="M 156 13 L 195 13" stroke="#1565c0" stroke-width="2" marker-end="url(#arrow-blue)" />
+          <text x="202" y="17" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#1565c0">FIFO Out</text>
+        </g>
+
+        <!-- Queue Guarantees / Features badges -->
+        <g transform="translate(12, 66)">
+          <rect x="0" y="0" width="88" height="18" rx="3" fill="#ffffff" stroke="#90caf9" />
+          <text x="6" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#0d47a1">&#x2714; Dup Detection</text>
+
+          <rect x="94" y="0" width="94" height="18" rx="3" fill="#ffffff" stroke="#90caf9" />
+          <text x="100" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#0d47a1">&#x1F512; Sessions (FIFO)</text>
+
+          <rect x="194" y="0" width="90" height="18" rx="3" fill="#ffffff" stroke="#90caf9" />
+          <text x="200" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#0d47a1">&#x23F1;&#xFE0F; Peek-Lock</text>
+        </g>
+      </g>
+
+      <!-- Dead-Letter Queue (DLQ) -->
+      <g transform="translate(170, 142)">
+        <rect x="0" y="0" width="378" height="84" rx="8" fill="url(#grad-dlq)" stroke="#c62828" stroke-width="1.5" />
+        <text x="14" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#b71c1c">
+          &#x2620;&#xFE0F; Dead-Letter Queue (DLQ): <tspan font-family="Consolas, monospace">orders-queue/$DeadLetterQueue</tspan>
+        </text>
+        <text x="14" y="40" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#c62828">
+          Automatic redirection when:
+        </text>
+        <text x="24" y="56" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#7f1d1d">
+          &#8226; <tspan font-weight="700">DeliveryCount &gt; MaxDeliveryCount</tspan> (10 retries exceeded &#8212; poison message)
+        </text>
+        <text x="24" y="71" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#7f1d1d">
+          &#8226; <tspan font-weight="700">Message Time-To-Live (TTL) Expired</tspan> or consumer explicitly dead-letters
+        </text>
+      </g>
+
+      <!-- Connecting Arrow from Queue to DLQ -->
+      <path d="M 80 130 L 80 184 L 165 184" fill="none" stroke="#c62828" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-red)" />
+      <rect x="85" y="152" width="78" height="22" rx="4" fill="#ffffff" stroke="#ef9a9a" />
+      <text x="88" y="166" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="800" fill="#c62828">Poison / Expired</text>
+
+      <!-- Peek-Lock Info Box -->
+      <g transform="translate(334, 38)">
+        <rect x="0" y="0" width="214" height="92" rx="6" fill="#f8fafc" stroke="#cbd5e1" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#0f172a">&#x1F504; Peek-Lock Protocol</text>
+        <text x="10" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#475569">1. Receiver requests message &amp; lock</text>
+        <text x="10" y="49" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#475569">2. Message invisible to other workers</text>
+        <text x="10" y="64" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#475569">3. Worker processes workload</text>
+        <text x="10" y="79" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#1565c0">4. Settle: Complete / Abandon / DLQ</text>
+      </g>
+    </g>
+
+    <!-- ==================== PATTERN B: TOPICS & SUBSCRIPTIONS ==================== -->
+    <g id="section-topics" transform="translate(228, 400)">
+      <rect x="0" y="0" width="564" height="202" rx="8" fill="#ffffff" stroke="#ffb74d" stroke-width="1.4" filter="url(#shadow-sm)" />
+      
+      <!-- Sub-section Header -->
+      <rect x="0" y="0" width="564" height="28" rx="8" fill="#fff3e0" />
+      <rect x="0" y="20" width="564" height="8" fill="#fff3e0" />
+      <text x="12" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#e65100">
+        PATTERN 2: TOPIC &amp; SUBSCRIPTIONS &#8212; PUBLISH-SUBSCRIBE (1:N Fan-Out)
+      </text>
+      <text x="552" y="19" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#7b1fa2">
+        Independent Copies &#8226; Content-Based Routing
+      </text>
+
+      <!-- Topic Ingress Box -->
+      <g transform="translate(14, 42)">
+        <rect x="0" y="0" width="136" height="144" rx="8" fill="url(#grad-topic)" stroke="#ef6c00" stroke-width="1.6" />
+        <text x="10" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#b26a00">&#x1F4E3; Topic</text>
+        <text x="10" y="38" font-family="Consolas, monospace" font-size="10.5" font-weight="700" fill="#bf360c">events-topic</text>
+        
+        <rect x="10" y="48" width="116" height="1" fill="#ffb74d" />
+        <text x="10" y="64" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#e65100">Single publication</text>
+        <text x="10" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#e65100">entry point for</text>
+        <text x="10" y="92" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#e65100">all event types.</text>
+
+        <rect x="10" y="104" width="116" height="28" rx="4" fill="#ffffff" stroke="#ffb74d" />
+        <text x="16" y="122" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#e65100">1 msg &#8594; N subs</text>
+      </g>
+
+      <!-- Distribution Fan-out lines with Filters -->
+      <!-- Flow to Sub 1 -->
+      <path d="M 150 78 L 220 54 L 320 54" fill="none" stroke="#e65100" stroke-width="1.8" marker-end="url(#arrow-orange)" />
+      <!-- Flow to Sub 2 -->
+      <path d="M 150 114 L 320 114" fill="none" stroke="#e65100" stroke-width="1.8" marker-end="url(#arrow-orange)" />
+      <!-- Flow to Sub 3 -->
+      <path d="M 150 150 L 220 174 L 320 174" fill="none" stroke="#e65100" stroke-width="1.8" marker-end="url(#arrow-orange)" />
+
+      <!-- Rule / Filter Badges on paths -->
+      <g transform="translate(182, 38)">
+        <rect x="0" y="0" width="130" height="20" rx="4" fill="#ffffff" stroke="#ef6c00" stroke-width="1" />
+        <text x="6" y="14" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#b26a00">SQL: Type='Invoice'</text>
+      </g>
+
+      <g transform="translate(182, 102)">
+        <rect x="0" y="0" width="130" height="20" rx="4" fill="#ffffff" stroke="#ef6c00" stroke-width="1" />
+        <text x="6" y="14" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#b26a00">Correlation: Env='Prod'</text>
+      </g>
+
+      <g transform="translate(182, 164)">
+        <rect x="0" y="0" width="130" height="20" rx="4" fill="#ffffff" stroke="#ef6c00" stroke-width="1" />
+        <text x="6" y="14" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#b26a00">TrueFilter (1=1 All)</text>
+      </g>
+
+      <!-- Subscriptions -->
+      <!-- Sub 1 -->
+      <g transform="translate(325, 34)">
+        <rect x="0" y="0" width="225" height="42" rx="6" fill="url(#grad-sub)" stroke="#7b1fa2" stroke-width="1.2" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#4a148c">&#x1F4C5; Sub: <tspan font-family="Consolas, monospace">sub-billing</tspan></text>
+        <text x="10" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Virtual Queue &#8226; Private DLQ sub-entity</text>
+      </g>
+
+      <!-- Sub 2 -->
+      <g transform="translate(325, 93)">
+        <rect x="0" y="0" width="225" height="42" rx="6" fill="url(#grad-sub)" stroke="#7b1fa2" stroke-width="1.2" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#4a148c">&#x1F69A; Sub: <tspan font-family="Consolas, monospace">sub-logistics</tspan></text>
+        <text x="10" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Virtual Queue &#8226; Private DLQ sub-entity</text>
+      </g>
+
+      <!-- Sub 3 -->
+      <g transform="translate(325, 152)">
+        <rect x="0" y="0" width="225" height="42" rx="6" fill="url(#grad-sub)" stroke="#7b1fa2" stroke-width="1.2" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#4a148c">&#x1F50D; Sub: <tspan font-family="Consolas, monospace">sub-audit-lake</tspan></text>
+        <text x="10" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Virtual Queue &#8226; Receives 100% of events</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== CONNECTIONS: PRODUCERS TO NAMESPACE ==================== -->
+  <!-- Web Apps -> Queue -->
+  <path d="M 180 151 L 238 186" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+  <!-- Microservices -> Queue -->
+  <path d="M 180 239 L 238 214" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+  <!-- Event Publishers -> Topic -->
+  <path d="M 180 457 L 238 466" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+  <!-- Integration APIs -> Topic -->
+  <path d="M 180 545 L 238 505" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+
+  <!-- ==================== RIGHT COLUMN: CONSUMERS & SETTLEMENT ==================== -->
+  <g id="consumers-column">
+    <rect x="825" y="68" width="215" height="615" rx="10" fill="url(#grad-consumer)" stroke="#ce93d8" stroke-width="1.5" filter="url(#shadow-sm)" />
+    
+    <rect x="825" y="68" width="215" height="34" rx="10" fill="#7b1fa2" />
+    <rect x="825" y="92" width="215" height="10" fill="#7b1fa2" />
+    <text x="932" y="90" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="800" fill="#ffffff">
+      CONSUMERS (Receivers)
+    </text>
+
+    <!-- Queue Competing Workers Box -->
+    <g transform="translate(835, 114)">
+      <rect x="0" y="0" width="195" height="124" rx="8" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="12" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#4a148c">&#x1F465; Competing Workers Pool</text>
+      <text x="12" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#6a1b9a">Horizontally scaled instances</text>
+
+      <!-- Worker Instances -->
+      <rect x="12" y="42" width="171" height="22" rx="4" fill="#f3e5f5" stroke="#ce93d8" />
+      <text x="18" y="57" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="700" fill="#4a148c">&#x2699;&#xFE0F; Worker Instance 1 (Active)</text>
+
+      <rect x="12" y="69" width="171" height="22" rx="4" fill="#f3e5f5" stroke="#ce93d8" />
+      <text x="18" y="84" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="700" fill="#4a148c">&#x2699;&#xFE0F; Worker Instance 2 (Active)</text>
+
+      <rect x="12" y="96" width="171" height="20" rx="4" fill="#faf5ff" />
+      <text x="18" y="110" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#7b1fa2">&#x2714; Exactly 1 worker gets 1 msg</text>
+    </g>
+
+    <!-- Message Settlement Actions (Crucial Concept) -->
+    <g transform="translate(835, 248)">
+      <rect x="0" y="0" width="195" height="152" rx="8" fill="url(#grad-settle)" stroke="#ab47bc" stroke-width="1.3" />
+      <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#4a148c">
+        &#x2696;&#xFE0F; Peek-Lock Settlement
+      </text>
+      <text x="10" y="32" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">
+        Receiver must explicitly settle:
+      </text>
+
+      <!-- Action 1: Complete -->
+      <g transform="translate(10, 40)">
+        <rect x="0" y="0" width="175" height="22" rx="4" fill="#e8f5e9" stroke="#81c784" />
+        <text x="6" y="15" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#1b5e20">&#x2713; CompleteAsync()</text>
+        <text x="108" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#2e7d32">&#8594; Deletes msg</text>
+      </g>
+
+      <!-- Action 2: Abandon -->
+      <g transform="translate(10, 66)">
+        <rect x="0" y="0" width="175" height="22" rx="4" fill="#fff3e0" stroke="#ffb74d" />
+        <text x="6" y="15" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#e65100">&#x21BA; AbandonAsync()</text>
+        <text x="108" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#e65100">&#8594; Retries (+1)</text>
+      </g>
+
+      <!-- Action 3: DeadLetter -->
+      <g transform="translate(10, 92)">
+        <rect x="0" y="0" width="175" height="22" rx="4" fill="#ffebee" stroke="#e57373" />
+        <text x="6" y="15" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#b71c1c">&#x2620; DeadLetterAsync()</text>
+        <text x="116" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#c62828">&#8594; To DLQ</text>
+      </g>
+
+      <!-- Action 4: Defer -->
+      <g transform="translate(10, 118)">
+        <rect x="0" y="0" width="175" height="22" rx="4" fill="#ede7f6" stroke="#b39ddb" />
+        <text x="6" y="15" font-family="Consolas, monospace" font-size="8.5" font-weight="700" fill="#4a148c">&#x23F8; DeferAsync()</text>
+        <text x="96" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#5e35b1">&#8594; By Seq Number</text>
+      </g>
+    </g>
+
+    <!-- Subscription Dedicated Consumers -->
+    <!-- Billing Consumer -->
+    <g transform="translate(835, 432)">
+      <rect x="0" y="0" width="195" height="46" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#4a148c">&#x1F4B3; Billing Service</text>
+      <text x="10" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#475569">Invoices &amp; Stripe payment capture</text>
+    </g>
+
+    <!-- Logistics Consumer -->
+    <g transform="translate(835, 492)">
+      <rect x="0" y="0" width="195" height="46" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#4a148c">&#x26A1; Azure Functions (Shipping)</text>
+      <text x="10" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#475569">Event-driven serverless trigger</text>
+    </g>
+
+    <!-- Audit Lake Consumer -->
+    <g transform="translate(835, 552)">
+      <rect x="0" y="0" width="195" height="46" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#4a148c">&#x1F4CA; Analytics &amp; Compliance</text>
+      <text x="10" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#475569">Data Lake ingestion &amp; cold storage</text>
+    </g>
+
+    <!-- Telemetry badge -->
+    <g transform="translate(835, 610)">
+      <rect x="0" y="0" width="195" height="62" rx="6" fill="#ede7f6" stroke="#ce93d8" stroke-dasharray="3 3" />
+      <text x="8" y="16" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="800" fill="#4a148c">&#x1F4C8; Azure Monitor &amp; App Insights</text>
+      <text x="8" y="31" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">&#8226; Metrics: Active/DeadLetter Msgs</text>
+      <text x="8" y="44" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">&#8226; Diagnostic Logs &amp; Tracing</text>
+      <text x="8" y="56" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">&#8226; Auto-scale on Queue Length</text>
+    </g>
+  </g>
+
+  <!-- ==================== CONNECTIONS: NAMESPACE TO CONSUMERS ==================== -->
+  <!-- Queue to Competing Workers -->
+  <path d="M 552 232 L 833 176" fill="none" stroke="#1565c0" stroke-width="2" marker-end="url(#arrow-blue)" />
+  <!-- Sub 1 to Billing -->
+  <path d="M 778 455 L 833 455" fill="none" stroke="#7b1fa2" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+  <!-- Sub 2 to Shipping -->
+  <path d="M 778 514 L 833 514" fill="none" stroke="#7b1fa2" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+  <!-- Sub 3 to Audit -->
+  <path d="M 778 573 L 833 573" fill="none" stroke="#7b1fa2" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+
+  <!-- ==================== BOTTOM ARCHITECTURE SUMMARY BAR ==================== -->
+  <g transform="translate(20, 695)">
+    <rect x="0" y="0" width="1020" height="52" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+    <text x="14" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#0f172a">&#x1F5FA;&#xFE0F; ARCHITECTURE HIGHLIGHTS &amp; GUARANTEES:</text>
+    
+    <g transform="translate(14, 27)">
+      <!-- Item 1 -->
+      <circle cx="5" cy="9" r="4" fill="#2e7d32" />
+      <text x="14" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#334155"><tspan font-weight="700">Decoupling:</tspan> Senders &amp; receivers operate asynchronously; zero direct dependencies.</text>
+
+      <!-- Item 2 -->
+      <circle cx="340" cy="9" r="4" fill="#1565c0" />
+      <text x="349" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#334155"><tspan font-weight="700">At-Least-Once Delivery:</tspan> Guaranteed via Peek-Lock settlement &amp; auto-retries.</text>
+
+      <!-- Item 3 -->
+      <circle cx="680" cy="9" r="4" fill="#c62828" />
+      <text x="689" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#334155"><tspan font-weight="700">Poison Safety:</tspan> Automatic isolation in DLQ prevents processing bottlenecks.</text>
+    </g>
+  </g>
+</svg>
+    <div class="diagram-caption">Figure 1: High-level architectural topology of Azure Service Bus Namespace, Entities (Queues, Topics, Subscriptions, DLQ), Security Boundary, and Consumer Settlement Loop.</div>
+  </div>
+
+  <h2 class="phase">Core concepts</h2>
+  <dl>
+    <dt>Namespace</dt>
+    <dd>Deployment and billing container that gives you a unique host name (<code>&lt;namespace&gt;.servicebus.windows.net</code>); all queues and topics live inside it.</dd>
+
+    <dt>Queue</dt>
+    <dd>Point-to-point destination: each message is delivered to a single competing consumer. Multiple readers can be attached; the broker hands each message to only one of them.</dd>
+
+    <dt>Topic and subscription</dt>
+    <dd>Publish-subscribe destination: a topic accepts messages and each subscription receives its own copy, so several downstream systems can react to the same publication independently.</dd>
+
+    <dt>Filters and actions</dt>
+    <dd>Subscriptions can carry SQL or correlation filters so they only receive a subset of the messages; actions can annotate the message properties on the way in.</dd>
+
+    <dt>Sessions</dt>
+    <dd>Messages that share a <code>SessionId</code> are handled in order by a single receiver, which gives ordered processing for a related stream of work without locking the whole queue.</dd>
+
+    <dt>Peek-lock and settlement</dt>
+    <dd>Receivers take a message under a lock and then <strong>complete</strong>, <strong>abandon</strong>, <strong>defer</strong> or <strong>dead-letter</strong> it. Abandoning returns the message to the queue and increments its delivery count.</dd>
+
+    <dt>Dead-letter queue</dt>
+    <dd>Each queue and subscription has a secondary sub-queue where messages land when they expire or exceed the maximum delivery count — the place to inspect poison messages instead of losing them.</dd>
+
+    <dt>Duplicate detection</dt>
+    <dd>The broker discards a message whose <code>MessageId</code> was already seen inside a configurable detection window, which makes retries from the sender safe.</dd>
+
+    <dt>Scheduled messages and deferral</dt>
+    <dd>A message can be enqueued with a future enqueue time, or deferred and later retrieved by sequence number — useful for time-based workflows and out-of-order handling.</dd>
+
+    <dt>Auto-forwarding and transactions</dt>
+    <dd>Entities can chain into each other (a queue forwarding to a topic, for example), and send/receive operations can be grouped in a transaction that commits or rolls back as a unit.</dd>
+  </dl>
+
+  <h2 class="phase">Service tiers</h2>
+  <div class="params">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Tier</th>
+          <th scope="col">Entities</th>
+          <th scope="col">Typical use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Basic</td>
+          <td>Queues only</td>
+          <td>Cheap queueing for development, tests and simple one-way work; no topics, no duplicate detection.</td>
+        </tr>
+        <tr>
+          <td>Standard</td>
+          <td>Queues and topics</td>
+          <td>General production messaging with the full feature set (sessions, dead-lettering, filters, duplicate detection) on shared infrastructure.</td>
+        </tr>
+        <tr>
+          <td>Premium</td>
+          <td>Queues and topics</td>
+          <td>Dedicated resources for predictable latency and throughput, isolation through private networking, and the largest message sizes.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="time">Feature availability changes over time — check the current tier matrix before sizing a production namespace.</p>
+
+    <h2 class="phase">Step-by-Step Configuration &amp; Usage Guide (with Screenshots)</h2>
+  <p>A complete, screenshot-driven walkthrough for configuring and using Azure Service Bus from scratch: provisioning namespaces, setting up queues with dead-lettering and deduplication, configuring pub/sub topics with SQL filtering, establishing security credentials, testing with Service Bus Explorer, and implementing production-ready .NET 8 producers and consumers.</p>
+
+  <div class="params">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Phase</th>
+          <th scope="col">Action Summary</th>
+          <th scope="col">Key Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><a href="#step-1"><strong>Create Namespace</strong></a></td>
+          <td>Provision namespace in Azure Portal with Standard/Premium tier.</td>
+          <td>DNS host, region, tier</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><a href="#step-2"><strong>Verify Dashboard</strong></a></td>
+          <td>Inspect deployment completion, Essentials bar, and throughput metrics.</td>
+          <td>Endpoint validation</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><a href="#step-3"><strong>Configure Queue</strong></a></td>
+          <td>Create <code>orders-queue</code> with duplicate detection, lock duration, and DLQ.</td>
+          <td>Point-to-point, max deliveries</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><a href="#step-4"><strong>Create Topic &amp; Subscriptions</strong></a></td>
+          <td>Create <code>events-topic</code> and subscriptions with SQL/correlation rules.</td>
+          <td>1:N Fan-out, content routing</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><a href="#step-5"><strong>Configure Security</strong></a></td>
+          <td>Grant Entra ID RBAC roles (Data Sender/Receiver) or generate SAS policy keys.</td>
+          <td>Zero-trust authentication</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><a href="#step-6"><strong>Service Bus Explorer</strong></a></td>
+          <td>Send JSON test payloads and peek/settle messages in the browser.</td>
+          <td>In-portal validation</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><a href="#step-7"><strong>Programmatic .NET Code</strong></a></td>
+          <td>Build C# producer (batch send) and processor with peek-lock completion loop.</td>
+          <td>Complete/Abandon/DLQ</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><a href="#step-8"><strong>Monitoring &amp; DLQ Alerts</strong></a></td>
+          <td>Configure Azure Monitor metrics and set automated alerts on DLQ spikes.</td>
+          <td>Poison message observation</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="guide-step" id="step-1">
+    <div class="guide-step-header">
+      <div class="guide-step-num">1</div>
+      <h3>Create Azure Service Bus Namespace in Portal</h3>
+    </div>
+    <p class="step-intro">The namespace is the root management, billing, and DNS container (<code>&lt;namespace&gt;.servicebus.windows.net</code>) that houses all your queues and topics.</p>
+    <ol class="actions">
+      <li>Navigate to the <a href="https://portal.azure.com" target="_blank" rel="noopener">Azure Portal</a> and sign in with your administrator account.</li>
+      <li>In the top global search bar, type <span class="ui-ref">Service Bus</span> and select <strong>Service Bus</strong> under <em>Services</em>. Alternatively, click <span class="ui-ref">+ Create a resource</span> &rarr; <em>Integration</em> &rarr; <em>Service Bus</em>.</li>
+      <li>Click <span class="ui-ref">+ Create</span> to open the <strong>Create namespace</strong> provisioning wizard.</li>
+      <li>Under <strong>Project Details</strong>, select your active <span class="ui-ref">Subscription</span> and pick or create a target <span class="ui-ref">Resource group</span> (e.g. <code>rg-messaging-prod</code>).</li>
+      <li>Under <strong>Instance Details</strong>:
+        <ul>
+          <li><strong>Namespace name:</strong> Enter a globally unique name (e.g. <code>sb-ecommerce-prod</code>). A green checkmark confirms availability.</li>
+          <li><strong>Location:</strong> Choose your target Azure region (e.g. <code>East US</code>) close to your client workloads.</li>
+          <li><strong>Pricing tier:</strong> Choose <span class="ui-ref">Standard</span> for production publish-subscribe topics, queues, sessions, and deduplication. (Select <em>Premium</em> if you require private link isolation and dedicated messaging units).</li>
+        </ul>
+      </li>
+      <li>Click <span class="ui-ref">Review + create</span>, verify the validation passed, and click <span class="ui-ref">Create</span>.</li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  <defs>
+    <filter id="shadow1" x="-2%" y="-2%" width="104%" height="106%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08" /></filter>
+  </defs>
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">Home &gt; Service Bus &gt; Create namespace</text>
+    
+
+  <!-- Wizard Tab Bar -->
+  <g transform="translate(18, 80)">
+    <rect x="0" y="0" width="884" height="28" fill="none" />
+    <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#0078d4" text-decoration="underline">Basics</text>
+    <text x="80" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#64748b">Networking</text>
+    <text x="180" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#64748b">Tags</text>
+    <text x="240" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#64748b">Review + create</text>
+    <line x1="0" y1="28" x2="884" y2="28" stroke="#cbd5e1" stroke-width="1" />
+  </g>
+
+  <!-- Form Body -->
+  <g transform="translate(28, 120)">
+    <text x="0" y="16" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#0f172a">Project Details</text>
+    
+    <!-- Subscription -->
+    <text x="0" y="44" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Subscription *</text>
+    <rect x="180" y="28" width="340" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="190" y="45" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">Azure subscription 1 (Pay-As-You-Go)</text>
+
+    <!-- Resource Group -->
+    <text x="0" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Resource Group *</text>
+    <rect x="180" y="62" width="340" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="190" y="79" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">rg-messaging-prod</text>
+    <text x="530" y="79" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="600" fill="#0078d4">Create new</text>
+
+    <line x1="0" y1="102" x2="864" y2="102" stroke="#e2e8f0" stroke-width="1" />
+
+    <text x="0" y="126" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#0f172a">Instance Details</text>
+
+    <!-- Namespace Name -->
+    <text x="0" y="154" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Namespace Name *</text>
+    <rect x="180" y="138" width="280" height="26" rx="3" fill="#ffffff" stroke="#0078d4" stroke-width="1.5" />
+    <text x="190" y="155" font-family="Consolas, monospace" font-size="11" fill="#0f172a">sb-ecommerce-prod</text>
+    <text x="466" y="155" font-family="Consolas, monospace" font-size="10.5" fill="#64748b">.servicebus.windows.net</text>
+    <circle cx="616" cy="151" r="7" fill="#22c55e" />
+    <text x="613" y="154" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="800" fill="#ffffff">&#x2713;</text>
+
+    <!-- Region -->
+    <text x="0" y="188" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Location *</text>
+    <rect x="180" y="172" width="340" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="190" y="189" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">East US</text>
+
+    <!-- Pricing Tier -->
+    <text x="0" y="222" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Pricing tier *</text>
+    <rect x="180" y="206" width="340" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="190" y="223" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Standard</text>
+    <text x="245" y="223" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#64748b">(Includes Topics, Queues &amp; Variable Throughput)</text>
+    
+    <!-- Info banner -->
+    <rect x="180" y="240" width="560" height="42" rx="4" fill="#eff6ff" stroke="#bfdbfe" />
+    <text x="192" y="257" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#1d4ed8">&#x2139;&#xFE0F; Standard Tier SLA:</text>
+    <text x="192" y="271" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#1e40af">Supports Queues, Topics, Subscriptions, Sessions, and Transactions up to 256 KB message payload.</text>
+  </g>
+
+  <!-- Bottom Action Bar -->
+  <g transform="translate(28, 436)">
+    <rect x="0" y="0" width="124" height="28" rx="4" fill="#0078d4" />
+    <text x="62" y="18" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">Review + create</text>
+
+    <rect x="134" y="0" width="118" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+    <text x="193" y="18" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" fill="#334155">Next : Networking &gt;</text>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 1: Azure Portal &mdash; Create Service Bus Namespace wizard (Basics tab) with parameters and tier selection.</div>
+    <div class="tip">
+      <strong>Pro-tip:</strong> Always choose <strong>Standard</strong> tier or higher for production. The <em>Basic</em> tier does not support Topics, Subscriptions, Sessions, Transactions, or Duplicate Detection.
+    </div>
+  </div>
+
+
+  <div class="guide-step" id="step-2">
+    <div class="guide-step-header">
+      <div class="guide-step-num">2</div>
+      <h3>Verify Provisioning &amp; Explore Namespace Dashboard</h3>
+    </div>
+    <p class="step-intro">Once Azure Resource Manager completes deployment, access the namespace overview to inspect endpoint addresses, resource status, and operational telemetry.</p>
+    <ol class="actions">
+      <li>When the notification banner confirms <em>&ldquo;Your deployment is complete&rdquo;</em>, click <span class="ui-ref">Go to resource</span>.</li>
+      <li>Inspect the <strong>Essentials</strong> top card:
+        <ul>
+          <li><strong>Status:</strong> Ensure it shows <span class="ui-ref">Active</span>.</li>
+          <li><strong>Host name:</strong> Note your primary DNS endpoint (e.g. <code>sb-ecommerce-prod.servicebus.windows.net</code>).</li>
+          <li><strong>Resource group:</strong> <code>rg-messaging-prod</code>.</li>
+        </ul>
+      </li>
+      <li>Examine the left navigation pane: identify <strong>Entities</strong> (<span class="ui-ref">Queues</span> and <span class="ui-ref">Topics</span>) and <strong>Settings</strong> (<span class="ui-ref">Shared access policies</span>, <span class="ui-ref">Networking</span>).</li>
+      <li>Review the built-in real-time charts in the <strong>Overview</strong> page displaying <em>Incoming Messages</em> and <em>Outgoing Messages</em>.</li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">Home &gt; Resource groups &gt; rg-messaging-prod &gt; sb-ecommerce-prod</text>
+    
+
+  <!-- Resource Command Bar -->
+  <g transform="translate(18, 76)">
+    <rect x="0" y="0" width="884" height="30" fill="#f1f5f9" rx="4" />
+    <text x="14" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0078d4">&#x2795; Queue</text>
+    <text x="86" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0078d4">&#x2795; Topic</text>
+    <text x="156" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#334155">&#x21BB; Refresh</text>
+    <text x="226" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#dc2626">&#x1F5D1;&#xFE0F; Delete</text>
+    <text x="300" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#334155">&#x1F50C; Export template</text>
+  </g>
+
+  <!-- Main View: Left Menu + Essentials Pane -->
+  <g transform="translate(18, 114)">
+    <!-- Left Navigation Blade -->
+    <rect x="0" y="0" width="170" height="350" fill="#f8fafc" stroke="#e2e8f0" rx="4" />
+    <text x="12" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">sb-ecommerce-prod</text>
+    <text x="12" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#64748b">Service Bus Namespace</text>
+    
+    <line x1="0" y1="46" x2="170" y2="46" stroke="#e2e8f0" />
+    
+    <rect x="4" y="52" width="162" height="22" rx="3" fill="#e0f2fe" />
+    <text x="14" y="67" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0078d4">&#x1F4CA; Overview</text>
+    <text x="14" y="90" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F4CB; Activity log</text>
+    <text x="14" y="112" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F510; Access control (IAM)</text>
+    <text x="14" y="134" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F511; Shared access policies</text>
+    <text x="14" y="156" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F310; Networking</text>
+
+    <text x="12" y="186" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#64748b">ENTITIES</text>
+    <text x="14" y="206" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0f172a">&#x1F4E6; Queues</text>
+    <text x="14" y="228" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="700" fill="#0f172a">&#x1F4E3; Topics</text>
+
+    <text x="12" y="258" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#64748b">MONITORING</text>
+    <text x="14" y="278" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F4C8; Metrics</text>
+    <text x="14" y="300" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F514; Alerts</text>
+    <text x="14" y="322" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#334155">&#x1F4C3; Diagnostic settings</text>
+
+    <!-- Right Content Area: Essentials Bar -->
+    <g transform="translate(180, 0)">
+      <rect x="0" y="0" width="704" height="96" fill="#f8fafc" stroke="#e2e8f0" rx="6" />
+      
+      <!-- Col 1 -->
+      <text x="16" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Resource group (change)</text>
+      <text x="16" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0078d4">rg-messaging-prod</text>
+
+      <text x="16" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Status</text>
+      <text x="16" y="74" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#16a34a">&#x25CF; Active</text>
+
+      <!-- Col 2 -->
+      <text x="210" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Location</text>
+      <text x="210" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">East US</text>
+
+      <text x="210" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Pricing tier</text>
+      <text x="210" y="74" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Standard</text>
+
+      <!-- Col 3 -->
+      <text x="390" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Host name</text>
+      <text x="390" y="36" font-family="Consolas, monospace" font-size="10.5" font-weight="700" fill="#0f172a">sb-ecommerce-prod.servicebus.windows.net</text>
+
+      <text x="390" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Subscription ID</text>
+      <text x="390" y="74" font-family="Consolas, monospace" font-size="10" fill="#64748b">a8c17b44-9381-4e78-9e12-32b01e3381a4</text>
+
+      <!-- Mini Chart Card 1 -->
+      <g transform="translate(0, 108)">
+        <rect x="0" y="0" width="344" height="136" rx="6" fill="#ffffff" stroke="#e2e8f0" />
+        <text x="14" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">&#x1F4C8; Incoming Messages (Last 1 hour)</text>
+        <path d="M 14 100 L 70 95 L 120 70 L 170 85 L 220 40 L 270 55 L 320 30" fill="none" stroke="#0078d4" stroke-width="2" />
+        <circle cx="320" cy="30" r="4" fill="#0078d4" />
+        <text x="314" y="22" font-family="Consolas, monospace" font-size="9" font-weight="700" fill="#0078d4">1.2K</text>
+        <text x="14" y="125" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#94a3b8">22:00 &#8226; 22:15 &#8226; 22:30 &#8226; 22:45</text>
+      </g>
+
+      <!-- Mini Chart Card 2 -->
+      <g transform="translate(360, 108)">
+        <rect x="0" y="0" width="344" height="136" rx="6" fill="#ffffff" stroke="#e2e8f0" />
+        <text x="14" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">&#x1F4C8; Outgoing &amp; Successful Deliveries</text>
+        <path d="M 14 102 L 70 96 L 120 72 L 170 87 L 220 42 L 270 58 L 320 32" fill="none" stroke="#16a34a" stroke-width="2" />
+        <circle cx="320" cy="32" r="4" fill="#16a34a" />
+        <text x="314" y="24" font-family="Consolas, monospace" font-size="9" font-weight="700" fill="#16a34a">1.2K</text>
+        <text x="14" y="125" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#94a3b8">Settled via CompleteAsync()</text>
+      </g>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 2: Azure Portal &mdash; Service Bus Namespace dashboard showing Essentials, side navigation, and message throughput telemetry.</div>
+  </div>
+
+
+  <div class="guide-step" id="step-3">
+    <div class="guide-step-header">
+      <div class="guide-step-num">3</div>
+      <h3>Create and Configure a Point-to-Point Queue</h3>
+    </div>
+    <p class="step-intro">Queues implement point-to-point decoupling where multiple workers can read from the queue, but each message is exclusively delivered to and processed by a single competing consumer.</p>
+    <ol class="actions">
+      <li>In the left sidebar under <strong>Entities</strong>, click <span class="ui-ref">Queues</span>, then click <span class="ui-ref">+ Queue</span> on the command bar.</li>
+      <li>In the <strong>Add queue</strong> side blade, configure the following core parameters:
+        <ul>
+          <li><strong>Name:</strong> <code>orders-queue</code>.</li>
+          <li><strong>Max queue size:</strong> <code>1 GB</code> (or up to 80 GB in Premium).</li>
+          <li><strong>Max delivery count:</strong> <code>10</code>. After 10 failed/abandoned delivery attempts, the message is automatically sequestered in the Dead-Letter Queue (DLQ).</li>
+          <li><strong>Message time to live (TTL):</strong> <code>14 Days</code>.</li>
+          <li><strong>Lock duration:</strong> <code>30 Seconds</code> (time a consumer has to process and settle before the lock expires).</li>
+        </ul>
+      </li>
+      <li>Select the advanced feature flags:
+        <ul>
+          <li>Check <span class="ui-ref">Enable duplicate detection</span> with a <code>10 minutes</code> detection window (broker discards duplicate <code>MessageId</code>s).</li>
+          <li>Check <span class="ui-ref">Enable dead lettering on message expiration</span> so expired orders are never silently lost.</li>
+          <li><em>(Optional)</em> Check <span class="ui-ref">Enable sessions</span> if strict FIFO per <code>SessionId</code> is required.</li>
+        </ul>
+      </li>
+      <li>Click <span class="ui-ref">Create</span> at the bottom of the blade.</li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">sb-ecommerce-prod &gt; Queues &gt; + Add queue</text>
+    
+
+  <!-- Overlay Modal Background simulating Azure Side Blade -->
+  <rect x="0" y="72" width="480" height="408" fill="#f8fafc" />
+  <rect x="480" y="72" width="440" height="408" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+  
+  <!-- Left background shadow table -->
+  <text x="24" y="105" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#0f172a">Queues</text>
+  <rect x="24" y="125" width="430" height="34" fill="#ffffff" stroke="#e2e8f0" rx="4" />
+  <text x="36" y="146" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#64748b">No queues provisioned in this namespace yet.</text>
+
+  <!-- Right Side Blade: Add Queue -->
+  <g transform="translate(500, 88)">
+    <text x="0" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="15" font-weight="800" fill="#0f172a">Add queue</text>
+    <text x="390" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="14" fill="#64748b">&#x2715;</text>
+    <line x1="0" y1="28" x2="400" y2="28" stroke="#e2e8f0" />
+
+    <!-- Name -->
+    <text x="0" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Name *</text>
+    <rect x="0" y="60" width="390" height="26" rx="3" fill="#ffffff" stroke="#0078d4" stroke-width="1.5" />
+    <text x="10" y="77" font-family="Consolas, monospace" font-size="11" font-weight="700" fill="#0f172a">orders-queue</text>
+
+    <!-- Max queue size -->
+    <text x="0" y="106" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Max queue size *</text>
+    <rect x="0" y="114" width="180" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="10" y="131" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">1 GB</text>
+
+    <!-- Max delivery count -->
+    <text x="210" y="106" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Max delivery count *</text>
+    <rect x="210" y="114" width="180" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="220" y="131" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">10</text>
+
+    <!-- Message TTL & Lock Duration -->
+    <text x="0" y="160" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Message time to live</text>
+    <rect x="0" y="168" width="180" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="10" y="185" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">14 Days</text>
+
+    <text x="210" y="160" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Lock duration</text>
+    <rect x="210" y="168" width="180" height="26" rx="3" fill="#ffffff" stroke="#94a3b8" />
+    <text x="220" y="185" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#0f172a">30 Seconds</text>
+
+    <!-- Checkboxes -->
+    <g transform="translate(0, 212)">
+      <!-- Box 1: Duplicate Detection -->
+      <rect x="0" y="0" width="15" height="15" rx="3" fill="#0078d4" />
+      <text x="3" y="12" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#ffffff">&#x2713;</text>
+      <text x="24" y="12" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#0f172a">Enable duplicate detection (10 mins window)</text>
+
+      <!-- Box 2: Dead Lettering on Expiration -->
+      <rect x="0" y="24" width="15" height="15" rx="3" fill="#0078d4" />
+      <text x="3" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#ffffff">&#x2713;</text>
+      <text x="24" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#0f172a">Enable dead lettering on message expiration</text>
+
+      <!-- Box 3: Enable Sessions -->
+      <rect x="0" y="48" width="15" height="15" rx="3" fill="#ffffff" stroke="#94a3b8" />
+      <text x="24" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">Enable sessions (FIFO ordering by SessionId)</text>
+    </g>
+
+    <!-- Create Button -->
+    <g transform="translate(0, 330)">
+      <rect x="0" y="0" width="110" height="30" rx="4" fill="#0078d4" />
+      <text x="55" y="19" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Create</text>
+      <rect x="120" y="0" width="90" height="30" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+      <text x="165" y="19" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#334155">Cancel</text>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 3: Azure Portal &mdash; Add Queue side panel with Max Delivery Count, Duplicate Detection, and Dead-Lettering configuration.</div>
+    <div class="tip">
+      <strong>Lock Duration Guideline:</strong> Set the lock duration to at least 2&times; to 3&times; your average processing time. If workers occasionally run long, use <code>RenewMessageLockAsync()</code> in code rather than setting an excessively long default lock duration.
+    </div>
+  </div>
+
+
+  <div class="guide-step" id="step-4">
+    <div class="guide-step-header">
+      <div class="guide-step-num">4</div>
+      <h3>Create a Topic with Filtered Subscriptions (Pub/Sub)</h3>
+    </div>
+    <p class="step-intro">Topics provide 1:N publish-subscribe fan-out: publishers send to a single topic, and each attached subscription receives an independent copy according to configurable rule filters.</p>
+    <ol class="actions">
+      <li>In the left sidebar under <strong>Entities</strong>, click <span class="ui-ref">Topics</span>, then click <span class="ui-ref">+ Topic</span>. Enter name <code>events-topic</code> and click <span class="ui-ref">Create</span>.</li>
+      <li>Click on the newly created <span class="ui-ref">events-topic</span> to open its blade, then click <span class="ui-ref">+ Subscription</span>.</li>
+      <li>In the <strong>Add subscription</strong> blade, configure subscription <code>sub-billing</code>:
+        <ul>
+          <li><strong>Subscription name:</strong> <code>sub-billing</code>.</li>
+          <li><strong>Max delivery count:</strong> <code>10</code>.</li>
+        </ul>
+      </li>
+      <li>Open the subscription&rsquo;s <strong>Filters &amp; actions</strong> tab:
+        <ul>
+          <li>Add a <strong>SQL Filter</strong>: <code>sys.Label = 'OrderPlaced' AND Amount &gt;= 100.00</code>.</li>
+          <li>Add an optional <strong>Rule Action</strong>: <code>SET RoutedBy = 'EnterpriseBus';</code> to annotate message headers before queuing.</li>
+        </ul>
+      </li>
+      <li>Repeat the process to add other independent subscriptions (e.g. <code>sub-shipping</code> with correlation filter or <code>sub-audit</code> with TrueFilter <code>1=1</code>).</li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">sb-ecommerce-prod &gt; Topics &gt; events-topic &gt; Subscriptions &gt; sub-billing</text>
+    
+
+  <!-- Topic Subscriptions List & Filter Configuration -->
+  <g transform="translate(24, 84)">
+    <text x="0" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="15" font-weight="800" fill="#0f172a">Topic: events-topic &gt; Subscription: sub-billing</text>
+    <line x1="0" y1="28" x2="872" y2="28" stroke="#e2e8f0" />
+
+    <!-- Left Essentials -->
+    <rect x="0" y="38" width="410" height="130" rx="6" fill="#f8fafc" stroke="#e2e8f0" />
+    <text x="14" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">&#x1F4CB; Subscription Properties</text>
+    <text x="14" y="46" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#64748b">Max Delivery Count: <tspan font-weight="700" fill="#0f172a">10</tspan></text>
+    <text x="14" y="66" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#64748b">Message Lock Duration: <tspan font-weight="700" fill="#0f172a">30 Seconds</tspan></text>
+    <text x="14" y="86" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#64748b">Default Message TTL: <tspan font-weight="700" fill="#0f172a">14 Days</tspan></text>
+    <text x="14" y="106" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" fill="#64748b">Dead Lettering on Filter Errors: <tspan font-weight="700" fill="#16a34a">Enabled</tspan></text>
+
+    <!-- Right: Filters & Rules Config Panel -->
+    <g transform="translate(430, 38)">
+      <rect x="0" y="0" width="442" height="310" rx="6" fill="#ffffff" stroke="#0078d4" stroke-width="1.4" />
+      <rect x="0" y="0" width="442" height="32" rx="6" fill="#f0f7ff" />
+      <rect x="0" y="24" width="442" height="8" fill="#f0f7ff" />
+      <text x="14" y="21" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="800" fill="#0078d4">&#x2699;&#xFE0F; Subscription Rule &amp; Filter Editor</text>
+
+      <text x="14" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">Rule Name:</text>
+      <rect x="14" y="58" width="414" height="24" rx="3" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="22" y="74" font-family="Consolas, monospace" font-size="10.5" font-weight="700" fill="#0f172a">BillingInvoiceFilter</text>
+
+      <text x="14" y="104" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">Filter Type: <tspan font-weight="700" fill="#0078d4">SQL Filter</tspan></text>
+      
+      <!-- SQL Filter Editor Window -->
+      <rect x="14" y="112" width="414" height="66" rx="4" fill="#1e293b" />
+      <text x="24" y="132" font-family="Consolas, monospace" font-size="10.5" fill="#38bdf8">sys.Label = 'OrderPlaced'</text>
+      <text x="24" y="148" font-family="Consolas, monospace" font-size="10.5" fill="#facc15">AND Amount &gt;= 100.00</text>
+      <text x="24" y="164" font-family="Consolas, monospace" font-size="9" fill="#94a3b8">-- Routes only high-value orders to this subscription</text>
+
+      <text x="14" y="200" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" fill="#334155">Rule Action (Property Mutation):</text>
+      <rect x="14" y="208" width="414" height="42" rx="4" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="22" y="226" font-family="Consolas, monospace" font-size="10" fill="#0f172a">SET RoutedBy = 'EnterpriseBus';</text>
+
+      <g transform="translate(14, 266)">
+        <rect x="0" y="0" width="100" height="26" rx="4" fill="#0078d4" />
+        <text x="50" y="17" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">Save Rule</text>
+      </g>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 4: Azure Portal &mdash; Topic Subscription Filter editor showing SQL Filter rule expression and routing action.</div>
+  </div>
+
+
+  <div class="guide-step" id="step-5">
+    <div class="guide-step-header">
+      <div class="guide-step-num">5</div>
+      <h3>Configure Access Security: Microsoft Entra ID &amp; SAS</h3>
+    </div>
+    <p class="step-intro">Grant client applications permission to send or receive messages securely using either passwordless RBAC (recommended) or Shared Access Signature (SAS) connection strings.</p>
+    <ol class="actions">
+      <li><strong>Option A &mdash; Microsoft Entra ID (Recommended for Production &amp; Cloud Apps):</strong>
+        <ul>
+          <li>Go to <span class="ui-ref">Access control (IAM)</span> &rarr; <span class="ui-ref">+ Add</span> &rarr; <span class="ui-ref">Add role assignment</span>.</li>
+          <li>For producers, assign the <strong>Azure Service Bus Data Sender</strong> role to your App Service, Azure Function, or User Managed Identity.</li>
+          <li>For consumers, assign the <strong>Azure Service Bus Data Receiver</strong> role.</li>
+        </ul>
+      </li>
+      <li><strong>Option B &mdash; Shared Access Policies (SAS Connection Strings):</strong>
+        <ul>
+          <li>In the left sidebar under <strong>Settings</strong>, click <span class="ui-ref">Shared access policies</span>.</li>
+          <li>Click <span class="ui-ref">+ Add</span>, specify name <code>SendListenPolicy</code>, check <span class="ui-ref">Send</span> and <span class="ui-ref">Listen</span> (avoid checking <em>Manage</em> unless granting administrative privileges), then click <span class="ui-ref">Create</span>.</li>
+          <li>Click the policy to open its drawer and copy the <span class="ui-ref">Primary Connection String</span> (starts with <code>Endpoint=sb://...</code>).</li>
+        </ul>
+      </li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">sb-ecommerce-prod &gt; Shared access policies &gt; SendListenPolicy</text>
+    
+
+  <g transform="translate(24, 84)">
+    <text x="0" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="15" font-weight="800" fill="#0f172a">Shared access policy: SendListenPolicy</text>
+    <line x1="0" y1="28" x2="872" y2="28" stroke="#e2e8f0" />
+
+    <!-- Claims Selection -->
+    <text x="0" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" fill="#334155">Configured Claims:</text>
+    <g transform="translate(0, 62)">
+      <rect x="0" y="0" width="14" height="14" rx="2" fill="#ffffff" stroke="#94a3b8" />
+      <text x="22" y="12" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#475569">Manage</text>
+
+      <rect x="100" y="0" width="14" height="14" rx="2" fill="#0078d4" />
+      <text x="103" y="11" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="800" fill="#ffffff">&#x2713;</text>
+      <text x="122" y="12" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Send</text>
+
+      <rect x="190" y="0" width="14" height="14" rx="2" fill="#0078d4" />
+      <text x="193" y="11" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="800" fill="#ffffff">&#x2713;</text>
+      <text x="212" y="12" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Listen</text>
+    </g>
+
+    <!-- Keys & Connection Strings Box -->
+    <g transform="translate(0, 100)">
+      <rect x="0" y="0" width="872" height="230" rx="6" fill="#f8fafc" stroke="#cbd5e1" />
+      
+      <!-- Primary Key -->
+      <text x="18" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="600" fill="#64748b">Primary Key</text>
+      <rect x="18" y="32" width="760" height="26" rx="3" fill="#ffffff" stroke="#cbd5e1" />
+      <text x="28" y="49" font-family="Consolas, monospace" font-size="10.5" fill="#334155">w9K8s2mZ98Lx41QyT.......................................=</text>
+      <rect x="786" y="32" width="70" height="26" rx="3" fill="#0078d4" />
+      <text x="821" y="49" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="700" fill="#ffffff">&#x1F4CB; Copy</text>
+
+      <!-- Primary Connection String -->
+      <text x="18" y="80" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="600" fill="#0078d4">Primary Connection String (Standard .NET SDK / Clients)</text>
+      <rect x="18" y="88" width="760" height="34" rx="3" fill="#ffffff" stroke="#0078d4" stroke-width="1.2" />
+      <text x="28" y="108" font-family="Consolas, monospace" font-size="10" font-weight="600" fill="#0f172a">Endpoint=sb://sb-ecommerce-prod.servicebus.windows.net/;SharedAccessKeyName=SendListenPolicy;SharedAccessKey=w9K8s2...=</text>
+      <rect x="786" y="88" width="70" height="34" rx="3" fill="#0078d4" />
+      <text x="821" y="109" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="700" fill="#ffffff">&#x1F4CB; Copy</text>
+
+      <!-- Entra ID Recommendation Banner -->
+      <rect x="18" y="136" width="838" height="74" rx="4" fill="#eff6ff" stroke="#bfdbfe" />
+      <text x="32" y="156" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#1e40af">&#x1F6E1;&#xFE0F; Zero-Trust Recommendation: Microsoft Entra ID (Passwordless)</text>
+      <text x="32" y="174" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#1e3a8a">Instead of connection strings, grant the managed identity role:</text>
+      <text x="32" y="192" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#1d4ed8">&#8226; Azure Service Bus Data Sender  &#8226; Azure Service Bus Data Receiver</text>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 5: Azure Portal &mdash; Shared Access Policy configuration blade and Primary Connection String retrieval.</div>
+    <div class="tip">
+      <strong>Zero-Trust Security:</strong> Avoid storing connection strings in source code or configuration files. When running on Azure (App Services, AKS, Container Apps), use <code>DefaultAzureCredential</code> with Managed Identities.
+    </div>
+  </div>
+
+
+  <div class="guide-step" id="step-6">
+    <div class="guide-step-header">
+      <div class="guide-step-num">6</div>
+      <h3>Test and Settle Messages via Service Bus Explorer</h3>
+    </div>
+    <p class="step-intro">The Azure Portal embeds <strong>Service Bus Explorer</strong>, a powerful tool for publishing test payloads, peeking at queue depth, and testing settlement without writing code.</p>
+    <ol class="actions">
+      <li>Navigate to <strong>Entities</strong> &rarr; <span class="ui-ref">Queues</span> &rarr; click on <span class="ui-ref">orders-queue</span>.</li>
+      <li>In the queue&rsquo;s left menu, select <span class="ui-ref">Service Bus Explorer</span>.</li>
+      <li><strong>Send a Test Message:</strong>
+        <ul>
+          <li>Select the <span class="ui-ref">Send messages</span> sub-tab.</li>
+          <li>Set Content Type to <span class="ui-ref">application/json</span>.</li>
+          <li>Paste sample JSON payload in the message body:
+            <pre><code>{
+  "orderId": "ORD-2026-904",
+  "customer": "Fabrikam Retail",
+  "amount": 250.00,
+  "status": "APPROVED"
+}</code></pre>
+          </li>
+          <li>Under <em>Custom Properties</em>, add key <code>sys.Label</code> with value <code>Priority</code>.</li>
+          <li>Click <span class="ui-ref">Send</span>. A green notification confirms successful ingress.</li>
+        </ul>
+      </li>
+      <li><strong>Peek and Settle Messages:</strong>
+        <ul>
+          <li>Switch to the <span class="ui-ref">Peek from start</span> tab to view the active message queue without removing messages.</li>
+          <li>Inspect Message ID <code>msg-9041</code>, Sequence Number, Enqueued Time, and Delivery Count.</li>
+          <li>Click into the message to inspect headers and simulate <strong>Dead-lettering</strong> or settlement.</li>
+        </ul>
+      </li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">sb-ecommerce-prod &gt; Queues &gt; orders-queue &gt; Service Bus Explorer</text>
+    
+
+  <g transform="translate(18, 76)">
+    <!-- Sub-tabs -->
+    <rect x="0" y="0" width="884" height="28" fill="#f1f5f9" rx="4" />
+    <text x="16" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0078d4">&#x1F4E4; Send messages</text>
+    <text x="140" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">&#x1F441;&#xFE0F; Peek from start (Active: 3)</text>
+    <text x="310" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#64748b">&#x2620;&#xFE0F; Peek dead-letter queue (DLQ: 0)</text>
+
+    <!-- Send Panel (Left) -->
+    <g transform="translate(0, 36)">
+      <rect x="0" y="0" width="410" height="320" rx="6" fill="#ffffff" stroke="#cbd5e1" />
+      <text x="14" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">&#x1F4DD; Compose &amp; Send Message</text>
+      
+      <text x="14" y="44" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Content-Type:</text>
+      <rect x="14" y="50" width="382" height="22" rx="3" fill="#f8fafc" stroke="#cbd5e1" />
+      <text x="22" y="65" font-family="Consolas, monospace" font-size="9.5" fill="#0f172a">application/json</text>
+
+      <text x="14" y="90" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="600" fill="#64748b">Message Body:</text>
+      <rect x="14" y="96" width="382" height="130" rx="4" fill="#0f172a" />
+      <text x="22" y="114" font-family="Consolas, monospace" font-size="9.5" fill="#f8fafc">{</text>
+      <text x="34" y="130" font-family="Consolas, monospace" font-size="9.5" fill="#38bdf8">"orderId": "ORD-2026-904",</text>
+      <text x="34" y="146" font-family="Consolas, monospace" font-size="9.5" fill="#38bdf8">"customer": "Fabrikam Retail",</text>
+      <text x="34" y="162" font-family="Consolas, monospace" font-size="9.5" fill="#38bdf8">"amount": 250.00,</text>
+      <text x="34" y="178" font-family="Consolas, monospace" font-size="9.5" fill="#38bdf8">"status": "APPROVED"</text>
+      <text x="22" y="196" font-family="Consolas, monospace" font-size="9.5" fill="#f8fafc">}</text>
+
+      <rect x="14" y="234" width="382" height="30" rx="3" fill="#f1f5f9" stroke="#cbd5e1" />
+      <text x="22" y="253" font-family="Consolas, monospace" font-size="9.5" fill="#475569">Custom Props: sys.Label = 'Priority'</text>
+
+      <rect x="14" y="274" width="90" height="28" rx="4" fill="#0078d4" />
+      <text x="59" y="292" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff">&#x27A4; Send</text>
+    </g>
+
+    <!-- Peek Results Table (Right) -->
+    <g transform="translate(424, 36)">
+      <rect x="0" y="0" width="460" height="320" rx="6" fill="#ffffff" stroke="#cbd5e1" />
+      <text x="14" y="22" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#0f172a">&#x1F441;&#xFE0F; Active Messages in Queue</text>
+      
+      <!-- Table Header -->
+      <rect x="14" y="36" width="432" height="24" fill="#e2e8f0" rx="2" />
+      <text x="20" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Seq #</text>
+      <text x="64" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Message ID</text>
+      <text x="156" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Delivery #</text>
+      <text x="220" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Enqueued Time</text>
+      <text x="340" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Actions</text>
+
+      <!-- Row 1 -->
+      <rect x="14" y="64" width="432" height="30" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5" />
+      <text x="20" y="82" font-family="Consolas, monospace" font-size="9" fill="#0f172a">101</text>
+      <text x="64" y="82" font-family="Consolas, monospace" font-size="9" font-weight="700" fill="#0078d4">msg-9041</text>
+      <text x="170" y="82" font-family="Consolas, monospace" font-size="9" fill="#0f172a">1</text>
+      <text x="220" y="82" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">22:30:15 UTC</text>
+      
+      <!-- Action Badges -->
+      <rect x="330" y="69" width="46" height="18" rx="3" fill="#dcfce7" stroke="#86efac" />
+      <text x="335" y="81" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#15803d">Settle</text>
+      <rect x="382" y="69" width="56" height="18" rx="3" fill="#fee2e2" stroke="#fca5a5" />
+      <text x="386" y="81" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#b91c1c">DLQ</text>
+
+      <!-- Message Details Preview Box -->
+      <g transform="translate(14, 110)">
+        <rect x="0" y="0" width="432" height="194" rx="4" fill="#f8fafc" stroke="#cbd5e1" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#0f172a">Message 101 Payload Inspection:</text>
+        <rect x="10" y="26" width="412" height="110" rx="3" fill="#0f172a" />
+        <text x="18" y="44" font-family="Consolas, monospace" font-size="9" fill="#22c55e">{</text>
+        <text x="28" y="60" font-family="Consolas, monospace" font-size="9" fill="#93c5fd">"orderId": "ORD-2026-904",</text>
+        <text x="28" y="76" font-family="Consolas, monospace" font-size="9" fill="#93c5fd">"customer": "Fabrikam Retail",</text>
+        <text x="28" y="92" font-family="Consolas, monospace" font-size="9" fill="#93c5fd">"amount": 250.00</text>
+        <text x="18" y="108" font-family="Consolas, monospace" font-size="9" fill="#22c55e">}</text>
+        <text x="10" y="156" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#475569">Lock Token: <tspan font-family="Consolas, monospace">4b8e21f9-01ae-4882-9382...</tspan></text>
+        <text x="10" y="174" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#475569">State: <tspan font-weight="700" fill="#15803d">Active</tspan> &#8226; Expires in 13d 23h</text>
+      </g>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 6: Azure Portal &mdash; Service Bus Explorer showing Message Composer, Peek Grid, and Payload Inspector.</div>
+  </div>
+
+
+  <div class="guide-step" id="step-7">
+    <div class="guide-step-header">
+      <div class="guide-step-num">7</div>
+      <h3>Programmatic Implementation: C# .NET Producer &amp; Consumer</h3>
+    </div>
+    <p class="step-intro">Implement a production-grade publisher and asynchronous message processor using the official <code>Azure.Messaging.ServiceBus</code> SDK with the complete Peek-Lock settlement lifecycle.</p>
+    
+    <ol class="actions">
+      <li>Install official client and identity packages in your .NET project:
+        <pre><code>dotnet add package Azure.Messaging.ServiceBus
+dotnet add package Azure.Identity</code></pre>
+      </li>
+      <li><strong>Sender (Producer):</strong> Creates a batch of messages and sends them atomically:
+<pre><code>using Azure.Identity;
+using Azure.Messaging.ServiceBus;
+
+// Authenticate via Microsoft Entra ID (or connection string)
+await using var client = new ServiceBusClient(
+    "sb-ecommerce-prod.servicebus.windows.net", 
+    new DefaultAzureCredential());
+
+ServiceBusSender sender = client.CreateSender("orders-queue");
+
+// Build message batch for optimal AMQP throughput
+using ServiceBusMessageBatch batch = await sender.CreateMessageBatchAsync();
+var order = new ServiceBusMessage("payload-json-bytes")
+{
+    ContentType = "application/json",
+    MessageId = "msg-9041",       // Enables duplicate detection
+    Subject = "OrderPlaced"       // Used for subscription filter routing
+};
+
+if (batch.TryAddMessage(order))
+{
+    await sender.SendMessagesAsync(batch);
+    Console.WriteLine("[PRODUCER] Sent message batch successfully.");
+}</code></pre>
+      </li>
+      <li><strong>Processor (Consumer) with Peek-Lock Settlement:</strong>
+<pre><code>ServiceBusProcessor processor = client.CreateProcessor("orders-queue", new ServiceBusProcessorOptions
+{
+    ReceiveMode = ServiceBusReceiveMode.PeekLock, // Message stays locked until settled
+    MaxConcurrentCalls = 4,                       // Concurrent competing worker threads
+    AutoCompleteMessages = false                  // Explicit settlement control
+});
+
+processor.ProcessMessageAsync += async args =&gt;
+{
+    string payload = args.Message.Body.ToString();
+    Console.WriteLine($"[CONSUMER] Received order: {payload}");
+
+    try
+    {
+        // 1. Execute business logic
+        await ProcessOrderAsync(payload);
+
+        // 2. Success: Complete and delete from queue
+        await args.CompleteMessageAsync(args.Message);
+        Console.WriteLine("[ACK] Message completed successfully.");
+    }
+    catch (TransientNetworkException)
+    {
+        // 3. Transient failure: Release lock for retry (+1 delivery count)
+        await args.AbandonMessageAsync(args.Message);
+    }
+    catch (InvalidOrderDataException ex)
+    {
+        // 4. Poison message: Move directly to Dead-Letter Queue with error reason
+        await args.DeadLetterMessageAsync(args.Message, "InvalidOrderPayload", ex.Message);
+    }
+};
+
+processor.ProcessErrorAsync += args =&gt;
+{
+    Console.WriteLine($"[ERROR] {args.Exception.Message}");
+    return Task.CompletedTask;
+};
+
+await processor.StartProcessingAsync();
+Console.WriteLine("Worker listening for orders. Press [Enter] to exit.");
+Console.ReadLine();
+await processor.StopProcessingAsync();</code></pre>
+      </li>
+    </ol>
+
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  <!-- Code Editor & Terminal Mockup Window -->
+  <rect x="0" y="0" width="920" height="480" rx="8" fill="#1e1e1e" stroke="#334155" stroke-width="1.2" />
+  
+  <!-- Window Titlebar -->
+  <rect x="0" y="0" width="920" height="32" rx="8" fill="#2d2d2d" />
+  <rect x="0" y="24" width="920" height="8" fill="#2d2d2d" />
+  <circle cx="16" cy="16" r="5" fill="#ef4444" />
+  <circle cx="32" cy="16" r="5" fill="#f59e0b" />
+  <circle cx="48" cy="16" r="5" fill="#10b981" />
+  <text x="460" y="21" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" fill="#9ca3af">OrderWorker.cs &#8212; ServiceBusProcessor Execution (.NET 8)</text>
+
+  <!-- Split Screen: Left Code, Right Terminal -->
+  <!-- Left Code Panel -->
+  <g transform="translate(16, 44)">
+    <rect x="0" y="0" width="450" height="420" rx="4" fill="#18181b" stroke="#27272a" />
+    <text x="14" y="22" font-family="Consolas, monospace" font-size="10" fill="#6b7280">// C# Programmatic Consumer using Azure.Messaging.ServiceBus</text>
+    <text x="14" y="40" font-family="Consolas, monospace" font-size="10.5" fill="#93c5fd">await using var <tspan fill="#facc15">processor</tspan> = client.CreateProcessor("orders-queue");</text>
+    
+    <text x="14" y="64" font-family="Consolas, monospace" font-size="10.5" fill="#e2e8f0">processor.<tspan fill="#60a5fa">ProcessMessageAsync</tspan> += async args =&gt; {</text>
+    <text x="28" y="84" font-family="Consolas, monospace" font-size="10" fill="#94a3b8">string body = args.Message.Body.ToString();</text>
+    <text x="28" y="104" font-family="Consolas, monospace" font-size="10" fill="#4ade80">Console.WriteLine($"[WORKER] Order: {body}");</text>
+    
+    <text x="28" y="130" font-family="Consolas, monospace" font-size="10" fill="#cbd5e1">try {</text>
+    <text x="42" y="148" font-family="Consolas, monospace" font-size="10" fill="#94a3b8">// Process order business logic...</text>
+    <text x="42" y="166" font-family="Consolas, monospace" font-size="10" fill="#38bdf8">await ProcessOrderAsync(body);</text>
+    
+    <text x="42" y="190" font-family="Consolas, monospace" font-size="10" fill="#6b7280">// 1. Settle: Complete (ACK)</text>
+    <text x="42" y="208" font-family="Consolas, monospace" font-size="10.5" font-weight="700" fill="#4ade80">await args.CompleteMessageAsync(args.Message);</text>
+    <text x="28" y="228" font-family="Consolas, monospace" font-size="10" fill="#cbd5e1">} catch (TransientException) {</text>
+    <text x="42" y="246" font-family="Consolas, monospace" font-size="10" fill="#facc15">// 2. Transient error: Abandon (Retry +1)</text>
+    <text x="42" y="264" font-family="Consolas, monospace" font-size="10" fill="#facc15">await args.AbandonMessageAsync(args.Message);</text>
+    <text x="28" y="284" font-family="Consolas, monospace" font-size="10" fill="#cbd5e1">} catch (PoisonDataException ex) {</text>
+    <text x="42" y="302" font-family="Consolas, monospace" font-size="10" fill="#f87171">// 3. Unrecoverable: Move to DLQ</text>
+    <text x="42" y="320" font-family="Consolas, monospace" font-size="10" fill="#f87171">await args.DeadLetterMessageAsync(args.Message, "InvalidData", ex.Message);</text>
+    <text x="28" y="338" font-family="Consolas, monospace" font-size="10" fill="#cbd5e1">}</text>
+    <text x="14" y="358" font-family="Consolas, monospace" font-size="10" fill="#e2e8f0">};</text>
+  </g>
+
+  <!-- Right Terminal Panel -->
+  <g transform="translate(480, 44)">
+    <rect x="0" y="0" width="424" height="420" rx="4" fill="#09090b" stroke="#27272a" />
+    <rect x="0" y="0" width="424" height="24" rx="4" fill="#18181b" />
+    <text x="14" y="16" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#a1a1aa">TERMINAL: bash &#8212; dotnet run</text>
+
+    <g transform="translate(14, 40)">
+      <text x="0" y="0" font-family="Consolas, monospace" font-size="10" fill="#22c55e">$ dotnet run --project OrderWorker</text>
+      
+      <text x="0" y="24" font-family="Consolas, monospace" font-size="9.5" fill="#a1a1aa">[14:30:00 INFO] Authenticated via DefaultAzureCredential (Entra ID).</text>
+      <text x="0" y="44" font-family="Consolas, monospace" font-size="9.5" fill="#a1a1aa">[14:30:01 INFO] ServiceBusProcessor listening on: orders-queue</text>
+      
+      <text x="0" y="74" font-family="Consolas, monospace" font-size="9.5" fill="#38bdf8">[14:30:05 PRODUCER] &#8594; Sent OrderBatch (3 messages) to Service Bus.</text>
+
+      <text x="0" y="104" font-family="Consolas, monospace" font-size="9.5" fill="#facc15">[14:30:06 WORKER] &#8592; Message Received (LockToken: 4b8e21f9...)</text>
+      <text x="0" y="120" font-family="Consolas, monospace" font-size="9" fill="#cbd5e1">Payload: {"orderId": "ORD-2026-904", "amount": 250.00}</text>
+      
+      <text x="0" y="146" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#4ade80">[14:30:07 SETTLE] &#x2714; Order ORD-2026-904 processed successfully.</text>
+      <text x="0" y="162" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#4ade80">[14:30:07 ACK] CompleteMessageAsync() executed. Msg deleted.</text>
+
+      <text x="0" y="196" font-family="Consolas, monospace" font-size="9.5" fill="#facc15">[14:30:08 WORKER] &#8592; Message Received (LockToken: 9c12a81f...)</text>
+      <text x="0" y="212" font-family="Consolas, monospace" font-size="9" fill="#cbd5e1">Payload: {"orderId": "ORD-2026-905", "amount": 115.50}</text>
+      <text x="0" y="234" font-family="Consolas, monospace" font-size="9.5" font-weight="700" fill="#4ade80">[14:30:09 ACK] CompleteMessageAsync() executed. Msg deleted.</text>
+
+      <text x="0" y="268" font-family="Consolas, monospace" font-size="9.5" fill="#22c55e">&#x25CF; Processing stream healthy. Active queue depth: 0 messages.</text>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 7: Visual Studio Code &mdash; Live execution of C# producer sending order batches and background processor settling messages via Peek-Lock.</div>
+  </div>
+
+
+  <div class="guide-step" id="step-8">
+    <div class="guide-step-header">
+      <div class="guide-step-num">8</div>
+      <h3>Monitor Queue Depth &amp; Configure Dead-Letter Alerts</h3>
+    </div>
+    <p class="step-intro">Operational excellence in Service Bus requires observing active queue depth, latency, and setting proactive alerts whenever poison messages arrive in the Dead-Letter Queue.</p>
+    <ol class="actions">
+      <li>In the namespace left sidebar under <strong>Monitoring</strong>, select <span class="ui-ref">Metrics</span>.</li>
+      <li>Add the key operational metrics:
+        <ul>
+          <li><strong>Incoming Messages (Sum):</strong> Ingress message rate from senders.</li>
+          <li><strong>Outgoing Messages (Sum):</strong> Consumption and settlement rate by workers.</li>
+          <li><strong>Dead-lettered Messages (Average):</strong> Messages quarantined in the DLQ.</li>
+        </ul>
+      </li>
+      <li><strong>Create a Poison Message Alert Rule:</strong>
+        <ul>
+          <li>Click <span class="ui-ref">+ New alert rule</span> on the metrics toolbar.</li>
+          <li><strong>Signal:</strong> <em>Dead-lettered Messages</em>.</li>
+          <li><strong>Threshold:</strong> Set <em>Greater than 0</em> over a 5-minute aggregation window.</li>
+          <li><strong>Action Group:</strong> Assign your DevOps PagerDuty / Email on-call group.</li>
+          <li><strong>Severity:</strong> <code>Sev 2 (Warning)</code> or <code>Sev 1 (Error)</code>.</li>
+        </ul>
+      </li>
+      <li>Save the alert rule to ensure operational teams are notified immediately when a poison message arrives for manual root-cause inspection.</li>
+    </ol>
+    <div class="portal-mockup-frame">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="auto" class="portal-screenshot-svg">
+  
+    <!-- Window Frame -->
+    <rect x="0" y="0" width="920" height="480" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+    
+    <!-- Azure Portal Top Nav Bar -->
+    <rect x="0" y="0" width="920" height="38" rx="8" fill="#002447" />
+    <rect x="0" y="28" width="920" height="10" fill="#002447" />
+    <!-- Azure Logo & Text -->
+    <path d="M 16 12 L 28 26 L 22 26 L 12 14 Z" fill="#0078d4" />
+    <path d="M 23 12 L 34 26 L 29 26 L 20 15 Z" fill="#50e6ff" />
+    <text x="40" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Microsoft Azure</text>
+    
+    <!-- Portal Global Search Box -->
+    <rect x="240" y="6" width="380" height="26" rx="4" fill="#001830" stroke="#004b87" stroke-width="1" />
+    <text x="252" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#94a3b8">&#x1F50D; Search resources, services, and docs (G+/)</text>
+    
+    <!-- Portal Right Utilities -->
+    <text x="800" y="23" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#cbd5e1">&#x2699;&#xFE0F; &#x1F514; &#x2753; admin@company.com</text>
+
+    <!-- Portal Breadcrumb / Command Bar -->
+    <rect x="0" y="38" width="920" height="34" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+    <text x="18" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#0078d4">sb-ecommerce-prod &gt; Monitoring &gt; Metrics</text>
+    
+
+  <g transform="translate(24, 84)">
+    <text x="0" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="15" font-weight="800" fill="#0f172a">Metrics: sb-ecommerce-prod</text>
+    <text x="460" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" fill="#64748b">Time range: Last 4 hours &#8226; Granularity: 5 minutes</text>
+    <line x1="0" y1="28" x2="872" y2="28" stroke="#e2e8f0" />
+
+    <!-- Metric Filter Bar -->
+    <rect x="0" y="38" width="872" height="32" rx="4" fill="#f1f5f9" />
+    <text x="14" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Metric 1: <tspan fill="#0078d4">Incoming Messages</tspan> (Sum)</text>
+    <text x="240" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Metric 2: <tspan fill="#16a34a">Outgoing Messages</tspan> (Sum)</text>
+    <text x="470" y="58" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Metric 3: <tspan fill="#dc2626">Dead-lettered Messages</tspan> (Avg)</text>
+
+    <!-- Main Chart Box -->
+    <g transform="translate(0, 80)">
+      <rect x="0" y="0" width="872" height="200" rx="6" fill="#ffffff" stroke="#cbd5e1" />
+      
+      <!-- Grid lines -->
+      <line x1="40" y1="40" x2="840" y2="40" stroke="#f1f5f9" stroke-width="1" />
+      <line x1="40" y1="90" x2="840" y2="90" stroke="#f1f5f9" stroke-width="1" />
+      <line x1="40" y1="140" x2="840" y2="140" stroke="#f1f5f9" stroke-width="1" />
+      <line x1="40" y1="180" x2="840" y2="180" stroke="#cbd5e1" stroke-width="1.2" />
+
+      <!-- Chart Line 1 (Incoming Blue) -->
+      <path d="M 40 160 L 180 150 L 320 80 L 460 70 L 600 85 L 740 60 L 840 50" fill="none" stroke="#0078d4" stroke-width="2.5" />
+      
+      <!-- Chart Line 2 (Outgoing Green) -->
+      <path d="M 40 162 L 180 152 L 320 84 L 460 72 L 600 88 L 740 62 L 840 52" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="3 3" />
+
+      <!-- Chart Line 3 (Dead Letter Red: stays at 0, spike at 600) -->
+      <path d="M 40 180 L 180 180 L 320 180 L 460 180 L 600 130 L 630 180 L 840 180" fill="none" stroke="#dc2626" stroke-width="2" />
+      <circle cx="600" cy="130" r="5" fill="#dc2626" />
+      <text x="585" y="120" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="800" fill="#dc2626">2 Poison Msgs</text>
+
+      <text x="40" y="195" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#94a3b8">20:00 &#8226; 21:00 &#8226; 22:00 &#8226; 23:00</text>
+    </g>
+
+    <!-- Alert Notification Banner -->
+    <g transform="translate(0, 290)">
+      <rect x="0" y="0" width="872" height="66" rx="6" fill="#fef2f2" stroke="#fca5a5" />
+      <text x="18" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#991b1b">&#x26A0;&#xFE0F; Azure Monitor Alert Rule Triggered &#8212; Severity: 2 (Warning)</text>
+      <text x="18" y="42" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#7f1d1d">Condition: 'Average Dead-lettered Messages &gt; 0' on queue: <tspan font-family="Consolas, monospace" font-weight="700">orders-queue</tspan></text>
+      <text x="18" y="56" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#991b1b">Action Group: DevOps-PagerDuty &amp; Email &#8226; Status: Fired at 22:35 UTC &#8226; Poison inspection recommended.</text>
+    </g>
+  </g>
+</svg>
+    </div>
+    <div class="step-caption">Screenshot 8: Azure Portal &mdash; Azure Monitor Metrics chart and automated Dead-Letter Queue trigger alert notification.</div>
+  </div>
+
+
+  <h2 class="phase">When to use it</h2>
+  <ul class="checklist">
+    <li><strong>Decoupling services</strong> — the producer does not need the consumer to be online, and each side scales on its own.</li>
+    <li><strong>Competing consumers</strong> — several instances of a worker drain the same queue, so throughput grows by adding replicas.</li>
+    <li><strong>Ordered work streams</strong> — sessions keep messages with the same key in order without serializing the whole queue.</li>
+    <li><strong>Poison-message handling</strong> — retries plus a dead-letter queue make failures observable instead of silent.</li>
+  </ul>
+
+  <div class="important">
+    <strong>Not the same as its neighbours.</strong> Event Grid delivers <em>reactive events</em> to handlers and does not queue them; Event Hubs ingests <em>telemetry streams</em> for high-throughput analytics; Storage Queues offer a simpler, cheaper queue without topics, sessions or ordering. Service Bus is the choice when you need brokered messaging with those guarantees.
+  </div>
+
+  <h2 class="phase">Related in this knowledge base</h2>
+  <ul class="checklist">
+    <li><a href="Azure Functions.html">Azure Functions</a> — has a Service Bus trigger and output binding, the usual way to consume messages without hosting a worker.</li>
+    <li><a href="Azure Logic Apps.html">Azure Logic Apps</a> — Service Bus connectors let a workflow send, receive and peek messages.</li>
+    <li><a href="Azure Monitor.html">Azure Monitor</a> — where namespace metrics and diagnostic logs are surfaced.</li>
+  </ul>
+
+  <div class="footer">IT Knowledge Base &middot; Azure &middot; Azure Service Bus</div>
+
+</main>
+</div>
+</body>
+</html>
