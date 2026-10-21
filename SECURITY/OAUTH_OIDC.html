@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAuth 2.0 and OpenID Connect - Identity reference</title>
+<style>
+
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; padding: 16px 20px 48px; }
+h1 { color: #1565c0; font-size: 1.75rem; margin: 4px 0 6px; }
+.subtitle { color: #475569; margin: 0 0 6px; line-height: 1.55; }
+.meta { color: #64748b; font-size: .9em; margin: 0 0 18px; }
+h2 { color: #2e7d32; margin-top: 34px; font-size: 1.18rem; }
+h2 .num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; margin-right: 9px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .74em; font-weight: 800; vertical-align: middle; }
+p { line-height: 1.6; margin: 0 0 10px; }
+a { color: #1565c0; }
+.toc { background: #f4f9ff; border: 1px solid #d7e3f1; border-radius: 9px; padding: 14px 18px; margin: 18px 0 8px; }
+.toc h2 { margin: 0 0 8px; font-size: 1rem; color: #1f4f8c; }
+.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.toc li { margin: 4px 0; line-height: 1.4; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+table th, table td { border: 1px solid #d7e3f1; padding: 8px 10px; vertical-align: top; text-align: left; }
+table th { background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; }
+table tbody tr:nth-child(odd) td { background: #f8fbff; }
+.code-block { display: grid; grid-template-columns: minmax(2.6em, auto) minmax(0, 1fr); background: #282c34; border: 1px solid #1f2329; border-left: 4px solid #61afef; border-radius: 8px; overflow: hidden; margin: 14px 0; }
+.code-gutter { margin: 0; padding: 14px 10px 14px 12px; border: 0; border-right: 1px solid #3a3f4b; background: #21252b; color: #5c6370; text-align: right; user-select: none; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; overflow: hidden; }
+.code-pre { margin: 0; padding: 14px 16px; border: 0; background: transparent; overflow-x: auto; overflow-y: hidden; }
+.code-pre code, .code-pre code.hljs { display: block; padding: 0; background: transparent; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; }
+.notes { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 7px; padding: 12px 18px 12px 32px; margin: 14px 0 6px; }
+.notes li { margin: 5px 0; line-height: 1.45; }
+.back { display: inline-block; margin-top: 30px; color: #1565c0; font-weight: 700; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+
+.sec { scroll-margin-top: 12px; }
+.toc a { cursor: pointer; }
+.modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .6); }
+.modal[hidden] { display: none; }
+.modal-card { display: flex; flex-direction: column; width: min(1000px, 100%); max-height: 88vh; border-radius: 12px; background: #fff; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); overflow: hidden; }
+.modal-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px 12px; border-bottom: 1px solid #e2e8f0; }
+.modal-num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .78rem; font-weight: 800; }
+.modal-title { margin: 0; font-size: 1.06rem; color: #1565c0; flex: 1 1 auto; }
+.modal-close { flex: none; width: 34px; height: 34px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: #334155; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.modal-close:hover, .modal-close:focus { background: #e2e8f0; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.modal-tabs { display: flex; gap: 6px; padding: 10px 18px 0; border-bottom: 1px solid #e2e8f0; }
+.tab { padding: 8px 14px; border: 1px solid transparent; border-bottom: 0; border-radius: 8px 8px 0 0; background: transparent; color: #475569; font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer; }
+.tab:hover { background: #f1f5f9; }
+.tab[aria-selected="true"] { background: #e3f2fd; border-color: #bbdefb; color: #0d47a1; }
+.modal-body { flex: 1 1 auto; overflow: auto; padding: 16px 18px; }
+.modal-body .pane[hidden] { display: none; }
+.modal-foot { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 12px 18px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+.nav-btn { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1565c0; font: inherit; font-weight: 700; font-size: .9rem; cursor: pointer; }
+.nav-btn:hover:not(:disabled) { background: #e3f2fd; border-color: #90caf9; }
+.nav-btn:disabled { opacity: .45; cursor: not-allowed; }
+.nav-count { color: #64748b; font-size: .85rem; font-weight: 700; }
+.sec-open { margin-left: 10px; padding: 3px 10px; border: 1px solid #90caf9; border-radius: 999px; background: #e3f2fd; color: #0d47a1; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer; vertical-align: middle; }
+.sec-open:hover, .sec-open:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.expl code, .modal-body .pane code { padding: 1px 5px; border-radius: 4px; background: #eef2f7; color: #0d47a1; font-family: Consolas, 'Courier New', monospace; font-size: .92em; }
+</style>
+<link rel="stylesheet" href="../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="container"><main>
+<h1>OAuth 2.0 and OpenID Connect — Identity Reference</h1>
+<p class="subtitle">Flows, tokens, validation and the failure modes that cause real incidents: PKCE, audience checks, refresh
+rotation, the BFF pattern and the misconfigurations reviewers look for.</p>
+<p class="meta">Scope: OAuth 2.0 &middot; OIDC 1.0 &middot; PKCE &middot; JWT / JWKS &middot; ASP.NET Core 8 &middot; Entra ID / Keycloak / Auth0</p>
+<div class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#o01" class="toc-link" data-target="o01">OAuth 2.0 and OIDC: who does what</a></li>
+<li><a href="#o02" class="toc-link" data-target="o02">Choosing the flow</a></li>
+<li><a href="#o03" class="toc-link" data-target="o03">Authorization code + PKCE, step by step</a></li>
+<li><a href="#o04" class="toc-link" data-target="o04">Tokens: what is inside, and how long it lives</a></li>
+<li><a href="#o05" class="toc-link" data-target="o05">Validating tokens in ASP.NET Core</a></li>
+<li><a href="#o06" class="toc-link" data-target="o06">Scopes, roles and policies: the authorization model</a></li>
+<li><a href="#o07" class="toc-link" data-target="o07">Refresh tokens: rotation and reuse detection</a></li>
+<li><a href="#o08" class="toc-link" data-target="o08">Service-to-service with client credentials</a></li>
+<li><a href="#o09" class="toc-link" data-target="o09">SPAs and the BFF pattern</a></li>
+<li><a href="#o10" class="toc-link" data-target="o10">Logout and session lifetime</a></li>
+<li><a href="#o11" class="toc-link" data-target="o11">The misconfigurations that get flagged in review</a></li>
+<li><a href="#o12" class="toc-link" data-target="o12">Debugging a token problem</a></li>
+<li><a href="#o13" class="toc-link" data-target="o13">When OIDC is not the answer</a></li>
+</ol></div>
+<section class="sec" id="o01">
+<h2><span class="num">01</span>OAuth 2.0 and OIDC: who does what<button class="sec-open" data-target="o01" type="button">Open</button></h2>
+<div class="expl"><p>OAuth 2.0 is a delegation framework: it lets a client obtain limited access to a resource on behalf of a user (or itself) without ever seeing the password. OpenID Connect is a thin identity layer on top — it adds an ID token that says who the user is.</p><p>The four roles are worth naming precisely, because most misdesigns come from confusing them.</p><table><thead><tr><th>Role</th><th>In practice</th></tr></thead><tbody><tr><td>Resource owner</td><td>The user, or the service that owns the data</td></tr><tr><td>Client</td><td>Your SPA, mobile app, desktop app or backend service</td></tr><tr><td>Authorization server</td><td>Entra ID, Keycloak, Auth0, Okta, IdentityServer — issues tokens</td></tr><tr><td>Resource server</td><td>Your API — validates the access token, never issues one</td></tr></tbody></table><ul class="notes"><li>Your API is a resource server: it validates tokens, it does not issue them or run login flows.</li><li>If you find yourself validating an ID token inside an API, the design is wrong — that token was meant for the client.</li><li>Say &#x27;authorization server&#x27; rather than &#x27;the IdP&#x27; when precision matters; interviewers notice.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-csharp">OAuth 2.0  -&gt;  authorization: may this client call this API?
+OIDC       -&gt;  authentication : who is the user?
+
+ID token      -&gt; for the client. "This is Ana, authenticated at 10:04."
+                 audience = client_id. Never send it to an API.
+Access token  -&gt; for the resource server. audience = the API.
+                 The API validates it and reads scopes/roles from it.
+Refresh token -&gt; for the client only, to obtain new access tokens.</code></pre></div></div>
+</section>
+<section class="sec" id="o02">
+<h2><span class="num">02</span>Choosing the flow<button class="sec-open" data-target="o02" type="button">Open</button></h2>
+<div class="expl"><p>There are three flows that matter today and two that should not be used for new work. The choice is decided by the client type, not by preference.</p><p>Authorization code with PKCE is the default for anything involving a user — web app, SPA, mobile, desktop.</p><table><thead><tr><th>Flow</th><th>Use it for</th><th>Notes</th></tr></thead><tbody><tr><td>Authorization code + PKCE</td><td>Web apps, SPAs, mobile, desktop</td><td>Default. PKCE is mandatory for public clients</td></tr><tr><td>Client credentials</td><td>Service-to-service, no user</td><td>Client authenticates with a secret or certificate</td></tr><tr><td>Device code</td><td>CLI tools, TVs, input-limited devices</td><td>User completes login on another device</td></tr><tr><td>Implicit</td><td>—</td><td>Deprecated: tokens in the URL fragment</td></tr><tr><td>Password (ROPC)</td><td>—</td><td>Deprecated: the app handles the password, breaks MFA</td></tr></tbody></table><ul class="notes"><li>A SPA is a public client: anything in the bundle is public, so no client secret.</li><li>Implicit existed for browsers before CORS and PKCE; there is no reason to choose it now.</li><li>ROPC exists for legacy migration only; it defeats MFA and conditional access.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">// Which flow? Two questions.
+// 1. Is there a user in front of the screen?
+//    yes -&gt; authorization code + PKCE
+//    no  -&gt; client credentials
+// 2. Can the client keep a secret? (server-side)
+//    yes -&gt; confidential client, secret or certificate
+//    no  -&gt; public client, PKCE required, no secret shipped</code></pre></div></div>
+</section>
+<section class="sec" id="o03">
+<h2><span class="num">03</span>Authorization code + PKCE, step by step<button class="sec-open" data-target="o03" type="button">Open</button></h2>
+<div class="expl"><p>Two requests to the authorization server and one to the token endpoint. PKCE binds the code to the client that started the flow, so a stolen code is useless on its own.</p><p>Being able to narrate this sequence is usually the actual interview question.</p><ul class="notes"><li>`state` defends against CSRF on the callback; `nonce` defends against token replay in the ID token.</li><li>The `code_verifier` never leaves the client; only its hash travelled in the URL.</li><li>The token request happens over TLS, server-to-server — never from the browser with a secret.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre><pre class="code-pre"><code class="language-csharp">1. Client generates:  code_verifier (43-128 chars, random)
+                      code_challenge = BASE64URL(SHA256(code_verifier))
+
+2. Browser redirect:
+   GET /authorize
+     ?response_type=code
+     &amp;client_id=orders-web
+     &amp;redirect_uri=https://app.example.com/callback
+     &amp;scope=openid profile orders.read
+     &amp;state=&lt;random, verified on return&gt;
+     &amp;nonce=&lt;random, verified inside the ID token&gt;
+     &amp;code_challenge=&lt;challenge&gt;&amp;code_challenge_method=S256
+
+3. Authorization server authenticates the user, redirects back with ?code=...&amp;state=...
+
+4. Client exchanges the code, server-to-server:
+   POST /token
+     grant_type=authorization_code&amp;code=&lt;code&gt;
+     &amp;redirect_uri=...&amp;client_id=orders-web
+     &amp;code_verifier=&lt;the original verifier&gt;
+
+5. Response: access_token, id_token, refresh_token (optional), expires_in</code></pre></div></div>
+</section>
+<section class="sec" id="o04">
+<h2><span class="num">04</span>Tokens: what is inside, and how long it lives<button class="sec-open" data-target="o04" type="button">Open</button></h2>
+<div class="expl"><p>A JWT is a signed claim set, not an encrypted one: anyone holding it can read it. Signature verification proves it was issued by the authorization server and not modified.</p><p>Short-lived access tokens plus refresh tokens is the standard: minutes to an hour for access, days for refresh, with rotation.</p><ul class="notes"><li>Never trust a JWT you did not verify — decoding is not validating.</li><li>`sub` identifies the user; `aud` must be your API; `iss` must be your authorization server.</li><li>Keep access tokens out of logs, URLs and localStorage.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</pre><pre class="code-pre"><code class="language-csharp">{
+  "iss": "https://login.example.com/",        // issuer  - validate
+  "aud": "orders-api",                       // audience - validate
+  "sub": "8f14e45f-...",                     // user id - stable
+  "scp": "orders.read orders.write",         // scopes (Entra: scp, others: scope)
+  "roles": ["OrderManager"],                 // app roles, if configured
+  "exp": 1747051200, "nbf": 1747047600,      // lifetime - validate with small skew
+  "iat": 1747047600,
+  "tid": "0e9f2fce-..."                      // tenant, for multi-tenant APIs
+}
+
+// Header: {"alg":"RS256","kid":"k-2025-05"} -&gt; RS256, key selected by kid</code></pre></div></div>
+</section>
+<section class="sec" id="o05">
+<h2><span class="num">05</span>Validating tokens in ASP.NET Core<button class="sec-open" data-target="o05" type="button">Open</button></h2>
+<div class="expl"><p>Use the framework: JWT bearer middleware with OIDC discovery fetches the signing keys and rotates them automatically. What you must configure is issuer, audience and clock skew.</p><p>`MapInboundClaims = false` keeps claim names as issued (`sub`, `scp`) instead of the legacy SOAP-era mapping.</p><ul class="notes"><li>`Authority` handles key rotation through the discovery document — do not hard-code signing keys.</li><li>Default `ClockSkew` is five minutes; shortening it makes expiry failures visible sooner.</li><li>Order matters: `UseAuthentication` before `UseAuthorization`, always.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =&gt;
+    {
+        o.Authority = "https://login.example.com";     // OIDC discovery + JWKS
+        o.Audience = "orders-api";
+        o.MapInboundClaims = false;                    // keep "sub", "scp" as issued
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.FromSeconds(30),
+            NameClaimType = "sub"
+        };
+    });
+
+app.UseAuthentication();
+app.UseAuthorization();</code></pre></div></div>
+</section>
+<section class="sec" id="o06">
+<h2><span class="num">06</span>Scopes, roles and policies: the authorization model<button class="sec-open" data-target="o06" type="button">Open</button></h2>
+<div class="expl"><p>Scopes describe what a client may do on behalf of a user; app roles describe what the user is allowed to do. In an enterprise API you usually need both.</p><p>Policies are where the two meet, and where the checks belong — not scattered as `if` statements in handlers.</p><ul class="notes"><li>Check authorization on the server for every endpoint, including the ones the UI hides.</li><li>A scope answers &#x27;may this app call this API&#x27;; a role answers &#x27;may this person do this action&#x27;.</li><li>Write policies so they can be unit-tested without an HTTP request.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddAuthorization(o =&gt;
+{
+    o.AddPolicy("orders:read", p =&gt; p
+        .RequireClaim("scp", "orders.read")
+        .AddRequirements(new MinimumTenantRequirement()));
+
+    o.AddPolicy("orders:approve", p =&gt; p
+        .RequireAuthenticatedUser()
+        .RequireRole("OrderManager")
+        .RequireClaim("scp", "orders.write"));
+});
+
+[Authorize(Policy = "orders:approve")]
+[HttpPost("orders/{id:guid}/approve")]
+public async Task&lt;IActionResult&gt; Approve(Guid id) { ... }</code></pre></div></div>
+</section>
+<section class="sec" id="o07">
+<h2><span class="num">07</span>Refresh tokens: rotation and reuse detection<button class="sec-open" data-target="o07" type="button">Open</button></h2>
+<div class="expl"><p>A refresh token is a long-lived credential. Rotation issues a new one on each use, and reuse of an old one is treated as theft: revoke the whole family.</p><p>For a BFF or a confidential client the refresh token lives server-side; a SPA should not handle one at all.</p><ul class="notes"><li>Store a hash, never the token itself; a database leak should not hand over sessions.</li><li>Rotate on every use and revoke the family on reuse — that is what detects a stolen token.</li><li>Bind the refresh token to the client and, where supported, to the device.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><pre class="code-pre"><code class="language-csharp">// Server-side token store, minimal shape
+public sealed record RefreshToken(string Hashed, string FamilyId, DateTime ExpiresAt, bool Revoked);
+
+async Task&lt;TokenResponse&gt; RefreshAsync(string presented)
+{
+    var stored = await _store.FindAsync(Hash(presented))
+        ?? throw new SecurityTokenException("Unknown refresh token");
+
+    if (stored.Revoked)
+    {
+        await _store.RevokeFamilyAsync(stored.FamilyId);    // reuse detected
+        throw new SecurityTokenException("Refresh token reuse");
+    }
+
+    var next = await _idp.RefreshAsync(presented);
+    await _store.RevokeAsync(stored);
+    await _store.SaveAsync(Hash(next.RefreshToken), stored.FamilyId, next.ExpiresAt);
+    return next;
+}</code></pre></div></div>
+</section>
+<section class="sec" id="o08">
+<h2><span class="num">08</span>Service-to-service with client credentials<button class="sec-open" data-target="o08" type="button">Open</button></h2>
+<div class="expl"><p>No user involved: the service authenticates as itself with a client id plus secret or certificate, and receives an access token for the target API.</p><p>Certificates or workload identity beat secrets — a secret in configuration is a secret in a repository eventually.</p><ul class="notes"><li>The scope for app-only calls is usually `api://{api-id}/.default`.</li><li>Cache tokens in memory until expiry; requesting one per call is a latency and throttling problem.</li><li>Never pass the user&#x27;s token through to another API — that is token passthrough and breaks the audience check.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre><pre class="code-pre"><code class="language-csharp">// Program.cs - .NET 8 with Microsoft.Identity.Web
+builder.Services.AddMicrosoftIdentityWebAppAuthentication(builder.Configuration)
+    .EnableTokenAcquisitionToCallDownstreamApi()
+    .AddInMemoryTokenCaches();
+
+// Typed client: the handler attaches the token, the caller never sees it
+builder.Services.AddHttpClient&lt;IPricingClient, PricingClient&gt;(c =&gt;
+    c.BaseAddress = new Uri("https://pricing.internal/"));
+
+public sealed class PricingClient(HttpClient http, ITokenAcquisition tokens)
+{
+    public async Task&lt;Price?&gt; GetAsync(string sku)
+    {
+        var token = await tokens.GetAccessTokenForAppAsync("api://pricing/.default");
+        http.DefaultRequestHeaders.Authorization = new("Bearer", token);
+        return await http.GetFromJsonAsync&lt;Price&gt;($"/prices/{sku}");
+    }
+}</code></pre></div></div>
+</section>
+<section class="sec" id="o09">
+<h2><span class="num">09</span>SPAs and the BFF pattern<button class="sec-open" data-target="o09" type="button">Open</button></h2>
+<div class="expl"><p>A browser cannot keep a secret and `localStorage` is readable by any script on the page. The modern answer for enterprise SPAs is a backend-for-frontend: the token stays on the server, the browser gets only a session cookie.</p><p>If you must keep tokens in the SPA, use the authorization code flow with PKCE in memory, short lifetimes, and accept the XSS risk explicitly.</p><ul class="notes"><li>A cookie-authenticated endpoint needs CSRF protection: SameSite alone is not a complete answer.</li><li>`SameSite=None` (needed for cross-site) reopens CSRF; keep the BFF on the same origin as the SPA.</li><li>This is exactly the shape most enterprise Angular + .NET systems converge on.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">Browser  &lt;-&gt;  BFF (same origin, cookie)  &lt;-&gt;  API (bearer token)
+
+BFF responsibilities:
+  - OIDC login/logout, holds access + refresh tokens server-side
+  - sets an HttpOnly, Secure, SameSite=Lax session cookie
+  - proxies /api/* to the real API, attaching the bearer token
+  - CSRF protection on state-changing requests
+  - silent renewal with the refresh token, invisible to the SPA
+
+Why: XSS can still act as the user, but it cannot exfiltrate a token
+that was never in the browser, and revocation happens server-side.</code></pre></div></div>
+</section>
+<section class="sec" id="o10">
+<h2><span class="num">10</span>Logout and session lifetime<button class="sec-open" data-target="o10" type="button">Open</button></h2>
+<div class="expl"><p>OIDC defines RP-initiated logout: the client redirects to the end-session endpoint so the authorization server also clears its session. Without it, &#x27;log out&#x27; only clears your app and the next login is silent.</p><p>Session lifetime is a product decision expressed in three numbers: access token lifetime, refresh token lifetime, and absolute session lifetime.</p><ul class="notes"><li>`post_logout_redirect_uri` must be registered; otherwise the authorization server refuses to redirect.</li><li>Clearing the local session without the end-session call leaves the IdP session alive — the classic &#x27;I logged out and came back logged in&#x27;.</li><li>For a SPA, silent renew through an iframe is being replaced by refresh tokens or the BFF for good reasons (third-party cookie blocking).</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9</pre><pre class="code-pre"><code class="language-csharp"># RP-initiated logout
+GET https://login.example.com/logout
+  ?id_token_hint=&lt;id_token&gt;
+  &amp;post_logout_redirect_uri=https://app.example.com/signed-out
+  &amp;client_id=orders-web
+
+# .NET: clear the local cookie too, always
+await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+return Redirect(logoutUrl);</code></pre></div></div>
+</section>
+<section class="sec" id="o11">
+<h2><span class="num">11</span>The misconfigurations that get flagged in review<button class="sec-open" data-target="o11" type="button">Open</button></h2>
+<div class="expl"><p>Almost every real-world OAuth incident is one of these. Knowing them is what separates &#x27;I used a library&#x27; from &#x27;I understand the protocol&#x27;.</p><p>Each has a concrete symptom you can describe.</p><table><thead><tr><th>Mistake</th><th>Consequence</th><th>Correct approach</th></tr></thead><tbody><tr><td>No audience validation</td><td>A token issued for another API is accepted</td><td>Validate `aud` against your own API id</td></tr><tr><td>No issuer validation</td><td>Tokens from another tenant accepted</td><td>Validate `iss` (and `tid` for multi-tenant)</td></tr><tr><td>Token passthrough</td><td>Your API forwards the user token downstream</td><td>Get a token for the downstream audience</td></tr><tr><td>Secrets in a SPA</td><td>Anyone can impersonate the client</td><td>Public client + PKCE, no secret</td></tr><tr><td>Wildcard redirect URI</td><td>Authorization code theft via open redirect</td><td>Exact match, registered per environment</td></tr><tr><td>No `state`/`nonce`</td><td>CSRF and token replay</td><td>Random values, verified on return</td></tr><tr><td>Tokens in localStorage</td><td>Exfiltration by any XSS</td><td>BFF cookie, or memory only</td></tr><tr><td>Accepting `alg: none`</td><td>Unsigned tokens accepted</td><td>Pin the expected algorithm in the library</td></tr></tbody></table><ul class="notes"><li>Write the audience down: it is the single most-missed check.</li><li>Multi-tenant APIs must validate the tenant, not just the signature.</li><li>A 401 in staging with a valid-looking token is usually an audience or issuer mismatch.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">// What a good review looks like at the middleware level
+o.Authority = "https://login.example.com";   // iss + JWKS from discovery
+o.Audience  = "orders-api";                  // aud must be us
+o.RequireHttpsMetadata = true;
+o.MapInboundClaims = false;
+o.TokenValidationParameters.ValidAlgorithms = ["RS256"];   // no alg confusion
+o.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(30);</code></pre></div></div>
+</section>
+<section class="sec" id="o12">
+<h2><span class="num">12</span>Debugging a token problem<button class="sec-open" data-target="o12" type="button">Open</button></h2>
+<div class="expl"><p>The failure modes are few and mechanical: wrong audience, wrong issuer, expired clock, key not found, or claims mapped away by the framework.</p><p>A repeatable checklist beats guessing.</p><ul class="notes"><li>`jwt.ms` or `jwt.io` to read; never paste production tokens into a public site.</li><li>Log the validation failure reason (`OnAuthenticationFailed`), not just the 401.</li><li>An integration test with a locally generated token pair catches most regressions before deployment.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">1. Decode the token (payload only) and read: iss, aud, exp, scp/roles, tid
+2. Compare aud with the API's expected audience, exactly
+3. Compare iss with Authority, including the trailing slash
+4. Check exp/nbf against the server clock, not your laptop's
+5. If signature fails: does the kid exist in {authority}/.well-known/openid-configuration -&gt; jwks_uri?
+6. If claims are missing: MapInboundClaims and the mapping table renamed them
+7. Still 401? Enable PII logging in development, never in production</code></pre></div></div>
+</section>
+<section class="sec" id="o13">
+<h2><span class="num">13</span>When OIDC is not the answer<button class="sec-open" data-target="o13" type="button">Open</button></h2>
+<div class="expl"><p>Comparable technologies exist for good reasons. Choosing wrongly is as telling as choosing badly.</p><p>OIDC for user identity in modern apps; SAML when the enterprise IdP only speaks SAML; mTLS and API keys for machine-to-machine inside a trusted network.</p><table><thead><tr><th>Technology</th><th>Good fit</th><th>Cost</th></tr></thead><tbody><tr><td>OIDC / OAuth 2.0</td><td>Modern web, mobile, API ecosystems, SSO</td><td>Token lifetimes and client configuration</td></tr><tr><td>SAML 2.0</td><td>Enterprise SSO with legacy IdPs, regulated sectors</td><td>XML signatures, verbose, awkward for APIs</td></tr><tr><td>API keys</td><td>Simple server-to-server in a closed environment</td><td>No expiry by default, no scopes, hard to rotate</td></tr><tr><td>mTLS</td><td>Strong service identity inside a mesh</td><td>Certificate lifecycle management</td></tr><tr><td>Windows / Kerberos</td><td>On-premises Windows domain</td><td>Does not cross cloud boundaries</td></tr></tbody></table><ul class="notes"><li>Interviewers ask this to hear a trade-off, not a preference.</li><li>OIDC can be bridged to SAML at the authorization server; that is often the pragmatic answer in banks.</li><li>Any answer should mention rotation and revocation, whichever technology you pick.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-csharp">// Decision shortcut
+// Users + modern app        -&gt; OIDC
+// Enterprise IdP, no OIDC   -&gt; SAML 2.0 (bridge it if you can)
+// Service inside a mesh     -&gt; mTLS, or workload identity
+// Public API, third parties -&gt; OAuth 2.0 client credentials per partner
+// Internal script, one team -&gt; API key only if it can be rotated and scoped</code></pre></div></div>
+</section>
+
+<div class="modal" id="reader" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reader-title">
+    <div class="modal-head">
+      <span class="modal-num" id="reader-num">01</span>
+      <h2 class="modal-title" id="reader-title"></h2>
+      <button class="modal-close" id="reader-close" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-tabs" role="tablist">
+      <button class="tab" id="tab-expl" role="tab" aria-selected="true" aria-controls="pane-expl" type="button">Explanation</button>
+      <button class="tab" id="tab-code" role="tab" aria-selected="false" aria-controls="pane-code" type="button">Code</button>
+    </div>
+    <div class="modal-body">
+      <div class="pane" id="pane-expl" role="tabpanel" aria-labelledby="tab-expl"></div>
+      <div class="pane" id="pane-code" role="tabpanel" aria-labelledby="tab-code" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="nav-btn" id="reader-prev" type="button">&larr; Previous</button>
+      <span class="nav-count" id="reader-count">1 / 13</span>
+      <button class="nav-btn" id="reader-next" type="button">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<a class="back" href="../IT.html">&larr; Back to the knowledge base</a>
+</main></div>
+<script src="../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script>
+(function () {
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var modal = document.getElementById('reader');
+  var numEl = document.getElementById('reader-num');
+  var titleEl = document.getElementById('reader-title');
+  var boxExpl = document.getElementById('pane-expl');
+  var boxCode = document.getElementById('pane-code');
+  var tabExpl = document.getElementById('tab-expl');
+  var tabCode = document.getElementById('tab-code');
+  var prevBtn = document.getElementById('reader-prev');
+  var nextBtn = document.getElementById('reader-next');
+  var countEl = document.getElementById('reader-count');
+  var closeBtn = document.getElementById('reader-close');
+  var index = 0;
+
+  function plainTitle(sec) {
+    var h2 = sec.querySelector('h2');
+    var clone = h2.cloneNode(true);
+    var btn = clone.querySelector('.sec-open');
+    if (btn) { btn.remove(); }
+    var num = clone.querySelector('.num');
+    if (num) { num.remove(); }
+    return clone.textContent.trim();
+  }
+
+  function showTab(name) {
+    var expl = name === 'expl';
+    tabExpl.setAttribute('aria-selected', String(expl));
+    tabCode.setAttribute('aria-selected', String(!expl));
+    boxExpl.hidden = !expl;
+    boxCode.hidden = expl;
+  }
+
+  function render(i) {
+    index = Math.max(0, Math.min(sections.length - 1, i));
+    var sec = sections[index];
+    numEl.textContent = sec.querySelector('h2 .num').textContent.trim();
+    titleEl.textContent = plainTitle(sec);
+
+    boxExpl.innerHTML = '';
+    boxCode.innerHTML = '';
+    var expl = sec.querySelector('.expl');
+    if (expl) { boxExpl.appendChild(expl.cloneNode(true)); }
+    var wrap = sec.querySelector('.code-wrap');
+    if (wrap) { boxCode.appendChild(wrap.cloneNode(true)); }
+    else { boxCode.innerHTML = '<p>No code for this section.</p>'; }
+
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === sections.length - 1;
+    countEl.textContent = (index + 1) + ' / ' + sections.length;
+    document.querySelector('.modal-body').scrollTop = 0;
+    showTab('expl');
+  }
+
+  function open(anchor) {
+    var i = sections.findIndex(function (s) { return s.id === anchor; });
+    render(i < 0 ? 0 : i);
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function close() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', function (e) {
+    var opener = e.target.closest('[data-target]');
+    if (opener) {
+      e.preventDefault();
+      open(opener.getAttribute('data-target'));
+      return;
+    }
+    if (e.target === modal) { close(); }
+  });
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', function () { render(index - 1); });
+  nextBtn.addEventListener('click', function () { render(index + 1); });
+  tabExpl.addEventListener('click', function () { showTab('expl'); });
+  tabCode.addEventListener('click', function () { showTab('code'); });
+
+  document.addEventListener('keydown', function (e) {
+    if (modal.hidden) { return; }
+    if (e.key === 'Escape') { close(); }
+    if (e.key === 'ArrowLeft') { render(index - 1); }
+    if (e.key === 'ArrowRight') { render(index + 1); }
+  });
+})();
+</script>
+</body>
+</html>
