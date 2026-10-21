@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>.NET Technologies - Full Stack role reference</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; padding: 16px 20px 48px; }
+h1 { color: #1565c0; font-size: 1.75rem; margin: 4px 0 6px; }
+.subtitle { color: #475569; margin: 0 0 6px; line-height: 1.55; }
+.meta { color: #64748b; font-size: .9em; margin: 0 0 18px; }
+h2 { color: #2e7d32; margin-top: 34px; font-size: 1.18rem; }
+h2 .num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; margin-right: 9px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .74em; font-weight: 800; vertical-align: middle; }
+p { line-height: 1.6; margin: 0 0 10px; }
+a { color: #1565c0; }
+.toc { background: #f4f9ff; border: 1px solid #d7e3f1; border-radius: 9px; padding: 14px 18px; margin: 18px 0 8px; }
+.toc h2 { margin: 0 0 8px; font-size: 1rem; color: #1f4f8c; }
+.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.toc li { margin: 4px 0; line-height: 1.4; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+table th, table td { border: 1px solid #d7e3f1; padding: 8px 10px; vertical-align: top; text-align: left; }
+table th { background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; }
+table tbody tr:nth-child(odd) td { background: #f8fbff; }
+.code-block { display: grid; grid-template-columns: minmax(2.6em, auto) minmax(0, 1fr); background: #282c34; border: 1px solid #1f2329; border-left: 4px solid #61afef; border-radius: 8px; overflow: hidden; margin: 14px 0; }
+.code-gutter { margin: 0; padding: 14px 10px 14px 12px; border: 0; border-right: 1px solid #3a3f4b; background: #21252b; color: #5c6370; text-align: right; user-select: none; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; overflow: hidden; }
+.code-pre { margin: 0; padding: 14px 16px; border: 0; background: transparent; overflow-x: auto; overflow-y: hidden; }
+.code-pre code, .code-pre code.hljs { display: block; padding: 0; background: transparent; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; }
+.notes { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 7px; padding: 12px 18px 12px 32px; margin: 14px 0 6px; }
+.notes li { margin: 5px 0; line-height: 1.45; }
+.back { display: inline-block; margin-top: 30px; color: #1565c0; font-weight: 700; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+
+.sec { scroll-margin-top: 12px; }
+.toc a { cursor: pointer; }
+.modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .6); }
+.modal[hidden] { display: none; }
+.modal-card { display: flex; flex-direction: column; width: min(1000px, 100%); max-height: 88vh; border-radius: 12px; background: #fff; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); overflow: hidden; }
+.modal-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px 12px; border-bottom: 1px solid #e2e8f0; }
+.modal-num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .78rem; font-weight: 800; }
+.modal-title { margin: 0; font-size: 1.06rem; color: #1565c0; flex: 1 1 auto; }
+.modal-close { flex: none; width: 34px; height: 34px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: #334155; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.modal-close:hover, .modal-close:focus { background: #e2e8f0; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.modal-tabs { display: flex; gap: 6px; padding: 10px 18px 0; border-bottom: 1px solid #e2e8f0; }
+.tab { padding: 8px 14px; border: 1px solid transparent; border-bottom: 0; border-radius: 8px 8px 0 0; background: transparent; color: #475569; font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer; }
+.tab:hover { background: #f1f5f9; }
+.tab[aria-selected="true"] { background: #e3f2fd; border-color: #bbdefb; color: #0d47a1; }
+.modal-body { flex: 1 1 auto; overflow: auto; padding: 16px 18px; }
+.modal-body .pane[hidden] { display: none; }
+.modal-foot { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 12px 18px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+.nav-btn { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1565c0; font: inherit; font-weight: 700; font-size: .9rem; cursor: pointer; }
+.nav-btn:hover:not(:disabled) { background: #e3f2fd; border-color: #90caf9; }
+.nav-btn:disabled { opacity: .45; cursor: not-allowed; }
+.nav-count { color: #64748b; font-size: .85rem; font-weight: 700; }
+.sec-open { margin-left: 10px; padding: 3px 10px; border: 1px solid #90caf9; border-radius: 999px; background: #e3f2fd; color: #0d47a1; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer; vertical-align: middle; }
+.sec-open:hover, .sec-open:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.expl code, .modal-body .pane code { padding: 1px 5px; border-radius: 4px; background: #eef2f7; color: #0d47a1; font-family: Consolas, 'Courier New', monospace; font-size: .92em; }
+</style>
+<link rel="stylesheet" href="../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="container"><main>
+<div class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#s01" class="toc-link" data-target="s01">.NET 8 platform essentials</a></li>
+<li><a href="#s02" class="toc-link" data-target="s02">Modern C#: records, nullable reference types, pattern matching</a></li>
+<li><a href="#s03" class="toc-link" data-target="s03">Multi-layered architecture: API, application, domain, infrastructure</a></li>
+<li><a href="#s04" class="toc-link" data-target="s04">Dependency injection and object lifetimes</a></li>
+<li><a href="#s05" class="toc-link" data-target="s05">REST APIs: minimal endpoints, controllers and contracts</a></li>
+<li><a href="#s06" class="toc-link" data-target="s06">EF Core: modelling, tracking and query behaviour</a></li>
+<li><a href="#s07" class="toc-link" data-target="s07">Dapper and raw SQL: when the ORM is the wrong tool</a></li>
+<li><a href="#s08" class="toc-link" data-target="s08">Repository and Unit of Work — and when they are noise</a></li>
+<li><a href="#s09" class="toc-link" data-target="s09">Relational databases: SQL Server and PostgreSQL</a></li>
+<li><a href="#s10" class="toc-link" data-target="s10">NoSQL with MongoDB</a></li>
+<li><a href="#s11" class="toc-link" data-target="s11">Authentication and authorization: JWT, OAuth 2.0 and OIDC</a></li>
+<li><a href="#s12" class="toc-link" data-target="s12">Validation and error handling</a></li>
+<li><a href="#s13" class="toc-link" data-target="s13">Configuration, secrets and options</a></li>
+<li><a href="#s14" class="toc-link" data-target="s14">Logging and observability</a></li>
+<li><a href="#s15" class="toc-link" data-target="s15">Background work and the outbox pattern</a></li>
+<li><a href="#s16" class="toc-link" data-target="s16">Testing: unit, integration and contract</a></li>
+<li><a href="#s17" class="toc-link" data-target="s17">Docker and Kubernetes for .NET services</a></li>
+<li><a href="#s18" class="toc-link" data-target="s18">Microservices and resilience</a></li>
+<li><a href="#s19" class="toc-link" data-target="s19">Performance and caching</a></li>
+<li><a href="#s20" class="toc-link" data-target="s20">Git and Azure DevOps in the lifecycle</a></li>
+<li><a href="#s21" class="toc-link" data-target="s21">AI-assisted development, done responsibly</a></li>
+<li><a href="#s22" class="toc-link" data-target="s22">The Angular-to-.NET contract</a></li>
+<li><a href="#s23" class="toc-link" data-target="s23">Security checklist before any release</a></li>
+<li><a href="#s24" class="toc-link" data-target="s24">Mapping the must-haves to evidence</a></li>
+</ol></div>
+<section class="sec" id="s01">
+<h2><span class="num">01</span>.NET 8 platform essentials<button class="sec-open" data-target="s01" type="button">Open</button></h2>
+<div class="expl"><p>The role asks for .NET 8 or later. The practical differences against older versions are the unified SDK, minimal APIs as a first-class model, performance work on JSON and LINQ, and a few features that change day-to-day code.</p>
+<p>Keyed services remove the need for a factory when two implementations of the same interface must coexist; <code>TimeProvider</code> makes time injectable and therefore testable.</p>
+
+<ul class="notes">
+<li>.NET 8 is LTS (support to November 2026); .NET 9 is STS. Say which one you ship and why.</li>
+<li>Minimal APIs, <code>TimeProvider</code>, keyed DI and NativeAOT are the features worth naming in an interview.</li>
+<li><code>CancellationToken</code> on every async boundary is part of the platform contract, not an extra.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">// Program.cs - .NET 8 host wiring
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddKeyedScoped&lt;IPaymentGateway, StripeGateway&gt;("stripe");
+builder.Services.AddKeyedScoped&lt;IPaymentGateway, AdyenGateway&gt;("adyen");
+
+var app = builder.Build();
+
+app.MapGet("/orders/{id:guid}", async (Guid id, IOrderService svc, CancellationToken ct)
+    =&gt; await svc.GetAsync(id, ct) is { } order ? Results.Ok(order) : Results.NotFound());
+
+app.Run();</code></pre></div></div>
+</section>
+<section class="sec" id="s02">
+<h2><span class="num">02</span>Modern C#: records, nullable reference types, pattern matching<button class="sec-open" data-target="s02" type="button">Open</button></h2>
+<div class="expl"><p>Most of what an interviewer hears as &#x27;modern C#&#x27; is three things: immutable data with records, compile-time null safety with nullable reference types, and pattern matching instead of chains of <code>if</code>.</p>
+<p>They matter because they remove whole categories of bug before runtime — a <code>null</code> that cannot reach production, an object that cannot be mutated by accident.</p>
+
+<ul class="notes">
+<li><code>record</code> gives value equality and <code>with</code> expressions; <code>sealed</code> stops inheritance surprises.</li>
+<li><code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code> plus warnings-as-errors is what makes it a guarantee, not a suggestion.</li>
+<li>Switch expressions over property patterns read better than nested <code>if</code> blocks and are exhaustiveness-checked for enums.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre><pre class="code-pre"><code class="language-csharp">public sealed record OrderLine(string Sku, int Quantity, decimal UnitPrice)
+{
+    public decimal Total =&gt; Quantity * UnitPrice;
+}
+
+public static decimal Discount(Order order) =&gt; order switch
+{
+    { Lines.Count: 0 } =&gt; 0m,
+    { Customer.Tier: Tier.Gold, Total: &gt; 1000m } =&gt; order.Total * 0.10m,
+    { Customer.Tier: Tier.Silver } =&gt; order.Total * 0.05m,
+    _ =&gt; 0m
+};
+
+// nullable reference types: the compiler tracks the null state
+public Order? Find(Guid id) =&gt; _orders.TryGetValue(id, out var o) ? o : null;</code></pre></div></div>
+</section>
+<section class="sec" id="s03">
+<h2><span class="num">03</span>Multi-layered architecture: API, application, domain, infrastructure<button class="sec-open" data-target="s03" type="button">Open</button></h2>
+<div class="expl"><p>The posting is explicit about separation between API/presentation, business/application and data access. That is the classic layered model, and the interview question behind it is dependency direction: the domain knows nothing, the application depends on the domain, infrastructure implements interfaces declared inside.</p>
+<p>One project per layer is the simplest honest structure; Vertical Slice is a defensible alternative if you can argue the trade-off.</p>
+
+<ul class="notes">
+<li>Dependency inversion: interfaces live where they are consumed, implementations live outside.</li>
+<li>The API project references Application only; Infrastructure is referenced at composition time (Program.cs).</li>
+<li>Loose coupling and high cohesion are the criteria — say which layer owns validation and which owns persistence.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><pre class="code-pre"><code class="language-csharp">src/
+  Orders.Api/            // controllers or endpoints, DI wiring, filters
+  Orders.Application/    // use cases, DTOs, validation, interfaces
+  Orders.Domain/         // entities, value objects, domain rules
+  Orders.Infrastructure/ // EF Core, Dapper, HTTP clients, messaging
+
+// Application declares the contract
+public interface IOrderRepository
+{
+    Task&lt;Order?&gt; GetAsync(Guid id, CancellationToken ct);
+    Task AddAsync(Order order, CancellationToken ct);
+}
+
+// Infrastructure implements it; Api never sees the implementation
+public sealed class OrderRepository(OrdersDbContext db) : IOrderRepository
+{
+    public Task&lt;Order?&gt; GetAsync(Guid id, CancellationToken ct) =&gt;
+        db.Orders.Include(o =&gt; o.Lines).FirstOrDefaultAsync(o =&gt; o.Id == id, ct);
+}</code></pre></div></div>
+</section>
+<section class="sec" id="s04">
+<h2><span class="num">04</span>Dependency injection and object lifetimes<button class="sec-open" data-target="s04" type="button">Open</button></h2>
+<div class="expl"><p>Built-in DI is the default expectation. The trap interviewers look for is the captive dependency: a scoped service captured by a singleton, which then lives forever and holds a disposed <code>DbContext</code>.</p>
+<p>Know the three lifetimes cold, plus when a scope must be created by hand (<code>IServiceScopeFactory</code> in background workers).</p>
+
+<ul class="notes">
+<li>Singleton must be thread-safe and stateless; scoped is the default for anything touching the DbContext.</li>
+<li>Injecting a scoped service into a singleton is a runtime <code>InvalidOperationException</code>, not a compile error.</li>
+<li>Validate on startup (<code>ValidateOnBuild</code>, <code>ValidateScopes</code>) so misconfiguration fails in development, not in production.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddSingleton&lt;IClock, SystemClock&gt;();          // one instance, app lifetime
+builder.Services.AddScoped&lt;IOrderRepository, OrderRepository&gt;(); // per HTTP request
+builder.Services.AddTransient&lt;IOrderMapper, OrderMapper&gt;();      // new on every resolution
+
+// Background work has no request scope: create one explicitly
+public sealed class OutboxWorker(IServiceScopeFactory scopes) : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken ct)
+    {
+        using var scope = scopes.CreateScope();
+        var repo = scope.ServiceProvider.GetRequiredService&lt;IOutboxRepository&gt;();
+        await repo.DrainAsync(ct);
+    }
+}</code></pre></div></div>
+</section>
+<section class="sec" id="s05">
+<h2><span class="num">05</span>REST APIs: minimal endpoints, controllers and contracts<button class="sec-open" data-target="s05" type="button">Open</button></h2>
+<div class="expl"><p>Both models ship in .NET 8; minimal APIs are the default for new services, controllers remain fine for large surfaces with filters and conventions.</p>
+<p>What is graded is the contract discipline: resource naming, correct status codes, no entity types leaking out of the API, and error payloads that clients can parse.</p>
+
+<ul class="notes">
+<li><code>201</code> with a <code>Location</code> header for creation, <code>204</code> for delete, <code>409</code> for conflicts, <code>422</code>/<code>400</code> for validation.</li>
+<li>Never return EF entities: DTOs decouple the wire format from the schema.</li>
+<li>Version explicitly (<code>/v1/...</code> or <code>Asp.Versioning</code>) before the first external consumer exists.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">public sealed record CreateOrderRequest(string CustomerId, IReadOnlyList&lt;CreateOrderLine&gt; Lines);
+public sealed record OrderResponse(Guid Id, string Status, decimal Total);
+
+app.MapPost("/api/orders", async (CreateOrderRequest req, IOrderService svc, CancellationToken ct) =&gt;
+{
+    var result = await svc.CreateAsync(req, ct);
+    return result.IsSuccess
+        ? Results.Created($"/api/orders/{result.Value.Id}", result.Value)
+        : Results.ValidationProblem(result.Errors);
+})
+.WithName("CreateOrder")
+.Produces&lt;OrderResponse&gt;(StatusCodes.Status201Created)
+.ProducesValidationProblem();</code></pre></div></div>
+</section>
+<section class="sec" id="s06">
+<h2><span class="num">06</span>EF Core: modelling, tracking and query behaviour<button class="sec-open" data-target="s06" type="button">Open</button></h2>
+<div class="expl"><p>EF Core is an ORM with a query pipeline, not a database. The questions that separate levels are about tracking, projections and the N+1 problem.</p>
+<p>AsNoTracking for reads, projection into DTOs at the database level, and <code>Include</code> used deliberately rather than sprinkled.</p>
+
+<ul class="notes">
+<li><code>Select</code> before <code>ToList</code> means the filtering happens in SQL; <code>ToList</code> then <code>Select</code> means it happens in memory.</li>
+<li>Lazy loading is off by default in EF Core — keep it off and load explicitly, or the N+1 problem comes back.</li>
+<li>Migrations belong in source control; <code>dotnet ef migrations add</code> in the pipeline, <code>database update</code> in deploy.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">// Read model: no tracking, only the columns needed
+var rows = await db.Orders
+    .AsNoTracking()
+    .Where(o =&gt; o.CustomerId == customerId)
+    .OrderByDescending(o =&gt; o.CreatedAt)
+    .Select(o =&gt; new OrderSummary(o.Id, o.Status, o.Lines.Sum(l =&gt; l.Quantity * l.UnitPrice)))
+    .Take(50)
+    .ToListAsync(ct);
+
+// Write model: tracking on, explicit transaction boundary
+var order = await db.Orders.Include(o =&gt; o.Lines).FirstAsync(o =&gt; o.Id == id, ct);
+order.AddLine(sku, quantity, price);
+await db.SaveChangesAsync(ct);</code></pre></div></div>
+</section>
+<section class="sec" id="s07">
+<h2><span class="num">07</span>Dapper and raw SQL: when the ORM is the wrong tool<button class="sec-open" data-target="s07" type="button">Open</button></h2>
+<div class="expl"><p>Dapper maps rows to objects with no change tracking and no query translation. It wins for reporting queries, bulk reads and anything where the generated SQL is wrong or slow.</p>
+<p>A healthy codebase mixes both: EF Core for writes and aggregates, Dapper for read models.</p>
+
+<ul class="notes">
+<li>Always parameterise; string concatenation in SQL is the vulnerability reviewers look for first.</li>
+<li><code>CommandDefinition</code> carries the cancellation token and command timeout.</li>
+<li>Explain the trade-off: Dapper is faster and explicit, EF Core is safer and cheaper to maintain.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9</pre><pre class="code-pre"><code class="language-csharp">const string sql = @"
+SELECT o.Id, o.Status, SUM(l.Quantity * l.UnitPrice) AS Total
+FROM Orders o
+JOIN OrderLines l ON l.OrderId = o.Id
+WHERE o.CustomerId = @customerId
+GROUP BY o.Id, o.Status";
+
+var rows = await connection.QueryAsync&lt;OrderSummary&gt;(
+    new CommandDefinition(sql, new { customerId }, cancellationToken: ct));</code></pre></div></div>
+</section>
+<section class="sec" id="s08">
+<h2><span class="num">08</span>Repository and Unit of Work — and when they are noise<button class="sec-open" data-target="s08" type="button">Open</button></h2>
+<div class="expl"><p>A repository abstracts persistence behind a collection-like interface; Unit of Work groups changes into one transaction. With EF Core, <code>DbContext</code> already is a Unit of Work and <code>DbSet</code> already is a repository.</p>
+<p>The defensible position: use repositories at the application boundary to keep the domain persistence-ignorant, and skip a hand-written UoW on top of EF Core.</p>
+
+<ul class="notes">
+<li>Do not wrap <code>DbSet</code> in a repository that only forwards calls — that is abstraction theatre.</li>
+<li>Repositories earn their place when the storage may change or when queries must be reused and tested.</li>
+<li>Say out loud that EF Core&#x27;s <code>DbContext</code> is scoped, so the UoW must be scoped too.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">public interface IUnitOfWork
+{
+    Task&lt;int&gt; SaveChangesAsync(CancellationToken ct);
+}
+
+public sealed class EfUnitOfWork(OrdersDbContext db) : IUnitOfWork
+{
+    public Task&lt;int&gt; SaveChangesAsync(CancellationToken ct) =&gt; db.SaveChangesAsync(ct);
+}
+
+// Application layer: one transaction per use case
+await _orders.AddAsync(order, ct);
+await _unitOfWork.SaveChangesAsync(ct);</code></pre></div></div>
+</section>
+<section class="sec" id="s09">
+<h2><span class="num">09</span>Relational databases: SQL Server and PostgreSQL<button class="sec-open" data-target="s09" type="button">Open</button></h2>
+<div class="expl"><p>Two years of relational experience is a must-have, and the questions are practical: indexes, execution plans, transactions and isolation.</p>
+<p>Know how to read a plan, what a covering index is, and why a <code>SELECT *</code> on a wide table hurts.</p>
+
+<ul class="notes">
+<li><code>@@ROWCOUNT = 0</code> is how you detect a lost update without a lock hint.</li>
+<li>Read committed is the default; say when you would use snapshot isolation and what it costs.</li>
+<li>PostgreSQL equivalents: <code>EXPLAIN (ANALYZE, BUFFERS)</code>, partial indexes, <code>ON CONFLICT DO NOTHING</code>.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">-- Covering index for the most frequent read path
+CREATE INDEX IX_Orders_Customer_Created
+    ON Orders (CustomerId, CreatedAt DESC)
+    INCLUDE (Status, Total);
+
+-- Check what the engine actually did
+SET STATISTICS IO ON;
+SELECT Id, Status FROM Orders WHERE CustomerId = @id ORDER BY CreatedAt DESC;
+
+-- Explicit transaction with a safe isolation level
+BEGIN TRANSACTION;
+UPDATE Inventory SET Available = Available - @qty WHERE Sku = @sku AND Available &gt;= @qty;
+IF @@ROWCOUNT = 0 ROLLBACK; ELSE COMMIT;</code></pre></div></div>
+</section>
+<section class="sec" id="s10">
+<h2><span class="num">10</span>NoSQL with MongoDB<button class="sec-open" data-target="s10" type="button">Open</button></h2>
+<div class="expl"><p>One year of NoSQL is required. The point is not &#x27;schemaless&#x27; but embedded versus referenced documents, and which one matches the read pattern.</p>
+<p>Indexes, <code>$lookup</code> sparingly, and transactions only when a single-document write is not enough.</p>
+
+<ul class="notes">
+<li>Embed what you read together; reference what changes independently or grows without bound.</li>
+<li>Every query needs an index or it becomes a collection scan — check with <code>explain()</code>.</li>
+<li>Multi-document transactions exist in replica sets but cost more; design so you rarely need them.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre><pre class="code-pre"><code class="language-csharp">public sealed class OrderDocument
+{
+    [BsonId] public Guid Id { get; set; }
+    public string CustomerId { get; set; } = "";
+    public List&lt;OrderLineDocument&gt; Lines { get; set; } = [];
+    public DateTime CreatedAt { get; set; }
+}
+
+var filter = Builders&lt;OrderDocument&gt;.Filter.Eq(o =&gt; o.CustomerId, customerId);
+var docs = await collection.Find(filter)
+    .SortByDescending(o =&gt; o.CreatedAt)
+    .Limit(50)
+    .ToListAsync(ct);
+
+await collection.Indexes.CreateOneAsync(
+    new CreateIndexModel&lt;OrderDocument&gt;(
+        Builders&lt;OrderDocument&gt;.IndexKeys.Descending(o =&gt; o.CreatedAt)));</code></pre></div></div>
+</section>
+<section class="sec" id="s11">
+<h2><span class="num">11</span>Authentication and authorization: JWT, OAuth 2.0 and OIDC<button class="sec-open" data-target="s11" type="button">Open</button></h2>
+<div class="expl"><p>The must-have is implementing authn/authz with OAuth 2.0, OpenID Connect or comparable. In .NET that means JWT bearer validation plus policy-based authorization.</p>
+<p>Explain the flow, not just the attribute: the API validates tokens issued by an identity provider; it does not issue them.</p>
+
+<ul class="notes">
+<li>Authentication answers who; authorization answers what. Two registrations, two attributes.</li>
+<li>Scopes for machine-to-machine, roles or policies for user permissions; keep the check server-side always.</li>
+<li>Never validate a token by hand — signature, issuer, audience and lifetime are the library&#x27;s job.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =&gt;
+    {
+        o.Authority = "https://login.example.com";   // OIDC discovery
+        o.Audience = "orders-api";
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true, ValidateAudience = true, ValidateLifetime = true
+        };
+    });
+
+builder.Services.AddAuthorization(o =&gt;
+    o.AddPolicy("orders:write", p =&gt; p.RequireClaim("scope", "orders.write")));
+
+app.MapPost("/api/orders", CreateOrder).RequireAuthorization("orders:write");
+app.MapGet("/api/orders/{id}", GetOrder).RequireAuthorization();</code></pre></div></div>
+</section>
+<section class="sec" id="s12">
+<h2><span class="num">12</span>Validation and error handling<button class="sec-open" data-target="s12" type="button">Open</button></h2>
+<div class="expl"><p>Two layers: input shape (required fields, formats) and business rules (uniqueness, state transitions). The first belongs in the request pipeline, the second in the domain.</p>
+<p>One error format for the whole API, based on <code>ProblemDetails</code>, so clients parse a single shape.</p>
+
+<ul class="notes">
+<li><code>400</code> for malformed input, <code>422</code> for semantic violations, <code>409</code> for state conflicts — pick and document.</li>
+<li>Return the trace id in the payload; it is what makes production support possible.</li>
+<li>Validate at the boundary and do not trust the client twice.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre><pre class="code-pre"><code class="language-csharp">public sealed class CreateOrderValidator : AbstractValidator&lt;CreateOrderRequest&gt;
+{
+    public CreateOrderValidator()
+    {
+        RuleFor(x =&gt; x.CustomerId).NotEmpty();
+        RuleFor(x =&gt; x.Lines).NotEmpty().WithMessage("An order needs at least one line.");
+        RuleForEach(x =&gt; x.Lines).ChildRules(l =&gt;
+            l.RuleFor(x =&gt; x.Quantity).GreaterThan(0));
+    }
+}
+
+app.UseExceptionHandler(err =&gt; err.Run(async ctx =&gt;
+{
+    ctx.Response.StatusCode = 500;
+    await ctx.Response.WriteAsJsonAsync(new ProblemDetails
+    {
+        Title = "Unexpected error",
+        Status = 500,
+        Extensions = { ["traceId"] = Activity.Current?.Id }
+    });
+}));</code></pre></div></div>
+</section>
+<section class="sec" id="s13">
+<h2><span class="num">13</span>Configuration, secrets and options<button class="sec-open" data-target="s13" type="button">Open</button></h2>
+<div class="expl"><p><code>appsettings.json</code> per environment, environment variables in containers, and the Options pattern for typed access.</p>
+<p>Secrets never live in the repository: user-secrets locally, Key Vault or the platform&#x27;s secret store in production.</p>
+
+<ul class="notes">
+<li><code>IOptions</code> for fixed values, <code>IOptionsSnapshot</code> per request, <code>IOptionsMonitor</code> for live reload.</li>
+<li><code>ValidateOnStart</code> turns a missing setting into a boot failure instead of a null reference at 3 a.m.</li>
+<li>Precedence to remember: appsettings &lt; appsettings.{Env} &lt; environment variables &lt; command line.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre><pre class="code-pre"><code class="language-csharp">public sealed class StorageOptions
+{
+    public const string SectionName = "Storage";
+    [Required] public string ConnectionString { get; init; } = "";
+    public int RetryCount { get; init; } = 3;
+}
+
+builder.Services.AddOptions&lt;StorageOptions&gt;()
+    .Bind(builder.Configuration.GetSection(StorageOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+// Consumer
+public sealed class BlobStore(IOptionsMonitor&lt;StorageOptions&gt; options)
+{
+    private StorageOptions Current =&gt; options.CurrentValue;
+}</code></pre></div></div>
+</section>
+<section class="sec" id="s14">
+<h2><span class="num">14</span>Logging and observability<button class="sec-open" data-target="s14" type="button">Open</button></h2>
+<div class="expl"><p><code>ILogger&lt;T&gt;</code> is the abstraction; structured logging and tracing are what make production debuggable. Log a correlation id once per request and every downstream message carries it.</p>
+<p>OpenTelemetry is now the portable answer: one exporter, traces and metrics, no vendor lock-in.</p>
+
+<ul class="notes">
+<li>Message templates, not interpolation: <code>$&quot;...&quot;</code> loses structure and allocates even when the level is off.</li>
+<li>Log once at the boundary; do not log the same exception in three layers.</li>
+<li>Traces + a trace id in the error payload turn a support ticket into a query.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">builder.Logging.ClearProviders();
+builder.Logging.AddJsonConsole(o =&gt; o.IncludeScopes = true);
+
+builder.Services.AddOpenTelemetry()
+    .WithTracing(t =&gt; t
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddEntityFrameworkCoreInstrumentation()
+        .AddOtlpExporter());
+
+// Structured, searchable, no string concatenation
+logger.LogInformation("Order {OrderId} created for {CustomerId} with {LineCount} lines",
+    order.Id, order.CustomerId, order.Lines.Count);</code></pre></div></div>
+</section>
+<section class="sec" id="s15">
+<h2><span class="num">15</span>Background work and the outbox pattern<button class="sec-open" data-target="s15" type="button">Open</button></h2>
+<div class="expl"><p><code>BackgroundService</code> is the built-in host for long-running work. The dangerous part is scope and idempotency: a message consumer will see the same message twice.</p>
+<p>The outbox pattern is the standard answer: write the domain change and the outgoing message in one transaction, then publish from a worker.</p>
+
+<ul class="notes">
+<li>Never inject a scoped service into a singleton worker — create a scope per iteration.</li>
+<li>Idempotency key on the consumer side is what makes at-least-once delivery safe.</li>
+<li><code>Task.Delay</code> with the token, and catch <code>OperationCanceledException</code> on shutdown.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre><pre class="code-pre"><code class="language-csharp">public sealed class OutboxPublisher(
+    IServiceScopeFactory scopes, ILogger&lt;OutboxPublisher&gt; log) : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken ct)
+    {
+        while (!ct.IsCancellationRequested)
+        {
+            using var scope = scopes.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService&lt;OutboxDbContext&gt;();
+
+            var batch = await db.Outbox.Where(m =&gt; m.PublishedAt == null)
+                                       .OrderBy(m =&gt; m.CreatedAt).Take(50).ToListAsync(ct);
+
+            foreach (var message in batch)
+            {
+                await Publish(message, ct);           // idempotent consumer side
+                message.PublishedAt = DateTime.UtcNow;
+            }
+            await db.SaveChangesAsync(ct);
+            await Task.Delay(TimeSpan.FromSeconds(5), ct);
+        }
+    }
+}</code></pre></div></div>
+</section>
+<section class="sec" id="s16">
+<h2><span class="num">16</span>Testing: unit, integration and contract<button class="sec-open" data-target="s16" type="button">Open</button></h2>
+<div class="expl"><p>The split that matters: unit tests for domain rules, integration tests for the API plus a real database, contract tests for anything consumed by another team.</p>
+<p><code>WebApplicationFactory</code> boots the whole pipeline in memory; Testcontainers gives a throwaway SQL Server or PostgreSQL with no mocks.</p>
+
+<ul class="notes">
+<li>Integration tests catch DI, routing, serialization and SQL problems that unit tests cannot.</li>
+<li>Mocks assert interactions; use them for external services, not for your own repositories.</li>
+<li>Name tests after the behaviour, not the method: <code>Rejects_order_without_lines</code> explains the requirement.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre><pre class="code-pre"><code class="language-csharp">public class OrdersApiTests : IClassFixture&lt;WebApplicationFactory&lt;Program&gt;&gt;
+{
+    private readonly HttpClient _client;
+    public OrdersApiTests(WebApplicationFactory&lt;Program&gt; factory) =&gt; _client = factory.CreateClient();
+
+    [Fact]
+    public async Task Rejects_order_without_lines()
+    {
+        var response = await _client.PostAsJsonAsync("/api/orders",
+            new { customerId = "c1", lines = Array.Empty&lt;object&gt;() });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = await response.Content.ReadFromJsonAsync&lt;ProblemDetails&gt;();
+        Assert.Equal(400, problem!.Status);
+    }
+}
+
+// Domain level: no infrastructure, no mocks
+[Theory]
+[InlineData(0, 0)]
+[InlineData(3, 30)]
+public void Total_multiplies_quantity_by_price(int qty, decimal expected)
+    =&gt; Assert.Equal(expected, new OrderLine("SKU", qty, 10m).Total);</code></pre></div></div>
+</section>
+<section class="sec" id="s17">
+<h2><span class="num">17</span>Docker and Kubernetes for .NET services<button class="sec-open" data-target="s17" type="button">Open</button></h2>
+<div class="expl"><p>A multi-stage Dockerfile keeps the SDK out of the runtime image; a non-root user and health endpoints are what make it deployable.</p>
+<p>In Kubernetes, what breaks first is configuration and readiness: the pod must report healthy only when it can serve.</p>
+
+<ul class="notes">
+<li>Copy the <code>.csproj</code> and restore before copying the source: the restore layer stays cached.</li>
+<li><code>/health/live</code> for liveness, <code>/health/ready</code> for readiness — different questions, different probes.</li>
+<li>Pin the image tag; <code>latest</code> makes rollbacks impossible to reason about.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre><pre class="code-pre"><code class="language-csharp">FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY *.csproj ./
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app .
+USER $APP_UID
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "Orders.Api.dll"]</code></pre></div></div>
+</section>
+<section class="sec" id="s18">
+<h2><span class="num">18</span>Microservices and resilience<button class="sec-open" data-target="s18" type="button">Open</button></h2>
+<div class="expl"><p>Microservices are an organisational answer to independent deployment, not a performance trick. What gets discussed in interviews is failure handling: timeouts, retries with jitter, circuit breakers and idempotency.</p>
+<p><code>IHttpClientFactory</code> plus a resilience handler gives all of it in configuration.</p>
+
+<ul class="notes">
+<li>Retry only idempotent operations; a retried POST without a key duplicates the order.</li>
+<li>A timeout shorter than the caller&#x27;s timeout, or the retry never happens before the caller gives up.</li>
+<li>Service discovery, gateway and BFF are the other three words to be able to place on a diagram.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddHttpClient&lt;IPricingClient, PricingClient&gt;(c =&gt;
+{
+    c.BaseAddress = new Uri("https+http://pricing-api");
+    c.Timeout = TimeSpan.FromSeconds(5);
+})
+.AddStandardResilienceHandler(o =&gt;
+{
+    o.Retry.MaxRetryAttempts = 3;
+    o.Retry.UseJitter = true;
+    o.CircuitBreaker.FailureRatio = 0.5;
+    o.AttemptTimeout.Timeout = TimeSpan.FromSeconds(2);
+});</code></pre></div></div>
+</section>
+<section class="sec" id="s19">
+<h2><span class="num">19</span>Performance and caching<button class="sec-open" data-target="s19" type="button">Open</button></h2>
+<div class="expl"><p>Most .NET performance problems are not micro-optimisations: they are sync-over-async, unbounded queries, missing indexes and chatty calls between services.</p>
+<p>Caching is the cheapest win when the read pattern allows it — and the most dangerous when invalidation is unclear.</p>
+
+<ul class="notes">
+<li>Async all the way: <code>.Result</code> and <code>.Wait()</code> burn threads and deadlock under load.</li>
+<li>Measure with <code>dotnet-counters</code>, <code>dotnet-trace</code> or Application Insights before changing anything.</li>
+<li>Name the invalidation strategy before adding a cache; a stale cache is a bug with a delay.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre><pre class="code-pre"><code class="language-csharp">// Distributed cache with an explicit key and expiry
+var key = $"catalog:{categoryId}:v2";
+var cached = await cache.GetStringAsync(key, ct);
+if (cached is null)
+{
+    var data = await db.Products.AsNoTracking()
+        .Where(p =&gt; p.CategoryId == categoryId)
+        .Select(p =&gt; new ProductDto(p.Id, p.Name, p.Price))
+        .ToListAsync(ct);
+
+    await cache.SetStringAsync(key, JsonSerializer.Serialize(data),
+        new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5) }, ct);
+    return data;
+}
+return JsonSerializer.Deserialize&lt;List&lt;ProductDto&gt;&gt;(cached)!;</code></pre></div></div>
+</section>
+<section class="sec" id="s20">
+<h2><span class="num">20</span>Git and Azure DevOps in the lifecycle<button class="sec-open" data-target="s20" type="button">Open</button></h2>
+<div class="expl"><p>The role lists Git and Azure DevOps explicitly. Beyond <code>git commit</code>, that means branch policies, pull requests with review, and a YAML pipeline that builds, tests and publishes.</p>
+<p>Build once, deploy the same artifact to every environment.</p>
+
+<ul class="notes">
+<li>Pull request + required reviewers + build validation is the branch policy trio.</li>
+<li>Secrets come from variable groups or a key vault link, never from the YAML.</li>
+<li>Tag the artifact with the commit hash so a deployment can be traced back to code.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre><pre class="code-pre"><code class="language-csharp">trigger:
+  branches: { include: [ main ] }
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs: { packageType: 'sdk', version: '8.0.x' }
+
+- script: dotnet restore
+- script: dotnet build --configuration Release --no-restore
+- script: dotnet test --no-build --configuration Release --logger trx
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    publishWebProjects: false
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true</code></pre></div></div>
+</section>
+<section class="sec" id="s21">
+<h2><span class="num">21</span>AI-assisted development, done responsibly<button class="sec-open" data-target="s21" type="button">Open</button></h2>
+<div class="expl"><p>The posting asks for hands-on experience with Copilot, Cursor or similar — and for independently reviewing what they generate. That second half is the part interviewers probe.</p>
+<p>The workflow that holds up: generate, read, test, and be able to explain every line you keep.</p>
+
+<ul class="notes">
+<li>State the constraints in the prompt: framework version, layer, DTO shapes, error contract.</li>
+<li>Never merge generated code you cannot debug.</li>
+<li>Licensing and data exposure: do not paste customer data or secrets into a prompt.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">// Prompt shape that produces reviewable code:
+// "Add a POST /api/orders endpoint that validates the request, calls
+//  IOrderService.CreateAsync, returns 201 with Location, and 400 with
+//  ProblemDetails on validation failure. Use the existing DTOs."
+
+// Review checklist applied to generated code:
+// 1. Async all the way, CancellationToken passed through
+// 2. No secrets, no hard-coded URLs
+// 3. Validation at the boundary, not inside the domain
+// 4. Tests written for the happy path and one failure
+// 5. Nothing the team's conventions forbid (naming, layering)</code></pre></div></div>
+</section>
+<section class="sec" id="s22">
+<h2><span class="num">22</span>The Angular-to-.NET contract<button class="sec-open" data-target="s22" type="button">Open</button></h2>
+<div class="expl"><p>The role is full stack, so the seam matters: DTO shape, error format, CORS and the generated client. Angular interceptors and .NET middleware must agree on both success and failure.</p>
+<p>OpenAPI generation removes the hand-written client and the drift that follows it.</p>
+
+<ul class="notes">
+<li>Money as <code>decimal</code> in .NET, <code>number</code> in JSON — decide early and document the rounding rule.</li>
+<li>Dates in UTC (ISO 8601) on the wire; format for the user in Angular, not in the API.</li>
+<li><code>WithOrigins</code> with <code>AllowCredentials</code> forbids <code>*</code> — the browser rejects the combination.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre><pre class="code-pre"><code class="language-csharp">// .NET: stable error shape for every failure
+public sealed record ApiError(string Code, string Message, string? TraceId);
+
+// Angular: one interceptor for auth + error mapping
+export const errorInterceptor: HttpInterceptorFn = (req, next) =&gt; {
+  return next(req).pipe(
+    catchError((err: HttpErrorResponse) =&gt; {
+      const problem = err.error as { title?: string; status?: number };
+      return throwError(() =&gt; new AppError(problem?.title ?? 'Unexpected error', err.status));
+    })
+  );
+};
+
+// CORS must name the origin; credentials need an explicit policy
+builder.Services.AddCors(o =&gt; o.AddPolicy("spa", p =&gt; p
+    .WithOrigins("https://app.example.com")
+    .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));</code></pre></div></div>
+</section>
+<section class="sec" id="s23">
+<h2><span class="num">23</span>Security checklist before any release<button class="sec-open" data-target="s23" type="button">Open</button></h2>
+<div class="expl"><p>A short list that catches most findings in a review of an enterprise API.</p>
+<p>Say which of these you have actually implemented, with an example — that is what a technical interviewer listens for.</p>
+
+<ul class="notes">
+<li>Parameterised SQL, least-privilege database users, and secrets outside the repository.</li>
+<li>Authorization checked server-side on every endpoint, including the ones the UI hides.</li>
+<li>Rate limiting and request size limits are part of the API, not an infrastructure afterthought.</li>
+</ul></div><div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddRateLimiter(o =&gt;
+    o.AddFixedWindowLimiter("api", opt =&gt;
+    {
+        opt.PermitLimit = 100;
+        opt.Window = TimeSpan.FromMinutes(1);
+    }));
+
+app.UseHsts();
+app.UseHttpsRedirection();
+app.Use(async (ctx, next) =&gt;
+{
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";
+    ctx.Response.Headers["Referrer-Policy"] = "no-referrer";
+    await next();
+});
+app.UseRateLimiter();</code></pre></div></div>
+</section>
+<section class="sec" id="s24">
+<h2><span class="num">24</span>Mapping the must-haves to evidence<button class="sec-open" data-target="s24" type="button">Open</button></h2>
+<div class="expl"><p>What the interview actually tests is whether each requirement has a story behind it. This is the table to keep in mind — one concrete example each, with a number when possible.</p>
+<p>If a line has no evidence yet, that is the gap to close before applying.</p>
+<table><thead><tr><th>Requirement</th><th>Evidence to prepare</th></tr></thead><tbody><tr><td>4+ years full stack</td><td>Two systems you owned end to end, with the architecture you chose and why</td></tr><tr><td>.NET 8 hands-on</td><td>A service on .NET 8 using minimal APIs, DI lifetimes and <code>TimeProvider</code></td></tr><tr><td>Angular 13+ from scratch</td><td>A project you architected: modules, routing, guards, interceptors, state</td></tr><tr><td>Layered .NET</td><td>One repository with Api/Application/Domain/Infrastructure and interfaces at the boundary</td></tr><tr><td>EF Core or Dapper</td><td>A query you optimised, with before/after timings</td></tr><tr><td>OAuth 2.0 / OIDC</td><td>Token validation plus policies in an API you deployed</td></tr><tr><td>SQL 2+ years, NoSQL 1+</td><td>An index or schema decision with the read pattern behind it</td></tr><tr><td>Docker, Kubernetes, microservices</td><td>A multi-stage image, probes, and one resilience policy you configured</td></tr><tr><td>Git and Azure DevOps</td><td>A YAML pipeline you wrote: build, test, publish, deploy</td></tr><tr><td>AI-assisted tools</td><td>A feature you shipped with Copilot and the review you applied to it</td></tr></tbody></table>
+<ul class="notes">
+<li>One concrete story per line beats ten vague claims.</li>
+<li>Quantify: latency, defect rate, deployment frequency.</li>
+<li>Be ready for the follow-up &#x27;what would you do differently&#x27;.</li>
+</ul></div></section>
+
+<div class="modal" id="reader" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reader-title">
+    <div class="modal-head">
+      <span class="modal-num" id="reader-num">01</span>
+      <h2 class="modal-title" id="reader-title"></h2>
+      <button class="modal-close" id="reader-close" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-tabs" role="tablist">
+      <button class="tab" id="tab-expl" role="tab" aria-selected="true" aria-controls="pane-expl" type="button">Explanation</button>
+      <button class="tab" id="tab-code" role="tab" aria-selected="false" aria-controls="pane-code" type="button">Code</button>
+    </div>
+    <div class="modal-body">
+      <div class="pane" id="pane-expl" role="tabpanel" aria-labelledby="tab-expl"></div>
+      <div class="pane" id="pane-code" role="tabpanel" aria-labelledby="tab-code" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="nav-btn" id="reader-prev" type="button">&larr; Previous</button>
+      <span class="nav-count" id="reader-count">1 / 24</span>
+      <button class="nav-btn" id="reader-next" type="button">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<a class="back" href="../../IT.html">&larr; Back to the knowledge base</a>
+</main></div>
+<script src="../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+(function () {
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var modal = document.getElementById('reader');
+  var numEl = document.getElementById('reader-num');
+  var titleEl = document.getElementById('reader-title');
+  var boxExpl = document.getElementById('pane-expl');
+  var boxCode = document.getElementById('pane-code');
+  var tabExpl = document.getElementById('tab-expl');
+  var tabCode = document.getElementById('tab-code');
+  var prevBtn = document.getElementById('reader-prev');
+  var nextBtn = document.getElementById('reader-next');
+  var countEl = document.getElementById('reader-count');
+  var closeBtn = document.getElementById('reader-close');
+  var index = 0;
+
+  function plainTitle(sec) {
+    var h2 = sec.querySelector('h2');
+    var clone = h2.cloneNode(true);
+    var btn = clone.querySelector('.sec-open');
+    if (btn) { btn.remove(); }
+    var num = clone.querySelector('.num');
+    if (num) { num.remove(); }
+    return clone.textContent.trim();
+  }
+
+  function showTab(name) {
+    var expl = name === 'expl';
+    tabExpl.setAttribute('aria-selected', String(expl));
+    tabCode.setAttribute('aria-selected', String(!expl));
+    boxExpl.hidden = !expl;
+    boxCode.hidden = expl;
+  }
+
+  function render(i) {
+    index = Math.max(0, Math.min(sections.length - 1, i));
+    var sec = sections[index];
+    numEl.textContent = sec.querySelector('h2 .num').textContent.trim();
+    titleEl.textContent = plainTitle(sec);
+
+    boxExpl.innerHTML = '';
+    boxCode.innerHTML = '';
+    var expl = sec.querySelector('.expl');
+    if (expl) { boxExpl.appendChild(expl.cloneNode(true)); }
+    var wrap = sec.querySelector('.code-wrap');
+    if (wrap) { boxCode.appendChild(wrap.cloneNode(true)); }
+    else { boxCode.innerHTML = '<p>No code for this section.</p>'; }
+
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === sections.length - 1;
+    countEl.textContent = (index + 1) + ' / ' + sections.length;
+    document.querySelector('.modal-body').scrollTop = 0;
+    showTab('expl');
+  }
+
+  function open(anchor) {
+    var i = sections.findIndex(function (s) { return s.id === anchor; });
+    render(i < 0 ? 0 : i);
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function close() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', function (e) {
+    var opener = e.target.closest('[data-target]');
+    if (opener) {
+      e.preventDefault();
+      open(opener.getAttribute('data-target'));
+      return;
+    }
+    if (e.target === modal) { close(); }
+  });
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', function () { render(index - 1); });
+  nextBtn.addEventListener('click', function () { render(index + 1); });
+  tabExpl.addEventListener('click', function () { showTab('expl'); });
+  tabCode.addEventListener('click', function () { showTab('code'); });
+
+  document.addEventListener('keydown', function (e) {
+    if (modal.hidden) { return; }
+    if (e.key === 'Escape') { close(); }
+    if (e.key === 'ArrowLeft') { render(index - 1); }
+    if (e.key === 'ArrowRight') { render(index + 1); }
+  });
+})();
+</script>
+
+</body>
+</html>

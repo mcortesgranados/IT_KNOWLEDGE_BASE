@@ -3,54 +3,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Untitled Document</title>
-<style type="text/css">
-<!--
-.style1 {font-family: Arial, Helvetica, sans-serif}
-.style3 {font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: #0066CC; }
-.style4 {
-	color: #003300;
-	font-weight: bold;
-}
--->
+
+  
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; padding: 16px 20px 48px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+p, li { line-height: 1.55; }
+a { color: #1565c0; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+table th, table td { border: 1px solid #d7e3f1; padding: 7px 9px; vertical-align: top; }
+table th { background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+table tbody tr { transition: background .15s ease; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td { background: #dff3ff; }
+.code-block { display: grid; grid-template-columns: minmax(2.6em, auto) minmax(0, 1fr); background: #282c34; border: 1px solid #1f2329; border-left: 4px solid #61afef; border-radius: 8px; overflow: hidden; margin: 14px 0; }
+.code-gutter { margin: 0; padding: 14px 10px 14px 12px; border: 0; border-right: 1px solid #3a3f4b; background: #21252b; color: #5c6370; text-align: right; user-select: none; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; overflow: hidden; }
+.code-pre { margin: 0; padding: 14px 16px; border: 0; background: transparent; overflow-x: auto; overflow-y: hidden; }
+.code-pre code, .code-pre code.hljs { display: block; padding: 0; background: transparent; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; }
+audio { max-width: 320px; height: 32px; margin: 6px 0; }
 </style>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f8;
-      margin: 40px;
-    }
-    h1 {
-      color: #333;
-    }
-    pre {
-      background-color: #2d2d2d;
-      color: #f8f8f2;
-      padding: 20px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-family: Consolas, monospace;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .comment {
-      color: #6a9955;
-    }
-    .keyword {
-      color: #569cd6;
-    }
-    .type {
-      color: #4ec9b0;
-    }
-    .method {
-      color: #dcdcaa;
-    }
-    .string {
-      color: #ce9178;
-    }
-  </style>
+<link rel="stylesheet" href="../../assets/vendor/highlight/atom-one-dark.min.css">
 </head>
 
-<body class="style1">
+<body>
+<div class="container"><main>
 <h1 class="style4" data-start="177" data-end="243"><a name="QUESTIONS" id="QUESTIONS"></a>QUESTIONS</h1>
 <h1 class="style4" data-start="177" data-end="243"><a name="QUESTIONS_LIST_01" id="QUESTIONS_LIST_01"></a><strong data-start="181" data-end="243">1. Company Context (Eurofins Domain &amp; Modernization Goals)</strong></h1>
 <table border="1" cellpadding="10" cellspacing="0">
@@ -3033,8 +3015,15 @@
   </li>
   <li data-start="1496" data-end="1688">
     <p data-start="1498" data-end="1511"><strong data-start="1498" data-end="1509">Example</strong>:</p>
-    <pre data-start="1517" data-end="1688"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">ALTER TABLE Orders  ADD CONSTRAINT FK_Orders_Customers  FOREIGN KEY (CustomerID)  REFERENCES Customers(CustomerID)  ON DELETE CASCADE;  </div></div>
-</pre>
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-sql">ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Customers
+FOREIGN KEY (CustomerID)
+REFERENCES Customers(CustomerID)
+ON DELETE CASCADE;</code></pre></div>
   </li>
 </ul>
 <hr data-start="1690" data-end="1693" />
@@ -3056,22 +3045,33 @@
   </li>
   <li data-start="2511" data-end="2842">
     <p data-start="2513" data-end="2526"><strong data-start="2513" data-end="2524">Example</strong>:</p>
-    <pre data-start="2532" data-end="2842"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-CREATE PROCEDURE InsertOrder  
-    @CustomerID INT,  
-    @OrderDate DATE  
-AS  
-BEGIN  
-    BEGIN TRANSACTION;  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre><pre class="code-pre"><code class="language-sql">CREATE PROCEDURE InsertOrder
+    @CustomerID INT,
+    @OrderDate DATE
+AS
+BEGIN
+    BEGIN TRANSACTION;
 
-    INSERT INTO Orders (CustomerID, OrderDate)  
-    VALUES (@CustomerID, @OrderDate);  
+    INSERT INTO Orders (CustomerID, OrderDate)
+    VALUES (@CustomerID, @OrderDate);
 
-    -- Other related inserts can go here  
+    -- Other related inserts can go here
 
-    COMMIT TRANSACTION;  
-END;  
-</pre>
+    COMMIT TRANSACTION;
+END;</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -3098,28 +3098,35 @@ END;
   </li>
   <li data-start="3683" data-end="3967">
     <p data-start="3685" data-end="3716"><strong data-start="3685" data-end="3715">Example (Data Annotations)</strong>:</p>
-    <pre data-start="3722" data-end="3967"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class Order  
-{  
-    public int OrderID { get; set; }  
-    public int CustomerID { get; set; }  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-csharp">public class Order
+{
+    public int OrderID { get; set; }
+    public int CustomerID { get; set; }
 
-    [ForeignKey("CustomerID")]  
-    public virtual Customer Customer { get; set; }  
-}  
-</pre>
+    [ForeignKey("CustomerID")]
+    public virtual Customer Customer { get; set; }
+}</code></pre></div>
 </div></div>
 </pre>
   </li>
   <li data-start="3971" data-end="4211">
     <p data-start="3973" data-end="3998"><strong data-start="3973" data-end="3997">Example (Fluent API)</strong>:</p>
-    <pre data-start="4004" data-end="4211"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-modelBuilder.Entity&lt;Order&gt;()  
-    .HasOne(o =&gt; o.Customer)  
-    .WithMany(c =&gt; c.Orders)  
-    .HasForeignKey(o =&gt; o.CustomerID)  
-    .OnDelete(DeleteBehavior.Cascade);  
-</pre>
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-xml">modelBuilder.Entity&lt;Order&gt;()
+    .HasOne(o =&gt; o.Customer)
+    .WithMany(c =&gt; c.Orders)
+    .HasForeignKey(o =&gt; o.CustomerID)
+    .OnDelete(DeleteBehavior.Cascade);</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -3135,26 +3142,41 @@ modelBuilder.Entity&lt;Order&gt;()
   </li>
   <li data-start="4911" data-end="5525">
     <p data-start="4913" data-end="4925"><strong data-start="4913" data-end="4924">Example</strong>:</p>
-    <pre data-start="4931" data-end="5525"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-using (var transaction = await _context.Database.BeginTransactionAsync())  
-{  
-    try  
-    {  
-        // Add related entities to multiple tables  
-        _context.Orders.Add(order);  
-        _context.OrderDetails.Add(orderDetail);  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre><pre class="code-pre"><code class="language-csharp">using (var transaction = await _context.Database.BeginTransactionAsync())
+{
+    try
+    {
+        // Add related entities to multiple tables
+        _context.Orders.Add(order);
+        _context.OrderDetails.Add(orderDetail);
 
-        await _context.SaveChangesAsync();  
+        await _context.SaveChangesAsync();
 
-        await transaction.CommitAsync();  // Commit if everything is successful  
-    }  
-    catch (Exception)  
-    {  
-        await transaction.RollbackAsync();  // Rollback in case of an error  
-        throw;  
-    }  
-}  
-</pre>
+        await transaction.CommitAsync();  // Commit if everything is successful
+    }
+    catch (Exception)
+    {
+        await transaction.RollbackAsync();  // Rollback in case of an error
+        throw;
+    }
+}</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -3178,15 +3200,19 @@ using (var transaction = await _context.Database.BeginTransactionAsync())
   </li>
   <li data-start="6192" data-end="6447">
     <p data-start="6194" data-end="6206"><strong data-start="6194" data-end="6205">Example</strong>:</p>
-    <pre data-start="6212" data-end="6447"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-var customer = await _context.Customers.FindAsync(order.CustomerID);  
-if (customer == null)  
-{  
-    throw new InvalidOperationException("Customer not found.");  
-}  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">var customer = await _context.Customers.FindAsync(order.CustomerID);
+if (customer == null)
+{
+    throw new InvalidOperationException("Customer not found.");
+}
 
-_context.Orders.Add(order);  
-</pre>
+_context.Orders.Add(order);</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -3210,8 +3236,9 @@ _context.Orders.Add(order);
   </li>
   <li data-start="7175" data-end="7329">
     <p data-start="7177" data-end="7225"><strong data-start="7177" data-end="7188">Example</strong>: Running EF Core migration commands:</p>
-    <pre data-start="7231" data-end="7329"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">dotnet ef migrations add AddForeignKeyToOrder  dotnet ef database update  </div></div>
-</pre>
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2</pre><pre class="code-pre"><code class="language-bash">dotnet ef migrations add AddForeignKeyToOrder
+dotnet ef database update</code></pre></div>
   </li>
 </ul>
 <hr data-start="7331" data-end="7334" />
@@ -3225,18 +3252,25 @@ _context.Orders.Add(order);
   </li>
   <li data-start="7912" data-end="8211">
     <p data-start="7914" data-end="7926"><strong data-start="7914" data-end="7925">Example</strong>:</p>
-    <pre data-start="7932" data-end="8211"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-try  
-{  
-    await _context.SaveChangesAsync();  
-}  
-catch (DbUpdateException ex)  
-{  
-    // Log and handle the referential integrity violation  
-    _logger.LogError($"Foreign key violation: {ex.Message}");  
-    throw;  
-}  
-</pre>
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre><pre class="code-pre"><code class="language-sql">try
+{
+    await _context.SaveChangesAsync();
+}
+catch (DbUpdateException ex)
+{
+    // Log and handle the referential integrity violation
+    _logger.LogError($"Foreign key violation: {ex.Message}");
+    throw;
+}</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -3833,8 +3867,7 @@ catch (DbUpdateException ex)
   </li>
   <li data-start="1800" data-end="1934">
     <p data-start="1802" data-end="1869">Use <strong data-start="1806" data-end="1868">Dapper + STRING_SPLIT() or a user-defined split function</strong>:</p>
-    <pre data-start="1872" data-end="1934"><div><div></div><div><div><div><span data-state="closed"></span><span data-state="closed"></span></div></div></div><div dir="ltr">SELECT value FROM STRING_SPLIT(ProductIds, ',')  </div></div>
-</pre>
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-sql">SELECT value FROM STRING_SPLIT(ProductIds, ',')</code></pre></div>
   </li>
   <li data-start="1935" data-end="1980">
     <p data-start="1937" data-end="1980">In C#, parse into a List&lt;int&gt; or similar.</p>
@@ -3883,9 +3916,26 @@ catch (DbUpdateException ex)
     <p data-start="2476" data-end="2549">This lets you modernize business logic <strong data-start="2515" data-end="2532">independently</strong> of the database.</p>
   </li>
 </ul>
-<pre data-start="2551" data-end="2970"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-<code class="language-csharp">
-public interface ICustomerRepository
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre><pre class="code-pre"><code class="language-csharp">public interface ICustomerRepository
 {
     Task&lt;CustomerDto&gt; GetByIdAsync(int id);
 }
@@ -3904,9 +3954,7 @@ public class LegacyCustomerRepository : ICustomerRepository
         var sql = "SELECT * FROM LegacyCustomers WHERE Id = @Id";
         return await _db.QueryFirstOrDefaultAsync&lt;CustomerDto&gt;(sql, new { Id = id });
     }
-}
-</code>
-</pre>
+}</code></pre></div>
 </div></div>
 </pre>
 <hr data-start="2972" data-end="2975" />
@@ -4052,11 +4100,15 @@ public class LegacyCustomerRepository : ICustomerRepository
   </li>
 </ul>
 <h4 data-start="1337" data-end="1354">Views in EF:</h4>
-<pre data-start="1355" data-end="1452"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">modelBuilder.Entity&lt;OrderSummary&gt;()      .HasNoKey()      .ToView(&quot;vw_OrderSummary&quot;);  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3</pre><pre class="code-pre"><code class="language-xml">modelBuilder.Entity&lt;OrderSummary&gt;()
+.HasNoKey()
+.ToView("vw_OrderSummary");</code></pre></div>
 <h4 data-start="1454" data-end="1482">Computed columns in EF:</h4>
-<pre data-start="1483" data-end="1598"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">[DatabaseGenerated(DatabaseGeneratedOption.Computed)]  public decimal TotalPrice { get; private set; }  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2</pre><pre class="code-pre"><code class="language-csharp">[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+public decimal TotalPrice { get; private set; }</code></pre></div>
 <h4 data-start="1600" data-end="1612">Dapper:</h4>
 <ul data-start="1613" data-end="1728">
   <li data-start="1613" data-end="1657">
@@ -4126,8 +4178,7 @@ public class LegacyCustomerRepository : ICustomerRepository
     <p data-start="2849" data-end="2884">Temporarily disable triggers using:</p>
   </li>
 </ul>
-<pre data-start="2885" data-end="2946"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">DISABLE TRIGGER [trg_MyTrigger] ON [dbo].[MyTable]  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-sql">DISABLE TRIGGER [trg_MyTrigger] ON [dbo].[MyTable]</code></pre></div>
 <ul data-start="2947" data-end="3008">
   <li data-start="2947" data-end="3008">
     <p data-start="2949" data-end="3008">Validate that app logic still performs required operations.</p>
@@ -4278,17 +4329,23 @@ public class LegacyCustomerRepository : ICustomerRepository
         <p data-start="3263" data-end="3328">Here's how you would configure services for dependency injection:</p>
       </li>
     </ul>
-    <pre data-start="3333" data-end="3747"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public void ConfigureServices(IServiceCollection services)  
-{      
-    // Register services and their dependencies      
-    services.AddTransient();  // Transient services      
-    services.AddScoped(); // Scoped services      
-    services.AddSingleton(); // Singleton services  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9</pre><pre class="code-pre"><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+    // Register services and their dependencies
+    services.AddTransient();  // Transient services
+    services.AddScoped(); // Scoped services
+    services.AddSingleton(); // Singleton services
 
-    // Other configurations...  
-}  
-</pre>
+    // Other configurations...
+}</code></pre></div>
  </div></div>
 </pre>
     <ul data-start="3752" data-end="4010">
@@ -4310,24 +4367,37 @@ public void ConfigureServices(IServiceCollection services)
         <p data-start="4061" data-end="4220">Dependencies are injected into classes, typically through the constructor. For example, a service class can have its dependencies injected by the DI container:</p>
       </li>
     </ul>
-    <pre data-start="4225" data-end="4604"><div><div></div><pre>
-public class MyController : ControllerBase  
-{  
-    private readonly IMyService _myService;  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-csharp">public class MyController : ControllerBase
+{
+    private readonly IMyService _myService;
 
-    // Constructor Injection  
-    public MyController(IMyService myService)  
-    {  
-        _myService = myService;  
-    }  
+    // Constructor Injection
+    public MyController(IMyService myService)
+    {
+        _myService = myService;
+    }
 
-    public IActionResult Get()  
-    {  
-        var data = _myService.GetData();  
-        return Ok(data);  
-    }  
-}  
-</pre>
+    public IActionResult Get()
+    {
+        var data = _myService.GetData();
+        return Ok(data);
+    }
+}</code></pre></div>
 <div><div></div></div><div dir="ltr"></div></div>
 </pre>
     <ul data-start="4609" data-end="4743">
@@ -4346,16 +4416,21 @@ public class MyController : ControllerBase
         <p data-start="5020" data-end="5144">A simple example could be creating module-specific configuration files and registering them in the main application startup:</p>
       </li>
     </ul>
-    <pre data-start="5149" data-end="5422"><div><div><span data-state="closed"></span><pre>
-public void ConfigureServices(IServiceCollection services)  
-{  
-    // Registering dependencies for Module A  
-    services.AddModuleAModuleServices();  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+    // Registering dependencies for Module A
+    services.AddModuleAModuleServices();
 
-    // Registering dependencies for Module B  
-    services.AddModuleBModuleServices();  
-}  
-</pre>
+    // Registering dependencies for Module B
+    services.AddModuleBModuleServices();
+}</code></pre></div>
 </div><div><div></div></div><div dir="ltr"></div></div>
 </pre>
     <ul data-start="5427" data-end="5506">
@@ -4363,16 +4438,23 @@ public void ConfigureServices(IServiceCollection services)
         <p data-start="5429" data-end="5506">Each module could have its own extension method to register its dependencies:</p>
       </li>
     </ul>
-    <pre data-start="5511" data-end="5817"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public static class ModuleAServiceCollectionExtensions  
-{  
-    public static void AddModuleAModuleServices(this IServiceCollection services)  
-    {  
-        services.AddTransient();  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9</pre><pre class="code-pre"><code class="language-csharp">public static class ModuleAServiceCollectionExtensions
+{
+    public static void AddModuleAModuleServices(this IServiceCollection services)
+    {
+        services.AddTransient();
         // Other module A specific services.
-}  
-..  
-    }  </pre>
+}
+..
+    }</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -4383,23 +4465,35 @@ public static class ModuleAServiceCollectionExtensions
         <p data-start="5855" data-end="6148">Once services are configured, you can resolve them either manually or via automatic injection. In a controller or service, they are automatically injected. But in cases where you need to resolve a service manually (e.g., in non-HTTP contexts), you can use the IServiceProvider to resolve it:</p>
       </li>
     </ul>
-    <pre data-start="6153" data-end="6549"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class SomeClass  
-{  
-    private readonly IServiceProvider _serviceProvider;  
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre><pre class="code-pre"><code class="language-csharp">public class SomeClass
+{
+    private readonly IServiceProvider _serviceProvider;
 
-    public SomeClass(IServiceProvider serviceProvider)  
-    {  
-        _serviceProvider = serviceProvider;  
-    }  
+    public SomeClass(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
 
-    public void SomeMethod()  
-    {  
-        var myService = _serviceProvider.GetRequiredService&lt;IMyService&gt;();  
-        myService.Execute();  
-    }  
-}  
-</pre>
+    public void SomeMethod()
+    {
+        var myService = _serviceProvider.GetRequiredService&lt;IMyService&gt;();
+        myService.Execute();
+    }
+}</code></pre></div>
 </div></div>
 </pre>
   </li>
@@ -4420,51 +4514,83 @@ public class SomeClass
 <p data-start="847" data-end="964">Once identified, the goal is to <strong data-start="879" data-end="887">move</strong> this logic into separate service classes, business layer, or domain models.</p>
 <h4 data-start="966" data-end="979">Example:</h4>
 <p data-start="980" data-end="999">Before refactoring:</p>
-<pre data-start="1000" data-end="1264"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public void btnSave_Click(object sender, EventArgs e)  
-{  
-    // Directly accessing business logic in the UI layer  
-    var result = ProcessOrder(orderDetails);  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre><pre class="code-pre"><code class="language-csharp">public void btnSave_Click(object sender, EventArgs e)
+{
+    // Directly accessing business logic in the UI layer
+    var result = ProcessOrder(orderDetails);
 
-    if (result.IsSuccess)  
-    {  
-        MessageBox.Show("Order saved successfully!");  
-    }  
-}  
-</pre>
+    if (result.IsSuccess)
+    {
+        MessageBox.Show("Order saved successfully!");
+    }
+}</code></pre></div>
 </div></div>
 </pre>
 <p data-start="1266" data-end="1318">After refactoring, separating UI and business logic:</p>
-<pre data-start="1319" data-end="2064"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class OrderProcessor  
-{  
-    public OrderProcessingResult ProcessOrder(OrderDetails orderDetails)  
-    {  
-        // Business logic here  
-        // For example, check if order is valid, calculate pricing, etc.  
-        return new OrderProcessingResult { IsSuccess = true };  
-    }  
-}  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre><pre class="code-pre"><code class="language-csharp">public class OrderProcessor
+{
+    public OrderProcessingResult ProcessOrder(OrderDetails orderDetails)
+    {
+        // Business logic here
+        // For example, check if order is valid, calculate pricing, etc.
+        return new OrderProcessingResult { IsSuccess = true };
+    }
+}
 
-public partial class OrderForm : Form  
-{  
-    private readonly OrderProcessor _orderProcessor;  
+public partial class OrderForm : Form
+{
+    private readonly OrderProcessor _orderProcessor;
 
-    public OrderForm(OrderProcessor orderProcessor)  
-    {  
-        _orderProcessor = orderProcessor;  
-    }  
+    public OrderForm(OrderProcessor orderProcessor)
+    {
+        _orderProcessor = orderProcessor;
+    }
 
-    private void btnSave_Click(object sender, EventArgs e)  
-    {  
-        var result = _orderProcessor.ProcessOrder(orderDetails);  
-        if (result.IsSuccess)  
-        {  
-            MessageBox.Show("Order saved successfully!");  
-        }  
-    }  
-}  
-</pre>
+    private void btnSave_Click(object sender, EventArgs e)
+    {
+        var result = _orderProcessor.ProcessOrder(orderDetails);
+        if (result.IsSuccess)
+        {
+            MessageBox.Show("Order saved successfully!");
+        }
+    }
+}</code></pre></div>
 </div></div>
 </pre>
 <h3 data-start="2066" data-end="2100"><strong data-start="2070" data-end="2100">2. Create a Business Layer</strong></h3>
@@ -4486,26 +4612,41 @@ public partial class OrderForm : Form
 <p data-start="2888" data-end="3101">To further decouple the UI from the business logic, implement <strong data-start="2950" data-end="2979">Dependency Injection (DI)</strong>. This allows the business logic to be injected into the form rather than being directly instantiated within the UI layer.</p>
 <p data-start="3103" data-end="3320">Using a DI container (e.g., Microsoft.Extensions.DependencyInjection), the necessary services are injected at runtime. This makes the UI easier to test and decouples it from specific implementations of business logic.</p>
 <h4 data-start="3322" data-end="3335">Example:</h4>
-<pre data-start="3336" data-end="3776"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class OrderForm : Form  
-{  
-    private readonly IOrderService _orderService;  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre><pre class="code-pre"><code class="language-csharp">public class OrderForm : Form
+{
+    private readonly IOrderService _orderService;
 
-    public OrderForm(IOrderService orderService)  
-    {  
-        _orderService = orderService;  
-    }  
+    public OrderForm(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
 
-    private void btnSave_Click(object sender, EventArgs e)  
-    {  
-        var result = _orderService.ProcessOrder(orderDetails);  
-        if (result.IsSuccess)  
-        {  
-            MessageBox.Show("Order saved successfully!");  
-        }  
-    }  
-}  
-</pre>
+    private void btnSave_Click(object sender, EventArgs e)
+    {
+        var result = _orderService.ProcessOrder(orderDetails);
+        if (result.IsSuccess)
+        {
+            MessageBox.Show("Order saved successfully!");
+        }
+    }
+}</code></pre></div>
 </div></div>
 </pre>
 <p data-start="3778" data-end="3898">In this case, IOrderService is injected into the form rather than hard-coding the business logic directly in the form.</p>
@@ -4570,66 +4711,111 @@ public class OrderForm : Form
                 <h4 data-start="1370" data-end="1415"><strong data-start="1375" data-end="1415">Step 1: Define Repository Interfaces</strong></h4>
                 <p data-start="1417" data-end="1676">First, define repository interfaces that encapsulate the methods the application will use to interact with the database. These interfaces will hide the specifics of how data is retrieved or stored, abstracting away the complexities of SQL Server interactions.</p>
                 <p data-start="1678" data-end="1728">Example interface for a simple Order repository:</p>
-                <pre data-start="1729" data-end="1992"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public interface IOrderRepository  
-{  
-    Task&lt;Order&gt; GetOrderByIdAsync(int orderId);  
-    Task&lt;IEnumerable&lt;Order&gt;&gt; GetOrdersAsync();  
-    Task AddOrderAsync(Order order);  
-    Task UpdateOrderAsync(Order order);  
-    Task DeleteOrderAsync(int orderId);  
-}  
-</pre>
+                <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-csharp">public interface IOrderRepository
+{
+    Task&lt;Order&gt; GetOrderByIdAsync(int orderId);
+    Task&lt;IEnumerable&lt;Order&gt;&gt; GetOrdersAsync();
+    Task AddOrderAsync(Order order);
+    Task UpdateOrderAsync(Order order);
+    Task DeleteOrderAsync(int orderId);
+}</code></pre></div>
 </div></div>
 </pre>
                 <h4 data-start="1994" data-end="2044"><strong data-start="1999" data-end="2044">Step 2: Create Repository Implementations</strong></h4>
                 <p data-start="2046" data-end="2332">The actual repository implementations interact with the <strong data-start="2102" data-end="2125">SQL Server database</strong>, but they will not modify the SQL Server schema. The repository will use <strong data-start="2199" data-end="2224">Entity Framework Core</strong> (EF Core) or <strong data-start="2238" data-end="2248">Dapper</strong> to query the database and execute SQL commands while keeping the SQL schema intact.</p>
                 <p data-start="2334" data-end="2405">Example of a repository implementation using <strong data-start="2379" data-end="2404">Entity Framework Core</strong>:</p>
-                <pre data-start="2406" data-end="3487"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class OrderRepository : IOrderRepository  
-{  
-    private readonly ApplicationDbContext _context;  
+                <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43</pre><pre class="code-pre"><code class="language-csharp">public class OrderRepository : IOrderRepository
+{
+    private readonly ApplicationDbContext _context;
 
-    public OrderRepository(ApplicationDbContext context)  
-    {  
-        _context = context;  
-    }  
+    public OrderRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
 
-    public async Task&lt;Order&gt; GetOrderByIdAsync(int orderId)  
-    {  
-        return await _context.Orders  
-            .Where(o =&gt; o.Id == orderId)  
-            .FirstOrDefaultAsync();  
-    }  
+    public async Task&lt;Order&gt; GetOrderByIdAsync(int orderId)
+    {
+        return await _context.Orders
+            .Where(o =&gt; o.Id == orderId)
+            .FirstOrDefaultAsync();
+    }
 
-    public async Task&lt;IEnumerable&lt;Order&gt;&gt; GetOrdersAsync()  
-    {  
-        return await _context.Orders.ToListAsync();  
-    }  
+    public async Task&lt;IEnumerable&lt;Order&gt;&gt; GetOrdersAsync()
+    {
+        return await _context.Orders.ToListAsync();
+    }
 
-    public async Task AddOrderAsync(Order order)  
-    {  
-        await _context.Orders.AddAsync(order);  
-        await _context.SaveChangesAsync();  
-    }  
+    public async Task AddOrderAsync(Order order)
+    {
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+    }
 
-    public async Task UpdateOrderAsync(Order order)  
-    {  
-        _context.Orders.Update(order);  
-        await _context.SaveChangesAsync();  
-    }  
+    public async Task UpdateOrderAsync(Order order)
+    {
+        _context.Orders.Update(order);
+        await _context.SaveChangesAsync();
+    }
 
-    public async Task DeleteOrderAsync(int orderId)  
-    {  
-        var order = await GetOrderByIdAsync(orderId);  
-        if (order != null)  
-        {  
-            _context.Orders.Remove(order);  
-            await _context.SaveChangesAsync();  
-        }  
-    }  
-}  
-</pre>
+    public async Task DeleteOrderAsync(int orderId)
+    {
+        var order = await GetOrderByIdAsync(orderId);
+        if (order != null)
+        {
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+        }
+    }
+}</code></pre></div>
 </div></div>
 </pre>
                 <p data-start="3489" data-end="3788">In this example, the <strong data-start="3510" data-end="3531">OrderRepository</strong> uses Entity Framework Core to query the database using the existing schema but doesn't alter or require changes to the underlying SQL Server schema. The only change that occurs is the introduction of EF Core models to represent the data in the application.</p>
@@ -4646,39 +4832,57 @@ public class OrderRepository : IOrderRepository
                 </ul>
                 <h4 data-start="4667" data-end="4707"><strong data-start="4672" data-end="4707">Step 4: Unit of Work (Optional)</strong></h4>
                 <p data-start="4708" data-end="4993">If the application requires more complex transactions, the <strong data-start="4767" data-end="4791">Unit of Work pattern</strong> can be used in combination with the repository. The Unit of Work ensures that multiple repositories work together within a single transaction, making it easier to manage commit and rollback operations.</p>
-                <pre data-start="4995" data-end="5399"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class UnitOfWork : IUnitOfWork  
-{  
-    private readonly ApplicationDbContext _context;  
-    public IOrderRepository OrderRepository { get; }  
+                <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-csharp">public class UnitOfWork : IUnitOfWork
+{
+    private readonly ApplicationDbContext _context;
+    public IOrderRepository OrderRepository { get; }
 
-    public UnitOfWork(ApplicationDbContext context)  
-    {  
-        _context = context;  
-        OrderRepository = new OrderRepository(_context);  
-    }  
+    public UnitOfWork(ApplicationDbContext context)
+    {
+        _context = context;
+        OrderRepository = new OrderRepository(_context);
+    }
 
-    public async Task CompleteAsync()  
-    {  
-        await _context.SaveChangesAsync();  
-    }  
-}  
-</pre>
+    public async Task CompleteAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+}</code></pre></div>
 </div></div>
 </pre>
                 <h4 data-start="5401" data-end="5438"><strong data-start="5406" data-end="5438">Step 5: Dependency Injection</strong></h4>
                 <p data-start="5439" data-end="5651">In the .NET Core architecture, <strong data-start="5470" data-end="5499">Dependency Injection (DI)</strong> should be used to inject the repository classes into the services or controllers. This ensures a clean separation of concerns and promotes testability.</p>
                 <p data-start="5653" data-end="5710">In Startup.cs or Program.cs, register the repository:</p>
-                <pre data-start="5711" data-end="6046"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public void ConfigureServices(IServiceCollection services)  
-{  
-    services.AddDbContext<ApplicationDbContext>(options =&gt;  
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
+                <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext(options =&gt;
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-    services.AddScoped&lt;IOrderRepository, OrderRepository&gt;();  
-    services.AddScoped&lt;IUnitOfWork, UnitOfWork&gt;();  
-}  
-</pre>
+    services.AddScoped&lt;IOrderRepository, OrderRepository&gt;();
+    services.AddScoped&lt;IUnitOfWork, UnitOfWork&gt;();
+}</code></pre></div>
 </div></div>
 </pre>
                 <h4 data-start="6048" data-end="6099"><strong data-start="6053" data-end="6099">Step 6: Ensure Performance and Scalability</strong></h4>
@@ -4738,52 +4942,82 @@ public void ConfigureServices(IServiceCollection services)
 <h4 data-start="758" data-end="801"><strong data-start="763" data-end="801">Step 1: Configure Built-in Logging</strong></h4>
 <p data-start="803" data-end="1010">.NET Core provides a built-in logging mechanism that supports multiple providers (Console, File, Azure, etc.). To start, I'll configure the logging providers in the <strong data-start="968" data-end="984">Startup.cs</strong> or <strong data-start="988" data-end="1004">Program.cs</strong> file.</p>
 <p data-start="1012" data-end="1054"><strong data-start="1012" data-end="1023">Example</strong> (in Program.cs for .NET 6+):</p>
-<pre data-start="1055" data-end="1776"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class Program  
-{  
-    public static void Main(string[] args)  
-    {  
-        CreateHostBuilder(args).Build().Run();  
-    }  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre><pre class="code-pre"><code class="language-csharp">public class Program
+{
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>  
-        Host.CreateDefaultBuilder(args)  
-            .ConfigureLogging((context, logging) =>  
-            {  
-                logging.ClearProviders();  
-                logging.AddConsole();  
-                logging.AddDebug();  
-                logging.AddEventSourceLogger();  
-                logging.AddFile("Logs/myapp-{Date}.log");  // Example of adding a file provider  
-            })  
-            .ConfigureWebHostDefaults(webBuilder =>  
-            {  
-                webBuilder.UseStartup&lt;Startup&gt;();  
-            });  
-}  
-</pre>
+    public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+        Host.CreateDefaultBuilder(args)
+            .ConfigureLogging((context, logging) =&gt;
+            {
+                logging.ClearProviders();
+                logging.AddConsole();
+                logging.AddDebug();
+                logging.AddEventSourceLogger();
+                logging.AddFile("Logs/myapp-{Date}.log");  // Example of adding a file provider
+            })
+            .ConfigureWebHostDefaults(webBuilder =&gt;
+            {
+                webBuilder.UseStartup&lt;Startup&gt;();
+            });
+}</code></pre></div>
 </div></div>
 </pre>
 <p data-start="1777" data-end="1933">This will set up logging to the console, debug output, event source, and optionally, a file system (using a logging extension like <strong data-start="1908" data-end="1919">Serilog</strong> or <strong data-start="1923" data-end="1931">NLog</strong>).</p>
 <h4 data-start="1935" data-end="1974"><strong data-start="1940" data-end="1974">Step 2: Use Structured Logging</strong></h4>
 <p data-start="1976" data-end="2241">For more advanced logging, I recommend using structured logging frameworks like <strong data-start="2056" data-end="2067">Serilog</strong> or <strong data-start="2071" data-end="2079">NLog</strong>. They allow for richer logging that supports JSON output, enabling better search and filtering in tools like <strong data-start="2189" data-end="2206">Elasticsearch</strong> or <strong data-start="2210" data-end="2240">Azure Application Insights</strong>.</p>
 <p data-start="2243" data-end="2269"><strong data-start="2243" data-end="2254">Example</strong> using Serilog:</p>
-<pre data-start="2270" data-end="2815"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public static IHostBuilder CreateHostBuilder(string[] args) =>  
-    Host.CreateDefaultBuilder(args)  
-        .ConfigureLogging((context, logging) =>  
-        {  
-            logging.ClearProviders();  
-            logging.AddSerilog(new LoggerConfiguration()  
-                .WriteTo.Console()  
-                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)  
-                .CreateLogger());  
-        })  
-        .ConfigureWebHostDefaults(webBuilder =>  
-        {  
-            webBuilder.UseStartup&lt;Startup&gt;();  
-        });  
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre><pre class="code-pre"><code class="language-csharp">public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+    Host.CreateDefaultBuilder(args)
+        .ConfigureLogging((context, logging) =&gt;
+        {
+            logging.ClearProviders();
+            logging.AddSerilog(new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger());
+        })
+        .ConfigureWebHostDefaults(webBuilder =&gt;
+        {
+            webBuilder.UseStartup&lt;Startup&gt;();
+        });</code></pre></div>
 </div></div>
 </pre>
 <h4 data-start="2817" data-end="2859"><strong data-start="2822" data-end="2859">Step 3: Log at Appropriate Levels</strong></h4>
@@ -4810,32 +5044,53 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
 </ul>
 <p data-start="3372" data-end="3473">In .NET Core, you can inject ILogger into controllers, services, and other classes to log messages.</p>
 <p data-start="3475" data-end="3487"><strong data-start="3475" data-end="3486">Example</strong>:</p>
-<pre data-start="3488" data-end="4174"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public class ProductController : ControllerBase  
-{  
-    private readonly ILogger&lt;ProductController&gt; _logger;  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre><pre class="code-pre"><code class="language-csharp">public class ProductController : ControllerBase
+{
+    private readonly ILogger&lt;ProductController&gt; _logger;
 
-    public ProductController(ILogger&lt;ProductController&gt; logger)  
-    {  
-        _logger = logger;  
-    }  
+    public ProductController(ILogger&lt;ProductController&gt; logger)
+    {
+        _logger = logger;
+    }
 
-    public IActionResult Get(int id)  
-    {  
-        try  
-        {  
-            _logger.LogInformation("Fetching product with id {ProductId}", id);  
-            var product = _productService.GetProduct(id);  
-            return Ok(product);  
-        }  
-        catch (Exception ex)  
-        {  
-            _logger.LogError(ex, "Error occurred while fetching product with id {ProductId}", id);  
-            return StatusCode(500, "Internal server error");  
-        }  
-    }  
-}  
-</pre>
+    public IActionResult Get(int id)
+    {
+        try
+        {
+            _logger.LogInformation("Fetching product with id {ProductId}", id);
+            var product = _productService.GetProduct(id);
+            return Ok(product);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching product with id {ProductId}", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+}</code></pre></div>
 </div></div>
 </pre>
 <h3 data-start="4176" data-end="4196"><strong data-start="4180" data-end="4196">2. Telemetry</strong></h3>
@@ -4851,25 +5106,48 @@ public class ProductController : ControllerBase
     <p data-start="4764" data-end="4831"><strong data-start="4764" data-end="4798">Configure Application Insights</strong> in Startup.cs or Program.cs:</p>
   </li>
 </ul>
-<pre data-start="4833" data-end="5247"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-public static IHostBuilder CreateHostBuilder(string[] args) =>  
-    Host.CreateDefaultBuilder(args)  
-        .ConfigureServices((hostContext, services) =>  
-        {  
-            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsights:InstrumentationKey"]);  
-        })  
-        .ConfigureWebHostDefaults(webBuilder =>  
-        {  
-            webBuilder.UseStartup&lt;Startup&gt;();  
-        });  
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre><pre class="code-pre"><code class="language-csharp">public static IHostBuilder CreateHostBuilder(string[] args) =&gt;
+    Host.CreateDefaultBuilder(args)
+        .ConfigureServices((hostContext, services) =&gt;
+        {
+            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsights:InstrumentationKey"]);
+        })
+        .ConfigureWebHostDefaults(webBuilder =&gt;
+        {
+            webBuilder.UseStartup&lt;Startup&gt;();
+        });</code></pre></div>
 </div></div>
 </pre>
 <p data-start="5249" data-end="5396">This will automatically track performance metrics like request count, response times, and dependency calls (like SQL queries, HTTP requests, etc.).</p>
 <h4 data-start="5398" data-end="5437"><strong data-start="5403" data-end="5437">Step 2: Track Custom Telemetry</strong></h4>
 <p data-start="5439" data-end="5562">Custom telemetry can also be tracked using <strong data-start="5482" data-end="5501">TelemetryClient</strong>. For example, tracking custom events or performance metrics:</p>
-<pre data-start="5564" data-end="6039"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-public class ProductService
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre><pre class="code-pre"><code class="language-json">public class ProductService
 {
     private readonly TelemetryClient _telemetryClient;
 
@@ -4886,66 +5164,104 @@ public class ProductService
             { "ProductCategory", product.Category }
         });
     }
-}
-  </pre></div></div>
+}</code></pre></div></div></div>
 </pre>
 <p data-start="6041" data-end="6133">This would send a custom event to Application Insights for tracking when a product is added.</p>
 <h3 data-start="6135" data-end="6164"><strong data-start="6139" data-end="6164">3. Exception Tracking</strong></h3>
 <p data-start="6166" data-end="6374">Exception tracking helps in identifying, capturing, and tracking errors in real-time. For .NET Core, I recommend using <strong data-start="6285" data-end="6295">Sentry</strong>, <strong data-start="6297" data-end="6327">Azure Application Insights</strong>, or <strong data-start="6332" data-end="6373">Serilog’s built-in exception tracking</strong>.</p>
 <h4 data-start="6376" data-end="6444"><strong data-start="6381" data-end="6444">Step 1: Set up Exception Tracking with Application Insights</strong></h4>
 <p data-start="6446" data-end="6540">Application Insights automatically tracks unhandled exceptions. For custom exception handling:</p>
-<pre data-start="6542" data-end="7251"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"> <pre>
-<span class="keyword">public class</span> <span class="type">ProductController</span> : <span class="type">ControllerBase</span>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre><pre class="code-pre"><code class="language-csharp">public class ProductController : ControllerBase
 {
-    <span class="keyword">private readonly</span> <span class="type">ILogger&lt;ProductController&gt;</span> _logger;
-    <span class="keyword">private readonly</span> <span class="type">TelemetryClient</span> _telemetryClient;
+    private readonly ILogger&lt;ProductController&gt; _logger;
+    private readonly TelemetryClient _telemetryClient;
 
-    <span class="keyword">public</span> <span class="method">ProductController</span>(<span class="type">ILogger&lt;ProductController&gt;</span> logger, <span class="type">TelemetryClient</span> telemetryClient)
+    public ProductController(ILogger&lt;ProductController&gt; logger, TelemetryClient telemetryClient)
     {
         _logger = logger;
         _telemetryClient = telemetryClient;
     }
 
-    <span class="keyword">public</span> <span class="type">IActionResult</span> <span class="method">Get</span>(<span class="type">int</span> id)
+    public IActionResult Get(int id)
     {
-        <span class="keyword">try</span>
+        try
         {
-            <span class="comment">// Your logic</span>
+            // Your logic
         }
-        <span class="keyword">catch</span> (<span class="type">Exception</span> ex)
+        catch (Exception ex)
         {
-            _logger.LogError(ex, <span class="string">"An error occurred"</span>);
-            _telemetryClient.TrackException(ex); <span class="comment">// Explicitly track exception</span>
-            <span class="keyword">return</span> StatusCode(500, <span class="string">"Internal server error"</span>);
+            _logger.LogError(ex, "An error occurred");
+            _telemetryClient.TrackException(ex); // Explicitly track exception
+            return StatusCode(500, "Internal server error");
         }
     }
-}
-  </pre></div></div>
+}</code></pre></div></div></div>
 </pre>
 <h4 data-start="7253" data-end="7306"><strong data-start="7258" data-end="7306">Step 2: Handle Unhandled Exceptions Globally</strong></h4>
 <p data-start="7308" data-end="7450">To handle unhandled exceptions globally in .NET Core, configure middleware in <strong data-start="7386" data-end="7402">Startup.cs</strong> or <strong data-start="7406" data-end="7422">Program.cs</strong> to log exceptions globally.</p>
-<pre data-start="7452" data-end="7983"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="keyword">public void</span> <span class="method">Configure</span>(<span class="type">IApplicationBuilder</span> app, <span class="type">IHostEnvironment</span> env)
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre><pre class="code-pre"><code class="language-csharp">public void Configure(IApplicationBuilder app, IHostEnvironment env)
 {
-    app.UseExceptionHandler(<span class="string">"/Home/Error"</span>);
+    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 
-    <span class="comment">// Global exception logging middleware</span>
-    app.Use(<span class="keyword">async</span> (context, next) =>
+    // Global exception logging middleware
+    app.Use(async (context, next) =&gt;
     {
-        <span class="keyword">try</span>
+        try
         {
-            <span class="keyword">await</span> next();
+            await next();
         }
-        <span class="keyword">catch</span> (<span class="type">Exception</span> ex)
+        catch (Exception ex)
         {
-            _logger.LogError(ex, <span class="string">"Unhandled exception occurred."</span>);
-            _telemetryClient.TrackException(ex); <span class="comment">// Track exception</span>
-            <span class="keyword">throw</span>; <span class="comment">// rethrow the exception</span>
+            _logger.LogError(ex, "Unhandled exception occurred.");
+            _telemetryClient.TrackException(ex); // Track exception
+            throw; // rethrow the exception
         }
     });
-}
-  </pre></div></div>
+}</code></pre></div></div></div>
 </pre>
 <h3 data-start="7985" data-end="8017"><strong data-start="7989" data-end="8017">4. Monitoring and Alerts</strong></h3>
 <p data-start="8019" data-end="8291">Finally, <strong data-start="8028" data-end="8042">monitoring</strong> and <strong data-start="8047" data-end="8057">alerts</strong> based on telemetry and exception tracking should be set up. Using tools like <strong data-start="8135" data-end="8159">Application Insights</strong>, you can set up alerts for high failure rates, slow responses, and other critical metrics that help maintain the health of the API.</p>
@@ -5024,13 +5340,17 @@ public class ProductService
       Request body:</p>
   </li>
 </ul>
-<pre>{
- &quot;name&quot;: &quot;Product Name&quot;,
- &quot;description&quot;: &quot;A description of the product.&quot;,
- &quot;price&quot;: 99.99,
- &quot;category&quot;: &quot;Electronics&quot;
- }
- </pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-json">{
+ "name": "Product Name",
+ "description": "A description of the product.",
+ "price": 99.99,
+ "category": "Electronics"
+ }</code></pre></div>
 <h4 data-start="2303" data-end="2347"><strong data-start="2308" data-end="2347">Step 2: Define Response Body Format</strong></h4>
 <p data-start="2348" data-end="2540">For every GET or POST request, specify the structure of the response body. Ensure that the response format is consistent and adheres to a common structure (e.g., status, data, error messages).</p>
 <p data-start="2542" data-end="2554"><strong data-start="2542" data-end="2553">Example</strong>:</p>
@@ -5040,14 +5360,19 @@ public class ProductService
       Response body:</p>
   </li>
 </ul>
-<pre>{
- &quot;id&quot;: 1,
- &quot;name&quot;: &quot;Product Name&quot;,
- &quot;description&quot;: &quot;A description of the product.&quot;,
- &quot;price&quot;: 99.99,
- &quot;category&quot;: &quot;Electronics&quot;
- }
- </pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-json">{
+ "id": 1,
+ "name": "Product Name",
+ "description": "A description of the product.",
+ "price": 99.99,
+ "category": "Electronics"
+ }</code></pre></div>
 <h4 data-start="2761" data-end="2802"><strong data-start="2766" data-end="2802">Step 3: Define HTTP Status Codes</strong></h4>
 <p data-start="2803" data-end="2933">Specify the HTTP status codes that will be returned for various outcomes. This helps the frontend know how to handle the response.</p>
 <p data-start="2935" data-end="2947"><strong data-start="2935" data-end="2946">Example</strong>:</p>
@@ -5073,27 +5398,42 @@ public class ProductService
 <h4 data-start="3314" data-end="3372"><strong data-start="3319" data-end="3372">Step 1: Integrate OpenAPI Specification (Swagger)</strong></h4>
 <p data-start="3373" data-end="3617">One of the best ways to document API contracts is using the <strong data-start="3433" data-end="3464">OpenAPI Specification (OAS)</strong>, often referred to as <strong data-start="3487" data-end="3498">Swagger</strong>. It allows you to describe your API in a machine-readable format and automatically generate interactive documentation.</p>
 <p data-start="3619" data-end="3697">In .NET Core, you can integrate <strong data-start="3651" data-end="3662">Swagger</strong> using the <strong data-start="3673" data-end="3688">Swashbuckle</strong> package.</p>
-<pre data-start="3699" data-end="3752"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">dotnet add package Swashbuckle.AspNetCore  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-bash">dotnet add package Swashbuckle.AspNetCore</code></pre></div>
 <p data-start="3754" data-end="3824">Then, in your <strong data-start="3768" data-end="3784">Startup.cs</strong> or <strong data-start="3788" data-end="3804">Program.cs</strong>, configure Swagger:</p>
-<pre>public void ConfigureServices(IServiceCollection services)
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">public void ConfigureServices(IServiceCollection services)
    {
    services.AddSwaggerGen(c =&gt;
    {
-   c.SwaggerDoc(&quot;v1&quot;, new OpenApiInfo { Title = &quot;My API&quot;, Version = &quot;v1&quot; });
+   c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
    });
-   }</pre>
-<pre>public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+   }</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
    {
    if (env.IsDevelopment())
    {
    app.UseSwagger();
    app.UseSwaggerUI(c =&gt;
    {
-   c.SwaggerEndpoint(&quot;/swagger/v1/swagger.json&quot;, &quot;My API V1&quot;);
+   c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
    });
    }
- }</pre>
+ }</code></pre></div>
 <p data-start="4300" data-end="4470">This generates interactive API documentation that the frontend team can use to explore the API endpoints, check request parameters, and see response formats in real time.</p>
 <hr data-start="4472" data-end="4475" />
 <h3 data-start="4477" data-end="4527"><strong data-start="4481" data-end="4527">4. Define Authentication and Authorization</strong></h3>
@@ -5106,8 +5446,7 @@ public class ProductService
     <p data-start="4837" data-end="4918">All API requests will require an <strong data-start="4870" data-end="4894">Authorization header</strong> containing a JWT token:</p>
   </li>
 </ul>
-<pre data-start="4919" data-end="4960"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">Authorization: Bearer {token}  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-plaintext">Authorization: Bearer {token}</code></pre></div>
 <h4 data-start="4962" data-end="5007"><strong data-start="4967" data-end="5007">Step 2: Define Roles and Permissions</strong></h4>
 <p data-start="5008" data-end="5206">Document the roles and permissions required for various API endpoints. For example, certain endpoints may only be accessible by an <strong data-start="5139" data-end="5148">Admin</strong> or <strong data-start="5152" data-end="5163">Manager</strong>, and the frontend should be aware of this.</p>
 <p data-start="5208" data-end="5220"><strong data-start="5208" data-end="5219">Example</strong>:</p>
@@ -5124,23 +5463,25 @@ public class ProductService
 <h4 data-start="5417" data-end="5461"><strong data-start="5422" data-end="5461">Step 1: Standardize Error Responses</strong></h4>
 <p data-start="5462" data-end="5551">Document the format of error responses so the frontend team can handle them consistently.</p>
 <p data-start="5553" data-end="5565"><strong data-start="5553" data-end="5564">Example</strong>:</p>
-<pre data-start="5553" data-end="5565">{
- &quot;status&quot;: &quot;error&quot;,
- &quot;message&quot;: &quot;Invalid product ID&quot;,
- &quot;details&quot;: &quot;Product ID must be a positive integer.&quot;
- }
- </pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-json">{
+ "status": "error",
+ "message": "Invalid product ID",
+ "details": "Product ID must be a positive integer."
+ }</code></pre></div>
 <h4 data-start="5699" data-end="5735"><strong data-start="5704" data-end="5735">Step 2: Provide Error Codes</strong></h4>
 <p data-start="5736" data-end="5850">To help the frontend team respond appropriately, provide standardized error codes that describe the type of issue.</p>
 <p data-start="5852" data-end="5864"><strong data-start="5852" data-end="5863">Example</strong>:</p>
-<pre>{
- &quot;errorCode&quot;: &quot;INVALID_PRODUCT_ID&quot;,
- &quot;errorMessage&quot;: &quot;Product ID is invalid. Must be a positive integer.&quot;
- }
- 
-
-
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4</pre><pre class="code-pre"><code class="language-json">{
+ "errorCode": "INVALID_PRODUCT_ID",
+ "errorMessage": "Product ID is invalid. Must be a positive integer."
+ }</code></pre></div>
 <h3 data-start="5999" data-end="6033"><strong data-start="6003" data-end="6033">6. Collaborate and Iterate</strong></h3>
 <h4 data-start="6035" data-end="6073"><strong data-start="6040" data-end="6073">Step 1: Use API Mocking Tools</strong></h4>
 <p data-start="6074" data-end="6322">During early stages of development, you can use API mocking tools (such as <strong data-start="6149" data-end="6160">Postman</strong> or <strong data-start="6164" data-end="6178">Swagger UI</strong>) to simulate responses from the backend, allowing frontend developers to start integrating and testing before the backend is fully implemented.</p>
@@ -5410,62 +5751,89 @@ Permissions<br />
 RolePermissions<br />
 UserRoles<br />
 <p class="style1" data-start="1817" data-end="1928">Or in C# models:</p>
-  <pre>
-<span class="keyword">public class</span> <span class="type">User</span>
+  <div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-csharp">public class User
 {
-    <span class="keyword">public</span> <span class="type">int</span> <span class="property">Id</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
-    <span class="keyword">public</span> <span class="type">string</span> <span class="property">Username</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
-    <span class="keyword">public</span> <span class="type">ICollection&lt;UserRole&gt;</span> <span class="property">Roles</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
-}
-  </pre>
-<pre>public class Role
+    public int Id { get; set; }
+    public string Username { get; set; }
+    public ICollection&lt;UserRole&gt; Roles { get; set; }
+}</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-csharp">public class Role
    {
    public int Id { get; set; }
    public string Name { get; set; }
    public ICollection&lt;RolePermission&gt; Permissions { get; set; }
-   }</pre>
-<pre>public class Permission
+   }</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-csharp">public class Permission
    {
    public int Id { get; set; }
-   public string Name { get; set; } // e.g. &quot;Module.Samples.Read&quot;
-   }
- </pre>
+   public string Name { get; set; } // e.g. "Module.Samples.Read"
+   }</code></pre></div>
 <h4 data-start="1373" data-end="1429"><strong data-start="1378" data-end="1429">2. Use ASP.NET Core Identity or Custom JWT Auth</strong></h4>
 <p data-start="1431" data-end="1498">If using <strong data-start="1440" data-end="1458">JWT-based auth</strong>, embed the roles in the token at login:</p>
-<pre>{
- &quot;sub&quot;: &quot;user123&quot;,
- &quot;roles&quot;: [&quot;Admin&quot;, &quot;LabTech&quot;]
- }
- </pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4</pre><pre class="code-pre"><code class="language-json">{
+ "sub": "user123",
+ "roles": ["Admin", "LabTech"]
+ }</code></pre></div>
 <p data-start="1569" data-end="1637">Configure JWT Bearer authentication in Startup.cs or Program.cs.</p>
 <hr data-start="1639" data-end="1642" />
 <h4 data-start="1644" data-end="1700"><strong data-start="1649" data-end="1700">3. Apply Role-Based Authorization with Policies</strong></h4>
 <p data-start="1702" data-end="1752">Create <strong data-start="1709" data-end="1735">authorization policies</strong> in your startup:</p>
-<pre>services.AddAuthorization(options =&gt;
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-csharp">services.AddAuthorization(options =&gt;
    {
-   options.AddPolicy(&quot;Samples.Read&quot;, policy =&gt; policy.RequireRole(&quot;LabTech&quot;, &quot;Admin&quot;));
-   options.AddPolicy(&quot;Samples.Approve&quot;, policy =&gt; policy.RequireRole(&quot;Admin&quot;));
- });</pre>
+   options.AddPolicy("Samples.Read", policy =&gt; policy.RequireRole("LabTech", "Admin"));
+   options.AddPolicy("Samples.Approve", policy =&gt; policy.RequireRole("Admin"));
+ });</code></pre></div>
 <p><br />
   Then apply them to modular controllers: </p>
-<pre class="style1" data-start="1817" data-end="1928">[Authorize(Policy = &quot;Samples.Read&quot;)]
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3</pre><pre class="code-pre"><code class="language-csharp">[Authorize(Policy = "Samples.Read")]
    [HttpGet]
- public IActionResult GetSamples() =&gt; ...</pre>
+ public IActionResult GetSamples() =&gt; ...</code></pre></div>
 <h4 data-start="2131" data-end="2187"><strong data-start="2136" data-end="2187">4. Centralize Module-to-Role Mapping (Optional)</strong></h4>
 <p data-start="2189" data-end="2305">Use a naming convention like &quot;{Module}.{Action}&quot;, so permissions can be stored and checked dynamically per module:</p>
-<pre>public class ModuleAuthorizationHandler : AuthorizationHandler&lt;ModulePermissionRequirement&gt;
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">public class ModuleAuthorizationHandler : AuthorizationHandler&lt;ModulePermissionRequirement&gt;
    {
    protected override Task HandleRequirementAsync(
    AuthorizationHandlerContext context, ModulePermissionRequirement requirement)
    {
    var hasPermission = context.User.Claims.Any(c =&gt;
-   c.Type == &quot;permissions&quot; &amp;&amp; c.Value == requirement.PermissionName);</pre>
-<pre> if (hasPermission)
-   context.Succeed(requirement);</pre>
-<pre> return Task.CompletedTask;
+   c.Type == "permissions" &amp;&amp; c.Value == requirement.PermissionName);</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2</pre><pre class="code-pre"><code class="language-csharp"> if (hasPermission)
+   context.Succeed(requirement);</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3</pre><pre class="code-pre"><code class="language-csharp"> return Task.CompletedTask;
    }
-   }
- </pre>
+   }</code></pre></div>
 <p data-start="2810" data-end="2904">Register the handler and use a custom [Authorize(Policy = &quot;...&quot;)] to control modular access.</p>
 <hr data-start="2906" data-end="2909" />
 <h4 data-start="2911" data-end="2970"><strong data-start="2916" data-end="2970">5. Optional: Use Claims-Based Granular Permissions</strong></h4>
@@ -5475,18 +5843,25 @@ UserRoles<br />
 </p>
 <h4 data-start="3180" data-end="3227"><strong data-start="3185" data-end="3227">6. Secure Modular APIs with Middleware</strong></h4>
 <p data-start="3229" data-end="3301">Use middleware to enforce per-module access by checking claims or roles:</p>
-<pre>app.Use(async (context, next) =&gt;
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4</pre><pre class="code-pre"><code class="language-csharp">app.Use(async (context, next) =&gt;
    {
    var user = context.User;
-   var path = context.Request.Path;</pre>
-<pre> if (path.StartsWithSegments(&quot;/api/samples&quot;) &amp;&amp; !user.IsInRole(&quot;LabTech&quot;))
+   var path = context.Request.Path;</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-csharp"> if (path.StartsWithSegments("/api/samples") &amp;&amp; !user.IsInRole("LabTech"))
    {
    context.Response.StatusCode = 403;
    return;
-   }</pre>
-<pre> await next();
-   });
- </pre>
+   }</code></pre></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2</pre><pre class="code-pre"><code class="language-csharp"> await next();
+   });</code></pre></div>
 <h4 data-start="3597" data-end="3651"><strong data-start="3602" data-end="3651">7. Admin Panel for Managing Roles/Permissions</strong></h4>
 <p data-start="3653" data-end="3680">Provide a UI in Angular to:</p>
 <ul data-start="3682" data-end="3782">
@@ -5573,60 +5948,88 @@ UserRoles<br />
 <h3 data-start="352" data-end="395">✅ 1. <strong data-start="361" data-end="395">Choose the Versioning Strategy</strong></h3>
 <p data-start="397" data-end="428">You can version your API using:</p>
 <h4 data-start="430" data-end="498">a. <strong data-start="438" data-end="461">URI Path Versioning</strong> (most common for legacy migrations):</h4>
-<pre data-start="499" data-end="552"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">GET /api/v1/products  GET /api/v2/products  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2</pre><pre class="code-pre"><code class="language-plaintext">GET /api/v1/products
+GET /api/v2/products</code></pre></div>
 <p data-start="553" data-end="655">✅ Easy to route, understand, and debug<br data-start="591" data-end="594" />
   ❌ Can cause duplication across controllers if not modularized</p>
 <h4 data-start="657" data-end="693">b. <strong data-start="665" data-end="692">Query String Versioning</strong>:</h4>
-<pre data-start="694" data-end="739"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">GET /api/products?api-version=1.0  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-plaintext">GET /api/products?api-version=1.0</code></pre></div>
 <p data-start="740" data-end="819">✅ Simple to implement<br data-start="761" data-end="764" />
   ❌ Less RESTful; not as intuitive as URI path versioning</p>
 <h4 data-start="821" data-end="857">c. <strong data-start="829" data-end="856">Header-Based Versioning</strong>:</h4>
-<pre data-start="858" data-end="912"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">GET /api/products  Header: api-version: 1.0  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2</pre><pre class="code-pre"><code class="language-plaintext">GET /api/products
+Header: api-version: 1.0</code></pre></div>
 <p data-start="913" data-end="989">✅ Clean URLs; better for public APIs<br data-start="949" data-end="952" />
   ❌ Harder to debug or consume manually</p>
 <h4 data-start="991" data-end="1041">d. <strong data-start="999" data-end="1040">Media Type (Accept Header) Versioning</strong>:</h4>
-<pre data-start="1042" data-end="1091"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">Accept: application/vnd.myapi.v1+json  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-plaintext">Accept: application/vnd.myapi.v1+json</code></pre></div>
 <p data-start="1092" data-end="1179">✅ Good for content negotiation<br data-start="1122" data-end="1125" />
   ❌ More complex; generally avoided in legacy migrations</p>
 <hr data-start="1181" data-end="1184" />
 <h3 data-start="1186" data-end="1229">✅ 2. <strong data-start="1195" data-end="1229">Set Up Versioning in .NET Core</strong></h3>
 <p data-start="1231" data-end="1273">Use Microsoft.AspNetCore.Mvc.Versioning:</p>
-<pre data-start="1275" data-end="1341"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">dotnet add package Microsoft.AspNetCore.Mvc.Versioning  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-bash">dotnet add package Microsoft.AspNetCore.Mvc.Versioning</code></pre></div>
 <p data-start="1343" data-end="1369">Configure in Startup.cs:</p>
-<pre data-start="1371" data-end="1785"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">services.AddApiVersioning(options =&gt;  {      options.AssumeDefaultVersionWhenUnspecified = true;      options.DefaultApiVersion = new ApiVersion(1, 0);      options.ReportApiVersions = true;      options.ApiVersionReader = ApiVersionReader.Combine(          new QueryStringApiVersionReader(&quot;api-version&quot;),          new HeaderApiVersionReader(&quot;X-Version&quot;),          new UrlSegmentApiVersionReader()      );  });  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">services.AddApiVersioning(options =&gt;
+{
+options.AssumeDefaultVersionWhenUnspecified = true;
+options.DefaultApiVersion = new ApiVersion(1, 0);
+options.ReportApiVersions = true;
+options.ApiVersionReader = ApiVersionReader.Combine(
+new QueryStringApiVersionReader("api-version"),
+new HeaderApiVersionReader("X-Version"),
+new UrlSegmentApiVersionReader()
+);
+});</code></pre></div>
 <hr data-start="1787" data-end="1790" />
 <h3 data-start="1792" data-end="1841">✅ 3. <strong data-start="1801" data-end="1841">Use Attributes to Manage Controllers</strong></h3>
 <p data-start="1843" data-end="1885">Version your controller using annotations:</p>
-<pre data-start="1887" data-end="2151"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-[ApiVersion("1.0")]  
-[Route("api/v{version:apiVersion}/products")]  
-public class ProductsV1Controller : ControllerBase { ... }  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/products")]
+public class ProductsV1Controller : ControllerBase { ... }
 
-[ApiVersion("2.0")]  
-[Route("api/v{version:apiVersion}/products")]  
-public class ProductsV2Controller : ControllerBase { ... }  
-</pre>
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/products")]
+public class ProductsV2Controller : ControllerBase { ... }</code></pre></div>
 </div></div>
 </pre>
 <hr data-start="2153" data-end="2156" />
 <h3 data-start="2158" data-end="2208">✅ 4. <strong data-start="2167" data-end="2208">Document and Communicate API Versions</strong></h3>
 <p data-start="2210" data-end="2266">Use <strong data-start="2214" data-end="2233">Swagger/OpenAPI</strong> to expose and document versions:</p>
-<pre data-start="2268" data-end="2433"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">services.AddVersionedApiExplorer(options =&gt;  {      options.GroupNameFormat = &quot;'v'VVV&quot;; // v1, v2, etc.      options.SubstituteApiVersionInUrl = true;  });  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-csharp">services.AddVersionedApiExplorer(options =&gt;
+{
+options.GroupNameFormat = "'v'VVV"; // v1, v2, etc.
+options.SubstituteApiVersionInUrl = true;
+});</code></pre></div>
 <p data-start="2435" data-end="2504">Then configure Swagger to show different versions as selectable tabs.</p>
 <hr data-start="2506" data-end="2509" />
 <h3 data-start="2511" data-end="2543">✅ 5. <strong data-start="2520" data-end="2543">Deprecate Gradually</strong></h3>
 <ul data-start="2545" data-end="2798">
   <li data-start="2545" data-end="2704">
     <p data-start="2547" data-end="2614">Mark older versions as <strong data-start="2570" data-end="2584">deprecated</strong> in documentation and headers:</p>
-    <pre data-start="2617" data-end="2704"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">Warning: 299 - &quot;API v1 is deprecated and will be removed on 2026-01-01&quot;  </div></div>
-</pre>
+    <div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-plaintext">Warning: 299 - "API v1 is deprecated and will be removed on 2026-01-01"</code></pre></div>
   </li>
   <li data-start="2705" data-end="2745">
     <p data-start="2707" data-end="2745">Communicate clear timelines to clients</p>
@@ -6301,19 +6704,27 @@ public class ProductsV2Controller : ControllerBase { ... }
     <p data-start="1252" data-end="1286">Validate token on each API request</p>
   </li>
 </ul>
-<pre data-start="1288" data-end="1669"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="keyword">services</span>.<span class="method">AddAuthentication</span>(<span class="class">JwtBearerDefaults.AuthenticationScheme</span>)
-    .<span class="method">AddJwtBearer</span>(<span class="keyword">options</span> =>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =&gt;
     {
-        options.TokenValidationParameters = <span class="keyword">new</span> <span class="class">TokenValidationParameters</span>
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = <span class="keyword">true</span>,
-            ValidateAudience = <span class="keyword">true</span>,
-            ValidateIssuerSigningKey = <span class="keyword">true</span>,
-            <span class="comment">// Other validation parameters...</span>
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            // Other validation parameters...
         };
-    });
-  </pre></div></div>
+    });</code></pre></div></div></div>
 </pre>
 <h4 data-start="1671" data-end="1696">🔹 For Cookie-based:</h4>
 <ul data-start="1697" data-end="1853">
@@ -6338,25 +6749,39 @@ public class ProductsV2Controller : ControllerBase { ... }
     <p data-start="2039" data-end="2101">Attach token to every request using Angular HttpInterceptor.</p>
   </li>
 </ul>
-<pre data-start="2103" data-end="2478"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="keyword">@Injectable</span>()  
-<span class="keyword">export class</span> <span class="class">AuthInterceptor</span> <span class="keyword">implements</span> HttpInterceptor {  
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre><pre class="code-pre"><code class="language-typescript">@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
 
-    <span class="method">intercept</span>(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {  
-        <span class="keyword">const</span> jwt = localStorage.getItem(<span class="string">'token'</span>);  
-        
-        <span class="keyword">if</span> (jwt) {  
-            req = req.clone({  
-                setHeaders: {  
-                    Authorization: <span class="string">`Bearer ${jwt}`</span>  
-                }  
-            });  
-        }  
-        
-        <span class="keyword">return</span> next.handle(req);  
-    }  
-}
-  </pre>
+    intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
+        const jwt = localStorage.getItem('token');
+
+        if (jwt) {
+            req = req.clone({
+                setHeaders: {
+                    Authorization: `Bearer ${jwt}`
+                }
+            });
+        }
+
+        return next.handle(req);
+    }
+}</code></pre></div>
 </div></div>
 </pre>
 <h4 data-start="2480" data-end="2504">🔹 Cookie Strategy:</h4>
@@ -6368,8 +6793,7 @@ public class ProductsV2Controller : ControllerBase { ... }
     <p data-start="2556" data-end="2597">Must enable withCredentials in Angular:</p>
   </li>
 </ul>
-<pre data-start="2599" data-end="2682"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">this.http.post('login-endpoint', credentials, { withCredentials: true });  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1</pre><pre class="code-pre"><code class="language-typescript">this.http.post('login-endpoint', credentials, { withCredentials: true });</code></pre></div>
 <hr data-start="2684" data-end="2687" />
 <h3 data-start="2689" data-end="2737">✅ <strong data-start="2695" data-end="2737">4. Modular Architecture Considerations</strong></h3>
 <ul data-start="2739" data-end="2853">
@@ -6380,8 +6804,15 @@ public class ProductsV2Controller : ControllerBase { ... }
     <p data-start="2810" data-end="2853">Protect Angular routes using canActivate:</p>
   </li>
 </ul>
-<pre data-start="2855" data-end="2991"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">{    path: 'admin',    loadChildren: () =&gt; import('./admin/admin.module').then(m =&gt; m.AdminModule),    canActivate: [AuthGuard]  }  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-csharp">{
+path: 'admin',
+loadChildren: () =&gt; import('./admin/admin.module').then(m =&gt; m.AdminModule),
+canActivate: [AuthGuard]
+}</code></pre></div>
 <ul data-start="2993" data-end="3075">
   <li data-start="2993" data-end="3075">
     <p data-start="2995" data-end="3075">Use .NET middleware for <strong data-start="3019" data-end="3045">authorization policies</strong> to protect backend endpoints.</p>
@@ -6448,8 +6879,17 @@ public class ProductsV2Controller : ControllerBase { ... }
     <p data-start="636" data-end="678">Register logging once in the Program.cs:</p>
   </li>
 </ul>
-<pre data-start="680" data-end="867"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">Log.Logger = new LoggerConfiguration()      .Enrich.FromLogContext()      .WriteTo.Console()      .WriteTo.File(&quot;logs/log.txt&quot;)      .CreateLogger();    builder.Host.UseSerilog();  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-csharp">Log.Logger = new LoggerConfiguration()
+.Enrich.FromLogContext()
+.WriteTo.Console()
+.WriteTo.File("logs/log.txt")
+.CreateLogger();
+builder.Host.UseSerilog();</code></pre></div>
 <h4 data-start="869" data-end="894">🔹 Angular Frontend:</h4>
 <ul data-start="895" data-end="1086">
   <li data-start="895" data-end="932">
@@ -6470,18 +6910,25 @@ public class ProductsV2Controller : ControllerBase { ... }
     <p data-start="1145" data-end="1202">Use <strong data-start="1149" data-end="1163">middleware</strong> to catch and log unhandled exceptions:</p>
   </li>
 </ul>
-<pre data-start="1206" data-end="1543"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-app.UseExceptionHandler(errorApp =>  
-{  
-    errorApp.Run(<span class="keyword">async</span> context =>  
-    {  
-        context.Response.StatusCode = <span class="keyword">500</span>;  
-        <span class="keyword">var</span> error = context.Features.Get&lt;IExceptionHandlerFeature&gt;();  
-        Log.Error(error?.Error, <span class="string">"Unhandled exception"</span>);  
-        <span class="keyword">await</span> context.Response.WriteAsync(<span class="string">"An error occurred."</span>);  
-    });  
-});
-  </pre></div></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre><pre class="code-pre"><code class="language-csharp">app.UseExceptionHandler(errorApp =&gt;
+{
+    errorApp.Run(async context =&gt;
+    {
+        context.Response.StatusCode = 500;
+        var error = context.Features.Get&lt;IExceptionHandlerFeature&gt;();
+        Log.Error(error?.Error, "Unhandled exception");
+        await context.Response.WriteAsync("An error occurred.");
+    });
+});</code></pre></div></div></div>
 </pre>
 <ul data-start="1545" data-end="1618">
   <li data-start="1545" data-end="1618">
@@ -6494,15 +6941,19 @@ app.UseExceptionHandler(errorApp =>
     <p data-start="1639" data-end="1778">Use a <strong data-start="1645" data-end="1669">global error handler</strong> (ErrorHandler class) and <strong data-start="1697" data-end="1716">HttpInterceptor</strong> for centralized API error logging and user-friendly feedback.</p>
   </li>
 </ul>
-<pre data-start="1780" data-end="1975"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="keyword">@Injectable</span>()  
-<span class="keyword">export</span> <span class="keyword">class</span> <span class="class">GlobalErrorHandler</span> <span class="keyword">implements</span> ErrorHandler {  
-    <span class="function">handleError</span>(error: any): void {  
-        console.error(<span class="string">'Global error:'</span>, error);  
-        <span class="comment">// Send to logging service</span>  
-    }  
-}
-  </pre></div></div>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-typescript">@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+    handleError(error: any): void {
+        console.error('Global error:', error);
+        // Send to logging service
+    }
+}</code></pre></div></div></div>
 </pre>
 <hr data-start="1977" data-end="1980" />
 <h3 data-start="1982" data-end="2025">✅ 3. <strong data-start="1991" data-end="2025">Authentication &amp; Authorization</strong></h3>
@@ -6540,14 +6991,17 @@ app.UseExceptionHandler(errorApp =>
     <p data-start="2601" data-end="2680">Implement global model validation filters to return consistent error responses.</p>
   </li>
 </ul>
-<pre data-start="2682" data-end="2901"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="keyword">services</span>.AddControllers()
-    .<span class="method">ConfigureApiBehaviorOptions</span>(options =>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-csharp">services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =&gt;
     {
-        options.InvalidModelStateResponseFactory = context =>
-            <span class="keyword">new</span> BadRequestObjectResult(context.ModelState);
-    });
-  </pre></div></div>
+        options.InvalidModelStateResponseFactory = context =&gt;
+            new BadRequestObjectResult(context.ModelState);
+    });</code></pre></div></div></div>
 </pre>
 <ul data-start="2903" data-end="2980">
   <li data-start="2903" data-end="2980">
@@ -6694,19 +7148,27 @@ app.UseExceptionHandler(errorApp =>
     </ul>
   </li>
 </ul>
-<pre data-start="786" data-end="1075"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="keyword">[ApiController]</span>
-<span class="keyword">[Route]</span>("api/files")
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">[ApiController]
+[Route]("api/files")
 public class FileController : ControllerBase
 {
     [HttpPost("upload")]
     public async Task&lt;IActionResult&gt; Upload(IFormFile file)
     {
-        <span class="keyword">var</span> id = <span class="keyword">await</span> _fileService.SaveAsync(file);
-        return Ok(<span class="keyword">new</span> { fileId = id });
+        var id = await _fileService.SaveAsync(file);
+        return Ok(new { fileId = id });
     }
-}
-  </pre></div></div>
+}</code></pre></div></div></div>
 </pre>
 <ul data-start="1077" data-end="1137">
   <li data-start="1077" data-end="1137">
@@ -6758,14 +7220,17 @@ public class FileController : ControllerBase
 <h2 data-start="1732" data-end="1768">✅ Frontend (Angular) Architecture</h2>
 <h3 data-start="1770" data-end="1802">1. <strong data-start="1777" data-end="1802">Core Angular Services</strong></h3>
 <p data-start="1804" data-end="1872">Place shared logic in the <strong data-start="1830" data-end="1844">CoreModule</strong>, injected via Angular’s DI:</p>
-<pre data-start="1874" data-end="2052"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr"><pre>
-@Injectable({ providedIn: 'root' })  
-export class FileUploadService {  
-    upload(file: File): Observable&lt;any&gt; {  
-        return this.http.post('/api/files/upload', file);  
-    }  
-}  
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6</pre><pre class="code-pre"><code class="language-typescript">@Injectable({ providedIn: 'root' })
+export class FileUploadService {
+    upload(file: File): Observable&lt;any&gt; {
+        return this.http.post('/api/files/upload', file);
+    }
+}</code></pre></div>
 </div></div>
 </pre>
 <p data-start="2054" data-end="2068">Same goes for:</p>
@@ -6792,13 +7257,15 @@ export class FileUploadService {
   </li>
 </ul>
 <p data-start="2461" data-end="2494">Declare them in a SharedModule:</p>
-<pre data-start="2496" data-end="2725"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">  <pre>
-<span class="decorator">@NgModule</span>({
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-typescript">@NgModule({
     declarations: [FileUploaderComponent, ReportPreviewComponent, DashboardWidgetComponent],
     exports: [FileUploaderComponent, ReportPreviewComponent, DashboardWidgetComponent]
 })
-export class <span class="class-name">SharedModule</span> {}
-  </pre></div></div>
+export class SharedModule {}</code></pre></div></div></div>
 </pre>
 <hr data-start="2727" data-end="2730" />
 <h3 data-start="2732" data-end="2771">3. <strong data-start="2739" data-end="2771">Communication Across Modules</strong></h3>
@@ -6963,8 +7430,11 @@ export class <span class="class-name">SharedModule</span> {}
 <h3 data-start="1785" data-end="1810">✅ 4. <strong data-start="1794" data-end="1810">Story Format</strong></h3>
 <p data-start="1812" data-end="1919">User stories should follow INVEST criteria (Independent, Negotiable, Valuable, Estimable, Small, Testable).</p>
 <p data-start="1921" data-end="1929">Example:</p>
-<pre data-start="1931" data-end="2077"><div><div><span data-state="closed"></span></div><div><div></div></div><div dir="ltr">As an order manager,  I want to create a new order using the new web interface,  So that I can avoid using the legacy desktop form.  </div></div>
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3</pre><pre class="code-pre"><code class="language-plaintext">As an order manager,
+I want to create a new order using the new web interface,
+So that I can avoid using the legacy desktop form.</code></pre></div>
 <p data-start="2079" data-end="2103"><strong data-start="2079" data-end="2103">Acceptance Criteria:</strong></p>
 <ul data-start="2104" data-end="2197">
   <li data-start="2104" data-end="2145">
@@ -14525,8 +14995,15 @@ export class <span class="class-name">SharedModule</span> {}
 <hr data-start="6157" data-end="6160" />
 <h3 data-start="6162" data-end="6224"><strong data-start="6166" data-end="6224">Test Pyramid for .NET + Angular Full-Stack Application</strong></h3>
 <p data-start="6226" data-end="6320">Here’s a visual breakdown of the testing pyramid for your full-stack .NET and Angular project:</p>
-<pre data-start="6322" data-end="6613">                   |-------- E2E Tests (5-10%) --------|<br />                   |                                   |<br />                   |  Integration Tests (15-20%)      |<br />                   |                                   |<br />                   |------------ Unit Tests (70-80%) --|<br />
-</pre>
+<div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-plaintext">                   |-------- E2E Tests (5-10%) --------|
+                   |                                   |
+                   |  Integration Tests (15-20%)      |
+                   |                                   |
+                   |------------ Unit Tests (70-80%) --|</code></pre></div>
 <h3 data-start="6615" data-end="6643"><strong data-start="6619" data-end="6643">Key Recommendations:</strong></h3>
 <ul data-start="6644" data-end="7275">
   <li data-start="6644" data-end="6842">
@@ -14688,5 +15165,8 @@ export class <span class="class-name">SharedModule</span> {}
 <p class="style1">&nbsp;</p>
 <p class="style1">&nbsp;</p>
 <p class="style1">&nbsp;</p>
+</main></div>
+<script src="../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
 </body>
 </html>
