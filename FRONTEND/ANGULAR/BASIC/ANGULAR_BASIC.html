@@ -4,17 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basic Angular Questions</title>
+    <link rel="stylesheet" href="../../../assets/vendor/highlight/vs2015.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h2 { color: #2c3e50; }
-        code { background-color: #f4f4f4; padding: 5px; border-radius: 5px; }
-        pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; }
-        .question { margin-top: 20px; }
-        .answer { margin-top: 10px; }
-    </style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling (Dark Theme VS 2015) */
+pre {
+    position: relative;
+    background: #1e1e1e !important;
+    border-radius: 8px;
+    padding: 16px 18px;
+    overflow: auto;
+    font-size: 0.92em;
+    border: 1px solid #333;
+    margin: 12px 0;
+}
+pre code {
+    font-family: Consolas, 'Courier New', monospace;
+    background: transparent !important;
+    padding: 0 !important;
+}
+p code, li code { background-color: #f1f3f5; padding: 2px 6px; border-radius: 4px; color: #b71c1c; font-size: 0.92em; }
+.copy-code-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #cfd8dc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 0.78em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    user-select: none;
+}
+.copy-code-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.copy-code-btn.copied {
+    background: #2e7d32;
+    border-color: #2e7d32;
+    color: #ffffff;
+}
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; }
+/* Q&A Card styling */
+.question { background: #ffffff; border: 1px solid #e1e4e8; border-radius: 8px; padding: 18px 22px; margin-bottom: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: box-shadow .2s ease, border-color .2s ease; }
+.question:hover { border-color: #90caf9; box-shadow: 0 4px 12px rgba(21,101,192,0.08); }
+.question > h2 { margin-top: 0; margin-bottom: 12px; font-size: 1.25em; color: #1565c0; border-bottom: 2px solid #eef2f6; padding-bottom: 8px; }
+.answer { color: #24292e; line-height: 1.6; }
+.answer p { margin: 8px 0; }
+</style>
 </head>
 <body>
-    <h1>Basic Angular Questions</h1>
+<div class="container">
+<main>
+    <h1>Basic Angular Questions<span class="tag">Frontend</span><span class="tag">Angular</span></h1>
+    <div class="note">
+        <p><strong>Angular Framework &mdash; Basic Concepts &amp; Core Architecture.</strong></p>
+        <p>Gu&iacute;a exhaustiva de preguntas y respuestas fundamentales sobre Angular: componentes, servicios, inyecci&oacute;n de dependencias, ciclo de vida (lifecycle hooks), enlace de datos (data binding), directivas estructurales y de atributo, pipes, enrutamiento (routing), formularios reactivos y template-driven, RxJS observables y Angular CLI.</p>
+    </div>
 
     <div class="question">
         <h2>1. What is Angular?</h2>
@@ -5442,10 +5549,43 @@ export class HighlightDirective {
             </code></pre>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
+    <div class="footer">IT Knowledge Base &middot; Frontend &middot; Angular Fundamentals</div>
+</main>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    hljs.highlightAll();
+
+    document.querySelectorAll('pre').forEach((pre) => {
+        const code = pre.querySelector('code');
+        if (!code) return;
+
+        pre.style.position = 'relative';
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-code-btn';
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Copiar código');
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copiar';
+
+        btn.addEventListener('click', () => {
+            const textToCopy = code.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                btn.classList.add('copied');
+                btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copiado!';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copiar';
+                }, 2000);
+            }).catch(() => {
+                btn.innerText = 'Error';
+            });
+        });
+
+        pre.appendChild(btn);
+    });
+});
+</script>
 </body>
 </html>
