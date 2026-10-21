@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redis and Memcached - Distributed caching reference</title>
+<style>
+
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; padding: 16px 20px 48px; }
+h1 { color: #1565c0; font-size: 1.75rem; margin: 4px 0 6px; }
+.subtitle { color: #475569; margin: 0 0 6px; line-height: 1.55; }
+.meta { color: #64748b; font-size: .9em; margin: 0 0 18px; }
+h2 { color: #2e7d32; margin-top: 34px; font-size: 1.18rem; }
+h2 .num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; margin-right: 9px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .74em; font-weight: 800; vertical-align: middle; }
+p { line-height: 1.6; margin: 0 0 10px; }
+a { color: #1565c0; }
+.toc { background: #f4f9ff; border: 1px solid #d7e3f1; border-radius: 9px; padding: 14px 18px; margin: 18px 0 8px; }
+.toc h2 { margin: 0 0 8px; font-size: 1rem; color: #1f4f8c; }
+.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.toc li { margin: 4px 0; line-height: 1.4; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+table th, table td { border: 1px solid #d7e3f1; padding: 8px 10px; vertical-align: top; text-align: left; }
+table th { background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; }
+table tbody tr:nth-child(odd) td { background: #f8fbff; }
+.code-block { display: grid; grid-template-columns: minmax(2.6em, auto) minmax(0, 1fr); background: #282c34; border: 1px solid #1f2329; border-left: 4px solid #61afef; border-radius: 8px; overflow: hidden; margin: 14px 0; }
+.code-gutter { margin: 0; padding: 14px 10px 14px 12px; border: 0; border-right: 1px solid #3a3f4b; background: #21252b; color: #5c6370; text-align: right; user-select: none; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; overflow: hidden; }
+.code-pre { margin: 0; padding: 14px 16px; border: 0; background: transparent; overflow-x: auto; overflow-y: hidden; }
+.code-pre code, .code-pre code.hljs { display: block; padding: 0; background: transparent; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; }
+.notes { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 7px; padding: 12px 18px 12px 32px; margin: 14px 0 6px; }
+.notes li { margin: 5px 0; line-height: 1.45; }
+.back { display: inline-block; margin-top: 30px; color: #1565c0; font-weight: 700; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+
+.sec { scroll-margin-top: 12px; }
+.toc a { cursor: pointer; }
+.modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .6); }
+.modal[hidden] { display: none; }
+.modal-card { display: flex; flex-direction: column; width: min(1000px, 100%); max-height: 88vh; border-radius: 12px; background: #fff; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); overflow: hidden; }
+.modal-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px 12px; border-bottom: 1px solid #e2e8f0; }
+.modal-num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .78rem; font-weight: 800; }
+.modal-title { margin: 0; font-size: 1.06rem; color: #1565c0; flex: 1 1 auto; }
+.modal-close { flex: none; width: 34px; height: 34px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: #334155; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.modal-close:hover, .modal-close:focus { background: #e2e8f0; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.modal-tabs { display: flex; gap: 6px; padding: 10px 18px 0; border-bottom: 1px solid #e2e8f0; }
+.tab { padding: 8px 14px; border: 1px solid transparent; border-bottom: 0; border-radius: 8px 8px 0 0; background: transparent; color: #475569; font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer; }
+.tab:hover { background: #f1f5f9; }
+.tab[aria-selected="true"] { background: #e3f2fd; border-color: #bbdefb; color: #0d47a1; }
+.modal-body { flex: 1 1 auto; overflow: auto; padding: 16px 18px; }
+.modal-body .pane[hidden] { display: none; }
+.modal-foot { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 12px 18px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+.nav-btn { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1565c0; font: inherit; font-weight: 700; font-size: .9rem; cursor: pointer; }
+.nav-btn:hover:not(:disabled) { background: #e3f2fd; border-color: #90caf9; }
+.nav-btn:disabled { opacity: .45; cursor: not-allowed; }
+.nav-count { color: #64748b; font-size: .85rem; font-weight: 700; }
+.sec-open { margin-left: 10px; padding: 3px 10px; border: 1px solid #90caf9; border-radius: 999px; background: #e3f2fd; color: #0d47a1; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer; vertical-align: middle; }
+.sec-open:hover, .sec-open:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.expl code, .modal-body .pane code { padding: 1px 5px; border-radius: 4px; background: #eef2f7; color: #0d47a1; font-family: Consolas, 'Courier New', monospace; font-size: .92em; }
+</style>
+<link rel="stylesheet" href="../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="container"><main>
+<h1>Redis and Memcached — Distributed Caching Reference</h1>
+<p class="subtitle">What a cache is actually for, how the two stores differ, and the patterns that survive production:
+cache-aside, invalidation, stampede protection, locks and rate limiting — with the failure paths written down.</p>
+<p class="meta">Scope: Redis 7 &middot; Memcached 1.6 &middot; StackExchange.Redis &middot; ioredis &middot; .NET 8 &middot; Node 20</p>
+<div class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#c01" class="toc-link" data-target="c01">What a cache is for, and what it costs</a></li>
+<li><a href="#c02" class="toc-link" data-target="c02">Redis versus Memcached</a></li>
+<li><a href="#c03" class="toc-link" data-target="c03">Connecting from .NET</a></li>
+<li><a href="#c04" class="toc-link" data-target="c04">Connecting from Node and TypeScript</a></li>
+<li><a href="#c05" class="toc-link" data-target="c05">Key design and namespacing</a></li>
+<li><a href="#c06" class="toc-link" data-target="c06">Stampede protection: when the key expires under load</a></li>
+<li><a href="#c07" class="toc-link" data-target="c07">Invalidation: the hard part</a></li>
+<li><a href="#c08" class="toc-link" data-target="c08">Redis data structures worth knowing</a></li>
+<li><a href="#c09" class="toc-link" data-target="c09">Locks, rate limiting and idempotency</a></li>
+<li><a href="#c10" class="toc-link" data-target="c10">Memcached specifics</a></li>
+<li><a href="#c11" class="toc-link" data-target="c11">Operating the cache in production</a></li>
+<li><a href="#c12" class="toc-link" data-target="c12">Anti-patterns that show up in interviews</a></li>
+</ol></div>
+<section class="sec" id="c01">
+<h2><span class="num">01</span>What a cache is for, and what it costs<button class="sec-open" data-target="c01" type="button">Open</button></h2>
+<div class="expl"><p>A cache trades memory and staleness for latency and load. It only pays off when the read is frequent, expensive and tolerant of being a few seconds old.</p><p>The three questions to answer before adding one: what is the key, how long may the value be wrong, and what happens when the cache is empty or the store is down.</p><ul class="notes"><li>Never cache what must be exact: balances, stock decrements, permission decisions at write time.</li><li>A cache is an optimisation, not a source of truth — the code must still work with it empty.</li><li>Measure the hit ratio. Below roughly 80% the cache is mostly overhead.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre><pre class="code-pre"><code class="language-csharp">// Cache-aside, the default pattern
+value = cache.get(key)
+if value is null:
+    value = database.load(key)      // authoritative source
+    cache.set(key, value, ttl)      // absolute expiry, never infinite
+return value
+
+// On write: update the database first, then invalidate the key
+database.save(entity)
+cache.delete(key)                    // delete, do not update: simpler and safer</code></pre></div></div>
+</section>
+<section class="sec" id="c02">
+<h2><span class="num">02</span>Redis versus Memcached<button class="sec-open" data-target="c02" type="button">Open</button></h2>
+<div class="expl"><p>Memcached is a pure key/value store: strings only, LRU eviction, no persistence, no replication. It is fast, simple and predictable.</p><p>Redis is a data-structure server — hashes, sets, sorted sets, streams, pub/sub — with optional persistence, replication and clustering. Most new designs choose Redis because the extra structures replace a lot of application code.</p><table><thead><tr><th></th><th>Memcached</th><th>Redis</th></tr></thead><tbody><tr><td>Model</td><td>Strings only, multi-get</td><td>Strings, hashes, sets, sorted sets, streams</td></tr><tr><td>Persistence</td><td>None — restart loses everything</td><td>RDB snapshots and/or AOF log</td></tr><tr><td>Replication</td><td>No</td><td>Primary/replica, Sentinel, Cluster</td></tr><tr><td>Eviction</td><td>LRU by slab</td><td>Configurable policies incl. allkeys-lru, volatile-ttl</td></tr><tr><td>Atomic ops</td><td>CAS on a key</td><td>INCR, Lua scripts, transactions, locks</td></tr><tr><td>Typical role</td><td>Pure object cache in front of SQL</td><td>Cache plus queues, counters, rate limits, sessions</td></tr></tbody></table><ul class="notes"><li>Say the trade-off out loud: Memcached is simpler and horizontally trivial; Redis is richer but another stateful service to operate.</li><li>Choose Memcached when the workload is genuinely &#x27;get a blob by key&#x27; at very large scale.</li><li>Choose Redis when you also need counters, locks, rate limiting or pub/sub — very common in enterprise apps.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7</pre><pre class="code-pre"><code class="language-csharp">// Same cache-aside shape, different client
+// Memcached: multi-get is the idiom that makes it competitive
+var values = memcached.Get(new[] { "user:1", "user:2", "user:3" });
+// Redis: one round trip with a pipeline does the same job
+var batch = db.CreateBatch();
+var tasks = ids.Select(id =&gt; batch.StringGetAsync($"user:{id}")).ToArray();
+batch.Execute();</code></pre></div></div>
+</section>
+<section class="sec" id="c03">
+<h2><span class="num">03</span>Connecting from .NET<button class="sec-open" data-target="c03" type="button">Open</button></h2>
+<div class="expl"><p>`StackExchange.Redis` is the standard client. The connection multiplexer must be a singleton: it manages the socket, the protocol and the reconnect logic, and it is thread-safe by design.</p><p>Recreating it per request is the classic production incident — connection storms and timeouts under load.</p><ul class="notes"><li>`AbortOnConnectFail = false` lets the app boot while Redis is still starting.</li><li>Set `SyncTimeout` low and prefer the async API; the sync API blocks a thread per call.</li><li>One multiplexer per process, registered as a singleton, disposed on shutdown.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><pre class="code-pre"><code class="language-csharp">builder.Services.AddSingleton&lt;IConnectionMultiplexer&gt;(_ =&gt;
+    ConnectionMultiplexer.Connect(new ConfigurationOptions
+    {
+        EndPoints = { "redis:6379" },
+        AbortOnConnectFail = false,        // survive a cold start
+        ConnectRetry = 3,
+        ConnectTimeout = 5000,
+        SyncTimeout = 2000,
+        Ssl = true,
+        DefaultDatabase = 0
+    }));
+
+// In the repository
+public sealed class UserCache(IConnectionMultiplexer mux)
+{
+    private readonly IDatabase _db = mux.GetDatabase();
+
+    public Task&lt;string?&gt; GetAsync(Guid id) =&gt; _db.StringGetAsync($"user:v1:{id}");
+}</code></pre></div></div>
+</section>
+<section class="sec" id="c04">
+<h2><span class="num">04</span>Connecting from Node and TypeScript<button class="sec-open" data-target="c04" type="button">Open</button></h2>
+<div class="expl"><p>`ioredis` and `node-redis` are both fine. The same rule applies: one client per process, reconnect handled by the library, and errors must have a listener or Node will crash the process.</p><ul class="notes"><li>An `error` listener is not optional: an unhandled error event terminates the Node process.</li><li>`maxRetriesPerRequest` bounds the latency a failing Redis can add to a request.</li><li>Serialise explicitly — JSON is fine; for large payloads prefer msgpack or store less.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre><pre class="code-pre"><code class="language-csharp">import Redis from 'ioredis';
+
+export const redis = new Redis(process.env.REDIS_URL!, {
+  maxRetriesPerRequest: 2,
+  enableReadyCheck: true,
+  retryStrategy: (times) =&gt; Math.min(times * 200, 2000)
+});
+
+redis.on('error', (err) =&gt; logger.error({ err }, 'redis error'));   // mandatory
+
+export async function cached&lt;T&gt;(key: string, ttl: number, load: () =&gt; Promise&lt;T&gt;): Promise&lt;T&gt; {
+  const hit = await redis.get(key);
+  if (hit) { return JSON.parse(hit) as T; }
+  const value = await load();
+  await redis.set(key, JSON.stringify(value), 'EX', ttl);
+  return value;
+}</code></pre></div></div>
+</section>
+<section class="sec" id="c05">
+<h2><span class="num">05</span>Key design and namespacing<button class="sec-open" data-target="c05" type="button">Open</button></h2>
+<div class="expl"><p>Keys are the schema of a cache. Without a convention you get collisions between features, unreadable `MONITOR` output and no way to invalidate by group.</p><p>Pattern that holds up: `app:entity:v{version}:id[:field]`. The version segment is what makes a shape change a deploy instead of a migration.</p><ul class="notes"><li>`KEYS *` and `SCAN` on a production instance are incidents waiting to happen; design so you never need them.</li><li>Keep values small: a few KB, not a whole table.</li><li>Hash tags `{...}` keep related keys in the same cluster slot when you use Redis Cluster.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-csharp">app:user:v1:8f14e45f          -&gt; JSON blob of a user
+app:user:v1:8f14e45f:roles    -&gt; a separate, smaller value
+app:catalog:v2:category:12    -&gt; a list, version bumped when the DTO changed
+app:lock:invoice:7781         -&gt; a lock key, short TTL
+
+// Group invalidation without SCAN in the hot path
+app:user:v1:{id}              // delete one key on write
+app:catalog:v2:{category}     // bump v2 -&gt; v3 to invalidate the whole namespace</code></pre></div></div>
+</section>
+<section class="sec" id="c06">
+<h2><span class="num">06</span>Stampede protection: when the key expires under load<button class="sec-open" data-target="c06" type="button">Open</button></h2>
+<div class="expl"><p>A popular key that expires while thousands of requests arrive sends every one of them to the database. The cache made the problem worse, not better.</p><p>Two standard answers: a short lock so one caller recomputes, or a slightly stale value served while a single refresh runs in the background.</p><ul class="notes"><li>Also add TTL jitter (±10%) so a whole namespace does not expire in the same second.</li><li>Serving stale while revalidating (SWR) is better UX than a latency spike — if the data tolerates it.</li><li>The lock must always be released in a `finally`, with a token so you never delete someone else&#x27;s lock.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre><pre class="code-pre"><code class="language-csharp">// Single-flight with a lock and a short TTL
+public async Task&lt;Catalog&gt; GetCatalogAsync(int id, CancellationToken ct)
+{
+    var key = $"app:catalog:v2:{id}";
+    var hit = await _db.StringGetAsync(key);
+    if (hit.HasValue) { return JsonSerializer.Deserialize&lt;Catalog&gt;(hit!)!; }
+
+    var lockKey = $"app:lock:catalog:{id}";
+    var token = Guid.NewGuid().ToString();
+    if (await _db.LockTakeAsync(lockKey, token, TimeSpan.FromSeconds(10)))
+    {
+        try
+        {
+            var value = await _source.LoadAsync(id, ct);          // authoritative
+            await _db.StringSetAsync(key, JsonSerializer.Serialize(value), TimeSpan.FromMinutes(5));
+            return value;
+        }
+        finally { await _db.LockReleaseAsync(lockKey, token); }
+    }
+
+    await Task.Delay(50, ct);                                     // someone else is loading
+    return await GetCatalogAsync(id, ct);
+}</code></pre></div></div>
+</section>
+<section class="sec" id="c07">
+<h2><span class="num">07</span>Invalidation: the hard part<button class="sec-open" data-target="c07" type="button">Open</button></h2>
+<div class="expl"><p>There are only a few honest strategies: TTL only, delete on write, write-through, or versioned keys. Pick one per entity and write it down.</p><p>Delete rather than update: an update writes a value that a concurrent reader may overwrite with older data.</p><ul class="notes"><li>Delete-on-write plus a TTL covers most cases; versioned keys handle schema changes elegantly.</li><li>Never dual-write without a transaction boundary — you will cache a value the database rejected.</li><li>Document the TTL per entity; a number nobody remembers is a number nobody can defend.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre><pre class="code-pre"><code class="language-csharp">// 1. Delete on write (simplest, safest)
+await _repo.SaveAsync(user, ct);
+await _cache.KeyDeleteAsync($"app:user:v1:{user.Id}");
+
+// 2. Version segment: bump the prefix, old keys expire on their own
+//    app:catalog:v2:*  -&gt;  app:catalog:v3:*   (no mass delete needed)
+
+// 3. Pub/sub for multi-instance invalidation
+await _sub.SubscribeAsync("cache:invalidate", (_, msg) =&gt;
+    _cache.KeyDelete(msg.ToString()));
+
+// 4. Write-through: cache and store in the same use case
+await _repo.SaveAsync(user, ct);
+await _cache.StringSetAsync(key, JsonSerializer.Serialize(user), TimeSpan.FromMinutes(10));</code></pre></div></div>
+</section>
+<section class="sec" id="c08">
+<h2><span class="num">08</span>Redis data structures worth knowing<button class="sec-open" data-target="c08" type="button">Open</button></h2>
+<div class="expl"><p>Half of Redis&#x27; value is doing in one command what the application would otherwise do with a read-modify-write.</p><p>Counters, leaderboards, deduplication sets, queues and streams all have first-class support.</p><ul class="notes"><li>`INCR` and `HINCRBY` are atomic across clients — no lock required.</li><li>Sorted sets are the cheapest leaderboard you will ever build.</li><li>Streams can replace a queue for moderate throughput; know when to move to a real broker.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">// Counter with atomic increment
+await db.StringIncrementAsync($"app:view:v1:{articleId}");
+
+// Leaderboard
+await db.SortedSetIncrementAsync("app:scores:weekly", playerId, points);
+var top = await db.SortedSetRangeByRankWithScoresAsync("app:scores:weekly", 0, 9, Order.Descending);
+
+// Deduplication / membership
+await db.SetAddAsync("app:seen:2025-05-12", userId);
+var unique = await db.SetLengthAsync("app:seen:2025-05-12");
+
+// Hash for a partial update without rewriting the blob
+await db.HashSetAsync($"app:session:v1:{sid}", [new("lastSeen", now), new("route", path)]);</code></pre></div></div>
+</section>
+<section class="sec" id="c09">
+<h2><span class="num">09</span>Locks, rate limiting and idempotency<button class="sec-open" data-target="c09" type="button">Open</button></h2>
+<div class="expl"><p>Redis is often used for coordination as much as caching. The important caveat: a Redis lock is not a distributed consensus protocol — it is a lease with a TTL.</p><p>For rate limiting it is genuinely good: a counter with expiry is exactly the sliding-window primitive.</p><ul class="notes"><li>A lock without a TTL is an outage waiting for a crash; always expire it.</li><li>Assume the lock can be lost mid-operation — design the critical section to be safe anyway.</li><li>Fixed windows allow bursts at the boundary; use a sliding window or token bucket if that matters.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-csharp">// Fixed-window rate limiter: 100 requests per minute per API key
+public async Task&lt;bool&gt; AllowAsync(string apiKey)
+{
+    var key = $"app:rl:v1:{apiKey}:{DateTime.UtcNow:yyyyMMddHHmm}";
+    var count = await _db.StringIncrementAsync(key);
+    if (count == 1) { await _db.KeyExpireAsync(key, TimeSpan.FromMinutes(2)); }
+    return count &lt;= 100;
+}
+
+// Idempotency key for a payment endpoint
+var claimed = await _db.StringSetAsync($"app:idem:v1:{requestId}", "in-flight",
+    TimeSpan.FromMinutes(10), When.NotExists);
+if (!claimed) { return Results.Conflict("Duplicate request"); }</code></pre></div></div>
+</section>
+<section class="sec" id="c10">
+<h2><span class="num">10</span>Memcached specifics<button class="sec-open" data-target="c10" type="button">Open</button></h2>
+<div class="expl"><p>Memcached is a hash table across machines. What matters operationally: slab allocation, LRU per slab class, no persistence and no replication.</p><p>Its multi-get is the reason it still wins for certain read patterns — one network round trip for many keys.</p><ul class="notes"><li>Items over 1 MB are rejected; chunk or store a reference instead.</li><li>No persistence: a restart is a cold cache. Size the database for the cold-start load.</li><li>Slab imbalance causes eviction while memory is technically free — monitor `evictions`, not just `bytes`.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp">// One round trip for many objects: the pattern Memcached is built around
+var keys = new[] { "app:user:v1:1", "app:user:v1:2", "app:user:v1:3" };
+var results = client.Get(keys);            // IDictionary&lt;string, object&gt;
+
+// CAS when two writers may collide
+var item = client.Get("app:config:v1");
+if (item != null &amp;&amp; client.TryGet("app:config:v1", out var current))
+{
+    current.Cas(++item.Cas);               // store only if nobody changed it
+    client.Store(StoreMode.Replace, "app:config:v1", current);
+}</code></pre></div></div>
+</section>
+<section class="sec" id="c11">
+<h2><span class="num">11</span>Operating the cache in production<button class="sec-open" data-target="c11" type="button">Open</button></h2>
+<div class="expl"><p>The cache becomes part of the availability story the moment it is on the request path. Two decisions make the difference: what happens when it is unreachable, and how memory behaves when it fills.</p><p>Treat configuration as code: `maxmemory` and `maxmemory-policy` are the two settings to review first.</p><ul class="notes"><li>Hit ratio = hits / (hits + misses). A ratio falling after a deploy usually means key names changed.</li><li>`evicted_keys` climbing steadily means the dataset does not fit — raise memory or shorten TTLs.</li><li>A cache outage should degrade latency, not availability: wrap calls in try/catch and fall back to the source.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre><pre class="code-pre"><code class="language-csharp"># redis.conf essentials
+maxmemory 2gb
+maxmemory-policy allkeys-lru        # evict keys, never fail writes
+save 900 1                          # snapshot policy; or AOF for durability
+appendonly no                       # AOF costs IO; enable only if you need it
+
+# What to watch, in order of usefulness
+INFO stats        -&gt; keyspace_hits, keyspace_misses, evicted_keys
+INFO memory       -&gt; used_memory_peak, mem_fragmentation_ratio
+slowlog get 10    -&gt; commands above slowlog-log-slower-than
+latency monitor   -&gt; spikes correlated with application deploys</code></pre></div></div>
+</section>
+<section class="sec" id="c12">
+<h2><span class="num">12</span>Anti-patterns that show up in interviews<button class="sec-open" data-target="c12" type="button">Open</button></h2>
+<div class="expl"><p>These are the answers that reveal whether someone has operated a cache or only read about it.</p><p>If you have a war story for any of them, that is what to tell — the failure and what you changed.</p><table><thead><tr><th>Anti-pattern</th><th>What it looks like</th><th>Fix</th></tr></thead><tbody><tr><td>Caching everything</td><td>Hit ratio under 60%, memory pressure</td><td>Cache only expensive, repeated reads</td></tr><tr><td>No TTL</td><td>Keys grow forever, one bad deploy poisons the data</td><td>Always expire; version the key namespace</td></tr><tr><td>Cache as source of truth</td><td>Data loss after a flush, divergent replicas</td><td>Database is authoritative; cache is derivable</td></tr><tr><td>`KEYS *` in a request path</td><td>Latency spikes to seconds under load</td><td>Known key sets, `SCAN` only in admin tooling</td></tr><tr><td>Lock without TTL</td><td>One crashed worker blocks the feature forever</td><td>Lease with expiry and a release token</td></tr><tr><td>Big values</td><td>Network saturation, fragmentation</td><td>Store ids or small projections, not whole graphs</td></tr></tbody></table><ul class="notes"><li>The failure path returns correct data slightly slower — that is the whole design.</li><li>Log cache failures at Warning: they should be visible, not fatal.</li><li>Be ready to justify the TTL and the key version, not just the pattern.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre><pre class="code-pre"><code class="language-csharp">// The shape that survives review
+public sealed class CachedCatalogService(
+    ICatalogService inner, IDistributedCache cache, ILogger&lt;CachedCatalogService&gt; log)
+{
+    public async Task&lt;Catalog?&gt; GetAsync(int id, CancellationToken ct)
+    {
+        var key = $"app:catalog:v2:{id}";
+        try
+        {
+            var hit = await cache.GetStringAsync(key, ct);
+            if (hit is not null) { return JsonSerializer.Deserialize&lt;Catalog&gt;(hit); }
+        }
+        catch (Exception ex) { log.LogWarning(ex, "Cache read failed for {Key}", key); }
+
+        var value = await inner.GetAsync(id, ct);          // always works
+        if (value is not null)
+        {
+            try { await cache.SetStringAsync(key, JsonSerializer.Serialize(value), ct); }
+            catch (Exception ex) { log.LogWarning(ex, "Cache write failed for {Key}", key); }
+        }
+        return value;
+    }
+}</code></pre></div></div>
+</section>
+
+<div class="modal" id="reader" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reader-title">
+    <div class="modal-head">
+      <span class="modal-num" id="reader-num">01</span>
+      <h2 class="modal-title" id="reader-title"></h2>
+      <button class="modal-close" id="reader-close" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-tabs" role="tablist">
+      <button class="tab" id="tab-expl" role="tab" aria-selected="true" aria-controls="pane-expl" type="button">Explanation</button>
+      <button class="tab" id="tab-code" role="tab" aria-selected="false" aria-controls="pane-code" type="button">Code</button>
+    </div>
+    <div class="modal-body">
+      <div class="pane" id="pane-expl" role="tabpanel" aria-labelledby="tab-expl"></div>
+      <div class="pane" id="pane-code" role="tabpanel" aria-labelledby="tab-code" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="nav-btn" id="reader-prev" type="button">&larr; Previous</button>
+      <span class="nav-count" id="reader-count">1 / 12</span>
+      <button class="nav-btn" id="reader-next" type="button">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<a class="back" href="../IT.html">&larr; Back to the knowledge base</a>
+</main></div>
+<script src="../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script>
+(function () {
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var modal = document.getElementById('reader');
+  var numEl = document.getElementById('reader-num');
+  var titleEl = document.getElementById('reader-title');
+  var boxExpl = document.getElementById('pane-expl');
+  var boxCode = document.getElementById('pane-code');
+  var tabExpl = document.getElementById('tab-expl');
+  var tabCode = document.getElementById('tab-code');
+  var prevBtn = document.getElementById('reader-prev');
+  var nextBtn = document.getElementById('reader-next');
+  var countEl = document.getElementById('reader-count');
+  var closeBtn = document.getElementById('reader-close');
+  var index = 0;
+
+  function plainTitle(sec) {
+    var h2 = sec.querySelector('h2');
+    var clone = h2.cloneNode(true);
+    var btn = clone.querySelector('.sec-open');
+    if (btn) { btn.remove(); }
+    var num = clone.querySelector('.num');
+    if (num) { num.remove(); }
+    return clone.textContent.trim();
+  }
+
+  function showTab(name) {
+    var expl = name === 'expl';
+    tabExpl.setAttribute('aria-selected', String(expl));
+    tabCode.setAttribute('aria-selected', String(!expl));
+    boxExpl.hidden = !expl;
+    boxCode.hidden = expl;
+  }
+
+  function render(i) {
+    index = Math.max(0, Math.min(sections.length - 1, i));
+    var sec = sections[index];
+    numEl.textContent = sec.querySelector('h2 .num').textContent.trim();
+    titleEl.textContent = plainTitle(sec);
+
+    boxExpl.innerHTML = '';
+    boxCode.innerHTML = '';
+    var expl = sec.querySelector('.expl');
+    if (expl) { boxExpl.appendChild(expl.cloneNode(true)); }
+    var wrap = sec.querySelector('.code-wrap');
+    if (wrap) { boxCode.appendChild(wrap.cloneNode(true)); }
+    else { boxCode.innerHTML = '<p>No code for this section.</p>'; }
+
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === sections.length - 1;
+    countEl.textContent = (index + 1) + ' / ' + sections.length;
+    document.querySelector('.modal-body').scrollTop = 0;
+    showTab('expl');
+  }
+
+  function open(anchor) {
+    var i = sections.findIndex(function (s) { return s.id === anchor; });
+    render(i < 0 ? 0 : i);
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function close() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', function (e) {
+    var opener = e.target.closest('[data-target]');
+    if (opener) {
+      e.preventDefault();
+      open(opener.getAttribute('data-target'));
+      return;
+    }
+    if (e.target === modal) { close(); }
+  });
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', function () { render(index - 1); });
+  nextBtn.addEventListener('click', function () { render(index + 1); });
+  tabExpl.addEventListener('click', function () { showTab('expl'); });
+  tabCode.addEventListener('click', function () { showTab('code'); });
+
+  document.addEventListener('keydown', function (e) {
+    if (modal.hidden) { return; }
+    if (e.key === 'Escape') { close(); }
+    if (e.key === 'ArrowLeft') { render(index - 1); }
+    if (e.key === 'ArrowRight') { render(index + 1); }
+  });
+})();
+</script>
+</body>
+</html>
