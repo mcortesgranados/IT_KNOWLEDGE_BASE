@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electron - Desktop applications reference</title>
+<style>
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; padding: 16px 20px 48px; }
+h1 { color: #1565c0; font-size: 1.75rem; margin: 4px 0 6px; }
+.subtitle { color: #475569; margin: 0 0 6px; line-height: 1.55; }
+.meta { color: #64748b; font-size: .9em; margin: 0 0 18px; }
+h2 { color: #2e7d32; margin-top: 34px; font-size: 1.18rem; }
+h2 .num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; margin-right: 9px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .74em; font-weight: 800; vertical-align: middle; }
+p { line-height: 1.6; margin: 0 0 10px; }
+a { color: #1565c0; }
+.toc { background: #f4f9ff; border: 1px solid #d7e3f1; border-radius: 9px; padding: 14px 18px; margin: 18px 0 8px; }
+.toc h2 { margin: 0 0 8px; font-size: 1rem; color: #1f4f8c; }
+.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.toc li { margin: 4px 0; line-height: 1.4; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; }
+table th, table td { border: 1px solid #d7e3f1; padding: 8px 10px; vertical-align: top; text-align: left; }
+table th { background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; }
+table tbody tr:nth-child(odd) td { background: #f8fbff; }
+.code-block { display: grid; grid-template-columns: minmax(2.6em, auto) minmax(0, 1fr); background: #282c34; border: 1px solid #1f2329; border-left: 4px solid #61afef; border-radius: 8px; overflow: hidden; margin: 14px 0; }
+.code-gutter { margin: 0; padding: 14px 10px 14px 12px; border: 0; border-right: 1px solid #3a3f4b; background: #21252b; color: #5c6370; text-align: right; user-select: none; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; overflow: hidden; }
+.code-pre { margin: 0; padding: 14px 16px; border: 0; background: transparent; overflow-x: auto; overflow-y: hidden; }
+.code-pre code, .code-pre code.hljs { display: block; padding: 0; background: transparent; font-family: Consolas, 'Courier New', monospace; font-size: .88em; line-height: 1.55; white-space: pre; }
+.notes { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 7px; padding: 12px 18px 12px 32px; margin: 14px 0 6px; }
+.notes li { margin: 5px 0; line-height: 1.45; }
+.back { display: inline-block; margin-top: 30px; color: #1565c0; font-weight: 700; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+
+.sec { scroll-margin-top: 12px; }
+.toc a { cursor: pointer; }
+.modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .6); }
+.modal[hidden] { display: none; }
+.modal-card { display: flex; flex-direction: column; width: min(1000px, 100%); max-height: 88vh; border-radius: 12px; background: #fff; box-shadow: 0 24px 70px rgba(0, 0, 0, .35); overflow: hidden; }
+.modal-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px 12px; border-bottom: 1px solid #e2e8f0; }
+.modal-num { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 7px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .78rem; font-weight: 800; }
+.modal-title { margin: 0; font-size: 1.06rem; color: #1565c0; flex: 1 1 auto; }
+.modal-close { flex: none; width: 34px; height: 34px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; color: #334155; font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.modal-close:hover, .modal-close:focus { background: #e2e8f0; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.modal-tabs { display: flex; gap: 6px; padding: 10px 18px 0; border-bottom: 1px solid #e2e8f0; }
+.tab { padding: 8px 14px; border: 1px solid transparent; border-bottom: 0; border-radius: 8px 8px 0 0; background: transparent; color: #475569; font: inherit; font-weight: 700; font-size: .92rem; cursor: pointer; }
+.tab:hover { background: #f1f5f9; }
+.tab[aria-selected="true"] { background: #e3f2fd; border-color: #bbdefb; color: #0d47a1; }
+.modal-body { flex: 1 1 auto; overflow: auto; padding: 16px 18px; }
+.modal-body .pane[hidden] { display: none; }
+.modal-foot { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 12px 18px; border-top: 1px solid #e2e8f0; background: #f8fafc; }
+.nav-btn { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1565c0; font: inherit; font-weight: 700; font-size: .9rem; cursor: pointer; }
+.nav-btn:hover:not(:disabled) { background: #e3f2fd; border-color: #90caf9; }
+.nav-btn:disabled { opacity: .45; cursor: not-allowed; }
+.nav-count { color: #64748b; font-size: .85rem; font-weight: 700; }
+.sec-open { margin-left: 10px; padding: 3px 10px; border: 1px solid #90caf9; border-radius: 999px; background: #e3f2fd; color: #0d47a1; font: inherit; font-size: .74rem; font-weight: 700; cursor: pointer; vertical-align: middle; }
+.sec-open:hover, .sec-open:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.expl code, .modal-body .pane code { padding: 1px 5px; border-radius: 4px; background: #eef2f7; color: #0d47a1; font-family: Consolas, 'Courier New', monospace; font-size: .92em; }
+</style>
+<link rel="stylesheet" href="../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="container"><main>
+<h1>Electron — Desktop Applications Reference</h1>
+<p class="subtitle">Building, hardening and shipping a desktop application with Electron: the process model, the preload
+boundary, IPC, packaging, updates and the diagnostics that matter once the app is on someone else's machine.</p>
+<p class="meta">Scope: Electron 31 &middot; Chromium + Node &middot; TypeScript &middot; electron-vite &middot; electron-builder &middot; electron-updater &middot; Playwright</p>
+<div class="toc">
+<h2>Contents</h2>
+<ol>
+<li><a href="#e01" class="toc-link" data-target="e01">What Electron is, and the process model that follows</a></li>
+<li><a href="#e02" class="toc-link" data-target="e02">Project setup and build pipeline</a></li>
+<li><a href="#e03" class="toc-link" data-target="e03">Application lifecycle and window management</a></li>
+<li><a href="#e04" class="toc-link" data-target="e04">Preload scripts and contextBridge: the only sane API surface</a></li>
+<li><a href="#e05" class="toc-link" data-target="e05">IPC: invoke/handle for questions, send/on for events</a></li>
+<li><a href="#e06" class="toc-link" data-target="e06">Security hardening checklist</a></li>
+<li><a href="#e07" class="toc-link" data-target="e07">Native capabilities: files, dialogs, tray, notifications</a></li>
+<li><a href="#e08" class="toc-link" data-target="e08">Packaging and distribution</a></li>
+<li><a href="#e09" class="toc-link" data-target="e09">Auto-update without breaking installations</a></li>
+<li><a href="#e10" class="toc-link" data-target="e10">Performance: startup, memory and the main thread</a></li>
+<li><a href="#e11" class="toc-link" data-target="e11">Testing a desktop app</a></li>
+<li><a href="#e12" class="toc-link" data-target="e12">Diagnosing problems in the field</a></li>
+<li><a href="#e13" class="toc-link" data-target="e13">Electron against the alternatives</a></li>
+</ol></div>
+<section class="sec" id="e01">
+<h2><span class="num">01</span>What Electron is, and the process model that follows<button class="sec-open" data-target="e01" type="button">Open</button></h2>
+<div class="expl"><p>Electron bundles Chromium for rendering and Node.js for the system layer, then runs your application as two kinds of process: a single main process that owns windows and OS integration, and one renderer per window that runs the web page.</p><p>Almost every Electron mistake comes from forgetting that boundary — doing I/O in the renderer, or blocking the main process with synchronous work.</p><ul class="notes"><li>The main process is single-threaded: a 200 ms computation there freezes every window.</li><li>Renderers are Chromium tabs with all their strengths and memory costs.</li><li>Assume the renderer is untrusted; treat it like a browser tab that happens to ship with your app.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8</pre><pre class="code-pre"><code class="language-javascript">main process                    renderer (per window)
+------------------------------  ------------------------------
+app, BrowserWindow, Menu        DOM, CSS, React/Angular
+dialog, tray, notifications     fetch(), workers
+fs, child_process, ipcMain      ipcRenderer (through preload)
+                                
+nodeIntegration: false          -&gt; renderer has NO Node access
+contextIsolation: true          -&gt; isolated JS world for the page</code></pre></div></div>
+</section>
+<section class="sec" id="e02">
+<h2><span class="num">02</span>Project setup and build pipeline<button class="sec-open" data-target="e02" type="button">Open</button></h2>
+<div class="expl"><p>A modern setup compiles the main process and the renderer separately: the main process is Node-targeted code, the renderer is bundled web code. Electron Forge or electron-vite wire that split for you.</p><p>TypeScript across both sides is the sensible default; the IPC contract is where types pay for themselves.</p><ul class="notes"><li>Three bundles: main, preload and renderer. Mixing them is the usual cause of &#x27;require is not defined&#x27;.</li><li>Pin the Electron major version; Chromium upgrades change rendering behaviour.</li><li>Keep the preload bundle tiny — it runs in the critical path of every window.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre><pre class="code-pre"><code class="language-javascript">// package.json
+{
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "package": "electron-builder --dir",
+    "dist": "electron-vite build &amp;&amp; electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-vite": "^2.3.0",
+    "electron-builder": "^24.13.0"
+  }
+}
+
+// electron.vite.config.ts
+export default defineConfig({
+  main:    { build: { outDir: 'dist/main' } },
+  preload: { build: { outDir: 'dist/preload' } },
+  renderer:{ build: { outDir: 'dist/renderer' } }
+});</code></pre></div></div>
+</section>
+<section class="sec" id="e03">
+<h2><span class="num">03</span>Application lifecycle and window management<button class="sec-open" data-target="e03" type="button">Open</button></h2>
+<div class="expl"><p>`app.whenReady()` is the only safe place to create windows. The cross-platform details that get forgotten: quit on non-macOS when all windows close, and re-create a window on macOS when the dock icon is clicked.</p><p>The single-instance lock prevents two copies of the app fighting over the same files.</p><ul class="notes"><li>`ready` fires once per app; windows can be created and closed many times.</li><li>Persist window bounds on close and restore them, or users will resize the app every launch.</li><li>Do not do heavy work in `whenReady` before creating the window — the user sees nothing.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><pre class="code-pre"><code class="language-javascript">const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) { app.quit(); }
+else {
+  app.on('second-instance', () =&gt; {
+    const win = BrowserWindow.getAllWindows()[0];
+    if (win) { if (win.isMinimized()) { win.restore(); } win.focus(); }
+  });
+
+  app.whenReady().then(() =&gt; {
+    createWindow();                     // new BrowserWindow({ ... })
+    app.on('activate', () =&gt; {          // macOS dock click
+      if (BrowserWindow.getAllWindows().length === 0) { createWindow(); }
+    });
+  });
+
+  app.on('window-all-closed', () =&gt; {
+    if (process.platform !== 'darwin') { app.quit(); }
+  });
+}</code></pre></div></div>
+</section>
+<section class="sec" id="e04">
+<h2><span class="num">04</span>Preload scripts and contextBridge: the only sane API surface<button class="sec-open" data-target="e04" type="button">Open</button></h2>
+<div class="expl"><p>The preload runs before the page loads, with access to a limited Node API, and injects an object into the page through `contextBridge`. That object is your application&#x27;s API — nothing else should be reachable from the renderer.</p><p>Expose verbs, not primitives: `saveDocument(doc)` rather than `writeFile(path, data)`.</p><ul class="notes"><li>Never expose `ipcRenderer` itself — that hands the renderer every channel you own.</li><li>Return an unsubscribe function from listener registrations, or you leak handlers per mount.</li><li>Declare the shape once in a `.d.ts` so the renderer gets autocomplete and type checking.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-javascript">// preload/index.ts
+import { contextBridge, ipcRenderer } from 'electron';
+
+const api = {
+  loadSettings: () =&gt; ipcRenderer.invoke('settings:load'),
+  saveSettings: (s: Settings) =&gt; ipcRenderer.invoke('settings:save', s),
+  onSyncStatus: (cb: (s: SyncStatus) =&gt; void) =&gt; {
+    const listener = (_e: unknown, s: SyncStatus) =&gt; cb(s);
+    ipcRenderer.on('sync:status', listener);
+    return () =&gt; ipcRenderer.removeListener('sync:status', listener);
+  }
+};
+
+contextBridge.exposeInMainWorld('desktop', api);
+
+// renderer: window.desktop.saveSettings({ theme: 'dark' })</code></pre></div></div>
+</section>
+<section class="sec" id="e05">
+<h2><span class="num">05</span>IPC: invoke/handle for questions, send/on for events<button class="sec-open" data-target="e05" type="button">Open</button></h2>
+<div class="expl"><p>`ipcRenderer.invoke` paired with `ipcMain.handle` is a promise-based request/response channel. `send`/`on` is fire-and-forget, for progress and state pushes.</p><p>The main process must validate everything it receives: the renderer is the untrusted side.</p><ul class="notes"><li>Handlers are keyed by channel name, and any renderer can call any channel it knows — validate, do not trust.</li><li>`event.sender` targets the calling window; broadcasting to all windows is usually a bug.</li><li>Reject early with a typed error the renderer can map to a message.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-javascript">// main/ipc.ts
+ipcMain.handle('files:open', async (_event, args: unknown) =&gt; {
+  const { filters } = OpenDialogSchema.parse(args);      // zod validation
+  const result = await dialog.showOpenDialog({ properties: ['openFile'], filters });
+  if (result.canceled || result.filePaths.length === 0) { return null; }
+  return fs.promises.readFile(result.filePaths[0], 'utf8');
+});
+
+// long job with progress
+ipcMain.handle('export:run', async (event, jobId: string) =&gt; {
+  for (let pct = 0; pct &lt;= 100; pct += 10) {
+    await work(pct);
+    event.sender.send('export:progress', { jobId, pct });   // push to that window
+  }
+  return { ok: true };
+});</code></pre></div></div>
+</section>
+<section class="sec" id="e06">
+<h2><span class="num">06</span>Security hardening checklist<button class="sec-open" data-target="e06" type="button">Open</button></h2>
+<div class="expl"><p>Electron&#x27;s own guidance is short and specific. What reviewers check: isolation flags, a Content Security Policy, blocked navigation, and external links opened in the real browser.</p><p>The renderer must never be able to load remote code with Node privileges.</p><ul class="notes"><li>`contextIsolation: false` or `nodeIntegration: true` is an automatic finding in a security review.</li><li>`shell.openExternal` on an unvalidated URL can execute a local handler — allow-list schemes.</li><li>Disable `webviewTag` unless you genuinely need it; it widens the attack surface.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre><pre class="code-pre"><code class="language-javascript">const win = new BrowserWindow({
+  webPreferences: {
+    preload: path.join(__dirname, '../preload/index.js'),
+    contextIsolation: true,     // default true; never turn it off
+    nodeIntegration: false,     // renderer gets no require()
+    sandbox: true,              // renderer in the OS sandbox
+    webSecurity: true
+  }
+});
+
+// Only your own origin may navigate or open windows
+win.webContents.on('will-navigate', (e, url) =&gt; {
+  if (new URL(url).origin !== APP_ORIGIN) { e.preventDefault(); }
+});
+win.webContents.setWindowOpenHandler(({ url }) =&gt; {
+  shell.openExternal(url);
+  return { action: 'deny' };
+});
+
+// CSP delivered with the document (index.html meta or headers)
+// default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'</code></pre></div></div>
+</section>
+<section class="sec" id="e07">
+<h2><span class="num">07</span>Native capabilities: files, dialogs, tray, notifications<button class="sec-open" data-target="e07" type="button">Open</button></h2>
+<div class="expl"><p>The reason to build a desktop app: real files, real windows, real OS integration. All of it lives in the main process and is offered to the renderer through your preload API.</p><ul class="notes"><li>`app.getPath` is per-OS and per-user; hard-coded paths break the first time you ship to another machine.</li><li>Notifications on Windows need an AppUserModelID to show the app name.</li><li>Menus and accelerators live in the main process, not in the renderer.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-javascript">// Tray + notification
+const tray = new Tray(path.join(__dirname, 'icon.png'));
+tray.setToolTip('Orders desktop');
+tray.on('click', () =&gt; mainWindow.show());
+tray.setContextMenu(Menu.buildFromTemplate([
+  { label: 'Open', click: () =&gt; mainWindow.show() },
+  { label: 'Quit', role: 'quit' }
+]));
+
+new Notification({
+  title: 'Sync finished',
+  body: `${count} orders imported`
+}).show();
+
+// Always resolve paths through app.getPath
+const logsDir = app.getPath('logs');    // userData, downloads, documents...</code></pre></div></div>
+</section>
+<section class="sec" id="e08">
+<h2><span class="num">08</span>Packaging and distribution<button class="sec-open" data-target="e08" type="button">Open</button></h2>
+<div class="expl"><p>`electron-builder` (or Forge&#x27;s makers) produces installers per platform. The three things that decide whether users can install it: target format, code signing, and not shipping `node_modules` twice.</p><p>`asar` bundles your code into one archive; native modules must be unpacked.</p><ul class="notes"><li>Unsigned Windows installers trigger SmartScreen; unsigned macOS builds are blocked outright.</li><li>Ship the same artifact you tested — no rebuild between QA and release.</li><li>Keep `dist/**` plus `package.json` only; a stray `node_modules` copy multiplies the installer size.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre><pre class="code-pre"><code class="language-javascript">// electron-builder.yml
+appId: com.example.orders
+productName: Orders
+directories: { output: release, buildResources: build }
+files:
+  - dist/**
+  - package.json
+asar: true
+asarUnpack:
+  - "**/*.node"
+win:
+  target: [nsis]
+  signingHashAlgorithms: [sha256]
+mac:
+  target: [dmg, zip]
+  hardenedRuntime: true
+  entitlements: build/entitlements.mac.plist
+linux:
+  target: [AppImage, deb]</code></pre></div></div>
+</section>
+<section class="sec" id="e09">
+<h2><span class="num">09</span>Auto-update without breaking installations<button class="sec-open" data-target="e09" type="button">Open</button></h2>
+<div class="expl"><p>`electron-updater` reads a feed, downloads in the background and applies on restart. The operational details that matter: channels, staged rollout, and a signature the app can verify.</p><p>An update that fails validation should leave the old version running, not a half-installed app.</p><ul class="notes"><li>Updates only work on signed, packaged builds — the dev run silently does nothing.</li><li>A rollback plan is part of the feature: keep the previous installer reachable.</li><li>Version numbers must increase monotonically per channel, or clients ignore the update.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre><pre class="code-pre"><code class="language-javascript">import { autoUpdater } from 'electron-updater';
+
+autoUpdater.channel = app.isPackaged ? 'stable' : 'beta';
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
+
+autoUpdater.on('update-available', i =&gt; log.info('update available', i.version));
+autoUpdater.on('error', e =&gt; log.error('update failed', e));
+
+app.whenReady().then(async () =&gt; {
+  if (!app.isPackaged) { return; }        // never update in development
+  await autoUpdater.checkForUpdatesAndNotify();
+});
+
+// Never auto-restart while the user has unsaved work: prompt instead</code></pre></div></div>
+</section>
+<section class="sec" id="e10">
+<h2><span class="num">10</span>Performance: startup, memory and the main thread<button class="sec-open" data-target="e10" type="button">Open</button></h2>
+<div class="expl"><p>Electron&#x27;s costs are Chromium&#x27;s costs: tens of MB per window and a measurable cold start. The levers that actually move the numbers are fewer windows, deferred work and no synchronous IPC.</p><p>`ipcRenderer.sendSync` blocks the renderer until the main process answers — treat it as forbidden in normal flows.</p><ul class="notes"><li>One window for a multi-document UI saves far more memory than any renderer optimisation.</li><li>Virtualise long lists in the renderer; a thousand DOM rows costs more than the IPC call.</li><li>Profile the main process separately with `--inspect` — DevTools only sees the renderer.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-javascript">// 1. Create the window early, show it late
+const win = new BrowserWindow({ show: false, backgroundColor: '#ffffff' });
+win.once('ready-to-show', () =&gt; win.show());
+
+// 2. Defer non-critical initialisation
+app.whenReady().then(async () =&gt; {
+  createWindow();
+  setTimeout(() =&gt; warmUpCaches(), 3000);   // after the UI is visible
+});
+
+// 3. Keep payloads small across the bridge
+//    structured clone on every IPC call: send ids, not whole collections
+
+// 4. Measure instead of guessing
+//    app.commandLine.appendSwitch('enable-logging')
+//    DevTools &gt; Performance, and `--inspect` for the main process</code></pre></div></div>
+</section>
+<section class="sec" id="e11">
+<h2><span class="num">11</span>Testing a desktop app<button class="sec-open" data-target="e11" type="button">Open</button></h2>
+<div class="expl"><p>Three layers: unit tests for pure logic, end-to-end tests that drive the packaged app, and a smoke test that the installer actually launches.</p><p>Playwright has first-class Electron support through `_electron.launch`, which is the pragmatic choice today.</p><ul class="notes"><li>Drive the app the way a user would; testing internal IPC calls directly hides integration bugs.</li><li>Run the suite on all three platforms in CI if you ship to all three — path and menu behaviour differ.</li><li>Include one test against the packaged build, not just the dev run.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre><pre class="code-pre"><code class="language-javascript">import { test, expect, _electron as electron } from '@playwright/test';
+
+test('opens a document and shows it in the editor', async () =&gt; {
+  const app = await electron.launch({ args: ['.'] });
+  const window = await app.firstWindow();
+
+  await window.getByRole('button', { name: 'Open file' }).click();
+  await expect(window.getByRole('textbox')).toHaveValue(/invoice/);
+
+  const title = await app.evaluate(({ app }) =&gt; app.getVersion());
+  expect(title).toBe('1.4.0');
+  await app.close();
+});
+
+// Unit level: the preload API surface, with ipcRenderer mocked
+vi.mock('electron', () =&gt; ({ ipcRenderer: { invoke: vi.fn() } }));</code></pre></div></div>
+</section>
+<section class="sec" id="e12">
+<h2><span class="num">12</span>Diagnosing problems in the field<button class="sec-open" data-target="e12" type="button">Open</button></h2>
+<div class="expl"><p>A desktop app has no server logs. `crashReporter` plus a rotating log file is the minimum; a source map upload is what makes a stack trace readable.</p><p>Ask for the log path in the bug report instead of guessing.</p><ul class="notes"><li>Log the app version, OS and Electron/Chromium versions at startup.</li><li>`render-process-gone` catches renderer crashes that would otherwise look like a blank window.</li><li>Never log tokens or file contents; desktop logs get attached to tickets.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><pre class="code-pre"><code class="language-javascript">import { crashReporter } from 'electron';
+import log from 'electron-log';
+
+crashReporter.start({ productName: 'Orders', uploadToServer: false });
+log.transports.file.resolvePathFn = () =&gt; path.join(app.getPath('logs'), 'main.log');
+log.transports.file.maxSize = 5 * 1024 * 1024;
+
+process.on('uncaughtException', e =&gt; log.error('uncaught', e));
+
+app.on('render-process-gone', (_e, _wc, details) =&gt;
+  log.error('renderer gone', details.reason));
+
+// Ship source maps separately so `frame` maps back to your TypeScript</code></pre></div></div>
+</section>
+<section class="sec" id="e13">
+<h2><span class="num">13</span>Electron against the alternatives<button class="sec-open" data-target="e13" type="button">Open</button></h2>
+<div class="expl"><p>Electron is the right answer when the team already writes web UI and needs deep OS access on three platforms. It is the wrong answer when the app is a thin form over a database, or when installer size and memory are the product constraint.</p><p>Being able to say when not to use it is what separates experience from familiarity.</p><table><thead><tr><th>Option</th><th>Choose it when</th></tr></thead><tbody><tr><td>Electron</td><td>Web skills, one codebase for Win/macOS/Linux, OS integration, frequent releases</td></tr><tr><td>Tauri</td><td>Same web UI model but a Rust core; much smaller binaries, still maturing ecosystem</td></tr><tr><td>WPF / WinUI (.NET)</td><td>Windows-only, deep Windows integration, .NET team already in place</td></tr><tr><td>.NET MAUI</td><td>Mostly-forms mobile+desktop app with a shared C# codebase</td></tr><tr><td>PWA</td><td>No installer needed, offline light, and the browser sandbox is acceptable</td></tr></tbody></table><ul class="notes"><li>Name the trade-off you accepted, not just the framework you picked.</li><li>Migration cost is mostly in the OS layer, not the UI: keep that layer isolated either way.</li><li>Interviewers listen for judgement here more than for API knowledge.</li></ul></div>
+<div class="code-wrap"><div class="code-block"><pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5</pre><pre class="code-pre"><code class="language-javascript">// Decision in three questions:
+// 1. Does it need file system, devices or long-running local work?  no  -&gt; PWA
+// 2. Is it Windows-only with a .NET team?                            yes -&gt; WPF/WinUI
+// 3. Is binary size or memory the hard constraint?                    yes -&gt; Tauri
+// Otherwise: Electron, and reuse the web team's stack.</code></pre></div></div>
+</section>
+
+<div class="modal" id="reader" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reader-title">
+    <div class="modal-head">
+      <span class="modal-num" id="reader-num">01</span>
+      <h2 class="modal-title" id="reader-title"></h2>
+      <button class="modal-close" id="reader-close" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-tabs" role="tablist">
+      <button class="tab" id="tab-expl" role="tab" aria-selected="true" aria-controls="pane-expl" type="button">Explanation</button>
+      <button class="tab" id="tab-code" role="tab" aria-selected="false" aria-controls="pane-code" type="button">Code</button>
+    </div>
+    <div class="modal-body">
+      <div class="pane" id="pane-expl" role="tabpanel" aria-labelledby="tab-expl"></div>
+      <div class="pane" id="pane-code" role="tabpanel" aria-labelledby="tab-code" hidden></div>
+    </div>
+    <div class="modal-foot">
+      <button class="nav-btn" id="reader-prev" type="button">&larr; Previous</button>
+      <span class="nav-count" id="reader-count">1 / 13</span>
+      <button class="nav-btn" id="reader-next" type="button">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<a class="back" href="../IT.html">&larr; Back to the knowledge base</a>
+</main></div>
+<script src="../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script>
+(function () {
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.sec'));
+  var modal = document.getElementById('reader');
+  var numEl = document.getElementById('reader-num');
+  var titleEl = document.getElementById('reader-title');
+  var boxExpl = document.getElementById('pane-expl');
+  var boxCode = document.getElementById('pane-code');
+  var tabExpl = document.getElementById('tab-expl');
+  var tabCode = document.getElementById('tab-code');
+  var prevBtn = document.getElementById('reader-prev');
+  var nextBtn = document.getElementById('reader-next');
+  var countEl = document.getElementById('reader-count');
+  var closeBtn = document.getElementById('reader-close');
+  var index = 0;
+
+  function plainTitle(sec) {
+    var h2 = sec.querySelector('h2');
+    var clone = h2.cloneNode(true);
+    var btn = clone.querySelector('.sec-open');
+    if (btn) { btn.remove(); }
+    var num = clone.querySelector('.num');
+    if (num) { num.remove(); }
+    return clone.textContent.trim();
+  }
+
+  function showTab(name) {
+    var expl = name === 'expl';
+    tabExpl.setAttribute('aria-selected', String(expl));
+    tabCode.setAttribute('aria-selected', String(!expl));
+    boxExpl.hidden = !expl;
+    boxCode.hidden = expl;
+  }
+
+  function render(i) {
+    index = Math.max(0, Math.min(sections.length - 1, i));
+    var sec = sections[index];
+    numEl.textContent = sec.querySelector('h2 .num').textContent.trim();
+    titleEl.textContent = plainTitle(sec);
+
+    boxExpl.innerHTML = '';
+    boxCode.innerHTML = '';
+    var expl = sec.querySelector('.expl');
+    if (expl) { boxExpl.appendChild(expl.cloneNode(true)); }
+    var wrap = sec.querySelector('.code-wrap');
+    if (wrap) { boxCode.appendChild(wrap.cloneNode(true)); }
+    else { boxCode.innerHTML = '<p>No code for this section.</p>'; }
+
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === sections.length - 1;
+    countEl.textContent = (index + 1) + ' / ' + sections.length;
+    document.querySelector('.modal-body').scrollTop = 0;
+    showTab('expl');
+  }
+
+  function open(anchor) {
+    var i = sections.findIndex(function (s) { return s.id === anchor; });
+    render(i < 0 ? 0 : i);
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function close() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', function (e) {
+    var opener = e.target.closest('[data-target]');
+    if (opener) {
+      e.preventDefault();
+      open(opener.getAttribute('data-target'));
+      return;
+    }
+    if (e.target === modal) { close(); }
+  });
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', function () { render(index - 1); });
+  nextBtn.addEventListener('click', function () { render(index + 1); });
+  tabExpl.addEventListener('click', function () { showTab('expl'); });
+  tabCode.addEventListener('click', function () { showTab('code'); });
+
+  document.addEventListener('keydown', function (e) {
+    if (modal.hidden) { return; }
+    if (e.key === 'Escape') { close(); }
+    if (e.key === 'ArrowLeft') { render(index - 1); }
+    if (e.key === 'ArrowRight') { render(index + 1); }
+  });
+})();
+</script>
+</body>
+</html>
