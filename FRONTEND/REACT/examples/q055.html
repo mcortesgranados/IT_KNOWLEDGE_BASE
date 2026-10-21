@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q55 - Why do we need to wrap multiple JSX elements inside a parent container? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q055">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q55</span></p>
+  <h1>Why do we need to wrap multiple JSX elements inside a parent container?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">A component returns one value; JSX with two roots is a syntax error, not a React rule. A fragment satisfies it without adding a DOM node.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre>
+    <pre class="code-pre"><code class="language-javascript">// Syntax error: adjacent JSX elements must be wrapped
+// return &lt;h1&gt;A&lt;/h1&gt;&lt;p&gt;B&lt;/p&gt;;
+
+// Valid, but adds a wrapper element to the DOM
+return &lt;div&gt;&lt;h1&gt;A&lt;/h1&gt;&lt;p&gt;B&lt;/p&gt;&lt;/div&gt;;
+
+// Valid and invisible in the DOM
+return &lt;&gt;&lt;h1&gt;A&lt;/h1&gt;&lt;p&gt;B&lt;/p&gt;&lt;/&gt;;
+
+// Arrays work too, and then each item needs a key
+return [&lt;h1 key="h"&gt;A&lt;/h1&gt;, &lt;p key="p"&gt;B&lt;/p&gt;];</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>The constraint comes from JavaScript: a function returns a single expression.</li>
+    <li>The wrapper matters in tables and flex layouts, where an extra `&lt;div&gt;` breaks the structure — use a fragment there.</li>
+    <li>An array return is legal but rarely worth it; `key` warnings follow immediately.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q055">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

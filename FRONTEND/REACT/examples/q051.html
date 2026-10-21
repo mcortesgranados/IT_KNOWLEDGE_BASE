@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q51 - What is the virtual DOM in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q051">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q51</span></p>
+  <h1>What is the virtual DOM in React?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">A JavaScript description of the UI. The clearest evidence is that no DOM node changes when nothing visible changes.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Panel() {
+  const [open, setOpen] = useState(false);
+  const [clicks, setClicks] = useState(0);
+
+  return (
+    &lt;div&gt;
+      {/* re-renders with every click, but its DOM node is untouched */}
+      &lt;h2&gt;Static heading&lt;/h2&gt;
+      &lt;button onClick={() =&gt; setClicks(c =&gt; c + 1)}&gt;Clicks: {clicks}&lt;/button&gt;
+      &lt;button onClick={() =&gt; setOpen(o =&gt; !o)}&gt;{open ? 'Close' : 'Open'}&lt;/button&gt;
+      {open &amp;&amp; &lt;p&gt;Panel content&lt;/p&gt;}
+    &lt;/div&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Each render builds a new tree of plain objects — cheap compared with DOM nodes.</li>
+    <li>React diffs old against new, then commits only the differences to the real DOM.</li>
+    <li>DevTools&#x27; &#x27;Highlight updates&#x27; option makes the difference between render and commit visible.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q051">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q36 - What are portals in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q036">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q36</span></p>
+  <h1>What are portals in React?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">A portal renders children into another DOM node while keeping them inside the React tree — the standard solution for modals and tooltips.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">import { createPortal } from 'react-dom';
+
+function Modal({ open, onClose, children }) {
+  if (!open) return null;
+
+  return createPortal(
+    &lt;div className="backdrop" onClick={onClose}&gt;
+      &lt;div className="modal" onClick={e =&gt; e.stopPropagation()}&gt;
+        {children}
+      &lt;/div&gt;
+    &lt;/div&gt;,
+    document.body          // rendered here, owned by the React tree
+  );
+}
+
+// Events still bubble through React's tree, not the DOM's</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Context, event bubbling and error boundaries follow the React tree, which is why portals do not break state.</li>
+    <li>The target node must exist before rendering — `document.body` always does.</li>
+    <li>Useful for modals, dropdowns, toasts: anything that must escape an `overflow: hidden` ancestor.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q036">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

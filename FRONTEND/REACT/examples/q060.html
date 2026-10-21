@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q60 - What is a functional component in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q060">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q60</span></p>
+  <h1>What is a functional component in React?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">A function that receives props and returns JSX. With hooks it holds state, effects and refs — the class distinction is historical.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+// Props in, JSX out; state comes from hooks
+export default function LikeButton({ initial = 0 }) {
+  const [likes, setLikes] = useState(initial);
+
+  return (
+    &lt;button onClick={() =&gt; setLikes(l =&gt; l + 1)} aria-pressed={likes &gt; 0}&gt;
+      ♥ {likes}
+    &lt;/button&gt;
+  );
+}
+
+// It is just a function: callable, composable, testable
+// &lt;LikeButton initial={5} /&gt;</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>The name must start with a capital letter when used as a component; lower-case names become HTML tags.</li>
+    <li>Hooks made function components capable of everything classes did, minus error boundaries.</li>
+    <li>Because it is a plain function, a component can be tested by calling it — though rendering is preferred.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q060">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

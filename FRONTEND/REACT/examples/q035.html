@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q35 - What is lifting state up in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q035">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q35</span></p>
+  <h1>What is lifting state up in React?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">Two siblings need the same value, so the state moves to their parent and travels down as props.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+function CelsiusInput({ value, onChange }) {
+  return &lt;input value={value} onChange={e =&gt; onChange(Number(e.target.value))} /&gt;;
+}
+
+function Fahrenheit({ celsius }) {
+  return &lt;p&gt;{celsius * 9 / 5 + 32} °F&lt;/p&gt;;
+}
+
+export default function Converter() {
+  const [celsius, setCelsius] = useState(20);   // lives in the parent
+
+  return (
+    &lt;div&gt;
+      &lt;CelsiusInput value={celsius} onChange={setCelsius} /&gt;
+      &lt;Fahrenheit celsius={celsius} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>The parent becomes the single source of truth; the children stay dumb and testable.</li>
+    <li>Below the parent, data flows down as props and events flow up as callbacks.</li>
+    <li>If it starts reaching too far down, that is the signal to switch to context or a state library.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q035">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

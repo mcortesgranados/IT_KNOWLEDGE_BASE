@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q11 - What is the `useRef` hook in React and how is it used? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q131">&larr; React Intermediate Questions - Set 2</a> <span class="tag">Q11</span></p>
+  <h1>What is the `useRef` hook in React and how is it used?</h1>
+  <p class="set">React Intermediate Questions - Set 2</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3</pre>
+    <pre class="code-pre"><code class="language-javascript">const inputRef = useRef(null);
+inputRef.current.focus();       // DOM access
+const timerRef = useRef(0);     // mutable value, no re-render</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>One hook, two uses: reaching the DOM, or keeping a value across renders.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q131">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

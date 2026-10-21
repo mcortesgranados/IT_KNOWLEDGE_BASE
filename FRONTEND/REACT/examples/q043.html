@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q43 - What is the significance of the key prop in React lists? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q043">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q43</span></p>
+  <h1>What is the significance of the key prop in React lists?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">Keys let React follow an item through inserts, removals and reordering. This example keeps a text input&#x27;s state attached to the right item.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Rows() {
+  const [rows, setRows] = useState([
+    { id: 'a', name: 'Ana' },
+    { id: 'b', name: 'Luis' },
+  ]);
+
+  return (
+    &lt;&gt;
+      &lt;button onClick={() =&gt; setRows(r =&gt; [{ id: 'z', name: 'New' }, ...r])}&gt;Add on top&lt;/button&gt;
+      {rows.map(row =&gt; (
+        &lt;label key={row.id}&gt;
+          {row.name}: &lt;input placeholder="note" /&gt;
+        &lt;/label&gt;
+      ))}
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Prepend an item with `key={index}` and the typed notes jump to the wrong row — the DOM nodes are reused by position.</li>
+    <li>With a stable id, React moves the existing node with its state intact.</li>
+    <li>Keys only need to be unique among siblings; they never reach the child as a prop.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q043">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

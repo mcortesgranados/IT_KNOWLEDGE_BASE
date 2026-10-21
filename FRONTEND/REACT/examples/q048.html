@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q48 - What is the difference between shallow and deep comparison in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q048">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q48</span></p>
+  <h1>What is the difference between shallow and deep comparison in React?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">React&#x27;s own optimisations are shallow. Deep equality is something you add deliberately, and it is rarely what you want on every render.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre>
+    <pre class="code-pre"><code class="language-javascript">// Shallow: one level, Object.is per key
+function shallowEqual(a, b) {
+  const ka = Object.keys(a), kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every(k =&gt; Object.is(a[k], b[k]));
+}
+
+shallowEqual({ user: { id: 1 } }, { user: { id: 1 } });  // false (different objects)
+
+// Deep: walks the whole structure
+const deepEqual = (a, b) =&gt; JSON.stringify(a) === JSON.stringify(b);
+deepEqual({ user: { id: 1 } }, { user: { id: 1 } });      // true
+
+// React.memo and PureComponent use shallowEqual</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Shallow is O(keys); deep is O(nodes) and runs on every comparison — that cost is why React does not do it.</li>
+    <li>`JSON.stringify` comparison breaks on functions, `undefined`, dates and key order.</li>
+    <li>If deep equality is needed every render, the state shape is usually the problem.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q048">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

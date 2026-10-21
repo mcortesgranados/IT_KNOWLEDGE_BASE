@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q47 - How do you handle events in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q047">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q47</span></p>
+  <h1>How do you handle events in React?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">Handlers are functions passed as props, with a synthetic event that normalises browser differences.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">export default function Toolbar({ onSave, items }) {
+  function handleDelete(id, event) {
+    event.stopPropagation();          // do not bubble to the row
+    console.log('delete', id);
+  }
+
+  return (
+    &lt;div onClick={() =&gt; console.log('row clicked')}&gt;
+      &lt;button onClick={onSave}&gt;Save&lt;/button&gt;
+      &lt;button onClick={e =&gt; handleDelete('all', e)}&gt;Delete all&lt;/button&gt;
+      {items.map(i =&gt; (
+        &lt;button key={i.id} onClick={e =&gt; handleDelete(i.id, e)}&gt;{i.name}&lt;/button&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`onClick={onSave}` passes the function; `onClick={onSave()}` calls it during render.</li>
+    <li>Wrap in an arrow function only when you need to pass arguments.</li>
+    <li>React events are pooled-ish wrappers: `e.target`, `e.key`, `preventDefault()` and `stopPropagation()` work the same everywhere.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q047">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q37 - What is reconciliation in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q037">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q37</span></p>
+  <h1>What is reconciliation in React?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">The diffing pass. Its practical consequence: element type decides reuse, and `key` decides which sibling is which.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11</pre>
+    <pre class="code-pre"><code class="language-javascript">// Same type -&gt; React updates in place, state survives
+{isOn ? &lt;Counter theme="light" /&gt; : &lt;Counter theme="dark" /&gt;}
+
+// Different type -&gt; unmount + mount, state is lost
+{isOn ? &lt;Counter /&gt; : &lt;div&gt;&lt;Counter /&gt;&lt;/div&gt;}
+
+// Same component, different key -&gt; treated as a different element
+{items.map(i =&gt; &lt;Row key={i.id} item={i} /&gt;)}
+
+// Swapping the key resets the component on purpose
+&lt;Profile key={userId} userId={userId} /&gt;</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>React compares by position and by type; a changed type throws away the old subtree entirely.</li>
+    <li>That is why `key={userId}` is a legitimate trick to reset form state when the record changes.</li>
+    <li>Reconciliation is what makes &#x27;state follows the component, not the DOM&#x27; true.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q037">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

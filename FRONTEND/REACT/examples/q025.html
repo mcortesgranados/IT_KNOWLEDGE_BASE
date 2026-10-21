@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q25 - What is React.memo? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q025">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q25</span></p>
+  <h1>What is React.memo?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">A wrapper that re-uses the previous render when the props have not changed. It is a shallow comparison, and that detail decides whether it works.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre>
+    <pre class="code-pre"><code class="language-javascript">import { memo, useState } from 'react';
+
+const Row = memo(function Row({ label }) {
+  console.log('render', label);
+  return &lt;li&gt;{label}&lt;/li&gt;;
+});
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  const [text] = useState('fixed');
+
+  return (
+    &lt;&gt;
+      &lt;button onClick={() =&gt; setCount(c =&gt; c + 1)}&gt;{count}&lt;/button&gt;
+      &lt;Row label={text} /&gt;        {/* does not re-render */}
+      &lt;Row label={{ toString: () =&gt; text }} /&gt; {/* new object each render -&gt; always re-renders */}
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Comparison is `Object.is` per prop: primitives work, fresh objects/functions/arrays do not.</li>
+    <li>Wrap the callbacks in `useCallback` and the objects in `useMemo`, or `memo` is pointless.</li>
+    <li>`memo` changes nothing about the child&#x27;s own state — it still updates when its state changes.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q025">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

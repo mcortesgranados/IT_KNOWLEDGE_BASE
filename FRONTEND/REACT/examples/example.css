@@ -1,0 +1,18 @@
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 18px 20px 48px; }
+.crumbs { margin: 0 0 10px; font-size: .9em; color: #64748b; }
+.crumbs a { color: #1565c0; text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+h1 { color: #1565c0; font-size: 1.55rem; margin: 4px 0 6px; }
+.set { color: #7b1fa2; font-weight: 700; font-size: .92em; margin: 0 0 10px; }
+.q { color: #475569; margin: 0 0 16px; line-height: 1.5; }
+h2 { color: #2e7d32; font-size: 1.05rem; margin: 24px 0 8px; }
+.code-block { display: grid; grid-template-columns: minmax(2.6em, auto) minmax(0, 1fr); background: #282c34; border: 1px solid #1f2329; border-left: 4px solid #61afef; border-radius: 8px; overflow: hidden; }
+.code-gutter { margin: 0; padding: 14px 10px 14px 12px; border: 0; border-right: 1px solid #3a3f4b; background: #21252b; color: #5c6370; text-align: right; user-select: none; font-family: Consolas, 'Courier New', monospace; font-size: .9em; line-height: 1.55; white-space: pre; overflow: hidden; }
+.code-pre { margin: 0; padding: 14px 16px; border: 0; background: transparent; overflow-x: auto; overflow-y: hidden; }
+.code-pre code, .code-pre code.hljs { display: block; padding: 0; background: transparent; font-family: Consolas, 'Courier New', monospace; font-size: .9em; line-height: 1.55; white-space: pre; }
+.notes { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 7px; padding: 12px 18px 12px 32px; margin: 16px 0; }
+.notes li { margin: 5px 0; line-height: 1.45; }
+.back { display: inline-block; margin-top: 24px; color: #1565c0; font-weight: 700; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 2px 8px; font-size: .82em; font-weight: 700; }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q49 - What is the significance of the children prop in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q049">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q49</span></p>
+  <h1>What is the significance of the children prop in React?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">`children` is the composition primitive: it lets a component wrap arbitrary content without knowing what it is.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre>
+    <pre class="code-pre"><code class="language-javascript">function Panel({ title, actions, children }) {
+  return (
+    &lt;section className="panel"&gt;
+      &lt;header&gt;
+        &lt;h2&gt;{title}&lt;/h2&gt;
+        {actions}
+      &lt;/header&gt;
+      &lt;div className="panel__body"&gt;{children}&lt;/div&gt;
+    &lt;/section&gt;
+  );
+}
+
+function App() {
+  return (
+    &lt;Panel title="Orders" actions={&lt;button&gt;Reload&lt;/button&gt;}&gt;
+      &lt;p&gt;Anything here arrives as `children`.&lt;/p&gt;
+      &lt;ul&gt;&lt;li&gt;#1001&lt;/li&gt;&lt;li&gt;#1002&lt;/li&gt;&lt;/ul&gt;
+    &lt;/Panel&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`children` can be a string, an element, an array or a function — `React.Children` utilities help when it varies.</li>
+    <li>Passing an element as `actions` is the same mechanism as a named slot.</li>
+    <li>Composition through `children` is preferred over configuration props like `bodyContent`.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q049">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

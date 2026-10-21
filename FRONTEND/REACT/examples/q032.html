@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q32 - Can hooks be used inside class components? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q032">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q32</span></p>
+  <h1>Can hooks be used inside class components?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">No — and the example shows why the answer is not &#x27;almost&#x27;: the class has no hook dispatcher, so the call fails at runtime.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre>
+    <pre class="code-pre"><code class="language-javascript">// This throws: Invalid hook call.
+class Legacy extends React.Component {
+  render() {
+    const [open, setOpen] = useState(false);   // error
+    return &lt;p&gt;{String(open)}&lt;/p&gt;;
+  }
+}
+
+// Two valid migrations
+// 1. Convert to a function component
+function Modern() {
+  const [open, setOpen] = useState(false);
+  return &lt;p&gt;{String(open)}&lt;/p&gt;;
+}
+
+// 2. Keep the class and use state/lifecycle
+class StillAClass extends React.Component {
+  state = { open: false };
+  render() { return &lt;p&gt;{String(this.state.open)}&lt;/p&gt;; }
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Hooks rely on call order inside a function component&#x27;s body; a class has no such body.</li>
+    <li>The same error appears when a hook is called conditionally or inside a loop, even in a function component.</li>
+    <li>Mixing is fine at the boundary: a class component may render a function child that uses hooks.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q032">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

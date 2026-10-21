@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q20 - What is conditional rendering in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q020">&larr; React Beginner Questions - Set 2</a> <span class="tag">Q20</span></p>
+  <h1>What is conditional rendering in React?</h1>
+  <p class="set">React Beginner Questions - Set 2</p>
+  <p class="q">No template language: conditions are plain JavaScript inside JSX. Three forms cover almost every case.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre>
+    <pre class="code-pre"><code class="language-javascript">export default function Inbox({ messages, isLoading, error }) {
+  // 1. Early return for a whole different screen
+  if (isLoading) return &lt;p&gt;Loading…&lt;/p&gt;;
+  if (error) return &lt;p role="alert"&gt;{error}&lt;/p&gt;;
+
+  return (
+    &lt;section&gt;
+      {/* 2. Ternary when both branches render something */}
+      &lt;h2&gt;{messages.length ? `${messages.length} unread` : 'Inbox zero'}&lt;/h2&gt;
+
+      {/* 3. Logical AND when the false branch renders nothing */}
+      {messages.length &gt; 100 &amp;&amp; &lt;p&gt;Consider archiving older threads.&lt;/p&gt;}
+
+      &lt;ul&gt;
+        {messages.map(m =&gt; &lt;li key={m.id}&gt;{m.subject}&lt;/li&gt;)}
+      &lt;/ul&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`count &amp;&amp; &lt;p&gt;` renders a literal `0` when count is 0 — write `count &gt; 0 &amp;&amp; …` instead.</li>
+    <li>A ternary is not a style choice: use it when you need both branches, `&amp;&amp;` when you need one.</li>
+    <li>Early returns keep the JSX flat and are the easiest conditional to read.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q020">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

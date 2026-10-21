@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q23 - What is the purpose of context in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q023">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q23</span></p>
+  <h1>What is the purpose of context in React?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">Context removes prop drilling: a value is published once and read anywhere below, without passing it through every intermediate component.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre>
+    <pre class="code-pre"><code class="language-javascript">import { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext('light');
+
+function Toolbar() {
+  const theme = useContext(ThemeContext);   // no props involved
+  return &lt;button className={theme}&gt;Save&lt;/button&gt;;
+}
+
+export default function App() {
+  const [theme, setTheme] = useState('light');
+  return (
+    &lt;ThemeContext.Provider value={theme}&gt;
+      &lt;Toolbar /&gt;
+      &lt;button onClick={() =&gt; setTheme(t =&gt; (t === 'light' ? 'dark' : 'light'))}&gt;
+        Toggle theme
+      &lt;/button&gt;
+    &lt;/ThemeContext.Provider&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Use it for low-frequency, app-wide values: theme, locale, current user, feature flags.</li>
+    <li>Every consumer re-renders when the provider value changes — keep the value stable or split contexts.</li>
+    <li>Context is not a state manager; it is a transport mechanism.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q023">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q16 - What is a React fragment? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q016">&larr; React Beginner Questions - Set 2</a> <span class="tag">Q16</span></p>
+  <h1>What is a React fragment?</h1>
+  <p class="set">React Beginner Questions - Set 2</p>
+  <p class="q">A component must return one node — but that node does not have to be an element. A fragment groups children without adding a wrapper to the DOM.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre>
+    <pre class="code-pre"><code class="language-javascript">// With a wrapper div: an extra level in the DOM, and flex/grid
+// layouts get a new child they did not ask for.
+function BadRow() {
+  return (
+    &lt;div&gt;
+      &lt;td&gt;Name&lt;/td&gt;
+      &lt;td&gt;Price&lt;/td&gt;
+    &lt;/div&gt;
+  );
+}
+
+// With a fragment: same JSX, no extra node
+function GoodRow() {
+  return (
+    &lt;&gt;
+      &lt;td&gt;Name&lt;/td&gt;
+      &lt;td&gt;Price&lt;/td&gt;
+    &lt;/&gt;
+  );
+}
+
+// Keyed fragment, needed when returning a list of groups
+import { Fragment } from 'react';
+const groups = rows.map(g =&gt; (
+  &lt;Fragment key={g.id}&gt;
+    {g.items.map(i =&gt; &lt;li key={i.id}&gt;{i.label}&lt;/li&gt;)}
+  &lt;/Fragment&gt;
+));</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`&lt;&gt;…&lt;/&gt;` is shorthand for `&lt;React.Fragment&gt;`; it cannot take a `key`, which is why the long form exists.</li>
+    <li>The table case is the classic one: `&lt;div&gt;` inside `&lt;tbody&gt;` is invalid HTML and breaks column layout.</li>
+    <li>Fragments have no DOM presence, so no styling can be applied to them.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q016">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

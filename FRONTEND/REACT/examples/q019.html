@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q19 - What is the purpose of the useRef hook? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q019">&larr; React Beginner Questions - Set 2</a> <span class="tag">Q19</span></p>
+  <h1>What is the purpose of the useRef hook?</h1>
+  <p class="set">React Beginner Questions - Set 2</p>
+  <p class="q">A ref is a mutable box that survives renders and never triggers one. This example uses it for both jobs a ref has.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useRef, useState } from 'react';
+
+export default function Search() {
+  const inputRef = useRef(null);      // DOM reference
+  const rendersRef = useRef(0);       // mutable value, no re-render
+
+  const [, forceRender] = useState(0);
+  rendersRef.current += 1;
+
+  return (
+    &lt;div&gt;
+      &lt;input ref={inputRef} placeholder="Type here" /&gt;
+      &lt;button onClick={() =&gt; inputRef.current.focus()}&gt;Focus&lt;/button&gt;
+
+      &lt;p&gt;Renders so far: {rendersRef.current}&lt;/p&gt;
+      &lt;button onClick={() =&gt; forceRender(n =&gt; n + 1)}&gt;Re-render&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Changing `ref.current` does not re-render; changing state does. That is the whole difference.</li>
+    <li>Use it for DOM access, timers, previous values and any mutable object that rendering should ignore.</li>
+    <li>Do not read `ref.current` during render for values that affect the output — that breaks the rendering contract.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q019">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

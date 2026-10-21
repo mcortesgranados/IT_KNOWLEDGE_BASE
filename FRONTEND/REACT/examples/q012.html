@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q12 - What is the difference between a controlled and an uncontrolled component? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q012">&larr; React Beginner Questions - Set 2</a> <span class="tag">Q12</span></p>
+  <h1>What is the difference between a controlled and an uncontrolled component?</h1>
+  <p class="set">React Beginner Questions - Set 2</p>
+  <p class="q">One input, two philosophies: React owns the value, or the DOM owns it and you read it on demand.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState, useRef } from 'react';
+
+export default function Form() {
+  const [controlled, setControlled] = useState('');
+  const uncontrolledRef = useRef(null);
+
+  function submit(e) {
+    e.preventDefault();
+    console.log('controlled  :', controlled);
+    console.log('uncontrolled:', uncontrolledRef.current.value);
+  }
+
+  return (
+    &lt;form onSubmit={submit}&gt;
+      &lt;input value={controlled} onChange={e =&gt; setControlled(e.target.value)} /&gt;
+      &lt;input defaultValue="initial" ref={uncontrolledRef} /&gt;
+      &lt;button type="submit"&gt;Send&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`value` + `onChange` = controlled: every keystroke re-renders the component.</li>
+    <li>`defaultValue` + `ref` = uncontrolled: no re-render, the value is read when you need it.</li>
+    <li>Controlled inputs are easier to validate, reset and format; uncontrolled ones are cheaper for large forms.</li>
+    <li>Mixing both on the same input (a `value` without `onChange`) makes the field read-only.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q012">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

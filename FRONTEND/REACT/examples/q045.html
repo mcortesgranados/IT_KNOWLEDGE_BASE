@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q45 - What is hydration in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q045">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q45</span></p>
+  <h1>What is hydration in React?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">Hydration attaches React to server-generated HTML instead of replacing it — provided the markup matches exactly.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">// client.js
+import { hydrateRoot } from 'react-dom/client';
+import App from './App';
+
+hydrateRoot(document.getElementById('root'), &lt;App /&gt;);
+
+// Markup that does not match produces hydration errors:
+// server: &lt;p&gt;2025-05-12 12:00&lt;/p&gt;
+// client: &lt;p&gt;2025-05-12 12:01&lt;/p&gt;   &lt;- different string, React cannot reconcile
+
+// Fix: render time-dependent values after mount
+function Clock() {
+  const [now, setNow] = useState(null);
+  useEffect(() =&gt; setNow(new Date().toISOString()), []);
+  return &lt;p&gt;{now ?? 'loading'}&lt;/p&gt;;
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>The first client render must produce the same tree as the server, or React discards and re-renders.</li>
+    <li>`new Date()`, `Math.random()` and `window` access during render are the usual culprits.</li>
+    <li>Hydration is why SSR is not automatically faster: the JS still has to load and run.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q045">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q58 - What is the purpose of the useLayoutEffect hook? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q058">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q58</span></p>
+  <h1>What is the purpose of the useLayoutEffect hook?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">Same as `useEffect`, but it runs synchronously after the DOM is updated and before the browser paints — the place to measure and correct layout.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useLayoutEffect, useRef, useState } from 'react';
+
+export default function Tooltip({ anchorRef, children }) {
+  const tipRef = useRef(null);
+  const [offset, setOffset] = useState(0);
+
+  useLayoutEffect(() =&gt; {
+    const anchor = anchorRef.current.getBoundingClientRect();
+    const tip = tipRef.current.getBoundingClientRect();
+    // Flip to the other side before the user ever sees it
+    if (anchor.bottom + tip.height &gt; window.innerHeight) {
+      setOffset(-tip.height - anchor.height);
+    }
+  }, []);
+
+  return &lt;div ref={tipRef} style={{ transform: `translateY(${offset}px)` }}&gt;{children}&lt;/div&gt;;
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>With `useEffect` the wrong position would be painted first, then corrected — a visible flicker.</li>
+    <li>It blocks paint, so keep the work tiny: measurements, not network calls.</li>
+    <li>It does nothing useful during server-side rendering; the browser warns about it.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q058">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

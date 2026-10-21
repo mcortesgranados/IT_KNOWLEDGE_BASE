@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q41 - What is an uncontrolled component in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q041">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q41</span></p>
+  <h1>What is an uncontrolled component in React?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">The DOM keeps the value; you read it when you need it through a ref, typically on submit.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useRef } from 'react';
+
+export default function Upload() {
+  const fileRef = useRef(null);
+  const commentRef = useRef(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('file', fileRef.current.files[0]);
+    formData.append('comment', commentRef.current.value);
+    console.log([...formData.keys()]);
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input type="file" ref={fileRef} /&gt;
+      &lt;textarea ref={commentRef} defaultValue="Optional comment" /&gt;
+      &lt;button type="submit"&gt;Send&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>File inputs are the classic case: their value cannot be set from React, so they are always uncontrolled.</li>
+    <li>`defaultValue` sets the initial value; `value` would make it read-only.</li>
+    <li>No re-render per keystroke, but no validation or conditional UI while typing either.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q041">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

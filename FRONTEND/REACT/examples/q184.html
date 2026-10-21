@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q64 - What is the purpose of keys in React lists? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q184">&larr; React Intermediate Questions - Set 7</a> <span class="tag">Q64</span></p>
+  <h1>What is the purpose of keys in React lists?</h1>
+  <p class="set">React Intermediate Questions - Set 7</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1</pre>
+    <pre class="code-pre"><code class="language-javascript">{tags.map(t =&gt; &lt;Chip key={t.id} label={t.name} /&gt;)}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Unique and stable among siblings; never the array index when the list can reorder.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q184">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

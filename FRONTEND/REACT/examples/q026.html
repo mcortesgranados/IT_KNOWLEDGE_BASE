@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q26 - What is lazy loading in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q026">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q26</span></p>
+  <h1>What is lazy loading in React?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">Split the bundle so a route or a heavy widget is downloaded on demand instead of at startup.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre>
+    <pre class="code-pre"><code class="language-javascript">import { lazy, Suspense, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// The import only happens when the component first renders
+const Reports = lazy(() =&gt; import('./pages/Reports'));
+
+export default function App() {
+  const [show, setShow] = useState(false);
+
+  return (
+    &lt;&gt;
+      &lt;button onClick={() =&gt; setShow(true)}&gt;Open reports&lt;/button&gt;
+      &lt;Suspense fallback={&lt;p&gt;Loading module…&lt;/p&gt;}&gt;
+        {show &amp;&amp; &lt;Reports /&gt;}
+      &lt;/Suspense&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/reports" element={
+          &lt;Suspense fallback={&lt;p&gt;Loading…&lt;/p&gt;}&gt;&lt;Reports /&gt;&lt;/Suspense&gt;
+        } /&gt;
+      &lt;/Routes&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`lazy` needs a default export; a named export needs `.then(m =&gt; ({ default: m.X }))`.</li>
+    <li>Every lazy component needs a `Suspense` boundary above it, or React throws.</li>
+    <li>The win is initial JS size; the cost is a small delay the first time it is used.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q026">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

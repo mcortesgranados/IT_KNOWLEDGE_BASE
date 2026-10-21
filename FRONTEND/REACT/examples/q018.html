@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q18 - What is the role of keys in React lists? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q018">&larr; React Beginner Questions - Set 2</a> <span class="tag">Q18</span></p>
+  <h1>What is the role of keys in React lists?</h1>
+  <p class="set">React Beginner Questions - Set 2</p>
+  <p class="q">Keys are how React recognises an item across renders. Using the array index looks fine until items are reordered or removed.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function TodoList() {
+  const [todos, setTodos] = useState([
+    { id: 'a1', text: 'Write tests' },
+    { id: 'a2', text: 'Deploy' },
+  ]);
+
+  function removeFirst() {
+    setTodos(prev =&gt; prev.slice(1));
+  }
+
+  return (
+    &lt;&gt;
+      &lt;ul&gt;
+        {todos.map(todo =&gt; (
+          &lt;li key={todo.id}&gt;{todo.text}&lt;/li&gt;   // stable, unique, not the index
+        ))}
+      &lt;/ul&gt;
+      &lt;button onClick={removeFirst}&gt;Remove first&lt;/button&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>With `key={index}`, removing the first item makes React reuse DOM nodes with the wrong content — input focus and state jump.</li>
+    <li>Keys must be unique among siblings, stable over time, and never derived from the loop position.</li>
+    <li>Keys are not props: the child cannot read `props.key`.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q018">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q52 - How does React update the real DOM? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q052">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q52</span></p>
+  <h1>How does React update the real DOM?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">Two phases: render computes what should change, commit applies it. Everything you write happens in the first; only React touches the DOM in the second.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  console.log('1. render phase', count);   // may run more than once
+
+  function handleClick() {
+    setCount(c =&gt; c + 1);   // batched
+    setCount(c =&gt; c + 1);   // same tick: both apply, one render
+    console.log('2. handler finished, DOM not updated yet');
+  }
+
+  useEffect(() =&gt; {
+    console.log('3. commit done, DOM is up to date', count);
+  });
+
+  return &lt;button onClick={handleClick}&gt;{count}&lt;/button&gt;;
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Render must stay pure: no DOM reads/writes, no side effects — it can be called, discarded or repeated.</li>
+    <li>Updates inside one event are batched into a single commit.</li>
+    <li>`useEffect` runs after the commit, which is why measuring the DOM there is safe.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q052">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

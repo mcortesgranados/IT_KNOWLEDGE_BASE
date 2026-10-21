@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q28 - What is a Higher-Order Component (HOC)? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q028">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q28</span></p>
+  <h1>What is a Higher-Order Component (HOC)?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">A function that takes a component and returns a new one. It is the pre-hooks way to share behaviour, and it still appears in libraries.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">function withAuth(WrappedComponent) {
+  return function Authenticated(props) {
+    const { user } = useCurrentUser();
+    if (!user) return &lt;p&gt;Please sign in&lt;/p&gt;;
+    return &lt;WrappedComponent {...props} user={user} /&gt;;
+  };
+}
+
+function Dashboard({ user }) {
+  return &lt;h1&gt;Welcome, {user.name}&lt;/h1&gt;;
+}
+
+const ProtectedDashboard = withAuth(Dashboard);
+
+// Conventions: prefix with "with", pass props through, never mutate
+// the wrapped component, and set a displayName for DevTools.</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Props are forwarded with `{...props}`; forgetting them is the classic HOC bug.</li>
+    <li>Hooks replaced most HOCs — `withAuth` above is now usually a custom hook or a wrapper component.</li>
+    <li>Nesting several HOCs creates wrapper hell in DevTools, one reason the pattern declined.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q028">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

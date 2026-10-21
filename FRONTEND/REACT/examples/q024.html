@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q24 - How can you optimize performance in a React application? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q024">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q24</span></p>
+  <h1>How can you optimize performance in a React application?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">Four levers, in the order you should reach for them: measure, split, memoise, virtualise.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre>
+    <pre class="code-pre"><code class="language-javascript">import { lazy, Suspense, memo, useMemo } from 'react';
+
+const HeavyChart = lazy(() =&gt; import('./HeavyChart'));   // 1. code splitting
+
+const Row = memo(function Row({ item }) {               // 2. skip unchanged rows
+  return &lt;li&gt;{item.label}&lt;/li&gt;;
+});
+
+export default function List({ items, filter }) {
+  const visible = useMemo(                          // 3. cache expensive work
+    () =&gt; items.filter(i =&gt; i.label.includes(filter)),
+    [items, filter]
+  );
+
+  return (
+    &lt;Suspense fallback={&lt;p&gt;Loading chart…&lt;/p&gt;}&gt;
+      &lt;HeavyChart /&gt;
+      &lt;ul&gt;{visible.map(i =&gt; &lt;Row key={i.id} item={i} /&gt;)}&lt;/ul&gt;
+    &lt;/Suspense&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Profile first with React DevTools&#x27; Profiler — most &#x27;slow&#x27; apps are rendering too much, not rendering slowly.</li>
+    <li>`memo` only helps if props stay referentially equal; otherwise it adds cost.</li>
+    <li>For thousands of rows, virtualise the list instead of memoising every row.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q024">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

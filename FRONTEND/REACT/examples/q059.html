@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q59 - How do you update the state in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q059">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q59</span></p>
+  <h1>How do you update the state in React?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">Never by assignment. Both models give you a setter, and both merge or replace according to different rules.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</pre>
+    <pre class="code-pre"><code class="language-javascript">// Function component
+const [user, setUser] = useState({ name: 'Ana', city: 'Bogotá' });
+setUser({ ...user, city: 'Medellín' });        // replace with a new object
+setUser(prev =&gt; ({ ...prev, city: 'Cali' }));  // safer under rapid updates
+
+// Class component: setState merges at the top level
+class Profile extends Component {
+  state = { name: 'Ana', city: 'Bogotá' };
+  move = () =&gt; this.setState({ city: 'Medellín' });   // name is preserved
+}
+
+// Both are asynchronous: read the value in the updater, not right after</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`useState` replaces, `setState` merges — the single most common source of lost fields when migrating.</li>
+    <li>Mutating the object (`user.city = &#x27;Cali&#x27;`) changes your data but does not schedule a render.</li>
+    <li>Pass a function when the next value depends on the previous one.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q059">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

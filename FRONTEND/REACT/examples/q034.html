@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q34 - How does React handle forms? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q034">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q34</span></p>
+  <h1>How does React handle forms?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">The idiomatic answer is a controlled form: one state object, one change handler, values always known to React.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Signup() {
+  const [form, setForm] = useState({ email: '', plan: 'free', accept: false });
+
+  function handleChange(e) {
+    const { name, value, type, checked } = e.target;
+    setForm(prev =&gt; ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(form);
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input name="email" value={form.email} onChange={handleChange} /&gt;
+      &lt;select name="plan" value={form.plan} onChange={handleChange}&gt;
+        &lt;option value="free"&gt;Free&lt;/option&gt;
+        &lt;option value="pro"&gt;Pro&lt;/option&gt;
+      &lt;/select&gt;
+      &lt;label&gt;&lt;input type="checkbox" name="accept" checked={form.accept} onChange={handleChange} /&gt; Accept&lt;/label&gt;
+      &lt;button type="submit"&gt;Create account&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>One handler for every field works because `name` comes from the input itself.</li>
+    <li>Checkboxes expose `checked`, not `value` — hence the `type` branch.</li>
+    <li>Submit handlers must call `preventDefault`, or the browser posts the form and reloads the page.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q034">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

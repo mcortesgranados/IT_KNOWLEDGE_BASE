@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q68 - What is the purpose of React.Fragment? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q068">&larr; React Beginner Questions - Set 7</a> <span class="tag">Q68</span></p>
+  <h1>What is the purpose of React.Fragment?</h1>
+  <p class="set">React Beginner Questions - Set 7</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre>
+    <pre class="code-pre"><code class="language-javascript">function Cells() {
+  return (
+    &lt;&gt;
+      &lt;td&gt;Name&lt;/td&gt;
+      &lt;td&gt;Price&lt;/td&gt;
+    &lt;/&gt;
+  );
+}
+
+// No wrapper element: the fragment disappears from the DOM</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Needed whenever a wrapper `&lt;div&gt;` would be invalid HTML, as inside `&lt;tr&gt;`.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q068">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

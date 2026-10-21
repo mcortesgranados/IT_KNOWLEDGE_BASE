@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q56 - What is the purpose of the useImperativeHandle hook? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q056">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q56</span></p>
+  <h1>What is the purpose of the useImperativeHandle hook?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">It lets a child decide what a forwarded ref exposes — a narrow API instead of the whole DOM node.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre>
+    <pre class="code-pre"><code class="language-javascript">import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+
+const FancyInput = forwardRef(function FancyInput(props, ref) {
+  const inputRef = useRef(null);
+  const [value, setValue] = useState('');
+
+  useImperativeHandle(ref, () =&gt; ({
+    focus: () =&gt; inputRef.current.focus(),
+    clear: () =&gt; { setValue(''); inputRef.current.focus(); },
+    get length() { return value.length; },
+  }), [value]);
+
+  return &lt;input ref={inputRef} value={value} onChange={e =&gt; setValue(e.target.value)} /&gt;;
+});
+
+// Parent
+const ref = useRef(null);
+ref.current?.clear();   // only these three members exist</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Without it, a forwarded ref hands the parent a raw DOM node — more power than it needs.</li>
+    <li>The dependency array rebuilds the handle; omit `value` and `length` freezes at its first value.</li>
+    <li>Reach for it for focus, scrolling, media playback and animation handles — not for data flow.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q056">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

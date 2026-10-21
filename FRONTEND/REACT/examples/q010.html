@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q10 - How do you create a React application? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q010">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q10</span></p>
+  <h1>How do you create a React application?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">There is no code file for this one — the answer is a set of commands. Vite is the current default; Create React App is the legacy path the question was written against.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre>
+    <pre class="code-pre"><code class="language-bash"># Recommended today (Vite)
+npm create vite@latest my-app -- --template react
+cd my-app
+npm install
+npm run dev
+
+# The path the question refers to (Create React App, legacy)
+npx create-react-app my-app
+cd my-app
+npm start
+
+# Either way, you end up with this minimum
+src/main.jsx      imports React and mounts &lt;App /&gt;
+src/App.jsx       the root component
+index.html        contains &lt;div id="root"&gt;&lt;/div&gt;</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`npm run dev` serves with hot reload on Vite; CRA uses `npm start`.</li>
+    <li>Both need Node 18+ and a `package.json`; nothing about React itself changes between them.</li>
+    <li>CRA is no longer recommended for new projects, but you will still meet it in existing repositories.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q010">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

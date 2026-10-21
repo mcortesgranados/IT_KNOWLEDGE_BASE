@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q7 - Why is React considered declarative? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q007">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q7</span></p>
+  <h1>Why is React considered declarative?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">The contrast is easiest to see side by side: imperative code tells the browser each step, declarative code describes the end state.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre>
+    <pre class="code-pre"><code class="language-javascript">// Imperative: you own every step
+function setLabelImperative(isActive) {
+  const el = document.querySelector('#status');
+  if (isActive) {
+    el.textContent = 'Active';
+    el.classList.add('on');
+    el.classList.remove('off');
+  } else {
+    el.textContent = 'Inactive';
+    el.classList.add('off');
+    el.classList.remove('on');
+  }
+}
+
+// Declarative: React derives the DOM from state
+function Status({ isActive }) {
+  return &lt;span className={isActive ? 'on' : 'off'}&gt;
+    {isActive ? 'Active' : 'Inactive'}
+  &lt;/span&gt;;
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>In the React version there is no intermediate state to keep consistent — the element is a pure function of `isActive`.</li>
+    <li>You describe *what* the UI is, and React decides *how* to get there.</li>
+    <li>This is also why bugs of the &#x27;forgot to remove the old class&#x27; kind disappear.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q007">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

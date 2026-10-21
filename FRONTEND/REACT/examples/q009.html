@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q9 - What is state in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q009">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q9</span></p>
+  <h1>What is state in React?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">State is data that survives re-renders and triggers them. The functional updater in this example is the detail most people miss.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Cart() {
+  const [items, setItems] = useState([]);
+
+  function addItem(name) {
+    // Arrow form receives the previous state — safe under rapid clicks
+    setItems(prev =&gt; [...prev, name]);
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() =&gt; addItem('Lamp')}&gt;Add lamp&lt;/button&gt;
+      &lt;ul&gt;{items.map((it, i) =&gt; &lt;li key={i}&gt;{it}&lt;/li&gt;)}&lt;/ul&gt;
+      &lt;p&gt;Total items: {items.length}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`setItems([...prev, name])` creates a new array; `prev.push(name)` would mutate and render nothing.</li>
+    <li>State updates are batched and asynchronous — read the value from the updater, not from the variable you just set.</li>
+    <li>State is local to the component instance; two `&lt;Cart /&gt;` elements keep two independent lists.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q009">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

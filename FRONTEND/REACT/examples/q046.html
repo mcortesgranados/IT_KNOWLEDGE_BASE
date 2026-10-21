@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q46 - What is the difference between stateful and stateless components? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q046">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q46</span></p>
+  <h1>What is the difference between stateful and stateless components?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">The distinction is only about who holds the data. A stateless component is a pure function of its props.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre>
+    <pre class="code-pre"><code class="language-javascript">// Stateless: props in, JSX out, no memory
+function Total({ items }) {
+  return &lt;p&gt;{items.reduce((sum, i) =&gt; sum + i.price, 0)} EUR&lt;/p&gt;;
+}
+
+// Stateful: owns data that changes over time
+function Cart() {
+  const [items, setItems] = useState([]);
+  return (
+    &lt;&gt;
+      &lt;button onClick={() =&gt; setItems(i =&gt; [...i, { price: 10 }])}&gt;Add&lt;/button&gt;
+      &lt;Total items={items} /&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Stateless components are trivial to test and to memoise — no hidden state to set up.</li>
+    <li>The modern wording is &#x27;container vs presentational&#x27;, or simply where the hook lives.</li>
+    <li>A stateless component can still be re-rendered often; stateless does not mean static.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q046">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

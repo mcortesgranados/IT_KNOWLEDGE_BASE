@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q54 - What is the difference between React.createElement and JSX? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q054">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q54</span></p>
+  <h1>What is the difference between React.createElement and JSX?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">JSX is the authoring format; `createElement` is what it compiles to. Same result, different ergonomics.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre>
+    <pre class="code-pre"><code class="language-javascript">// JSX
+const card = (
+  &lt;article className="card"&gt;
+    &lt;h3&gt;Title&lt;/h3&gt;
+  &lt;/article&gt;
+);
+
+// Compiled, with the automatic runtime
+import { jsx as _jsx } from 'react/jsx-runtime';
+const card2 = _jsx('article', {
+  className: 'card',
+  children: _jsx('h3', { children: 'Title' }),
+});
+
+// The classic runtime calls React.createElement directly
+const card3 = React.createElement('article', { className: 'card' },
+  React.createElement('h3', null, 'Title'));</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`createElement(type, props, ...children)` takes children as extra arguments; `jsx()` takes them as a prop.</li>
+    <li>Neither creates DOM nodes — both return plain objects (`$$typeof: Symbol(react.element)`).</li>
+    <li>Writing `createElement` by hand is only reasonable inside a factory or a compiler test.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q054">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

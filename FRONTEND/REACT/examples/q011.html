@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q11 - What is the purpose of ReactDOM? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q011">&larr; React Beginner Questions - Set 2</a> <span class="tag">Q11</span></p>
+  <h1>What is the purpose of ReactDOM?</h1>
+  <p class="set">React Beginner Questions - Set 2</p>
+  <p class="q">React builds the tree; react-dom is the package that talks to the browser and puts it on screen. Since React 18 it is also where the root lives.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14</pre>
+    <pre class="code-pre"><code class="language-javascript">import { createRoot } from 'react-dom/client';
+import App from './App';
+
+const container = document.getElementById('root');
+
+// createRoot returns a handle, not an element
+const root = createRoot(container);
+root.render(&lt;App /&gt;);
+
+// Later, to tear the whole tree down (tests, widgets, micro-frontends)
+// root.unmount();
+
+// react-dom also exposes the server entry point:
+// import { renderToString } from 'react-dom/server';</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`react` has no idea what a DOM is — it is shared with React Native, where `react-dom` does not exist.</li>
+    <li>React 18 replaced `ReactDOM.render` with `createRoot`; the old call still works but logs a deprecation warning.</li>
+    <li>One root per DOM container: mounting twice on the same node leaves the first tree orphaned.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q011">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q5 - What is the difference between functional and class components? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q005">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q5</span></p>
+  <h1>What is the difference between functional and class components?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">Same component, two syntaxes. The functional one on the left is what you should write today; the class one is what you will still find in older codebases.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre>
+    <pre class="code-pre"><code class="language-javascript">// Functional component with a hook
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  return &lt;button onClick={() =&gt; setCount(count + 1)}&gt;{count}&lt;/button&gt;;
+}
+
+// Class component, same behaviour
+import { Component } from 'react';
+
+export class CounterClass extends Component {
+  state = { count: 0 };
+  render() {
+    return (
+      &lt;button onClick={() =&gt; this.setState({ count: this.state.count + 1 })}&gt;
+        {this.state.count}
+      &lt;/button&gt;
+    );
+  }
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Hooks only work in function components; class components use `this.state` and lifecycle methods instead.</li>
+    <li>The class version needs `this` binding, which is why the arrow function is there.</li>
+    <li>Both can hold state and side effects — the difference is ergonomics, not capability.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q005">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

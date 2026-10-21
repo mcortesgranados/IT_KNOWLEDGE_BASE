@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q2 - Who developed React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q002">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q2</span></p>
+  <h1>Who developed React?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">There is no code that answers a history question, so the honest example is the one line you can run to see which version of React — and therefore which era of Meta&#x27;s stewardship — you are on.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10</pre>
+    <pre class="code-pre"><code class="language-javascript">import { version } from 'react';
+
+export default function About() {
+  return (
+    &lt;p&gt;
+      React {version} — originally built at Facebook (now Meta),
+      maintained in the open at github.com/facebook/react.
+    &lt;/p&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Created at Facebook in 2011, open-sourced in 2013, maintained by Meta engineers together with the community.</li>
+    <li>`version` comes from the package itself, so this page can never claim the wrong number.</li>
+    <li>The licence is MIT — worth knowing before a legal review asks.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q002">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

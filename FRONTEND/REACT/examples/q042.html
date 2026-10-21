@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q42 - What is the purpose of defaultProps in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q042">&larr; React Beginner Questions - Set 5</a> <span class="tag">Q42</span></p>
+  <h1>What is the purpose of defaultProps in React?</h1>
+  <p class="set">React Beginner Questions - Set 5</p>
+  <p class="q">It filled missing props with defaults. For function components it has been replaced by destructuring defaults, which the example shows side by side.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre>
+    <pre class="code-pre"><code class="language-javascript">// Current approach — works today and is type-friendly
+function Badge({ label, tone = 'neutral', size = 'md' }) {
+  return &lt;span className={`badge badge--${tone} badge--${size}`}&gt;{label}&lt;/span&gt;;
+}
+
+// Legacy approach — still valid on class components
+function OldBadge(props) {
+  return &lt;span className={`badge badge--${props.tone}`}&gt;{props.label}&lt;/span&gt;;
+}
+OldBadge.defaultProps = { tone: 'neutral' };
+
+// Note: defaultProps is ignored for function components in
+// React 18.3+/19 builds (with a deprecation warning).</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Destructuring defaults apply only when the prop is `undefined`, not when it is `null`.</li>
+    <li>Defaults are a fallback, not a contract — `propTypes` or TypeScript is what documents types.</li>
+    <li>On class components `defaultProps` still works and is the conventional place for them.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q042">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

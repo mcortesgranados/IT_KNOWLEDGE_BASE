@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q29 - What is the purpose of the useCallback hook? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q029">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q29</span></p>
+  <h1>What is the purpose of the useCallback hook?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">It keeps the same function identity between renders — useful only when that identity is being compared somewhere.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre>
+    <pre class="code-pre"><code class="language-javascript">import { memo, useCallback, useState } from 'react';
+
+const Button = memo(function Button({ onClick, children }) {
+  return &lt;button onClick={onClick}&gt;{children}&lt;/button&gt;;
+});
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  const [other, setOther] = useState(0);
+
+  const increment = useCallback(() =&gt; setCount(c =&gt; c + 1), []);
+
+  return (
+    &lt;&gt;
+      &lt;Button onClick={increment}&gt;+1 ({count})&lt;/Button&gt;
+      &lt;button onClick={() =&gt; setOther(o =&gt; o + 1)}&gt;unrelated {other}&lt;/button&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Without `useCallback`, `increment` is a new function each render and `memo` on `Button` does nothing.</li>
+    <li>An empty dependency array means the closure captures the first render&#x27;s values — include what you read.</li>
+    <li>Using it everywhere costs memory and buys nothing; only memoised children or effect dependencies need it.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q029">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

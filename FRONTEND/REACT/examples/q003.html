@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q3 - What are components in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q003">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q3</span></p>
+  <h1>What are components in React?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">A component is a function that returns JSX. Composition — components using components — is the whole architecture.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17</pre>
+    <pre class="code-pre"><code class="language-javascript">function Avatar({ name }) {
+  return &lt;span className="avatar"&gt;{name[0]}&lt;/span&gt;;
+}
+
+function UserCard({ user }) {
+  return (
+    &lt;article className="card"&gt;
+      &lt;Avatar name={user.name} /&gt;
+      &lt;h3&gt;{user.name}&lt;/h3&gt;
+      &lt;p&gt;{user.role}&lt;/p&gt;
+    &lt;/article&gt;
+  );
+}
+
+export default function Team({ users }) {
+  return &lt;&gt;{users.map(u =&gt; &lt;UserCard key={u.id} user={u} /&gt;)}&lt;/&gt;;
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Upper-case names are mandatory for components — `&lt;avatar /&gt;` would be treated as an unknown HTML tag.</li>
+    <li>Each component owns its markup and styles; `UserCard` knows nothing about how `Avatar` renders inside.</li>
+    <li>A component can be as small as one element; there is no minimum size.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q003">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

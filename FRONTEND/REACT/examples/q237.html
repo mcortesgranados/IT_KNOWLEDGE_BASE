@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q107 - How does the `useRef` hook work? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q237">&larr; React Intermediate Questions - Set 11</a> <span class="tag">Q107</span></p>
+  <h1>How does the `useRef` hook work?</h1>
+  <p class="set">React Intermediate Questions - Set 11</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3</pre>
+    <pre class="code-pre"><code class="language-javascript">const id = useRef(0);
+id.current += 1;          // persists, no render
+const box = useRef(null); // points at a DOM node</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>A mutable box attached to the component instance, not to a render.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q237">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q38 - What is PureComponent in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q038">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q38</span></p>
+  <h1>What is PureComponent in React?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">A class component with a built-in shallow `shouldComponentUpdate`. The manual version shows exactly what it does and what it misses.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">import { Component, PureComponent } from 'react';
+
+// What PureComponent does for you
+class Manual extends Component {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.value !== this.props.value;   // shallow, one field
+  }
+  render() { return &lt;p&gt;{this.props.value}&lt;/p&gt;; }
+}
+
+class Pure extends PureComponent {
+  render() { return &lt;p&gt;{this.props.value}&lt;/p&gt;; }
+}
+
+// Both skip the render when the shallow comparison is equal
+&lt;Pure value={{ n: 1 }} /&gt;   {/* new object each render: always re-renders */}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Shallow means one level: nested changes inside the same object are invisible to it.</li>
+    <li>The function-component equivalents are `React.memo` for props and `useMemo` for values.</li>
+    <li>Mutating an object in place makes the comparison pass and the UI go stale.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q038">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

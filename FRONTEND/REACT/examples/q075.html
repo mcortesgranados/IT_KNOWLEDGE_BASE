@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q75 - What is the purpose of React’s Suspense component? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q075">&larr; React Beginner Questions - Set 8</a> <span class="tag">Q75</span></p>
+  <h1>What is the purpose of React’s Suspense component?</h1>
+  <p class="set">React Beginner Questions - Set 8</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3</pre>
+    <pre class="code-pre"><code class="language-javascript">&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+  &lt;Profile /&gt;        {/* may suspend while it loads */}
+&lt;/Suspense&gt;</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Suspense shows the fallback while a child waits — for `lazy`, or for data with a Suspense-aware library.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q075">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

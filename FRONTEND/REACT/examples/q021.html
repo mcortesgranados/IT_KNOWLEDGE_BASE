@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q21 - What is React Router? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q021">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q21</span></p>
+  <h1>What is React Router?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">Routing is not built into React; React Router maps URLs to components so the page changes without a full reload.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+export default function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;nav&gt;
+        &lt;Link to="/"&gt;Home&lt;/Link&gt; | &lt;Link to="/users/7"&gt;User 7&lt;/Link&gt;
+      &lt;/nav&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/users/:id" element={&lt;UserPage /&gt;} /&gt;
+        &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`Link` intercepts the click; an `&lt;a href&gt;` would reload the whole app.</li>
+    <li>`:id` is read inside `UserPage` with `useParams()`.</li>
+    <li>The `*` route is the catch-all — without it unmatched URLs render nothing.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q021">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

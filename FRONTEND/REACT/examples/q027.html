@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q27 - What is the difference between useState and useReducer? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q027">&larr; React Beginner Questions - Set 3</a> <span class="tag">Q27</span></p>
+  <h1>What is the difference between useState and useReducer?</h1>
+  <p class="set">React Beginner Questions - Set 3</p>
+  <p class="q">Same primitive underneath. `useReducer` wins when the next state depends on several fields or when the transitions deserve names.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useReducer } from 'react';
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'add':    return { ...state, items: [...state.items, action.item], total: state.total + action.price };
+    case 'clear':  return { items: [], total: 0 };
+    default:       return state;
+  }
+}
+
+export default function Cart() {
+  const [state, dispatch] = useReducer(reducer, { items: [], total: 0 });
+
+  return (
+    &lt;&gt;
+      &lt;button onClick={() =&gt; dispatch({ type: 'add', item: 'Lamp', price: 20 })}&gt;Add&lt;/button&gt;
+      &lt;button onClick={() =&gt; dispatch({ type: 'clear' })}&gt;Clear&lt;/button&gt;
+      &lt;p&gt;{state.items.length} items — ${state.total}&lt;/p&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>With `useState` the same logic becomes several setters that must stay in sync.</li>
+    <li>The reducer is a pure function, so it can be tested outside React.</li>
+    <li>`dispatch` is stable, which makes it safe to pass to memoised children.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q027">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

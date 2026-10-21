@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q4 - What is JSX? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q004">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q4</span></p>
+  <h1>What is JSX?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">JSX is sugar. The compiler turns every tag into a function call, which is why this example is exact rather than approximate.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre>
+    <pre class="code-pre"><code class="language-javascript">// What you write
+const greeting = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;
+
+// What the compiler produces (classic runtime)
+const compiled = React.createElement(
+  'h1',
+  { className: 'title' },
+  'Hello'
+);
+
+// Expressions go inside braces; attributes use camelCase
+const user = { name: 'Ana' };
+const card = &lt;p&gt;Welcome, {user.name.toUpperCase()}&lt;/p&gt;;</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>`className` instead of `class`, `htmlFor` instead of `for` — JSX attributes follow DOM property names.</li>
+    <li>JSX is not HTML string concatenation: `{...}` embeds any JavaScript expression, including function calls.</li>
+    <li>It needs a build step — Babel, SWC or esbuild — because browsers cannot parse it.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q004">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q40 - How do you handle component state in a Redux store? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q160">&larr; React Intermediate Questions - Set 4</a> <span class="tag">Q40</span></p>
+  <h1>How do you handle component state in a Redux store?</h1>
+  <p class="set">React Intermediate Questions - Set 4</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3</pre>
+    <pre class="code-pre"><code class="language-javascript">// Redux: component state lives in the store, not in the component
+const items = useSelector(s =&gt; s.cart.items);
+dispatch({ type: 'cart/add', payload: item });</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Local UI state (open/closed) stays in the component; shared domain state goes to the store.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q160">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

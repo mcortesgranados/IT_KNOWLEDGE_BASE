@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q57 - What is the purpose of React.forwardRef? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q057">&larr; React Beginner Questions - Set 6</a> <span class="tag">Q57</span></p>
+  <h1>What is the purpose of React.forwardRef?</h1>
+  <p class="set">React Beginner Questions - Set 6</p>
+  <p class="q">A ref is not a prop: it never reaches a function component&#x27;s props. `forwardRef` is how a ref is handed through to a DOM node inside.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+    <pre class="code-pre"><code class="language-javascript">import { forwardRef, useRef } from 'react';
+
+const TextInput = forwardRef(function TextInput(props, ref) {
+  return &lt;input ref={ref} {...props} /&gt;;
+});
+
+export default function Form() {
+  const emailRef = useRef(null);
+
+  return (
+    &lt;form onSubmit={e =&gt; { e.preventDefault(); emailRef.current.focus(); }}&gt;
+      &lt;TextInput ref={emailRef} placeholder="email" /&gt;
+      &lt;button type="submit"&gt;Focus the field&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Without `forwardRef`, `&lt;TextInput ref={...} /&gt;` warns and the ref stays `null`.</li>
+    <li>The ref is the second argument, not part of `props` — a deliberate API decision.</li>
+    <li>The second parameter of `forwardRef`&#x27;s render function must be named `ref`, or tooling cannot reorder it.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q057">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

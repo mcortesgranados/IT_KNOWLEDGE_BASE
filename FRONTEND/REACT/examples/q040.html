@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q40 - What is a controlled component in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q040">&larr; React Beginner Questions - Set 4</a> <span class="tag">Q40</span></p>
+  <h1>What is a controlled component in React?</h1>
+  <p class="set">React Beginner Questions - Set 4</p>
+  <p class="q">The input&#x27;s value lives in React state, so React can read it, validate it and reset it at any moment.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Coupon() {
+  const [code, setCode] = useState('');
+  const valid = /^[A-Z0-9]{6}$/.test(code);
+
+  return (
+    &lt;form onSubmit={e =&gt; { e.preventDefault(); console.log('apply', code); }}&gt;
+      &lt;input
+        value={code}
+        onChange={e =&gt; setCode(e.target.value.toUpperCase())}
+        placeholder="ABC123"
+      /&gt;
+      &lt;button type="submit" disabled={!valid}&gt;Apply&lt;/button&gt;
+      &lt;button type="button" onClick={() =&gt; setCode('')}&gt;Reset&lt;/button&gt;
+      {!valid &amp;&amp; code.length &gt; 0 &amp;&amp; &lt;p&gt;Six characters, letters and digits.&lt;/p&gt;}
+    &lt;/form&gt;
+  );
+}</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>Uppercasing in `onChange` is possible only because React owns the value.</li>
+    <li>A `value` without `onChange` gives a read-only field and a React warning.</li>
+    <li>The cost is a render per keystroke — negligible for forms, noticeable for huge inputs.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q040">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

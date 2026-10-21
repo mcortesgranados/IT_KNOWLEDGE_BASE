@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q6 - What is the virtual DOM in React? - code example</title>
+<link rel="stylesheet" href="example.css">
+<link rel="stylesheet" href="../../../assets/vendor/highlight/atom-one-dark.min.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumbs"><a href="../01_react_all_questions.html#q006">&larr; React Beginner Questions - Set 1</a> <span class="tag">Q6</span></p>
+  <h1>What is the virtual DOM in React?</h1>
+  <p class="set">React Beginner Questions - Set 1</p>
+  <p class="q">You cannot see the virtual DOM, but you can prove it exists by watching what React actually touches when state changes.</p>
+  <h2>Example</h2>
+  <div class="code-block">
+    <pre class="code-gutter" aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15</pre>
+    <pre class="code-pre"><code class="language-javascript">import { useState } from 'react';
+
+export default function Ticker() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Static text — never re-created in the DOM&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(c =&gt; c + 1)}&gt;Count: {count}&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// In DevTools: inspect the &lt;p&gt;. After many clicks its DOM node
+// stays identical, while the button's text node is the one updated.</code></pre>
+  </div>
+  <h2>What to notice</h2>
+  <ul class="notes">
+    <li>React builds a lightweight tree of objects, diffs it against the previous tree, then patches only what differs.</li>
+    <li>The `&lt;p&gt;` above keeps its identity across renders; only the text node inside the button changes.</li>
+    <li>The win is not raw speed but predictability — you never write the update logic yourself.</li>
+  </ul>
+  <a class="back" href="../01_react_all_questions.html#q006">&larr; Back to the question list</a>
+</div>
+<script src="../../../assets/vendor/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
