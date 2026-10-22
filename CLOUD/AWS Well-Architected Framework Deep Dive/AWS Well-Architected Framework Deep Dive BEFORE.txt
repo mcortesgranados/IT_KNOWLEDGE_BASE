@@ -1,0 +1,342 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+13:58
+
+Course Introduction
+01:45
+
+Adopting a Well-Architected Framework
+03:37
+
+
+Introducing the AWS Well-Architected Framework
+07:42
+Course Updates and Changelogs
+00:54
+
+CHAPTER 2
+
+Security
+1:55:10
+
+Security 101
+07:27
+Exploring Foundations and Identity
+08:18
+
+Applying Detection
+06:09
+
+
+Understanding Protection
+10:32
+
+
+
+
+HANDS-ON LAB
+Optimizing Network Resources to Maintain a Secure Instance
+30:00
+Reviewing Incident Response
+09:57
+
+Diving into Application Security
+06:37
+
+
+Section Review
+06:10
+QUIZ
+Security Pillar Quiz
+30:00
+CHAPTER 3
+
+Cost Optimization
+2:02:17
+
+Cost Optimization 101
+05:43
+Understanding Financial Awareness
+07:16
+
+Exploring Expenditure and Usage
+04:21
+
+Selecting Cost-Effective Resources
+13:18
+
+
+
+HANDS-ON LAB
+Reduce Storage Costs with EFS
+1:00:00
+Managing Demand and Supply Resources
+03:01
+Applying Continuous Optimization
+06:31
+Section Review
+07:07
+QUIZ
+Cost Optimization Pillar Quiz
+15:00
+CHAPTER 4
+
+Operational Excellence
+1:53:28
+
+Operational Excellence 101
+05:22
+Understanding Organization in the Cloud
+07:20
+
+
+
+
+Preparing for Operational Excellence in the Cloud
+10:23
+
+
+Operating According to Best Practices
+08:47
+Evolving According to Best Practices
+02:22
+HANDS-ON LAB
+Updating CloudFormation Stacks with Direct Updates and Change Sets
+1:00:00
+Section Review
+04:14
+QUIZ
+Operational Excellence Pillar Quiz
+15:00
+CHAPTER 5
+
+Performance Efficiency
+1:30:23
+
+Performance Efficiency 101
+03:21
+Understanding Selection and Review: Part 1
+07:16
+
+
+Understanding Selection and Review: Part 2
+09:32
+
+
+Monitoring and Trade-Offs
+05:01
+HANDS-ON LAB
+Triggering AWS Lambda from Amazon SQS
+45:00
+Section Review
+05:13
+QUIZ
+Performance Efficiency Pillar Quiz
+15:00
+CHAPTER 6
+
+Reliability
+1:37:29
+
+Reliability 101
+04:32
+Applying Foundations
+10:35
+
+Reviewing Workload Architecture
+07:34
+Managing Change
+07:01
+
+
+
+
+Managing Failure: Part 1
+06:52
+
+
+Managing Failure: Part 2
+11:37
+
+
+
+
+HANDS-ON LAB
+Set Up Cross-Region S3 Bucket Replication
+30:00
+Section Review
+04:18
+QUIZ
+Reliability Pillar Quiz
+15:00
+CHAPTER 7
+
+Sustainability
+2:04:01
+
+Sustainability 101
+05:15
+Diving into the Improvement Process
+07:22
+
+Exploring Region Selection and Demand Alignment
+09:13
+
+
+
+
+
+
+
+
+
+
+
+Reviewing Software and Architecture
+10:04
+
+
+
+
+
+
+
+
+Understanding Data and Hardware
+06:33
+
+
+
+
+Applying Process and Culture
+05:50
+
+
+
+HANDS-ON LAB
+Scaling EC2 Using SQS
+45:00
+Section Review
+04:44
+QUIZ
+Sustainability Pillar Quiz
+30:00
+CHAPTER 8
+
+Focusing on Solutions
+3:19:40
+
+AWS Lenses and Guidance
+02:18
+Reviewing Container Build and High-Performance Computing Lenses
+10:24
+
+
+Understanding SAP and Financial Services Industry Lenses
+10:29
+
+
+
+
+Introducing Serverless Applications and Software as a Service Lenses
+10:54
+
+
+Applying Hybrid Networking and Game Industry Lenses Part: 1
+08:00
+
+
+Applying Hybrid Networking and Game Industry Lenses Part: 2
+11:51
+
+Exploring Machine Learning and Internet of Things (IoT) Lenses
+12:07
+
+
+Diving into Streaming Media and Data Analytics Lenses
+10:16
+
+
+Understanding Operational Readiness Reviews
+07:41
+
+Reviewing Disaster Recovery of Workloads on AWS
+10:01
+HANDS-ON LAB
+Applying Disaster Recovery Techniques in AWS
+1:00:00
+Exploring the Management and Governance Cloud Environment Guide
+11:57
+Section Wrap-Up
+03:42
+QUIZ
+Focusing on Solutions Quiz
+30:00
+CHAPTER 9
+
+Applying and Evaluating the Framework
+41:19
+
+Applying the Framework
+02:13
+The AWS Well-Architected Tool 101
+04:17
+Walking through the AWS Well-Architected Tool
+07:54
+Case Study #1: Replatforming Over Time
+05:44
+Case Study #2: Evolving While Meeting Changing Requirements
+06:11
+QUIZ
+Applying and Evaluating the Framework Quiz
+15:00
+CHAPTER 10
+
+Conclusion
+05:11
+
+Course Review and Summary
+03:32
+Continuous Learning and What’s Next
+01:39
+
+
+
+Your Progress
+0%
+
+COMPLETE
+
+Lesson Completion
+
+0%
+
+Lab Completion
+
+0 of 7
+
+Quiz Completion
+
+0 of 8
+
+NEW
+
+Learning Scheduler
+Tell us how many hours per week you can study.
+
+4
+16 Dec.
+HRS PER WEEKCOMPLETION DATE
+MEMBERS ONLY
+
+Cloud Playground
+Cloud along in real time. This course supports Cloud Playground sandbox environments, so you can learn by doing in a real cloud environment.
+
+Certificate of Completion
+Complete at least 80% of the course before you can request a certificate of completion.
+
+Rate this course
+Loved it? Room for improvement? Let us know!
+
