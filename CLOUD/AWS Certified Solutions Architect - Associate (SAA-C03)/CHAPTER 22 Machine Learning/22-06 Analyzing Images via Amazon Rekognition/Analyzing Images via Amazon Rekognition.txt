@@ -1,0 +1,86 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look at analyzing images
+using Amazon Rekognition
+and this 100% does come up in the latest exam.
+So we're going to look at what Amazon Rekognition is.
+We're going to look at its different use cases.
+I'm going to give you a demo of it
+and then we'll move on to my exam tips.
+So what is Rekognition?
+Well, basically it's Amazon's computer vision product
+that automates the Rekognition of pictures and videos
+using deep learning and neural networks.
+And you can use these processes to understand and label
+what is in a picture or a video.
+So here we've got celebrity recognition.
+You can upload pictures of celebrities to Rekognition
+and it will basically tell you who that person is.
+In terms of use cases for Rekognition,
+the main one is content moderation.
+So you might have a social media platform
+and you need to make sure people aren't uploading
+anything rude or offensive on it.
+So you can automatically moderate content
+allowing your applications and websites
+to be family friendly
+and this is the most common exam scenario.
+So just remember if you see a scenario-based question
+talking about what service you can use to recognize images,
+I want you to think of Rekognition.
+You can do face detection and analysis.
+So this automatically recognizes faces
+and detects weather someone's wearing a hat or glasses.
+You can do celebrity recognition
+so you can automatically recognize famous people
+and label them
+and you can use it in streaming video events detections.
+So it's useful for applications such as Ring.
+You can automatically recognize people or animals or faces
+and then create alert notifications based off this.
+So with Ring, sometimes it will say movements detected
+but sometimes it will say a person is detected
+that is using Rekognition.
+So let's go ahead and see this in action.
+Okay, so here I am in the AWS console. If you
+want to find Rekognition, you can just type it up here
+in the search services.
+I've already visited it, so I'm just going to click on here
+and then we can go ahead and try a demo.
+So the first demo is just on label detection.
+So let's go ahead and upload our own image
+and I'm going to upload an image of Jeff Bezos
+and we'll be able to see here,
+it's starting to pick up labels.
+So it detects that there's clothing in here,
+apparel that is a person in here,
+human, shirt, pants, et cetera.
+And you can go in and show more.
+So we can look at things like it's doing gender detection,
+says it's 90.2% that it's a man,
+footwear, jeans, denim shoes, et cetera.
+So this is label detection.
+Let's go ahead and go and look at celebrity recognition.
+So here's a picture of Jeff,
+going to upload my own picture.
+So I'm going to go in and click in here
+and we can see that
+it has a 99.99% confidence
+that this is Jeff Bezos.
+So that is using celebrity recognition.
+So onto my exam tips,
+this definitely does come up in the exam
+and basically all you need to know is
+where are you going to use it.
+So if you have a scenario question about content moderation
+using artificial intelligence or ML,
+think of Amazon Rekognition.
+So you might have your own social media platform
+and you need to make sure that it's family friendly
+and to be able to detect
+if someone's uploading rude images to it
+then you would use Rekognition for that service.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

@@ -1,0 +1,281 @@
+QUESTION 1
+
+Which of the following AWS AI and machine learning services are used to power the Alexa service?
+
+
+Amazon Polly and Amazon Comprehend
+
+
+Amazon Transcribe and Amazon Comprehend
+
+CORRECT
+Amazon Polly, Amazon Lex, and Amazon Transcribe
+
+
+Amazon Lex and Amazon Comprehend
+
+Sorry!
+While Amazon Polly is used to power Alexa, Amazon Comprehend is not.
+
+Correct Answer
+Amazon Polly, Amazon Lex, and Amazon Transcribe are all AWS services that help power Alexa.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+What would you use Amazon Textract for?
+
+CORRECT
+For applying machine learning to automatically extract text, handwriting, and data from scanned documents.
+
+
+For utilizing natural language processing (NLP) to help you understand the meaning and sentiment in your text.
+
+
+For creating an intelligent search service powered by machine learning.
+
+
+For time-series forecasting to generate important business insights.
+
+Good work!
+Amazon Textract uses machine learning to automatically extract text, handwriting, and data from scanned documents.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+How would you use Amazon Forecast?
+
+
+To use a time-series forecasting service to generate important business insights.
+
+
+To automatically extract text, handwriting, and data from scanned documents.
+
+
+To use natural language processing (NLP) to help you understand the meaning and sentiment in your text.
+
+
+To predict the weather.
+
+Good work!
+Amazon Forecast is a time-series forecasting service that uses machine learning and is built to provide you with important business insights.
+
+________________________________________________________________________________________________________________________
+QUESTION 4
+
+Which AWS service can you use to create machine learning models using Jupyter Notebooks?
+
+CORRECT
+Amazon SageMaker
+
+
+Amazon Kendra
+
+
+Amazon Textract
+
+
+Amazon Comprehend
+
+Good work!
+SageMaker is used to create AI and ML models using Jupyter Notebooks.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which AWS service can you use to translate one language to another?
+
+
+Amazon Comprehend
+
+
+Amazon Lex
+
+CORRECT
+Amazon Translate
+
+
+Amazon Kendra
+
+Sorry!
+Comprehend is a service used for sentiment analysis.
+
+Correct Answer
+Translate is a service used to translate one language in to another.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 6
+
+Which AWS AI and machine learning service is primarily used to power the voice of the Alexa service?
+
+
+Amazon Sagemaker
+
+
+Amazon Rekognition
+
+
+Amazon Comprehend
+
+CORRECT
+Amazon Polly
+
+Sorry!
+Amazon Sagemaker is a fully managed service that provides developers and data scientists with the ability to build, train, and deploy machine learning models quickly. It is not primarily responsible for Alexa's voice.
+
+Correct Answer
+Amazon Polly is a service that turns text into lifelike speech, which is a key component of Alexa's functionality.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 7
+
+What is Amazon Fraud Detector?
+
+
+An AWS AI service that is used by fraudsters to prevent detection of fraudulent activity.
+
+CORRECT
+An AWS AI service that is built to detect fraud in your data.
+
+
+An AWS AI service that is used to give you advice about how to save costs in your AWS account.
+
+
+An AI service that is used to perform vulnerability scans on EC2 instances.
+
+Sorry!
+Amazon Fraud Detector is an AWS AI service that is built to detect fraud in your data, not prevent detection of fraudulent activity.
+
+Correct Answer
+Amazon Fraud Detector is an AWS AI service that is built to detect fraud in your data.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 8
+
+What does Amazon Kendra allow you to do?
+
+
+To use a time-series forecasting service to generate important business insights.
+
+
+To use natural language processing (NLP) to help you understand the meaning and sentiment in your text.
+
+
+To use machine learning to automatically extract text, handwriting, and data from scanned documents.
+
+CORRECT
+To create an intelligent search service powered by machine learning.
+
+Sorry!
+​​Amazon Forecast is a time-series forecasting service that uses machine learning and is built to provide you with important business insights.
+
+Correct Answer
+Amazon Kendra allows you to create an intelligent search service powered by machine learning.
+
+________________________________________________________________________________________________________________________
+
+
+QUESTION 9
+
+Which AWS AI and machine learning service is NOT used to power the Alexa service?
+
+
+Amazon Polly
+
+
+Amazon Transcribe
+
+CORRECT
+Amazon Comprehend
+
+
+Amazon Lex
+
+Sorry!
+Polly is an AWS service that helps power Alexa.
+
+Correct Answer
+Comprehend is not an AWS service that helps power Alexa.
+
+________________________________________________________________________________________________________________________
+
+
+QUESTION 4
+
+Which AWS service uses machine learning and AI to recognize the content of images?
+
+
+Amazon Lex
+
+CORRECT
+Amazon Rekognition
+
+
+Amazon Polly
+
+
+Amazon Textract
+
+Sorry!
+Lex does not use machine learning and AI to recognize the content of images.
+
+Correct Answer
+Rekognition uses machine learning and AI to recognize the content of images.
+
+
+________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What would you use Amazon Comprehend for?
+
+
+To use machine learning to automatically extract text, handwriting, and data from scanned documents.
+
+
+To use machine learning to predict the weather.
+
+
+To help you to create an intelligent search service powered by machine learning.
+
+CORRECT
+To help you understand the meaning and sentiment in your text.
+
+Sorry!
+Amazon Textract uses machine learning to automatically extract text, handwriting, and data from scanned documents.
+
+Correct Answer
+Amazon Comprehend is used to help you understand the meaning and sentiment in your text.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 6
+
+What is Amazon Fraud Detector?
+
+
+An AWS AI service that is used to give you advice about how to save costs in your AWS account.
+
+CORRECT
+An AWS AI service that is built to detect fraud in your data.
+
+
+An AWS AI service that is used by fraudsters to prevent detection of fraudulent activity.
+
+
+An AI service that is used to perform vulnerability scans on EC2 instances.
+
+Sorry!
+Amazon Fraud Detector is an AWS AI service that is built to detect fraud in your data, not provide advice about how to save costs.
+
+Correct Answer
+Amazon Fraud Detector is an AWS AI service that is built to detect fraud in your data.
+
+________________________________________________________________________________________________________________________
+

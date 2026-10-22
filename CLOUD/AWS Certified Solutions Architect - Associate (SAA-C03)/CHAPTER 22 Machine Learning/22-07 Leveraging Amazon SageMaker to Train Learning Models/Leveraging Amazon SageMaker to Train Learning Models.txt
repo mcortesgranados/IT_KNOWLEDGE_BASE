@@ -1,0 +1,200 @@
+Okay, hello Cloud Gurus and welcome
+to this lecture.
+In this lecture, we're going to look at leveraging
+Amazon SageMaker to train machine learning models.
+Now, SageMaker definitely does come up in the exam
+but basically all you need to understand is what it is
+and what it does.
+So we're going to have a look at SageMaker as an overview.
+We're going to look at the 2 different deployment types.
+We're going to look at the different SageMaker stages.
+We're going to look at elastic inference, automatic scaling,
+high availability, and we'll move on to my exam tips.
+Now I am going to deep dive a little bit
+into SageMaker in this lecture.
+Don't let it freak you out.
+You actually only just need to know
+that SageMaker is a way to build
+and deploy machine learning models in the AWS cloud.
+That's basically all you need to know going into your exam.
+I would highly recommend if you're interested in AI and ML
+to do our AI and ML specialty courses
+where we really deep dive into SageMaker.
+But going into the exam
+you basically just need to know what it is.
+Now, if you go into the AWS console
+and you go into SageMaker, this is what you're going to see.
+It's basically split down into 4 separate areas.
+We've got ground truth, notebook training, and inference.
+So ground truth is where you set up and manage labeling jobs
+for training data sets using active learning
+and human labeling.
+Notebook is where you can actually go in
+and access a managed Jupyter notebook environment.
+Jupyter notebook environment is basically where
+you are going to write your machine learning algorithms
+in Python.
+We then have training.
+This is where we train
+and tune our models that we would have developed
+in our notebooks.
+And then we have inference,
+and this is basically where you can package
+and deploy your machine learning models at scale.
+So that's all it is.
+The 3 most important ones to remember
+are notebook, training, and inference.
+Notebooks is where
+you're going to go in and create your models. Training
+is where you're going to train and tune your models.
+And then inference is where you're going to go ahead
+and deploy your models.
+Now, there's 2 different deployment types.
+You can have offline usage and online usage.
+Basically the main difference between them is
+if you've got a machine learning model that needs to respond
+to data in real time,
+then you're going to want to use your online usage.
+So it gives you synchronous or real-time usage.
+It's going to give you load latency predictions.
+And it's basically,
+it's hosted using the SageMaker hosting services.
+In terms of the input format and output format,
+the input format varies depending on the algorithm,
+but the output format
+with online usage will always be a JSON string back.
+So again, where this would come up in the exam
+if they're talking about SageMaker
+and what deployment type you should use.
+If you need a immediate response,
+then of course you want to use the online usage.
+If you don't, then you can use the offline usage.
+So in terms of the SageMaker stages,
+what you do is you go in, you create a model,
+and this is the place that's going to provide predictions
+for your endpoint.
+You then go in and create an endpoint configuration
+and this is where you specify the model to use,
+the inference instance type, and then the instance count,
+the variant name and weight.
+And this is sometimes called a production variant.
+And then you go ahead and create an endpoint.
+So again, let's not deep dive too much into this.
+I just want you to remember
+if you are going ahead and using SageMaker
+you basically just want to go in, create a model,
+then you've got to create an endpoint configuration
+and then you go ahead and create an endpoint.
+So let's look at how the training works.
+So the training data can come from a variety of sources.
+It can come from the AWS console, it can come from the SDK,
+it can come from an S3 bucket
+which has a whole bunch of training data.
+And what you do is you go ahead and load that
+into SageMaker.
+And behind the scenes
+this is basically creating a container
+with a machine learning container inside it.
+And then once it's done, the training,
+it's going to basically output the model artifacts to S3.
+You're then going to go in and create your model.
+So again, you're going to get your data
+from the AWS console, the SDK,
+the model artifacts that you just did for the training,
+and then the inference container.
+You load that into SageMaker
+and then that creates your model.
+And this could be an online model or offline model.
+And you can actually bring in your own models
+and you can also go ahead
+and buy them on the AWS marketplace.
+So that's how SageMaker works at a very, very high level.
+Again, don't get too bogged down in it.
+Just remember, SageMaker is where you can load data in
+to create machine learning models.
+SageMaker Neo basically allows you to customize
+your machine learning models for specific CPU hardware.
+This could be things such as ARM, Intel,
+and NVIDIA processors.
+It also includes a compiler to convert
+the machine learning model
+to an environment that is optimized to execute the model
+on the target architecture.
+So there's lots of different models
+or lots of different software that you can use.
+One of the most common is TensorFlow, which is by Google,
+PyTorch is also by Facebook.
+And essentially you're going in
+and creating your models using one of these technologies
+and then you can load that into SageMaker Neo.
+And what that's going to do is it's going to
+optimize your models to run on specific hardware.
+So this could be ARM processors,
+NVIDIA processors, et cetera.
+I also need you to be aware of Elastic Inference.
+So Elastic Inference basically speeds up throughput
+and decreases latency
+of real time inferences deployed on SageMaker.
+And so these are just models, essentially,
+on the hosted services,
+and it's using only CPU based instances.
+So when you are doing machine learning
+you can use CPU based instances or GPU based instances.
+GPU instances are going to be a lot quicker
+but they're also more expensive.
+So if you see a scenario question where it's talking
+about decreasing the cost of running SageMaker,
+I want you to think immediately of Elastic Inferences.
+And they must be configured
+when you create a deployable model.
+And they're not available for all algorithms yet.
+SageMaker comes with automatic scaling
+so it will automatically scale to meet your demand.
+And then we just need to quickly cover off
+high availability with SageMaker.
+So if we deploy SageMaker into a single availability zone
+and that's it, and the availability zone goes down,
+then SageMaker will go down.
+So Amazon always recommend
+that you deploy it across multiple availability zones.
+So you can put it across 2.
+You can then set up some CloudWatch metrics
+so if one does go down,
+SageMaker will automatically go ahead
+and provision your model in a separate availability zone.
+So I know that this lecture is a little bit in depth.
+Don't worry, you don't need to remember all of this.
+What you need to remember is this.
+So SageMaker is where you create machine learning models.
+And the 3 main things you need to remember
+is the notebook, this is where you have access
+to a managed Jupyter notebook environment.
+This is where you're going to go in
+and write your machine learning models.
+You then have training,
+this is where you train and tune your models.
+And you then have inference, and this is where you package
+and deploy your models at scale.
+Also, remember going into your exam
+the first thing you do is you create a model,
+then you create an endpoint configuration,
+and then you create the endpoint itself.
+You can use things like TensorFlow or PyTorch
+and load them into Amazon SageMaker Neo.
+And this is basically going to optimize your models to work
+on specific hardware architectures
+such as NVIDIA or ARM processors, et cetera.
+Remember, if you want to decrease your costs
+you're going to use Elastic Inference.
+That's going to be using CPU inferences
+instead of GPU inferences.
+Remember that SageMaker can scale automatically,
+and just remember that it's high availability.
+So if you see anything about training
+and developing and deploying machine learning models,
+all I want you to do is think of SageMaker.
+You just need to know what it is at a high level.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

@@ -1,0 +1,39 @@
+Okay, hello Cloud Gurus
+and welcome to this section.
+This is the machine learning overview section
+and this has recently been added
+to the CSA-03 blueprint.
+So what we're going to look at in this section of the course
+is we're going to look at analyzing text
+using Amazon Comprehend, Kendra, and Amazon Textract.
+We're then going to go on to predicting time series data
+using Amazon Forecast.
+We're then going to move on to protecting accounts
+with Amazon Fraud Detector.
+We'll then look at working with text and speech
+using Amazon Polly, Amazon Transcribe, and Amazon Lex,
+and then we'll have a look at analyzing images
+via Amazon Rekognition.
+And then the main lecture in this section of the course
+is leveraging SageMaker to train learning models.
+Then finally, we'll move on to translating content
+into different languages with Amazon Translate.
+And then we'll have a look at my exam tips.
+Now, if this does seem pretty full on, don't worry.
+Actually, very few of these services
+are currently on the exam.
+The only 2 services that we have experienced
+in the exam so far are Rekognition and SageMaker,
+so that's where we're really going to focus
+in this section of the course.
+We're going to really sort of have a good look
+at Rekognition and SageMaker.
+And the rest we're just going to cover what they are
+at a high level and what their use cases are.
+And often what will happen is some of these
+will just be detractors,
+so it'll just be asking you a question
+and a translate might be a detractors
+which has absolutely nothing to do
+with the scenario-based question.
+So let's move on to the next lecture.

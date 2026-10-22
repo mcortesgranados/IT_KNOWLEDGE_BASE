@@ -1,0 +1,47 @@
+Okay. Hello Cloud Gurus and welcome
+to the very last lecture in the AI and ML section
+of the course.
+Today we're going to learn about translating content
+into different languages with Amazon Translate.
+And likewise, this hasn't yet come up on the exam,
+so we're going to cover it a very high level,
+just so you know what it is.
+So what is Amazon Translate?
+We're going to look at the use cases
+and then we're going to go into the exam tips.
+So Translate is exactly what it sounds like.
+It's a machine learning service that allows you
+to automate language translation,
+and it uses deep learning and neural networks.
+And Amazon Translate allows you to translate
+from one language to another.
+Now, your use cases for this,
+as you might need highly accurate
+and continuously improving translation service.
+The translation service is very accurate
+and Amazon is continuously innovating
+to improve the accuracy of it.
+We have actually been using this
+as a translation service since it was first launch.
+When it first came out, it was terrible,
+but it has actually really, really improved.
+It's very easy to integrate into your applications,
+and you can easily integrate the translation service
+into your applications using APIs.
+And it's extremely cost effective.
+So it's so cost effective when you compare it
+to the cost of hiring human translators.
+And you can save an absolute fortune if you automate this.
+And then finally, it's very scalable.
+So it has the scalability of AWS.
+So no matter what the workload is,
+whether it's a few pages or a library of novels,
+Translate is going to scale with your demands.
+So my exam tips,
+if you have a scenario-based question
+where you need to translate from one language
+to another using a deep learning or a neural network,
+I want you to think of Amazon Translate.
+Well, that's it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to my exam tips.

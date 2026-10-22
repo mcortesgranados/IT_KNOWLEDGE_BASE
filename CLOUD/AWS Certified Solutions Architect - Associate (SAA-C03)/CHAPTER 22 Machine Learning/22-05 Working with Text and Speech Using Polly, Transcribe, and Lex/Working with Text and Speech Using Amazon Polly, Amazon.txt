@@ -1,0 +1,126 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look
+at 3 different services,
+so we're going to look at working with text and speech
+using Amazon Polly, Amazon Transcribe, and Amazon Lex.
+Again, this doesn't really come up in the exam,
+you just basically need to know what these services are,
+but these are interesting services
+because you do interact with them a lot
+in your everyday lives, at least I do.
+So let's go ahead and have a look at what Transcribe is,
+what its use cases are, what Lex is, what its use cases are,
+what Polly is and what its use cases are.
+And then we're going to have a look
+at how you can use the trio in action.
+And then we will go on to my exam tips.
+So let's start with Transcribe. What is it?
+Well, basically it's used to convert
+speech to text automatically,
+and you can use this to generate subtitles on the fly.
+And it's actually what we use at A Cloud Guru
+to generate our subtitles.
+So essentially, what it allows you to do
+is convert audio and video files into text.
+And you can basically do this
+in a fast and automated process.
+And like I said,
+one specific use case is to generate subtitles.
+Moving on to Lex, you actually do use Lex pretty much
+or I would say almost every day without knowing it.
+So Lex allows you to build conversational interfaces
+in your applications using natural language models.
+And chances are when you're talking
+to an automated bot online,
+you're interacting with the Lex service on the backend.
+So you might be calling American Airlines
+and talking to one of their bots to move a flight
+or to cancel a flight or try and get a refund,
+or might be Bank of America
+where you're trying to order a new card,
+something like that,
+chances are when you're chatting with a bot,
+that is Lex on the backend.
+Some use cases for Lex,
+well, you can build virtual agents and voice assistants.
+You can create a virtual agent to arrange refunds,
+flight changes, password requests, et cetera.
+You can automate informational responses,
+so you can basically automate
+the frequently asked questions on your website
+so users can ask you directly on your website
+a frequently asked question
+and it will automate the response.
+And this basically improves productivity
+with application bots because you can create chatbots
+that interact with your customers
+and then that way your customer support teams
+aren't bogged down
+basically dealing with frequently asked questions.
+The bots do that and if a bot can't answer,
+then you escalate it to your customer support team.
+And so you can also automate things
+like your contact center transcripts.
+You can create bots who go in and act as chatbots
+using existing contact center scripts.
+So moving onto the third service, Polly. Hello, Polly.
+"Polly wants a cracker," I had to say it,
+but Polly basically turns your text into lifelike speech
+and it allows you to create applications
+that talk and interact to you
+using a variety of languages and accents.
+So if you actually go onto the Amazon blog,
+like Jeff Barr's blog,
+you can actually have the blog be read out
+and that is using Polly.
+I would encourage you to go into the AWS console,
+do a search for Polly and you can basically just type in
+some text and then make it read it out loud
+and then you can change the different accents.
+So you could have an Australian accent,
+you could have a British accent,
+but you can also do this in different languages.
+You could do it in Swedish
+or in French or in Japanese, et cetera.
+So in terms of use cases for Polly,
+basically Polly allows you to create applications
+that speak rather than just display text.
+And like I said, if you visit the AWS blog,
+you can see an example of Polly
+converting the blog posts into lifelike speech.
+So where do you see this trio in action?
+Where do you see Transcribe, Lex, and Polly in action?
+Well, when you go Alexa,
+basically you're invoking the Lex service,
+which is then responding to you using Polly.
+So basically, these 3 services is what drives Alexa.
+So when you're speaking to your Alexa device,
+it is basically transcribing your speech into text.
+That text is then sent to the Lex service
+and then the Lex service will then decide how to respond
+and it will send text back to Polly
+and then Polly will convert that text back to speech.
+So like I said, without even knowing it,
+basically if you use Alexa, you use this service every day.
+If you don't use Alexa, you probably use Lex an awful lot
+when you're talking to chatbots online.
+So going into my exam tips,
+just remember when to use Transcribe.
+If you see a scenario about machine learning
+to convert video and audio into text,
+for example, generating closed captioning,
+I want you to think of Transcribe.
+If you see a scenario question
+where you need to build conversational chatbots,
+I want you to think of Lex.
+And like I said,
+this is the service that powers the logic behind Alexa,
+so it's pretty easy to remember.
+And then finally, if you see a scenario question
+where you need to convert text into natural speech
+and perhaps in multiple languages,
+then you would want to use PolLy.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture. Thank you.

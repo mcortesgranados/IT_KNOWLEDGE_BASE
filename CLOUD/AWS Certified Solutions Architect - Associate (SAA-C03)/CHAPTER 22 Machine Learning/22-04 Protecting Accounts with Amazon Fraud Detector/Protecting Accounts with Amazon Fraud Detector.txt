@@ -1,0 +1,52 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can protect our accounts
+using Amazon's Fraud Detector. So
+we're going to start by looking at what Fraud Detector is,
+we're going to look at its use cases,
+and then we'll go on to my exam tips.
+So what is Fraud Detector?
+Well, it's exactly what it sounds like.
+It's an AWS AI service
+that's built to detect fraud in your data.
+And essentially you can go in
+and create a fraud detection machine learning model
+that's based on your data.
+And you can also quickly automate this process.
+So some use cases for it
+is you might want to identify suspicious online payments.
+So you can go ahead and train the model
+to identify these online payments
+based on previous cases of fraud.
+You could also use Fraud Detector
+to detect new account fraud.
+So you could create a model
+where you can distinguish between
+genuine new users or accounts
+and high-risk accounts,
+and then add additional security checks
+to the accounts that are high risk.
+And this helps prevent things
+like trial and loyalty program abuse.
+So you can stop users from automating "free trial" accounts,
+so they get an indefinite free service.
+And we have actually used this at A Cloud Guru previously,
+where we would have these free trials
+for like 7 days,
+and then we'd have these bots going in
+and just constantly creating new accounts.
+So you can use Fraud Detector to prevent things like that.
+And you can also improve your account takeover detection.
+So you can automate the detection of account takeovers,
+and this is basically where an illegitimate user
+hijacks a legitimate user's account.
+So really just going into the exam,
+look for scenarios where you're asked to build
+a fraud detection machine learning model
+that's highly customizable based on your data,
+I want you to think of Amazon Fraud Detector.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.
