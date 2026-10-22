@@ -1,0 +1,53 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:12
+
+Course Introduction
+00:35
+
+About the Training Architect
+00:37
+CHAPTER 2
+
+Introduction to the Cloud
+11:49
+
+What Is the Cloud?
+02:03
+Where Did Cloud Computing Come From?
+02:47
+Why Do We Use the Cloud?
+03:04
+Why Should I Care about the Cloud?
+01:59
+Who Are the Different Cloud Vendors?
+01:56
+CHAPTER 3
+
+Understanding Cloud Computing
+12:01
+
+Isn't the Cloud Just Storage?
+01:16
+What Is PaaS?
+01:46
+What Is SaaS?
+01:27
+What Is IaaS?
+01:40
+What Is FaaS?
+01:44
+What Is a Server?
+01:31
+What Is Serverless?
+01:03
+What Are Some Cloud Computing Jobs?
+01:34
+CHAPTER 4
+
+Conclusion
+01:01
+
+Course Summary and What's Next?
