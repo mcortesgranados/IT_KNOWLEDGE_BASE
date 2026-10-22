@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Azure Blob Storage</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+/* Architecture Diagram styling */
+.architecture-diagram-card {
+  margin: 24px 0 28px;
+  background: #ffffff;
+  border: 1px solid #c5d8ec;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(21, 101, 192, 0.08);
+  overflow: hidden;
+  padding: 16px;
+}
+.architecture-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: 8px;
+}
+.diagram-caption {
+  margin-top: 12px;
+  font-size: 0.88em;
+  color: #546e7a;
+  text-align: center;
+  font-weight: 600;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+<main>
+
+  <h1>Azure Blob Storage<span class="tag">Storage</span></h1>
+
+  <a class="profile-link" href="../Blob_Storage_references_jpg.html" target="_blank" rel="noopener">ACG LINK</a>
+
+  <div class="note">
+    <p><strong>Azure Blob Storage: Overview and Configuration Example.</strong></p>
+    <p>Azure Blob Storage is a scalable object storage solution for the cloud, designed to store and manage large amounts of unstructured data, such as text or binary data. It provides high availability, durability, and accessibility to your data from anywhere in the world. Here's a detailed overview of Azure Blob Storage along with a configuration example:</p>
+  </div>
+
+    <h2 class="phase">Architecture Diagram</h2>
+  <p>End-to-end architectural topology of Azure Blob Storage, highlighting client ingress protocols (HTTPS, SFTP, NFS v3), Microsoft Entra ID RBAC and SAS security boundaries, container and blob type classifications (Block, Append, Page Blobs and ADLS Gen2), the automated 4-tier lifecycle engine (Hot, Cool, Cold, Archive), regional/geo redundancy models, and Event Grid reactive downstream consumers.</p>
+
+  <div class="architecture-diagram-card">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 760" width="100%" height="auto" class="architecture-svg" role="img" aria-label="Azure Blob Storage Architecture Diagram">
+  <defs>
+    <!-- Shadow Filters -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="112%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <filter id="shadow-sm" x="-5%" y="-5%" width="110%" height="110%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.06" />
+    </filter>
+
+    <!-- Gradients -->
+    <linearGradient id="grad-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d47a1" />
+      <stop offset="100%" stop-color="#1976d2" />
+    </linearGradient>
+    <linearGradient id="grad-ns-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8fbff" />
+      <stop offset="100%" stop-color="#f0f7ff" />
+    </linearGradient>
+    <linearGradient id="grad-client" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f1f8e9" />
+      <stop offset="100%" stop-color="#e8f5e9" />
+    </linearGradient>
+    <linearGradient id="grad-consumer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f3e5f5" />
+      <stop offset="100%" stop-color="#ede7f6" />
+    </linearGradient>
+    <linearGradient id="grad-tier-hot" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffebee" />
+      <stop offset="100%" stop-color="#ffcdd2" />
+    </linearGradient>
+    <linearGradient id="grad-tier-cool" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e3f2fd" />
+      <stop offset="100%" stop-color="#bbdefb" />
+    </linearGradient>
+    <linearGradient id="grad-tier-cold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e0f7fa" />
+      <stop offset="100%" stop-color="#b2ebf2" />
+    </linearGradient>
+    <linearGradient id="grad-tier-arch" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ede7f6" />
+      <stop offset="100%" stop-color="#d1c4e9" />
+    </linearGradient>
+    <linearGradient id="grad-blob" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f0fdf4" />
+    </linearGradient>
+
+    <!-- Arrow Markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1565c0" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2e7d32" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7b1fa2" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef6c00" />
+    </marker>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect x="0" y="0" width="1060" height="760" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+
+  <!-- Top Banner / Title -->
+  <rect x="16" y="14" width="1028" height="42" rx="8" fill="url(#grad-header)" />
+  <text x="32" y="39" font-family="'Segoe UI', Arial, sans-serif" font-size="16" font-weight="800" fill="#ffffff">
+    AZURE BLOB STORAGE &#8212; OBJECT STORAGE ARCHITECTURE
+  </text>
+  <text x="1024" y="39" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="600" fill="#e3f2fd">
+    Massive Scalability &#8226; Multi-Tier Lifecycle &#8226; ADLS Gen2 &#8226; Event Grid
+  </text>
+
+  <!-- ==================== LEFT COLUMN: CLIENTS & ACCESS PROTOCOLS ==================== -->
+  <g id="clients-column">
+    <rect x="20" y="68" width="170" height="615" rx="10" fill="url(#grad-client)" stroke="#a5d6a7" stroke-width="1.5" filter="url(#shadow-sm)" />
+    
+    <rect x="20" y="68" width="170" height="34" rx="10" fill="#2e7d32" />
+    <rect x="20" y="92" width="170" height="10" fill="#2e7d32" />
+    <text x="105" y="90" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="800" fill="#ffffff">
+      CLIENTS &amp; INGRESS
+    </text>
+
+    <!-- Client 1 -->
+    <g transform="translate(30, 114)">
+      <rect x="0" y="0" width="150" height="70" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="21" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b5e20">&#x1F310; Apps &amp; End Users</text>
+      <text x="10" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#4b5563">Web / Mobile / SPAs</text>
+      <rect x="10" y="44" width="130" height="18" rx="4" fill="#e8f5e9" />
+      <text x="14" y="57" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">Uploads, Assets, Docs</text>
+    </g>
+
+    <!-- Client 2 -->
+    <g transform="translate(30, 196)">
+      <rect x="0" y="0" width="150" height="70" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="21" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b5e20">&#x2699;&#xFE0F; Backend Services</text>
+      <text x="10" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#4b5563">.NET / Java / Python / Go</text>
+      <rect x="10" y="44" width="130" height="18" rx="4" fill="#e8f5e9" />
+      <text x="14" y="57" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">Azure SDKs &amp; REST API</text>
+    </g>
+
+    <!-- Client 3 -->
+    <g transform="translate(30, 278)">
+      <rect x="0" y="0" width="150" height="70" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="21" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b5e20">&#x1F4CA; Analytics &amp; Spark</text>
+      <text x="10" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#4b5563">Databricks / Synapse</text>
+      <rect x="10" y="44" width="130" height="18" rx="4" fill="#e8f5e9" />
+      <text x="14" y="57" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">ADLS Gen2 / Parquet</text>
+    </g>
+
+    <!-- Client 4 -->
+    <g transform="translate(30, 360)">
+      <rect x="0" y="0" width="150" height="70" rx="8" fill="#ffffff" stroke="#81c784" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="21" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b5e20">&#x1F6E1;&#xFE0F; Enterprise Tools</text>
+      <text x="10" y="36" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#4b5563">Storage Explorer / CLI</text>
+      <rect x="10" y="44" width="130" height="18" rx="4" fill="#e8f5e9" />
+      <text x="14" y="57" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">AzCopy &amp; Backup Agents</text>
+    </g>
+
+    <!-- Protocols & Auth Specs -->
+    <g transform="translate(28, 444)">
+      <rect x="0" y="0" width="154" height="226" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-dasharray="3 3" />
+      <text x="8" y="17" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#1b5e20">&#x1F511; Protocols &amp; Auth</text>
+      
+      <text x="8" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">Endpoints:</text>
+      <text x="8" y="48" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; HTTPS REST (443)</text>
+      <text x="8" y="61" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; SFTP (SSH Port 22)</text>
+      <text x="8" y="74" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; NFS v3.0 Protocol</text>
+
+      <path d="M 8 84 L 146 84" stroke="#a5d6a7" stroke-width="1" />
+
+      <text x="8" y="99" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">Security &amp; Identity:</text>
+      <text x="8" y="113" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; Microsoft Entra ID (RBAC)</text>
+      <text x="8" y="126" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; Shared Access Signatures (SAS)</text>
+      <text x="8" y="139" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; Account Access Keys</text>
+      <text x="8" y="152" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; User Delegation SAS</text>
+
+      <path d="M 8 162 L 146 162" stroke="#a5d6a7" stroke-width="1" />
+
+      <text x="8" y="177" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">Network Security:</text>
+      <text x="8" y="191" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; Private Endpoints (Private Link)</text>
+      <text x="8" y="204" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; VNet Service Endpoints</text>
+      <text x="8" y="217" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#334155">&#8226; IP Firewall Whitelist</text>
+    </g>
+  </g>
+
+  <!-- ==================== MIDDLE CONTAINER: STORAGE ACCOUNT ==================== -->
+  <g id="storage-account-boundary">
+    <!-- Outer Account Box -->
+    <rect x="215" y="68" width="590" height="615" rx="12" fill="url(#grad-ns-bg)" stroke="#1976d2" stroke-width="2" filter="url(#shadow)" />
+
+    <!-- Storage Account Header -->
+    <rect x="215" y="68" width="590" height="42" rx="12" fill="#1565c0" />
+    <rect x="215" y="98" width="590" height="12" fill="#1565c0" />
+    <text x="232" y="92" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="800" fill="#ffffff">
+      &#x1F4BE; AZURE STORAGE ACCOUNT (StorageV2)
+    </text>
+    <text x="500" y="92" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#bbdefb">
+      &lt;account&gt;.blob.core.windows.net
+    </text>
+    <rect x="715" y="78" width="76" height="22" rx="11" fill="#0d47a1" />
+    <text x="753" y="93" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#ffffff">
+      STANDARD / PREMIUM
+    </text>
+
+    <!-- Governance, Encryption & Security Sub-Bar -->
+    <rect x="228" y="116" width="564" height="26" rx="5" fill="#e3f2fd" stroke="#90caf9" stroke-width="1" />
+    <text x="238" y="133" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#0d47a1">
+      &#x1F512; Security: 256-bit AES Encryption at Rest (Microsoft/Customer-Managed Key) &#8226; Soft Delete &#8226; Versioning &#8226; WORM
+    </text>
+
+    <!-- SECTION 1: CONTAINER & BLOB TYPES HIERARCHY -->
+    <g transform="translate(228, 150)">
+      <rect x="0" y="0" width="564" height="236" rx="8" fill="#ffffff" stroke="#90caf9" stroke-width="1.4" filter="url(#shadow-sm)" />
+      
+      <!-- Container Bar -->
+      <rect x="0" y="0" width="564" height="28" rx="8" fill="#e3f2fd" />
+      <rect x="0" y="20" width="564" height="8" fill="#e3f2fd" />
+      <text x="12" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#1565c0">
+        CONTAINER LAYER: <tspan font-family="Consolas, monospace">/mycontainer</tspan> (Organizes blobs; controls public access level)
+      </text>
+      <text x="552" y="19" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#2e7d32">
+        Flat / ADLS Gen2 Hierarchical
+      </text>
+
+      <!-- 3 Blob Types Cards -->
+      <!-- Blob Type 1: Block Blob -->
+      <g transform="translate(14, 38)">
+        <rect x="0" y="0" width="168" height="184" rx="8" fill="url(#grad-blob)" stroke="#2e7d32" stroke-width="1.4" />
+        <rect x="0" y="0" width="168" height="26" rx="8" fill="#e8f5e9" />
+        <rect x="0" y="18" width="168" height="8" fill="#e8f5e9" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#1b5e20">&#x1F4E6; Block Blobs</text>
+        
+        <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Default &amp; General Purpose</text>
+        <text x="10" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Composed of discrete blocks</text>
+        <text x="10" y="65" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Up to 50,000 blocks</text>
+        <text x="10" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Max size: ~190.7 TiB</text>
+
+        <!-- Block Diagram Visual -->
+        <g transform="translate(10, 88)">
+          <rect x="0" y="0" width="32" height="22" rx="3" fill="#c8e6c9" stroke="#4caf50" />
+          <text x="16" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="8" font-weight="700" fill="#1b5e20">Blk 1</text>
+          
+          <rect x="36" y="0" width="32" height="22" rx="3" fill="#c8e6c9" stroke="#4caf50" />
+          <text x="52" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="8" font-weight="700" fill="#1b5e20">Blk 2</text>
+          
+          <rect x="72" y="0" width="32" height="22" rx="3" fill="#c8e6c9" stroke="#4caf50" />
+          <text x="88" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="8" font-weight="700" fill="#1b5e20">Blk 3</text>
+          
+          <text x="110" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#2e7d32">&#8594; List</text>
+        </g>
+
+        <rect x="10" y="120" width="148" height="54" rx="4" fill="#ffffff" stroke="#c8e6c9" />
+        <text x="14" y="134" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#2e7d32">Best For:</text>
+        <text x="14" y="147" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Images, audio, video files</text>
+        <text x="14" y="159" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Documents, backups, big data</text>
+        <text x="14" y="171" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Data Lake (ADLS Gen2)</text>
+      </g>
+
+      <!-- Blob Type 2: Append Blob -->
+      <g transform="translate(196, 38)">
+        <rect x="0" y="0" width="168" height="184" rx="8" fill="url(#grad-blob)" stroke="#ef6c00" stroke-width="1.4" />
+        <rect x="0" y="0" width="168" height="26" rx="8" fill="#fff3e0" />
+        <rect x="0" y="18" width="168" height="8" fill="#fff3e0" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#b26a00">&#x1F4DD; Append Blobs</text>
+        
+        <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Fast Append-Only Writes</text>
+        <text x="10" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Optimized for add operations</text>
+        <text x="10" y="65" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Blocks appended at end</text>
+        <text x="10" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Max size: ~195 GiB</text>
+
+        <!-- Append Diagram Visual -->
+        <g transform="translate(10, 88)">
+          <rect x="0" y="0" width="42" height="22" rx="3" fill="#ffe0b2" stroke="#ff9800" />
+          <text x="21" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="8" font-weight="700" fill="#b26a00">Data 1</text>
+          
+          <rect x="46" y="0" width="42" height="22" rx="3" fill="#ffe0b2" stroke="#ff9800" />
+          <text x="67" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="8" font-weight="700" fill="#b26a00">+Data 2</text>
+          
+          <path d="M 94 11 L 115 11" stroke="#ef6c00" stroke-width="1.8" marker-end="url(#arrow-orange)" />
+          <text x="122" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#e65100">Append</text>
+        </g>
+
+        <rect x="10" y="120" width="148" height="54" rx="4" fill="#ffffff" stroke="#ffe0b2" />
+        <text x="14" y="134" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#e65100">Best For:</text>
+        <text x="14" y="147" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Application audit trails</text>
+        <text x="14" y="159" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Diagnostic &amp; event logs</text>
+        <text x="14" y="171" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Continuous telemetry streams</text>
+      </g>
+
+      <!-- Blob Type 3: Page Blob -->
+      <g transform="translate(378, 38)">
+        <rect x="0" y="0" width="172" height="184" rx="8" fill="url(#grad-blob)" stroke="#1565c0" stroke-width="1.4" />
+        <rect x="0" y="0" width="172" height="26" rx="8" fill="#e3f2fd" />
+        <rect x="0" y="18" width="172" height="8" fill="#e3f2fd" />
+        <text x="10" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#0d47a1">&#x1F4BF; Page Blobs</text>
+        
+        <text x="10" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#334155">Random Read / Write Pages</text>
+        <text x="10" y="52" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; 512-byte fixed page size</text>
+        <text x="10" y="65" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Targeted page range writes</text>
+        <text x="10" y="78" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">&#8226; Max size: up to 8 TiB</text>
+
+        <!-- Page Visual -->
+        <g transform="translate(10, 88)">
+          <rect x="0" y="0" width="34" height="22" rx="3" fill="#bbdefb" stroke="#1e88e5" />
+          <text x="17" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="7.5" font-weight="700" fill="#0d47a1">512B</text>
+          
+          <rect x="38" y="0" width="34" height="22" rx="3" fill="#bbdefb" stroke="#1e88e5" />
+          <text x="55" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="7.5" font-weight="700" fill="#0d47a1">512B</text>
+
+          <rect x="76" y="0" width="34" height="22" rx="3" fill="#bbdefb" stroke="#1e88e5" />
+          <text x="93" y="15" text-anchor="middle" font-family="Consolas, monospace" font-size="7.5" font-weight="700" fill="#0d47a1">512B</text>
+          
+          <text x="115" y="15" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#1565c0">Seek</text>
+        </g>
+
+        <rect x="10" y="120" width="152" height="54" rx="4" fill="#ffffff" stroke="#bbdefb" />
+        <text x="14" y="134" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#1565c0">Best For:</text>
+        <text x="14" y="147" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Azure VM OS &amp; Data Disks (VHD)</text>
+        <text x="14" y="159" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Azure SQL DB files</text>
+        <text x="14" y="171" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Fast random index access</text>
+      </g>
+    </g>
+
+    <!-- SECTION 2: STORAGE TIERS & LIFECYCLE MANAGEMENT -->
+    <g transform="translate(228, 396)">
+      <rect x="0" y="0" width="564" height="152" rx="8" fill="#ffffff" stroke="#90caf9" stroke-width="1.4" filter="url(#shadow-sm)" />
+      
+      <rect x="0" y="0" width="564" height="26" rx="8" fill="#e3f2fd" />
+      <rect x="0" y="18" width="564" height="8" fill="#e3f2fd" />
+      <text x="12" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#1565c0">
+        ACCESS TIERS &amp; AUTOMATED LIFECYCLE MANAGEMENT
+      </text>
+      <text x="552" y="18" text-anchor="end" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" fill="#e65100">
+        Cost Optimization &#8226; Policy Rules
+      </text>
+
+      <!-- 4 Tiers Horizontally -->
+      <!-- Tier 1: Hot -->
+      <g transform="translate(12, 34)">
+        <rect x="0" y="0" width="118" height="74" rx="6" fill="url(#grad-tier-hot)" stroke="#e57373" stroke-width="1.2" />
+        <text x="8" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#b71c1c">&#x1F525; Hot Tier</text>
+        <text x="8" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#7f1d1d">Active &amp; frequent access</text>
+        <text x="8" y="47" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#b71c1c">Highest storage cost</text>
+        <text x="8" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">Lowest transaction cost</text>
+      </g>
+
+      <!-- Transition Arrow 1 -->
+      <path d="M 134 71 L 152 71" stroke="#ef6c00" stroke-width="2" marker-end="url(#arrow-orange)" />
+      <text x="143" y="62" text-anchor="middle" font-family="Consolas, monospace" font-size="7.5" font-weight="700" fill="#b26a00">30d</text>
+
+      <!-- Tier 2: Cool -->
+      <g transform="translate(155, 34)">
+        <rect x="0" y="0" width="118" height="74" rx="6" fill="url(#grad-tier-cool)" stroke="#64b5f6" stroke-width="1.2" />
+        <text x="8" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#0d47a1">&#x2744;&#xFE0F; Cool Tier</text>
+        <text x="8" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#1e3a8a">Infrequent (min 30 days)</text>
+        <text x="8" y="47" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#0d47a1">Lower storage cost</text>
+        <text x="8" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">Higher read access fee</text>
+      </g>
+
+      <!-- Transition Arrow 2 -->
+      <path d="M 277 71 L 295 71" stroke="#ef6c00" stroke-width="2" marker-end="url(#arrow-orange)" />
+      <text x="286" y="62" text-anchor="middle" font-family="Consolas, monospace" font-size="7.5" font-weight="700" fill="#b26a00">90d</text>
+
+      <!-- Tier 3: Cold -->
+      <g transform="translate(298, 34)">
+        <rect x="0" y="0" width="118" height="74" rx="6" fill="url(#grad-tier-cold)" stroke="#4dd0e1" stroke-width="1.2" />
+        <text x="8" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#006064">&#x1F9CA; Cold Tier</text>
+        <text x="8" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#134e4a">Rarely read (min 90 days)</text>
+        <text x="8" y="47" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#006064">Very low storage cost</text>
+        <text x="8" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">Direct online read SLA</text>
+      </g>
+
+      <!-- Transition Arrow 3 -->
+      <path d="M 420 71 L 438 71" stroke="#ef6c00" stroke-width="2" marker-end="url(#arrow-orange)" />
+      <text x="429" y="62" text-anchor="middle" font-family="Consolas, monospace" font-size="7.5" font-weight="700" fill="#b26a00">180d</text>
+
+      <!-- Tier 4: Archive -->
+      <g transform="translate(441, 34)">
+        <rect x="0" y="0" width="112" height="74" rx="6" fill="url(#grad-tier-arch)" stroke="#ba68c8" stroke-width="1.2" />
+        <text x="8" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#4a148c">&#x1F5C4;&#xFE0F; Archive Tier</text>
+        <text x="8" y="33" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#581c87">Offline (min 180 days)</text>
+        <text x="8" y="47" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#4a148c">Lowest cost storage</text>
+        <text x="8" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#581c87">Hours to rehydrate</text>
+      </g>
+
+      <!-- Lifecycle Policy Rule Info Box -->
+      <rect x="12" y="116" width="540" height="26" rx="4" fill="#fff8e1" stroke="#ffe082" />
+      <text x="20" y="133" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="600" fill="#b45309">
+        &#x2699;&#xFE0F; <tspan font-weight="800">Lifecycle Engine:</tspan> Evaluates prefix/tag filters daily &#8226; Transitions tiers &#8226; Deletes old versions &#8226; Emits tier change metrics
+      </text>
+    </g>
+
+    <!-- SECTION 3: REDUNDANCY & DURABILITY -->
+    <g transform="translate(228, 558)">
+      <rect x="0" y="0" width="564" height="66" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="12" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="800" fill="#1e293b">
+        &#x1F30E; DATA REDUNDANCY &amp; AVAILABILITY MODELS (High Durability &#8805; 99.999999999% 11 9's to 16 9's)
+      </text>
+
+      <g transform="translate(12, 28)">
+        <rect x="0" y="0" width="128" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+        <text x="6" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#0d47a1">LRS (Locally Redundant)</text>
+        <text x="6" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="7.5" fill="#64748b">3 copies in 1 DC</text>
+
+        <rect x="136" y="0" width="128" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+        <text x="6" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#0d47a1">ZRS (Zone-Redundant)</text>
+        <text x="6" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="7.5" fill="#64748b">3 Availability Zones</text>
+
+        <rect x="272" y="0" width="132" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+        <text x="6" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#0d47a1">GRS / RA-GRS (Geo)</text>
+        <text x="6" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="7.5" fill="#64748b">Replication to paired region</text>
+
+        <rect x="412" y="0" width="128" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+        <text x="6" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="700" fill="#0d47a1">GZRS / RA-GZRS</text>
+        <text x="6" y="24" font-family="'Segoe UI', Arial, sans-serif" font-size="7.5" fill="#64748b">ZRS + Geo-pair replication</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== CONNECTIONS: CLIENTS TO ACCOUNT ==================== -->
+  <path d="M 180 151 L 238 210" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+  <path d="M 180 231 L 238 240" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+  <path d="M 180 313 L 238 270" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+  <path d="M 180 395 L 238 430" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)" />
+
+  <!-- ==================== RIGHT COLUMN: EVENT GRID & CONSUMERS ==================== -->
+  <g id="consumers-column">
+    <rect x="825" y="68" width="215" height="615" rx="10" fill="url(#grad-consumer)" stroke="#ce93d8" stroke-width="1.5" filter="url(#shadow-sm)" />
+    
+    <rect x="825" y="68" width="215" height="34" rx="10" fill="#7b1fa2" />
+    <rect x="825" y="92" width="215" height="10" fill="#7b1fa2" />
+    <text x="932" y="90" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="800" fill="#ffffff">
+      EVENTS &amp; CONSUMERS
+    </text>
+
+    <!-- Event Grid Core Router Box -->
+    <g transform="translate(835, 114)">
+      <rect x="0" y="0" width="195" height="110" rx="8" fill="#ffffff" stroke="#ab47bc" stroke-width="1.3" filter="url(#shadow-sm)" />
+      <text x="12" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="800" fill="#4a148c">&#x26A1; Azure Event Grid</text>
+      <text x="12" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Event-Driven Reactive Ingestion</text>
+
+      <rect x="10" y="42" width="175" height="60" rx="4" fill="#faf5ff" stroke="#e1bee7" />
+      <text x="16" y="56" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#4a148c">Native Storage Events:</text>
+      <text x="16" y="69" font-family="Consolas, monospace" font-size="8" fill="#7b1fa2">&#8226; Microsoft.Storage.BlobCreated</text>
+      <text x="16" y="82" font-family="Consolas, monospace" font-size="8" fill="#7b1fa2">&#8226; Microsoft.Storage.BlobDeleted</text>
+      <text x="16" y="95" font-family="Consolas, monospace" font-size="8" fill="#7b1fa2">&#8226; Microsoft.Storage.BlobTierChanged</text>
+    </g>
+
+    <!-- Downstream Consumers -->
+    <!-- Consumer 1: Azure Functions -->
+    <g transform="translate(835, 234)">
+      <rect x="0" y="0" width="195" height="66" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#4a148c">&#x26A1; Azure Functions</text>
+      <text x="10" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">BlobTrigger &amp; EventGridTrigger</text>
+      <text x="10" y="48" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Auto-resizing, OCR, parsing &amp; ETL</text>
+      <rect x="10" y="53" width="175" height="8" fill="#f3e5f5" rx="2" />
+    </g>
+
+    <!-- Consumer 2: Logic Apps / Workflow -->
+    <g transform="translate(835, 310)">
+      <rect x="0" y="0" width="195" height="66" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#4a148c">&#x1F504; Azure Logic Apps</text>
+      <text x="10" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">Automated business workflows</text>
+      <text x="10" y="48" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Email notifications, approval routing</text>
+      <rect x="10" y="53" width="175" height="8" fill="#f3e5f5" rx="2" />
+    </g>
+
+    <!-- Consumer 3: Service Bus / Webhooks -->
+    <g transform="translate(835, 386)">
+      <rect x="0" y="0" width="195" height="66" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#4a148c">&#x1F68C; Azure Service Bus / Queues</text>
+      <text x="10" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">Decoupled queueing of file events</text>
+      <text x="10" y="48" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Orderly background file processing</text>
+      <rect x="10" y="53" width="175" height="8" fill="#f3e5f5" rx="2" />
+    </g>
+
+    <!-- Consumer 4: Big Data & Analytics -->
+    <g transform="translate(835, 462)">
+      <rect x="0" y="0" width="195" height="66" rx="6" fill="#ffffff" stroke="#ba68c8" stroke-width="1.2" filter="url(#shadow-sm)" />
+      <text x="10" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#4a148c">&#x1F52C; Azure Synapse / Fabric</text>
+      <text x="10" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#475569">Serverless SQL querying</text>
+      <text x="10" y="48" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" fill="#6a1b9a">Delta Lake &amp; Parquet querying in place</text>
+      <rect x="10" y="53" width="175" height="8" fill="#f3e5f5" rx="2" />
+    </g>
+
+    <!-- Monitoring & Diagnostics -->
+    <g transform="translate(835, 538)">
+      <rect x="0" y="0" width="195" height="132" rx="6" fill="#ede7f6" stroke="#ce93d8" stroke-dasharray="3 3" />
+      <text x="8" y="18" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="800" fill="#4a148c">&#x1F4C8; Observability &amp; Analytics</text>
+      
+      <text x="8" y="34" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#581c87">Azure Monitor Storage Insights:</text>
+      <text x="8" y="48" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Ingress/Egress data volumes</text>
+      <text x="8" y="60" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Success / Client &amp; Server E2E Latency</text>
+      <text x="8" y="72" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Capacity breakdown by Tier &amp; Container</text>
+
+      <path d="M 8 80 L 187 80" stroke="#d1c4e9" stroke-width="1" />
+
+      <text x="8" y="94" font-family="'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" fill="#581c87">Diagnostic Logging:</text>
+      <text x="8" y="108" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Read, write, and delete operations</text>
+      <text x="8" y="120" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#334155">&#8226; Log Analytics &amp; SIEM integration</text>
+    </g>
+  </g>
+
+  <!-- ==================== CONNECTIONS: STORAGE TO EVENT GRID ==================== -->
+  <path d="M 778 200 L 833 169" fill="none" stroke="#7b1fa2" stroke-width="2" marker-end="url(#arrow-purple)" />
+  <text x="806" y="174" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="800" fill="#7b1fa2">Events</text>
+
+  <!-- Event Grid to Consumers -->
+  <path d="M 932 224 L 932 234" fill="none" stroke="#ab47bc" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+  <path d="M 932 300 L 932 310" fill="none" stroke="#ab47bc" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+  <path d="M 932 376 L 932 386" fill="none" stroke="#ab47bc" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+  <path d="M 932 452 L 932 462" fill="none" stroke="#ab47bc" stroke-width="1.8" marker-end="url(#arrow-purple)" />
+
+  <!-- ==================== BOTTOM ARCHITECTURE SUMMARY BAR ==================== -->
+  <g transform="translate(20, 695)">
+    <rect x="0" y="0" width="1020" height="52" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+    <text x="14" y="19" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="800" fill="#0f172a">&#x1F5FA;&#xFE0F; KEY ARCHITECTURAL PILLARS:</text>
+    
+    <g transform="translate(14, 27)">
+      <!-- Item 1 -->
+      <circle cx="5" cy="9" r="4" fill="#2e7d32" />
+      <text x="14" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#334155"><tspan font-weight="700">Massive Scalability:</tspan> Exabytes capacity per account; up to 190.7 TiB for a single Block Blob.</text>
+
+      <!-- Item 2 -->
+      <circle cx="370" cy="9" r="4" fill="#1565c0" />
+      <text x="379" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#334155"><tspan font-weight="700">Automated Tiering:</tspan> Lifecycle policies shift data from Hot &#8594; Cool &#8594; Cold &#8594; Archive to cut costs.</text>
+
+      <!-- Item 3 -->
+      <circle cx="730" cy="9" r="4" fill="#7b1fa2" />
+      <text x="739" y="13" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" fill="#334155"><tspan font-weight="700">Event-Driven:</tspan> Built-in Event Grid integration notifies downstream services in milliseconds.</text>
+    </g>
+  </g>
+</svg>
+    <div class="diagram-caption">Figure 1: High-level architectural topology of Azure Blob Storage Account, Entities, Access Tiers, Security, and Event-Driven Ecosystem.</div>
+  </div>
+
+  <h2 class="phase">Features of Azure Blob Storage</h2>
+  <dl>
+    <dt>Scalability and Durability</dt>
+    <dd>Provides scalable storage capacity with the ability to store and manage vast amounts of data. Data is replicated for high durability.</dd>
+
+    <dt>Multiple Storage Tiers</dt>
+    <dd>Supports multiple storage tiers, including hot, cool, cold, and archive, to optimize costs based on data access patterns.</dd>
+
+    <dt>Blob Types</dt>
+    <dd>Supports different types of blobs, including block blobs, append blobs, and page blobs, each designed for specific use cases.</dd>
+
+    <dt>Data Encryption</dt>
+    <dd>Offers encryption at rest and in transit, ensuring the security of stored data.</dd>
+
+    <dt>Access Control and Authorization</dt>
+    <dd>Integrates with Microsoft Entra ID (formerly Azure Active Directory) for role-based access control (RBAC) and supports Shared Access Signatures (SAS) for fine-grained authorization.</dd>
+
+    <dt>Versioning</dt>
+    <dd>Provides versioning support for blobs, enabling you to track changes and restore previous versions.</dd>
+
+    <dt>Lifecycle Management</dt>
+    <dd>Allows you to define rule-based policies for automatic data movement between storage tiers and retention policies.</dd>
+
+    <dt>Event Grid Integration</dt>
+    <dd>Integrates with Azure Event Grid for event-driven architectures, enabling you to react to blob storage events (such as blob created or deleted).</dd>
+  </dl>
+
+  <h2 class="phase">Configuration Example</h2>
+  <p>Let's configure an Azure Blob Storage account and upload a file to a blob container using the Azure Storage Explorer:</p>
+
+  <div class="params">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Step</th>
+          <th scope="col">What to do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Login to Azure Portal</strong></td>
+          <td>Navigate to the <a target="_blank" rel="noopener" href="https://portal.azure.com/">Azure Portal</a>.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Create a Storage Account</strong></td>
+          <td>Click on &quot;Create a resource&quot; and search for &quot;Storage account.&quot; Click &quot;Create&quot; to start the Storage Account creation wizard. Specify account details, such as subscription, resource group, storage account name, region, and performance (Standard / Premium).</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Configure Advanced Settings</strong></td>
+          <td>Configure additional settings, such as account kind (StorageV2 for general-purpose storage), replication (Locally redundant storage &mdash; LRS, Geo-redundant storage &mdash; GRS, etc.), and access tier (Hot or Cool).</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Review and Create</strong></td>
+          <td>Review the configured settings and click &quot;Create&quot; to deploy the Storage Account.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Access Keys</strong></td>
+          <td>Once the Storage Account is created, navigate to the Storage Account in the Azure Portal. Go to &quot;Settings&quot; &gt; &quot;Access keys&quot; to find the account key, which is required for authentication.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Install Azure Storage Explorer</strong></td>
+          <td>Download and install <a target="_blank" rel="noopener" href="https://azure.microsoft.com/products/storage/storage-explorer">Azure Storage Explorer</a>.</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Connect to Storage Account</strong></td>
+          <td>Open Azure Storage Explorer and click on &quot;Add an account&quot; to connect to your Azure subscription. Provide the subscription ID and paste one of the access keys obtained from the Storage Account.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Create a Blob Container</strong></td>
+          <td>In Azure Storage Explorer, navigate to the Storage Account &gt; Blob Containers. Right-click on &quot;Blob Containers&quot; and select &quot;Create Blob Container.&quot; Provide a name for the container, e.g., &quot;mycontainer.&quot;</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>Upload a File to Blob Container</strong></td>
+          <td>Right-click on the created container and select &quot;Upload...&quot; Choose a file to upload to the blob container.</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>Access Blob URL</strong></td>
+          <td>Once the file is uploaded, right-click on the file and select &quot;Copy URL&quot; to get the URL of the blob.</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>Blob Access Control <span class="time">(Optional)</span></strong></td>
+          <td>Configure access control for the blob, such as setting public access levels or generating a Shared Access Signature (SAS) for temporary access.</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>Blob Versioning <span class="time">(Optional)</span></strong></td>
+          <td>Enable blob versioning in the Azure Portal if versioning is required for the blob.</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>Blob Lifecycle Management <span class="time">(Optional)</span></strong></td>
+          <td>Configure a lifecycle management policy in the Azure Portal to automatically move blobs between storage tiers or delete old versions.</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>Blob Events <span class="time">(Optional)</span></strong></td>
+          <td>Set up Azure Event Grid to receive notifications about blob events, such as blob created or deleted.</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>Blob Analytics <span class="time">(Optional)</span></strong></td>
+          <td>Enable Azure Storage Analytics to capture metrics and logs for monitoring and analysis.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">IT Knowledge Base &middot; Azure &middot; Azure Blob Storage</div>
+
+</main>
+</div>
+</body>
+</html>
