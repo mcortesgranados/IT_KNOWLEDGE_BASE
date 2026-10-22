@@ -1,0 +1,149 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+42:41
+
+Introduction
+01:29
+What We'll Learn
+03:20
+Network OSI Overview
+08:01
+
+Network Terms Overview
+08:51
+
+Kubernetes Network Model
+09:41
+
+
+
+
+
+
+
+
+Tools Demo Lab
+11:19
+
+CHAPTER 2
+
+Container Networking
+34:33
+
+Linux Networking Primitives
+04:48
+
+
+
+
+
+IPtables Role in Kubernetes
+07:05
+
+
+
+
+IPVS
+04:21
+
+eBPF
+06:24
+
+
+
+
+
+Container Connectivity Demo Lab
+11:55
+
+CHAPTER 3
+
+Kubernetes Networking
+43:12
+
+What Does kube-proxy do?
+02:39
+
+
+
+Routing in the Cluster
+02:50
+Overlay Networking
+05:00
+Overlay Network Demo Lab
+07:49
+
+Network Policy Overview
+05:08
+
+Cluster DNS
+08:34
+
+
+
+
+
+Troubleshooting Cluster DNS
+11:12
+
+CHAPTER 4
+
+Accessing the Cluster Network
+58:45
+
+Kubernetes Services
+04:32
+Endpoints and Endpoint Slices
+07:37
+NodePort Service
+03:35
+
+NodePort Demo Lab
+08:28
+
+Services Expanded
+04:36
+
+Services Expanded Demo Lab
+05:11
+Service Load Balancer
+03:17
+
+
+Ingress
+06:49
+Ingress Demo Lab
+06:14
+
+Service Meshes
+04:21
+Service Load Balancer Demo Lab
+04:05
+CHAPTER 5
+
+AWS Networking and Kubernetes
+26:53
+
+AWS Network Review
+02:48
+Amazon VPC CNI
+04:34
+
+
+AWS EKS Cluster
+04:07
+AWS ALB and ALB Ingress Controller
+03:43
+AWS ALB and ALB Ingress Controller Demo Lab
+09:07
+
+AWS App Mesh
+02:34
+CHAPTER 6
+
+Conclusion
+02:02
+
+Conclusion
