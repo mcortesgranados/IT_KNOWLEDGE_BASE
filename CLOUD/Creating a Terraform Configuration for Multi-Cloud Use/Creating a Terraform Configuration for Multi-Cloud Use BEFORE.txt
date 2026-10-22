@@ -1,0 +1,61 @@
+Course Outline
+CHAPTER 1
+
+Creating a Terraform Configuration for Multi-Cloud Use
+2:48:38
+
+Introduction
+03:27
+
+
+Setting Up the Terraform Project
+07:58
+
+
+
+Demo: Creating the Terraform Project
+07:44
+
+
+Creating the AWS Instance Module
+05:42
+
+
+
+Demo: Creating the AWS Instance Module for the Terraform Project
+06:20
+
+
+
+Creating the Azure Instance Module
+08:24
+
+
+
+Demo: Creating the Azure Instance Module for the Terraform Project
+05:52
+
+
+
+Creating the Root Module
+08:24
+
+
+Demo: Creating the Root Module for the Terraform Project
+11:30
+
+
+Deploying the Instances
+08:46
+
+
+Demo: Deploying Each Instance
+14:24
+
+
+
+Wrap-Up
+05:07
+
+HANDS-ON LAB
+Create a Terraform Configuration for Multi-Cloud Use
