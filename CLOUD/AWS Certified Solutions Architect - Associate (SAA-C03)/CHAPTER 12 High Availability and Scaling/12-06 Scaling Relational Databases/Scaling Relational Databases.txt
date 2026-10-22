@@ -1,0 +1,276 @@
+Okay, hello gurus.
+Welcome to this lesson where we're going to discuss
+scaling your relational databases.
+In this lesson, we're gonna cover a few different topics,
+starting with four ways that you can scale.
+We're gonna have a console demo
+using the AWS Sandbox environments.
+And then we'll have some exam tips for this lesson.
+Alright, let's go ahead
+and dive into the four different ways that we wanna cover
+regarding scaling your relational database.
+The first type of scaling is vertical scaling.
+This is simply resizing your database compute
+from one size to another one that is larger,
+and this could offer greater performance.
+One thing to keep in mind here though,
+is that whenever you do this,
+you are obviously going to be paying more
+for that new compute.
+One key critical concept
+of being a great solutions architect
+is to understand the trade-offs
+between performance and cost.
+The next type of scaling to discuss here
+is scaling your storage.
+The storage for your relational databases,
+especially within RDS and Aurora
+can scale up if you need them to.
+However, understand they cannot scale back down.
+So building off of that first point
+where I talked about trade-offs
+between performance and cost, you need to be meticulous
+when you are planning these storage increases
+for scaling the storage.
+Thirdly, we want to cover read replicas.
+You can create read-only copies of your database
+and your data.
+And these can be used to help spread out the load
+and stress for read intensive workloads.
+Now a major point to know for read replicas
+is that they cannot be used for any data writing purposes,
+thus the name of read replica.
+Also, these are not meant to be leveraged
+as a failover instance, or your databases.
+That's not their primary purpose.
+For that, instead, you should be using
+multi availability zone implementations
+to handle your HA and your failover.
+And the last type of scaling we wanna cover in this lesson
+is Aurora Serverless.
+This is an offering from AWS
+that allows you to offload the scaling
+of your Aurora database to Amazon Web Services themselves.
+This type of scaling excels with unpredictable workloads.
+So if you get a use case in one of your scenarios
+and it talks about unpredictable reads
+and writes for your relational database,
+then maybe Aurora Serverless
+might be a perfect option for that.
+All right, let's go ahead
+and move into the AWS console and our Sandbox environment
+where I'm going to have a database
+I've already created in RDS.
+And what I'm going to do is
+I'm going to work on creating a read replica
+and we'll discuss the different endpoints
+that we see for use.
+Let's get going.
+Okay, hello gurus.
+Welcome to the AWS Sandbox environment.
+I'm in North Virginia
+and I've already created, as you can see,
+a simple database called database 1.
+And it's got pretty much most of the default settings
+that go along with creating an RDS database.
+Now, this will be a quick demo
+and I just wanna show you how we could go ahead
+and assume that we have a lot of read intensive workloads
+using this database.
+So if we wanted to offload those
+from this primary instance, we can do that.
+So notice really quickly before we get started,
+we have our primary endpoint here for this database.
+And let's see what changes
+as we get going by creating a read replica.
+So with this database selected,
+I'm gonna go ahead under actions,
+I'm gonna click on create read replica.
+Now as you can see with this little tool tip here,
+this new read replica will have the same security group
+and parameter groups as the source DB instance.
+It's an important thing to call out.
+So I've selected my replica source.
+I can give it a new identifier for this instance.
+So what I'll do is I'll call it database RR
+for read replica,
+and let's go down to instance configuration.
+So what I'll do is I'm gonna use the same instance class
+as the source, but you can change this if you wanted to.
+So if you think there is going to be
+an intensive amount of reads,
+maybe you wanna make this a slightly larger instance,
+or in other words, vertically scale your database
+so that it can handle a higher workload.
+Now since I'm not actually hitting this endpoint,
+I'm gonna leave it the same, especially for cost purposes.
+Now let's move on.
+Now this is a neat feature.
+You can actually deploy read replicas
+across regions if you wanted to.
+So when I select Ohio, you'll see it's going to change
+some of the settings and I can start deploying that there.
+Now I'm actually gonna go back and do it
+in the same region instead.
+Verify all of our settings are still the same, and they are.
+So this again, is just something good to know.
+You can actually create cross regional read replicas,
+which is very useful
+for increasing user performance in other regions.
+So I'll leave this the same.
+I'm gonna go down to storage,
+and this is where we can set storage types
+and different settings for this read replica.
+Now a neat feature here is notice
+we can enable storage auto-scaling.
+So this allows us to automatically increase our storage
+after our threshold is exceeded.
+Now I don't have this enabled on the primary instance,
+and it's really not a big deal
+because I'm not actually using the database,
+but it's good to know you can do this.
+And a big thing to pay attention to
+is the maximum threshold.
+So this would be the setting
+on how high you want your storage to go.
+So for now, the default is 1,000 gigabytes.
+Scrolling down, let's go ahead and look at availability.
+We'll leave this the same,
+but you can see you can deploy a cluster which is new
+and likely not to be tested on too heavily.
+There's a Multi-AZ which will leave as the standard,
+and there's a single DB instance.
+Now remember, Multi-AZ
+is how you should handle high availability
+and read replicas are not meant for that
+as a primary purpose.
+Scrolling down, we'll look at connectivity.
+I'm gonna leave all of this the same, it's the same setting
+as I used on the previous primary instance,
+and we'll leave everything else the same.
+So authentication, additional information
+like encryption, et cetera.
+I'll scroll down here
+and I'm gonna click on create read replica.
+And there we go, it's now creating a read replica for us,
+which is awesome.
+So what I'll do here is I'm going to pause this lesson,
+give this a few minutes,
+and then I'll pick it back up once it's created.
+Okay, welcome back.
+I'm going to be honest with you,
+that took about 15 to 20 minutes
+for a very small instance that had no data in it.
+So when you do do this,
+understand it could take quite some time
+to become available.
+But now that it is available,
+let's go ahead and check out some of the configurations
+and compare the two.
+I select our primary source database here.
+Nothing's really changed.
+We have all of the same endpoint configurations, et cetera.
+However, now we have a grouped resource here
+or our read replica,
+and you'll see we have a different endpoint for this.
+So now what we would do in theory
+is point all read traffic to this particular endpoint
+as opposed to the source database,
+and that would offload our read intensive workloads
+for our actual writeable database.
+Notice that if you did use this read replica endpoint
+and try to actually create write commands
+or use some write commands, it's not gonna work.
+That is not the point of this type of database replica,
+and that's not how you use it.
+In addition to that, remember, this is not meant
+to be a highly available solution.
+That is not the primary purpose for a read replica.
+Now one thing I did wanna call out here
+is if we go to actions with this read replica,
+you can actually promote it to a standalone database.
+So if we did this and I select promote, it's pretty easy.
+You just have to enable automated backups.
+Choose a window if you want, and let's click on promote.
+So now what will happen
+is this is gonna modify this database
+to be promoted to its own actual full database.
+So now with this endpoint,
+we could read and write to this particular instance.
+Now I'm not gonna wait for this to complete.
+I just wanted to show you how easy it is
+to promote a read replica.
+And for now, let's go ahead in this demo here,
+we'll jump back in the presentation
+where we will wrap things up.
+All right, welcome back.
+The first major exam tip we want to give here
+is regarding scaling versus refactoring.
+You're likely going to be given scenarios
+where refactoring and changing to a no SQL option
+like DynamoDB could be a viable choice.
+Really what we're trying to say here
+is don't be afraid to refactor your database
+to a different engine type
+if it's going to solve the problem.
+Now that's not as easy in the real world,
+but it could come up on the exam.
+However, if there's a requirement
+where it must be relational,
+then this is not really an option.
+So read the scenario carefully.
+Now with that very specific use case
+and scenario out of the way,
+let's go ahead and discuss some other exam tips
+for you to take with you on your exam journey.
+The first is regarding read replicas.
+Remember, any scenarios
+that mention read intensive workloads
+should automatically trigger your brain
+to consider implementing read replicas for your database.
+However, also remember that these are not meant to be used
+for a highly available solution.
+For that, you would use a Multi-AZ deployment.
+The next thing we wanna talk about
+is being careful with your storage.
+Remember, your storage will only ever scale up for RDS.
+It's not going to scale back down,
+and with that you have cost.
+Thirdly, don't be afraid to vertically scale
+your relational database compute.
+Remember that you can change the instance type
+to a larger instance,
+and that could very well offer greater performance
+for your workloads.
+Also remember, however,
+that part of being a great solutions architect
+is being able to choose the most optimized scaling
+for your workloads.
+You need to be able to compare
+performance gains versus cost.
+The next topic is Multi-AZ.
+Unless it's a development environment,
+you're likely going to want to turn this on
+for your workloads.
+An important concept to remember for this
+is that your standby instance
+cannot be directly used for reads and writes.
+This can commonly appear on the exam,
+and they can try and trick you with the siding
+between a standby instance or a read replica.
+Really be sure you understand the difference
+between the two options.
+Lastly, Aurora everything.
+Whenever it's possible,
+you're going to want to try and use Aurora
+if the situation calls for a relational database.
+AWS typically heavily favors their own tech
+and services whenever possible.
+So unless there's a very specific scenario
+or use case for using RDS for a relational database
+or maybe even an Amazon EC2 instance,
+you might want to leverage Amazon Aurora.
+All right, that's gonna do it for this lesson
+on scaling relational databases.
+Let's end this here and then whenever you're ready,
+I will see you in the next lesson.

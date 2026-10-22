@@ -1,0 +1,273 @@
+QUESTION 1
+
+What type of capacity should be selected for a DynamoDB table with a sporadic workload?
+
+CORRECT
+On-Demand
+
+
+Reserved
+
+
+Provisioned
+
+
+Spot
+
+Good work!
+On-Demand is the best option for a sporadic workload. Reference Documentation: Pricing for On-Demand Capacity (https://aws.amazon.com/dynamodb/pricing/on-demand/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+What should you add to your RDS database to help with a read-heavy workload?
+
+
+Oracle serverless capacity
+
+CORRECT
+Read replicas
+
+
+More swap space
+
+
+MariaDB
+
+Sorry!
+This is not a feature offered by RDS. Reference Documentation: Amazon RDS Read Replicas (https://aws.amazon.com/rds/features/read-replicas/)
+
+Correct Answer
+Read replicas are the best way to handle a read-heavy workload. Reference Documentation: Amazon RDS Read Replicas (https://aws.amazon.com/rds/features/read-replicas/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Amazon _____ is the most common service used to trigger a scaling event in an EC2 Auto Scaling group.
+
+CORRECT
+CloudWatch
+
+
+S3
+
+
+SNS
+
+
+EC2
+
+Good work!
+CloudWatch is the most commonly used service to trigger a scaling event. Reference Documentation: Why Doesn't My Amazon EC2 Auto Scaling Policy Trigger When My CloudWatch Alarm Changes States? (https://aws.amazon.com/premiumsupport/knowledge-center/autoscaling-policy-cloudwatch-alarm/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What is the easiest way to reduce the time it takes for your EC2 instance to be ready to take production traffic?
+
+
+Lower the Auto Scaling group cooldown period.
+
+
+There is nothing you can do to reduce the time it takes.
+
+CORRECT
+Bake all your dependencies into the AMI.
+
+
+Enable "Fast Boot" in the console.
+
+Sorry!
+This wouldn't cause your instances to be ready any sooner. Reference Documentation: Amazon Machine Images (AMI) (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)
+
+Correct Answer
+Baking your code into your AMIs will help reduce provisioning time. Reference Documentation: Amazon Machine Images (AMI) (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)
+
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What tool can be used to notify you of scaling events?
+
+
+E-mail
+
+
+SQS
+
+CORRECT
+SNS
+
+
+Auto Scaling push messages
+
+Sorry!
+You'd need to use SNS to send that email. Reference Documentation: Getting Amazon SNS Notifications When Your Auto Scaling Group Scales (https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html)
+
+Correct Answer
+SNS is usually the best way to notify someone that something is happening in AWS. Reference Documentation: Getting Amazon SNS Notifications When Your Auto Scaling Group Scales (https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 6
+
+Which setting has limitations that could potentially prevent a launch template from being used with Amazon EC2 Auto Scaling?
+
+CORRECT
+Changing the default network interface
+
+
+Not including user data
+
+
+Defining EC2 instance size
+
+
+Requiring an ELB load balancer
+
+Good work!
+When creating a launch template for an Auto Scaling group and specifying a network interface, there are considerations and limitations that need to be taken into account in order to avoid errors. Reference Documentation: Changing the default network interface (https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html#change-network-interface).
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 7
+
+How can you automatically register EC2 instances with an ELB load balancer when they are launched?
+
+CORRECT
+Attaching the load balancer to an Auto Scaling group
+
+
+Using Instance metadata
+
+
+Using a launch configuration
+
+
+Using the ELB settings page
+
+Good work!
+When you use Elastic Load Balancing with your Auto Scaling group, it's not necessary to register individual EC2 instances with the load balancer. Instances that are launched by your Auto Scaling group are automatically registered with the load balancer. Likewise, instances that are terminated by your Auto Scaling group are automatically deregistered from the load balancer.. Reference Documentation: Elastic Load Balancing and Amazon EC2 Auto Scaling (https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 8
+
+What setting in your Amazon EC2 Auto Scaling group determines how many instances you need online right now?
+
+
+Minimum capacity
+
+CORRECT
+Desired capacity
+
+
+Average capacity
+
+
+Maximum capacity
+
+Sorry!
+Minimum only defines the floor, or the lowest count you need to keep online. Reference Documentation: Setting capacity limits for your Auto Scaling group (https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-capacity-limits.html).
+
+Correct Answer
+You'd use desired capacity to specify how many instances you need. Reference Documentation: Setting capacity limits for your Auto Scaling group (https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-capacity-limits.html).
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 9
+
+What RDS database engine offers a serverless scaling option?
+
+
+MariaDB
+
+
+SQL Server
+
+
+MySQL
+
+CORRECT
+Aurora
+
+Good work!
+Aurora is the only engine that offers a serverless scaling option. Reference Documentation: Amazon Aurora Serverless (https://aws.amazon.com/rds/aurora/serverless/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 10
+
+How can you create a highly available application using EC2 Auto Scaling?
+
+
+Do nothing, as Auto Scaling is highly available by default.
+
+
+Define multiple regions in your Auto Scaling group.
+
+CORRECT
+Define multiple AZs in your Auto Scaling group.
+
+
+Check the "do not fail" box in the configuration page.
+
+Sorry!
+Steady state groups are a use case for Auto Scaling groups having only a single AZ. Reference Documentation: Auto Scaling Groups (https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html)
+
+Correct Answer
+Auto Scaling will balance your EC2 count across the AZs you list. Reference Documentation: Auto Scaling Groups (https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+If you need to change the AMI included in a launch template, what should you do?
+
+
+Terminate existing EC2 instances.
+
+
+Migrate to launch configurations.
+
+
+File an AWS support ticket to update all AMIs.
+
+CORRECT
+Create a new version of the launch template with the updated AMI.
+
+Sorry!
+This would not change the AMI of the instances that are coming online.
+
+Correct Answer
+Creating a new version is the correct way to change the AMI. Reference Documentation: Creating a Launch Template for an Auto Scaling Group (https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html)
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 10
+
+What AWS resource defines the configuration of instances created by EC2 Auto Scaling?
+
+CORRECT
+Launch templates
+
+
+Instance wizard
+
+
+Saved configurations
+
+
+Launch settings
+
+Good work!
+Launch templates are the best way to define what your instances will look like. Reference Documentation: Launch Templates (https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchTemplates.html)
+
+_______________________________________________________________________________________________________________________________________________
+

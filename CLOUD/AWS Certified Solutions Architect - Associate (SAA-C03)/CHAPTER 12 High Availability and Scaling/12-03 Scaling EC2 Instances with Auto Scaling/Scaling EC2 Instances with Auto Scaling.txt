@@ -1,0 +1,368 @@
+Welcome back Cloud Gurus.
+In this lesson, we're gonna look at scaling EC2 instances
+using auto-scaling groups.
+Throughout this lesson,
+we're gonna cover several different topics.
+We're gonna talk about what auto-scaling groups are,
+we'll talk about auto-scaling steps,
+we'll discuss setting capacity limits,
+and then we'll wrap everything up
+with a simple exam tips portion before we move on.
+So, what are auto-scaling groups?
+Auto-scaling groups are a resource in AWS
+that contains a collection of EC2 instances
+that are treated as a collective group
+for purposes of scaling and management.
+So these are how you take advantage of using cloud compute
+to scale up and down as you need it.
+This is one of the big advantages of using the cloud
+as you can go ahead and scale on demand.
+So let's talk about steps in creating
+and using auto-scaling groups.
+The first thing you have to do
+is you have to define your template.
+So this is where you'll pick from available launch templates
+or launch configurations.
+So if you call back to the previous lessons
+where we discussed launch templates,
+this is where they would be used.
+We could leverage them easily in an auto-scaling group.
+The next thing you have to do
+is you specify your networking space
+and your different purchasing options
+if they're not already set in your launch template.
+Now a big thing to keep in mind for the exam
+is you do want to leverage multiple availability zones
+to allow for high availability and easy recovery.
+The reason you want to do this
+is if one of those AZs go down,
+well one of the other ones that you've configured
+can automatically spin up more compute
+to automatically recover for you.
+The third portion here is about elastic load balancing.
+Your EC2 instances can be registered
+behind a load balancer configured within
+the auto-scaling group.
+A neat feature that you also need to be aware of
+for this exam is that your auto-scaling group
+can be set to respect the load balancer's health checks
+for maintaining instance count.
+So you could either use the auto-scaling health checks,
+which is typically just a system status check,
+or you can leverage a load balancer
+that you're sitting behind to do specific health checks
+for some type of application or path.
+Moving on to the fourth portion here
+is you set a scaling policy.
+You always will set your minimum, your maximum,
+and your desired capacity,
+but you can also set certain scaling templates
+to see how many or how few resources you really need.
+We will explore those here coming up shortly
+and we'll actually have a demonstration
+of using some scaling policies later on.
+For now, just understand you do set the minimum,
+maximum and desired,
+and then you can build on top of that
+some auto-scaling policies themselves.
+The last portion here is about notifications.
+So you can leverage Amazon SNS as a notification tool.
+What it allows you to do is let someone know
+when a scaling event occurs.
+So maybe you want to notify an ops team
+that some scaling in has occurred or maybe scaling out.
+Well, you can do that very easily using auto-scaling groups.
+Now let's go ahead and move on
+to setting our capacity limits.
+We need to talk about some of the restrictions
+that we can put into place for these groups.
+The first portion is the minimum.
+This is going to be the absolute lowest number
+of EC2 instances that you will ever have online
+with this auto-scaling group.
+The auto-scaling group resource will not dip below this.
+The next is the maximum.
+So opposite of minimum, this is actually the highest number
+of instances that you will ever provision
+with this auto-scaling group.
+Similar to the minimum,
+with the maximum number your auto-scaling group
+will not go above this.
+And then thirdly, we have desired.
+So, how many instances do you want right now
+once you create this group?
+This is just an initial setting,
+and really it's ignored after you start scaling up and down
+using different policies.
+Another major concept to be aware of for this exam
+with auto-scaling groups is a lifecycle hook.
+On the right side here we have an Amazon provided image
+of what a lifecycle hook might look like,
+and you can see all of the different steps.
+What these allow you to do is perform custom actions
+on your compute
+whenever that corresponding lifecycle event occurs.
+Now, a neat capability of a lifecycle hook
+is that you can get your instance to wait
+for up to two hours.
+What that means is it won't be an active member
+of the auto-scaling group
+until that wait process is complete.
+So in theory, you could have an instance sitting there,
+waiting to complete some type of action
+for up to two hours before it gets moved
+into an active state.
+There are two main portions I want to call out
+on this diagram.
+The first lifecycle hook is a scaling out hook.
+You can see that here on the top left
+where we're saying we're going into a pending wait,
+and then after that wait it goes to pending proceed
+where the instance can then move into in-service.
+Now this is especially useful for use cases
+where you need to install
+or configure some proprietary software
+or even third party software.
+An example of this could be
+some type of host endpoint monitoring software
+where you have to configure it with specific serial numbers
+and license keys,
+and you don't want it to be active until that's complete.
+The next main portion is the bottom left,
+and these are known as scaling in lifecycle hooks.
+These are very useful for storing application logs
+on instance shutdown.
+So for instance, maybe you're already passing logs
+to CloudWatch,
+but whenever you have an instance terminate,
+you might want to capture every single application log
+that's not maybe going to CloudWatch.
+Well, you can do that using this scaling in hook
+by kicking off some type of script,
+storing those logs somewhere like S3
+and then proceeding to terminate your instance.
+Those are two different use cases you might see come up
+on the exam for a lifecycle hook.
+Now, continuing on the same topic,
+let's go over a simple process of a lifecycle hook.
+Your EC2 gets launched by your auto-scaling group.
+It enters a wait state via the lifecycle hook capability.
+While your instance is in the wait state,
+maybe it runs a custom script via user data
+or some other third party scripting system
+to install a proprietary application and configure it.
+Then maybe you have a secondary script that installs
+and actually configures the application
+with your specific requirements.
+Once that application is validated
+and configured to be working,
+the instance can send a complete lifecycle action command
+in order to continue that process and move it in service.
+Now with that being said,
+let's go ahead and have a quick console demo
+where I will create a very simple auto-scaling group
+with EC2 instances,
+and we're just gonna cover the basics of creation.
+So let's go ahead and jump in the console now.
+Okay, welcome back Cloud Gurus.
+I'm in my AWS sandbox environment here
+in the US east-1 region.
+I've loaded up our EC2 console here.
+And let's go ahead and work on creating
+a very simple auto-scaling group.
+I'm gonna navigate to auto-scaling groups.
+Click on create group, and let's give it a name.
+Now the next thing we have to do is specify our template.
+And we could switch to using launch configs,
+however, remember that we said
+this is not recommended by AWS
+and you should only use these if you have a very,
+very specific use case.
+Otherwise, always use a launch template.
+Now what I've done with this launch template
+is I've created it in the background,
+and all it is is a very,
+very simplified version of a launch template.
+I've only specified the AMI ID and a default security group.
+Everything else here is default and not specified,
+because we're gonna do that via this auto-scaling group.
+So now that I've selected my template, I'll click on next.
+And now we can see we create our network configurations.
+So we can select the VPC we want to use,
+or we can create a new one.
+And we can either create new subnets
+or select existing ones.
+Now this is where high availability comes in.
+In order to be highly available,
+you need to select at least two subnets
+in two different availability zones.
+So for this I'm gonna select east-1A, 1B, and 1C.
+That way we're spread amongst three different AZs
+and our solution could be truly highly available.
+So now whenever an instance spins up
+via this auto-scaling group,
+it should deploy in one of these subnets.
+The next up is the instance type requirements.
+So you could do it via attributes
+where you can specify vCPUs and memory,
+but really for this I want to manually add my instances.
+So if we wanted to, you could have a mix of instance types
+for this and then weigh them based on your needs.
+For our need, I'm gonna say a hundred percent weight
+for a T2 small.
+So all instances here are going
+to be a T2 small within this group.
+The next is our instance purchase options.
+So if you wanted to, you can mix on demand
+and spot instances within this group
+via this waiting percentage.
+For this, we're gonna do a hundred percent on demand,
+but understand you can mix in spot
+or you could use every instance as a spot instance itself
+instead of any on demand, it's completely up to you.
+So I'm gonna leave this as the default;
+we want purely on demand.
+And then what we could do here
+is choose our allocation strategy if we mixed in spot,
+but we're not doing that because we didn't say spot.
+So I'm gonna next.
+And now we get to our advanced options.
+So the first thing we see here is load balancing.
+What we could do here is attach our auto-scaling group
+to an existing load balancer, or we can create a new one.
+So if you wanted to create a load balancer specific to this,
+you could do that here.
+And notice it automatically populates
+those three subnets that we chose earlier.
+Now, you could also attach to an existing one if we had one.
+However, for this, we're gonna choose no load balancer,
+'cause we want to just leverage
+the auto-scaling group itself.
+We're gonna skip down to health checks here
+because you do need to know the health checks options.
+You'll notice that it's EC2 health checks
+being stated as always enabled,
+and that's because these will always be available
+since this is an EC2 auto-scaling group.
+However, you could also leverage ELB health checks
+if we fronted this group with an ELB.
+This allows some flexibility on our health checks
+for our different instance management.
+With this, we see our health check grace period.
+So this is simply a period of delay
+before that first health check
+is going to actually run against your instance.
+The default is 300 seconds, which is five minutes.
+We can enable group metrics collection
+under additional settings, which I'll do.
+And you can also set a amount of time
+for a default instance warmup
+before that instance actually adds instance metrics
+to the group.
+On the next page here, we set our group size.
+So this is where we were talking about we have desired,
+minimum and maximum.
+So we can set our desire to one
+'cause we want one instance right now.
+We'll set minimum to one, and we'll set maximum to three.
+So we're saying we want at most ever three instances,
+at minimum only ever one instance,
+and right now, give me one.
+Now the next topics here, we're going to skip
+for this demonstration
+because we cover these in an upcoming lesson.
+We're gonna talk about scaling policies
+and scaling protection later on.
+So for now, I'll click on next.
+You can see we can add SNS topic notifications here.
+And these are the available event types currently
+that you can send notifications on.
+So you can send a notification whenever there's a launch,
+a termination, failure to launch,
+or even failure to terminate.
+We're gonna remove this. I'm gonna go to next.
+We're gonna skip tags. We see our review.
+And let me go ahead and click on create.
+Now what I'll do here while this is creating,
+I'm gonna select it and I'm gonna go ahead and speed this up
+and then show you how we can view the instances
+that are managed by this auto-scaling group
+whenever they are successfully launched.
+Okay, so I went ahead and resumed now,
+you can see we have one instance,
+which was our desired capacity,
+and you can see all of our settings that we set earlier.
+Now, really quickly before we jump back
+into the presentation, let's look at some of these tabs.
+You can see the activity history
+where it scaled up the new instance
+to meet the desired capacity.
+We also have our instance management tab here,
+which shows the instances
+that are belonging to this auto-scaling group.
+And under here notice our lifecycle hook.
+So this is where we could create a new lifecycle hook
+for our auto-scaled instances.
+The last thing I wanna show here are these last two tabs.
+We have a monitoring tab,
+which shows the different monitoring details
+for our auto-scaling group and the EC2 instances
+as well as the instance refresh.
+This is a really cool feature.
+So what you can do is start an instance refresh,
+which performs a rolling update
+on your auto-scaling group instances.
+Essentially, it replaces the old instances with new ones.
+So this is especially useful for updating launch templates
+and forcing them to be updated in the group,
+or maybe you have a stuck instance
+that's for some reason passing a health check.
+Well, you can start an instance refresh
+and force it to be refreshed.
+Now that's gonna do it for this very simple demo
+where we created an auto-scaling group
+using a launch template,
+let's jump back into the presentation to wrap things up.
+Okay, welcome back to the presentation,
+let's wrap things up with some exam tips.
+The first primary exam tip we wanna cover
+is regarding high availability.
+Remember, this is an important feature
+to creating highly available application.
+And that's because you have the ability
+to spread your compute over multiple availability zones,
+as well as utilize load balancers for traffic management.
+You do need to understand
+how all of these pieces work together
+to provide an HA solution.
+Now, let's talk a few exam tips before we move on
+in addition to that one big one.
+Remember, auto-scaling groups
+will contain the location of where your instances will live,
+in other words, which VPC and which subnet.
+You can also select a load balancer
+for your instances to live behind.
+However, if you do this,
+do remember you have to have the correct security groups
+in place to allow that traffic.
+Remember the limits that you can set.
+You can set the minimum, the maximum,
+and the desired capacity
+when you're defining your auto-scaling group.
+You'll also need to be aware that you can leverage SNS
+for notifications of different event types,
+which we viewed when we were creating the group.
+And lastly here, it's all about balancing.
+You can leverage auto-scaling to balance your instances
+across the availability zones you specify,
+and in fact, this is done automatically for you.
+For instance, if we had specified three compute instances
+for three availability zones,
+this auto-scaling group service would do its best
+to spread those across all three AZs.
+That way we're better prepared for any potential downtime
+of an AZ and we are actually highly available.
+Okay, that's gonna do it for this scaling EC2 instances
+with auto-scaling lesson.
+Let's go ahead and cut here
+and then we will pick back up with the next lesson.

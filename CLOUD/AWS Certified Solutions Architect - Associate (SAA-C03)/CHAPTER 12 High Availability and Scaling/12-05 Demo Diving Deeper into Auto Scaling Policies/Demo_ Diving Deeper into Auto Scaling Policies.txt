@@ -1,0 +1,168 @@
+Okay, welcome back Cloud Gurus.
+In this lesson we're gonna have a demonstration
+of creating an auto-scaling policy.
+This is a very short and sweet presentation,
+where we're gonna go over a demo scenario
+and then we'll have a console demo.
+So let's dive in.
+In this demo, we're going to create
+a new auto-scaling group.
+We're gonna specify a minimum, a maximum,
+and a desired capacity.
+And during creation, we're gonna create a scaling policy
+and test it out.
+So let's go ahead and jump in the console now.
+Okay, welcome back gurus.
+I'm in my cloud sandbox here in the US East One region.
+I've loaded up the EC2 dashboard and let's get started.
+First thing I want to do is show you,
+I've created a launch template here, which has very,
+very basic settings in place.
+I've set the Amazon Linux 2023 AMI.
+I said I want all T2 small instance types
+and I set up a basic security group, that's all.
+So we're gonna use this to create an auto-scaling group.
+Now a nice little nifty shortcut here
+is I can go to actions, create auto-scaling group,
+and it selects our launch template for us,
+which helps us skip a step.
+So I'm gonna give this a name.
+It shows our launch template here, I'll click on next.
+We'll use the default VPC
+and I will select three different availability zones
+and subnets.
+We can see our instance type is already set,
+so I'm gonna go to next.
+We are not using load balancing
+for this particular demonstration,
+and we are gonna use the EC2 health checks.
+So I'm gonna leave this in place.
+I'm going to enable group metric collections
+so I can leverage the group if I ever needed to
+and I'm gonna click on next.
+Now comes the group sizing.
+So for this, I'm gonna set desired to one, minimum to one,
+and then I'm gonna set maximum to six.
+Afterwards we can see scaling policies.
+Now I will show you how this works later after this,
+but for this particular demonstration,
+the only option at this level is to configure
+a target tracking scaling policy.
+So remember, this is going to set a target
+for our auto-scaling group to track based on a metric.
+So I'll leave the policy name the same.
+We're gonna use average CPU,
+and we're gonna target value of 50%.
+Now, I don't need to warm up
+because I'm not running anything application-wise,
+I'm just gonna be stress testing the CPU itself.
+And remember, for the target value,
+this means that the group needs to average
+this target value.
+So we're gonna see how that works here in a moment.
+Now you can also disable a scaling in,
+and this could only create a scale out policy,
+but we're not gonna do that.
+Usually you wanna scale in and out automatically.
+I'm going to skip over scale in protection.
+I'm gonna click on next.
+We're not gonna add a notification,
+I'm not going to tag it
+and let's go ahead and and create it.
+Okay, so while this is being created,
+one thing I did want to cover really quickly
+is let me open up this launch template.
+One thing I did forget to talk about here
+is that I did also give this an instance profile here
+that allows systems manager session manager
+to connect to this instance,
+and that's how I'm going to actually test this scaling.
+So I just wanted to cover that really quickly.
+Now with that being said, let me close this tab.
+We're gonna refresh this and there we go.
+So let me go ahead and view this auto scaling group.
+And while this is actually spinning up still,
+I wanna show you one more thing.
+Under automatic scaling,
+this is where we can set our dynamic scaling policies
+that are different.
+So we have the target tracking policy,
+but I could also create a simple scaling
+or a step scaling policy.
+We also have predictive scaling,
+which, remember, uses AWS machine learning
+to predict forecasted load
+and we have scheduled actions, which is good
+for big time events where you know for a fact
+that there is going to be some heavy incoming workload
+for your instances.
+So this is where we could create those in the console.
+For now, I'm gonna go back to instance management.
+We're gonna see this as healthy.
+I'm gonna select this instance and we can see it's running.
+So I'm gonna go ahead and connect.
+I'm gonna use session manager.
+I'm gonna connect here, and once we're in,
+I'm going to install a simple utility called stress
+so I can stress test this CPU.
+Okay, it's there.
+I'm gonna go and clear my screen.
+And one thing I can do here is I can LS CPU,
+which is a command to look at the CPU information.
+The big thing I wanna point out here is I have one CPU,
+so I'm gonna just go ahead and stress test one of the CPU
+since that's all I have.
+So I'll run stress CPU one.
+Now you'll see this is starting to dispatch
+a bunch of stuff into the one CPU that we have.
+And if I go back to our auto-scaling group,
+and I go to monitoring,
+we can see here our auto-scaling metrics under EC2
+and we're gonna see CPU utilization.
+Now what I'm going to do here is I'm gonna pause this video.
+I'm going to let this run through for a few minutes
+and then I'll come back
+once it actually starts presenting data.
+Okay, so it took a little under a minute,
+but we can start seeing CPU utilization is registering
+on our EC2 CloudWatch monitoring details page.
+So if I keep refreshing this,
+eventually this percentage is gonna go up.
+So again, what I'll do is I'll pause it again
+really quickly.
+I'll let this register again so it shows a higher percentage
+and then I will resume.
+Okay, I've resumed this video lesson
+and you can see now we're registering at 100%.
+That means that this instance is taking all CPU utilization
+and this is the only instance we had in the group.
+So in theory, our scaling policy
+should have come into effect.
+Well, I can check that by going to activity
+and there we go.
+It is now launching a new EC2 instance
+based on that CPU utilization setting that we set.
+You can see that our alarm
+triggered our target tracking policy to increase it
+to two instances at this particular time.
+So now under instance management,
+we can see this is starting to spin up
+and there we go, we have two instances.
+So what'll happen here
+is after a certain amount of time,
+this utilization is gonna drop down
+because it's averaging between the one
+that's getting stressed out
+and the one that has no load at all.
+Now we're not going to wait for it to scale back in.
+I just wanted to demonstrate
+how you can scale out using a scaling policy
+like we did just now.
+So our auto scaling group
+automatically handed all of this for us based on the metrics
+that we set early on in the creation.
+Now that's gonna do it for this demonstration.
+Let's go ahead and wrap this up here.
+I'm gonna do some cleaning up,
+and then whenever you're ready,
+let's pick up with the next lesson.

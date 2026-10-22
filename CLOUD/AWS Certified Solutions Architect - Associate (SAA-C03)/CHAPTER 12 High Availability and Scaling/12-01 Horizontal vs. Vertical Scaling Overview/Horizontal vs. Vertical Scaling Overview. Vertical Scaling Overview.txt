@@ -1,0 +1,128 @@
+Hey, Cloud Gurus, welcome back.
+In this lesson, we're going to give you an overview
+of the 2 types of scaling
+that we need to be familiar with,
+horizontal and vertical scaling.
+We're going to start off with vertical scaling.
+This is also a little bit of the older style of scaling
+when it comes to applications.
+We'll see how does this translate
+into our new Cloud architecture,
+and then we're going to get to dive into horizontal scaling.
+AKA, the type of scaling
+that we probably want to focus on, in most situations.
+And then I'm going to walk you through
+3 important questions to ask yourself in the exam.
+These are going to be the 3 Ws of scaling.
+So let's jump right on in.
+Now you might be familiar with vertical scaling
+if you've worked in an IT environment before.
+Vertical scaling is, well,
+it's kind of like that skyscraper
+that you see on the screen,
+gradually getting taller and taller and taller,
+and this works up until a point.
+At some point, well, as you can see,
+that building just can't continue to get taller.
+We can apply this same mentality
+to our EC2 instances.
+We can start off with that t2.micro
+and we can turn it off and resize it
+and maybe now it's an m4.large.
+Can we can turn it off and resize it again,
+and now it's an R516 XL,
+but at some point, we can't just keep resizing
+that same instance over and over again
+and expect our application to be able to perform
+and be highly available
+and really be cost effective.
+If your answer to scaling is create that X132 XL instance
+with that 4 terabytes of RAM,
+we might want to rethink what we're doing here.
+Now that's not to say that vertical scaling
+never has a place.
+No matter how hard you try,
+that t2.micro is going to be a terrible production database.
+At some point, you'll probably need to scale vertically.
+We'll make a callout to a few spots
+as we go through these upcoming lessons
+where that could be appropriate,
+but what I want you to be focusing on
+is not vertical scaling, but horizontal scaling.
+Now instead of having just a single skyscraper,
+now I've got, well, my suburbs.
+This is a collection of EC2 instances.
+Just like that neighborhood,
+it can sprawl, and sprawl and sprawl.
+I can keep spinning up EC2 instances
+as long as I have money to pay for them.
+I can spin up instances over and over and over again
+and there's no real limit besides that checkbook.
+Now horizontal scaling includes a few additional benefits.
+It also increases our high availability
+because as long as we're spreading those
+across multiple availability zones,
+if one AZ fails, who cares?
+We've got redundancy.
+We've got backups.
+And we're going to see this in practice
+as we take a look at some of our auto-scaling technologies
+in some upcoming lessons.
+Now I promised you those 3 questions to keep in mind
+so let's go through those now.
+The very first thing that we're always
+going to want to ask ourselves is what?
+What do we scale?
+Are we scaling an EC2 instance?
+Are we scaling that database?
+How do I spin up that instance appropriately?
+Where is that template coming from?
+How do I decide when it's time to scale
+what I need to bring online?
+Now, once we've answered that question
+of what I'm scaling,
+then we have to decide where does it make sense to scale?
+Where in the VPC?
+How many availability zones am I using?
+What load balancers are those resources
+going to be registered behind?
+Now just that what and where by themselves
+don't really do us a lot of good.
+If I've decided that I want to scale that EC2 instance
+and it needs to be in these availability zones,
+and this network,
+I need some sort of data, some sort of trigger,
+some sort of alarm to tell me
+when do I need that architecture?
+That's why all of these Ws are critical to have.
+We have to be able to look at our resources and say
+when does it make sense to spin up more?
+When does it make sense to take something away?
+Now as we are in the AWS space
+and studying for that AWS exam,
+most of the time, that's going to be CloudWatch
+because CloudWatch alarms to tell us
+when something needs to happen.
+Now we're going to go through all of these Ws in detail
+in our upcoming lessons
+and we'll answer each one of these questions.
+These 3 Ws are going to be my exam tip.
+Whenever you see a question
+that involves some sort of scaling,
+whether it's database, an EC2 instance,
+even some of those Lambda functions or serverless resources
+that we're going to talk about in some upcoming lessons,
+doesn't matter what it is.
+Ask yourself, what do we scale,
+where do we scale it, and when do we need to scale?
+These 3 Ws should help lead you
+to the correct solution
+for the scenario that you're provided with.
+All right, Cloud Gurus,
+thanks for walking through the 2 types of scaling
+and those 3 Ws.
+Join me in the next lesson
+where we're going to start applying
+these scaling types and Ws
+to actual AWS architecture.
+I'll see you there.

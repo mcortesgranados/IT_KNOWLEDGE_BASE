@@ -1,0 +1,233 @@
+Hello Cloud Gurus, welcome back.
+In this lesson we're gonna look at
+scaling your non-relational databases.
+In this lesson, we're gonna cover a few different things.
+We're gonna talk about the different scaling options.
+We'll dive into capacity units, which are critical to know.
+We'll have a quick in-console demo
+and then we'll have some exam tips.
+So let's go ahead and dive in.
+The first thing here is scaling options
+for your non-relational databases in AWS.
+Scaling is actually simplified
+when you are using a service like DynamoDB.
+The first type of scaling that you can have
+is provision capacity.
+Now within DynamoDB you can use provision capacity
+if you have a generally predictable workload.
+The effort to use it requires that you review past usage
+or that you are very good at predicting future usage.
+And when you do this, you set a specific upper
+and lower scaling boundary.
+Provision capacity is likely always going
+to be the most cost effective model when using DynamoDB.
+On the other side of things, we have on-demand scaling.
+This is perfect for sporadic workloads
+where you have no idea what kind of usage will be going on
+with your non-relational database.
+For enabling this, it is insanely easy
+and you simply select on-demand for your capacity mode
+when you are altering or creating your table.
+You're going to pay a small amount
+of money per read and per write,
+and usually this is going to be
+a little less cost effective when compared
+to an accurate setting for provision capacity.
+The tough part on this exam is going
+to be picking out specific indicators within the scenario
+that determine whether you should use
+provisioned or on-demand.
+Now moving on, let's talk about capacity units.
+You might have seen these before,
+but I like to cover them again,
+especially in terms of scaling.
+These are very important
+that you have at least a high level understanding
+on how they work for DynamoDB.
+The first type of capacity unit
+we want to cover is a read capacity unit.
+This is DynamoDB's unit of measurement for reads per second
+for one item up to four kilobytes in size.
+What this means is that anything larger than four kilobytes
+is going to require an additional read capacity unit.
+Now the next two points might not come up on this particular
+exam, but I like to call them out just so people know
+for their own workloads and their own use cases.
+The first that is up here is
+that a read capacity unit is good for one
+strongly consistent read per second.
+What this means is there's really no delay in the item
+value and attributes when you make a call to read it.
+Or it's also good
+for two eventually consistent reads per second.
+Eventually consistent means
+that you might get slightly outdated information
+for that item when you make the call.
+So it's really gonna depend on your workload requirements
+for which type of read you make.
+Now let's do a quick knowledge check.
+I'm gonna give you a quick question.
+You can do your best to answer it
+and pause this lesson while you're doing so,
+and then when you're ready you can resume.
+How many read capacity units would you need
+for one strongly consistent read per second
+for objects that are seven kilobytes in size?
+Well for this, remember one capacity unit
+is equal to one strongly consistent read per second
+for an item up to four kilobytes.
+With this, remember that if it's more than four kilobytes,
+you need to add an additional read capacity unit.
+So for this, we round up to the next nearest amount
+for an item size, which could be eight kilobytes,
+and then we can divide that by the four kilobyte limit
+and we get two read capacities for one
+strongly consistent read per second for these items.
+Now moving on, let's talk about write capacity units.
+These are a unit of measurement for writes per second
+for an item up to one kilobyte in size.
+Notice the drastic sizing difference.
+Now let's do something similar
+where I'll give you a knowledge check.
+You can pause this lesson and answer it
+and then you can move on when you're ready.
+How many write capacity units do you need
+for one write per second for an object
+or item that is three kilobytes in size within your table?
+Well remember, one write capacity unit
+is equal to one write per second
+for an item up to one kilobyte in size.
+So if we do the math,
+we have an item which is three kilobytes in size.
+So we multiply that by our write capacity unit requirements,
+so we get three times one,
+which gives us three write capacity units.
+All right, let's go ahead
+and jump in the console really quickly
+in our sandbox environment where I'm going
+to deploy a DynamoDB table that could be used
+for Terraform deployments of state locking and tracking.
+And we're going to start with provision capacity
+and then we'll end with on-demand
+to see how you can change it.
+Welcome to our AWS sandbox environment.
+I've loaded up the DynamoDB service
+and let's go and get started.
+For this, I'm gonna create a new table
+and we're gonna pretend this is
+for a Terraform state locking and tracking table.
+So I'm gonna give it a table name of Terraform State Lock,
+and then we have our partition key and sort key.
+Now these are covered in a DynamoDB specific lesson
+elsewhere, so I'm not going to get into these for details
+and I'm just gonna set all of these settings
+and just kind of talk through them.
+Now if you're familiar with Terraform,
+all we need to do here is give our partition key of LockID
+and we'll give it an attribute of String, which is perfect.
+You don't need to worry about a sort key,
+it's not used in this.
+And if we go down here, we can look at our table settings.
+So these are the defaults, but we don't want that.
+I'm gonna go to Customize and let's work through this.
+The first thing we have is our table class.
+I'm not going to get into that, we'll leave it as standard,
+but if we go down here,
+we can look at read and write capacity settings.
+Now really quickly before that,
+you'll notice they actually give you a capacity calculator,
+so this is where you can actually use their internal tools
+to calculate the best provision capacity for you.
+For this, under Provisioned,
+what we're gonna do is we're gonna turn off read capacity
+autoscaling and write capacity autoscaling.
+If you wanted though, you could set a minimum and maximum
+and then a target utilization.
+So then you let DynamoDB automatically scale this for you
+and you don't have to worry about accurately provisioning it
+with a static value.
+However, for this demo, I wanna show you
+what it looks like statically defined.
+For this, since it would just be me using it,
+I'm gonna give it one capacity unit for reads
+and one for writes.
+And if you notice, on the capacity calculator,
+that would cost me 59 cents a month
+using these particular settings.
+So eventually consistent reads
+and standard writes, it's very cheap.
+So what I'll do now is I'll go down,
+we're gonna leave all of the other settings as default
+and I'm gonna click on Create.
+So now what I've done is I've initiated the creation
+of a DynamoDB table for Terraform state locking.
+And once this is done, you're gonna notice we have a
+provision of one capacity unit for both reads and writes.
+It's that simple to specify provision capacity.
+Now, one thing I did wanna show is
+that you can switch from provision to on-demand.
+So let's go and check that out now.
+If I go to Actions, Edit Capacity,
+we can switch to on-demand, which is awesome.
+So if we're like, hey, I actually don't know
+what kind of workloads I'm gonna get
+and I don't want to be wrong, I'm gonna switch to on-demand.
+So now you can see it's applying changes.
+We'll go to Overview and I will refresh.
+And once this is done updating, you're gonna see,
+hey, we're on-demand now.
+So we don't have provision capacity defined,
+DynamoDB will automatically handle this for us.
+It's very handy, but one thing I do want
+to call out is you can only change this capacity mode
+two times within a 24 hour period.
+So be sure when you are switching,
+you're doing so correctly.
+Okay, that's gonna do it.
+We looked at creating a DynamoDB table
+with provision capacity
+and then we looked at switching to on-demand
+with that same table.
+Let's go ahead and jump back in the presentation
+to wrap things up with some exam tips.
+Welcome back.
+I hope that demo was good enough for you to learn
+how to implement a DynamoDB table
+and set up scaling for your use case.
+One major exam tip before we get going
+and we move on is that you need
+to keep cost in mind when you're scaling
+your DynamoDB tables.
+Remember that predictable workloads are likely going
+to be best using provisioned capacity
+and sporadic workloads are going
+to be best probably using on-demand.
+Just remember on-demand
+is less cost effective than provisioned.
+Let's wrap things up with four more exam tips
+for your exam journey.
+First, you need to know
+the access patterns for your database.
+You need to look and see if they're predictable
+or if they're unpredictable.
+These are the major drivers in which type of scaling
+and capacity mode you're going to use.
+Next, remember that design matters.
+Avoid hotkeys in your DynamoDB tables,
+which would lead to better performance
+so you don't have to necessarily only rely on scaling
+properties within the table.
+Thirdly, remember that you can switch
+between the different capacity modes.
+So like in the demo, if you wanna switch from provisioned
+to on-demand, you can do that.
+However, also remember,
+you can only switch twice per 24 hours per table.
+Lastly, keep cost in mind when you're considering
+which type of table to pick.
+Cost optimization is a major pillar in the well architected
+framework, so you need to be aware of the trade-offs.
+Okay, that's gonna do it
+for this scaling non-relational databases lesson.
+Let's end here and then I will see you in the next lesson
+whenever you're ready.

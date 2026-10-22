@@ -1,0 +1,281 @@
+Okay, welcome back gurus.
+In this lesson, we're going to discuss
+what launch templates are
+and what launch configurations are.
+This is an important concept
+and you have to be able to distinguish
+between the two options.
+Now to start things off in this lesson
+we're gonna talk about what launch templates are.
+We're gonna look at templates versus launch configurations.
+We'll have a quick console demo
+where we create a launch template,
+and then we'll wrap things up with some exam tips.
+So what is a launch template?
+Well put simply, a launch template is going to allow you
+to specify all of the required settings
+that go into building an EC2 instance.
+What this means is that it's simply a collection of settings
+that you are able to configure one time
+so you don't have to walk through the EC2 wizard over
+and over again to deploy similar instances.
+It is the heart and soul of auto-scaling
+for any well-designed architecture.
+Now, let's actually compare launch templates versus
+launch configurations.
+Templates, which are the newest option,
+are going to be capable of leveraging every single
+EC2 auto scaling feature.
+However, launch configurations, which are the predecessor,
+are only going to allow for certain auto scaling features
+to be used.
+Another major difference
+is that launch templates support versioning.
+So you can leverage the same template
+and specify a version number, which is the opposite compared
+to launch configurations.
+Launch configurations are actually immutable.
+Now what this means is if you have
+to make one tiny little change
+to your configuration settings,
+you have to create a brand new launch configuration
+and point to that new resource.
+It gets very messy very quickly.
+The third major difference here is that templates allow
+for more granularity.
+You get more settings, more configuration options,
+and just more stuff you can change in general.
+A launch configuration, since it is older,
+is gonna have limited configuration options.
+Now, because of all of these differences
+we just talked about,
+AWS always recommends you use a launch template.
+You should do your absolute best
+to never use a launch configuration
+unless you have some very odd specific use case.
+Now, with those differences out of the way,
+let's actually have a quick demo
+where I'm gonna jump in the console with you.
+We're going to create a launch template
+and view all of the different options that go along with it.
+So let's go ahead and transition into the console now.
+Okay, welcome back gurus.
+I'm in my AWS sandbox environment here
+in the North Virginia region.
+Let's go ahead and create our launch template.
+I'm gonna navigate to EC2.
+I'm going to find launch templates,
+and let's create our very first
+launch template for us to use.
+The first thing we have to do here is give it a name.
+So I'm gonna call this web server,
+and then we could also give it a description.
+So I'll go ahead and do that really quickly.
+Now we're gonna skip the guidance
+because we wanna walk through this end to end
+so we really understand the entire process.
+So we'll leave this unchecked.
+We'll expand template tags,
+which allows us to tag the template itself.
+So what we could do here is do environment, we'll say prod,
+and this will tag the template itself,
+which is good for tracking and resource management.
+Another nifty thing here is we can use a source template.
+So if we had another template already created,
+which we don't, we could use that as a shortcut to build
+and edit a brand new one if we had very similar settings.
+We'll leave this blank,
+but this is a good thing to know about.
+Moving down, let's look at the launch template contents.
+The first thing we can do is specify if we want an AMI.
+So what this allows us to do is choose either some
+verified AMIs or we can even specify our own AMIs
+that we may have customized
+for our own proprietary software.
+Now, this is optional, which means you don't have
+to specify the operating system.
+However, it is more common than not that you usually specify
+an AMI because most of the scripts
+or other stuff you're configuring might be specific
+to the operating system you choose.
+So for this, I'll choose Amazon Linux.
+We'll use the latest version, which you can see here.
+Let's go ahead and go down to instance type.
+Again this is optional, so if you wanted to change this
+and leverage it for different instance types,
+you could do that by ignoring this.
+However for this demo, we're gonna specify a t2 small,
+and now every instance that we deploy
+with this launch template,
+will default to a t2 small when we're deploying it.
+The next thing we see here is a key pair.
+So if you needed to use keys in order to SSH
+or connect to your instances, you could specify them here.
+I don't have a key pair,
+so I'm gonna leave this not included and not specify one.
+The next major group of settings here is network settings.
+You can see this is also optional,
+but I do want to include this.
+So I'm gonna select a subnet
+that I want our instances to be deployed into.
+Now, this could be hit or miss
+depending on your requirements.
+Typically, you're gonna use these launch templates
+in auto-scaling groups.
+So you probably wouldn't select this at this level.
+You're normally going to select the subnet
+and network settings at the auto scaling group level.
+But for the sake of this demo, I'm gonna specify a subnet
+so we can view how it works.
+So I select my public subnet.
+I'm going to select an existing allow HTTP security group
+that we have here.
+And all this is doing is allowing port 80 from everywhere.
+Now, if I expand advanced network configurations,
+this is where we can get very detailed with our ENIs.
+We can add new network interfaces,
+we could assign primary and secondary IPs,
+more security groups.
+And the thing I actually do wanna do is I wanna auto assign
+a public IP for every instance
+that uses this launch template
+because we have a web server,
+what good is a web server if we can't hit it over the web?
+So I will enable that,
+which will now assign auto IP address assignment
+for every single instance, and we'll move on.
+The next section is storage.
+So if we wanted to, we could add new custom volumes here,
+and we can even edit the existing volume one
+that you see here.
+That includes changing the volume type, the IOPS,
+do you want them encrypted or not, et cetera.
+We'll leave these to default,
+but be sure you know these different options
+which you can see here.
+Next up is a resource tag
+so we can tag all resources that we select
+with our environment tag.
+And you can see the options here, volumes,
+we can do spot instance requests,
+but we'll just do network interfaces.
+So we just have these three.
+Now the last section here is advanced details.
+Now, we're not going to walk through every option
+we see here because there are quite a bit,
+and you really don't need to know them
+at a deep level for this exam.
+So we're gonna cover some of the important ones instead.
+The first option is that if you wanted to,
+you could automatically require that you're requesting
+spot instances for every instance using this template.
+Now, obviously be careful with this
+because these can be interrupted,
+so it really just depends on your workload.
+I'm gonna deselect that.
+And the next important thing here is our instance profile.
+So we can assign an instance profile, which I'll do here
+and now each EC2 instance will have this role assigned
+to it, which just gives us permissions
+to connect via systems manager, session manager.
+Now you're gonna notice here there are tons of more options,
+including things like termination protection,
+which you can enable or disable for every instance.
+You can enable detailed CloudWatch monitoring, et cetera.
+There are tons of things here
+that you should be familiar with,
+but you don't necessarily need to know at this point in time
+for this lesson.
+The one thing I do wanna cover however,
+is I do want to go ahead
+and specify user data for every single instance,
+because we wanna spin up a web server.
+So what I'm gonna do is I'm gonna copy
+and paste some simple code here,
+which is just creating a simple webpage using HTTPD
+as a service that we should be able
+to reach if we actually deploy this.
+And that's it.
+So now we see a summary here, very high level.
+I'm gonna click on create,
+and there we go, web server, our launch template here,
+which is the ID,
+and we can see all of the different settings that we've set
+with that first version.
+So let's say hey, well, we actually messed something up.
+Well, let's go and create a new version.
+So what I'm gonna do is I'm gonna go to actions.
+I'm going to modify our template here, create new version.
+We'll give it a simple description,
+and I'm gonna edit one small thing,
+which will be in the user data,
+just so we have a minor difference.
+So what I'll do down here is I will just eliminate
+one simple line here.
+I'll click on create, and there we go.
+Now we have version two.
+So you can see right now we have version one,
+which is the default, and then version two,
+which is not the default.
+So it's pretty easy if you needed to,
+you could select actions,
+and we're gonna set a default version here,
+and once this pops up, we can select the new default,
+which we'll say is version two.
+And there we go.
+Now whenever we reference this launch template,
+it's going to be version two each time by default.
+And that's it.
+Now you can see we get our web server name,
+our default version, and all of the other settings
+that we set earlier with that launch template,
+including the networking, storage, tags, et cetera.
+And that's it.
+So that's how you create a launch template
+for your EC2 instances within AWS.
+Let's go ahead and jump back into the presentation
+where we'll have some quick exam tips
+and then we'll move on.
+Okay, welcome back.
+First exam tip we want to cover here
+is about our launch template
+and understanding what goes into it.
+You need to understand that you can customize the image,
+the instance size and type.
+You can add and create new or existing security groups,
+and you can even edit networking information as well.
+Those are just a few of the settings
+you have to be familiar with for this exam.
+Now moving on, let's have a few more
+before we actually wrap this lesson up.
+Remember, launch templates are the most up to date way
+to create a template for an EC2 instance.
+Launch configurations are the predecessor
+to launch templates,
+and they're not necessarily wrong to use,
+but if possible, avoid using them and use templates instead.
+It's also important that you remember user data is included
+in the template or the launch configuration,
+and we saw that in our demo where I pasted in
+a simple web server script
+that each instance would have if we launched
+an instance using that template.
+Remember that launch templates can be versioned.
+We looked at creating a second version
+and actually making it the default version
+where we made a tiny change and changed the description.
+Remember, launch configurations are immutable,
+and we'd had to create a new resource in general
+for such a small change.
+The last thing here is networking.
+Launch configurations do not include networking information.
+However, as we saw, launch templates can,
+and it's important to remember that it's optional.
+Typically, people use these with auto scaling groups,
+and then within that auto scaling group
+is where you specify your networking information.
+However, if you want to, you can specify it with a template.
+That's gonna do it for this lesson on launch templates
+and launch configurations.
+Let's end here, and whenever you're ready,
+I'll see you in the next lesson.

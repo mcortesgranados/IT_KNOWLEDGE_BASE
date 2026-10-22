@@ -1,0 +1,247 @@
+Okay, hello, Cloud Gurus.
+Welcome back.
+In this lesson, we're gonna discuss diving deeper
+into auto-scaling policies.
+Within this lesson,
+we're gonna cover several different concepts,
+including things like step scaling,
+we'll look at instance warmup and cool-down.
+We're gonna discuss the different scaling types
+that you could see on the exam,
+and then we'll wrap things up with some exam tips.
+So first things first, let's talk about step scaling.
+Step scaling is going to apply stepped adjustments
+in order to vary the scaling
+depending on the size of the alarm breach that's in place.
+So that might sound a little confusing,
+but let's go ahead and check out an example
+on how this would work.
+So in this example, on the left side,
+we have the average memory utilization here,
+and we have on the X-axis different numbers of check-ins,
+which are gonna be different periods of time.
+On the Y-axis, we have the different percentage
+of the average memory utilization.
+You can see that we've highlighted
+anything between 60 and 100%
+is going to have a scale out event.
+Then anything between zero and 40%
+on a certain check-in period will have a scale in event.
+On the right side, here we have our instance count
+and we have on the X-axis the same check-in periods.
+And then on the Y-axis,
+we have the total number of instances
+within our auto-scaling group.
+So let's break down on how this would work.
+For scaling out,
+the first step we could take in our step scaling
+is we could add 10 instances when memory is registered
+between 60 and 80% utilization.
+So whenever a period has anything
+between 60 and 80% memory utilization,
+we'll add 10 instances to our auto-scaling group.
+In addition to that, we can add an additional step
+for more intensive resource utilization
+saying anything between 80 and 100,
+add an additional five instances
+whenever the memory is between that 80 and 100.
+Now, from a scaling in perspective,
+we can do something similar,
+but in this case, we terminate instances.
+So we can say, "Hey, we want to terminate 10 instances
+when memory is between 40 and 20% during a check-in."
+And continuing on that,
+we actually want to terminate 15 more instances
+whenever memory is between 20 and 0%.
+So we can set these steps based on our different metrics.
+So with that being said,
+let's actually go ahead and check this out again.
+This time, we've hit period two for our check-in.
+You'll notice the memory is between 60 and 80% here.
+So what that means is we're going to hit
+our first step scale,
+which is to add 10 instances.
+Moving on on the third period,
+we're in that same exact area,
+so we're not gonna add any more instances
+because it's just hovering and staying there.
+The next check-in, period four,
+we can assume that we have even more memory utilization.
+So we've gotten really busy
+and now we're using between 80 and 100% of our memory.
+Well, based on our step scale,
+we would add five more instances to handle that load.
+Now in theory, as we're adding these additional instances
+to our auto-scaling group,
+the average memory should start going down overall,
+which we can see here in period five,
+and now it's between 40 and 60.
+So we didn't set anything between 40 and 60, remember,
+so it would just stay there at 35 instances.
+Now let's assume it keeps dropping.
+So on period six,
+it's falling between 20 and 40 total utilization.
+Well, remember our step scale said to go ahead
+and remove 10 instances from the group.
+And then lastly, we can assume
+we're even further down than that,
+between zero and 20%
+and this is gonna go ahead
+and have us drop 15 instances more.
+So now we're down to 10 instances.
+So this is an example on how step scaling works.
+You set different metrics that you're measuring for,
+and then you set different steps
+for your auto-scaling group to take.
+These can get as complex or as simple as you need.
+Now let's go ahead and move on
+and talk about simple scaling.
+Simple scaling is a scaling policy
+that relies on metrics for scaling needs.
+What this means is you can set up
+something like a CloudWatch alarm
+to look for CPU utilization,
+anything greater than 80%.
+And when it's 80% or more,
+then you can have this scaling policy
+add a percentage more to the capacity.
+So maybe you want to add 20% more capacity
+to your auto-scaling group.
+So that's how simple scaling would work.
+Now, it would also work the opposite way.
+So once you're underneath that utilization metric,
+it could remove those added instances as well,
+so then you're not overpaying for your compute.
+The next is target tracking.
+Now target tracking is going to use a scaling metric
+and a certain value that your auto-scaling group needs
+to maintain at all times.
+So an example here is maybe you have
+the average CPU utilization set to 50%.
+Well then, your auto-scaling group is gonna do its best
+to manage the amount of compute that's in that group
+to hit that utilization mark.
+Essentially, you're giving it a goal
+that you want the auto-scaling group to maintain
+and add and remove instances as needed.
+Now moving on,
+let's talk about instance warmup and cool-down.
+Instance warmups are going to stop your instances
+from being placed behind a load balancer,
+failing a health check
+and being terminated prematurely.
+Essentially, you're giving your instance time
+to get its application loaded
+and start passing all of your different health checks.
+This is important
+because if you don't have a warmup period in place,
+you could have high instance churn,
+which means you're constantly spinning up
+and terminating instances
+because you're not giving them enough time
+to actually get started.
+Now, you also have a cool-down,
+and this is gonna pause auto-scaling
+for a certain amount of time.
+This is meant to help you avoid runaway scaling events.
+So this is especially important
+if you're getting some type of very rare high demand
+and you don't want to incur a ton of cost
+based on a massive scaling event.
+Cool-down periods are going to help your auto-scaling group
+scale successfully without overdoing it.
+Realistically, both of these work together again
+to avoid thrashing,
+so you're not churning instances
+by quickly spinning them up and spinning them down.
+Instead, you're actually giving your instances
+the correct amount of time to respond to load
+and respond to health checks.
+Now, let's go ahead and talk about other scaling types.
+There are three primary types of scaling
+that you really need to be aware of,
+and these are three different concepts essentially.
+The first is reactive scaling.
+In reactive scaling, you're playing catch up.
+So essentially once the load actually is there,
+you can measure it via some metrics,
+and then you can determine
+if you need to create more resources.
+The next is scheduled scaling.
+So if you have a predictable workload,
+you can actually create a scaling event
+to get your resources ready to go
+before they're actually needed.
+A big use case for scheduled scaling
+is some type of maybe shopping event at the end of the year
+for things like Black Friday or Christmas
+or some other holiday that you might celebrate
+and then you're buying a bunch of gifts for.
+If you know you're gonna have a big spike in traffic
+at a predictable time,
+you can use scheduled scalings to get ahead of it.
+The last is predictive scaling,
+and this is where AWS actually uses
+its machine learning algorithms
+to go ahead and determine
+when they think you will need to scale.
+Now, these are reevaluated every 24 hours
+to create a new forecast for the next 48 hours.
+All of these have their own use cases,
+so be aware of the three different types of scaling
+that you can actually use.
+Now, let's go ahead and wrap things up with some exam tips.
+The first primary exam tip.
+You need to have a good understanding
+of how auto-scaling handles your minimum,
+maximum and desired capacity for this exam.
+You're going to be given scenarios
+where you'll need to know the cost implications
+and even the reasons why you might
+or might not want to change one of those numbers.
+Now, building off of that,
+let's go ahead and have our final exam tip section here
+with five primary points we want to take away.
+Remember, if you need to, you can scale out aggressively.
+You can do your best to get ahead of the workload
+if you absolutely need to.
+Remember things like predictive scaling
+and scheduled scaling.
+Those are both usable for this particular use case.
+The second point here
+is you really wanna scale in conservatively.
+Once your instances are up,
+you really wanna do your best to slowly roll them back in
+and terminate them whenever they're not needed.
+That being said, you shouldn't rush to terminate instances,
+especially if you're using
+some type of stateful logic on your application.
+Thirdly, here is provisioning.
+Keep an eye on your provisioning times.
+Remember, you can pre-bake your AMIs
+to minimize the amount of time it takes
+to provision a new instance in your auto-scaling group.
+Fourthly, we have cost.
+Remember, you can use EC2 reserved instances
+and compute saving plans
+for minimum counts within an auto-scaling group
+in order to save money.
+If you know you're always gonna need
+a certain amount of minimum instances,
+you can go ahead and purchase a savings plan
+or a reserved instance
+and take advantage of that cost savings.
+Lastly, CloudWatch, this is going to be your go-to tool
+for alerting your auto-scaling groups
+that you need more or less instances,
+and then it will go ahead and scale
+based on your different scaling policy
+that you put in place.
+Again, remember, there's target tracking,
+there's simple scaling and there is step scaling.
+Now that's gonna do it for this lesson.
+In the upcoming lesson,
+we're gonna actually have a demonstration in the console
+about creating a scaling policy and testing it out.
+So let's go ahead and end this here
+and then I will see you in the next one.
