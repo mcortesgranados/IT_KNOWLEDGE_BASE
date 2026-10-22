@@ -1,0 +1,109 @@
+Course Outline
+CHAPTER 1
+
+Introduction to Amazon RDS
+32:40
+
+Welcome
+00:46
+Introduction to Amazon RDS
+03:29
+What is Amazon RDS?
+04:18
+Terminology
+03:11
+Environment Setup
+09:43
+
+
+A Note About Demo Lessons
+00:54
+Demo - Provision an RDS Database Instance
+10:19
+
+CHAPTER 2
+
+Operating with RDS
+35:11
+
+Provisioning an RDS Database Instance
+13:47
+
+
+
+Demo - Provision a Specifically Configured RDS Database Instance
+06:01
+RDS Pricing
+01:34
+Scaling your Database Instance
+04:17
+Demo - Vertically Scale a Database Instance
+09:32
+CHAPTER 3
+
+Multi-AZ and Read Replicas
+27:40
+
+What is Multi-AZ?
+02:12
+Multi-AZ Failover
+06:08
+Demo - Multi-AZ Failover
+05:57
+What are Read Replicas?
+05:17
+Demo - Read Replicas
+08:06
+CHAPTER 4
+
+Backups and Recovery
+22:04
+
+Backup Options
+05:53
+Restoring your backups
+02:31
+Demo - Point in Time Recovery and Manual Snapshots
+13:40
+
+
+CHAPTER 5
+
+Security and Monitoring
+35:15
+
+Securing your Database Instance
+01:30
+Network Isolation
+01:29
+Access Control
+01:19
+Encryption at rest
+02:47
+SSL Connectivity
+02:03
+Demo - Securing RDS
+12:12
+Monitoring RDS
+06:14
+Demo - Monitoring an RDS Instance
+07:41
+
+CHAPTER 6
+
+Amazon Aurora
+32:25
+
+What is Amazon Aurora?
+04:21
+Key Concepts
+03:56
+How does it work?
+04:18
+Demo - Provision and Work With an Aurora Cluster
+04:32
+Aurora Serverless
+05:56
+Demo - Provision an Aurora Serverless Database
+08:47
+Thank you
