@@ -1,0 +1,132 @@
+Course Outline
+CHAPTER 1
+
+Introduction and Overview of Graph Data Theory
+50:18
+
+Welcome
+02:13
+Course Overview
+02:46
+
+
+
+
+
+
+
+Graph Databases and the Face Categorising Project
+04:26
+
+Amazon Neptune 10,000 Feet View
+03:03
+
+Amazon Neptune Graph Models
+03:42
+Property Graph Model
+02:23
+Resource Description Framework (RDF) Graph Model
+05:58
+Demo: Getting Set Up for this Course
+10:47
+
+
+
+
+QUIZ
+Go Serverless with a Graph Database - Introduction and Overview of Graph Data Theory Quiz
+15:00
+CHAPTER 2
+
+Playing with Amazon Neptune Query Languages
+40:39
+
+Chapter Introduction
+01:07
+Apache Tinkerpop and the Console
+03:29
+Introducing the Gremlin Query Language
+06:01
+Demo: Using the Apache Tinkerpop Console
+08:12
+
+An Alternate Query Language - SPARQL
+06:50
+QUIZ
+Go Serverless with a Graph Database - Playing with Amazon Neptune Query Languages Quiz
+15:00
+CHAPTER 3
+
+Setting Up an App that will Interact with Neptune
+49:00
+
+Chapter Introduction
+04:37
+
+Understanding the Neptune and API Stacks
+05:37
+Understanding the Neptune CloudFormation
+06:58
+Understanding the API CloudFormation
+08:17
+Demo: Spin Up the Neptune Stack
+02:51
+Demo: Spin Up the API Stack
+02:28
+Cleaning Up to Save $$$
+00:53
+Demo: Removing the Stacks
+02:19
+QUIZ
+Go Serverless with a Graph Database - Setting Up an App that will Interact with Neptune Quiz
+15:00
+CHAPTER 4
+
+Creating a Useful Dataset
+45:05
+
+Chapter Introduction
+01:33
+
+Creating Graph Data with Rekognition
+03:49
+Understanding the Rekognition Stack
+06:12
+Demo: Creating Graph Data from Rekognition
+03:35
+Updates to the Neptune and API Stacks for Loading Data
+04:21
+Demo: Loading Data into Neptune
+06:38
+Rekognition Data that Suits RDF
+03:57
+QUIZ
+Go Serverless with a Graph Database - Creating a Useful Dataset Quiz
+15:00
+CHAPTER 5
+
+Working with our Data via the App
+36:47
+
+Neptune Web UI Overview
+04:07
+
+Demo: Modifying the Query Lambda
+05:54
+Demo: Running the Neptune Web UI
+11:46
+QUIZ
+Go Serverless with a Graph Database - Working with our Data via the App Quiz
+15:00
+CHAPTER 6
+
+Conclusion
+24:25
+
+Building on our Serverless Graph Database Solution
+07:55
+
+Thank You and Goodbye
+01:30
+QUIZ
+Go Serverless with a Graph Database - Conclusion Quiz
