@@ -1,0 +1,215 @@
+CHAPTER 01 Introduction
+01-01 Course Introduction
+
+01-02 Exploring the Cloud Playground
+
+01-03 About the Exam
+
+01-04 Using the AWS CLI and AWS SDK
+
+01-05 Shared Responsibility Model
+
+01-06 Course Updates and Changelogs
+
+CHAPTER 02 Threat Detection and Incident Response Domain
+02-01 Recording AWS Resource Changes with AWS Config
+
+02-02 Demo Analyzing Environments with AWS Trusted Advisor
+
+02-03 Threat Detection with Amazon GuardDuty
+
+02-04 Demo Viewing Amazon GuardDuty Findings
+
+02-05 Remediating Amazon GuardDuty Findings
+
+02-06 Demo Account Checkups with the AWS Health Dashboard
+
+02-07 Assessing EC2 Instances with Amazon Inspector
+
+02-08 Demo Inspecting EC2 Instances
+
+02-09 Automated Patching Using AWS Systems Manager
+
+02-10 Demo Incident Response and Recovery with AWS Systems Manager
+
+02-11 Security Compliance Reporting Using AWS Artifact
+
+02-12 Responding to AWS Abuse Notices
+
+02-13 AWS Incident Response
+
+02-14 Amazon Detective
+
+02-15 Section Summary
+
+02-16 QUIZ Incident Response in AWS
+CHAPTER 03 Security Logging and Monitoring Domain
+03-01 Logging and Metrics Using Amazon CloudWatch
+
+03-02 Demo Sending Custom Logs to CloudWatch
+
+03-03 HANDS-ON LAB Using CloudWatch for Resource Monitoring
+
+03-04 Auditing AWS Accounts with AWS CloudTrail
+
+03-05 Demo Examining CloudTrail Events
+
+03-06 HANDS-ON LAB Remediating EC2 Auto Scaling Group Modifications with EventBridge
+
+03-07 Logging with Amazon Kinesis and Amazon OpenSearch (Elasticsearch)
+
+03-08 Demo Querying Data with Amazon Athena
+
+03-09 Demo Enabling VPC Flow Logs Part 1
+
+03-10 Demo Enabling VPC Flow Logs Part 2
+
+03-11 HANDS-ON LAB Work with AWS VPC Flow Logs for Network Monitoring
+
+03-12 Continuously Auditing AWS with AWS Audit Manager
+
+03-13 Section Summary
+
+03-14 QUIZ Logging and Monitoring in AWS
+CHAPTER 04 Infrastructure Security Domain
+04-01 AWS Key Management Service (KMS) Fundamentals
+
+04-02 Implementing Envelope Encryption with AWS KMS
+
+04-03 Demo Generating Data Keys for Envelope Encryption
+
+04-04 Demo Multi-Region Keys, Imports, and Deletion with AWS KMS
+
+04-05 HANDS-ON LAB Creating and Securing Customer Managed Keys with AWS KMS
+
+04-06 Creating More Secure Keys with AWS CloudHSM
+
+04-07 Blocking Malicious Traffic with AWS WAF and AWS Firewall Manager
+
+04-08 Demo Implementing AWS WAF on Application Load Balancers
+
+04-09 Intrusion Detection and Prevention via AWS Network Firewall
+
+04-10 Locking Down CloudFront Distributions Integrated with Amazon S3
+
+04-11 Origin Access Control (OAC)
+
+04-12 HANDS-ON LAB Configuring an Origin Access Control for an AWS CloudFront Distribution
+
+04-13 Securing HTTP Calls with Lambda@Edge
+
+04-14 Preventing DDoS Attacks with AWS Shield
+
+04-15 Auditing Compromised Resources with AWS Security Hub
+
+04-16 Demo Exploring Security Scores in AWS Security Hub
+
+04-17 Network Security via VPNs
+
+04-18 Customizing VPCs, Routing, and Security Controls - Part 1
+
+04-19 Customizing VPCs, Routing, and Security Controls - Part 2
+
+04-20 Securely Connecting to VPCs
+
+04-21 Private Service Connections via VPC Endpoints
+
+04-22 AWS KMS Key Types
+
+04-23 Web App Attacks
+
+04-24 Section Summary
+
+04-25 QUIZ Infrastructure Security in AWS
+CHAPTER 05 Identity and Access Management Domain
+05-01 IAM Refresher
+
+05-02 Important AWS Root User Account Concepts
+
+05-03 Exploring AWS Identities - Part 1
+
+05-04 Exploring AWS Identities - Part 2
+
+05-05 Granting and Denying Access via IAM Policies
+
+05-06 Interpreting IAM Policies
+
+05-07 HANDS-ON LAB Create and Assume Roles in AWS
+
+05-08 Demo Troubleshooting Conflicting IAM Policies
+
+05-09 Demo Setting Permissions Boundaries
+
+05-10 Demo Generating IAM Credential Reports
+
+05-11 HANDS-ON LAB Create Users and Manage Permissions Using Groups and Policies in IAM
+
+05-12 Importance of AWS Security Token Service (STS)
+
+05-13 Demo Using Different STS Sources
+
+05-14 HANDS-ON LAB Using EC2 Roles and Instance Profiles in AWS
+
+05-15 Using Web Identity Federation
+
+05-16 Creating User Pools and Identity Pools in Amazon Cognito
+
+05-17 Authentication with AWS Directory Service - Part 1
+
+05-18 Authentication with AWS Directory Service - Part 2
+
+05-19 Demo Logging In to AWS via AWS Single Sign-On (SSO)
+
+05-20 Leveraging AWS Organizations for AWS Account Access
+
+05-21 Section Summary
+
+05-22 QUIZ Identity and Access Management in AWS
+CHAPTER 06 Data Protection Domain
+06-01 TLS Certificate Management with AWS Certificate Manager (ACM)
+
+06-02 Secure Elastic Load Balancing (ELB) - Part 1
+
+06-03 Secure Elastic Load Balancing (ELB) - Part 2
+
+06-04 Demo Deploying a TLS-Secured Application Load Balancer
+
+06-05 Demo Increasing Security within DynamoDB
+
+06-06 Controlling Sensitive Data with Amazon Macie
+
+06-07 Data Lifecycle
+
+06-08 Secure Storage with Amazon S3
+
+06-09 HANDS-ON LAB Advanced S3 Security Configuration
+
+06-10 HANDS-ON LAB Creating a Basic Amazon S3 Lifecycle Policy
+
+06-11 Section Summary
+
+06-12 QUIZ Data Protection in AWS
+CHAPTER 07 Management and Security Governance (and Miscellaneous)
+07-01 Section Overview
+
+07-02 Controlling Access to Amazon QuickSight
+
+07-03 Demo Complicated KMS-Related Issues - Recovering Encrypted EBS Volumes
+
+07-04 Parameter Store and Secrets Manager for Sensitive Data
+
+07-05 Filtering and Rejecting EC2 Instance Traffic
+
+07-06 Kinesis Encryption
+
+07-07 Cross-Region Networking
+
+07-08 Section Summary
+
+07-09 QUIZ Miscellaneous Services and Concepts in AWS
+CHAPTER 08 Conclusion
+08-01 Congratulations! What's Next?
+
+08-02 PRACTICE EXAM AWS Certified Security – Specialty SCS-C02: Exam 1
+08-03 PRACTICE EXAM AWS Certified Security – Specialty SCS-C02: Exam 2
+08-04 PRACTICE EXAM AWS Certified Security – Specialty SCS-C02: Exam 3

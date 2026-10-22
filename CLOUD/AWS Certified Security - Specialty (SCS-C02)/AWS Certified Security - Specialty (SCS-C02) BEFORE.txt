@@ -1,0 +1,510 @@
+
+Next Lessons
+Course Introduction thumbnail
+02:26
+Course Introduction
+
+CHAPTER 1.1
+
+Exploring the Cloud Playground thumbnail
+04:28
+Exploring the Cloud Playground
+
+CHAPTER 1.2
+
+About the Exam thumbnail
+09:26
+About the Exam
+
+CHAPTER 1.3
+
+Course Outline
+CHAPTER 1
+
+Introduction
+27:05
+
+Course Introduction
+02:26
+
+Exploring the Cloud Playground
+04:28
+About the Exam
+09:26
+
+Using the AWS CLI and AWS SDK
+03:51
+Shared Responsibility Model
+05:54
+Course Updates and Changelogs
+01:00
+
+CHAPTER 2
+
+Threat Detection and Incident Response Domain
+2:39:31
+
+Recording AWS Resource Changes with AWS Config
+14:59
+
+
+
+
+
+Demo: Analyzing Environments with AWS Trusted Advisor
+10:19
+
+
+
+
+Threat Detection with Amazon GuardDuty
+07:59
+
+
+
+
+
+Demo: Viewing Amazon GuardDuty Findings
+04:57
+Remediating Amazon GuardDuty Findings
+05:29
+
+Demo: Account Checkups with the AWS Health Dashboard
+07:20
+
+
+Assessing EC2 Instances with Amazon Inspector
+09:29
+
+
+
+
+Demo: Inspecting EC2 Instances
+06:49
+Automated Patching Using AWS Systems Manager
+15:41
+
+
+
+Demo: Incident Response and Recovery with AWS Systems Manager
+10:44
+
+Security Compliance Reporting Using AWS Artifact
+05:41
+
+
+
+Responding to AWS Abuse Notices
+04:18
+AWS Incident Response
+2 MONTHS AGO
+
+UPDATED
+09:43
+
+
+
+Amazon Detective
+2 MONTHS AGO
+
+UPDATED
+05:16
+
+Section Summary
+10:47
+QUIZ
+Incident Response in AWS
+30:00
+CHAPTER 3
+
+Security Logging and Monitoring Domain
+4:54:16
+
+Logging and Metrics Using Amazon CloudWatch
+14:10
+
+
+Demo: Sending Custom Logs to CloudWatch
+14:28
+
+HANDS-ON LAB
+Using CloudWatch for Resource Monitoring
+30:00
+Auditing AWS Accounts with AWS CloudTrail
+14:41
+
+
+Demo: Examining CloudTrail Events
+11:55
+HANDS-ON LAB
+Remediating EC2 Auto Scaling Group Modifications with EventBridge
+30:00
+Logging with Amazon Kinesis and Amazon OpenSearch (Elasticsearch)
+11:02
+
+
+
+
+
+
+Demo: Querying Data with Amazon Athena
+09:36
+
+
+Demo: Enabling VPC Flow Logs Part 1
+06:54
+Demo: Enabling VPC Flow Logs Part 2
+11:05
+HANDS-ON LAB
+Work with AWS VPC Flow Logs for Network Monitoring
+1:30:00
+Continuously Auditing AWS with AWS Audit Manager
+09:23
+
+
+Section Summary
+11:02
+QUIZ
+Logging and Monitoring in AWS
+30:00
+CHAPTER 4
+
+Infrastructure Security Domain
+5:08:33
+
+AWS Key Management Service (KMS) Fundamentals
+13:25
+
+
+
+
+
+
+
+
+
+Implementing Envelope Encryption with AWS KMS
+08:28
+
+
+
+Demo: Generating Data Keys for Envelope Encryption
+10:25
+
+Demo: Multi-Region Keys, Imports, and Deletion with AWS KMS
+08:22
+
+
+
+
+HANDS-ON LAB
+Creating and Securing Customer Managed Keys with AWS KMS
+30:00
+Creating More Secure Keys with AWS CloudHSM
+10:41
+
+
+
+
+
+
+Blocking Malicious Traffic with AWS WAF and AWS Firewall Manager
+14:55
+
+
+
+
+
+
+
+
+Demo: Implementing AWS WAF on Application Load Balancers
+11:31
+Intrusion Detection and Prevention via AWS Network Firewall
+10:40
+
+
+
+
+
+Locking Down CloudFront Distributions Integrated with Amazon S3
+13:07
+
+
+Origin Access Control (OAC)
+1 MONTH AGO
+
+UPDATED
+04:28
+
+HANDS-ON LAB
+Configuring an Origin Access Control for an AWS CloudFront Distribution
+30:00
+Securing HTTP Calls with Lambda@Edge
+10:35
+
+
+
+Preventing DDoS Attacks with AWS Shield
+06:48
+
+
+
+
+
+
+
+Auditing Compromised Resources with AWS Security Hub
+08:27
+Demo: Exploring Security Scores in AWS Security Hub
+04:38
+Network Security via VPNs
+08:33
+
+
+
+
+
+Customizing VPCs, Routing, and Security Controls - Part 1
+08:26
+
+
+
+
+
+
+Customizing VPCs, Routing, and Security Controls - Part 2
+10:51
+Securely Connecting to VPCs
+12:28
+
+
+
+
+
+Private Service Connections via VPC Endpoints
+07:02
+
+AWS KMS Key Types
+2 MONTHS AGO
+
+UPDATED
+09:02
+
+Web App Attacks
+2 MONTHS AGO
+
+UPDATED
+10:42
+
+
+
+Section Summary
+14:59
+QUIZ
+Infrastructure Security in AWS
+30:00
+CHAPTER 5
+
+Identity and Access Management Domain
+6:44:00
+
+IAM Refresher
+09:30
+
+
+Important AWS Root User Account Concepts
+04:37
+Exploring AWS Identities - Part 1
+08:46
+Exploring AWS Identities - Part 2
+10:43
+Granting and Denying Access via IAM Policies
+14:02
+
+Interpreting IAM Policies
+13:13
+HANDS-ON LAB
+Create and Assume Roles in AWS
+45:00
+Demo: Troubleshooting Conflicting IAM Policies
+14:06
+
+
+Demo: Setting Permissions Boundaries
+14:22
+
+
+Demo: Generating IAM Credential Reports
+07:22
+
+HANDS-ON LAB
+Create Users and Manage Permissions Using Groups and Policies in IAM
+30:00
+Importance of AWS Security Token Service (STS)
+12:57
+
+
+Demo: Using Different STS Sources
+17:10
+
+
+HANDS-ON LAB
+Using EC2 Roles and Instance Profiles in AWS
+1:30:00
+Using Web Identity Federation
+07:47
+
+Creating User Pools and Identity Pools in Amazon Cognito
+10:47
+
+
+Authentication with AWS Directory Service - Part 1
+10:18
+
+Authentication with AWS Directory Service - Part 2
+10:21
+Demo: Logging In to AWS via AWS Single Sign-On (SSO)
+11:59
+Leveraging AWS Organizations for AWS Account Access
+16:00
+
+Section Summary
+15:00
+QUIZ
+Identity and Access Management in AWS
+30:00
+CHAPTER 6
+
+Data Protection Domain
+2:49:57
+
+TLS Certificate Management with AWS Certificate Manager (ACM)
+14:13
+
+
+
+
+
+
+
+
+
+Secure Elastic Load Balancing (ELB) - Part 1
+13:12
+
+
+
+
+
+Secure Elastic Load Balancing (ELB) - Part 2
+05:20
+
+Demo: Deploying a TLS-Secured Application Load Balancer
+09:02
+Demo: Increasing Security within DynamoDB
+09:59
+
+
+
+
+Controlling Sensitive Data with Amazon Macie
+09:44
+
+
+
+
+Data Lifecycle
+2 MONTHS AGO
+
+UPDATED
+09:03
+
+
+
+
+Secure Storage with Amazon S3
+13:33
+
+
+
+
+
+
+
+
+
+HANDS-ON LAB
+Advanced S3 Security Configuration
+30:00
+HANDS-ON LAB
+Creating a Basic Amazon S3 Lifecycle Policy
+30:00
+Section Summary
+10:51
+QUIZ
+Data Protection in AWS
+15:00
+CHAPTER 7
+
+Management and Security Governance (and Miscellaneous)
+1:11:09
+
+Section Overview
+01:27
+Controlling Access to Amazon QuickSight
+07:20
+
+
+
+
+Demo: Complicated KMS-Related Issues - Recovering Encrypted EBS Volumes
+10:01
+
+Parameter Store and Secrets Manager for Sensitive Data
+14:51
+
+
+
+
+
+
+
+Filtering and Rejecting EC2 Instance Traffic
+03:28
+Kinesis Encryption
+05:02
+
+
+
+
+Cross-Region Networking
+2 MONTHS AGO
+
+UPDATED
+05:30
+
+
+
+
+Section Summary
+08:30
+QUIZ
+Miscellaneous Services and Concepts in AWS
+15:00
+CHAPTER 8
+
+Conclusion
+8:16:08
+
+Congratulations! What's Next?
+01:08
+PRACTICE EXAM
+AWS Certified Security – Specialty SCS-C02: Exam 1
+2:45:00
+PRACTICE EXAM
+AWS Certified Security – Specialty SCS-C02: Exam 2
+2:45:00
+PRACTICE EXAM
+AWS Certified Security – Specialty SCS-C02: Exam 3
+2:45:00
