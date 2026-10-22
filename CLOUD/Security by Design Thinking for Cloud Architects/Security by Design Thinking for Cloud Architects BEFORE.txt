@@ -1,0 +1,167 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+02:18
+
+Course Introduction
+01:11
+
+Getting Started
+01:07
+
+
+
+CHAPTER 2
+
+Cloud Architecture and Governance
+59:28
+
+Cloud Architecture and Governance Introduction
+00:27
+Cloud Models
+11:26
+Deployment Models and Cloud Architecture
+12:24
+
+
+
+
+
+
+
+Governance
+11:20
+
+
+
+
+
+
+
+
+
+
+Data and Privacy
+13:51
+
+
+
+
+
+Cloud Architecture and Governance Summary
+10:00
+CHAPTER 3
+
+Cloud Monitoring, Identity, and Access
+1:13:29
+
+Cloud Monitoring, Identity, and Access Introduction
+00:24
+Cloud Monitoring
+09:24
+
+
+Cloud Identity
+12:38
+Cloud Access
+12:56
+Cloud Monitoring, Identity, and Access Summary
+08:07
+HANDS-ON LAB
+Create and Manage Microsoft Entra ID Users in the Portal
+30:00
+CHAPTER 4
+
+Cloud Infrastructure Security
+1:08:05
+
+Cloud Infrastructure Security Introduction
+00:27
+Cloud Network and Traffic Security
+09:51
+Cloud Compute Security
+07:46
+
+
+
+
+
+Container and Serverless Security
+14:16
+
+
+
+
+
+
+
+
+Cloud Infrastructure Security Summary
+05:45
+HANDS-ON LAB
+Configuring NACLs Using AWS
+30:00
+CHAPTER 5
+
+Cloud Storage and Database Security
+1:01:46
+
+Cloud Storage and Database Security Introduction
+00:22
+Cloud Storage Security
+08:38
+Cloud Database Security
+11:23
+
+
+
+
+
+
+Key Management
+06:38
+Cloud Storage and Database Security Summary
+04:45
+HANDS-ON LAB
+Handling Encryption Keys with Cloud KMS
+30:00
+CHAPTER 6
+
+Cloud Applications and API Security
+1:22:56
+
+Cloud Applications and API Security Introduction
+00:23
+Cloud Software Development Security
+10:39
+Cloud Application Security
+11:27
+
+
+
+
+
+
+Cloud API Security
+09:22
+
+Cloud Applications and API Security Summary
+06:05
+HANDS-ON LAB
+Configuring WAF Rules Using Cloud Armor
+45:00
+CHAPTER 7
+
+Conclusion
+22:58
+
+Course Summary
+07:03
+Conclusion and What’s Next
+00:55
+
+
+
+QUIZ
+Security by Design Thinking for Cloud Architects Quiz
