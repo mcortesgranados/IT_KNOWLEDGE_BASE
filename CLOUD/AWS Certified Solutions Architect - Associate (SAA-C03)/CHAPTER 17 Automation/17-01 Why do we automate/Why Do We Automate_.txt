@@ -1,0 +1,224 @@
+Hello Cloud Gurus,
+welcome back.
+In this lesson we're going to be answering
+a very important question,
+and that is why do we automate?
+Now you might have some sort of experience
+with automation before.
+Maybe you've automated something in your day to day life
+with that schedule for your internet of things, light bulb
+to come on and off at a certain point in the day,
+or maybe you just set your thermostat to turn on and off
+whenever you go to bed.
+Those are all examples of when we automate
+in our actual lives
+and it makes our lives a little bit simpler
+and a little bit easier.
+We're going to apply those same principles
+to our cloud architecture.
+We're going to see why do I want to consider automation?
+And really why do I want to avoid all of those manual steps
+that I might be doing right now?
+We'll get a little bit of a peak
+at what tools are we going to be covering
+in the next few upcoming lessons?
+What options does AWS give us to make our lives simpler?
+And then finally we'll wrap it all up with some exam tips.
+So let's go ahead and jump right on in.
+Now why do we automate?
+Well, the whole problem is that manual steps are a gamble.
+If you're going through and building out a VPC yourself.
+Well, you've probably done that
+in one of our previous lessons,
+or you've seen seen us do that for you.
+Now why do we care about automation?
+Well, the answer is because manual steps are so dangerous.
+Think about those VPCs that you've been creating
+in the labs, watching us do it in the lessons.
+How many steps are there
+to appropriately select the correct IP range,
+the amount of subnets that you're going to use,
+setting up your routing tables, and your NAT gateway,
+and your internet gateway, and your security groups.
+Imagine how many errors you might make.
+I can vouch for this. I can
+tell you that I have done these things manually before.
+It will take me a day to build it out
+and then 2 days to troubleshoot it
+because I introduce problems.
+If you ask me to do the same task 10 times in a row,
+I might do it once correctly
+and the other 8 or 9 times
+are going to be chock full of errors.
+That's because we're people, we make mistakes.
+Computers, however, don't make mistakes.
+So the more that I can offload to the computers
+to do for me, the more I get consistent repeatable results
+that avoid errors and avoid introducing costly problems
+into my environment.
+So what benefits are we going to take away from these tools?
+Why do we want to avoid those manual processes?
+You have more important things to do with your life.
+I guarantee it.
+Nobody wants to sit down
+and click that same button over and over and over again.
+Imagine having to spin up an EC2 instance once a day.
+That's not too bad.
+Now imagine spinning up that same EC2 instance
+300 times in a day. That's not going to work.
+You have other things to do in your job.
+Security, you will introduce security holes
+if you do things manually.
+I have done this.
+In my previous job as a system administrator,
+I have accidentally introduced a security group rule
+that said open all ports
+to all traffic from anywhere on the internet.
+And that sat in our architecture for a couple of months
+until I discovered it.
+Yeah, that's not a good place to be.
+When I have everything automated
+I can do a security review once.
+And every time I deploy that automation
+I get a secure environment time after time after time.
+Consistency, those networks,
+those EC2 instances, are all going to look different
+if you do it yourself.
+So not only do we have better things to do with our time
+and we need it to be secure,
+we need it to be the same every single time.
+Computers don't make mistakes,
+if we give them the appropriate set of instructions.
+So that's what these upcoming lessons
+are going to be all about.
+How do I use use AWS automation tools and techniques
+to ensure that my architecture is consistent, secure,
+and created in that timely manner.
+AWS has a variety of options to automate.
+There are 3 big tools that you might see
+on some of your exam questions. So
+those are going to be the ones that we're going to focus on
+but this is by no means the extent
+of all of our automation possibilities.
+The first, and I would say probably the most important,
+is called CloudFormation.
+Now, if you've never used CloudFormation before
+it's simply infrastructure as code.
+Instead of clicking all those buttons to build my VPC,
+all I have to do is go in and define in text form,
+I want my VPC to be this size
+and be in these AZs and have this IP range.
+Basically I fill in all the settings,
+I pass it to CloudFormation.
+CloudFormation interprets those instructions,
+runs that code, and makes those AWS API calls for me
+so I don't have to do it myself.
+Now, if you're thinking Alex, that sounds great
+but I don't want to write code. I'm with you.
+Writing code is not always the most fun.
+Now, if you're a developer, it's a lot of fun for you
+but I think we could all use this solution
+every once in a while
+that just holds your hand the entire way through.
+And that's where Elastic Beanstalk comes into play.
+Elastic Beanstalk is effectively
+your IT department in a can.
+All you have to do is take your application,
+your web app, drag and drop, and Elastic Beanstalk
+will build out the infrastructure,
+build out the load balancers, deploy your applications,
+set up auto-scaling.
+So it combines all those previous lectures
+that we've been going through into one service
+that just does it on your behalf.
+Now the last tool that we'll take a look at
+it's called Systems Manager.
+Systems Manager gives you the ability to patch, update,
+manage, configure those EC2 instances
+along with that on-premise architecture
+so you don't have to hop into all those boxes yourself
+and do the work manually.
+Now, this was just a really quick overview
+of all of these tools. I
+promise we're going to go much deeper into each one of them.
+Before we do those deep dives though,
+let's close it out with some exam tips.
+Now I know you might've heard in your life
+that being lazy is not a good thing.
+It's not a desirable trait
+but when it comes to the cloud, it is.
+It is if we're automating.
+I don't want to have manual steps.
+So if you ever find yourself clicking a button
+or typing in a command think, can I automate?
+And we want to keep this idea going on the exam.
+Whenever possible in our scenarios
+replace manual steps with automated tools.
+If you are given 2 answers with everything the same
+except one answer uses CloudFormation and another answer
+requires you to manually build out the architecture
+that it's describing,
+the right answer is do use CloudFormation.
+The right answer is to use automated tools
+whenever possible, automate.
+Now a few more tips here for everybody.
+Automate everything, automate yourself out of a job.
+That's some advice that I got a long long time ago
+in my career.
+Now we're never going to be out of our jobs
+because there's always something else that we can automate,
+but this is the same idea
+that we want to keep in mind on that test.
+Manual steps are not good.
+Doesn't mean that they're wrong if they're the only option,
+but whenever possible, focus on solutions,
+focus on answers, that have automation.
+You're going to need to be able to look
+for the right tool, for the right job.
+There's no one perfect solution that says,
+oh, this automation tool does everything for me.
+You're going to have to be able to read through the scenario
+and kind of pick out
+is this more of an Elastic Beanstalk situation?
+Is this more CloudFormation?
+Is this more Systems Manager?
+Or maybe do I even need to combine a few tools here?
+Now in the upcoming lessons,
+we'll arm you with the knowledge that you need to know
+to get those questions right.
+There are benefits to automation.
+We've talked about them here.
+It's faster.
+It's more reliable.
+It's more secure.
+Keep these in mind when you're reviewing those answers.
+Because if you're looking for an answer
+that's faster, better, and more secure,
+you can probably bet they're looking for an automation step
+in that answer.
+You always want to keep in mind
+that automation has those benefits that we've covered.
+It's faster, it's more secure, it's more reliable.
+So if you ever see a question
+that's talking about improving, or generally anything
+but more specifically, that reliability,
+that consistency, and that security,
+think through, can we automate some of these steps?
+And automation allows you to create
+immutable infrastructure.
+The idea is, we can easily tear it down
+when we don't need it and create it when we do.
+So we want to think of everything that's been automated
+as this is disposable. Now
+we're going to keep this in mind and we'll talk a bit more
+about that immutability of our resources
+in our upcoming lesson
+when we take a look at CloudFormation.
+And finally,
+just a heads up for all those pet owners out there,
+if your dog is ever having digestive problems,
+adding a scoop of canned pumpkin to their food
+can help settle their stomach.
+Alright folks, thanks for taking a quick look at
+why do we want to automate?
+I can't wait to see it in the next lesson.

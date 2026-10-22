@@ -1,0 +1,356 @@
+Hello gurus.
+In this lesson,
+we're going to look at using AWS Systems Manager.
+In this lesson,
+we're going to cover a ton of different topics.
+We're gonna look at what Systems Manager is,
+we'll discuss some important capabilities
+that you should be aware of,
+we'll discuss different concepts that you should know,
+we're going to dive into using the SSM agent,
+which is a critical component of using this service,
+we're going to discuss different parameter store concepts,
+we'll have an in console demo
+where we leverage several capabilities at once,
+and then we'll wrap things up with some exam tips.
+All right, let's dive in.
+What is Systems Manager?
+AWS Systems Manager is a comprehensive suite of tools
+that are aimed at providing visibility, control
+and automation capabilities for your managed instances,
+both inside and outside of AWS.
+It is a centralized solution for managing
+and maintaining the health, compliance
+and configuration of your infrastructure components.
+An important concept to note for this exam,
+which we will cover within this lesson
+is the AWS Systems Manager agent,
+or otherwise known as SSM Agent for short.
+This agent is a software component that is installed
+and then executed on managed instances
+within AWS as well as on premise.
+It allows communication between your instances
+and compute with the AWS Systems Manager Service.
+The agent itself enables SSM to perform various tasks,
+and these include things like running executed commands,
+collecting inventory data.
+You can manage patch updates
+and even automate actions all from a centralized place.
+Now let's go ahead and discuss some different features
+that Systems Manager offers.
+These are also known as capabilities.
+First is automation.
+With predefined or custom playbooks,
+also known as documents,
+you can streamline resource management.
+This makes it easier to execute tasks
+and workflows on your managed compute.
+Run Command is a feature that enables you
+to remotely execute commands
+and scripts on managed instances without having
+to have SSH or RDP access in place.
+This greatly enhances security and efficiency.
+Systems Manager automates the process for patching
+of managed instances.
+It handles both operating system patches
+and application updates, and this also helps ensure security
+and compliance via this Patch Manager Capability.
+Parameter Store is a secure service that allows you
+to store secrets
+and plain text application configuration information
+and it provides a central repository for this data.
+Now this data can be encrypted using KMS keys
+for more control.
+Another capability is that you can define schedules
+for performing actions on your managed instances.
+You can enable efficient maintenance
+and update times via maintenance windows.
+This usually plays hand in hand with Patch Manager.
+And lastly, a major capability that you must know
+for this exam is Session Manager.
+This allows you to securely connect
+to your managed compute resources without the need
+for direct SSH or direct RDP access.
+This is a great enhancer for security
+and overall management.
+Now all of these features within AWS SSM
+offer valuable tools within them
+for optimizing the infrastructure management
+and automation tasks
+that you would usually take part in daily.
+It's honestly one of my favorite services to use in AWS.
+Moving on, we can dive into some important concepts
+that you need to know for this exam
+as well as just real world use cases.
+Now both of these deal with Session Manager,
+which was one of those capabilities we talked about
+and I can promise you that you will need
+to know this for the exam.
+First, we have Logging.
+Systems Manager allows you
+to log all usage during your session manager sessions.
+This includes the commands that are run as well
+as the connections that are made.
+And the cool thing is you can send your logged data
+to CloudWatch and your other calls to Cloud Trail.
+This ensures you have a record of session activities
+for auditing and compliance.
+The agent itself is a critical component.
+This supports both Linux and Windows managed instances
+and it facilitates that secure
+and remote management without that SSH
+or RDP access like we talked about.
+The important thing to know here
+is that this enables secure agent-based connections
+to your instances without having
+to open unnecessary port.
+And all of this is done via a simple single agent known as
+what we talked about, the SSM agent.
+And speaking of that agent,
+let's talk a bit more in depth about it.
+Remember, the AWS SSM agent is an essential software
+that runs on your instances.
+It is what actually enables SSM to perform your updates,
+perform your management,
+and even send configuration tasks to your resources.
+On the bottom, the bottom here I have a list
+of supported types of instances,
+and this is just a summarized list,
+but do be familiar with those.
+Now this is typically pre-installed on many official AMIs,
+so it simplifies the setup.
+To ensure it functions correctly, though,
+you have to make sure you have the necessary IAM permissions
+configured on your compute so
+that the SSM agent can actually run and connect.
+In addition to compute instances,
+the agent can also be installed on your own
+compute and edge devices.
+This is a really neat feature.
+It enables interactions with SSM
+by extending the capabilities
+beyond the AWS managed resources that you typically use.
+It is very powerful.
+Okay, with the SSM agent out of the way.
+Let's talk about Parameter store.
+This is another key capability you need to know.
+Parameter Store allows you
+to organize your data in a hierarchical manner.
+It makes it easy to categorize and manage.
+For example, you can structure parameters like /dev,
+/db pass for development database passwords.
+The path can be used for granular access controls,
+which makes this a very powerful capability.
+With this feature, you can set what are known
+as parameter policies,
+and these include things like an expiration date
+in order to control access and lifecycle of your parameters.
+Now, let's go ahead and talk about parameter types.
+A string type is a type of parameter
+and it stores your data as plain text.
+This is generally suitable for general
+non-secret configuration data.
+A stringless parameter is going
+to hold comma separated lists of values,
+making it useful for storing and managing multiple values
+that can be referenced via a single API call.
+And lastly, secure string parameters are designed
+for holding sensitive data and they are stored
+and referenced securely through encryption via KMS.
+This is ideal for storing secrets
+and other confidential information
+because it ensures data security.
+Now a key difference between this capability
+and Secrets Manager is going to come down to cost.
+Parameter Store is free to use.
+However, you do not get automatic secret rotations like you
+do with Secrets Manager.
+So those are two distinguishing features
+you need to be familiar with.
+Okay, let's do this.
+We're gonna take a break from this information.
+We're gonna jump into the sandbox
+and we're gonna use Systems Manager.
+We're gonna connect to an EC two instance
+using Session Manager.
+We're going to create a config value in Parameter Store.
+We then we'll execute a run command script that pulls
+that value onto the local file system.
+Let's get going.
+Okay. Hello gurus.
+Welcome to our AWS Sandbox environment.
+Now I'm in my EC two dashboard here
+and let's go over some prerequisites before we dive in.
+I've already created an instance here
+and you'll notice under the security groups,
+I have no inbound rules.
+So how can we connect to this?
+Well, we're going to use Session manager.
+Remember, it uses the agent in order to connect
+to this instance securely.
+Now, one thing we do need to call out
+is I have attached this instance profile here,
+which is already pre-created.
+And you'll notice under the policies we're using
+the AWS managed policy that's provided.
+And this gives us the proper permissions
+to interact with systems manager.
+So this is important.
+You need correct IAM permissions
+in order to communicate with systems manager.
+Otherwise the SSM agent will not work as it's intended to.
+So I've already created this, I attached it to my instance,
+and now we have the proper permissions in place.
+So what I'm going to do is I'm gonna click
+on Connect, Session Manager
+and you'll notice how easy it is
+to connect to this instance.
+There we go.
+I am now connected to a shell instance
+on this EC2 instance.
+And you'll notice when I run a, who am I, I'm logged in
+as SSM user, you're probably normally used
+to seeing EC2 user,
+but this is how you can distinguish by default
+who is actually logging in.
+So lemme clear this and the next thing we want to do
+is we want to go ahead and create a parameter.
+So I'm gonna go ahead and go back to my main screen here.
+I'm going to search for systems manager.
+And let's get started.
+The first thing we want to do
+is we want to create a parameter under Parameter Store.
+Now when I create parameter, we're going to give it a name
+and I'm going to use a pathing syntax
+so I can demonstrate how that works.
+So I'm gonna call this dev/squid.comp,
+I'm going to give it a description
+and then we'll let it be a standard tiered parameter
+and we're gonna select string.
+But notice there's three different types
+which we talked about.
+And for this I'm going to make it a text data type.
+One thing to note here is you can leverage an EC2 image
+AMI ID via this type of parameter by default.
+This is very useful and it can come up on the exam.
+Now for this, I'm going to go back to text
+and I'm going to paste in a base 64 encoded string here.
+Now you'll see what this is later on once we decode it,
+but it's a simple default squid proxy configuration file
+and you will see what it looks like here in a moment.
+Now really quickly also,
+all of this code will be available in the GitHub repository
+for you to reference if you wanna want to play around.
+But for now,
+I'm going to pace my base 64 encoded string data here.
+I'm gonna click on Create.
+And there we go.
+We now have our squid comp configuration
+data under our path parameter name.
+Let's go ahead and test this out.
+So the next thing I want to do is I want to navigate
+to run command.
+Once this loads, I'm gonna select Run Command.
+I'm going to search for Shell
+because I wanna run a shell script or command.
+I'm going to select that document
+and then you'll notice we can provide commands.
+Now we can specify a shell script
+or a command that we want to run.
+Now for me, I'm just gonna specify a command
+and let's talk about this really quickly.
+I zoom in here, you're gonna notice we're echoing
+our SSM parameter.
+So this is how we reference the parameter within
+this document and this command.
+So this will look for a parameter called /dev/squid.comp
+within this region.
+We're piping it to base 64 and decoding it,
+and then we're saving it to a /temp/squid.comp file.
+So if I zoom back out, and really quickly
+before we continue, I can verify under /temp
+that there are no documents like this on the instance.
+You'll notice we have a bunch of other temporary files.
+So back to run command.
+We've got our simple command here.
+We're going to leave the defaults for working directory
+and execution timeout.
+And let's look at target selection.
+So this is neat.
+You can specify instances by tag values.
+You can choose resource groups or we can choose manually.
+So the first and third option here are great
+for large scale operations where you need to pass a command
+or a script to a ton of instances at once.
+Since we're just doing one, I'm going to choose manually.
+We'll see that our instance is registered
+because our SSM agent is online and talking.
+So I'm gonna select it.
+I'm gonna scroll down.
+We can give it a comment if we wanted to.
+You can specify a timeout.
+We can run rate control, which is gonna say, Hey,
+how many targets at once.
+And another important feature here is we can output data.
+So we can write command output to a bucket,
+and we can also send data to CloudWatch logs.
+Now, I'm not doing this because I have no command output,
+but it is good for you to know
+that you can use these options.
+We're gonna skip the latter part of this CloudWatch, SNS
+and CLI stuff, and we're gonna click on Run.
+You'll notice it's in progress,
+and if I refresh, it's successful.
+This is perfect.
+We see our target, we see the instance name,
+and then the statuses.
+So now if I click on this, it's going to bring us
+to the run command history for this run command execution.
+Notice at the top here are execution ID.
+Now, like I said, there's no output.
+There's obviously no errors,
+but we can verify this on our instance.
+So now if I clear my screen in the LS and /temp,
+well we can see we have squid comfier.
+So let me go ahead and clear this again.
+I'm going to zoom in and let's actually look at that file.
+There we go.
+Our simple Squid configuration file
+for our squid proxy server.
+And this shows how easy it is to leverage systems manager
+for all of its different capabilities
+to perform automatic remote executions.
+We've now referenced that parameter value.
+We passed in that base 64 encoding.
+We decoded it and we transferred it to a local file.
+Now that's gonna do it for this demonstration.
+Let's jump back into the presentation
+and we'll wrap things up with some exam tips.
+Okay, let's talk about some valuable exam tips.
+First, systems manager can manage both on-Prem
+and in AWS compute resources.
+This allows for centralized management
+across hybrid environments.
+Understand that Patch Manager can patch,
+update and configure instances.
+This helps you maintain security
+and compliance of your infrastructure.
+It's good to know that automation documents can be used
+with config to enforce architecture states.
+Remember that Parameter Store is a free service
+that allows you to store configuration data
+and even secret values in a structured manner.
+You do need to know when you should leverage this service
+compared to Secrets Manager.
+You can securely connect
+to your compute using Session Manager
+instead of the traditional SSH or RDP.
+This greatly enhances security and offers easier management.
+And lastly, systems manager interactions require
+that the SSM agent is installed
+and running on your managed instances.
+Don't forget, you also need proper permissions in place
+so that it can work properly.
+Now that's gonna do it for this lesson on Systems Manager.
+Let's go ahead and wrap things up
+and then I will pick back up with you in the next lesson.

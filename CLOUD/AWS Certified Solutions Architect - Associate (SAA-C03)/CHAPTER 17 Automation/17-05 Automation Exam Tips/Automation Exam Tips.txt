@@ -1,0 +1,164 @@
+Hello Cloud Gurus, and welcome back.
+In this lesson, we're going to take a look at some exam tips
+for all of the automation tools
+that we've covered in the previous lessons.
+So let's go ahead and dive right on in.
+I have 4 questions here that I want you to keep in mind
+and these 4 questions are going to apply
+to really every exam question
+that you're going to read through.
+The first question is, can you automate?
+The answer is most likely yes.
+If you're ever reading through a scenario
+and it's talking about a manual step,
+you should be thinking which one of my automation tools
+can avoid that manual procedure.
+Can I use CloudFormation to build all the architecture?
+Can I use Elastic Beanstalk to offload
+all of that work of setting everything up myself?
+Or could I use Systems Manager
+to handle configuring the insides of my EC2 instances?
+What kind of automation is going to work
+in this particular scenario?
+There's no one size-fits-all.
+We covered that a little bit in the previous lessons.
+I can't just say, oh this is the automation tool
+that I'm using in every single situation,
+because they all kind of have their own use case.
+Systems Manager for the inside of those instances,
+Elastic Beanstalk to really act as that one-stop IT shop,
+and CloudFormation to make that immutable AWS architecture
+that we can easily deploy and then throw away.
+Is the automation repeatable?
+It's a good question.
+Sometimes we can write a script
+or a program ourself to do something using API calls,
+or a CLI or an SDK, and it works.
+But if it's not built with one of our frameworks,
+sometimes it's not a repeatable situation.
+So while you could see the answer on the exam
+of, oh I wrote my own CLI script,
+We generally want to focus on answers
+that use one of the AWS-provided frameworks,
+such as the few that we've gone through in this section.
+And then finally,
+with this work cross-region or cross-account?
+I've seen scenarios that say, hey, we've got a template
+that's working in region A, but it doesn't work in region B,
+or I deployed in my account,
+but it doesn't work in my co-workers account.
+How do we solve this problem?
+We've talked about this a little bit
+with not hard-coding those IDs,
+not hard-coding those values inside of my templates,
+but we want to keep this in mind.
+Hard-coding IDs or even those soft limits
+inside of an AWS account,
+are 2 of the biggest reasons
+that you're going to see your automation fail
+when it moves cross-region or when it moves cross-account.
+Let's take a look at a couple of tips
+that are specifically CloudFormation-related.
+The first one is we really need to understand
+those CloudFormation sections.
+Like I said, in the CloudFormation lecture,
+we don't have to be a coding expert.
+They're not going to ask you to debug in-depth
+why this particular block of code isn't working.
+You're not going to have to go through the nuances
+of JSON versus YAML.
+In general, you just need to know
+that use case for the parameter.
+It's those questions that you're asking the end user
+who's building the template,
+the mappings, how they can control
+or automatically fill in a value
+such as what is the particular AMI
+that I would like to use for this region,
+and the resource section.
+The resource section
+is going to contain all of the resources, right?
+Those instances, those networks, those databases,
+everything that you're trying to build out.
+So just keep all 3 of those in mind
+as you're looking at CloudFormation questions.
+Immutable architecture is the best.
+On the exam we like to prefer answers
+that include a stateless environment.
+Something that I can easily pick up and throw away,
+and reprovision, it's that disposable architecture.
+That's what I want.
+We want to have automation built out that is so robust,
+that I can turn it off. I can chuck it out the window
+when it's no longer needed.
+Now that doesn't mean that I'm proactively
+terminating the database every single day,
+because obviously that wouldn't work out so well for me,
+but it could mean that I'm throwing away those web servers
+those backend servers,
+I'm hosting my data in S3 or EFS,
+and I'm treating that compute
+as something that is disposable.
+Now you might run into a scenario
+where you're asked to deal with particular IDs.
+This could be an AMI ID, a snapshot ID,
+and remember we never want to hard-code those.
+So the right answer is going to be,
+store those in the mapping section,
+or use Parameter Store.
+Now the little bit about Parameter Store
+in that Systems Manager lesson.
+Parameter Store remember,
+it's kind of like that universal key value storage,
+and CloudFormation can look up values
+that are stored in there.
+So mappings and parameters are an appropriate location
+to store those IDs,
+as long as we are never hard-coding them directly
+into the resource section itself,
+as that's much more likely to cause that breakage
+when you move that template from one environment to another.
+Now we've got a few more tips on that Elastic Beanstalk
+and Systems Manager service.
+So we generally just need to know with the Elastic Beanstalk
+that it's your one-stop shop for everything AWS.
+You're building out a web server,
+that's really what it excels in.
+If it's looking for a situation that is simple,
+I've seen questions that say,
+yeah, we want to make a quick migration,
+or my coworkers are not interested
+in learning CloudFormation.
+Well, then we can focus on using Elastic Beanstalk
+over that CloudFormation architecture.
+If the scenario is a little bit more complex,
+if it's talking about things like Lambda functions
+and sqsqs and load balancers, and API Gateway,
+and a little bit more robust architecture,
+then we'd want to think CloudFormation,
+as that gives us the most granular level
+of automation control over everything that we're building.
+Now, when it comes to Systems Manager,
+those automation documents
+are going to be very useful to you.
+These automation documents can be used
+to configure the insides of EC2 instances,
+as well as parts of the AWS environment.
+So they're kind of the jack of all trades automation tool.
+Now, speaking of Systems Manager,
+you don't have to dive too deeply.
+That's going to be featured a lot more on the SysOps exam.
+So in general, they want to see that you understand,
+hey, we can use automation documents to control things
+inside of my AWS account and inside of my EC2 instances,
+potentially you might see a question or two
+around storing new value in Parameter Store.
+And that session manager that we walked through in that demo
+might come up,
+however, I'd say that's pretty unlikely
+but it couldn't hurt to have just a little bit of practice
+utilizing that tool.
+All right folks, that's going to wrap it up
+for our automation section.
+Thanks for going through these exam tips with me
+and I can't wait to see in the next video.

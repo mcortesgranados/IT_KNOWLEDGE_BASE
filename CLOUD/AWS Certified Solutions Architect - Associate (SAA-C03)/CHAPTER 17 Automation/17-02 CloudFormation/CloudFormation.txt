@@ -1,0 +1,423 @@
+All right, welcome back gurus.
+In this lesson, we're gonna talk about AWS CloudFormation.
+During this lesson, we're gonna touch
+on a few different subjects.
+We're going to discuss what AWS CloudFormation is.
+We'll talk about the process overview.
+We'll look at using CloudFormation.
+We're going to review the different template sections
+you should be familiar with for the exam.
+We'll move into a quick console demo,
+and then we'll wrap things up with some exam tips.
+Okay, so AWS CloudFormation is a powerful AWS service
+that enables you to define
+and provision your infrastructure as code.
+With CloudFormation,
+you create what are known as templates
+in either JSON or YAML format,
+and you describe your resources,
+configurations, and even relationships
+that are required for your applications workloads.
+CloudFormation supports a wide range of resources in AWS,
+but it is good to know
+that not every single one is supported
+and there might be occasional limitations.
+But for the most part,
+it does cover most of the commonly used resources.
+This infrastructure as code approach
+or IAC helps you manage
+and automate the deployment
+and updates of your resources
+in a consistent and repeatable manner.
+It makes it an essential tool
+for infrastructure management
+and automation within AWS.
+Now let's go ahead and discuss the process overview
+for creating and deploying a template.
+On the left side here is a sample template
+or at least a snippet from a sample template,
+and it's in YAML format.
+In CloudFormation,
+the first step is to write your code,
+which involves creating a declarative template
+to describe your infrastructure
+using either JSON or YAML.
+And these templates are used
+to define the different resources,
+the configurations, the dependencies,
+and other aspects of your infrastructure resources.
+This code is the foundation for provisioning
+and managing your resources
+in that structured
+and automated manner we talked about.
+Step two involves deploying your code
+as a stack or a stack set in CloudFormation.
+A stack is a collection of resources
+that are created, updated,
+or deleted together
+as a single logical unit.
+A stack set is a way
+to manage stacks across multiple accounts
+and regions at once.
+When you deploy your code as a stack or stack set,
+CloudFormation takes care of the underlying process
+of making the necessary API calls on your behalf.
+In other words, it creates, updates
+or deletes the specified AWS resources
+based on the instructions you've provided in your template.
+This automation simplifies the provisioning
+and management of all of your infrastructure.
+And going back to our sample on the left here,
+what this is doing is creating an internet gateway
+and then it's attaching that internet gateway to a VPC
+using some of the resources
+that are in the other parts of the template
+that we can't see.
+Okay, let's go ahead
+and talk about using CloudFormation.
+CloudFormation provides several benefits
+that we've already kind of talked about,
+but let's explore them a little bit deeper.
+By describing your infrastructure
+as code in these templates,
+you can easily manage your changes,
+you can track versions,
+and you can collaborate with team members
+using version control systems like Git.
+This enhances IAC best practices.
+CloudFormation allows you
+to assign tags to your stacks,
+which also assigns these tags to your resources,
+making it easier to identify these resources
+and associate costs
+with specific projects or environments.
+With CloudFormation, you can automate the provisioning
+and management of your resources like we talked about,
+and this helps eliminate the need
+to manually do those tasks.
+The big thing here is that it ensures consistency
+and it reduces the inevitable likelihood of human error.
+Believe it or not,
+everyone is going to make a mistake
+at one point in their lifetime within the cloud.
+It's just going to happen.
+Now, each stack is a regional resource,
+but you can easily deploy what are known as portable stacks
+into other regions as needed.
+This flexibility simplifies the process
+of replicating infrastructure
+into your different regions.
+You create portable stacks
+by leveraging things like parameters
+and lookups for different data
+that's not specific to one particular region.
+When you're updating an existing CloudFormation stack,
+you can actually generate a preview
+of the changes that will occur.
+This helps you understand the impact of those changes
+before you apply them.
+It also helps reduce the risk of unintended consequences.
+This is known as a change set.
+Now, if you use an admin account
+or a delegated admin account,
+you can create, update
+or delete CloudFormation stacks across multiple accounts
+and regions with a single operation.
+These streamline the management of infrastructure
+in complex, multi account,
+and multi-region scenarios.
+These features and capabilities,
+which are known as stack sets,
+make CloudFormation a powerful tool
+for managing and automating your infrastructure efficiently.
+Now, let's go ahead
+and look at the different template sections
+that you should be familiar with for this exam
+and in the real world.
+We've picked out six critical components of every template,
+and I went ahead and noted which ones are actually required
+and then which ones are optional.
+You do absolutely need to know the required portions
+for this exam.
+There will more than likely be
+at least one question asking which fields are required
+and if a template is valid based on that knowledge.
+The first required field is the template format version.
+This is a static value
+and it will always be listed as 2010-09-09.
+The next portion is the parameters,
+and these are optional.
+You can use parameters
+to dynamically create resources
+based on input values for your template.
+You can also enforce certain formats for your parameters,
+which is really handy.
+Thirdly, there are mappings.
+Mappings are used to look up values
+based on different data points.
+A common example of mappings is to use regional mappings
+that map to specific AMI IDs
+for EC2 instances.
+This is a very common scenario.
+Fourthly,
+and the next required portion is the resources portion.
+This is where you actually define
+all of your resources in your account
+as well as their configuration requirements.
+Obviously, you're not really deploying resources
+if you don't define them,
+so that is why it's required.
+The fifth section is the output section.
+This seems pretty self-explanatory,
+and it's where you go ahead
+and specify what information
+and values you want to output.
+These are key to be able to reference those values
+and they're actually able to be referenced
+within other stacks in your account.
+And finally, we have the transform section.
+The transform section is used
+to specify one or more macros,
+formally called transforms,
+and these macros modify the template
+before it's actually processed.
+These allow you to add custom processing
+or automation to your templates
+and enhance flexibility and reusability.
+Again, these are just six critical components
+that make up parts of the template
+and really be sure you understand the two required sections.
+Okay, let's take a quick break from this presentation.
+We will jump into our sandbox environment,
+and while we're in there,
+I'm going to leverage an existing CloudFormation template
+to deploy a VPC.
+We'll view the template,
+look at the architecture
+in what is known as CloudFormation Designer,
+and then we'll actually deploy it.
+So let's get going.
+Okay, welcome to the AWS sandbox.
+I'm in my North Virginia region.
+Let's go ahead and get started.
+I'm going to navigate to CloudFormation,
+and the first thing I want to do here
+is I'm going to create a new stack.
+So I'm gonna find create stack,
+and I'm going to create one with new resources.
+It is important to know that you can create one
+with existing resources,
+which means you're importing your already designed
+and deployed architecture.
+Now, I will call out,
+this is a huge pain in the neck,
+so you're better off starting off from scratch
+and using CloudFormation
+to actually deploy your initial design
+if you are able to.
+So for now, I'm gonna click on with new resources.
+And instead of uploading a template,
+which can be done via an S3 URL,
+or you can upload it via your own local file system,
+I'm going to use the create template in Designer selection.
+Now, what Designer does
+is it gives you a graphical representation of your stack,
+and that's what we want to do for this demo.
+So I'm gonna click on create template in Designer,
+and once we're in here,
+I'm going to navigate to the bottom,
+switch to template, select YAML,
+and I'm going to paste in my architecture's CloudFormation.
+Now you'll notice this is 234 lines long,
+so we're not gonna talk about it too in depth,
+but if you want to,
+you will be able to reference this template
+within the GitHub repository
+so you can play with it and explore as needed.
+For now, what I'm going to do
+is I'm going to hit refresh up here,
+and notice this gives us a visual representation
+of what's going on.
+Now I do understand,
+and I'm sure you've noticed it's kind of confusing,
+and they just do their best
+to link the different dependencies
+between the different resources.
+So you'll notice everything comes back to our VPC
+and we're deploying things like private subnets,
+and if I zoom in,
+we can see some other stuff like public subnets
+and then even a NAT gateway
+and an internet gateway
+with all of our route tables.
+So this is just a good way
+to visually represent what's going on within a template
+and it's really nifty.
+Now, if we look at the actual template itself,
+I'll go ahead and zoom in here,
+you'll notice that of course,
+the first part is our template format version,
+and this is a requirement, remember.
+This needs to be the first line for your template.
+We have a description that's empty
+because it's optional,
+and then we have resources.
+So the resources, we're creating a VPC,
+we're passing in properties
+specific to this type of resource,
+and then we're creating our subnets,
+our route tables, et cetera.
+Everything that goes along with a three AZ-wide public
+and private VPC.
+You see a route table
+with our route table type of resource,
+the properties, et cetera.
+So be sure to run through this simple VPC architecture
+via this CloudFormation template on your own time,
+but it's good to know that you use this
+in order to go ahead
+and deploy this type of resource automatically.
+AWS is going to handle it all for us.
+So if I go ahead and click on validate,
+it's going to make sure this template is valid,
+it is, and I can go ahead and click on upload.
+So this is going to create a new stack for us to use,
+and you'll notice that it stores it
+in an S3 bucket for us automatically.
+So now if I click on next,
+we have to give our stack a name.
+So I'm going to call this complete VPC.
+We have no parameters,
+but if we wanted to, we could pass those in.
+I'm going to click on next.
+We can tag this.
+We'll call it environment prod.
+If we needed specific permissions,
+we can give this stack a role to use
+to perform those permissions.
+Now, I'm not going to do this
+and this is likely not gonna be needed on this exam,
+so you don't have to worry about it,
+but it's just cool to call out.
+Now, one thing that could come up is stack failures.
+So depending on if your stack fails to create,
+do you want to roll back all resources
+even if they're created,
+or do you want to keep the successfully provisioned ones?
+Typically, people use rollback all
+so that they can completely define
+and recreate their infrastructure,
+but this is an option
+to keep the successfully provisioned ones.
+Next up, we have the advanced options.
+So a stack policy is going to say, hey,
+what resources do you want to protect
+from accidentally being deleted or updated
+whenever this entire stack is updated?
+Now, this is just a JSON document
+and it's a little more in depth than what you need to know,
+but just understand you can put a stack policy in place
+to protect resources within the stack.
+The next is the rollback configuration.
+So this is playing with
+that first portion here of stack failures.
+And what you can do is use CloudWatch alarms
+to monitor for any failed attempts at deploying
+and then alert someone based on that.
+And then the next option is notification options.
+So in addition to rollback configurations and monitoring,
+you can actually send messages to an SNS topic
+to let people know things are being deployed,
+they're being deleted or updated, et cetera.
+And then finally here at the bottom, stack creation.
+You can set the number of minutes
+before a timeout occurs
+and you can activate termination protection.
+So the default is deactivated,
+but if we wanted to, we could protect this stack
+and its resources by activating this.
+Now I'm going to leave the defaults.
+We're gonna click on next,
+and now we review.
+So we see all of the information
+that we've passed in,
+including parameters, tags, et cetera,
+and I'm gonna click on submit.
+Now what I'll do here is I'm going to speed this up,
+so this is going to look extremely fast,
+and I'm gonna continuously refresh this pane here,
+and you're going to see
+how it's creating all of these different resources
+for us automatically via API calls on the backend.
+In fact, you can already see
+it's already created the VPC resource,
+and now it's creating the subnets
+and the route tables for us.
+So like I said, I'm gonna speed this up.
+Again, it will look very fast,
+and I'll just keep refreshing until this is complete.
+Okay, so now it is complete,
+and you can notice this last line here
+saying creation complete,
+and our stack is marked as complete as well.
+So you'll notice the timestamp here, 11:54,
+and we started this at 11:52.
+So it took about two, two and a half minutes
+for it to deploy.
+Now, the big thing that I wanna call out
+that took the longest is the NAT gateway,
+because this goes into a pending state,
+it has to be associated with a public IP
+and then be attached.
+So this took the longest,
+otherwise this would've been very quick.
+So this is the events tab,
+but if we look at the resources tab,
+we can look at all of the different resources
+that were created for us automatically.
+We have our routes, our route tables,
+our subnets, our VPC, et cetera.
+So on the left is the logical ID
+that we gave it in the template.
+This is the second column,
+which is the physical ID
+and the actual resource ID itself.
+We have the type of CloudFormation resource it was,
+and then the status.
+We have outputs,
+so if we define any outputs, they would show here.
+We could see parameters that were passed in.
+We can view the actual template, which is awesome,
+and we can create or view change sets.
+That's gonna do it for this simple demonstration.
+Let's jump back in to the actual lesson
+where we'll have some exam tips.
+All right, welcome back.
+Let's have six quick exam tips before moving on.
+CloudFormation is well-suited
+for creating immutable infrastructure,
+and it allows you to see the creation of new resources
+and easily modify existing ones.
+Understand the layout of a template.
+Remember the purpose for each section
+and the required ones as well.
+Be aware that if CloudFormation encounters an error
+while it's creating or updating resources,
+it can roll back the changes based on your config.
+Please understand rollback behavior.
+Realize that CloudFormation can easily create
+and delete your entire architecture.
+It's very good for automation.
+Avoid using hard-coded values
+and resource IDs in your templates.
+These can lead to errors and failures
+and it makes it less flexible
+when you're trying to move it around.
+And lastly, know
+that CloudFormation makes the same API calls we do
+for the services,
+but it's automated and it's easily repeatable.
+Now that's gonna do it for this information
+and lesson on CloudFormation.
+Let's go ahead and end things here
+and we can move on whenever you're ready.

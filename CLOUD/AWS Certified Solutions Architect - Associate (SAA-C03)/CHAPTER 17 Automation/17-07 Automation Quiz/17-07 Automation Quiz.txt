@@ -1,0 +1,194 @@
+QUESTION 1
+
+Systems Manager can be used to patch and update _____ and ______.
+
+
+Containers, ECS
+
+
+Lambda, EC2
+
+CORRECT
+EC2 instances, on-premises instances
+
+
+S3 buckets, EC2 instances
+
+Sorry!
+Systems Manager will handle on-premises and EC2 instance patches. Reference Documentation: AWS Systems Manager Patch Manager (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html)
+
+Correct Answer
+Systems Manager will handle on-premises and EC2 instance patches. Reference Documentation: AWS Systems Manager Patch Manager (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-patch.html)
+
+__________________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which of the following is NOT a benefit of deploying an application using Elastic Beanstalk?
+
+
+You maintain full control over all of your architecture.
+
+
+It will deploy and update your applications for you.
+
+CORRECT
+Elastic Beanstalk will rewrite your applications from any language into Python.
+
+
+It will automatically replace instances that fail.
+
+Sorry!
+Elastic Beanstalk gives you full control over your architecture. Reference Documentation: AWS Elastic Beanstalk (https://aws.amazon.com/elasticbeanstalk/)
+
+Correct Answer
+Elastic Beanstalk doesn't do that for you. Reference Documentation: AWS Elastic Beanstalk (https://aws.amazon.com/elasticbeanstalk/)
+
+__________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Whenever possible, we should focus on ______ processes over doing things ________.
+
+
+Reviewing, at scale
+
+
+Manual, by automating them
+
+CORRECT
+Automating, manually
+
+
+On premises installs, in the cloud
+
+Sorry!
+We want to avoid manual steps. Automation is key when using AWS. Reference Documentation: Infrastructure & Automation (https://aws.amazon.com/blogs/infrastructure-and-automation/)
+
+Correct Answer
+Automation is key when using AWS. Reference Documentation: Infrastructure & Automation (https://aws.amazon.com/blogs/infrastructure-and-automation/)
+
+__________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What part of a CloudFormation template allows you to pass values into the template?
+
+
+Resources
+
+CORRECT
+Parameters
+
+
+Settings
+
+
+Conditions
+
+Sorry!
+Resources define what architecture is going to be created. Reference Documentation: Parameters (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html)
+
+Correct Answer
+Parameters allow us to pass data into the template before it's created.
+
+__________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What best describes "immutable pattern" for application code deployments?
+
+
+Deployed application code can't destroy cloud resources.
+
+
+Deployed application code requires your cloud architecture to be in read-only mode.
+
+CORRECT
+Deployed application code can't modify existing cloud resources, which, as a result, requires the creation of new resources.
+
+
+Deployed application code can't proceed because AWS has locked your account.
+
+Sorry!
+This statement is not accurate. Immutable pattern can't modify (not destroy) existing cloud resources.
+
+Correct Answer
+The immutable pattern specifies a deployment of application code by starting an entirely new set of servers with a new configuration or version of application code. When we go immutable, we don't want to ever upgrade in place. Once the cloud resource exists, it can't be modified. Reference Documentation: Immutable and Blue/Green Deployment (https://docs.aws.amazon.com/whitepapers/latest/practicing-continuous-integration-continuous-delivery/immutable-and-bluegreen-deployment.html).
+
+
+__________________________________________________________________________________________________________________________________________
+
+
+QUESTION 6
+
+Your brand new CloudFormation stack just encountered an error. By default, what happens to the resources that it had created?
+
+CORRECT
+They are terminated.
+
+
+AWS leaves them running for 15 minutes to make sure you don't need anything from them.
+
+
+They are reused when you try running the template again.
+
+
+They are preserved.
+
+Good work!
+In order to save money, CloudFormation terminates the resources from the template. Reference Troubleshooting AWS CloudFormation (https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html)
+
+__________________________________________________________________________________________________________________________________________
+
+
+QUESTION 7
+
+Elastic Beanstalk is an example of _______.
+
+
+Amazon's terrible naming scheme.
+
+
+Infrastructure as a Service (IaaS)
+
+CORRECT
+Platform as a Service (PaaS)
+
+
+Unmanaged architecture
+
+Sorry!
+Elastic Beanstalk is a PaaS service and handles everything for you! Reference Documentation: AWS Elastic Beanstalk (https://aws.amazon.com/elasticbeanstalk/)
+
+Correct Answer
+Elastic Beanstalk is a PaaS service and handles everything for you! Reference Documentation: AWS Elastic Beanstalk (https://aws.amazon.com/elasticbeanstalk/)
+
+__________________________________________________________________________________________________________________________________________
+
+
+QUESTION 8
+
+What is a primary use case for the AWS Systems Manager Parameter Store "SecureString" parameter?
+
+
+For directly connecting to your EC2 instances.
+
+
+For managing the patch level on your Windows servers.
+
+
+For storing non-sensitive data that does not require encryption.
+
+CORRECT
+For sensitive data that needs to be stored and referenced in a secure manner.
+
+Sorry!
+The SecureString parameter is not used for managing patch levels. AWS Systems Manager does have a Patch Manager for managing patches on your servers.
+
+Correct Answer
+A SecureString parameter is any sensitive data that needs to be stored and referenced in a secure manner. If you have data that you don't want users to alter or reference in plaintext, such as passwords or license keys, create those parameters using the SecureString data type. Only the value of a SecureString parameter is encrypted. Parameter names, descriptions, and other properties aren't encrypted. Reference Documentation: AWS Systems Manager Parameter Store (https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)
+
+__________________________________________________________________________________________________________________________________________
+
+

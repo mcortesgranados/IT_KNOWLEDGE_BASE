@@ -1,0 +1,85 @@
+Welcome back, gurus.
+In this lesson, we're going to cover
+a service known as Elastic Beanstalk.
+Okay, now in this lesson,
+we're gonna cover a few different things.
+We'll talk about what a Platform as a Service is,
+we'll look at Elastic Beanstalk,
+and then we'll have some exam tips.
+So let's go ahead and jump in.
+What is a PaaS or a Platform as a Service?
+This is an application deployment model
+that simplifies the process for developers
+to deploy and manage their applications.
+With a PaaS, you supply your code,
+and the provider takes care of building,
+deploying, and managing the underlying infrastructure.
+It really allows you to focus on
+the app development and functionality.
+Essentially, it's a one-stop solution
+for streamlined application deployment and management.
+Now in the AWS ecosystem,
+Elastic Beanstalk is considered the go-to platform
+for your Platform as a Service need.
+With Elastic Beanstalk,
+developers are able to focus on app development
+all while AWS handles the underlying infrastructure.
+The service supports a range of programming languages.
+This includes Java, .NET, PHP,
+Node.js, Ruby, and Go.
+And those are just a few that are listed.
+Additionally, Elastic Beanstalk offers various platforms
+like Tomcat and Docker for you to run your applications on.
+Now, let's go ahead and talk about
+some of the features you should be familiar with.
+The first is that it automates
+the entire deployment process.
+This allows you to create a template
+for your desired environment configuration,
+and then run it very easily.
+You can upload and test your application code
+within the service itself.
+This is further allowing you
+to streamline the deployment workflow.
+And lastly, Elastic Beanstalk
+takes care of the internal setup of your instances,
+eliminating the need for manual host management.
+Again, this further allows developers
+to focus on application development
+without the need to access the host directly.
+Okay, let's go ahead and wrap things up with some exam tips.
+Remember, Elastic Beanstalk is meant
+to deploy and scale your web applications automatically.
+This includes things like a web application server platform.
+The supported languages include things like Java, PHP,
+Ruby, .NET, and many others.
+Pretty much any of the popular runtimes
+in the world right now are supported by Beanstalk.
+What it does is it deploys your applications
+using managed platforms like either Apache Tomcat or Docker.
+Remember that the concept of a PaaS
+or a Platform as a Service
+is that it helps provision the resources for you.
+So in our case, the AWS resources
+include things like the instances,
+databases, S3, and even load balancers.
+In this service,
+the operating system and the application servers
+are updated automatically for you.
+You also get built-in monitoring, metrics and health checks.
+And lastly, it can fully manage the instances for you.
+Remember that.
+Again, that's the point of a Platform as a Service.
+You can leverage it to perform
+many administrative tasks for you,
+or you can actually take full administrative control.
+It's completely up to you.
+Now, that'll do it for this lesson on Elastic Beanstalk.
+This service really is starting
+to get pushed aside a little bit,
+so you really just need to know
+some of this high level stuff,
+especially for this particular exam.
+So let's go ahead and end things here,
+and then when you are ready,
+I will see you in the next lesson.
