@@ -1,0 +1,67 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:57
+
+Course Introduction
+01:57
+
+CHAPTER 2
+
+Introduction to Identity and Access Management
+15:42
+
+Section Introduction
+00:34
+Understanding IAM
+04:49
+Understanding Authentication vs. Authorization
+01:36
+Exploring Security Credentials
+03:01
+Accessing IAM
+04:40
+Section Review
+01:02
+CHAPTER 3
+
+Identities
+13:53
+
+Section Introduction
+00:35
+Understanding Identities
+03:02
+Exploring the Principle of Least Privilege
+02:28
+Understanding Groups
+01:55
+Managing Identities
+04:49
+Section Review
+01:04
+CHAPTER 4
+
+Access Management
+56:55
+
+Section Introduction
+00:34
+Understanding Policies
+03:23
+Understanding Roles
+03:20
+Managing Access
+03:37
+HANDS-ON LAB
+Creating a New User with Limited Permissions Using the AWS Management Console
+45:00
+Section Review
+01:01
+CHAPTER 5
+
+Conclusion
+02:13
+
+Conclusion and What’s Next
