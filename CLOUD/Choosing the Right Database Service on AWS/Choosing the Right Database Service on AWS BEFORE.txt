@@ -1,0 +1,62 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:37
+
+Course Introduction
+00:40
+Prerequisites
+00:57
+
+
+CHAPTER 2
+
+Relational Databases
+06:16
+
+What Are Relational Databases?
+02:24
+What Relational Databases Are Available on AWS?
+03:52
+
+
+
+CHAPTER 3
+
+NoSQL Databases
+05:41
+
+What Are NoSQL Databases?
+02:34
+What NoSQL Databases Are Available on AWS?
+03:07
+
+
+
+
+CHAPTER 4
+
+In-Memory Databases
+03:45
+
+What Are In-Memory Databases?
+01:58
+What In-Memory Databases Are Available on AWS?
+01:47
+CHAPTER 5
+
+Specialty Databases
+03:11
+
+What Specialty Databases Are Available on AWS?
+03:11
+
+
+
+CHAPTER 6
+
+Conclusion
+04:35
+
+Course Summary
