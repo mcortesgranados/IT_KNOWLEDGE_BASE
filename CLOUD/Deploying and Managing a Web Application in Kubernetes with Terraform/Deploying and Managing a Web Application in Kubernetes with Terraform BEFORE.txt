@@ -1,0 +1,49 @@
+Course Outline
+CHAPTER 1
+
+Deploying and Managing a Web Application in Kubernetes with Terraform
+2:18:31
+
+Course Introduction
+02:16
+How to Provision a Kubernetes Cluster with Terraform
+09:32
+
+
+
+Demo: Provision an AKS Cluster with Terraform
+14:57
+
+
+
+
+Demo: Provision an EKS Cluster with Terraform
+10:42
+
+
+
+
+Demo: Provision a GKE Cluster with Terraform
+14:44
+
+
+
+
+Kubernetes Web Application
+06:05
+
+
+Demo: Create a Kubernetes Web Application
+13:11
+
+
+
+Demo: Manage Resources for a Kubernetes Web Application
+05:25
+
+
+
+Course Wrap-Up
+01:39
+HANDS-ON LAB
+Deploy a Web Application in Kubernetes with Terraform
