@@ -1,0 +1,742 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+16:04
+
+Introduction
+01:30
+
+
+
+
+What Can I Skip?
+02:28
+
+The DVA-C02 Exam Blueprint
+06:27
+
+
+
+Introducing The AWS Cloud Sandbox
+02:57
+
+Introducing Hands-On Labs
+01:48
+Course Updates and Changelogs
+00:54
+
+CHAPTER 2
+
+Beginner's Guide to IAM
+1:26:43
+
+IAM 101
+04:55
+
+
+IAM Demo
+12:21
+
+
+
+
+
+HANDS-ON LAB
+Introduction to AWS Identity and Access Management (IAM)
+45:00
+Testing IAM Policy Permissions
+05:56
+
+
+
+IAM 101 Summary
+03:31
+
+
+
+QUIZ
+AWS Certified Developer - Associate - Beginners Guide to IAM Quiz
+15:00
+CHAPTER 3
+
+Beginner's Guide to EC2
+4:42:55
+
+Introducing EC2
+05:14
+
+EC2 Pricing Options
+13:04
+
+
+
+
+Exploring EC2 Instance Types
+06:55
+
+
+Launching an EC2 Instance - Demo
+15:41
+
+How to Use Putty Demo (Windows Users Only)
+08:15
+
+
+Using EC2 Instance Connect - Demo
+03:19
+
+
+Understanding EBS Volumes
+18:24
+
+
+
+Creating an EBS Volume - Demo
+09:09
+
+Exploring Elastic Load Balancer
+11:45
+
+
+
+
+
+
+Route 53 Demo
+15:00
+
+
+CLI Demo Lab
+16:14
+
+
+
+
+
+CLI Pagination
+06:37
+
+
+Working With The AWS CloudShell - Demo
+04:35
+
+EC2 with S3 Role Demo
+13:41
+
+RDS 101
+06:44
+
+RDS Demo
+17:01
+
+RDS Multi-AZ and Read Replicas
+08:27
+
+RDS Backups and Snapshots
+11:24
+
+Increasing Scalability Using RDS Proxy
+04:18
+Elasticache 101
+05:42
+
+Introducing MemoryDB For Redis
+04:58
+Demo: Systems Manager Parameter Store
+05:07
+
+
+
+
+
+Demo: Securely Storing Secrets With AWS Secrets Manager
+11:49
+
+Discovering EC2 Image Builder
+04:56
+Creating an AMI Using EC2 Image Builder - Demo
+15:05
+Using AMIs in a Different Region
+03:14
+EC2 Summary - Part 1
+07:35
+
+
+EC2 Summary - Part 2
+09:15
+
+EC2 Summary - Part 3
+04:27
+QUIZ
+AWS Certified Developer - Associate - Beginner's Guide to EC2 Quiz
+15:00
+CHAPTER 4
+
+S3
+2:42:30
+
+S3 101
+09:38
+
+
+
+
+
+Reviewing S3 Storage Classes
+08:59
+
+
+
+
+Securing S3 Buckets
+06:42
+
+S3 Bucket Policies Demo
+08:54
+
+HANDS-ON LAB
+Create a Static Website Using Amazon S3
+30:00
+S3 Encryption
+04:07
+
+
+Configuring Encryption on an S3 Bucket - Demo
+04:43
+
+
+CORS Configuration - Demo
+14:11
+
+
+
+Overview of CloudFront
+10:07
+
+Configuring Amazon CloudFront Demo
+16:34
+
+
+
+Configuring CloudFront With Origin Access Identity
+07:26
+
+
+
+Understanding CloudFront AllowedMethods
+05:14
+
+Introducing Athena
+02:39
+Demo: Working with Athena
+09:21
+
+S3 Summary
+08:55
+
+
+
+QUIZ
+AWS Certified Developer - Associate - S3 Quiz
+15:00
+CHAPTER 5
+
+Introduction to Serverless Computing
+6:26:41
+
+Serverless 101
+06:28
+
+Introducing Lambda
+06:34
+
+
+
+
+HANDS-ON LAB
+Creating a Lambda Function Using the AWS Console
+45:00
+API Gateway
+08:39
+
+
+
+Building a Serverless Website - Demo
+10:51
+
+
+Version Control With Lambda - Demo
+12:27
+
+Lambda Concurrent Executions Limit
+03:55
+
+Lambda and VPC Access
+05:20
+
+Example Serverless Architectures
+06:21
+Step Functions - Demo
+09:18
+
+
+HANDS-ON LAB
+Building a Serverless Application Using Step Functions, API Gateway, Lambda, and S3 in AWS
+1:45:00
+HANDS-ON LAB
+Building and Troubleshooting a Serverless Web Application
+30:00
+Comparing Step Functions Workflows
+08:03
+
+Understanding Ephemeral and Persistent Data Storage Patterns
+08:36
+
+Lambda Environment Variables and Parameters
+05:12
+Configuring a Lambda Function Using Environment Variables and Parameters - Demo
+07:16
+
+
+
+Handling Lambda Event Lifecycle and Errors
+06:22
+Lambda Deployment Packaging Options
+04:15
+Lambda Performance Tuning Best Practices
+05:37
+Using Lambda Destinations and Dead-Letter Queues - Demo
+08:55
+
+Advanced API Gateway
+04:51
+
+
+Using API Gateway Mock Endpoints for Integration Testing and Resolving Integration Dependencies
+03:12
+Using API Gateway Stages for Testing Deployed Code
+02:46
+Creating Dynamic Lambda Deployments Using API Gateway Staging Variables
+07:29
+
+API Response and Request Transformations
+03:06
+API Gateway Caching and Throttling
+06:18
+
+
+Understanding X-Ray
+04:10
+
+
+
+
+
+X-Ray Configuration
+05:19
+
+X-Ray Demo
+09:21
+Serverless Summary - Part 1
+05:15
+
+Serverless Summary - Part 2
+07:27
+Serverless Summary - Part 3
+08:18
+QUIZ
+AWS Certified Developer - Associate - Introduction to Serverless Computing Quiz
+15:00
+CHAPTER 6
+
+DynamoDB
+2:28:37
+
+Introduction to DynamoDB
+11:51
+
+
+
+
+Creating a DynamoDB Table - Demo
+16:21
+
+
+
+
+DynamoDB Access Control
+03:30
+Indexes Deepdive
+04:20
+
+HANDS-ON LAB
+AWS DynamoDB in the Console - Creating Tables, Items, and Indexes
+30:00
+Scan vs Query API Call - Demo
+11:52
+
+
+
+Using DynamoDB API Calls
+05:29
+
+DynamoDB Provisioned Throughput
+06:49
+
+DynamoDB On-Demand Capacity
+03:02
+
+DynamoDB Accelerator (DAX)
+04:48
+
+DynamoDB TTL - Demo
+11:49
+
+
+DynamoDB Streams
+05:01
+Provisioned Throughput Exceeded and Exponential Backoff
+04:47
+
+DynamoDB Summary
+13:58
+
+
+QUIZ
+AWS Certified Developer - Associate - DynamoDB Quiz
+15:00
+CHAPTER 7
+
+KMS and Encryption on AWS
+1:02:48
+
+KMS 101
+04:21
+
+Creating A CMK - Demo
+12:26
+
+CMK Summary
+04:17
+
+Understanding KMS API Calls - Demo
+13:16
+
+
+
+Exploring Envelope Encryption
+04:12
+
+Enabling and Disabling KMS Key Rotation - Demo
+02:27
+Certificate Management in AWS
+03:08
+KMS Summary
+03:41
+
+QUIZ
+AWS Certified Developer - Associate - KMS and Encryption on AWS Quiz
+15:00
+CHAPTER 8
+
+Other AWS Services
+3:07:32
+
+SQS
+11:34
+
+Understanding SQS Queue Types
+04:08
+
+SQS Settings
+05:43
+
+
+
+
+SQS Delay Queues & Large Messages
+05:26
+
+HANDS-ON LAB
+Triggering AWS Lambda from Amazon SQS
+45:00
+Simple Notification Service
+09:06
+
+SES vs SNS
+05:01
+
+Kinesis 101
+13:23
+
+Setting Up A Kinesis Data Stream - Demo
+12:21
+
+
+
+Kinesis Shards and Consumers
+07:07
+
+Introducing Elastic Beanstalk
+05:03
+
+
+Updating Elastic Beanstalk
+12:20
+
+Deploying An Application With Elastic Beanstalk - Demo
+06:59
+
+
+
+Updating An Application In Elastic Beanstalk - Demo
+06:05
+
+
+
+
+Advanced Elastic Beanstalk
+06:46
+
+
+
+
+RDS & Elastic Beanstalk
+06:00
+
+Migrating Applications to Elastic Beanstalk
+02:28
+
+Other AWS Services Summary
+08:02
+
+QUIZ
+AWS Certified Developer - Associate - Other AWS Services Quiz
+15:00
+CHAPTER 9
+
+Developer Theory
+6:45:51
+
+What is CI/CD?
+08:12
+
+
+CodeCommit 101
+03:56
+
+CodeCommit Demo
+09:57
+HANDS-ON LAB
+Configure and Work with CodeCommit from the CLI
+1:00:00
+CodeDeploy 101
+06:52
+
+The CodeDeploy AppSpec File
+05:43
+
+CodeDeploy Lifecycle Event Hooks
+07:05
+
+HANDS-ON LAB
+Deploying an Application Using CodeDeploy
+30:00
+CodePipeline 101
+04:07
+
+
+CodePipeline Demo - Part 1
+08:41
+
+
+
+
+CodePipeline Demo - Part 2
+08:23
+
+HANDS-ON LAB
+Setting Up a Pipeline with a Manual Approval in AWS CodePipeline
+30:00
+HANDS-ON LAB
+Working with a DevOps CI/CD Pipeline in AWS
+30:00
+Introducing CodeArtifact
+05:23
+Demo - Creating a CodeArtifact Repository
+05:48
+
+
+Elastic Container Service
+07:46
+
+
+
+
+
+Introduction To CloudFormation
+10:44
+
+
+
+Provisioning Resources Using CloudFormation Demo
+14:35
+
+
+HANDS-ON LAB
+Create a DynamoDB Table Using CloudFormation
+30:00
+Exporting CloudFormation Stack Values
+09:10
+
+The Serverless Application Model (SAM)
+02:47
+
+CloudFormation and SAM Demo
+06:42
+
+
+CloudFormation Nested Stacks
+02:52
+
+
+
+HANDS-ON LAB
+Working with CloudFormation Nested Stacks
+45:00
+Introducing The Cloud Development Kit (CDK)
+04:58
+CDK Demo
+05:18
+
+Introducing Amplify
+05:19
+Amplify Demo
+06:08
+
+Developer Theory Summary - Part 1
+07:19
+Developer Theory Summary - Part 2
+08:06
+
+
+QUIZ
+AWS Certified Developer - Associate - Developer Theory Quiz
+15:00
+CHAPTER 10
+
+Advanced IAM
+2:08:05
+
+Web Identity Federation
+08:48
+
+
+Cognito User Pools Demo
+07:35
+
+
+
+
+Cognito Identity Pools Demo - Part 1
+06:40
+
+
+Cognito Identity Pools Demo - Part 2
+10:18
+
+
+Inline Policies vs Managed Policies vs Customer Managed Policies
+07:13
+
+HANDS-ON LAB
+Working With AWS Managed Policies, Customer Managed Policies, and Inline Policies
+45:00
+STS AssumeRoleWithWebIdentity
+04:06
+
+
+Configuring Cross Account Access - Demo
+16:45
+
+
+
+
+
+Advanced IAM Summary
+06:40
+
+QUIZ
+AWS Certified Developer - Associate - Advanced IAM Quiz
+15:00
+CHAPTER 11
+
+Monitoring
+2:20:31
+
+Introduction to CloudWatch
+07:41
+
+CloudWatch Demo
+14:53
+
+Creating CloudWatch Dashboards Demo
+09:06
+Understanding CloudWatch Concepts
+06:01
+
+CloudWatch vs CloudTrail
+03:43
+
+HANDS-ON LAB
+Using CloudWatch for Resource Monitoring
+30:00
+Using CloudWatch Actions
+08:39
+
+
+Exploring CloudWatch Logs Insights Demo
+07:05
+Receiving Notifications with CloudWatch - Demo
+07:27
+What is EventBridge?
+05:25
+Using EventBridge - Demo
+09:29
+Recognizing Common HTTP Error Codes
+03:54
+
+Recognizing Common SDK Exceptions
+04:31
+
+Monitoring Summary
+07:37
+QUIZ
+AWS Certified Developer - Associate - Monitoring Quiz
+15:00
+CHAPTER 12
+
+Additional Resources to Help You Prepare for the Exam
+04:35
+
+Additional Resources
+04:35
+
+
+
+
+
+
+
+
+
+
+
+
+CHAPTER 13
+
+Summary
+9:00:59
+
+Summary and Next Steps
