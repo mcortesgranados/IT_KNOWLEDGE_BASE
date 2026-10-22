@@ -1,0 +1,114 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+05:29
+
+Introduction
+03:35
+
+
+
+
+Files for Demo Lessons
+01:00
+
+
+A Note About Demo Lessons
+00:54
+CHAPTER 2
+
+Managing Infrastructure in the Cloud
+13:55
+
+Managing Infrastructure in the Cloud
+02:11
+Infrastructure as Code
+02:10
+What is CloudFormation?
+02:40
+Demo: Introducing CloudFormation
+06:54
+CHAPTER 3
+
+CloudFormation Fundamentals
+10:56
+
+Terminology
+03:55
+Template Anatomy
+07:01
+
+CHAPTER 4
+
+CloudFormation Features
+38:45
+
+Intrinstic Functions
+02:17
+
+Demo: Intrinsic Functions
+05:09
+Multiple Resources
+01:23
+Demo: Multiple Resources
+04:59
+Pseudo Parameters
+01:38
+
+Demo: Pseudo Parameters
+02:51
+Mappings
+03:02
+
+Demo: Mappings
+05:12
+Input Parameters
+02:19
+
+Demo: Input Parameters
+04:40
+Outputs
+01:43
+
+Demo: Outputs
+03:32
+CHAPTER 5
+
+Setting up an EC2 Instance
+17:49
+
+Introduction
+01:23
+User Data
+03:02
+CloudFormation Helper Scripts
+01:34
+
+CloudFormation Init
+03:25
+Demo: Setting up an EC2 Instance
+08:25
+CHAPTER 6
+
+Updating our Stack with Change Sets
+32:12
+
+Introduction
+05:57
+
+
+Demo Part 1: Change Sets
+14:55
+
+
+Demo Part 2: Change Sets
+11:20
+
+
+CHAPTER 7
+
+Closing Notes
+02:46
+
+Summary

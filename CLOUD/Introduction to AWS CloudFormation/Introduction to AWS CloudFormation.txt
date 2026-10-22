@@ -1,0 +1,67 @@
+CHAPTER 01 Introduction
+01-01 Introduction
+
+01-02 Files for Demo Lessons
+
+01-03 A Note About Demo Lessons
+
+CHAPTER 02 Managing Infrastructure in the Cloud
+02-01 Managing Infrastructure in the Cloud
+
+02-02 Infrastructure as Code
+
+02-03 What is CloudFormation?
+
+02-04 Demo Introducing CloudFormation
+
+CHAPTER 03 CloudFormation Fundamentals
+03-01 Terminology
+
+03-02 Template Anatomy
+
+CHAPTER 04 CloudFormation Features
+04-01 Intrinstic Functions
+
+04-02 Demo Intrinsic Functions
+
+04-03 Multiple Resources
+
+04-04 Demo Multiple Resources
+
+04-05 Pseudo Parameters
+
+04-06 Demo Pseudo Parameters
+
+04-07 Mappings
+
+04-08 Demo Mappings
+
+04-09 Input Parameters
+
+04-10 Demo Input Parameters
+
+04-11 Outputs
+
+04-12 Demo Outputs
+
+CHAPTER 05 Setting up an EC2 Instance
+05-01 Introduction
+
+05-02 User Data
+
+05-03 CloudFormation Helper Scripts
+
+05-04 CloudFormation Init
+
+05-05 Demo Setting up an EC2 Instance
+
+CHAPTER 06 Updating our Stack with Change Sets
+06-01 Introduction
+
+06-02 Demo Part 1 Change Sets
+
+06-03 Demo Part 2 Change Sets
+
+CHAPTER 07 Closing Notes
+07-01 Summary
+
