@@ -1,0 +1,77 @@
+Course Outline
+CHAPTER 1
+
+Course Introduction
+08:20
+
+Course Introduction
+01:55
+About the Training Architect
+01:12
+AWS Free Tier: Usage Tracking and Billing Widget
+03:39
+Course Prerequisites
+01:34
+CHAPTER 2
+
+Systems Manager Introduction and Setup Requirements
+1:31:30
+
+Introduction to AWS Systems Manager
+05:14
+AWS Resource Groups
+11:16
+HANDS-ON LAB
+Creating an SSM IAM Role and Configuring an EC2 Instance with AWS Systems Manager via the CLI
+45:00
+HANDS-ON LAB
+Creating an IAM Role and Configuring an EC2 Instance for AWS Systems Manager
+30:00
+CHAPTER 3
+
+AWS Systems Manager — Shared Resources
+50:47
+
+Documents and Parameter Store
+05:47
+HANDS-ON LAB
+Creating and Using a Custom Document with Parameter Store Variables
+45:00
+CHAPTER 4
+
+Instances and Nodes
+3:17:09
+
+Session Manager and Hybrid (Infrastructure) Activations
+14:54
+Run Command and State Manager
+06:55
+Inventory Tracking and Patch Manager
+04:42
+AWS Systems Manager Distributor
+05:38
+HANDS-ON LAB
+Installing and Configuring SSM Agent on Linux
+1:00:00
+HANDS-ON LAB
+Managing Infrastructure State with State Manager and Run Command
+45:00
+HANDS-ON LAB
+Connecting to Managed Instances Using SSM Session Manager
+1:00:00
+CHAPTER 5
+
+Automation and Change Management
+1:04:31
+
+Automation and Systems Manager Maintenance Window
+04:31
+HANDS-ON LAB
+Executing Automation Workflow Using AWS SSM Automation
+1:00:00
+CHAPTER 6
+
+Conclusion
+02:03
+
+What's Next?
