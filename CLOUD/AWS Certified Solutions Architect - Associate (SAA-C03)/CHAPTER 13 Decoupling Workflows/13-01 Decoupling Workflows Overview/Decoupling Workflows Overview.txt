@@ -1,0 +1,171 @@
+Hello, Cloud Gurus, and welcome back.
+In this lesson,
+we're going to be taking a look at what does it mean
+to decouple our workflows
+and how can we apply this to our applications.
+We'll start off by taking a look at tight coupling
+and how this can cause problems and bottlenecks
+inside of our applications.
+Then we'll compare that to loose coupling
+and see how loose coupling can solve some of these problems.
+Once we have that under our belt,
+we'll see what are we going to cover, service-wise,
+in the next upcoming lessons.
+And then we'll finally wrap it all up with some exam tips.
+So, let's go ahead and jump right on in.
+What's wrong with the diagram in front of you?
+At first glance, it looks like nothing.
+I've got my happy user and they're placing orders
+or sending traffic through that web frontend,
+which then forwards that information along to the backend
+and everything chugs along perfectly, until it doesn't.
+We need to keep that famous Werner Vogels quote in mind,
+"Everything fails all the time'.
+In this situation,
+what happens if my web frontend goes offline?
+What happens if my web backend goes offline?
+Well, the short answer is, my happy user becomes a sad user.
+This is an example of a tightly coupled application.
+Now, that means that my user cares directly
+about the EC2 instance that's acting as that frontend,
+and that EC2 instance cares a lot about that single
+EC2 instance that's acting as that backend.
+Tight coupling just means that we have one instance
+talking directly to another EC2 instance.
+So, what we want to focus on is ensuring that we are never
+tightly coupling applications.
+While it is much simpler,
+it leads to a lot of problems down the road.
+So, how do we solve this issue?
+Well, the short answer is,
+we need to set up loose coupling.
+Now in this situation, my end user gets the same result.
+Their request is passed through the load balancer,
+which gets distributed out to a fleet of EC2 instances
+acting as the frontend,
+which then pass traffic to that load balancer in the backend
+and distributes it out to those EC2 instances.
+Now with a loosely coupled application,
+if one instance or multiple instances go offline
+from either the frontend or the backend or both,
+who really cares? It doesn't matter.
+The load balancer handles only sending traffic
+to the healthy architecture.
+So now, I can have more than one instance.
+I can have a fleet of resources,
+and that frontend doesn't have to know anything about
+that backend, besides send it to the load balancer,
+and that's it.
+The load balancer then ensures
+that it gets to healthy architecture.
+So as long as we have one single instance in that frontend
+and one single instance in that backend online,
+we're doing okay.
+This is going to be a really important point
+that you want to understand:
+that loose coupling is better at just about
+every situation than tightly coupling applications.
+You never want to have one EC2 instance
+talking directly to another EC2 instance.
+You always want that scalable, highly available,
+managed service in between those resources.
+Now, load balancers aren't always the answer.
+Sometimes, we don't want to have a
+direct line of communication
+from that frontend to the backend
+through the load balancer.
+We might want to have something that maybe could hold on
+to that message until that backend resource is ready
+to come and retrieve it,
+rather than having that backend resource
+needing to be online 24/7
+and always ready to accept that connection.
+So. let's take a look at some upcoming tools.
+Let's take a look at three services that we're going to see
+in the next few videos.
+The very first one is the Simple Queue Service,
+also known as SQS.
+Now, SQS is a fully-managed, highly-available messaging tool
+that we can use to decouple applications.
+Effectively, it can sit in between that frontend
+and that backend and kind of replace that load balancer.
+So, my web frontend is going to dump messages
+into that queue,
+and then those backend resources can pull that queue
+looking for that data
+whenever those instances are ready to do so.
+Still allows my applications to never have to talk directly
+to each other,
+but it doesn't require that active live connection
+that the load balancer would need.
+We'll also talk about the Simple Notification Service
+or known as SNS.
+SNS is your go-to tool
+if you'd like to push out notifications.
+If you want to take one notification
+and proactively deliver it to an endpoint,
+rather than leaving it in a messaging queue,
+SNS is the tool for you.
+We'll talk about using SNS to send out notifications
+to applications as well as sending out text messages
+and emails to our end users.
+And then we'll take a look at API Gateway.
+Now, API Gateway allows us to put a safe, scalable,
+highly-available front door to our applications.
+So, we can control what users talk to our resources.
+Now, I promise we're going to take a much deeper look into
+all three of these tools.
+But for right now, let's end it out with a few exam tips.
+My first exam tip is:
+we never want to tightly couple applications.
+On the exam, you are never going to pick a correct answer
+that includes tightly-coupled resources.
+You always want to focus on loose coupling.
+Ensure that you never have that EC2 instance
+talking to another EC2 instance.
+You always have that load balancer
+or that messaging queue in between,
+because as far as our AWS architecture is concerned
+tight coupling does not offer a meaningful benefit
+over loose coupling.
+In fact, it only introduces problems
+that we'd like to avoid.
+Let's take a look at a few more tips here.
+Always loosely coupled!
+You're going to hear me say this over
+and over and over again.
+But I just want to start getting this into your head.
+Loose coupling is always the answer, compared
+to tight coupling.
+Never tightly couple!
+Now, I'm sure you could think of a situation
+in maybe your own environment or in the real world
+where you would say, "Alex, we need to tightly couple.
+This application cannot be loosely coupled."
+And you might be right.
+That might be the right solution for you.
+But on the exam,
+we're really focusing on only loosely coupling.
+Every level of your application should be loosely coupled.
+From those users coming in through Route 53,
+through those load balancers,
+to the internal portions of your application,
+whether that's a load balancer or SQS.
+Just because you have loosely coupled
+the front part of your application doesn't mean
+that you've automatically loosely coupled the entire thing.
+You need to ensure we have no direct EC2-to-EC2 calls.
+Now, there's no one single solution.
+As I kind of hinted at here or specifically called out,
+sometimes low balancers are the right option.
+Other times, SQS might be a better fit.
+And we'll talk a little bit more around the use cases
+of those messaging queues in our upcoming videos.
+Now, I want to leave you with one last tip here.
+If you ever find yourself in a position
+where a bull is charging at you,
+it's best to simply sidestep, allow it run by,
+and then hightail it in the opposite direction.
+All right, folks.
+Thanks for going through this decoupling overview with me,
+and I can't wait to see you in our next lesson.

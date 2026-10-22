@@ -1,0 +1,152 @@
+All right, way to go Cloud Gurus,
+you've made it through this section on Decoupling Workflows.
+Let's go ahead
+and take some time to have some more exam tips
+to help reinforce some important concepts that we've learned
+throughout this section.
+So per usual,
+let's start off with 4 questions
+to ask yourself in the exam.
+The first thing you need to be able to distinguish is,
+are the workloads synchronous or asynchronous?
+This is a very critical decision
+as it will really decide which services you can use
+within the architecture itself.
+We then have what type of decoupling actually makes sense?
+Do you need things like Pub/Sub
+where you have an SNS topic
+pushing messages to several different cues
+or do you need something
+like a step function that has ordering
+of workflows to complete your workloads?
+We also want to ask, does the order of messages matter?
+So for example, do you need a FIFO SQS queue
+which is going to guarantee first in first out,
+or can you get away with a standard SQS queue
+and just handle some deduplication on the back end?
+We also need to ask ourselves
+what type of application load are we going to see?
+Now, this is an important question
+primarily because a lot of these services have limits
+that will also play a big part
+in choosing which ones you'll use
+in your architecture infrastructure.
+So let's start diving in a little bit deeper.
+Amazon SQS, what should we know for the exam?
+Well, it is important to know
+that SQS can duplicate messages.
+So in SQS standard queues,
+while it may only happen every once in a while,
+can duplicate these messages.
+So if it's happening pretty consistently,
+it's recommended you check
+for a misconfigured visibility timeout.
+Or maybe a developer is failing
+to actually make a delete API call.
+So since they're failing to delete the message,
+it's just reappearing back on a queue.
+Now, it's also important to know
+queues are not bi-directional.
+If you need to communicate
+to return to the instance that's sent the message
+or whatever producer sent it, you need a second queue.
+They only go in one direction.
+You also need to know the defaults.
+So it's very important
+that you understand the standard values
+for these SQS queue settings.
+For instance, that visibility timeout that we talked about.
+Also realize that nothing lasts forever.
+Messages stored in SQS can only persist up to 14 days.
+And like some other settings,
+that is a configurable setting itself.
+And lastly, does order matter?
+So if message ordering is important,
+you need to make sure that you're selecting things
+like SQS FIFO queues.
+Okay, let's move on to Amazon SNS and API Gateway.
+What should you know for this exam?
+If you need proactive notifications, think SNS.
+Anytime a question asks about email, text,
+or any other type of push-based notification,
+you want to consider SNS.
+Also, CloudWatch and SNS make a perfect pair.
+Scenarios talking about getting notifications
+from CloudWatch alarms,
+should immediately make you think and look for Amazon SNS
+within the answer.
+And then lastly, API Gateway.
+You really don't need an in-depth understanding
+as it gets very complex,
+but you do need to know that it acts as a secure front door
+for external communication coming into your environments.
+And that brings us to AWS Batch.
+For AWS Batch,
+you need to know that any long-running
+batched workloads are a perfect use case for this service.
+And in our case, long-running is anything greater
+than 15 minutes,
+and that's mainly because AWS Lambda
+has an execution limit at 15 minutes.
+So while there may be ways to leverage Lambda
+with other services, most of the time
+you want to choose the most efficient service
+which in this case would be things like AWS Batch.
+We also want to watch for questions
+regarding batch workload queues.
+So if any of them talk about workloads requiring queues,
+then think about AWS Batch as well.
+And then lastly,
+this is an on-demand alternative to AWS Lambda.
+So if questions do ask for
+an alternative solution to AWS Lambda,
+primarily due to runtime requirements or execution timeouts,
+think about AWS Batch as a potential answer.
+Onto Amazon MQ.
+Understand that this is a managed messaging broker service
+that lives within the AWS Cloud.
+So any mention of managed broker services,
+should likely involve Amazon MQ.
+It supports 2 different engine types
+RabbitMQ or ActiveMQ.
+Any mention of these 2 technologies
+should immediately make you think of Amazon MQ.
+The last big thing to look out for
+are specific messaging protocols.
+So if you see these protocols like JMS
+or any of the ones listed here,
+then Amazon MQ will likely be within the solution answer.
+And that's primarily because SNS
+and SQS cannot handle these specific messaging protocols.
+Now, let's talk about Step Functions.
+These are a serverless orchestration service
+that allows you to orchestrate other AWS services
+in a hands off manner.
+Anytime you see a requirement
+for workflow decision requirements, think of this service.
+So more specifically,
+if you have different states or logic during your workflows
+like conditional checks, failure catches,
+or especially wait periods.
+If a question talks about a lengthy wait period,
+up to one year, think of AWS Step Functions.
+And that brings us to Amazon AppFlow.
+The main thing you need to know here
+is that this is for third-party,
+SaaS data ingestion with AWS services.
+So if scenarios ask about simplified data ingestion
+from external SaaS applications into Amazon Web Services,
+this is likely one of the correct solutions.
+Remember that it is bi-directional.
+So this service can either take in or put out data
+while it's interacting with different
+third-party SaaS's and AWS services.
+A common scenario to watch for
+is any data being used from a third party SaaS
+that needs to live within Amazon S3 on a regular basis.
+And that's going to do it.
+That's going to wrap up this Decoupling Workflows
+exam tips section in lesson.
+Let's go ahead and end here.
+Take a break, and when you're ready,
+we'll pick up in the next section.

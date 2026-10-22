@@ -1,0 +1,294 @@
+Hello, Cloud Gurus, and welcome back.
+In this lesson, we're going to be taking a look
+at the Simple Queue Service,
+or as people more commonly refer to it as SQS.
+Now, before we talk about the SQS service itself,
+we need to understand a really important concept
+and that is what is poll-based messaging?
+Once we have that under our belts, we'll take a look at SQS
+and see how does this fit into our architecture?
+Then we're going to see all of the different settings
+that we have to dive into.
+What are the different knobs and dials
+that we have to twist and turn to set up SQS correctly?
+We'll take an especially deeper dive
+into one of those settings called the visibility timeout
+and how does it govern the interaction and communication
+between my architecture and that messaging queue,
+before we finally round it all out
+with some great exam tips.
+So let's go ahead and jump right on in.
+Our very first question is, what is poll-based messaging?
+Now, I like to think of poll-based messaging
+like a little scenario we might all be familiar with.
+I'd like to send a letter to my best friend.
+So I sit down at my desk, I write them a very nice note.
+I put a stamp on that letter
+and I hand it off to the mailman.
+Now the mailman takes my letter, drives over to their house,
+and drops it off in their mailbox.
+Whenever my friend is ready, they can head to the mailbox,
+grab that message, and read it at their leisure.
+That is effectively what poll-based messaging is.
+We have a producer of messages, perhaps a web frontend,
+that EC2 instance that takes a message in,
+writes said message into the SQS queue,
+and then my backend consumer can come get that message
+from the queue whenever it's ready.
+So we can think of SQS kind of like that postman,
+delivering the message into the mailbox.
+So that's effectively what SQS is.
+It's a messaging queue
+that allows asynchronous processing of work.
+Now, what does that word asynchronous mean?
+Well, it's a really important concept to understand
+and it's going to function a little bit differently
+than maybe how we're used to communicating
+with our EC2 instances.
+In previous lessons,
+we talked about our EC2 instance calling a load balancer
+and then that request being directed from the ELB
+to my backend resource.
+Now, what if I don't want a direct connection?
+What if I want to write that message,
+write that data to that SQS queue
+and then have that backend resource
+come and get it whenever it's ready?
+That way, it doesn't have to be able to immediately respond
+to that message coming in via a load balancer
+if it's not ready to accept that content.
+It can go to SQS and get that data,
+retrieve that message whenever it's ready to do so.
+So that's what we're thinking of when we say asynchronous.
+It's not direct communication.
+We're using that SQS queue as a buffer.
+Now, while SQS is a very simple service,
+as the name implies,
+there are a lot of settings that we have to understand
+to ensure that the queue is functioning properly.
+The very first one is called the delivery delay.
+Now, the default value for this is zero,
+but it can be set up to 15 minutes.
+Now, the delivery delay does just what you would expect.
+I write a message to the queue,
+and then if that delay is set at something other than zero,
+the queue just hides the message for a set period of time
+that I've specified before it will reveal it
+if that backend instance is asking for messages.
+So why would we want to purposefully delay messages?
+Well, let's imagine we have that web frontend
+that's placing orders.
+A user types in their credit card information,
+their address, and I need to pass that information
+to my backend instance.
+Perhaps I'd like to delay that notification
+being sent to the user
+to say that their order was processed successfully
+until I can verify with the credit card company that yes,
+they have money behind that order to pay for everything.
+I can set a delay in the amount of time that there is
+between when my message shows up in the queue
+and when that backend resource
+can actually receive that content
+and do something with that order.
+The message size.
+Now, by default, you can post a message
+up to 256 kilobytes of text in any format
+and that's a really important number to remember.
+It does not matter the format of said text.
+It could be JSON. It could be YAML.
+It could just be a free-form paragraph
+that you're writing to your best friend.
+It doesn't matter,
+but 256 kilobytes is the largest amount of text
+that can fit into a single message.
+Now, you can adjust that number down,
+but it cannot go higher than 256.
+Encryption.
+Encryption is very important
+as we've talked about in this course,
+and we need to know what can we encrypt
+versus what's already encrypted.
+Well, with S3,
+the messages are encrypted in transit by default.
+They're not encrypted by default at rest.
+However, this is a very simple thing to do.
+It's just a checkbox;
+pick your favorite KMS key and you're good to go.
+We then encrypt the data in-transit and at-rest,
+but keep in mind for that exam,
+it's not encrypted at rest by default.
+Message retention.
+This is a critical concept to understand.
+Nothing lives in SQS forever.
+In fact, by default, messages will only live for 4 days.
+It can be set up to 14 days
+and can be set as low as one minute,
+but after that window expires,
+the messages are purged from the queue,
+which means if we're not actively processing data
+out of the queue and the messages are starting to back up,
+if we don't get to them eventually, they will be lost.
+There are 2 types of polling that are available for SQS
+and the default is called short polling.
+Now, short polling just means my backend instance connects,
+says hello, do I have work? I don't?
+I disconnect, and then I try it again.
+I connect, disconnect,
+connect, disconnect over and over and over
+and that does a few negative things.
+First, it burns CPU cycles on the backend instance.
+Second, by making all of those additional API calls,
+I'm wasting money because API calls to SQS are not free.
+So what I can do is I can specify
+by setting a connection time window
+that I would like to use long polling.
+Long polling just means I'm going to connect
+and then wait a little bit.
+I say, hey, do I have work?
+And then I hang out and I wait, and I wait,
+and I wait for those messages to come in.
+Now, this is not enabled by default,
+but we should focus on picking answers on the exam
+that use long polling.
+Now, there are some very specific situations
+where you can't have multi-threaded processes
+where short polling does make sense,
+but in general, on the exam,
+always look for that long polling as 99.999% of the time
+that's what we want to be using in every situation.
+And finally, queue depth.
+Now, this isn't particularly a setting, but more of a value.
+We just finished talking about Auto Scaling
+in the last set of lessons.
+Remember, those EC2 instances can be triggered
+by a whole lot of things.
+It's not always CPU.
+One of them could be the depth of the SQS queue.
+As messages back up,
+CloudWatch kicks off that alarm to Auto Scaling to say
+we need more instances to process all of that data.
+As the queue depth shrinks, we have less messages in there
+that need to be processed.
+We could spin down those EC2 instances
+that are working to churn through that content.
+And our final bonus tip here,
+this is a very important service for the exam.
+We will recap this in our exam tips,
+but it is vital that you know all of the defaults out there
+and what happens when we change any one of these settings.
+Now, there's one really important setting
+that we haven't talked about on this page,
+and it's called the visibility timeout.
+So let's go ahead and take a look at what that number means.
+Now, this is the basic layout of SQS decoupling.
+My happy little user is writing an order to my EC2 instance.
+My EC2 instance places that order in my SQS queue
+and my backend EC2 instance pulls the queue saying,
+do I have work?
+Aha, I have that message. Let's process it.
+Now, let's take a quick look at the interaction
+between that backend instance and that queue.
+So my order comes in,
+and the message is placed in that SQS queue.
+Now, the visibility timeout is here
+to ensure proper handling of that message
+by my EC2 instances in the backend.
+So what's going to happen is my backend instance says,
+ah, I have polled for this message.
+I see that I have to process this order
+for my happy little user.
+SQS says, cool, you've downloaded the message
+and now what's going to happen
+is it's going to put a lock on that message
+and this is called the visibility timeout.
+Now, this is a setting that you can configure.
+By default, here, we just have that 30-second window.
+This is for 30 seconds.
+This message remains in the queue,
+but no one else can see it.
+So if other instances pull that queue,
+the queue's going to say, I don't have anything for you
+even though there is this hidden message.
+Now, if that backend instance fails to process that message
+in 30 seconds and reach back out to the queue to say,
+I'm done, I'm good, you can purge that,
+the message is going to reappear.
+This means if my instance goes offline,
+if it fails, I'm not losing that content.
+So the visibility time out is a vital setting
+for your SQS queue.
+Now, let's assume everything went well.
+I've downloaded that message.
+The message is locked and 25 seconds.
+Through that visibility timeout of 30 seconds,
+my instance reaches out and says,
+thumbs up, we're good to go, awesome.
+The queue is then going to delete that message.
+It's going to say, we're done. We don't need this anymore.
+We need to understand this interaction
+because this is going to be a big test concept.
+Now, I promise we will have some hands-on activities
+with SQS coming up in the next few lessons, but for now,
+let's go ahead and recap some of this with a few exam tips.
+So hopefully, I'm starting to drive this point home.
+SQS is important.
+It will be seen on a lot of different questions.
+And we'll go hands-on and build this out
+into our own environment in a little bit.
+But for now, start thinking through,
+what settings do we have that we've talked about?
+What happens when I make that change
+and why would I want to make that change
+to all of those different default values?
+It's important to keep these in mind
+because you will see them in many scenarios on the exam.
+Let's see a few more exam tips.
+Like I just said, know all of the settings.
+We didn't cover all of the needed settings for the exam
+in this one lesson.
+We'll be introducing a few more
+and seeing them in action in upcoming lessons.
+So just keep this section in mind
+and the future SQS sections as you're studying for the test.
+Nothing lasts forever. Remember that 14-day maximum.
+You will see exam questions that talk about,
+oh, I haven't polled my SQS queue in 28 days.
+Where did all of my data go?
+And the answer is it was purged
+because SQS is not a permanent message storage solution.
+You're going to be asked to troubleshoot.
+Why did we see lost messages?
+Why do I have messages popping back up?
+A lot of times, this comes down to misconfigured settings.
+Maybe that visibility timeout was set too low.
+I set it at 5 seconds
+and it really takes my instances 15 seconds
+to process those messages,
+so that lock is expiring before it should be,
+or maybe I've got that delivery delay set
+when I shouldn't have that.
+Know that difference between long and short polling.
+Long polling is more efficient
+with your cost and those CPU cycles.
+And this is what we want to be looking for on the exam.
+If you see a test question
+talking about burning too much CPU or burning cache,
+think through are we using long polling
+instead of short polling?
+Size. 256 kilobytes of text in any format. I'm
+going to keep repeating that over and over and over again
+because you might see an exam question talking about,
+oh, I've got 512 kilobytes of text.
+And you're going to think, nope, that doesn't work
+because 256 is the maximum size that we can have.
+And once again, remember, there is no restriction or limit
+on the format of that text.
+And my final tip here for you,
+if you're microwaving those leftovers,
+spread the food to the outer edge of the plate
+and leave a circle or a hole in the middle.
+This will ensure even heating of the food
+and stop you from having that spoonful of cold food.
+All right, folks, thanks for going through SQS with me
+and I can't wait to see you in our next video.

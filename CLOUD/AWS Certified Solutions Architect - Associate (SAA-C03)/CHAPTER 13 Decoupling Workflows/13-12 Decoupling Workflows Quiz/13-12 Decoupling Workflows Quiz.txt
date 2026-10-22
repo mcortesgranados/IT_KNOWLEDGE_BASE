@@ -1,0 +1,478 @@
+QUESTION 1
+
+Which service allows for bidirectional data flows between AWS and SaaS applications?
+
+CORRECT
+Amazon AppFlow
+
+
+Amazon MSK
+
+
+Amazon S3 Replication
+
+
+AWS AppSync
+
+Good work!
+In Amazon AppFlow, flows can be bidirectional between AWS services and SaaS applications.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+How can you ensure that your SQS messages arrive in the correct order?
+
+
+SQS will do that automatically.
+
+
+Enable "correct_order" in your SQS queue.
+
+CORRECT
+Use an SQS FIFO queue.
+
+
+Route the messages through an ELB.
+
+Sorry!
+SQS FIFO is required for this to happen automatically. Reference Documentation: Amazon SQS FIFO (First-In First-Out) queues (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html)
+
+Correct Answer
+SQS FIFO guarantees that your messages will arrive in the correct order. Reference Documentation: Amazon SQS FIFO (First-In First-Out) queues (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+You need an AWS managed service to execute long-running, event-driven, batched workloads that are expected to take 30 minutes to complete. Which service best meets your needs?
+
+
+AWS AppSync
+
+
+AWS Lambda
+
+
+API Gateway
+
+CORRECT
+AWS Batch
+
+Sorry!
+This is a managed GraphQL interface.
+
+Correct Answer
+AWS Batch is meant for long-running and event-driven workloads. Anything requiring more than 15 minutes is a perfect choice, as Lambda limits come into play.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Which tool can be used to sideline malformed SQS messages?
+
+
+Side-letter queues (SLQ)
+
+CORRECT
+Dead-letter queues (DLQ)
+
+
+It can't be done
+
+
+Alive-letter queues (ALQ)
+
+Sorry!
+The dead-letter queue acts as the reject queue for malformed messages. Reference Documentation: Amazon SQS dead-letter queues (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+
+Correct Answer
+The dead-letter queue acts as the reject queue for malformed messages. Reference Documentation: Amazon SQS dead-letter queues (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which AWS service would you choose for serverless orchestration of long-running (up to 1 year) workflows that can integrate with several other AWS services?
+
+CORRECT
+AWS Step Functions
+
+
+AWS EC2 Spot Instances
+
+
+AWS Lambda
+
+
+Amazon MQ
+
+Good work!
+This is a serverless orchestration service combining different AWS services for business applications.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 6
+
+Which message broker engine type is supported on Amazon MQ?
+
+
+Kafka
+
+
+SQS
+
+CORRECT
+RabbitMQ
+
+
+Kinesis Data Firehose
+
+Sorry!
+While this is a message broker, it is not supported on Amazon MQ.
+
+Correct Answer
+This is a supported engine type.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 7
+
+If your application needs to process 5,000 messages per second, which type of SQS queue would you use?
+
+
+SQS paired with an EC2 Auto Scaling Group
+
+CORRECT
+SQS Standard
+
+
+SQS FIFO
+
+
+SQS Performance
+
+Sorry!
+Auto Scaling groups are for EC2 instances only. Reference Documentation: Amazon SQS features (https://aws.amazon.com/sqs/features/)
+
+Correct Answer
+SQS Standard gives you a nearly unlimited number of transactions per second. Reference Documentation: Amazon SQS features (https://aws.amazon.com/sqs/features/)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 8
+
+You need to ingest data regularly from Salesforce into Amazon S3 for your application to process. Which of the following services is the most efficient for completing this?
+
+CORRECT
+Amazon AppFlow
+
+
+AWS Batch
+
+
+AWS AppSync
+
+
+AWS X-Ray
+
+Good work!
+Amazon AppFlow is a fully managed integration service for exchanging data between SaaS apps and AWS services (like Amazon S3). As another option, you could set up a Salesforce Event Bus Relay and an EventBridge partner event source. You would then activate the Salesforce partner event source in the EventBridge console and start the event relay.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 9
+
+What type of firewall can be used in conjunction with API Gateway to help prevent DDoS attacks?
+
+CORRECT
+Web Application Firewall (WAF)
+
+
+Host firewall
+
+
+NACL
+
+
+Security group
+
+Good work!
+API Gateway and WAF help protect you from a DDoS attack. Reference Documentation: Using AWS WAF to protect your APIs (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-aws-waf.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 10
+
+What is the largest message size you can store in SQS?
+
+CORRECT
+256KB
+
+
+128KB
+
+
+512KB
+
+
+1MB
+
+Good work!
+SQS can only handle messages up to 256KB of text in any format. Reference Documentation: Amazon SQS FAQs (https://aws.amazon.com/sqs/faqs/)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+What type of service is SQS?
+
+CORRECT
+Messaging queue
+
+
+Database
+
+
+Machine learning tool
+
+
+Compute resource
+
+Good work!
+SQS is a messaging queue. Reference Documentation: Amazon Simple Queue Service (https://aws.amazon.com/sqs/)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+You need to create a new message broker application in AWS. The new application needs to support the JMS messaging protocol. Which service fits your needs?
+
+
+Amazon SQS
+
+
+Amazon SNS
+
+CORRECT
+Amazon MQ
+
+
+Amazon MSK
+
+Sorry!
+This is a queue service that cannot work as a message broker.
+
+Correct Answer
+Amazon MQ is the only managed choice that supports anything specific to JMS or other messaging protocols like AMQP 0-9-1, AMQP 1.0, MQTT, OpenWire, and STOMP.
+
+____________________________________________________________________________________________________________________________
+
+
+QUESTION 4
+
+You need to migrate an existing RabbitMQ-based application from on-premises to AWS with the least impact to functionality and design. Which service would be the best choice?
+
+CORRECT
+Amazon MQ
+
+
+Amazon Managed Broker
+
+
+AWS Application Messaging Service
+
+
+AWS Batch
+
+Sorry!
+This is not a real service.
+
+Correct Answer
+Amazon MQ is a managed message broker service for easily migrating message broker systems to the AWS Cloud. It supports ActiveMQ and RabbitMQ.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 7
+
+Which service is SNS commonly paired with to alert users that an alarm has gone off?
+
+
+S3
+
+
+SWF
+
+CORRECT
+CloudWatch
+
+
+EC2
+
+Sorry!
+S3 is not a notification service. Reference Documentation: Setting up Amazon SNS notifications (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_SetupSNS.html)
+
+Correct Answer
+SNS and CloudWatch are commonly paired together. Reference Documentation: Setting up Amazon SNS notifications (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/US_SetupSNS.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 10
+
+Which type of AWS Step Functions workflow execution is best for long-running workflows that you expect to be in progress for up to 200 days?
+
+
+AWS Lambda
+
+
+Express Workflows
+
+CORRECT
+Standard Workflows
+
+
+AWS Batch
+
+Sorry!
+This is not a type of workflow in AWS Step Functions.
+
+Correct Answer
+This type of workflow has an exactly once execution and can run for up to 1 year! It is useful for long-running workflows needing auditable history.
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+What kind of architecture does AWS recommend building?
+
+CORRECT
+Loosely Coupled
+
+
+Tightly Coupled
+
+
+Medium Coupled
+
+
+Single Coupling
+
+Good work!
+Loose coupling is very important to your architecture! Reference Documentation: Loosely Coupled Scenarios (https://docs.aws.amazon.com/wellarchitected/latest/high-performance-computing-lens/loosely-coupled-scenarios.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+SNS is a _____-based messaging service.
+
+
+Pull
+
+
+Poll
+
+CORRECT
+Push
+
+
+Grab
+
+Sorry!
+SNS is a push-based notification service. Reference Documentation: Amazon Simple Notification Service (https://aws.amazon.com/sns/)
+
+Correct Answer
+SNS is a push-based notification service. Reference Documentation: Amazon Simple Notification Service (https://aws.amazon.com/sns/)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 7
+
+Which tool can be used to monitor the queue depth of a DLQ?
+
+
+S3
+
+
+SQS
+
+
+CloudTrail
+
+CORRECT
+CloudWatch
+
+Sorry!
+S3 is object-based storage and not a monitoring tool. Reference Documentation: Monitoring Amazon SQS queues using CloudWatch (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-monitoring-using-cloudwatch.html)
+
+Correct Answer
+CloudWatch is the go-to tool for any sort of monitoring in AWS. Reference Documentation: Monitoring Amazon SQS queues using CloudWatch (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-monitoring-using-cloudwatch.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 9
+
+What is the maximum length of time a message may remain in an SQS queue?
+
+
+Forever
+
+
+12 Hours
+
+
+4 Days
+
+CORRECT
+14 Days
+
+Good work!
+SQS can retain messages up to 14 days. Reference Documentation: Amazon SQS FAQs (https://aws.amazon.com/sqs/faqs/)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 10
+
+Which layers of our applications need to be loosely coupled?
+
+
+Just internal
+
+
+None — it's bad practice to loosely couple applications
+
+
+Just external
+
+CORRECT
+Internal and external
+
+Sorry!
+All levels of your architecture need to be loosely coupled! Reference Documentation: Loosely Coupled Scenarios (https://docs.aws.amazon.com/wellarchitected/latest/high-performance-computing-lens/loosely-coupled-scenarios.html)
+
+Correct Answer
+All levels of your architecture need to be loosely coupled! Reference Documentation: Loosely Coupled Scenarios (https://docs.aws.amazon.com/wellarchitected/latest/high-performance-computing-lens/loosely-coupled-scenarios.html)
+
+____________________________________________________________________________________________________________________________
+
+QUESTION 9
+
+Which of the following endpoints can use a custom delivery policy to define how Amazon SNS retries the delivery of messages when server-side errors occur?
+
+
+SMS
+
+
+It can't retry messages
+
+
+Email
+
+
+HTTP/S
+
+Good work!
+Amazon SNS defines a delivery policy for each delivery protocol. The delivery policy defines how Amazon SNS retries the delivery of messages when server-side errors occur (when the system that hosts the subscribed endpoint becomes unavailable). You can use a delivery policy and its four phases to define how Amazon SNS retries the delivery of messages to HTTP/S endpoints. With the exception of HTTP/S, you can't change Amazon SNS-defined delivery policies. Only HTTP/S supports custom policies. Creating an HTTP/S delivery policy (https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html#creating-delivery-policy).
+
+
+

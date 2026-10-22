@@ -1,0 +1,206 @@
+Hello again.
+In this lesson we're gonna talk about
+executing batch workloads using AWS Batch.
+Now, throughout this lesson,
+we're gonna cover several topics.
+We'll have an overview of the batch service.
+We'll discuss important components.
+We'll compare Fargate and EC2 compute environments.
+We will compare Batch and Lambda
+and talk about when you should use one over the other.
+We'll have some architecture examples.
+We'll talk about managed and unmanaged compute,
+and then we'll wrap this all up with some exam tips.
+So first things first, what is AWS Batch exactly?
+AWS Batch is a managed service
+that is designed to allow you to easily create
+and run your batched compute-based workloads within AWS.
+Essentially, these workloads run on compute environments
+that leverage instances or even Fargate.
+The service is designed
+to make your batch work a lot simpler.
+It handles all of the heavy lifting for you,
+meaning that it scales based on configurations
+that you set for the infrastructure.
+The service will automatically scale
+to an accurately-sized infrastructure
+based on the number of jobs that are submitted.
+It will then automatically optimize
+the distribution of that workload
+to that infrastructure as well.
+A nice thing about this service
+is that there is no install required.
+You can just leverage the service
+to abstract the installation and the maintenance
+of batch workload software that you might be using.
+Essentially, say goodbye to your tedious software updates.
+You can just focus on delivering results.
+Now, let's look at some important components
+that you need to know regarding Batch.
+The first is a job.
+This is a unit of work that is sent to Batch.
+These jobs can be things like simple shell scripts.
+They can be executable files and programs,
+and they can even be Docker images
+for containers to leverage on demand.
+The next component is a job definition.
+This is how you actually specify how your jobs will be run.
+A nice way to think of this is to consider them
+your blueprints for the actual resources
+within the job itself.
+Moving on, we have job queues.
+This is where jobs get submitted.
+Once a job is submitted to one of your queues,
+the jobs reside there until they get scheduled
+to run in a compute environment.
+And speaking of compute environments,
+these are sets of managed or unmanaged compute resources
+that actually run your jobs,
+so, essentially, the underlying compute.
+Now, you may be asking yourself
+or talking to me through the screen asking,
+how do you choose between Fargate
+or EC2 compute environments?
+Well, lucky for us, AWS has easily broken that down
+for us already.
+Fargate is going to be the recommended approach
+for a majority of workloads.
+It's perfect for any workloads requiring fast start times,
+so think anything under 30 seconds.
+It's also perfectly suited
+for workloads that require the following.
+Anything less than 16 virtual CPU,
+no GPUs required,
+and anything needing less than 20 gigabytes of memory.
+On the other side of things, we have EC2 compute.
+Where should we use these?
+Well, the first major point to know
+is that you use these if you require a lot more control
+over the instance selection.
+Also, you need to choose this type
+if you have any of the following:
+requirements for GPUs,
+networking requirements for elastic fabric adapter,
+anything requiring that you spin up a custom AMI,
+anytime you need high concurrency rates,
+and finally, if you need access
+to the Linux parameters attributes,
+which is a little more in depth than you need for this exam.
+Now, next up, let's compare Lambda and Batch.
+The first consideration you should have at this time
+is the time limit and certain constraints.
+Remember, Lambda is great for anything
+that's running less than 15 minutes,
+and Batch can easily run beyond that time limit.
+The next consideration is disk space.
+Lambda has limited native disk space.
+And if you want to leverage EFS to get around that,
+you have to use a VPC-enabled Lambda function to do it.
+This adds overhead and cost,
+especially if you consider all of the networking components.
+Now, while Lambda is a fully serverless offering,
+it does have limited runtimes by default.
+Batch, on the other hand, can leverage Docker,
+meaning it can leverage pretty much
+any runtime that you can think of.
+Overall, the biggest takeaway here,
+and my favorite answer for a majority
+of architecture design questions in the beginning
+is that it depends on your use case.
+Carefully read through your scenarios that are offered
+and really consider the trade-offs
+and the limitations of each service before deciding.
+Now, with that out of the way,
+let's take a look at an architecture example using Batch.
+We have our user and an S3 event configured.
+And this user uploads, let's say, a large CSV file
+that we need to process within our application.
+Our S3 event can be configured to trigger a Lambda function,
+and that event would contain the bucket name
+and the object's key for sending downstream.
+We can use that function to trigger a batch command
+and submit a job to a queue within our batch service.
+The batch compute environment and the job
+can pull a custom Docker image that we require
+to process this large document.
+Then it can actually begin executing the workloads
+using our configured compute environment,
+which again can be EC2, Fargate,
+and you can even use Amazon EKS.
+Now, this compute environment can reference the object
+and the bucket using the job configuration that was sent,
+and it can begin to process our data in different steps.
+Once complete, we can have our Batch service
+run a batch write item command to our DynamoDB table
+that we're using to store the massive amount
+of processed data.
+So this is a realistic workflow
+on how you can leverage batch within your applications.
+Now, really quickly, here are the numbered steps
+for you to look at if you want to download these steps
+and slides later on so it's easier to reference the order.
+Now, one last topic before the exam tips.
+Let's discuss managed and unmanaged compute environments.
+First up, we have managed.
+In a managed compute environment,
+Batch helps you manage the capacity
+and instance types of the compute resources within it.
+This is going to be based
+on the compute resource specifications
+that you get to define
+when you create the compute environment.
+Managed compute environments
+launch Amazon ECS container instances
+into a VPC and subnet that you specify.
+Also, by default, Batch managed compute environments
+use a recent approved version
+of the Amazon ECS optimized AMI.
+However, you can make and use your own
+custom AMI if you want.
+Now, when you're setting up a managed environment,
+you can choose EC2 on-Demand, EC2 Spot,
+and even Fargate or Fargate Spot capacity
+in this environment.
+So you can use these different spot ones
+for better cost savings.
+Now, let's talk about unmanaged.
+In an unmanaged compute environment,
+you are required to manage your own compute resources.
+This means you must verify that the AMI that you're using
+meets the Amazon ECS container instance specifications.
+Again, it's important to note,
+you manage everything within the environment.
+Typically, most people tend to use the managed environment
+because it's the easiest and most efficient,
+that is unless you have extremely
+specific requirements or use cases.
+So that's some comparisons to be aware of
+when you're talking about managed
+and unmanaged compute environments.
+Now, let's go ahead and wrap things up with some exam tips.
+First things first, remember, AWS Batch is perfect
+for long-running, event-driven workloads
+that are gonna be longer than 15 minutes.
+It's a managed service that is meant
+to simplify usage of batch software
+for application processing.
+You need to be familiar
+with the terms job and job definitions.
+Also, remember that job get submitted to your queues.
+Whenever there's a scenario
+where you must decide between Lambda and Batch,
+consider limitations of Lambda, like time limit, disk space,
+and default runtimes.
+Make sure you really understand the difference
+between the underlying compute that can be used with Batch.
+With this, consider the number of jobs
+and the other requirements that we talked on,
+like GPU and memory.
+Lastly, know the difference between
+an unmanaged and a managed compute environment.
+People will generally use managed
+so that their infrastructure overhead is handled for them.
+Unmanaged is typically used for very specific requirements.
+Now, that's gonna do it for this lesson on AWS Batch.
+Let's end here and then you can pick up
+whenever you're ready with the next lesson.

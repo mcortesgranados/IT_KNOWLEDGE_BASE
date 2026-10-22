@@ -1,0 +1,302 @@
+Welcome back, gurus.
+In this lesson, we're gonna talk about
+fronting applications using API Gateway.
+Throughout this lesson, we're gonna cover several topics.
+We're gonna discuss what API Gateway is.
+We'll discuss some notable features
+that go along with the service.
+We'll look at different API options and endpoint types.
+We'll discuss securing your APIs.
+We will then look at API Gateway in practice,
+as well as an in console demo.
+And then, to wrap everything up,
+we'll go over our usual exam tips.
+So let's go and dive in.
+What is Amazon API Gateway?
+Amazon API Gateway is a fully managed service
+within AWS where you can create, publish,
+and update secured APIs for your applications.
+It essentially allows you to place a front door entrance
+in front of your applications using a RESTful API.
+Now, the neat thing with API gateway is that
+it actually allows simple integrations
+with things like AWS Lambda functions, HTTP endpoints,
+and many other AWS services.
+So let's go ahead and actually take a look
+at some notable features of the service
+that you should be familiar with.
+The first is security.
+API Gateway allows you to easily protect
+your different backend endpoints
+by attaching an AWS WAF to that endpoint.
+This helps greatly implement security
+to prevent layer seven attacks on your infrastructure.
+It also helps stop abuse by leveraging
+DDoS protection methods, like the ability
+to front your gateway with CloudFront
+or even by throttling requests once they hit the point
+of receiving an overwhelming number.
+Lastly, it's meant to be easy to use.
+Now, this is of course relative to the person using it,
+but AWS did their best to design this service to allow you
+to easily build out customized API calls
+for fronting your backend services.
+All right, now we can move on to some API options.
+There are currently three types of options for us
+to use when we are creating an API Gateway API.
+The first is a traditional RESTful API.
+These allow you to create and leverage things
+like API keys for authentication.
+You can implement per client throttling.
+You can validate your requests that are coming in
+and you can even easily integrate with AWS WAF.
+The second is called an HTTP API.
+This is meant to be a be a simpler option when compared
+to the fully customizable RESTful API option.
+These will be cheaper, but they'll also offer
+minimal features compared to the first one.
+The last option we have is a WebSocket API.
+A WebSocket, for those who are unfamiliar,
+is simply a technology that allows for
+two-way interactive communication sessions
+between the user and a server.
+With this type of API, you can send messages to a server
+and receive event-driven responses without having to
+pull for a reply.
+An example of a WebSocket API would be a mobile app
+that sends you notifications whenever a message comes in.
+For example, the Amazon application sending order update
+notifications to your phone.
+Now, it is important to note
+that the first two options here are both RESTful APIs.
+The HTTP option is just an abstracted version
+that is meant to allow for simpler, faster creation.
+Cool, so we've discussed the API types.
+Let's move on to discussing the endpoint types.
+There are three you must know for this exam
+and really for any real world application.
+The first is an edge-optimized endpoint type.
+This is typically the default option when you're
+creating a new API
+and it allows for all API requests to get sent
+through a CloudFront edge location,
+which means that it's going to offer the best performance
+for global users.
+The second type is a regional type.
+This will be perfect for deploying an API
+that is only specific to your clients or users
+that really only reside near or within
+a particular region in the world.
+With these, you can still leverage CloudFront with them
+as well, if you needed to.
+And lastly, we have the private type.
+These are going to be APIs that can only be accessed
+via a VPC interface endpoint.
+These are meant for special use cases within
+application architecture designs.
+Most exam scenarios will deal with the first two options,
+but it is good that you know all three of them.
+All right, moving on, let's talk about security of APIs.
+Within API Gateway, you can enforce user authentication
+at the API level.
+To accomplish this, we can leverage several different
+authentication methods,
+including IAM roles, STS credentials.
+You can use long-term access keys to generate credentials.
+We can stand up and use Amazon Cognito pools
+or you can even create your own custom authorizer
+using Lambda functions.
+There are tons of options for you to use.
+Now let's talk about implementing custom TLS.
+You can do this via AWS ACM,
+and if you need to implement an ACM cert
+for your edge-optimized endpoints,
+then you need to know that cert must be deployed
+into us-east-1.
+There is no exception for this.
+This is extremely similar to CloudFront.
+Now, if you need it for your regional endpoints,
+then that ACM cert must live within that particular region.
+This would be more similar to how you would implement
+an ACM cert for a regional load balancer.
+And the last point here is regarding WAF.
+If you need to, you can place WAF in front of your API
+and achieve DDoS and layer seven protection whenever needed.
+Okay, next up we have a sample architecture diagram
+that shows API gateway in practice,
+specifically for the ACG platform.
+And if you didn't know, it was actually built using
+entirely serverless technology in the beginning.
+We have the public domain name being hit
+from our learner's computer and this gets sent of course
+to our AWS infrastructure via Route 53.
+Once that request is sent to our CloudFront distribution,
+it can leverage different backend services.
+Now, these services include API Gateway
+and Amazon S3 for specific path patterns.
+API Gateway is deployed and published to front
+many different AWS Lambda functions.
+Now, these Lambda functions perform many different
+functions within the application,
+and one of those is to reach into an Amazon Aurora
+private database for various purposes.
+This is a very simplified example
+on how we can leverage API Gateway
+to front other internal private services
+and interact with those private services
+that live within things like a VPC and a private subnet.
+Now, with that out of the way,
+let's dive into the AWS console really quickly,
+where I'm going to create and deploy a simple RESTful API.
+It's going to front a Lambda function,
+which is going to return a basic payload upon being invoked.
+So let's go ahead and dive in.
+Okay, welcome to our sandbox environment.
+I've loaded up my cloud sandbox
+and I'm logged in as cloud user.
+And let's go ahead and get started creating an API Gateway.
+The first thing I want to do is I'm gonna create the backend
+Lambda function for us to use.
+So I'm gonna navigate to Lambda here,
+I'm gonna create a new function,
+and I'm just gonna call it our Inspirational Function.
+And the reason we're doing that is because
+I created a very simple function that just goes out,
+grabs an inspirational quote, and returns it.
+So let me set this to Python.
+We're gonna use the default template for Lambda permissions,
+'cause all we need to do is log,
+and I'm gonna click on create.
+All right, so now that I've created my Lambda function,
+let me go ahead and paste in my code here and deploy this.
+And once it's deployed, I can zoom in here for you.
+It's very simple.
+All it's doing is getting a random quote from a website,
+returning that in a response body,
+or it's returning an error.
+So it's very simple, and this will be in our GitHub repo
+for you to use if you want to.
+So now that I have my function created,
+let's navigate to API Gateway.
+And in this console, we're gonna go ahead
+and choose a RESTful API.
+So I'm gonna go to REST API and I'm gonna click on build.
+Now, a few things to call out here.
+We're going to create a new one from scratch,
+but it is cool to know
+that you can actually import an API from an open API
+definition and they do support Swagger 2.0.
+So for this, I'm going to do new,
+we're gonna call it Inspirational,
+we'll give it a description,
+and then we can choose our endpoint type.
+So notice there's regional, edge-optimized,
+which is global, and then there's private.
+So I'm gonna choose regional for this.
+We're gonna create our API, and there we go.
+It was literally that easy.
+So now we have a basic API setup for us to publish.
+Now of course, we need to either create a resource
+or a method, so I'm gonna create a simple get method
+that invokes a Lambda function.
+So I'm gonna select get for my method type,
+but under this, notice they have every HTTP method
+that you can need.
+For this, we'll use get, like I said,
+and then we're going to integrate with a Lambda function.
+However, notice that you can use other things
+like we talked about, like an HTTP endpoint,
+other services, and even over a VPC link.
+Now for Lambda function, an important thing to leverage
+whenever you can is the Lambda proxy integration.
+And this does exactly as it reads.
+It sends the request to your function as a structured event
+so that you can parse that JSON easily.
+So I will enable this, and then I'm gonna pick my function.
+So we see here Inspirational Function.
+I select that, we'll leave the default timeout,
+and I'm gonna click on create method.
+And there we go. We now have a get method under our API
+that we can test.
+So speaking of that, let's go ahead and test this.
+I'm going to go to test.
+And before we click on test, one thing I do want
+to call out here is that, as we added that integration
+with Lambda, it allowed API Gateway
+to invoke our function.
+So it created a necessary permission
+on the backend that it's not visible.
+However, if you're doing this via some type
+of infrastructure as code, you will need to create
+that permission, so keep that in mind.
+When it's in the console, it's abstracted from you.
+Now, with that being said, let's go ahead and test this out.
+So I'm gonna click on test, and there we go.
+We have our get, our latency, 200 status,
+and then here is our quote.
+"Youth has no age." Pablo Picasso.
+So this is working, so I can keep testing this out.
+It should give us more quotes and it is working as expected.
+This is perfect.
+Within the logging down here, notice all
+of the different information that's available.
+We see the method, the path, different headers,
+and parameters, etc.
+There's a ton of information you can play with.
+Now, really quickly before we wrap this up,
+let's go ahead and actually deploy this API.
+This is important as this is not deployed publicly
+for us to use, so I wanna click on deploy.
+We're gonna create a new stage. We'll call it dev.
+And I'm gonna click on deploy.
+And there we go, so now we have a stage with our API
+that we were just working with,
+and you can then also move this up to production
+once testing is done with dev.
+So you'll notice there's an invoke URL here
+that we can go ahead and play around with.
+And there you go.
+So every time I refresh this,
+it's hitting that API gateway,
+and you'll notice it's returning a bunch of quotes for us.
+So this is perfect.
+We've deployed an API with a publicly accessible DNS
+and we can hit it.
+Now, one thing to note, obviously
+most of the time you would use a custom domain name
+with this, and that is possible for you to do.
+So you can set up custom domain names
+for your applications using API Gateway.
+We just use the default.
+Now, that's gonna do it for this demonstration.
+Let's jump back into the presentation,
+where we will wrap things up.
+Okay, welcome back.
+Hopefully that simple demonstration helped reinforce
+your knowledge regarding creating RESTful APIs using
+Amazon API Gateway.
+Let's have a few exam tips before we move on.
+The first point here is that you need to understand
+the logic that APIs are essentially front doors
+for your applications and your services.
+Any scenarios involving accessing backend services privately
+should favor API Gateway over other things
+like using hard-coded access keys and secrets.
+Also, anytime the exam mentions creating any type of API,
+you should immediately think of this service.
+Fourthly, API Gateway does actually support
+versioning of your APIs.
+This is great, because that's a general best practice
+when designing and updating APIs.
+Remember, you can indeed front your API Gateway with WAF
+to achieve greater layer seven protections
+for your web apps.
+And then lastly, do your best to remember
+the different types of endpoints that are available.
+In addition, also remember the different API types
+that you can choose as well.
+That's gonna do it for this lesson on fronting applications
+using Amazon API Gateway.
+Let's go ahead and end here,
+and whenever you're ready, we can pick up
+with the next lesson.

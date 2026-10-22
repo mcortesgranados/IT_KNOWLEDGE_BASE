@@ -1,0 +1,306 @@
+Hello again, Gurus.
+In this lesson, we're gonna cover
+delivering messages with Amazon SNS.
+Now, throughout this lesson,
+we're gonna cover a few different topics.
+We're gonna look at pushed-based messaging.
+We'll talk about what Amazon SNS is.
+We're gonna look at different settings
+and quotas that you should be familiar with.
+I'll go over a few architecture examples.
+And then I'll create a quick, simple version
+in a console demo so we can see what it looks like.
+And then we'll have exam tips.
+So what is push-based messaging?
+Any messages sent by a producer
+that arrives at the SNS topic, which we'll look at,
+will immediately be sent to all consumers.
+So it's being pushed out to all consumers by the producer.
+With that being said, what is Amazon SNS?
+Otherwise known as Simple Notification Service.
+SNS is a pushed-based messaging service in AWS.
+It allows you to set up an application design
+where you can proactively send messages
+to different endpoints, including things like emails,
+SQS queues, or even HTTP clients
+that are subscribed to the topic.
+A major use case for SNS is to allow you to alert systems
+or people of certain events
+and metrics that get crossed in basically real time.
+You actually probably have seen it used in other lessons,
+especially regarding CloudWatch alarms.
+Now, the big takeaway here
+is that one message can be sent to many receivers.
+One to many, remember that.
+Now, let's talk about some SNS settings and quotas
+that are important to know for the exam and the real world.
+The first thing to know here
+is that there are several subscriber types
+that are supported by default.
+These include things like Kinesis Data Firehose,
+Lambda functions, SQS queues,
+and even simple email and SMS.
+Any messages that are sent via SNS
+can be up to 256 kilobytes of text data.
+This is an important limit to keep in mind.
+Now, a neat feature for SNS
+is you can actually leverage SQS dead-letter queues
+for sidelining failed messages from SNS.
+This allows for additional troubleshooting as needed.
+It's important to also call out
+that there are FIFO topics that you can use.
+And currently these only support
+FIFO SQS queues as subscribers.
+Next up is encryption.
+While messages are encrypted in transit
+by default within AWS,
+you can also enable at rest encryption
+using specific KMS keys.
+And lastly, we have access policies.
+These are just other IAM resource policies
+that you can add to your topics.
+They're similar to things like bucket policies,
+and they can be extremely useful
+for allowing cross-account access to your topics.
+Now, moving on, let's quickly talk
+about something known as large message payloads.
+While that default limit is 256 kilobytes for message size,
+you can also leverage something
+known as the SNS Extended Library.
+This library allows you
+to send messages up to two gigabytes in size.
+It's way larger.
+Now, how it works is it leverages an Amazon S3 bucket
+for storing the actual payload,
+and then it publishes a message that contains reference
+or accessing that object which contains the data.
+It's a really neat feature.
+Moving on, let's go ahead and discuss SNS Fanout.
+This is a very important topic for you to know.
+Using Fanout with SNS,
+your messages that are published to your topic
+gets replicated to multiple endpoint subscriptions at once.
+It's the point of push-based messaging.
+What this does is it allows for a fully decoupled, parallel,
+and asynchronous processing of your message to occur.
+With these points being discussed,
+let's review some architectures
+that I think you need to be familiar with for the exam
+and really just any real world application.
+The first thing here is a very common architecture,
+and you do need to know this.
+In this example, we have a web app
+that's a producer for our SNS topic,
+and it sends a message to the topic and our service.
+On the other side of things, we have multiple SQS queues
+that are acting as consumers for the application.
+Each of these queues receives the same message
+that was sent by the producer.
+We can then leverage those different queues
+to perform different portions
+and logic within our applications.
+For example, maybe the top queue is pulled
+by our order processing portion of our app,
+so it only looks for particular data in that message
+and does what it needs to do.
+Then on the bottom, we have another app
+that completes the order fulfillment portion.
+They use the same message, but perform different tasks
+based on the data within that message.
+Now, the next example is regarding S3 events.
+In this example, we can swap the web app or an S3 bucket,
+and that is configured to send S3 events to our topic.
+And the logic on the backend can be the same as before.
+So instead of a web application,
+maybe we have a file uploaded, we send that to SNS,
+and we perform the same logic based on data in that file.
+Now, the third example, we can swap back
+to our web application, sending orders to our SNS topic.
+However, this time, we have a Kinesis Data Firehose
+subscribed to the topic,
+and this allows for massive amounts of data to be ingested
+and potentially transformed,
+and we can send records to another archive bucket
+as well as something to open search
+for performing analytics and viewing dashboards.
+So for example, for a web ordering application,
+maybe this can be things
+like visualizing the most popular products
+or maybe the most common country and origin of orders,
+things of that nature.
+Now, let's move on to message filtering.
+By default, every single message published to a topic
+is sent to every single subscriber,
+but there is a feature known as message filtering
+that allows you to define a JSON policy,
+which allows you to define
+which messages get sent to particular subscribers.
+You essentially filter out messages
+to different endpoint types
+based on contents and attributes of the messages.
+So here's an example architecture
+of using that filter policy.
+Depending on a specific value within our message,
+we may want to handle that differently
+by sending it to a different subscriber for our application.
+For instance, for any submitted orders,
+we may want to only send those
+to our order fulfillment queue for processing.
+But if there's another message regarding a refunded order,
+we wouldn't need to send that to that same queue.
+Instead, we can send it to a different queue
+to perform our application's logic around refunds.
+So in this example, our JSON order message,
+which is on the bottom left,
+would only get sent to the top queue
+based on the filter policies.
+So we've successfully filtered our messages,
+which means we're not unnecessarily invoking
+any other application logic.
+Okay, let's jump into a console demo.
+Really quickly I'll create an SNS topic,
+add a simple email subscription, and test it out.
+All right, let's get started.
+I'm in my AWS sandbox environment.
+I'm going to navigate to Simple Notification Service.
+And let's create a simple topic
+with a simple email subscription.
+The first thing I'll do is I'm gonna give my topic a name.
+I'm gonna click on Next, and let's get going.
+So it's good to know there are FIFO SNS queues,
+which operate similarly to SQS,
+but for this we're gonna do standard.
+We've given a name.
+We can give it a display name,
+which is different than the actual topic name.
+And this is really just for more human readability.
+Our encryption is optional again,
+but remember, you can provide encryption at rest
+by specifying a KMS key to do so.
+So I'll leave the default one here,
+but you could select any of the other ones
+that have permissions for SNS.
+Next is the access policy.
+So similar to an SQS access policy,
+we're specifying who can publish messages
+and who can subscribe to messages.
+So this is perfect for allowing cross-account access
+for your SNS topics.
+You can specify anybody, which is not recommended,
+or specific AWS accounts.
+For this, I'll leave the default,
+and we'll move on to data protection policy.
+Now, you don't need to know this for this exam,
+but you can configure data protection policy
+which is going to allow you to define sensitive data
+to monitor and prevent.
+So this is too in depth for this exam,
+so I'm not going to cover it.
+The next couple are also a little too deep for this exam,
+but we'll at least view them.
+The delivery policy is gonna show how many failed deliveries
+can be sent to an HTTP or HTTPS endpoint.
+So this is set to default,
+and it's not really a big deal for us
+because we're not sending to an HTTP client,
+so it's really irrelevant for this demo.
+The next thing we have is status logging.
+So if you wanted to log delivery statuses,
+you could do that for specific endpoints.
+Now we're using email,
+and you'll notice that's not a selection,
+so this is gonna be left the same as well.
+But if you did do this, SNS would need permission
+to write to CloudWatch logs, so keep that in mind.
+We'll skip over tags
+because that's pretty self-explanatory at this point.
+And the last thing we have here is active tracing.
+So AWS X-Ray is a service that allows you
+to trace flows throughout your application
+via a service map.
+So you can essentially see how long SNS is taking
+within the flow of your application from end to end request.
+I'm not gonna use this, but it's just cool to know you can.
+So I'll create my topic here. We're good to go.
+Now, the next thing we need to do here
+is create a subscription.
+So generally speaking, if you create a subscription
+via some other service like Lambda or Kinesis
+and you do it via the console,
+it will automatically grant the permissions needed
+for those services to receive messages from SNS.
+However, when you do an email subscription,
+which will show here,
+you specify the email that's subscribing,
+and I'll use my little temporary email box here.
+We can set our filter policy,
+which is what we talked about in the presentation.
+So we can look for message body filters or attributes.
+And we can set a redrive policy.
+In other words, do we want to specify a dead-letter queue
+for any failed messages sent to this endpoint?
+I'll leave these both off,
+but this is where you would configure those
+within your creation.
+So I'm gonna click on Create subscription.
+If I go back to the topic,
+you'll notice it's pending confirmation.
+And that's because you can't just sign anybody up
+via this endpoint type.
+That's not how it works.
+It prevents abuse by allowing them to confirm it.
+So if I go to my email, you'll see received one,
+and once this loads, I'll click on the actual message
+and I'll confirm my subscription.
+Here we go. We get an alert, I'll confirm it.
+And there you go, subscription confirmed.
+So let me close this.
+I'll refresh this screen here.
+And we are confirmed.
+So now if I publish a message to this topic,
+I'll give it an optional subject of testing.
+We can enter a raw message.
+If we wanted to, we could add message attributes,
+which is on the outside of the actual body itself.
+And again, we can filter on these using filter policies
+in addition to the message body.
+So it's really up to you how you wanna filter.
+I'm not going to add any here.
+I'm gonna click on Publish.
+We can see a message ID and a request ID.
+And now if I go to my email inbox again,
+we get our subject of testing and there's our email,
+Hello Pluralsight and Cloud Gurus!
+So this is working.
+We've now accomplished pushed-based messaging
+via an SNS topic.
+Let's go ahead, and here,
+we'll jump back into the presentation
+where we will wrap things up with some exam tips.
+Okay, welcome back.
+Let's dive into some exam tips before we move on.
+First, for any scenarios that require real-time alerting,
+you want to consider Amazon SNS.
+Also, if there's any scenarios
+based on pushed-based messaging,
+you should also think about SNS.
+You don't need to be familiar
+with the different subscriber options in too much detail,
+but do know that you can use SQS, Lambda,
+emails, and HTTP endpoints.
+Fourthly, it is good to call out
+that SNS only supports custom retry policies
+for HTTP and HTTPS endpoints at this point in time.
+You can implement FIFO SNS topics,
+which offers specific message ordering
+and de-duplication just like SQS ones do.
+Lastly, but definitely not least, please, please understand
+the different architectural layouts
+that we looked at earlier.
+If you, you need to go back, review them,
+and really make sure you understand them.
+They are very important to know for the exam.
+Now, that's gonna do it for this lesson.
+Let's go ahead and you can take a break,
+and then whenever you're ready,
+we'll pick back up with the next one.

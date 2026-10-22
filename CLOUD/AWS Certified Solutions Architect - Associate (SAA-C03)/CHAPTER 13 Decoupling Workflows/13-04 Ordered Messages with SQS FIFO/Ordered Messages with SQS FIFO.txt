@@ -1,0 +1,196 @@
+Okay, hello, Cloud Gurus.
+Welcome to this lesson where we're going
+to talk about Ordered Messages using SQS FIFO.
+In this lesson, it's going to be pretty short and sweet.
+We're gonna talk about message ordering,
+we'll have a quick demo in the console
+and then we'll wrap things up with some exam tips.
+Let's go ahead and dive in.
+First things first, let's talk about SQS message ordering
+by comparing standard and FIFO queues.
+A standard queue, remember,
+is going to use best effort ordering.
+What that means is that your messages could be received out
+of order in your application,
+and that will need to be handled.
+FIFO queues actually offer you guaranteed ordering
+of your messages, and that's a huge difference.
+So you'll get the messages
+in the exact order they were received.
+The second difference is that in a standard queue,
+you could receive duplicate messages based on
+the different configuration settings
+and the message consumption rate.
+If your message visibility timeout is low
+and your application doesn't delete a message in time,
+it could be re received by another part of your application.
+FIFO queues, on the other hand,
+offer no message duplication.
+They do this by leveraging
+an explicit message deduplication ID
+for each message to prevent any processing
+that causes duplicate messages.
+The last major comparison point here is that
+with standard cues,
+you gain nearly unlimited transactions per second,
+it scales extremely well.
+FIFO queues, by default, allow you
+to obtain 300 transactions per second within your apps.
+However, it is important to call out
+that you can leverage message batching
+to achieve up to 3000 messages per second with FIFO queues.
+That's an important concept to know of.
+Now moving on, you can actually enable
+a major feature known as FIFO high throughput
+for these queues.
+This can be enabled for any new or existing FIFO queue.
+This feature allows the queue
+to actually process up to 9,000 transactions per second
+per API call without the need for batching.
+But if you do end up using batching as a best practice,
+you can achieve up to 90,000 messages per second,
+it is insanely efficient.
+Moving on even further, let's go ahead
+and visualize a comparison between a standard
+and a FIFO queue with regards to message ordering.
+With standard queues,
+in this example, we get four messages sent
+from our producer to the queue.
+You can see the color coded messages on the left
+with their number representing the order
+of them being received.
+These messages get sent to our source queue,
+and the producers will consume them
+in the best effort possible for ordering and duplication.
+Now, when we compare this to FIFO queues,
+it's a little different.
+You can see on the left side,
+we've received messages out of order
+and we've received duplicates,
+but with FIFO queues, it's a little bit more efficient.
+This time, we have the same four messages,
+they get sent to the FIFO queue,
+and they're actually received in the same exact order.
+And this time, since it's a FIFO queue,
+there's no duplicated messages
+and the ordering is guaranteed.
+Everything is consumed in that same 1, 2, 3, 4 order
+that it was sent.
+So that's the huge difference
+in the visualization on how they work.
+Okay, with that being said, let's go ahead
+and take a look at a simple demo
+of configuring a FIFO queue in the console.
+Okay, welcome to our sandbox environment.
+I'm in the North Virginia region.
+Let's quickly create a FIFO queue
+and see what it looks like.
+So I'm in SQS here,
+I'm gonna create a queue,
+and instead of standard, we're gonna do FIFO,
+so, first in first out.
+Now you'll notice here you have
+to append that FIFO to your queue name.
+So what I'll do is I'll call this Queue.FIFO,
+and you'll notice all of the settings
+for the most part are the same,
+minus a couple other ones here under FIFO queue.
+So the first setting here is content-based deduplication.
+So we can turn this on
+so that we're not receiving the same content
+within the message.
+So it won't be the exact same message,
+and it's actually more specific
+to the content within the message.
+The next thing we can do is enable high throughput,
+and remember, we covered this just a few minutes ago.
+But notice when we do turn this on from maximum throughput,
+it limits what we can do below.
+So we can't specify the deduplication scope
+or the FIFO throughput limit.
+So even though you're getting
+a more high performant version,
+you're losing some of the customization options.
+Now under these options, deduplication scope.
+So we can scope where we want to look
+for deduplication of the queue.
+Do you wanna do all messages
+or are you gonna pass in a message group ID
+and only worry about de-duplicating messages that belong
+to the same message group?
+So this really just comes down to your application needs,
+and you won't really need to know this
+in too great of detail for this exam.
+I'm gonna select all messages,
+and then we have FIFO throughput limit.
+So how are we applying throughput limits on this queue?
+Do you wanna do it to the entire queue,
+or similar to the left side,
+do you want to apply throughput limits
+at a message group level?
+Again, you don't need to know this too in depth,
+but it's good to be aware of in case you want
+to use these in real world applications.
+So I'll leave these settings the default,
+you'll notice everything else is pretty much the same.
+We can encrypt, change the access policy,
+set up a dead-letter queue, et cetera.
+Now, one thing to call out for this,
+is if I chose a dead-letter queue,
+this would have to be another FIFO queue,
+it can't be a typical regular SQS queue .
+So remember that for the exam as well,
+that's actually very critical to know
+if you're creating a FIFO SQS queue
+and you need a dead-letter queue to leverage with it,
+that also needs to be a FIFO version of a queue.
+That's very important.
+So I'll click on Create,
+and there we go, it's that simple.
+So now we've created a FIFO queue and we're good to go.
+Let's jump back into the presentation
+where we're gonna have a few exam tips before moving on.
+Okay, welcome back.
+Hopefully that provided some insight
+for creating a FIFO queue.
+First things first, if you ever see a scenario discussing
+message ordering for distributed decoupled applications,
+think FIFO queues.
+There are other ways of enforcing message ordering
+and deduplication,
+however, FIFO is going to offer you the least amount
+of resistance and the quickest way to accomplish this.
+Okay, let's finish up with some final exam tips
+before we move on.
+First, remember, FIFO queues
+do not offer the same performance as a standard queue.
+You can enable some features to make them more efficient,
+however, they're just not going
+to perform the same in the end.
+So with that being said, be sure to weigh the pros
+and the cons of using them for your applications.
+Next, remember that you can order messages
+via other methods,
+but they're going to require a lot more overhead
+and infrastructure considerations.
+FIFO is usually the best way to do this.
+Message deduplication IDs are tokens that are used
+to ensure deduplication of your messages
+that are being received.
+It's important to know that matching dedupe IDs
+are not delivered during a deduplication interval period.
+Fourthly, like we looked at when we were creating the queue,
+message group IDs can help ensure
+that your messages are processed one by one
+in a strict order based on those specific groups.
+You can also even enforce throughput limits based on
+those message group IDs.
+Lastly, it does cost more to leverage these queues
+than it does a standard queue.
+It really shouldn't come as a surprise
+since you do gain many additional benefits for using them,
+but you do need to know they are more expensive.
+Now, with that being said, let's go ahead
+and end this lesson here about SQS FIFO queues,
+and whenever you're ready,
+I'll see you in the next lesson.

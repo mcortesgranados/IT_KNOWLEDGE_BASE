@@ -1,0 +1,153 @@
+Hello, Cloud Gurus.
+Welcome to this lesson,
+Ingesting Data from SaaS Applications
+to AWS with Amazon AppFlow.
+Let's go ahead and take a look
+at what we are going to learn throughout this lesson.
+We'll first talk about what AppFlow is.
+So what this service is meant to provide us.
+We'll talk about important terms
+and concepts that you should know going into the exam.
+We'll look at an example diagram
+on how it actually works.
+We'll discuss some use cases
+that you might see pop up on the exam itself.
+And we'll finish off with some exam tips
+for you to take into your exam
+so you feel confident about this service.
+So let's go ahead and dive in.
+What is AppFlow?
+Well, Amazon AppFlow is a fully managed service
+that allows us to securely exchange data
+between a software as a service application
+and Amazon Web Service services.
+So think of things like Salesforce migrating data
+to Amazon S3, for example.
+Now, the sole purpose of this service is to ingest data.
+So it really allows you to pull data records
+from third-party vendors,
+and then store them in services like S3.
+An example of this would be ingesting contact records
+from Salesforce and putting them
+into an Amazon Redshift table.
+Another example would be pulling support tickets
+from Zendesk and storing those
+in an Amazon S3 bucket.
+Now, it's good to know that Amazon AppFlow
+is a bidirectional service.
+So data transfer can go both ways.
+However, not all source and destination combinations
+are currently supported within the service itself.
+So now that we know what the service is,
+let's discuss some of the important terms
+and concepts you should be familiar with.
+The first is a flow,
+and a flow is what transfers data
+between a source and a destination.
+Now, Amazon AppFlow currently supports a variety
+of AWS services and third-party SaaS applications
+as either sources or destinations.
+Data mapping determines how data
+from the source is actually placed in the destination.
+So here you can map fields in each source object
+to the fields in the destination that you want to see.
+We also have filters
+and filters essentially control which data records
+are transferred to our destination.
+Amazon AppFlow will only transfer records
+that meet our filter criteria.
+And then lastly, we have a trigger.
+A trigger is how our flow runs.
+And there are several different types that are supported.
+We have run on demand, run on event,
+and then run on schedule.
+You don't necessarily need to know those
+at an in-depth level but it's good to understand
+that those type of triggers are supported.
+So let's go ahead and dive into an example diagram.
+On the left here,
+we have a third-party software as a service.
+And then on the right, we have our AWS account
+with our Amazon AppFlow,
+and then our S3 bucket storing objects.
+So the left side here is what we would consider our source
+in this example.
+And the right side would be our destination,
+specifically, the S3 bucket.
+Now the first thing we would do
+is we would create a source and destination connection
+between our source and you guessed it, destination.
+After that is complete,
+we can look at mapping fields
+between the source and the destination itself.
+So how do we want data that gets ingested
+to map in our destination bucket?
+After mapping fields,
+we can then create filters as well.
+So we can say hey, we want this particular type
+of data to be included
+or excluded depending on our use case.
+And then the last thing here is we are able
+to actually run our flow using some types of trigger.
+So we can run the flow.
+It ingests the data, it maps it,
+and then it stores it in our S3 destination.
+Now, remember, the destination can be anything supported.
+So it can be a Redshift table
+or it could be an S3 bucket like we see here.
+There are many different configuration options available.
+So now that we have seen a graphical representation
+of how this works,
+let's move into use cases.
+Now, these are use cases provided by Amazon,
+so it's likely you can see something similar on the exam.
+The first would be transferring Salesforce records
+to Amazon Redshift.
+So maybe there's records being created in Salesforce Cloud
+that you need to migrate and ingest into Amazon Redshift
+so that you can analyze them using other AWS services.
+You can also use it for ingesting
+and analyzing Slack conversations
+and then storing them in S3.
+So maybe this can be a scheduled flow trigger
+that transfers your data
+from a particular channel into your S3 buckets.
+Then we have the migrating of Zendesk
+or other help desk support tickets
+to a service like Snowflake.
+And lastly here, the fourth one
+is we can transfer aggregate data
+on a scheduled basis to Amazon S3.
+And the asterisk here just shows you
+that you can actually transfer up to 100 gigabytes per flow.
+All right, so let's wrap things up
+with some exam tips you can take
+into your exam so that you're better prepared
+to answer scenarios based on this service.
+You need to know what AppFlow is at a high level.
+And it's a fully managed integration service
+for transferring data to
+and from SaaS vendors and applications.
+Now, it's important to also note
+that it's bidirectional.
+So these flows can go to or from AWS services
+and other SaaS applications.
+The only thing is you need to ensure your configuration
+is actually supported.
+So some exam scenarios to watch out for
+are things like needing an easy or managed
+and fast transfer of SaaS
+or third-party vendor data into AWS,
+especially if you need some type of scheduled basis
+to do it as well.
+So an example would be an application needing
+to reference large amounts of SaaS data on the regular
+and needing that data to be accessed
+from within Amazon S3.
+Using this Amazon AppFlow service
+can make it far easier
+and much more efficient to do this.
+Now, that's gonna wrap it up
+for this Amazon AppFlow lesson.
+When you're ready, go ahead and end this one
+and then I'll see you in the next one.

@@ -1,0 +1,320 @@
+Well, hello Gurus.
+Welcome to this lesson,
+Sidelining Messages with Dead-Letter Queues.
+In this lesson we're gonna cover dead-letter queues.
+We'll have a quick in consul demo in our Sandbox,
+and then we'll have some exam tips.
+Alright, so let's go ahead
+and dive into the first portion of this lesson
+where we're gonna cover dead-letter queues in Amazon SQS.
+Dead-letter queues are a critical concept for you
+to understand for this exam
+and for any real world application designs.
+In the simplest terms, a dead-letter queue is a target queue
+for messages that cannot be processed successfully
+from your application's primary message queue.
+What this means is that it's essentially a failover queue
+to store messages or inspection and replay later on.
+Now, a neat feature with a dead-letter queue within SQS is
+that it actually works with both SQS and Amazon SNS.
+And a dead-letter queue is going to be very useful
+for debugging your applications and your messaging systems,
+or whenever a particular message
+just can't be processed successfully for any reason.
+They allow you the ability
+to actually isolate the unconsumed messages
+and then troubleshoot them on your own time.
+Another neat feature that's also critical for the exam is
+that you can actually redrive your messages.
+What this means is that you enable the redrive capability
+and it allows you to move that particular message
+back into the original source queue.
+Now, really dead-letter queues
+are really just simply other SQS queues.
+There's nothing inherently special about them
+and you just create them like you would
+any other queue in SQS.
+It's the way they're used
+in your application infrastructure design
+that makes them a dead-letter queue.
+And the last thing I wanna point out here is
+that you can use a dead-letter queue
+with FIFO queues as well.
+However, if you do do that, your dead-letter queue
+that you use must also be a FIFO queue.
+Okay, let's go ahead and dive in
+and move on to dead-letter queue benefits.
+Dead-letter queues can be used
+to configure alarms based on message availability counts.
+Essentially what this means is that you can set up some type
+of metric alarm via CloudWatch
+and you can look for any number of messages
+on that particular dead-letter queue.
+Basically, once a message is sent to your dead-letter queue,
+you can trigger alarms to notify operations teams.
+Another benefit is that these allow you to quickly identify
+which log files you might want to investigate
+for specific exceptions
+and errors that occur in your application.
+You could use a unique identifier
+within that original message, within the contents,
+et cetera, and go ahead and cross-reference that
+with CloudWatch logs.
+Additionally, another benefit is
+that you can analyze the exact message contents
+that were sent to the original primary queue
+and look for any errors.
+Perhaps they forgot a field in a JSON object
+or perhaps they sent the wrong format entirely.
+And lastly, another benefit here that you need
+to know about is that they allow you
+to troubleshoot any potential consumer permissions
+that may be missing.
+For instance, maybe your consumer
+just can't actually read messages from the queue
+and they're all ending up in a dead-letter queue.
+Now this is just a limited list of potential benefits
+for using dead-letter queues,
+and there could be many more that we just don't have listed,
+but we tried to call out.
+Let's go ahead and visualize how a dead-letter queue works
+within a messaging based application system.
+In this example, we have our extremely happy user
+at the top.
+We have an EC2 instance acting as a front end
+for our app, and there's another EC2 instance acting
+as the backend, which is of course separate.
+Our front end passes messages to SQS
+and our backend reads those messages
+or pulls for those messages from the queue.
+Now, if we assume the happy user is interacting
+with our application and they submit,
+let's say an order online, we can assume it's going
+to populate a message into our primary queue.
+But let's assume the message processing fails
+from our backend side of the application.
+Well as excellent solutions architects, we went ahead
+and configured a dead-letter queue.
+What this means is the original message contents
+will be wrapped in another message
+and forwarded to that configured dead-letter queue.
+This allows us to identify
+and investigate the specific message
+that was causing us errors.
+And if we just deem it's an intermittent error,
+that's not really an issue, we can actually go ahead
+and replay that within the original queue using redrive.
+Okay, let's go ahead
+and take a break from all of this information
+and set up an SQS queue
+and then configure it to send any failed messages
+to a separate dead-letter queue that we specify.
+I'm going to work on setting up a Lambda trigger
+to process a simple JSON object that's within that message.
+And if it can't process it, it's going
+to print an error message on why
+and send it to our dead-letter queue.
+Let's go ahead and get going.
+Okay, welcome Gurus.
+We are in our AWS Sandbox environment
+and the first thing I want to do is cover my Lambda function
+that I've already created in order
+to act as a consumer for our queue
+to test out our dead-letter queue processing.
+Now this is a very simple function.
+You can see the code here
+and this code will be available for you in the GitHub Repo
+if you do want to play around with it.
+All it's doing is essentially pulling the message body
+from our hold message, making sure all
+of the required fields are in there,
+and if it's not, it's sending it back to that same queue so
+that we can trigger the maximum retries
+and it should be sent to our dead-letter queue.
+Now with Lambda functions, it's important to call out
+that AWS handles retries for you on the backend
+before this will actually be sent to the queue.
+Again, you don't need to know the specific number of times,
+but understand that Lambda will try
+and automatically retry this message several times
+before it actually sends it back to the queue.
+So again, all we're doing is looking
+for the required fields.
+If they're there, we print them.
+If they're not, we put them back on the queue
+to eventually trigger the dead-letter queue.
+Now you will notice we are using an environment variable
+of the queue URL
+and we'll get that after we create our queues.
+With that being said, let's go ahead and jump into SQS
+and I'm gonna create a brand new queue.
+The first thing I'll do is create our dead-letter queue.
+Now this is gonna be a standard queue
+because we cover FIFO in a different one.
+So I'm gonna call this WebOrders-DLQ.
+I'm going to leave the configuration settings the same,
+encryption, the access policy, which is saying, hey,
+who can send messages and who can receive them?
+And this is perfect for cross account access.
+So if you needed another account to either send messages
+or receive messages on this queue, you can do that
+using the access policy.
+For our use case, I'm just gonna configure the default.
+The next we have is our redrive policy.
+So what queues can use this as a dead-letter queue?
+Well, we want to enable this
+and you can see there's three different options.
+We can deny everyone, which really makes no sense.
+We can specify a specific QR and if we had one,
+and we can allow all,
+so all source queues in this account
+in this region can use this as a dead-letter queue.
+And this is what we want for this demo.
+We can skip over the next couple
+and I'm gonna click on Create Queue.
+So we have our dead-letter queue.
+Let's create our source queue.
+Standard, we'll call it WebOrders.
+I will leave the configuration the same,
+so I'm not gonna make any changes to these.
+We'll leave the encryption in place,
+but it's good to call out
+you can specify AKMS key if you need custom encryption.
+We're gonna leave the same access policy.
+And let's skip down to dead-letter queue.
+So we wanna send undeliverable messages to our DLQ,
+that way we can view them
+and process them later on if we need to.
+So I'm going to enable this.
+Let's choose our DLQ on here,
+and I'm gonna set maximum receives.
+Now what this number is doing
+is it's specifying the maximum amount of times
+our source queue can receive the same message
+before it sends it to the dead-letter queue.
+So I'm gonna set this to two,
+and what this is saying is, hey, if I get the same message
+more than two times, so three times, I'm going to send it
+to the dead-letter queue and assume it's undeliverable.
+And we can verify this here in a little bit.
+So I'm gonna go down,
+I'm going to create this, and there we go.
+This is perfect.
+So now we have our primary queue and our dead-letter queue.
+And remember,
+a dead-letter queue is literally just another queue.
+It's just set up to receive messages from our source queue.
+Now, before we actually get started here,
+two things I want to do.
+I want to get this queue URL
+and populate it into my function here.
+That way we can resend messages.
+And then the next thing I do wanna show you is
+because I had this queue name pre-populated
+and predetermined,
+I've already created a function policy here
+that has the correct access in place for this SQS queue.
+So this first one allows it to log to CloudWatch,
+and the second policy allows it to pull our queue
+and then send messages to our queue.
+And you can verify the ARN here is the same as up here.
+So I planned ahead on that aspect.
+But it's important to note, you do need
+to obviously grant IAM permissions
+to your function for this to work.
+So I'm gonna close out of this, I'm going to navigate
+to my function monitor.
+Let's jump into CloudWatch logs
+so we can watch this as it populates.
+Okay, so we have our log group up.
+We'll refresh for log streams here in a moment.
+Now let's go ahead and jump into queues.
+And the last thing I have to do here is go ahead
+and set up my Lambda trigger.
+So I'm gonna configure a new one,
+select our processor function, click on Save.
+I'll give this just a few seconds
+to create and then we'll move on.
+Okay, that took about 20 seconds.
+And one thing to call out here is
+what this has done is it's also in the background
+created a permission to invoke our function.
+So now our lambda function will pull
+for messages automatically on this queue.
+So let's go and test it out.
+The first thing I'm gonna go ahead
+and send here is a correct JSON.
+So I'm gonna send and receive, paste this in.
+We have our entire message body, and let's click on Send.
+So now if I go back to CloudWatch, I refresh,
+we should get a log stream here in a second.
+I load this up, you're gonna see it printed out that event.
+So this is working as intended.
+It's got all the fields, it printed out those fields.
+This is perfect.
+So what happens if we post a message
+that has incorrect JSON?
+Well, let's try it out.
+I'm gonna go back here.
+Let's clear this.
+Paste an incorrect JSON where we're missing a field.
+I'm gonna click on Send.
+Go back to CloudWatch.
+We can refresh.
+I'll go back into the log stream.
+And you'll notice after I refreshed here,
+we're getting a lot of retries.
+And this is because Lambda will automatically try
+and retry this on the backend several times.
+But now we're saying, hey, it's failed a process.
+We're missing fields returning to queue.
+If I go back into our dead-letter queue here
+and I click on receive messages,
+so let's pull.
+There we go.
+So you'll notice now we have a message on the queue
+and that receive count is three.
+So this is perfect.
+Remember, we set maximum receives to two.
+So since it's three, it gets sent to the DLQ,
+we can view the body of the message that triggered it.
+And if we needed to, we could look at added attributes
+or specific details of that particular message.
+So this is exactly how you can use a DLQ
+to isolate failed messages and investigate them.
+Now, that's gonna do it for this demonstration.
+Let's jump back into the presentation
+where we will wrap things up with a quick exam tip summary.
+Okay, welcome back.
+First things first, remember, DLQs are going
+to be the best sideline for your primary queues.
+If this scenario laid out mentions anything about problems
+with messages in SQS, immediately think about DLQs
+and visibility timeout.
+It's also important to set up a CloudWatch alarm
+to monitor that queue depth.
+A common example is to set an alarm
+for any message count greater than zero in a DLQ.
+Okay, let's have five more quick exam tips
+before we move on.
+The first one is to monitor, monitor, and monitor.
+Always make sure you set up an alarm
+and set up alerts for queue depth for your DLQs.
+Remember, these are not special.
+They're simply just other SQS queues
+and they get set up
+to receive rejected messages from a source queue.
+If you have any FIFO requirements, remember
+that the dead-letter queue used
+with those must also be a FIFO queue.
+Dead-letter queues have the same default retention window
+as normal source queues
+because again, they're just simple queues
+that are configured to contain and hold failed messages.
+And lastly, remember, you can use these
+with Amazon SNS topics as well.
+Now that's gonna do it
+for this lesson on sidelining messages
+with dead-letter queues.
+Let's go ahead and wrap things up here
+and then I will see you in the next lesson.

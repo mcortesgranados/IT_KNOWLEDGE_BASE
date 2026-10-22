@@ -1,0 +1,182 @@
+Welcome back, Cloud Gurus.
+In this lesson, we're going to take a look
+at coordinating distributed applications
+with AWS Step Functions.
+During this lesson, there are several topics
+we want to cover including an AWS Step Functions overview.
+We'll look at things called executions, workflows.
+We'll talk about states and state machines.
+We'll look at the different integrated AWS services
+that go along with it.
+We'll talk about those different states.
+And then, we'll wrap things up with some exam tips
+for you to take with you into your exam.
+So what is AWS Step Functions?
+In a nutshell, it's a serverless orchestration service
+that is going to allow you to combine AWS Lambda functions
+with other AWS services
+to build business critical applications.
+It provides a graphical console
+that you can use to see your applications workflow,
+as well as a series of different event-driven steps.
+Now, the main components within Step Functions
+are known as state machines and tasks.
+And we'll cover those here in a little bit.
+A state machine is a particular workflow
+with different event-driven steps within it.
+And a task is a state in a workflow
+that represents a single unit of work
+that another AWS service will perform for you,
+and each step in a workflow is considered a state.
+So every single step is a state in a workflow
+in AWS Step Functions.
+Now, AWS Step Functions have 2 different types
+of workflows.
+We have standard and we have express.
+So let's talk about these different workflows.
+Each workflow, like we mentioned, has executions.
+And executions are instances where you run your workflows
+in order to perform your tasks.
+So we have our standard and our express workflows
+that we're going to compare.
+Standard workflows have an exactly-once execution.
+It's also good to know that these type of workflows
+can actually run for up to one year.
+Yeah, you read that right and you heard that right.
+One whole year.
+They're very useful because of this,
+for long-running workflows
+that need to have an auditable history.
+So you can see the different steps that took place,
+as well as the different data that was ingested
+and output from the workflows.
+A big number to keep in mind
+is that there's rates up to 2,000 executions per second.
+And the pricing for these workflows
+is based per state transition.
+So even though they can run for up to one year,
+if there's only one state in that whole entire year,
+you're only billed for that one transition.
+It's not a length of time necessarily.
+It's just per transition.
+Now, express workflows are slightly different.
+These have an at-least-once workflow execution
+so this means that you can get some duplication that exists
+and you'll need to handle.
+Another big difference is that these can actually only run
+for up to 5 minutes.
+Just a slight difference from one year.
+Now, express workflows are useful
+for high-event-rate workloads.
+So things that are coming in
+and need to go out very quickly,
+you might want to use express workflows for.
+An example of something like this
+would be IoT data streaming and ingestion.
+IoT data comes in very quickly and in massive waves,
+so this might be a good use case for express workflows.
+And then, pricing is slightly different on these.
+It's based on number of executions,
+the duration, and the memory consumed
+for the underlying compute that is used.
+Now, let's move over to states and state machines.
+Now, individual states are pretty flexible.
+You can leverage them to make decisions based on input,
+perform certain actions, or just pass output itself.
+They all use a specific language
+called the Amazon States Language,
+which is ASL for short in AWS.
+Now, states are strictly elements within your state machines
+and you refer to them by a name,
+which is any string as long as it's unique
+within the scope of the entire state machine.
+An example of where this would come in handy
+might be something like an online pickup order, right?
+Each step in that workflow would be considered a state.
+So things like place order, fulfill order,
+mark order as ready for pickup,
+and then maybe you finally mark it
+as picked up by the customer.
+Each of those individual parts of that process
+would be considered a state.
+So what services are integrated within AWS
+that work nicely with this Step Function service?
+Well, I'm not going to read them all off
+but you can see there are a lot.
+And these are just selected from a larger list
+of all of the different services.
+So you can see things like Lambda, SNS,
+API Gateway, Fargate.
+There's tons and tons and tons
+of integrations available for you to use.
+So if you get time, check them out.
+It might be a perfect use case for you,
+for your particular architecture.
+So moving on.
+I want to look at the different states that are there.
+So let's just take a look
+at all of the different types that exist.
+The first is a pass state.
+And this is going to pass any input directly to its output.
+So no work is getting completed.
+It's literally just passing data in and then back out.
+There's a task state which is a single unit of work
+that gets performed.
+So think of things like Lambda and SNS notification.
+Individual units of work.
+There's a choice state.
+So this is going to be a branching logic
+that gets added to state machines.
+So think yes, no, or maybe some other type of logic
+where it's looking for particular string values
+or numerical values, and it makes a choice based on that.
+We have a wait state.
+So if you need to create a specified time delay
+within a workflow, you would use a wait state.
+We have a succeed state.
+So this is going to stop executions successfully.
+So if everything flows correctly,
+you can reach a succeed state
+and mark the whole entire step function
+as complete and successful.
+And then there's a fail state,
+which is kind of self-explanatory.
+It stops the executions and mark them as failures.
+So if they don't succeed, then they fail.
+We also have a parallel state.
+And this is where we run parallel branches of executions
+within state machines.
+And then, the last one I want to touch on here is a map.
+And this is a state that runs a set of steps
+based on elements of an input array
+that you can look into and pull data from.
+Now, these are the 8 different types of states
+that you can use within your Step Functions.
+So let's go ahead and wrap things up with some exam tips.
+You need to know what AWS Step Functions is.
+And remember that it's a serverless orchestration service
+meant for event-driven task executions.
+Especially if you have questions dealing
+with integrating with other AWS services in an easy manner.
+We also need to know the execution types.
+So remember, there are standard workflows
+for long-running auditable executions.
+And express ones for high-event-rate execution workloads.
+Everything is written in an Amazon States Language format,
+which is a proprietary format that they use
+that is similar to JSON, to specify your workflows.
+Remember states.
+States are your elements within your state machines
+where things and actions happen within a workflow.
+It's good to know that there are tons of integrations.
+Seriously, tons.
+There's common ones that are brought up a lot
+like AWS Lambda, API Gateway, and Amazon EventBridge.
+And then lastly, be familiar with most of these state types.
+Now, one that you really want to watch for
+is whenever there's a time
+that you have to add a weight period to a workflow,
+you might want to look into AWS Step Functions
+as part of the solution.
+And that's going to do it. We'll go ahead and end here.
+When you're ready, we'll see you in the next one.
