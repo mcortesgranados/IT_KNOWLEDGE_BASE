@@ -1,0 +1,169 @@
+Hello, Cloud Gurus,
+and welcome back.
+In this lesson,
+we're going to be taking a high-level look
+at an IT concept known as caching.
+So the very first thing that we have to answer is,
+what is a cache?
+Why does this matter,
+and when do I want to use it?
+And we'll see kind of a quick review
+of where do we cache.
+Where inside of our environment
+can we actually put caches?
+We're going to take a look
+at some upcoming AWS caching solutions
+that we'll see in future videos.
+And then of course,
+we'll round it all out
+with some of those handy dandy exam tips.
+So let's go ahead and dive right on in.
+Now to understand what caching is,
+we're going to take a quick look
+at what life is like without a cache.
+On the screen in front of you,
+we have Fred.
+Now, Fred is is very hungry.
+Recently, Fred's been thinking a lot about ice cream,
+specifically purple ice cream.
+He wants some.
+How does Fred get that purple ice cream?
+Well, of course,
+because he doesn't have a cache,
+Fred gets in his car and drives 25 miles down
+to the ice cream factory.
+Where else would you get ice cream?
+He buys his purple ice cream
+and drives it home and eats it,
+and life is grand.
+Except Fred doesn't like to drive 25 miles
+every time he thinks of purple ice cream.
+If only there was a better solution.
+Now this is what life is like without a cache.
+Without a cache
+if I want to view some web content,
+I got to go all the way across the world to get it
+and have it delivered back to me,
+and it just takes a long time.
+So let's fix this problem for Fred.
+Now let's give Fred the ability
+to cache that purple ice cream.
+So in this case, what Fred's going to do,
+is Fred's going to buy a freezer.
+Fred puts that freezer in his house,
+and now instead of having to get in his car
+and drive 25 miles to go get that ice cream
+every time he wants it,
+he simply throws on his slippers,
+walks out to the garage,
+and gets some.
+Now at some point,
+Fred has eaten all that ice cream
+or maybe the ice cream's gone bad.
+It's been in the freezer for too long,
+and isn't that a travesty.
+So in that case,
+Fred can then go that extra 25 miles down
+to the ice cream factory,
+buy all the ice cream that he wants,
+store it in the freezer,
+and then continue to hit that freezer
+every time he needs it
+until eventually it's out.
+Now, this same process works inside of AWS.
+We can put a cache close to our end users
+so they're not traversing all the way
+across the globe
+to download or view our content.
+So obviously life is better with a cache.
+So where do we cache in our AWS applications?
+Well, we kind of already talked
+a little bit about that external caching,
+the idea that I'm cashing those images, videos,
+and static content closer to our end users.
+And we'll talk about that content delivery network
+in a future lesson
+that we can use to distribute our content externally.
+Now we can also cache internally as well.
+We can put a cache in front of our databases.
+Now this means we can cash queries
+that are performed often.
+So we don't have to talk to the database as much.
+Now, if you've ever built an application before
+you can probably relate to this,
+that that database is generally a bottleneck.
+So the less reads that we have to do
+from that database,
+the better my application is going to perform.
+So what specific caching options
+are we going to see inside of AWS?
+Well, there are 4 solutions
+that we're going to cover
+in those future lessons.
+Our first cache is called CloudFront.
+CloudFront is actually an external caching solution,
+a content distribution network that allows us
+to spread out our resources all over the globe
+to make those delivery times
+just a little bit smoother.
+We'll also take a look at ElastiCache.
+Now, ElastiCache is going
+to be an internal caching solution.
+That's going to sit in front of our databases
+to help offload some of that work
+that the database normally has to do.
+We'll also see DAX,
+or DynamoDB Accelerator.
+Now DAX is a caching solution
+that is built specifically for DynamoDB.
+So if you already thought that DynamoDB was fast,
+well we're going to make it just a bit faster.
+And finally, we'll take a look at Global Accelerator.
+Now, Global Accelerator is another tool
+that we can use to help speed up external connections.
+So by the end of this section,
+you'll have a good overview
+of external versus internal caching.
+Now let's go ahead and wrap this up
+with some exam tips.
+My first exam tip is that AWS loves caches.
+They really do.
+Whenever possible,
+pick a solution that includes caching.
+Even if it's not specifically called out,
+you want to favor answers
+that have caches built in.
+We'll take a look at the various types coming up,
+but you just want to keep that big heart emoji
+in mind as you're going through the exam.
+Now, a few more tips here for us.
+Put caches everywhere.
+If it doesn't have a cache,
+put one in front of it.
+We'll take a look at how we can do this,
+but we want to cache everything
+and cache everywhere.
+Caches help with speed.
+That's just a fact.
+Now there are other benefits
+that we're going to take a look at as well.
+Sometimes it helps with failure.
+Other times it helps with security,
+but the primary one is going to be that performance.
+As we go through this,
+you'll need to keep in mind
+which caching solution works
+internally versus externally.
+If something's an internal cache,
+it's really not going to be an external cache.
+You're going to have to pick one versus the other,
+and make sure that in the exam,
+they're not being misused.
+And finally,
+before you ever trim a hedge,
+lay down small sheets underneath it.
+This will make collecting the hedge trimmings
+much easier when you're done.
+Alright, folks,
+thanks for going through this caching overview with me,
+and I can't wait to see you in the next lesson.

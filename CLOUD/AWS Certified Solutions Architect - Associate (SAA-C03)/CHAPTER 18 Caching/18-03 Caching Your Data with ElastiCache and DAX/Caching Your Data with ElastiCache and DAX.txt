@@ -1,0 +1,164 @@
+Hello, Cloud Gurus and welcome back.
+In this lesson, we're going to take a look
+at 2 different kinds of AWS database caching solutions:
+ElastiCache and DAX.
+We're going to go ahead and kick this off with ElastiCache.
+What is it?
+How do I use it?
+And when do I want to start applying this
+into my architecture?
+We'll take a little bit of a look at the different forms
+of ElastiCache, namely Memcached versus Redis.
+And then we'll dive into Dynamo DB Accelerator,
+or as it's more commonly known DAX.
+We'll have a quick review
+of when do I want to use ElastiCache versus DAX
+before I round this all out with some exam tips.
+So let's go ahead and dive right on it.
+So to that first question, what is ElastiCache?
+Well, ElastiCache is kind of a unique service.
+It's an AWS managed version of 2 open-source technologies:
+Memcached and Redis.
+Now, neither these tools are specifically built for AWS
+but they're common in a lot of architecture patterns.
+So AWS designed ElastiCache to allow you to spin up
+one or the other, or even both sometimes,
+to avoid a lot of common issues that you would have
+as an architect rolling these out yourself.
+So if it's really just Memcached or Redis in disguise,
+well, what are those tools?
+Well, let's take a quick look at
+what is Memcached compared to Redis.
+So both of these tools are generally going to sit
+in front of your database.
+So they sit inside of your architecture.
+They're not external, they are internal.
+And they're going to cache those common queries
+that you would need to make.
+As we talked about earlier, this means less reads back
+to that data store.
+So Memcached is just a database caching solution.
+Nothing you're going to store in here
+is going to be permanent,
+so it's not a source of truth for that data.
+Memcached is not a database by itself,
+it is just a caching solution.
+It doesn't offer failover
+or multi-Availability Zone support or backups even.
+So even if we wanted to use it as a database
+it really wouldn't be a very good idea.
+Now, Redis on the other hand,
+it's supported as a caching solution
+but it also has the ability to function as a standalone,
+non-relational or noSQL database.
+Now, this is a really important point for the exam.
+You will see scenarios where it is asking
+for a caching solution and Redis might be the right choice.
+Or you might also see a situation where it's asking
+for a noSQL database.
+And if DynamoDB isn't present,
+the next best choice is most likely going to be Redis.
+Now because we're using it as a standalone database
+or a caching solution, it has to have a little bit
+more built into it than Memcached does.
+So Redis does have the ability to failover
+and provide multi-Availability Zone support
+for that high availability deployment.
+It supports backups as well.
+So if you're required to pick a caching solution
+that has backups, Redis is going to be your go-to.
+Now traditionally Memcached and Redis
+are going to sit in front of a relational database,
+something built out in RDS most likely,
+but what about that noSQL solution?
+What about DynamoDB?
+Well, that's where DynamoDB Accelerator or DAX
+comes into play.
+What DAX does is it really takes that performance
+on DynamoDB and cranks it all the way up to 11.
+So it is an in-memory caching solution
+and it can help you reduce database response times
+from milliseconds down to microseconds.
+Let's just think about that for a minute.
+That is a crazy reduction.
+If you would've told me 10 years ago
+that we would be talking about microseconds for a response
+to a database call, I would have said you're crazy.
+But now, well, that's just commonplace when we use DAX.
+DAX does live inside of a VPC.
+You get to specify where you'd like it to live
+and it is going to be highly available.
+You have control over DAX.
+In fact, maybe even a little bit more control
+than DynamoDB itself.
+You get to decide the size of the nodes,
+how many you're going to have in the cluster,
+that time to leave for that database,
+your maintenance windows, reminds me a little bit
+of some of those settings for RDS,
+but it's just for Dynamo DB.
+Now this is a lot of caching solutions real quick.
+So how do I know which type of cache I want to use? Because
+on the exam, we're going to have to make that decision.
+Well, it really comes down to DAX is only for DynamoDB.
+It is not a source of truth, it's highly available.
+It's an in-memory caching solution only for Dynamo.
+That's it,
+you cannot use DAX in front of another type of database.
+That means that ElastiCache
+is going to be a little bit more flexible.
+This is going to sit in front of RDS,
+or if we're using a Redis,
+it could offer that database solution on its own.
+Now I know we've gone through these concepts rather quickly
+and that's by design.
+While we could spend hours talking about the individual
+nuances of each solution
+that's not really going to be required for the exam.
+We only have to have that high-level overview
+of when do I want to use one versus the other?
+Now, speaking of the exam,
+let's take a look at our first exam tip here,
+put a cache on it.
+That's a great piece of advice to keep in mind on the test.
+You're going to be given scenarios
+and you're going to have to pick the right kind
+of caching solution to sit in front of that database.
+So to sum it all up, DAX is for DynamoDB,
+ElastiCache is generally for those relational databases
+with Memcached, just being a cache,
+and Redis having the ability to be a cache
+as well as a non-relational database by itself.
+So a few more tips here for us, always have a cache.
+It's just great advice. On the exam,
+it makes things go faster, it's better.
+You just want to have one.
+So pick answers that include a caching solution.
+Like I said a few minutes ago,
+you want to keep it generally high-level.
+It's not going to dive into the nuances
+of how do we structure our data?
+Or how do I have the correct TTL?
+You just need to know from the architecture level
+which kind you want to pick
+and the fact that it needs to sit in front of that database
+and their internal caching solutions.
+Now DAX and Memcached are just a cache,
+but Redis could be a cache as well as a standalone database.
+I've mentioned this point a few times now
+because that's really important to keep in mind.
+I've seen quite a few questions
+asking about using Redis as a standalone database solution.
+So it's good to know that it has that support
+from multi-Availability Zones.
+It has that support for failover.
+It has that support for backups,
+where the other solutions don't.
+And one last tip here for us,
+if you're ever trying to build an emergency shelter
+don't forget to build a floor.
+Most people underestimate how much heat the ground will draw
+from your body while you're trying to sleep.
+Alright folks,
+thanks for going through ElastiCache and DAX with me,
+and I can't wait to see you in the next lesson.

@@ -1,0 +1,158 @@
+Well, hello Gurus.
+In this lesson, we're going to discuss
+Fixing IP Caching using AWS Global Accelerator.
+Now, in this lesson,
+we're going to cover several different topics.
+We're going to talk about what Global Accelerator is,
+we'll look at some different concepts
+and some terms you should be familiar with,
+we're going to have a high-level view of the service,
+we'll dive into an architectural design view
+so you're familiar with how it works,
+and then we'll wrap things up with some exam tips.
+So, let's get cached
+and talk about some AWS Global Accelerator.
+AWS Global Accelerator, otherwise shortened as GA,
+is a networking service designed to optimize
+and enhance the performance of your applications
+by routing your user's traffic
+through AWS's global network infrastructure.
+Now, these different points
+where the routing occurs are known as accelerators.
+The service leverages Anycast IP addresses
+and these improve performance and help manage IP caching.
+This results in faster
+and more reliable user experiences around the globe.
+It is important to call out that Global Accelerator
+is primarily intended for managing TCP or UDP traffic.
+It makes it well-suited for applications
+that require low latency and high availability.
+One of its major distinctions from Amazon CloudFront
+is that CloudFront
+is meant to be a content delivery network service
+focused on content caching and distribution
+via HTTP and HTTPS,
+so they function at different layers.
+Now, moving on, let's explore some concepts
+and some terms you should be familiar with.
+An accelerator is a crucial component of this service.
+It directs and optimizes your user's traffic
+by routing it to the most suitable AWS endpoints.
+It acts as the entry point for incoming traffic
+and helps improve the performance
+and availability of the applications.
+Listeners are responsible
+for processing the inbound connections
+based on specific ports and specific protocols.
+These enable you to configure how your end user traffic
+is actually directed to the endpoints.
+And lastly, endpoints are the actual AWS resources,
+like application load balancers,
+network load balancers, or even E2 instances,
+to which Global Accelerator directs your traffic.
+These are what serve as the destination points
+for your user's requests.
+All right, next up we can get into a high-level view
+of using this service so we can cover
+some of the important points for this exam.
+Global Accelerator provides
+two static Anycast IPv4 addresses
+for your accelerators by default.
+In the case of using dual-stack IP addressing,
+you actually receive four static IPs,
+two for IP version 4 and two for IP version 6.
+These Static IPs act as a single fixed entry point
+for all client traffic.
+That's how Anycast IP trafficking works.
+Global Accelerator offers you two accelerator types
+to control how your traffic is actually directed.
+With a standard accelerator,
+GA chooses the healthiest closest endpoint for your traffic.
+With custom routing accelerators,
+you use application logic
+to directly map one traffic
+to a specific EC2 instance
+among many different destinations.
+Now, this happens all while gaining
+the performance improvements of routing your traffic
+through the Global Accelerator service.
+A custom routing accelerator is useful
+when you have an application that requires groups of users
+to interact with each other via the same session,
+so an example of this would be a gaming application.
+Okay, now that we have the high-level view out of the way,
+let's have a quick architecture overview
+so we can visualize how this works.
+In this example, we have our AWS account on the right side
+and we have our different endpoints
+within two different regions across the globe.
+What happens is AWS Global Accelerator
+creates two global accelerators for us to use
+which leverage a point of presence
+or an edge networking location via the CloudFront network.
+With these accelerators,
+we also get assigned two Anycast IP addresses
+for us to use within our routing logic
+and our DNS configuration.
+Now, these can be mapped
+to our example web Internet of Things service,
+which is going to be listening on port 443.
+Remember, TCP and UDP.
+Now, the two endpoints we see on the right hand side,
+which are different elastic load balancer types
+are natively supported via standard endpoints.
+From a traffic flow perspective,
+if we assume we have users in, say, Ghana and Australia,
+whenever they make their request
+to our web service via port 443,
+Global Accelerator is going to automatically handle
+sending that traffic to the most optimized endpoint.
+And the beautiful thing is this happens
+without us having to specifically pick where it's going.
+Global Accelerator sends the traffic
+over the AWS Backbone network.
+Now, this is big because this network is free from jitter
+and congestion when you compare it
+to the global public internet.
+Because of this,
+the networking performance is extremely high.
+And the beautiful thing is all of this happens
+without us needing to actually implement
+any major architectural changes.
+All right, let's wrap things up
+with some exam tips before we move on.
+When you encounter scenarios related to IP caching,
+consider the use of Global Accelerator
+as it plays a crucial role in optimizing traffic
+and reducing your latency.
+By default, Global Accelerator provides you
+two Anycast IP addresses,
+which are essential for routing and optimizing your traffic.
+Dual-stack will provide you four addresses,
+two IP version 4 and two IP version 6.
+You need to understand the concept
+of how Anycast IP traffic works
+and how it benefits the performance
+and availability of your applications.
+Global Accelerator uses edge locations
+to accelerate the delivery of traffic.
+This is a key component of its performance optimization.
+And with that, make sure you are aware
+that Global Accelerator is primarily designed
+for handling TCP and UDP traffic.
+It's suitable for use cases like gaming applications
+and IoT messaging.
+And lastly, you need to be able
+to recognize the distinctions
+between Global Accelerator and CloudFront.
+While CloudFront is a content delivery network,
+it is primarily meant to be focused on content caching
+and distribution via HTTP and HTTPS protocols.
+Global Accelerator, on the other hand,
+is tailored for optimizing network traffic and routing
+via TCP and UDP.
+Okay, that's gonna do it for this lesson
+on IP caching via Global Accelerator.
+Let's go ahead and wrap things up,
+we'll take a break
+and then we can pick back up with the next lesson.

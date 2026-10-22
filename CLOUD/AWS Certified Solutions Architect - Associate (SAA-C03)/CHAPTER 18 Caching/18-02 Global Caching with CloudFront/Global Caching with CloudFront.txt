@@ -1,0 +1,252 @@
+Welcome back.
+In this lesson, we're going to be taking a look
+at one of AWS's most popular caching solutions: CloudFront.
+We're going to start it off
+by taking a look at what is CloudFront,
+where do we want to put it inside of our architecture,
+and how does it use those edge locations?
+We'll dive into some important settings
+that you need to be aware of
+when you're setting up your CloudFront distribution,
+and then we'll go ahead
+and jump into my console and build one out.
+And then we'll loop back after that
+with some of those exam tips.
+So let's go ahead and dive right on in.
+So what is CloudFront?
+Well, at its core, CloudFront is a content delivery network
+(commonly called a CDN).
+What CloudFront allows us to do is
+to take our static content (our images,
+our videos, our applications)
+and distribute them out
+to those edge locations all over the globe.
+You remember those edge locations from a previous lesson?
+Those 100+ locations all over the world?
+Well, instead of storing all of your content
+in one single location
+and making your users come and get it,
+we can store it basically everywhere.
+So let's go ahead and actually see
+what this looks like.
+Now, imagine for a second that you live in Europe--
+and for my European friends,
+this is probably a very real reality for you.
+You would like to look at some
+of those amazing American cat photos
+that I've stored in my Oregon bucket in S3.
+Now, if you're sitting there in London
+or in Paris or somewhere in Germany trying to download this,
+your cats have to travel a very, very, very long distance.
+And that makes you sad because they load line by line
+and it's just not fun.
+You want your cats delivered quickly.
+So what we're going to do is we're going to insert
+CloudFront in between.
+Now what's going to happen is my very first user
+is going to make a request through CloudFront
+to say, "Hey, give me some of those American cats."
+CloudFront is going to say, "Great.
+"I'm going to go to S3, grab those cats.
+"I'm going to hold onto a copy in that local edge location,
+and then I'm going to return those cats to that user."
+Now that didn't really speed much up on the first request,
+but what about the second request,
+the third request, the fourth request, the nth request?
+Because there is a copy of those cats stored
+in that edge location,
+those users get their content quickly.
+So this allows me to take my single location
+for those cat photos
+and effectively make it a global cat distribution service.
+Now there are reasons to consider CloudFront
+besides just the blistering speed that it brings
+to your cat distribution service.
+The first reason is security.
+It actually defaults to an HTTPS connection.
+Now that's great out the box
+because we always want to have HTTPS endpoints.
+It also allows you to attach a custom SSL certificate
+if you don't want to use the CloudFront endpoint.
+Effectively, if you want to route your entire domain
+through CloudFront, it's really simple to do.
+It also allows you to put a secure connection
+on your S3 static websites.
+And that's an important fact to remember for the exam.
+With CloudFront, we actually can't pick specific countries
+or specific edge locations to distribute your content to.
+Now, as we'll see in a few minutes,
+you can pick general areas of the globe,
+but it's maybe more continent based than anything else.
+You can create a very rudimentary allow
+or deny list for particular countries,
+but if you do have to block or allow particular countries,
+you don't really want to use CloudFront to do it.
+You want to use the Web Application Firewall
+to make that happen because it's a lot more feature rich.
+CloudFront supports AWS endpoints.
+Now that's kind of a no-brainer.
+You could have all guessed that,
+but you might be surprised
+to know it actually supports non-AWS endpoints.
+So if you've taken this course up until now
+and you've said, "I hate everything AWS related,
+"but I love content distribution networks,"
+you could use the CDN to front your data center
+or another cloud provider.
+It's up to you.
+Now, whenever you think of a cache,
+you should be thinking about stale content.
+Normally, you want to rely on that TTL,
+that time to live.
+It's really going to set how long your data's going to live
+at those edge locations before it gets refreshed.
+Now, if you make a mistake--
+namely, maybe you set that to wait too long
+before the content is refreshed--
+you can go out and proactively expire that content.
+You can force a refresh to kick your content
+out to the cache and go and get something new.
+Now, CloudFront is great to talk about in theory.
+Let's go ahead and jump into my console
+and build out a distribution for one of my websites.
+I've got my CloudFront console up.
+Now for those folks following along at home,
+I do have a static S3 website
+that I've created before I started this demo.
+Now a quick note: This console is likely
+to change in the near future.
+It is ripe for a refresh
+using the new Amazon design language.
+So if it has changed by the time you've seen this video,
+please don't panic.
+I promise the content is all still relevant.
+They just like to move the buttons around.
+So let's go ahead and create our first distribution here.
+So I'm going to create a web distribution
+and I'm going to start off here with the origin domain name.
+Now I'm actually going to pick
+from here a list of my S3 buckets, maybe my load balancers,
+right? Effectively, what's serving out that content.
+In my case, I actually just want to paste
+in here my S3 bucket URL,
+because this is a static S3 website that I'm going to use.
+Scrolling down a little bit farther.
+Unfortunately, in this video, I'm not able to talk about all
+of these settings because there are a lot.
+The good news for you is most
+of them aren't actually relevant
+for the Associate-level test.
+We'll circle back to this content in the Professional exam
+if you choose to take that step,
+but I will call out a few important features
+that you will need to know for this particular exam.
+Right now, I'm allowing both HTTP and HTTPS.
+I can restrict that via redirect or just have HTTPS only.
+Little bit farther down here.
+It is important to know that I can create signed URLs
+or have signed cookies to restrict what user
+or users can access my content
+and for how long that's going to be accessible.
+It is important to know that you can restrict access
+to your content via CloudFront using signed URLs
+or signed cookies.
+You don't need to know how to do this
+for this particular exam.
+You just need to know
+that this is an option that you can add
+in those temporary access points to your architecture.
+Little bit farther here.
+We can see that I actually can't pick
+particular edge locations.
+In fact, it's really just continent based.
+Here, North America and Europe,
+the rest of the world.
+I'm just going to leave it with all edge locations.
+We can't pick a particular edge location,
+nor really would we want to.
+Now, if we remember from our security lecture,
+we talked about that Web Application Firewall.
+We can attach a WAF to our CloudFront distribution
+if we need that additional level of security and control.
+I'm using the default SSL certificate.
+But if you want,
+you can upload your own custom SSL certificate
+and run your entire domain through it.
+If you have something a little bit better than mine--
+maybe you own catvideos.com
+and you want to build your cat empire--
+you can serve it out securely.
+Now the rest of this, I'm just going to go ahead
+and leave blank--or default, I should say--
+then I'm going to click Create.
+Now this is going to take a few minutes.
+So I'm going to go ahead
+and pause the video, and we'll check back in
+as soon as this is finished.
+All right, looks like that just finished.
+And there's a lot of settings on here,
+but the one that we really care
+about is going to be that domain name.
+So let's go ahead and grab that real fast.
+And I'm going to open up a new tab and paste that in.
+Now, I feel the need...the need for speed.
+All right, not the most exciting website,
+but it is using those edge locations
+to get that content out quickly,
+and notice up here in my browser,
+this is a static S3 website,
+and it has, magically, HTTPS.
+Well, it's not magic.
+It's CloudFront,
+but that's a good thing to remember.
+Now I know this was a whirlwind tour of CloudFront,
+but let's go ahead and jump back into the slides
+and cover some of those exam tips.
+My first exam tip is CloudFront fixes all connection issues.
+Now I understand in the real world,
+things are a little bit more nuanced.
+But remember on this exam, AWS loves caches.
+So put a cache in front of your application.
+Use CloudFront to cache your content externally.
+Slow connections from around the globe?
+Cache it.
+Images or videos aren't loading?
+Cache it.
+And we use CloudFront to make all of that happen.
+Oh, a few more tips here for us.
+CloudFront's fast.
+In fact, speed is the main purpose
+of what we want to use this for.
+So we can cache those static images, videos, right?
+The things that take a long time.
+All of those cat pictures that we want to look at.
+Cache them in those edge locations using CloudFront.
+Supports both on-prem and cloud architecture.
+So it's not just for AWS.
+That's going to be an important tidbit for you to remember.
+CloudFront can be used to block individual countries,
+but the WAF is going to be a better option.
+Because remember, the WAF gives us more flexibility
+as far as rate limiting, SQL injection attacks.
+It has more nuance around it,
+where CloudFront's just going to be allow or deny.
+It's very simplistic.
+So in general, we want to front our CloudFront distributions
+with a WAF to give us that finer level of control.
+You can use all the locations
+or you can kind of dictate particular continents.
+That's really about it.
+So on the exam,
+make sure you don't pick answers that say,
+"Oh, we're only using this specific edge location"
+because that's not actually offered by CloudFront.
+And one final tip here for us.
+If you're trying to melt snow while you're on a hike,
+pour some water into the pot.
+It'll dramatically reduce the time
+that it takes for the snow to melt,
+and you'll save a lot of fuel.
+All right, folks.
+Thanks for going through CloudFront here with me,
+and I can't wait to see you in the next lesson.

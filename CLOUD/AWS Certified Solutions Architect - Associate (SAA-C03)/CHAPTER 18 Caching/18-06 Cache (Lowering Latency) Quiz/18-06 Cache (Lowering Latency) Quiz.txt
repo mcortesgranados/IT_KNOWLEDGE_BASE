@@ -1,0 +1,163 @@
+QUESTION 1
+
+What AWS service allows you to easily deal with public IP caching issues?
+
+
+ElastiCache
+
+CORRECT
+Global Accelerator
+
+
+Edge Locations
+
+
+CloudFront
+
+Sorry!
+ElastiCache is a fully managed, in-memory caching service but does not help with public IP caching issues.
+
+Correct Answer
+Global Accelerator can help deal with IP caching issues by providing static IPs. Reference: AWS Global Accelerator
+
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+How do caches help improve performance?
+
+CORRECT
+Caching allows you to efficiently reuse previously retrieved or computed data.
+
+
+They take dynamic content and hold onto it until it's no longer relevant.
+
+
+They help your EC2 instance count scale to accommodate heavier workloads.
+
+
+They don't. It's best to ignore caches when designing your application.
+
+Good work!
+This is a perfect description of a cache. Reference: Caching Overview
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+What type of physical AWS architecture does CloudFront use to improve performance?
+
+
+Local Regions
+
+
+Availability Zones
+
+
+Regions
+
+CORRECT
+Edge Locations
+
+Sorry!
+CloudFront does not use local Regions to speed up the delivery of your content.
+
+Correct Answer
+CloudFront uses edge locations to speed up the delivery of your content. Reference: Locations and IP Address Ranges of CloudFront Edge Servers
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+DAX is designed to sit in front of what AWS data service?
+
+
+S3
+
+
+RDS
+
+
+Redshift
+
+CORRECT
+DynamoDB
+
+Sorry!
+DAX is not designed to front S3.
+
+Correct Answer
+DAX is designed to front DynamoDB. Reference: Amazon DynamoDB Accelerator (DAX)
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What's the place where caches can be best used?
+
+CORRECT
+Anywhere possible!
+
+
+In front of a database.
+
+
+Behind a load balancer.
+
+
+In front of web applications.
+
+Good work!
+Caches allow you to increase your application performance and are usually a great idea everywhere!
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+CloudFront is commonly used to front ________.
+
+
+Redshift databases
+
+
+SQS queues
+
+CORRECT
+S3 buckets
+
+
+DynamoDB
+
+Sorry!
+CloudFront wouldn't be able to front Redshift. Reference: How Do I Use CloudFront to Serve a Static Website Hosted on Amazon S3?
+
+Correct Answer
+CloudFront commonly fronts S3 buckets. Reference: How Do I Use CloudFront to Serve a Static Website Hosted on Amazon S3?
+
+_______________________________________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which of the following statements is true?
+
+
+Only Route 53 can create weights for application endpoints.
+
+
+Global Accelerator is the only AWS service that allows you to create weights for your application endpoints.
+
+
+No AWS services can create weights for application endpoints.
+
+CORRECT
+Both Route 53 and Global Accelerator can create weights for application endpoints.
+
+Sorry!
+Global Accelerator can also do this.
+
+Correct Answer
+Both Route 53 and Global Accelerator can do this. Reference Documentation: Values for Weighted Records
+
+_______________________________________________________________________________________________________________________________________________________________________
+
