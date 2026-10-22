@@ -1,0 +1,84 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+03:33
+
+Course Introduction
+02:39
+
+About the Author
+00:54
+CHAPTER 2
+
+Alexa Skill Components
+1:13:05
+
+Interaction Model and Intents
+09:18
+User Utterances and Natural Language Processing
+04:42
+Intent Triggered Lambda Functions
+04:55
+Alexa Skills Kit Command Line Interface (ASK CLI)
+09:10
+HANDS-ON LAB
+Deploying Your First Alexa Skill
+45:00
+CHAPTER 3
+
+Capturing Data from User Utterances
+1:19:52
+
+Custom Intents
+08:37
+Custom Slots
+11:15
+HANDS-ON LAB
+Adding Slots to an Alexa Skill
+30:00
+HANDS-ON LAB
+Adding a Custom Intent to an Alexa Skill
+30:00
+CHAPTER 4
+
+Dialogs
+1:33:37
+
+Skill Sessions and Multi-Turn Conversations
+07:44
+Dialog Directive and Entity Resolution: Part 1
+14:51
+Dialog Directive and Entity Resolution: Part 2
+11:02
+HANDS-ON LAB
+Adding Dialog to an Alexa Skill
+1:00:00
+CHAPTER 5
+
+Multimodal Interfaces
+33:14
+
+Using Cards to Display Information
+03:14
+HANDS-ON LAB
+Adding a Card to an Alexa Skill
+30:00
+CHAPTER 6
+
+Attributes
+45:13
+
+Request, Session, and Persistent Attribute Scope: Part 1
+09:32
+Request, Session, and Persistent Attribute Scope: Part 2
+05:41
+HANDS-ON LAB
+Using Session Attributes in an Alexa Skill
+30:00
+CHAPTER 7
+
+Keep Learning
+02:00
+
+Where to Go from Here
