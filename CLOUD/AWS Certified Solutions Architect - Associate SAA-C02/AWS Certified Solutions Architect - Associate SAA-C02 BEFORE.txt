@@ -1,0 +1,594 @@
+
+Next Lessons
+Introduction thumbnail
+01:19
+Introduction
+
+CHAPTER 1.1
+
+The Exam Blueprint thumbnail
+05:09
+The Exam Blueprint
+
+CHAPTER 1.2
+
+Why Should I Learn and Get Certified with AWS? thumbnail
+13:21
+Why Should I Learn and Get Certified with AWS?
+
+CHAPTER 1.3
+
+Course Outline
+CHAPTER 1
+
+Introduction
+20:43
+
+Introduction
+01:19
+
+
+The Exam Blueprint
+05:09
+
+
+
+Why Should I Learn and Get Certified with AWS?
+13:21
+
+A Note About Demo Lessons
+00:54
+CHAPTER 2
+
+Supporting Courses
+09:03
+
+Certification Path and Supporting Courses
+01:15
+
+Designing Resilient Architectures for Associate AWS Solutions Architects
+01:25
+
+
+Networking and Compute for Associate AWS Solutions Architects
+01:16
+
+
+Storage, Databases, and Migration for Associate AWS Solutions Architects
+01:18
+
+
+High Availability and Scalability for Associate AWS Solutions Architects
+01:14
+
+
+Application Services for Associate AWS Solutions Architects
+01:18
+
+
+Logging and Security for Associate AWS Solutions Architects
+01:17
+
+
+CHAPTER 3
+
+AWS - 10,000-Foot Overview
+40:17
+
+The History of AWS So Far
+06:52
+
+AWS - 10,000-Foot Overview
+15:09
+How to Sign up for AWS
+03:16
+
+
+
+
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - AWS - 10,000 Foot Overview Quiz
+15:00
+CHAPTER 4
+
+Identity and Access Management & S3
+4:40:22
+
+Identity and Access Management 101
+04:34
+
+Identity and Access Management - Demo
+17:35
+Create a Billing Alarm - Demo
+04:51
+
+
+S3 101
+18:39
+
+
+Create an S3 Bucket - Demo
+11:15
+S3 Pricing Tiers [SAA-C02]
+04:38
+
+
+S3 Security and Encryption
+05:55
+
+S3 Versioning - Demo
+09:13
+
+Lifecycle Management with S3 - Demo
+04:07
+S3 Object Lock and Glacier Vault Lock [SAA-C02]
+05:08
+S3 Performance [SAA-C02]
+06:37
+
+
+S3 Select and Glacier Select [SAA-C02]
+02:40
+AWS Organizations and Consolidated Billing [SAA-C02]
+08:18
+Sharing S3 Buckets Across Accounts - Lab [SAA-C02]
+08:32
+Cross-Region Replication - Demo
+08:27
+
+
+
+
+
+
+S3 Transfer Acceleration
+02:48
+
+AWS DataSync [SAA-C02]
+02:05
+CloudFront
+05:08
+
+Create a CloudFront Distribution - Demo
+07:17
+
+CloudFront Signed URLs and Cookies [SAA-C02]
+06:43
+Snowball
+04:57
+Snowball - Demo
+08:34
+Storage Gateway
+10:25
+Athena vs. Macie [SAA-C02]
+04:28
+S3 and IAM Summary
+17:28
+HANDS-ON LAB
+Create a Static Website Using Amazon S3
+30:00
+HANDS-ON LAB
+Introduction to AWS Identity and Access Management (IAM)
+45:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Identity Access Management & S3 - Identity Access Management Quiz
+15:00
+CHAPTER 5
+
+EC2
+6:24:16
+
+EC2 101 - Elastic Compute Cloud
+14:27
+
+Launch Our First EC2 Instance: Part 1 - Demo
+20:08
+
+
+
+Launch Our First EC2 Instance: Part 2 - Demo
+08:36
+
+Security Groups - Demo
+10:02
+EBS 101
+03:41
+EBS Volumes and Snapshots - Demo
+16:58
+AMI Types (EBS vs. Instance Store)
+07:28
+
+ENI vs. ENA vs. EFA [SAA-C02]
+06:53
+Encrypted Root Device Volumes and Snapshots - Demo
+06:22
+
+
+Spot Instances and Spot Fleets [SAA-C02]
+08:48
+
+EC2 Hibernate [SAA-C02]
+07:24
+CloudWatch 101
+04:47
+CloudWatch - Demo
+08:28
+AWS Command Line (CLI) - Demo
+07:57
+Identity and Access Management Roles - Demo
+05:20
+
+
+Using Bootstrap Scripts - Demo
+06:15
+
+Instance Metadata - Demo
+04:17
+
+EFS - Lab [SAA-C02]
+12:05
+
+
+
+Amazon FSx for Windows and Amazon FSx for Lustre [SAA-C02]
+04:35
+EC2 Placement Groups
+06:32
+HPC on AWS [SAA-C02]
+10:42
+AWS WAF [SAA-C02]
+03:45
+EC2 Summary
+18:46
+HANDS-ON LAB
+Using AWS Tags and Resource Groups
+1:15:00
+HANDS-ON LAB
+Using EC2 Roles and Instance Profiles in AWS
+1:30:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - EC2 Quiz
+15:00
+CHAPTER 6
+
+Databases on AWS
+2:52:09
+
+Databases 101
+11:40
+
+
+Let's Create Our First RDS Instance - Demo
+13:21
+
+
+
+
+RDS: Backups, Multi-AZ, and Read Replicas
+07:21
+RDS: Backups, Multi-AZ, and Read Replicas - Demo
+08:04
+
+DynamoDB
+03:52
+Advanced DynamoDB [SAA-C02]
+13:38
+Redshift
+06:33
+Aurora [SAA-C02]
+10:57
+Elasticache
+03:17
+
+Database Migration Service (DMS) [SAA-C02]
+05:26
+Caching Strategies on AWS [SAA-C02]
+02:58
+EMR Overview [SAA-C02]
+04:10
+Databases Summary
+05:52
+HANDS-ON LAB
+Deploy an Amazon RDS Multi-AZ and Read Replica in AWS
+1:00:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Databases On AWS Quiz
+15:00
+CHAPTER 7
+
+Advanced IAM
+36:14
+
+AWS Directory Service [SAA-C02]
+07:32
+IAM Policies [SAA-C02]
+15:46
+AWS Resource Access Manager (RAM) [SAA-C02]
+04:53
+AWS Single Sign-On [SAA-C02]
+02:57
+Advanced IAM Summary [SAA-C02]
+05:06
+CHAPTER 8
+
+Route 53
+1:13:59
+
+DNS 101
+13:56
+Register a Domain Name - Demo
+07:46
+
+
+Route 53 Routing Policies Available on AWS
+00:39
+
+Route 53: Simple Routing Policy - Demo
+03:29
+Route 53: Weighted Routing Policy - Demo
+07:07
+Route 53: Latency-Based Policy - Demo
+04:39
+Route 53: Failover Routing Policy - Demo
+04:03
+Route 53: Geolocation Routing Policy - Demo
+04:57
+Route 53: Geoproximity Routing Policy (Traffic Flow Only) - Demo
+03:02
+Route 53: Multivalue Answer Policy - Demo
+04:03
+DNS Summary
+05:18
+
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Route53 Quiz
+15:00
+CHAPTER 9
+
+VPCs
+4:45:04
+
+VPC Overview
+12:11
+Create Your Own Custom VPC: Part 1 - Demo
+20:27
+
+Create Your Own Custom VPC: Part 2 - Demo
+06:39
+
+
+NAT Instances and NAT Gateways - Demo
+13:01
+
+Network Access Control Lists vs. Security Groups - Demo
+15:12
+
+Custom VPCs and ELBs - Demo
+02:19
+VPC Flow Logs - Demo
+05:45
+
+Bastions
+03:28
+
+Direct Connect
+03:39
+Setting Up Direct Connect [SAA-C02]
+02:37
+
+Global Accelerator [SAA-C02]
+11:47
+VPC Endpoints [SAA-C02]
+10:53
+AWS PrivateLink [SAA-C02]
+03:36
+AWS Transit Gateway [SAA-C02]
+02:40
+
+AWS VPN CloudHub [SAA-C02]
+02:00
+AWS Network Costs [SAA-C02]
+03:35
+VPC Summary
+15:15
+HANDS-ON LAB
+Creating a Basic VPC and Associated Components in AWS
+45:00
+HANDS-ON LAB
+Work with AWS VPC Flow Logs for Network Monitoring
+1:30:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - VPCs Quiz
+15:00
+CHAPTER 10
+
+HA Architecture
+3:28:52
+
+Elastic Load Balancers
+06:06
+Load Balancers and Health Checks - Demo
+15:43
+
+
+
+
+Advanced Load Balancer Theory [SAA-C02]
+07:03
+Auto Scaling [SAA-C02]
+05:15
+Launch Configurations and Auto Scaling Groups - Demo
+08:19
+
+
+HA Architecture
+06:22
+
+Building a Fault-Tolerant WordPress Site: Getting Set Up - Demo
+10:31
+
+
+Building a Fault-Tolerant WordPress Site: Setting Up EC2 - Demo
+21:24
+
+Building a Fault-Tolerant WordPress Site: Adding Resilience and Auto Scaling - Demo
+20:09
+
+Building a Fault-Tolerant WordPress Site: Cleaning Up - Demo
+04:12
+Building a Fault-Tolerant WordPress Site: CloudFormation - Demo
+06:35
+
+
+Elastic Beanstalk
+05:20
+High Availability with Bastion Hosts [SAA-C02]
+04:19
+On-Premises Strategies with AWS [SAA-C02]
+04:37
+HA Architecture Summary
+07:57
+
+
+HANDS-ON LAB
+Getting Started with CloudFormation
+1:00:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - HA Architecture Quiz
+15:00
+CHAPTER 11
+
+Applications
+2:06:22
+
+SQS [SAA-C02]
+10:50
+
+Simple Workflow Service
+05:47
+Simple Notification Service
+04:05
+Elastic Transcoder
+02:35
+API Gateway
+09:43
+
+Kinesis 101 [SAA-C02]
+09:08
+Web Identity Federation and Cognito
+07:23
+Event Processing Patterns [SAA-C02]
+08:13
+Applications Summary
+08:38
+HANDS-ON LAB
+Scaling EC2 Using SQS
+45:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Applications Quiz
+15:00
+CHAPTER 12
+
+Security
+46:03
+
+Reducing Security Threats [SAA-C02]
+05:35
+
+Key Management Service (KMS) [SAA-C02]
+13:35
+CloudHSM [SAA-C02]
+03:49
+Systems Manager Parameter Store [SAA-C02]
+13:08
+
+
+Secrets Manager [SAA-C02]
+02:18
+AWS Shield [SAA-C02]
+03:15
+Web Application Firewall (WAF) [SAA-C02]
+04:23
+CHAPTER 13
+
+Serverless
+2:16:45
+
+Lambda
+13:31
+HANDS-ON LAB
+Programmatically Utilizing Data From S3
+1:00:00
+Let's Build an Alexa Skill - Demo
+16:57
+
+
+Serverless Application Model (SAM) [SAA-C02]
+09:23
+Elastic Container Service (ECS) [SAA-C02]
+18:09
+Serverless Summary
+03:45
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Serverless Quiz
+15:00
+CHAPTER 14
+
+Good Luck!
+4:49:55
+
+Good Luck and How to Book Your Exam
+03:29
+
+Thank You and Next Steps
+01:26
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Good Luck! Quiz
+1:15:00
+QUIZ
+AWS Certified Solutions Architect Associate 2020 - Good Luck! - Challenge Quiz 2
+1:15:00
+PRACTICE EXAM
+AWS Certified Solutions Architect – Associate Exam
+2:15:00
+Your Progress
+0%
+
+COMPLETE
+
+Lesson Completion
+
+0%
+
+Lab Completion
+
+0 of 10
+
+Quiz Completion
+
+0 of 11
+
+NEW
+
+Learning Scheduler
+Tell us how many hours per week you can study.
+
+4
+5 Jan.
+HRS PER WEEKCOMPLETION DATE
+MEMBERS ONLY
+
+Practice Exam
+Unlimited attempts available. Each attempt is randomly generated. Retake the exam to gain confidence.
+
+MEMBERS ONLY
+
+Cloud Playground
+Cloud along in real time. This course supports Cloud Playground sandbox environments, so you can learn by doing in a real cloud environment.
+
+Certificate of Completion
+Complete at least 80% of the course before you can request a certificate of completion.
+
+Rate this course
+Loved it? Room for improvement? Let us know!
+
