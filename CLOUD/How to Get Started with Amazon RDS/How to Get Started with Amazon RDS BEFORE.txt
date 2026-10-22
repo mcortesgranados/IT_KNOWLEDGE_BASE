@@ -1,0 +1,35 @@
+Course Outline
+CHAPTER 1
+
+How to Get Started with Amazon RDS
+9:44:08
+
+Course Introduction
+00:50
+Deploying an RDS Instance
+06:43
+HANDS-ON LAB
+Deploy an RDS Instance
+1:45:00
+Multi-AZ and Read Replicas
+06:27
+HANDS-ON LAB
+Fail Over an RDS Instance
+1:45:00
+Backup and Recovery
+05:38
+HANDS-ON LAB
+Back Up an RDS Instance
+30:00
+Security and Monitoring
+08:50
+HANDS-ON LAB
+Secure an RDS Instance
+1:45:00
+Course Conclusion
+00:40
+HANDS-ON LAB
+Secure a Multi-AZ RDS Instance
+1:45:00
+HANDS-ON LAB
+Deploy a Secure Multi-AZ RDS Instance
