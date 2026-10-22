@@ -1,0 +1,94 @@
+Okay, welcome back Cloud Gurus.
+This lesson is about analyzing data
+with Amazon OpenSearch service.
+Let's have a quick breakdown
+of what this lesson will entail.
+We're gonna go ahead and go over what is OpenSearch.
+We're going to look at the different service features
+that we are offered, and then we're gonna have
+an example diagram showing how it could be used
+and we'll wrap things up with some exam tips.
+Okay, so what is OpenSearch?
+OpenSearch is a managed service allowing you to run search
+and analytics engines for many different use cases.
+It's important to know this is the successor
+to Amazon Elastic Search Service.
+So really they're interchangeable and you might see one
+or the other on the exam, however
+they serve the same function.
+So let's talk about some of these service features
+that you should know.
+Now, Amazon OpenSearch Service allows you
+to perform quick analysis.
+So with this service, you're able to quickly ingest, search,
+and then analyze your data within clusters.
+Now, this is commonly part of an ETL process.
+It's also a highly-scalable service
+so you can easily scale your cluster infrastructure
+while it's running the open-source
+OpenSearch services that AWS offers.
+Now, it does tie into IAM like every other AWS service does,
+and you can leverage other things like VPC, security groups
+encryption at rest and in transit, and you can even lock
+down your field-level security for your data.
+Now since it's AWS managed, there is some stability with it.
+So it's multi-AZ capable,
+with several different master nodes
+and automated snapshots in the background.
+Now it's also a flexible service.
+It actually allows you to use SQL
+for business intelligence applications or BI apps.
+And then the last point here is integrations.
+It allows you to easily integrate with things
+like Amazon CloudWatch, CloudTrail, S3, and even Kinesis.
+So with CloudWatch for example, you can actually set
+a destination for those log streams to your OpenSearch
+service where you can set up different indexes
+and then make different dashboards to view your data.
+Now, let's quickly go over an example diagram.
+On the left we have our data sources.
+So this can be anything from logs, servers,
+whatever you want to output data from.
+And then next to that, we have our input.
+So after all of that data is semi-normalized,
+we have our log files, our metrics, documents, configs,
+whatever you want to capture, process, and load
+into Amazon OpenSearch.
+And then with that input, we have our analytics.
+So our analytics are actually completed
+in our OpenSearch service.
+And then we have our output.
+So after we normalize or perform whatever analytics we want
+we can output data for different things
+like application monitoring,
+we can search and analyze files and logs.
+We can even gain real-time insights
+about our applications if we wanted to.
+So it's a pretty simple flow.
+Your data sources turn into input, which in turn
+get input into our OpenSearch service.
+We perform our analytics, our searching, our visualizations,
+and that gets output however we want it to.
+So we can pass it to a seam application like Splunk,
+or we can leverage it for infrastructure monitoring
+using in-house tools that you may have built.
+Now, let's go ahead and wrap things up with an exam tip.
+The first thing I want to point out is
+Amazon OpenSearch service loves logs.
+So if you're ever given a scenario on the exam that talks
+about creating a logging solution, involving visualization
+of log file analytics or business intelligent reports,
+there's a good chance OpenSearch is going to be included.
+You need to know that it is used
+as a managed analytics and visualization service.
+And again, AWS may still reference its predecessor
+Elasticsearch, but the same concepts apply.
+While the name is different,
+and there might be a few tweaks
+under the hood that are different,
+overall, the concepts are the same,
+they serve the same function.
+Okay, that's gonna do it.
+Let's go ahead, wrap this video up, take a short break
+and when you're ready to continue,
+we'll see you in the next one.

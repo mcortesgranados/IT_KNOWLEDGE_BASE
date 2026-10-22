@@ -1,0 +1,139 @@
+Hello cloud gurus and welcome back.
+In this lesson, we're gonna be taking a look
+at two AWS surfaces, namely Athena and Glue.
+So we're gonna kick it off by taking a look at Athena.
+What is it, why do I want to use it
+and what do I need to know about it?
+And then we'll see, what is Glue?
+Now, why are we talking about two services?
+Well, they commonly go hand in hand,
+so we'll take a quick look at how we can use them together
+to get some pretty powerful results.
+After that, we're gonna wrap it all up
+with some of those handy dandy exam tips.
+So let's go ahead and dive right on in.
+So our first question we're gonna answer is, what is Athena?
+Well, the official definition is that Athena
+is an interactive query service
+that makes it easy to analyze data in S3 using SQL.
+Now, think about that for a second.
+Up until now, we've gone through this,
+what can be considered a potentially painful process
+of having to transform our data and load it into a database.
+What if we could just skip that?
+What if we could just query the data
+as it sits in that data lake,
+as it sits in that S3 bucket?
+That's what Athena allows us to do.
+Basically, we can talk directly to our data
+and we don't have to go through that process
+of loading it up into a traditional database.
+Now that's pretty cool if you ask me.
+So if Athena is a serverless query language for S3
+then what is Glue?
+Well glue is actually a pretty handy tool.
+What it allows us to do is stick things together.
+You might have most recently used this in school
+where you had two pieces of paper that you needed,
+oh, I'm sorry.
+You'll have to excuse me, that's the wrong kind of glue.
+Now, the AWS Glue is a serverless data integration service.
+Effectively, what it allows us to do
+is perform those ETL workloads without managing
+or running traditional EC2 instances.
+So what does that mean?
+Well, effectively, it kind of replaces EMR.
+What we can do now is simply use Glue
+to do that extract, transform load of our data
+without having to spin up a huge fleet of EC2 instances
+and use third party open source tooling
+to transform that data.
+Okay, so we're talking about some serverless architecture.
+So how would we put Glue and this Athena service together?
+Well, the actual architecture diagram
+for this is pretty simple, and that's a good thing
+because there's very few times in life
+when you're building that big data application
+and you could use that word simple.
+So it all starts off with your data
+that's being stored in S3.
+Now you have all of this unstructured data,
+it's coming from all of these different sources
+and effectively you need to put it in a format
+that you can then easily query.
+If there's no guardrails around what the data looks like,
+we wouldn't be able to run those SQL queries
+to get us that insight that we need to have.
+So you're gonna point Glue at this data,
+and what it's gonna effectively do is build you a catalog,
+build you a structure for that data.
+Now, once that's built,
+you actually have a few different options.
+Now it is good to know
+about the Amazon service called Redshift Spectrum.
+It's actually a flavor of Redshift,
+and you don't really need to know too much about it
+for the exam that you're gonna be taking shortly
+but at a high level,
+it allows you to use Redshift
+without having to load all of that data
+into the Redshift database itself.
+Now, that's great if you're already using Redshift
+but our other option here is to use Athena.
+What Athena can do is take that data
+that Glue has so nicely structured
+and run queries on it without having to load it
+into that database.
+It would then be very easy to use something like QuickSight
+which at a really high level
+is effectively Amazon's version of Tableau,
+it can help you visualize this data
+so you can simply combine storing data in S3,
+structuring it with Glue,
+querying it with Athena and QuickSight
+to give you a dashboard with all of your needed insights.
+Now I know,
+that was a very quick tour without a lot of depth
+in these services,
+and that's because on the exam they're only gonna be covered
+at a very high level.
+We have a lot of other big data content available for you
+if you'd like to go deeper on each one of these tools
+but for now, let's go ahead
+and wrap it up with some exam tips.
+So if you're faced with a scenario on the exam
+where it's asking for a serverless SQL option,
+namely where you need
+to query some data out of your S3 bucket,
+you wanna think Athena.
+This could be data from a BI application.
+This could also be login data.
+Keep that in mind on the exam.
+You can use Athena to query logs stored in an S3 bucket.
+So let's take a look at a few more exam tips here for us.
+Our first one,
+both Athena and Glue are going to be serverless options.
+They are fully managed by AWS,
+and there's actually very little configuration
+that you are going to be responsible for.
+This makes it a pretty simple rollout on your end.
+We wanna keep these tools at another high level overview
+so it's good to know generally what they are.
+Athena is serverless SQL, Glue is serverless ETL.
+That's about as much as we're gonna have to know
+for this particular test.
+And they do work together very well.
+So while Athena can work by itself,
+maybe if you already have that data
+that has a structure to it,
+Glue can help you design a schema for that data.
+So keep both of these in mind.
+It's good to know what they do, and it's also good to know
+when they are used as distractors on the exam.
+And one last tip here for us.
+If you're ever cleaning windows,
+try using old newspapers instead of rags.
+This will leave your windows with a streak free shine.
+All right, folks, thanks for going through Athena
+and Glue with me,
+and I can't wait to see you in the next video.

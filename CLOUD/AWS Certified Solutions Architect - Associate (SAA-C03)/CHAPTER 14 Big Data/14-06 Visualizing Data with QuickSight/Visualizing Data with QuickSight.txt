@@ -1,0 +1,128 @@
+Well, hello again.
+Welcome to this lesson
+where we're gonna discuss visualizing data
+using Amazon QuickSight.
+In this lesson, we're gonna cover a few topics,
+including what Amazon QuickSight is.
+We'll look at some features and some use cases.
+We'll discuss dashboards,
+users, and groups.
+We'll have a quick overview of an architecture example,
+and then we'll go over some exam tips.
+Okay, let's go ahead and talk data visualizations
+and business intelligence.
+Amazon QuickSight is a fully managed serverless business
+intelligence, data visualization service that is meant
+to simplify the process of creating interactive dashboards.
+It allows you to easily share these dashboards
+with specific users and groups
+and enhance data accessibility and collaboration.
+Now, with that understood,
+let's talk about some features and use cases.
+Let Amazon QuickSight is a great tool for various purposes,
+including business data visualizations,
+ad-hoc data analytics,
+and the extraction of crucial data-driven business insights,
+it's a versatile tool for various data related tasks.
+The service actually offers extensive integration
+capabilities connecting with services like Amazon RDS,
+Amazon Aurora, Athena,
+Amazon S3, and many others.
+It facilitates seamless data access
+across multiple platforms.
+You need to know the term SPICE.
+This is a robust in-memory engine
+that excels at performing advanced calculations
+and boosting data analysis efficiency.
+SPICE stands for Super fast
+Parallel In-memory Calculation Engine.
+Now, for greater security,
+there is an enterprise offering,
+which is not free, and it allows the implementation
+of Column-Level Security,
+which is going to allow for better safeguarding
+of specific sensitive data.
+Now, for this exam, you really don't need
+to be greatly familiar with how Column-Level Security works.
+However, if you decide to do the data analytics exam
+or a database exam,
+you're gonna wanna look into this a little bit more.
+Lastly, it is essential to be aware
+that QuickSight's pricing is structured on a per session
+and per user basis.
+This offers flexibility
+for different usage scenarios throughout your company.
+Okay, let's move on to dashboards,
+users, and groups.
+QuickSight provides you the capability to create users
+for accessing the platform,
+and in the enterprise version,
+you can also create groups
+to streamline user management.
+Now, one huge thing to call out here is
+that QuickSight users and groups exist
+solely within the QuickSight ecosystem.
+Do not confuse them with IAM users and groups.
+The next point here is regarding dashboards.
+QuickSight dashboards offer the convenience
+of stored configurations
+and filters for a tailored user experience.
+Each user can have their own dashboard if they want.
+And lastly, you have the flexibility to share dashboards
+and analysis results with specific users and groups.
+This enhances collaboration and information sharing.
+It is essential to call out that shared dashboard.
+Users can see the underlying data together.
+Keep that in mind.
+Now, let's go ahead and take a high level look
+at a QuickSight architecture example diagram.
+In this example, we have our Amazon S3 bucket,
+which is going to contain all of our data
+and we want to analyze that
+for our business intelligence needs.
+We set up some glue crawlers to crawl that data,
+and then we also went ahead
+and created data catalogs based on all of that crawl data
+with the Crawlers within the bucket.
+Now, after we've got all of that set up,
+we can add the additional portions
+to our actual architecture,
+which includes cataloging data using Redshift Spectrum,
+which remember from earlier lessons uses shared clusters
+to process that data without having to actually load it.
+And we can also integrate Amazon Athena
+with the data catalog, so we can easily use SQL queries
+to query the different data in place.
+Now, one of Amazon QuickSight's biggest integrations
+is actually Athena itself,
+so we can actually go ahead
+and directly integrate with QuickSight
+to build dashboards based on our Athena queries.
+This is a very popular scenario on the exam,
+so be certain you understand
+how they can integrate at this level.
+Okay, let's go ahead and wrap things up
+with some exam tips regarding QuickSight.
+When you're ready to dive into your data,
+Amazon QuickSight is a great solution.
+If business intelligence is mentioned,
+Amazon QuickSight is the name to remember.
+The service seamlessly integrates
+with various AWS services like RDS,
+Aurora, Athena, and S3.
+Be sure to remember that architecture diagram
+that we just went over.
+The service offers pricing options based on per session
+and per user usage.
+In addition to that, the enterprise edition,
+which again is not free,
+unlocks advanced features like CLS.
+Lastly, you need to know the term SPICE.
+Remember that this is a powerful in-memory engine
+powering QuickSight analytics capabilities.
+Now, that's gonna do it for this lesson
+on visualizing data with QuickSight.
+We'll end here.
+We could take a quick break,
+grab some coffee or some tea,
+and then we will pick back up with the next lesson.

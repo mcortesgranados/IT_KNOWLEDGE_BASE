@@ -1,0 +1,188 @@
+Hello, Cloud Gurus
+and welcome back.
+In this lesson, we're going to be learning
+about all things Kinesis related.
+So as you probably could have guessed
+we're going to start off with, what is Kinesis?
+Why do I want to use it?
+And then I hope you're sitting
+down because we've got Kinesis Data Streams,
+Kinesis Data Firehose, Kinesis Data Analytics,
+Kinesis versus SQS, Kinesis and the Turkey Sandwich.
+Okay. One of those might not be real,
+but it's going to be a lot of Kinesis
+wrapped up with some of those handy exam tips.
+And so let's go ahead and dive right on in.
+So to answer that first question, what is Kinesis?
+Well, Kinesis, you can kind of think of it like a highway,
+a big road to transport lots of stuff.
+You throw as much stuff as you want
+on that highway and, well, it can move it for you.
+It can take data from point A
+and get it to point B in real time,
+or nearly real time for some variants of Kinesis.
+So Kinesis is all about moving that data along.
+So right off the bat
+we have 2 forms of Kinesis that you're going
+to need to be generally familiar with
+for this particular exam.
+The first is called Kinesis Data Streams
+and Kinesis Data Streams is real-time.
+Now it's as real-time as we can ever possibly get.
+That's always a little bit of a gotcha,
+nothing's ever real-time in IT,
+but this is as fast as it possibly could happen.
+Getting data from one point to another.
+And we're going to compare that to Kinesis Data Firehose.
+Now Data Firehose, it's not quite as real-time.
+It will get the data there in nearly real-time,
+within about 60ish seconds,
+and Kinesis Data Firehose has limited endpoints
+that you can send that data to,
+where Data Streams really has an unlimited possibility
+of where you can send your information to.
+So on first glance you might be thinking, wow Alex,
+Data Streams just sounds better.
+It sounds like Firehose has a lot of limitations,
+and I know that's tempting, but let's take a look first
+at what it would actually take
+to set up Kinesis Data Streams.
+So we're going to view a quick architecture pattern here.
+Now we have the producers.
+Producers are just something that's making data.
+Maybe this is an EC2 instance,
+maybe this is a web client,
+maybe this is a mobile phone, a server,
+it doesn't really matter what it is,
+but it is something that is creating information.
+Could be a log, it could be stats on those IOT sensors,
+the type of data isn't particularly relevant,
+but you want to move it from one endpoint to another.
+So what you would do
+is you would provision Kinesis Data Streams,
+and you're going to have to decide how many shards
+you're going to create.
+Now, shards can only handle a certain amount of data.
+You're going to have to scale how many shards
+do you need to have.
+And you're also going to have to create something
+called a consumer.
+Now, a consumer is just something
+that's going to take that data in,
+process that content, and put it
+in that endpoint that you have selected.
+Now that endpoint really could be anything,
+because these consumers, well,
+this is something that you're going to have to write.
+You're going to have to use that Kinesis SDK
+to build this application.
+And you're going to have to handle scaling this application
+by defining how many shards that you're going to have.
+So the upside is, it's in real-time.
+The downside is, it's honestly a lot of work
+to put together.
+This is why AWS started with Kinesis Data Stream,
+and then released a second service
+called Kinesis Data Firehose.
+So let's take a look at that really fast.
+So Data Firehose is much, much simpler.
+Data Firehose handles the scaling for you.
+Data Firehose handles building out that consumer,
+namely you don't have to write that code.
+This is kind of the managed version
+of an already managed service.
+Amazon has really shaved off all
+of those square corners that you might stub your toe on.
+So with Kinesis Data Firehose, you send data
+to the service and it has a few supported endpoints
+where you can then put that data.
+It could be S3, could be Redshift,
+could be Elasticsearch, right?
+It could be something like Splunk as well.
+There is support for limited third party endpoints.
+So effectively, it does nearly the same thing
+as Data Stream, it's just a lot simpler.
+Now Kinesis Data Stream or Firehose,
+it's not really going to process that information
+as it goes through,
+but maybe you'd like to.
+We can use Kinesis Data Analytics
+paired with Firehose or Data Stream,
+to process our information using standard SQL.
+Now, what this means is it's really simple
+to set up a situation where data comes in
+in one format and gets changed.
+Maybe we will want to sanitize those logs.
+Maybe our IOT devices, well, it's not
+in a format that we can easily load into our database.
+So we can run our SQL on this data, effectively in real time
+as it's being pushed through.
+There's no servers to manage.
+You don't have to worry about scaling.
+It's going to handle all of that behind the scenes.
+So you're never stuck trying to provision shards,
+or resources, or instances, or anything along those lines.
+And just like the rest of AWS, you only pay for the amount
+of data that you are passing through the service.
+You're only paying for how much you are using.
+Now for this particular exam, you are going to
+have to be aware of a scenario that might pop up for you.
+So if you're looking for a message broker,
+that messaging queue, which service do we pick?
+We've already talked a lot in this course about SQS.
+That's Simple Queue Service.
+It's easy, it doesn't require a lot of configuration.
+The downside is it doesn't offer real-time message delivery.
+So if your application requires
+real-time message delivering,
+namely, you cannot possibly have delay in those messages,
+that's when you're going to want to look towards Kinesis.
+Now, Kinesis, it's going to be a bit more complicated
+to configure.
+There's more work that you're going to have to do.
+And generally it's focusing on big data style applications,
+but it does provide that real-time communication.
+So if you're on the exam and you're asked to choose
+between Kinesis versus SQS, remember SQS is simpler,
+but it doesn't offer real-time.
+Kinesis, bit more complicated,
+but it does hit that real-time checkbox.
+So for my first exam tip, if you see anything
+real-time, think Kinesis.
+Now that real-time has a little bit
+of an asterisk next to it.
+If the scenario says near real-time,
+think Kinesis Data Firehose.
+If it says real-time, then you want to use Data Streams.
+That's really what it comes down to.
+A lot of the scenarios are going to be based
+around speed of that data moving through.
+And if it talks about streaming any sort of data,
+you automatically want to be looking
+for answers that include some form of Kinesis.
+Now, a few more tips here for us.
+Remember with Kinesis versus SQS, both can handle messages,
+both can handle data, but Kinesis is the only option
+that's real-time.
+If you're asked in a situation to transform
+that streaming data, think Kinesis Data Analytics,
+because we can apply that SQL to our data
+as it's moving through.
+Now on the exam, if you're asked for a solution
+that automatically scales your streaming service,
+Data Firehose is the only option that does this for you.
+For Data Streams, you're going to be responsible
+for determining how many shards you need to have.
+Now, if you're looking at our big data exam,
+you'll have to know a bit more about this
+and how do we actually pick how many shards
+we're going to have to have, but for this particular exam
+it's fine just to know it at a high level.
+And my last tip here for everybody, if you're ever cooking
+with green onions, don't throw those stems away.
+If you put it in a glass of water,
+they'll actually start to regrow.
+And within a few days to maybe a couple of weeks,
+you might have some new tasty onions for that next meal.
+Alright, folks, thanks for going through Kinesis with me.
+And I can't wait to see you in the next lesson.

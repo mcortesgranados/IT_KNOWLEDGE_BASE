@@ -1,0 +1,139 @@
+Welcome back, Cloud Gurus.
+In this lesson, we'll talk about
+"Implementing Amazon Managed Streaming for Apache Kafka,"
+"also known as Amazon MSK."
+So what should we expect to learn here?
+We'll have a brief Amazon MSK overview,
+we'll talk about important components and concepts,
+we'll discuss resiliency in Amazon MSK,
+we'll look at some good things to know,
+we'll talk about security and logging,
+and then we'll wrap it all up
+with some exam tips for you to take with you.
+So what is Amazon MSK?
+Amazon MSK is a streaming service used for Apache Kafka,
+and it's a fully managed service that enables you to build
+and run applications that need Apache Kafka
+to process streaming data.
+What it does is it provides you control-plane operations,
+so it will go ahead and create, update,
+and delete clusters as required,
+and the beauty of this is that it allows you
+to just leverage the data plane operations for Kafka,
+so you can work on producing and consuming
+your streaming data,
+and not worry about the other underlying infrastructure.
+So this service is very good for existing applications
+that need to leverage the open-source versions
+of Apache Kafka,
+so it'll actually allow
+for support for existing applications, existing tools,
+and different plugins that leverage this type of service.
+Now let's move on to important concepts and components.
+The first term you want to know is broker node,
+so you specify the amount of broker nodes
+per Availability Zone that you want to create
+at cluster creation.
+There's also ZooKeeper nodes,
+and these are actually created for you.
+We have producers, consumers, and topics,
+so the Kafka data-plane operations
+allow you to create topics,
+and then you can produce and consume the data
+using those topics.
+And lastly, there's flexible cluster operations,
+so since it handles the control plane,
+it will perform cluster operations for you,
+or you can help it using the console, CLI,
+or any API within any SDK.
+So you may be asking how resilient is this service?
+The first thing is that it allows for automatic recovery,
+so Amazon MSK will do automatic detection
+and recovery from common failure scenarios,
+so it allows for minimal impact, which is great.
+The service itself will detect broker failures,
+and when it does,
+it'll work on mitigation or replacement
+of those unhealthy nodes.
+It also tries to reduce data,
+so it's going to try and reuse storage from older brokers
+during those failovers to reduce data needing replication,
+so all of this adds up to a low impact time.
+So the impact time is really limited
+to however long it takes Amazon MSK
+to complete detection and recovery,
+and since it's all automated, it's a very low impact time.
+Now after recovery,
+producers and consumer applications
+continue to communicate with the same broker IP address
+as it did before.
+So as you can see, it's a very resilient service.
+Now let's move on to good things that you should know,
+so these might not be on the exam,
+but they're good to know just in case.
+The first is MSK Serverless.
+Now this is a cluster type
+within the Amazon MSK service itself
+that offers serverless cluster management,
+so it will automatically provision and scale for you.
+Now MSK Serverless is actually fully compatible
+with Apache Kafka,
+so there's no reason to not use it if you desire to.
+You actually use the same client applications
+for producing and consuming the data.
+And then lastly, we have MSK Connect.
+This allows developers to easily stream data
+to and from Apache Kafka clusters,
+so it's essentially a nice feature to have
+in the service to make things easier.
+Now, like all services in AWS,
+security and logging are pretty big.
+Firstly, it integrates with Amazon KMS
+for server-side encryption requirements.
+Amazon MSK will always encrypt your data at rest.
+That is a default option, and it will always do it.
+It uses TLS 1.2 by default for any in transits encryption
+between brokers in your cluster.
+Now you can override this as you see fit,
+but it's good to know that by default
+it is encrypted in transit.
+Broker logs can be delivered to services
+like Amazon CloudWatch, Amazon S3,
+or even things like Amazon Kinesis Data Firehose.
+By default, Amazon MSK will collect metrics
+and then send those to CloudWatch
+where you can view them,
+and if desired, set some type of alarm.
+And then lastly, like all Amazon services,
+Amazon MSK actually logs all API calls to AWS CloudTrail,
+so that's going to do it for this service.
+Before we move on, let's take a minute
+to go over some exam tips.
+Understand that this is a fully managed service
+for running and building Apache Kafka data streaming apps,
+so if it's Apache Kafka related,
+you might want to think about this service.
+The service itself handles control-plane operations,
+so this means creation, updating,
+and deletion of your clusters.
+It allows you to leverage the data-plane operations,
+so you can work on producing and consuming the data
+as you see fit.
+It provides automatic recoveries,
+so the service is going to detect
+and then automatically mitigate most common failures
+that go along with Apache Kafka.
+It integrates with Amazon KMS
+for service-side encryption by default,
+and it uses TLS 1.2 for all in-transit communications.
+And lastly, it allows for logging,
+so you can push broker logs to CloudWatch, S3,
+or Kinesis Data Firehose,
+and you log all API calls to AWS CloudTrail.
+So for the exam,
+just be sure to keep this service in mind
+whenever you read things about
+a fully managed Apache Kafka-compatible service.
+That'll do it for this lesson.
+When you're ready, end here,
+and then we'll pick up in the next one.

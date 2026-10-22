@@ -1,0 +1,145 @@
+Okay, hello, Gurus. Welcome back.
+In this lesson, we're gonna talk about processing data
+with EMR, which stands for Elastic MapReduce.
+Now, in this lesson, we're gonna cover several topics,
+touching on what is ETL, what is EMR.
+We will talk about storage within EMR.
+We're gonna discuss clusters and nodes.
+We'll look at purchasing options and cluster types.
+We'll go over some architecture,
+and then we'll have an exam tips portion.
+So what is ETL?
+ETL, which stands for extract, transform, and load,
+are processes that are critical components
+of data management and analysis.
+The high level overview of ETL is that it's a process
+that involves the systematic extraction of data
+from various source systems.
+The transforming or reshaping of that data
+to meet specific business requirements is a major factor.
+And then at the end, you finally load it
+into a target database or a data warehouse
+for further analysis and reporting.
+ETL processes allow for valuable insights to be gained
+when you're making critical business decisions.
+Now, building off of that knowledge,
+let's dive into one of AWS's managed services
+for completing these processes.
+This is known as Amazon EMR,
+and it stands for Elastic MapReduce.
+EMR is meant to provide an easier way
+to manage infrastructure
+and run playbooks for your ETL processes in the cloud.
+It's considered a big data platform,
+and it allows use of popular industry open-source tools
+like Spark, Hive, and HBase for processing your data.
+Now, don't worry,
+you don't need to know these different tools in depth
+for this exam,
+but you do need to know they are supported.
+Now, let's talk about EMR storage.
+There are three types of storage within the EMR service
+that you can leverage.
+The first is the Hadoop Distributed File System,
+otherwise known as HDFS.
+This is a scalable and distributed file system
+that's specific to Hadoop
+and it distributes your data across nodes.
+This type of storage is extremely popular
+for caching results during the processing of your data.
+The next option is the EMR File System,
+or otherwise known as EMRFS.
+This actually allows Hadoop to access data
+directly from within Amazon S3
+as if it were a part of the HDFS storage system.
+Generally speaking, people will use S3
+to store input and output data,
+but you usually avoid storing intermediate data there.
+The last option is the local file system.
+This is just what it sounds like,
+locally connected storage disks
+for each instance in your cluster.
+These are instance store volumes,
+so you need to remember that they go away
+each time an EC2 instance spins down.
+In other words, do not store important data there.
+Now, next up, we have clusters and nodes.
+Clusters are simply groups of EC2 instances within EMR,
+and these instances are called nodes.
+Now, you need to be familiar with node types.
+A primary node manages your cluster,
+coordinates data distribution,
+and even tracks status and health of the cluster.
+A core node is responsible for actually running your tasks
+and even storing your data in HDFS.
+These are meant to be used for long-running tasks.
+And lastly, we have task nodes.
+These are meant to only run one task
+with no storage on the systems.
+These are optional, and they usually get ran
+using spot instance types.
+Now speaking of that,
+let's talk about purchasing options and cluster types
+now that we know the node types.
+You can run on-demand EC2 instances, of course,
+and these are going to be the most reliable option,
+but also the most expensive option.
+You can purchase reserved instances for EMR.
+They are the same as when they're used
+for general EC2 compute,
+and typically architects use these for their primary
+and task nodes since those are long-running.
+However, you can also purchase spot instances.
+These are frequently used for task nodes
+as they can terminate with little warning.
+This is also the cheapest option offered for compute,
+as you probably know already.
+Lastly, clusters themselves can be either long-running
+or they can be temporary,
+and they refer to temporary clusters
+as transient clusters in AWS.
+Please be familiar with that term.
+Now, here is an example architecture diagram for EMR
+in regard to using the service.
+You can see we have our cluster in our VPC and our subnet.
+And these clusters need access to the EMR service,
+which means they need internet access
+or VPC endpoint access.
+Otherwise, EMR cannot manage the cluster properly.
+The same connectivity requirements go for using S3
+of via EMRFS.
+So you either need internet access or VPC endpoint access.
+Now, hopefully the solutions architect in you is yelling,
+"Don't use internet access
+because of the data transfer costs,"
+and you would be correct.
+You should leverage a VPC endpoint
+for accessing S3 whenever possible.
+Okay, let's move on to some quick exam tips
+and then we can move on to a demonstration lesson,
+which is coming up next.
+First, remember
+that EMR is an AWS-managed big data platform,
+and it allows you to process vast amounts of data.
+When using it, the same EC2 purchasing options apply
+that are available for normal instances.
+For the exam,
+keep an eye out for any scenarios involving toolsets
+like Hive, Spark, HBase, and Presto.
+Any of those will likely involve EMR
+for processing your data.
+Also, keep an eye out for any mention of Apache Hadoop
+and Apache Spark.
+Both of those are big indicators
+for using this service as well.
+Please be sure to remember the storage types,
+especially HDFS and EMRFS for accessing S3.
+And then lastly, remember, this service is perfect
+for ETL processes for massive datasets, web indexing,
+training machine learning models,
+and even large-scale genomics projects.
+Anytime there's vast amounts of data, consider EMR.
+Now, that'll do it for this lesson on EMR.
+Let's go ahead and take a quick break
+and then we can jump into the demonstration lesson
+which is coming up next.

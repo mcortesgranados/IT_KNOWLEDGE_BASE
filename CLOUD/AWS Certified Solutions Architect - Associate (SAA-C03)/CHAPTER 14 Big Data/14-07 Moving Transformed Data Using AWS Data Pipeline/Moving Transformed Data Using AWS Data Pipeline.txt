@@ -1,0 +1,141 @@
+Hello, Cloud Gurus.
+Welcome to this lesson, Moving Transform Data
+using AWS Data Pipeline.
+What can we expect to see during this lesson?
+The first thing we'll do is we'll go over
+what AWS Data Pipeline is.
+We'll also look at it a little bit deeper
+with an overview section.
+We'll discuss different components that you should know.
+We'll look at popular use cases of the service.
+We're going to take a look at an example diagram
+to help reinforce how this works.
+And then, we'll wrap things up
+with some exam tips for you to take with you into your exam.
+Now, AWS Data Pipeline is a managed extract,
+transform and load service, or ETL, used
+for automating movement and transformation of your data.
+So now that we know how it's defined,
+let's have a quick overview.
+The service is essentially a web service that allows you
+to define data driven workflows and then automate those.
+You create steps that are dependent
+on previous tasks completing successfully.
+Within it, you get to define parameters.
+And these parameters are specific
+to your data transformations.
+AWS Data Pipeline actually enforces
+your chosen logic that you implement here.
+The service itself is highly available.
+Since AWS hosts the service they manage
+the highly available nature of it,
+as well as the distributed infrastructure.
+And a bonus note is that it's fault tolerant.
+And building off of this, since they do manage it,
+it automatically retries failed activities,
+and you can configure notifications
+via Amazon SNS for failures,
+or really even successful tasks. It's up to you.
+Now, the service works with many
+different Amazon storage services.
+It easily integrates with things
+like Amazon DynamoDB, Amazon RDS,
+Amazon Redshift, and Amazon S3.
+And those are just some of the popular ones
+that it integrates with.
+Now, it also works very closely
+with certain AWS compute services.
+And, in this instance, think of things
+like Amazon EC2 or Amazon EMR for specific compute needs.
+Okay, so now that we know the service a little bit deeper,
+let's look at different components that you should know.
+The first is a pipeline definition,
+and this essentially specifies the business logic aspect
+of your data management needs.
+So what do you need done and how do
+you need it to be completed?
+There is managed compute, which the service
+will create for you so the service
+will create things like EC2 instances
+to perform your activities,
+or you can even leverage existing EC2.
+There's task runners and these are EC2 instances
+that pull for different tasks and perform them
+when they find them in the pipeline.
+And then the last thing here is data nodes.
+And these define the locations as well as the type
+of data that you're going to be inputting
+and outputting of the pipeline service.
+Now, one more thing I did want to mention is activities
+and activities are pipeline components
+that define the work to perform.
+Now, let's move into some popular use cases
+for this service, the first would be processing data
+in Amazon EMR using Hadoop streaming.
+We can import or export DynamoDB data from a table.
+We can copy CSV files or data
+between S3 buckets in a checked manner
+and we can look at exporting RDS data to Amazon S3.
+So you can set a scheduled trigger
+that essentially exports your table data, moves it to S3
+and then can notify you when it's complete.
+And the last scenario here would be copying data
+to Amazon Redshift.
+So maybe you need to copy data from Amazon S3
+into Redshift so you can analyze it a little bit further.
+Well, with this pipeline service, you can do that.
+Now, let's look at an example diagram on how this works.
+So in this instance, we're looking at exporting MySQL Data
+to Amazon S3 in order to generate reports.
+So, at the top here, we have our data pipeline.
+And on the bottom we begin to see our resources.
+So we have EC2, we have RDS, we have Amazon S3
+and then we have Amazon EMR on the right
+so that we can go ahead and generate our reports.
+So the first thing we would do is we would set up
+our task runners to authenticate into our database.
+So we would provide the credentials
+in a secure manner so our task runners can log
+into the database and do what they need to do.
+We would then look at exporting our data from RDS
+into Amazon S3, and we would do so using
+those task runners that are authenticated into our database.
+And after our data is exported to Amazon S3,
+we can then leverage that to generate reports
+in our Amazon EMR service.
+Now, the cool thing about AWS Data Pipeline
+is you can set schedules for specific tasks.
+So, for instance, maybe you want to authenticate
+into the database on a daily basis
+so you can verify that it's working.
+And with that daily task, maybe we also want
+to export our database daily as well,
+so we can export our data daily using a similar task.
+And then, you also have weekly tasks.
+So maybe you want to generate a report
+at the end of each week using that daily data
+that we exported with the other tasks.
+So there's some flexibility around scheduling
+your tasks as you see fit.
+Now, let's go ahead and move into some exam tips.
+You need to know that the service
+is a managed ETL service for ETL workflows
+and it automates movements and transformations of your data.
+It's a data driven service so it uses data driven workflows
+and you can create dependencies
+between tasks and activities.
+It easily integrates with many
+different AWS storage services,
+like DynamoDB, RDS, Redshift, and S3.
+And it also integrates with compute,
+like we talked about, so things like EC2 and EMR.
+We can also integrate with Amazon SNS,
+so we can set up notifications for failures,
+or even successes and other workloads as well.
+And then, some keywords to look out for on the
+exam are anything relating to managed ETL services, automatic
+automatic retries of ETL services, and data driven workflows.
+So, with that, I hope you have gained a good understanding
+of what AWS Data Pipeline does and how it's used.
+We'll end things here, and then when you're ready,
+we'll pick up with the next lesson.

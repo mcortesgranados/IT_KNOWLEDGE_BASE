@@ -1,0 +1,152 @@
+Welcome back Cloud Gurus.
+This lesson is gonna cover some exam tips
+so we can review some of the more important parts
+of the lessons in this big data section.
+To start things off,
+here are four questions you should ask yourself
+when you're taking your exam,
+what kind of database actually works
+for this particular scenario?
+How much data do you actually have to use?
+How much do you have to manipulate,
+and how much do you have to analyze?
+Is serverless a requirement within the scenario
+or are you supposed to leverage actual compute resources
+for your requirements?
+And lastly, how can you optimize the costs
+associated with your big data workloads?
+If you ask yourself these four questions during your exam,
+you're likely going to have an easier time
+isolating which answer is going to be best
+for the scenario at hand.
+Now, moving on, the first topic we want to discuss
+is regarding Redshift and EMR.
+Remember, while Redshift is a relational database,
+it is not meant to be a replacement
+for using RDS and traditional applications.
+This is meant to be used for a large scale data warehousing
+and data analytics.
+The service does support
+both single availability zone deployments
+and multi-availability zone deployments.
+You can create your clusters in different availability zones
+with the service,
+and currently it only supports two different AZs
+at this point in time.
+Remember, there's no ability or capability
+to convert between a single and multi-AZ cluster deployment,
+but you can create a snapshot
+and then restore it into a new cluster
+with your desired config.
+Also, recall that Amazon EMR is made up of EC2 instances.
+What this means is that you can employ
+standard EC2 instance cost saving measures
+like savings plans and reserved instances.
+If you see Apache Hadoop or Apache Spark
+within the scenario,
+you will likely want to go ahead and leverage EMR
+as part of the solution.
+This service offers several built-in open source tools
+that allow you to process vast amount of big data.
+It can actually go ahead and leverage things
+like Hadoop Distributed File Systems, EMRFS,
+which again, remember, allows you to integrate with S3
+as a storage system,
+and even local storage for transient data.
+Now, moving on, let's talk about Kinesis, Athena, and Glue.
+Remember that Amazon Kinesis will be the only service
+that allows for real-time responses and streaming of data.
+If the question asks for a real-time solution
+to process and move data,
+look for an answer that includes a Kinesis Data Stream.
+Remember that both Amazon SQS and Kinesis
+can both act as queues.
+Now, each service has its own pros and cons of course,
+and SQS is far easier and simpler to use for messaging.
+However, Kinesis will be much faster
+and you can actually store data for up to one year
+within your stream.
+If you see anything regarding serverless SQL commands,
+it's going to mean you will likely want to use
+Amazon Athena.
+The beautiful part about this service
+is that it uses these common SQL commands
+to query your data, which is stored in S3
+without actually having to manipulate the data.
+And lastly,
+remember that Glue is meant to be a serverless ETL service.
+It can easily help you create a schema for your data,
+which can then be paired with Athena for an easy query.
+Furthermore, remember that you can go ahead and query Athena
+using QuickSight to build dashboards and visualizations
+for business intelligence needs.
+Now, one thing to wrap up here before we move on,
+it's also important to call out to know the difference
+between Data Firehose and Data Streams within Kinesis.
+Data Firehose is going to be near realtime,
+and Data Streams are going to be considered real-time.
+Understand that key difference.
+Now, moving on and continuing with QuickSight,
+let's go ahead and talk about that service,
+we'll talk about OpenSearch
+and a little bit of Elasticsearch
+just to cover all of our bases.
+If you need to create a dashboard for visualizing data,
+you're likely going to want to leverage Amazon QuickSight.
+This is the go-to tool for this type of scenario.
+Amazon OpenSearch is meant to be primarily used
+for analyzing files and data like log files
+and other various documents.
+This is especially useful within an ETL process
+or for analyzing near real-time data like Clickstream data.
+With that, remember that OpenSearch is the successor
+to Amazon Elasticsearch service.
+You might see one or the other on the exam,
+but they both serve the same purpose
+in an architectural way.
+Now AWS is phasing out Elasticsearch on the questions
+and it very well might not even appear anymore,
+but I do like to call it out
+just in case it does come up on your particular exam.
+Okay, next up, let's talk about Data Pipeline.
+Remember, this is a managed ETL service within AWS.
+It's meant to help implement automated workflows
+for both movement and transformation of your data
+within your ETL process.
+It integrates very easily
+with different storage services in AWS.
+This includes things like Amazon RDS
+and even Amazon S3 buckets.
+It also integrates with compute services as well.
+So think things like EC2 and EMR.
+And the last exam tip here to take away
+is to remember that this is perfect
+for data-driven and task dependent ETL workloads.
+Moving on, the last main exam tips here
+are regarding Amazon Managed Streaming for Apache Kafka,
+otherwise known as MSK.
+Remember that MSK is a managed service
+for building and running
+your Apache Kafka streaming applications.
+The service actually handles
+all of the control plane operations for you.
+So this is things like creation, updating,
+and even deletion of the actual infrastructure.
+What you have to worry about
+is managing the data plane operations.
+So that would be the actual application side of things.
+Now, one neat feature that's built into this service
+is that you can push your broker logs
+to different places like CloudWatch, Amazon S3,
+or even Kinesis Data Firehose, depending on your use case.
+And the last point I want to call out here
+is that just like every other service,
+the API calls for this service
+can and will be logged to CloudTrail.
+However, don't confuse that with Kafka application calls,
+those are not the same thing.
+Now that's gonna do it for this exam tips lesson
+regarding our big data section.
+Let's go ahead and end here.
+Take a much needed break, and then when you're ready,
+we'll pick up with the next section.

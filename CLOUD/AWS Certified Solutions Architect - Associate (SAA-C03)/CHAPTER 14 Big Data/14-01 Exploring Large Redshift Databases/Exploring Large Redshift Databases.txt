@@ -1,0 +1,177 @@
+Okay, welcome back, gurus.
+In this lesson,
+we're gonna explore large Redshift databases.
+Throughout this lesson, we're gonna cover several topics.
+We're gonna talk about the three Vs of big data.
+We'll talk about what Amazon Redshift is.
+We'll discuss an overview and some uses.
+We'll dive into high availability, snapshots, and DR.
+We'll discuss Redshift Spectrum and Enhanced VPC Routing.
+And then we'll wrap things up with some exam tips.
+All right, so what are the three Vs of big data?
+The three Vs of big data refer
+to three primary characteristics
+that are often used to describe
+and differentiate big data from traditional data.
+The first is volume.
+And volume refers to the sheer amount of data
+that is being generated and collected.
+Big data is characterized by large and massive data sets.
+And these typically exceed the capacity
+of traditional data processing systems.
+Now for this, we're talking terabytes, petabytes,
+or even exabytes of data.
+It's a lot.
+The next V is variety.
+Variety describes the various types of data
+that make up big data.
+So essentially it encompasses things
+like structured data, like databases,
+semi-structured data like XML or JSON,
+and even unstructured data like text, images, and videos.
+Big data regularly involves data from multiple sources
+in multiple formats.
+The next is velocity.
+And velocity pertains to the speed
+at which data is generated, processed, and analyzed.
+Big data sources can produce data
+at an incredibly fast pace.
+And you have to be able to keep up with it.
+Think applications like realtime
+or near-realtime data streams from things like warehouses
+or weather senses, social media posts and comments,
+or even financial transactions around the globe.
+Analyzing this data quickly is a key challenge
+in big data applications.
+And these three Vs are at the heart of it all.
+Now let's go ahead and jump into Amazon Redshift.
+What is Amazon Redshift?
+This is a fully managed data warehouse service in the cloud
+that can handle massive amounts of data,
+even on the petabyte scale.
+It is essentially a super-sized relational database.
+And it's really become a go-to choice
+for many big data applications in AWS.
+A fun fact about this service is
+that its name was actually chosen
+because AWS wanted to entice people
+to transition from using Oracle databases
+and instead tap into the power of Redshift.
+Now, Amazon Redshift is
+an incredibly large data warehousing solution
+with a massive capacity of up to 16 petabytes of data.
+With such vast storage capabilities,
+there's really no need to split your extensive data sets.
+And this helps make data management more streamlined.
+Now, since this database is considered relational,
+it means you can work with it
+using your familiar SQL and business intelligence tools,
+simplifying your interaction and analysis.
+Now, the service is based
+on the PostgreSQL database engine type.
+But it is crucial to note that Redshift is not meant
+for handling online transaction processing workloads.
+It's primarily tailored
+for analytical and data warehousing tasks.
+It's also important to understand
+that Redshift is not intended to serve
+as a replacement or standard RDS databases.
+These two services have distinct use cases
+and they should be chosen
+based on the specific data management and processing needs
+that come up.
+Now, one thing to call out is that AWS loves to brag
+that Redshift stands out
+by delivering incredible performance gains.
+It's noted to provide
+up to 10 times the speed and efficiency
+when compared to other cloud-based data warehouse options.
+Now, what sets Redshift apart from other services
+and solutions is its column-based data storage.
+This is different than the traditional row-based approach.
+This design enables
+highly efficient, parallel-query processing,
+and it makes it a powerful choice
+for data analysis and data retrieval.
+Okay, let's talk about high availability, snapshots,
+and disaster recovery.
+I mean, we are planning on being solutions architects.
+So this is a major topic for us to know.
+A newer release for this service is
+that Redshift now supports
+multi-availability zone deployments.
+It's good to know that currently the service will only span
+two Availability Zones at this time.
+However, since it used to only be Single-AZ,
+this is a huge release.
+Now when you need to,
+you can take snapshots of your databases.
+These are going to be incremental
+and allow for a point-in-time recovery.
+Also, these can be either automated or manually initiated.
+One thing to call out is
+that these snapshots are always stored in S3,
+but you cannot manage the underlying bucket directly.
+That's a common trick question on the exam.
+You have no control over the storage holding your snapshots.
+And lastly, right now, there is no option
+for converting from a Single-AZ deployment
+to a Multi-AZ deployment, or vice versa.
+So because of that,
+be sure to plan your architecture accordingly.
+One important note I wanted to call out for the exam itself.
+Any scenarios on the exam
+that are needing to optimize Redshift insert performances
+should favor large data inserts.
+What this means is you should leverage large batch inserts
+whenever you can in order to optimize your performance.
+In fact, this is actually the official recommended approach
+from AWS.
+Now moving on,
+let's talk about a neat feature called Redshift Spectrum.
+This feature allows you to efficiently query
+and retrieve data from S3
+without the need to actually load that data
+into your Redshift tables.
+This capability essentially streamlines your data access,
+which is massive.
+It leverages massive parallelism,
+which allows the feature to run extremely fast
+against large data sets.
+And it actually uses Redshift servers
+that are independent from your own cluster,
+which is awesome.
+There's also a feature called Enhanced VPC Routing,
+where all copy and unload operations between your cluster
+and your data repos are directed through your VPC.
+This enhances data security and controls.
+And it also enables you to use things like VPC Endpoints,
+VPC Flow Logs, and other VPC features.
+Okay, let's go ahead and wrap this up with some exam tips,
+and then we can move on.
+It's crucial to remember that you should not use Redshift
+as a direct replacement for RDS.
+They serve different purposes.
+Amazon Redshift is a powerful relational database
+built on the PostgreSQL engine used for data warehousing.
+It's designed for handling vast amounts of data
+with capacities up to 16 petabytes.
+Remember that you can enhance availability
+by deploying a Multi-AZ cluster,
+but right now it only spans two AZs.
+For more efficient data processing in S3,
+consider using Redshift Spectrum.
+Remember, they use clusters
+that are independent from your own.
+And lastly, Redshift offers the capability
+to create snapshots for point-in-time recovery
+and even restoration to other regions.
+This provides powerful data management and recovery options
+for you to use.
+All righty, way to hang in there.
+That's gonna wrap up
+this exploring large Redshift databases lesson.
+Let's go ahead.
+We're gonna take a break.
+And then when you are ready,
+I will see you in the next lesson.
