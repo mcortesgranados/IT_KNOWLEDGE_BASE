@@ -1,0 +1,74 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+06:50
+
+Course Introduction and Course Scenario
+04:14
+
+The Exam Blueprint
+02:36
+
+CHAPTER 2
+
+Elastic Load Balancing
+3:37:22
+
+Elastic Load Balancing Overview
+05:23
+Understanding Application Load Balancers
+11:17
+Understanding Network Load Balancers
+05:42
+HANDS-ON LAB
+Configure an Application Load Balancer and Auto Scaling Group
+1:30:00
+HANDS-ON LAB
+Deploying a Highly Available Web Application and a Bastion Host in AWS
+1:30:00
+QUIZ
+Elastic Load Balancing Quiz
+15:00
+CHAPTER 3
+
+CloudFront
+26:57
+
+CloudFront Overview
+09:13
+Global Accelerator Overview
+02:44
+QUIZ
+CloudFront Quiz
+15:00
+CHAPTER 4
+
+Route 53
+48:51
+
+Route 53 and DNS Overview
+02:52
+Registering a Domain
+05:03
+Understanding Simple Routing Policies
+05:00
+Understanding Failover Routing Policies
+06:49
+Understanding Weighted Routing Policies
+03:36
+Understanding Latency Routing Policies
+02:21
+Understanding Geolocation Routing Policies
+03:28
+CNAME vs. Alias
+04:42
+QUIZ
+Route 53 Quiz
+15:00
+CHAPTER 5
+
+Conclusion
+03:00
+
+How to Prepare for the Exam
