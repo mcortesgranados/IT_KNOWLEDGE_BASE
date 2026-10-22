@@ -1,0 +1,112 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+05:10
+
+Course Introduction
+01:47
+Source Code for the Course
+03:23
+
+CHAPTER 2
+
+Introduction to Neptune and Graph Data Theory
+49:07
+
+Introduction to Neptune and Graph Data Theory
+00:30
+Understanding Graph Databases
+07:55
+AWS Neptune Overview
+10:25
+Label Property Graph Model
+05:09
+Resource Description Framework Graph Model
+10:08
+QUIZ
+Neptune and Graph Data Theory
+15:00
+CHAPTER 3
+
+Setting Up Your Environment
+29:23
+
+Getting Started: Setting Up Your Environment
+00:45
+Setting Up Your Cloud Instance
+05:52
+
+Installing Serverless
+07:46
+QUIZ
+Setting Up Your Environment
+15:00
+CHAPTER 4
+
+Query Data from a Graph Database
+36:55
+
+Introduction to Querying Data from a Graph Database
+00:49
+Introduction to Apache TinkerPop
+05:36
+Working with Gremlin Query Language
+07:11
+Gremlin Query Demo
+08:19
+QUIZ
+Query Data from a Graph Database
+15:00
+CHAPTER 5
+
+Deploying the Neptune Environment
+44:29
+
+Introduction to Deploying the Neptune Environment
+00:37
+Architecture Overview
+02:31
+Deploying Neptune to AWS
+10:02
+Deploying the API Stack to AWS
+10:19
+
+Deploying the UI to AWS
+06:00
+
+QUIZ
+Deploying Neptune
+15:00
+CHAPTER 6
+
+Working with the Serverless Application
+2:13:50
+
+Working with the Serverless Application
+00:38
+Loading Data into Neptune
+13:22
+
+
+
+
+
+Application Demo
+08:50
+Tearing Down the Environment
+06:00
+HANDS-ON LAB
+Deploy a Serverless Application to AWS with Lambda and Neptune
+1:30:00
+QUIZ
+Working with the Serverless Application
+15:00
+CHAPTER 7
+
+Conclusion
+02:27
+
+Course Summary
+01:59
+Conclusion and What's Next
