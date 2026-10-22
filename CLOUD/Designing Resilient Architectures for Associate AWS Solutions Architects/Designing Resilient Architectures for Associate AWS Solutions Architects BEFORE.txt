@@ -1,0 +1,119 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+07:17
+
+Course Introduction and Course Scenario
+04:41
+
+The Exam Blueprint
+02:36
+
+CHAPTER 2
+
+Design Resilient Architectures
+1:07:16
+
+Understanding Cloud Computing
+11:42
+
+
+
+Overview of the Shared Responsibility Model and the AWS Well-Architected Framework
+06:14
+
+
+Exploring AWS Cost Optimization
+08:15
+
+Exploring AWS Reliability
+05:03
+Exploring AWS Performance Efficiency
+04:41
+
+Understanding Public, Private, Multi, and Hybrid Environments
+02:42
+Understanding Public and Private AWS Services
+02:51
+
+AWS VPC and AWS Infrastructure Overview
+10:48
+
+QUIZ
+Design Resilient Architectures quiz
+15:00
+CHAPTER 3
+
+Creating the AWS Organization
+2:37:50
+
+Scenario Review
+01:18
+Understanding AWS Accounts
+04:32
+Creating an AWS Account
+06:12
+
+
+Securing Your AWS Account Permissions
+06:53
+
+
+
+
+AWS Free Tier and Creating a Billing Alarm
+11:52
+
+Identity and Access Management (IAM) Overview
+05:39
+Creating IAM Users
+10:09
+Creating IAM Policies
+08:59
+Creating IAM Groups
+06:09
+Creating IAM Roles
+14:19
+AWS Organizations Overview
+05:22
+Creating an AWS Organization
+14:09
+Understanding IAM Access Keys
+02:17
+HANDS-ON LAB
+Introduction to AWS Identity and Access Management (IAM)
+45:00
+QUIZ
+Creating the AWS Organization quiz
+15:00
+CHAPTER 4
+
+AWS Core Services
+1:03:20
+
+EC2 Overview
+06:16
+
+S3 Overview
+05:40
+
+Introduction to CloudWatch
+05:24
+CloudTrail Overview
+05:58
+CloudFormation Overview
+03:54
+Route 53 Overview
+12:23
+Overview of AWS Databases
+08:45
+QUIZ
+AWS Core Services quiz
+15:00
+CHAPTER 5
+
+Conclusion
+03:00
+
+How to Prepare for Your Exam
