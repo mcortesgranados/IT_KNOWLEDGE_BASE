@@ -1,0 +1,40 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+08:42
+
+About the Training Architect
+01:33
+What You Should Know Going into This Course
+01:07
+Why Secure S3 — and Why Being Distrustful Is Good
+02:10
+S3 Security Best Practices — 10,000-Foot Overview
+03:52
+CHAPTER 2
+
+Securing Your S3 Data
+2:08:59
+
+Securing S3 through S3 Bucket Policies
+20:06
+
+Securing S3 through IAM Policies
+15:13
+
+Understanding and Using S3's Block Public Access Feature
+09:33
+Other S3 Features for Security: Versioning, Replication, Locking, Encryption
+03:03
+Auditing Access and Remediating S3 Security Issues
+06:04
+HANDS-ON LAB
+Securing Your S3 Bucket from A to Z
+1:15:00
+CHAPTER 3
+
+Conclusion
+01:25
+
+Conclusion and What’s Next
