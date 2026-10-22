@@ -1,0 +1,161 @@
+All right, way to go, Cloud Gurus.
+You've made it through this migration section.
+Let's have a quick run through of some migration exam tips
+to reinforce what we've just learned.
+Four questions to ask yourself in the exam.
+First, where are we going?
+Are we moving data from on-premises to AWS,
+from AWS to on-premises?
+Are we moving between cloud vendors
+or even to a third-party SaaS from AWS?
+There are many different options
+and scenarios that can come up,
+so be sure to distinguish what the source is
+and what the destination is.
+Secondly, how do we get there?
+Do we use Snowball devices to do a bulk upload to Amazon
+or do we use a migration service like AWS DMS
+to migrate our database in chunks?
+Building off of that, is it all at once?
+So again, do we leverage a Snowball device
+to move all of our data in one big move
+or do we migrate in small increments using replication
+for our servers in AWS?
+There are many different ways you can go,
+so be sure you understand the true use case in the scenario.
+And then finally, is it a partial migration?
+So if it's not all at once,
+how do we want to partially migrate this?
+Do we want to just use a basic S3 upload?
+Do we want to use multi-part upload?
+Do we want to use a service for server replication
+or do we want to just lift and shift everything all at once?
+These are 4 important questions you should ask yourself
+within scenarios that you see on the exam.
+So the first thing we want to talk about is migrating data
+with the AWS Snow Family.
+What should you know?
+Well, firstly, Snowball choices are really going to be based
+on how much data you're moving.
+It's good to know that Snowballs are perfect
+for moving many terabytes of data.
+So if you don't want to hog up
+all of your bandwidth on your network,
+you can use Snowballs instead
+and offload that storage migration to a device
+and then load that into Amazon S3
+by shipping them your Snowball devices.
+Now, Snowcone and Snowmobile
+are likely not to be on the exam as much as Snowball itself,
+but it's good to know just enough of a general overview
+for both of these services.
+And then lastly, when do we actually use Snowball?
+Well, it's best used in situations
+where you have slow to no internet.
+So think about that scenario I just gave you
+about not wanting to hog up all of your network bandwidth
+by uploading all of that data.
+In that case, you can use a Snowball
+to be much more efficient.
+Snowball is going to be faster
+and more secure in a lot of these situations.
+Let's move on to 3 exam tips for Storage Gateway.
+The first is a hybrid.
+Anytime you have on-premises storage,
+think which version of Storage Gateway
+could complement this.
+So if I need to store my data in S3,
+but I also need access to it on-premises
+in a quick or easy manner,
+think which Storage Gateway would I use?
+Another scenario is are you out of space?
+File Gateway is a perfect solution
+if your local network-attached storage is already full.
+Remember, this easily allows you to leverage AWS storage
+like you would any other
+local network-attached storage device.
+And thirdly, it's a VM.
+So Storage Gateway is run locally
+as a virtual machine on-premises.
+You deploy the template file,
+you connect it to your storage solution in Amazon,
+likely S3, and then you can connect to it locally
+within all of your virtual machines.
+Now let's move on to DataSync and the Transfer Family.
+DataSync is an agent-based solution
+that excels at one-time migration of file shares into AWS.
+So if you have files that live on-prem,
+but you need to shift them all into Amazon
+and be done with the on-premises solution,
+then DataSync is likely a good choice.
+Next, we have EFS and FSx.
+These are both viable locations
+for DataSync to transfer content into,
+and remember which one you would use
+for your particular operating system.
+That comes up quite a bit.
+And thirdly, the Transfer Family is going to allow you
+to use legacy file transfer protocols, so think SFTP,
+to give older applications the ability
+to read and write from S3 buckets.
+It abstracts the API calls
+and turns it into a legacy file transfer protocol.
+Let's move on to moving to the cloud with Migration Hub.
+Remember, Migration Hub is an organizational tool
+that's giving you a way to organize
+all of your migration steps.
+However, you will need other tools
+to complete the migration.
+It doesn't do it for you.
+It just helps you organize and track.
+The Database Migration Service
+is going to be your go-to tool
+for any sort of database migration.
+It works for both on-premises to the cloud
+or for even moving data between different RDS databases.
+And remember, it provides you that powerful tool
+known as the AWS Schema Conversion Tool.
+Lastly, do you have VMs?
+If so, Server Migration Service is going to be the tool
+that you'll want to use in order to migrate
+out of the data center and then into AWS.
+Now that we have those covered,
+let's quickly talk about the Application Discovery Service.
+This is going to allow you to quickly migrate
+entire applications to the cloud,
+and it does so by discovery.
+There's agentless discovery,
+which can be used via an OVA template file
+that's deployed to vSphere.
+You can also do an agent-based discovery,
+which uses, obviously, an agent,
+and it collects detailed information of your VMs
+on both Linux and Windows operating systems.
+So just remember, if you need to discover
+and collect detailed information,
+think Application Discovery Service.
+The next service is the Application Migration Service.
+Now, this service is commonly referred to as AWS MGN,
+and what it offers is an automated lift and shift service
+for you to migrate all of your infrastructure
+into the AWS Cloud.
+What it does is it allows you
+to replicate your source servers,
+and these can be things like basic VMs.
+They can be physical servers.
+They can even be Azure VMs in the Azure Cloud.
+And it replicates them into AWS
+for a non-disruptive cutover.
+And remember, there's a very impressive RTO and RPO.
+It's an RTO of mere minutes
+based on boot time of the operating systems,
+and the RPO is subseconds, so it's very fast
+and it allows you for immediate recovery essentially.
+Now that'll do it for these exam tips.
+Per usual, all of the references for these lessons
+are available at the documentation within the AWS sites,
+and you can see those listed here.
+Now let's go ahead.
+We'll take a break, stretch, get a glass of water,
+and when you're ready,
+we'll pick back up with the next section.

@@ -1,0 +1,165 @@
+Hello, Cloud gurus and welcome back.
+In this lesson, we're going to be taking
+a look at all of the different flavors of Storage Gateway.
+Now before we dive into the individual versions,
+we have to look at Storage Gateway as a whole.
+Why was the service built and how can we use it
+inside of our environment?
+Then we'll take a look at one of the most popular versions
+of Storage Gateway called File Gateway.
+We'll see how Volume Gateway can help us with our migrations
+of our current virtual machines into AWS,
+and then we'll take a look at Tape Gateway
+and how we can eliminate those pesky physical tape backups.
+And of course, we'll round it all out
+with some of those exam tips.
+So let's go ahead and dive right on in.
+The first question that we have to answer
+is: what is Storage Gateway?
+Well, Storage Gateway is a hybrid cloud storage service
+that allows us to merge on-prem resources with the cloud.
+Basically, what it allows us to do
+is take AWS and our physical on-prem resources
+and just staple them together.
+This can be really useful for when we do a lift
+and shift or a one-time migration
+out of the data center into the cloud
+or it can allow for long-term pairings of our architecture.
+It's really going to be based on our particular need.
+Now Storage Gateway by itself doesn't really get us much.
+There's a few different flavors that we have to discuss.
+The first one, and the one I'd say
+you're going to see on the exam the most,
+is called File Gateway.
+And what File Gateway does is, well,
+it's an NFS or SMB mount
+(SMB for those Windows folks out there)--
+basically it's a network file share.
+You can mount this file share locally
+and it secretly, or well, not so secretly
+because you've set it up, backs up your data into S3.
+Now there's a few different versions of File Gateway
+that we can set up.
+You can either back up all of your data into the cloud
+and it just acts as well, that gateway,
+or you can keep a cached copy of the most recently used
+files. This means you don't have to download
+the recently used content out of S3 if you don't want to.
+There's a few different versions of File Gateway
+that we can set up.
+I could keep all of my data locally on-prem
+and back it up into AWS, specifically into S3,
+or I could keep the most recently used copies
+of my files on-prem and keep everything else inside of S3.
+The scenario that you're going to run into on the test
+is going to be one where the user, or users,
+don't have enough on-prem storage space
+and your solution is going to be set up
+a cached file gateway.
+This allows those users to extend on-prem into the cloud.
+You get all the benefits of having the data physically
+on-prem and all of the benefits
+of having it backed up in S3.
+This can help with migrations as well.
+If you're working to move network file shares into AWS,
+you can set this up and have it run for a bit.
+Or have it run permanently,
+if you're looking for more of that hybrid solution.
+Now, when we say set this up,
+it is important to know--
+all of these Storage Gateway solutions are simply VMs
+that you're going to run inside of your on-prem environment.
+These VMs are provided by AWS.
+Let's take a little bit of a shift away
+from those network files shares into those volumes.
+Now you've got all of those virtual machines
+that are running on-prem,
+how do we back up those drives into the cloud?
+Well, that's where volume gateway comes into play.
+So this is an iSCSI mount, meaning it's going to be backing
+up those disks that those VMs are currently reading
+and writing to.
+You have that same cached or stored mode,
+depending on how much data you want to keep locally.
+But the important part is it's all backed up inside of S3.
+Now, from here, you can easily create
+those EBS snapshots and restore volumes inside of AWS.
+So what we can think of this as is an easy way to migrate
+those volumes from on-prem to become EBS volumes
+inside of AWS.
+Once again, this is another solution
+that's great for backing up content,
+or if you're looking for the migration,
+this can help bridge that gap.
+Now the last, and what I'd say is my favorite,
+is Tape Gateway.
+Tape Gateway allows you to skip
+having to physically deal with tapes.
+Yeah, I've been there.
+If you have too, you can probably relate.
+Swapping out tapes every week in your backup devices
+is not very much fun.
+Now, we can set up Tape Gateway and basically trick
+those backup devices into thinking
+that they're backing up to physical tapes, but they're not.
+They're backing up to Tape Gateway.
+That takes your data and stores it inside of AWS.
+Stores it inside of S3 Glacier, Glacier Deep Archive,
+depending on where you'd like to put it.
+You don't have to change any of your current settings
+or any of your current backup workflows, right?
+This is directly integrated as a VM on-prem
+and just like I said,
+tricks those backup services into thinking
+that they're backing up to a tape.
+It's encrypted, it's safe,
+so you don't have to worry about transmitting
+all of that sensitive data in plain text over the internet.
+So on the exam, what specifically do you have to know?
+Well, we want to focus on Storage Gateway
+being a hybrid solution.
+It's good for data migration,
+but it really excels for when you're going to have
+that data center and the cloud stapled together.
+So when you're looking at migration questions,
+think: which version of Storage Gateway
+is going to be the right answer?
+Do I need to keep my content cached?
+Do I need to migrate all of it?
+So when these hybrid storage scenarios come up,
+keep Storage Gateway in mind.
+You want to be thinking through all of the things
+we've talked about, which version of Storage Gateway
+makes sense in the given situation.
+Let's take a look at a few more exam tips.
+You just need to know the general use cases,
+the high-level version of,
+oh, the NFS service is out of storage? Great.
+We're going to set up File Gateway.
+Oh, I'm daring to deal with tape backups?
+We're going to use Tape Gateway.
+Out of space on-prem?
+Which Storage Gateway solves this issue?
+This is going to be a common problem that you run into,
+and based on the type of storage that it is,
+that will point you to the right Storage Gateway solution.
+While I love Tape Gateway,
+it's probably not going to come up as often.
+I'm not saying that you can just skip it
+or somehow erase the last 20 seconds out of your mind
+where we talked about it.
+It's good to know that it's there.
+It might be a distractor,
+but the primary focus on the exam
+is going to be on File Gateway and Volume Gateway.
+And in the many times that I've taken the exam,
+I've primarily seen the focus on File Gateway.
+Now that doesn't mean you have to know how to configure
+the VM or set it up or troubleshoot it.
+You just need to know the general scenarios.
+As this sort of topic is going to be pretty high level.
+And finally, filling your car tires
+with nitrogen can help them from deflating as quickly.
+Alright folks, thanks for going
+through Storage Gateway with me,
+and I can't wait to see you in the next video.

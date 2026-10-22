@@ -1,0 +1,183 @@
+QUESTION 1
+
+What would be the best way to migrate 80 TB of data into S3 if you have limited bandwidth at your data center?
+
+
+Direct Connect
+
+
+Snowball
+
+
+Over the internet
+
+
+S3 Transfer Acceleration
+
+Sorry!
+Due to the limited bandwidth, Snowball is the best choice. Reference Documentation: AWS Snowball (https://aws.amazon.com/snowball)
+
+Correct Answer
+Due to the limited bandwidth, Snowball is the best choice. Reference Documentation: AWS Snowball (https://aws.amazon.com/snowball)
+
+
+
+_________________________________________________________________________________________________________________________________
+
+
+QUESTION 2
+
+What is the easiest way to start sending your tape backups into AWS rather than keeping them on prem?
+
+
+Glacier Import
+
+CORRECT
+Tape Gateway
+
+
+Volume Gateway
+
+
+Monthly Snowball deliveries
+
+Sorry!
+Tape Gateway would be the best choice, as it can emulate a tape and then ship the data to AWS. Reference Documentation: Tape Gateway (https://aws.amazon.com/storagegateway/vtl/)
+
+Correct Answer
+Tape Gateway would be the best choice, as it can emulate a tape and then ship the data to AWS. Reference Documentation: Tape Gateway (https://aws.amazon.com/storagegateway/vtl/)
+
+_________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which service is best for the migration of relational databases, data warehouses, NoSQL databases, and other data stores to AWS?
+
+CORRECT
+AWS Database Migration Service
+
+
+AWS Application Discovery Service
+
+
+AWS Application Migration Service
+
+
+AWS Athena
+
+Good work!
+This service's sole purpose is to migrate existing databases and other data stores to AWS.
+
+_________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What tool would you recommend as the best choice for transferring large amounts of data between on-premises storage, edge locations, other clouds, and AWS Storage services?
+
+
+AWS DataImport
+
+
+AWS Snowmobile
+
+
+AWS Transfer Family
+
+CORRECT
+AWS DataSync
+
+Sorry!
+This is not a service. Reference: AWS DataSync (https://aws.amazon.com/datasync/)
+
+Correct Answer
+AWS DataSync is great for online data transfers to simplify, automate, and accelerate copying large amounts of data between on-premises storage, edge locations, other clouds, and AWS Storage services. Reference: AWS DataSync (https://aws.amazon.com/datasync/)
+
+_________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which of the following statements about DataSync is false?
+
+CORRECT
+DataSync always needs an agent when migrating data.
+
+
+DataSync works best as a solution for one-time data migration.
+
+
+DataSync encrypts data in-transit via TLS.
+
+
+DataSync can transfer data to archival storage, such as S3 Glacier Deep Archive.
+
+Good work!
+While DataSync usually uses an agent, an agent is not required when transferring between AWS storage services in the same AWS account. Reference Documentation: Q: How do I use AWS DataSync to transfer data between AWS Storage services? (https://aws.amazon.com/datasync/faqs/)
+
+_________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which service is meant to help you plan migrations of your applications to AWS through the collection of usage and configuration data from on-premises servers via either agentless or agent-based collectors?
+
+
+AWS Simple Notification Service
+
+CORRECT
+AWS Application Discovery Service
+
+
+AWS Migration Tracking Service
+
+
+AWS Database Migration Service
+
+Sorry!
+This service is for push notifications and Pub/Sub architectures.
+
+Correct Answer
+This service helps users plan migrations to AWS via the collection of usage and configuration data from on-premises servers.
+
+_________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+What would be the best way to migrate 100 PB of data into AWS?
+
+CORRECT
+Snowmobile
+
+
+Direct Connect
+
+
+Snowball
+
+
+Snowcone
+
+Good work!
+Due to the size, Snowmobile would be the most cost- and time-effective solution. Reference Documentation: AWS Snowmobile (https://aws.amazon.com/snowmobile/)
+
+_________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which tool would you use to migrate a database from on-premises to RDS?
+
+CORRECT
+Database Migration Service
+
+
+DataSync
+
+
+Snowball
+
+
+Server Migration Service
+
+Good work!
+The Database Migration Service would be the perfect choice for this situation. Reference Documentation: AWS Database Migration Service (https://aws.amazon.com/dms/)
+
+_________________________________________________________________________________________________________________________________
+

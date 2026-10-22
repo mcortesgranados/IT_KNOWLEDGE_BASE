@@ -1,0 +1,170 @@
+Hello, Cloud Gurus, and welcome back.
+In this lesson, we're going to take a look
+at moving to the cloud using Migration Hub.
+We'll start off with: What is Migration Hub?
+When do we want to use it,
+and what kind of migrations is it going to help us with?
+Then we'll take a look at the Server Migration Service,
+commonly known as SMS.
+We'll then pivot to database town
+and take a quick peek at the Database Migration Service.
+From here, we'll get a view
+of what does the Migration Hub look like inside
+of my console.
+And then we'll wrap it all out
+with some of those handy exam tips.
+So let's go ahead and dive right on in.
+So what is the AWS Migration Hub?
+Well, essentially, it's a single pane of glass
+that we can look through to track the progress
+of our application migration to AWS.
+It's more of a GUI-based service
+that allows me to record and schedule,
+and it integrates with 2 of the actual tools
+that do the heavy lifting, the SMS and the DMS service.
+At first glance, you might say this is just a GUI and it
+is--it's an organizational tool,
+but it really helps us to track and manage the 2 services
+that are doing the heavy lifting, SMS and DMS.
+So let's take a look at those tools
+and see how they can help us.
+So the first service we're going to take a quick peek at
+is the Server Migration Service.
+So in this imaginary situation,
+you have your very expensive,
+very robust VMware architecture up and running
+inside of your data center.
+And you say, "Alex, I'd like to move this with me."
+Okay, great.
+You don't have to just throw everything out the window
+and build it new inside of AWS.
+Using SMS, what you can do is schedule when you'd like
+these copies to happen.
+So what it's going to do is during the scheduled time window,
+it's going to take a copy of your underlying vSphere Volume.
+It's going to bring that data into S3.
+From here, it's going to convert that into an EBS snapshot
+and then create an AMI from that.
+So in a roundabout way,
+what it allows you to do is just take
+your VMware architecture and convert it to be an AMI.
+And that's really the summary that you want to have
+when you go sit the exam.
+Now, the second tool that we're going to see here
+is the DMS service, SMS's best friend.
+So the Database Migration Service kind of does
+the same thing, but with the database.
+So what is it can do is it can pick up
+that ugly, old Oracle database
+and run it through the Schema Conversion Tool
+and output that data into an Amazon Aurora database.
+Now the Schema Conversion Tool has a variety
+of different kinds of jobs that it can do,
+but its primary purpose is to take Oracle databases
+and SQL Server databases and convert them to Aurora.
+Now that is a gross simplification of this tool,
+but that's what we really need to know for the exam.
+The second thing it can do is it can take existing on-prem
+or standard RDS or EC2 architecture--
+basically a database anywhere--and move it into AWS.
+You can use the DMS service
+to consolidate multiple databases
+into 1 single piece of architecture.
+So this helps us as we don't have as many things to manage,
+and it also helps us during the migration process.
+So you just want to keep a high-level view of SMS and DMS
+in your head when you're looking at exam questions
+that talk about migrations.
+Now let's take a quick switch over to my console
+and take a look at the Migration Hub inside of my account.
+Alright. So in front of us here is the AWS Migration Hub.
+Let's take a look at some of its features here.
+Now, when we scroll down a little bit,
+we have 2 steps that we have to go through.
+We either get started with a migration if we already know
+what's happening inside of our environment,
+or we get started with the discovery,
+because it is vitally important for you to understand
+what's going on before you try to migrate it.
+So there's a few steps
+that it's going to try to walk us through here:
+discover, migrate, and eventually track the status
+of that migration.
+And there's quite a few discovery tools
+that we have available here to us.
+We have the Discovery Agent here,
+and what it's going to do is, well,
+you install it on your VMs, your physical architecture,
+and it just maps out what's going on inside of that OS--
+what packages you have, what services are running--
+giving you all the details.
+Here, we can deploy this Discovery Connector into
+our VMware vCenter to summarize information about our VMs.
+That can help us with recommendations when it comes time
+to spin up new EC2 architecture, create load balancers,
+all of those fun steps.
+Now if we take a quick step back to the dashboard here
+and click on the button for Migration,
+let's go through the process of
+at least quickly looking at these tools.
+We have the Server Migration Service
+that we just talked about that helps migrate our VMs
+into AWS as AMIs.
+There is integration with CloudEndure,
+with some third-party solutions as well.
+So it's not just AWS architecture.
+And then finally, DMS down here.
+Now, you don't have to know these tools in depth,
+or really much past just the general overview
+of what they do.
+I'm going to go ahead and leave it here.
+And let's hop back into the slides for some final exam tips.
+What we want to take away from this lecture is
+that we don't need to do it ourselves.
+If you're looking at an exam question
+that talks about migration,
+just understand which tool you're going to want to use.
+We want to keep in mind, DMS is going to be our go-to
+for moving databases
+and crucially migrating off of SQL Server and off of Oracle
+to something on RDS, namely Aurora.
+And SMS is going to be the best option for helping us take
+those existing VMs and moving them as AMIs into AWS.
+Alright. A few more tips here for us.
+Now, these tools are magic. as far as the exam is concerned.
+I know in the real world,
+there's a lot of configuration that you have to do.
+There is a ton of steps that we just glossed over,
+but those don't really matter
+as far as the exam is concerned.
+You just get to magically wave your migration wand,
+and everything happens for you.
+On the exam, remember the Schema Conversion Tool can help us
+migrate to Aurora or RDS.
+Hint, hint, hint.
+We want to migrate off of Oracle, off of SQL Server.
+Anytime you see those words pop up on the test,
+start thinking about how we can get off of
+those database engines.
+Now in the real world, you might have more
+of a hybrid environment where you leave some things
+in your physical environment
+and you take some stuff to the cloud.
+On the exam,
+generally favor scenarios where you're going to migrate
+everything into AWS.
+And once again, just keep it high level.
+Great to know what these tools are.
+If this interests you,
+please do a deep dive on this content.
+Go through, set it up, walk through this yourself.
+But as far as the test is concerned,
+we just need to know the general overview.
+And finally, if your router supports it,
+try creating a separate network for your IoT devices.
+Things like your thermostat, your light switches,
+these have far more security issues and should be isolated
+from your primary computing architecture.
+Alright, folks,
+thanks for taking a look at these migration tools with me,
+and I can't wait to see you in the next video.

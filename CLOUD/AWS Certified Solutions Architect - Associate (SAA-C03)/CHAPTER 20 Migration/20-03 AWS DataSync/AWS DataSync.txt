@@ -1,0 +1,118 @@
+Hello, Cloud Gurus, and welcome back.
+In this lesson,
+we're going to take a quick look
+at the AWS DataSync service.
+So we're going to kick this off
+with the very important question,
+what is DataSync?
+Where does it fit inside of my architecture?
+And then what does it look like
+to actually use this service?
+And then we'll end it all out
+with some of those handy exam tips.
+Now as you can probably tell,
+this is going to be a little bit of a quicker lesson,
+because we really only need to understand
+a general high-level utilization of this particular service
+for the Solutions Architect Exam.
+So let's go ahead and dive right on in.
+So what is DataSync?
+Well, it's officially defined as an agent-based solution
+for migrating on-prem storage to AWS.
+It allows us to easily move data between NFS and SMB shares
+into the cloud.
+So why do I want to use this service?
+Well, this is going to be a migration tool.
+You've got a whole lot of data on-prem.
+You got an NFS mount.
+You've got a large chunk of storage
+that you want to move to AWS.
+DataSync is going to be the setup that you'll want to use
+if this is more along the lines of a one-time migration.
+So what does it actually look like
+to configure and set up DataSync?
+Well here we have our on-prem server.
+And what you're going to have to do
+is install and set up the DataSync agent
+as this is an agent-based solution.
+Now from here,
+you're going to configure the DataSync service
+to show where is this data going to go.
+Now this is all encrypted
+as it's transferred over the internet,
+so you don't have to worry
+about folks being able to spy and see what you're up to.
+That's an important thing to remember for the exam.
+Provide secure transmission of your data.
+You get to decide, do I want my to end up in an S3 Bucket,
+an EFS File System--that shared block-level storage,
+or for the Windows folks out there, in FSx.
+The big takeaway from this
+is that we need to know it's an agent-based solution
+and it supports S3, EFS, and FSx.
+While actually setting it up
+does take a little bit more work
+than just looking at a diagram like this,
+this is about as much as we're going to have to know
+to pass the exam.
+Speaking of the exam,
+let's take a look at some of those exam tips.
+We have a couple of tools that might seem like they overlap.
+We've got DataSync.
+We've got Storage Gateway.
+When do I pick one versus the other?
+Well, we need to remember
+that DataSync is great for a one-time migration.
+If you want to have a more continuous setup,
+think Storage Gateway.
+Now that doesn't mean
+that Storage Gateway can't be used for a one-time migration,
+but, generally, they each have their own lane.
+Storage Gateway really excels
+when we want to setup that hybrid architecture
+where we want to take
+the on-prem architecture that we know and love
+and the AWS Cloud
+and staple them together,
+where DataSync is great for that lift and shift
+and then shut down of that data center.
+So a few more tips here for us.
+First one is going to be primarily one-time migrations,
+that's the use case.
+Now, like I said, in the actual world,
+it's not as cut and dry.
+However, on the exam,
+generally we want to focus on that one-time use.
+It is agent based,
+so you will have to install architecture on your end.
+You can't just magically point it to the DataSync endpoint,
+because that wouldn't work. (laughs)
+You have to have that agent properly set up
+and given permissions to then copy that data into AWS.
+You will need to be familiar
+with the general endpoints
+that DataSync can send information to
+S3, EFS, FSx,
+that's going to be our supported locations
+for where that data can end up.
+And then finally, high level.
+This walk through has been pretty high level,
+and it's about as much as you're going to need to know
+for the test.
+DataSync is not going to pop up in detail.
+You're not going to see very in-depth questions
+or troubleshooting.
+In fact, it might only show up as a distractor.
+Just know what we've talked about here so far
+and you should be good to go.
+Now finally, just a quick note for everybody,
+nearly 11% of all bank card pin numbers are 1234.
+That's actually kind of scary. (laughs)
+It's best to use a random number generator
+to create your own
+as that gives it much higher levels of security
+and a much lower chance
+that somebody is just going to randomly guess it.
+All right, folks,
+thanks for quickly going through DataSync with me,
+and I can't wait to see you in the next lesson.

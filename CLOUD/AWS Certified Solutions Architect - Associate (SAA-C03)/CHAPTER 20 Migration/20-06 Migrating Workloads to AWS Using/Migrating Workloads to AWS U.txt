@@ -1,0 +1,142 @@
+All right, welcome back Cloud Gurus.
+This lesson is going to take a look at migrating workloads
+to AWS using AWS Application Discovery Service
+or the AWS Application Migration Service.
+Let's take a look
+at what we are expected to learn throughout this lesson.
+The first thing we'll do is we'll look
+at the AWS Application Discovery Service.
+We'll talk about the different discovery types that go
+along with it, and then we'll move on
+to the AWS Application Migration Service
+or also known as AWS MGN.
+We'll look at the recovery time objective
+and the recovery point objectives for the AWS MGM service,
+and we'll wrap things up with some exam tips.
+So let's go ahead and dive in.
+The AWS Application Discovery Service, what is it?
+Well, it's a service that helps you plan all
+of your migrations to the AWS Cloud
+and it does this by collecting usage
+and configuration data about all of your on-premise servers.
+The cool thing about this service is it's meant to
+simplify your migration needs.
+It integrates with AWS Migration Hub
+which is going to further simplify your migration tracking
+and your aggregation of data
+for all of your status information
+and you can see everything within a single console.
+And lastly, it's a service that's meant to help you track,
+so it helps you easily view all of your discovered servers,
+you can group all of the servers by application
+and then you can track each grouped application migration
+in the console.
+So, how do we actually discover our on-premise servers?
+Well, that's where discovery types come in.
+Now, AWS Application Discovery Service offers you
+2 different types of discoveries.
+The first is Agentless, and then we have Agent Based.
+The Agentless discovery is performed
+via an Agentless collector.
+Now, what this collector is
+is an OVA file within VMware vCenter.
+So if you're not familiar with vCenter and VMware,
+an OVA file is simply a deployable file for a new type
+of virtual machine appliance that you can deploy in vCenter.
+Once you deploy the OVA,
+it helps you identify your different hosts and all
+of the VMs within that vCenter where you deployed it.
+The cool thing about this collector is it helps track
+and collect IP and MAC addresses,
+it'll collect information regarding resource allocations,
+so memory and CPUs,
+and then it will even collect the hostnames
+and track all of that information
+for you to simplify your migration processes.
+And then lastly,
+it collects a ton of utilization data metrics.
+So this is things like peak utilization for CPU, your RAM,
+and even disk IO metrics.
+So let's talk about Agent Based.
+Now, Agent Based discovery is
+via a deployed AWS Application Discovery Agent.
+What happens is you install this agent
+on each of your VMs and each of your physical servers,
+and AWS thought this through,
+so there is an installer for both Windows and Linux,
+so you can install it
+on pretty much every operating system that exists
+in an enterprise today.
+And since this is Agent-Based,
+it's going to collect a little bit more information.
+It'll collect static config data,
+your time-series performance information,
+it'll collect network connections, so inputs and outputs,
+and it will even dive in
+and collect and track operating system processes.
+And those are the 2 types of discoveries
+that this service offers.
+So with the AWS Application Discovery Service
+out of the way, let's move on to the AWS MGM service
+which is for migrations of applications.
+It's important to know
+that AWS does sometimes refer to this service as AWS MGN.
+Now, the first big point we want to make here is
+that AWS MGN is an automated lift-and-shift service
+for expediting your migration of applications to AWS.
+So the idea of this is to help simplify
+and expedite all of your migrations by lifting
+and shifting your entire application infrastructure
+and translating it to AWS.
+Now, what this does is it enables companies
+to lift-and-shift
+a large number of different physical, virtual,
+or even cloud servers
+due to the flexible nature of the service.
+And since it is flexible, it helps avoid cutover
+windows or disruptions when you are cutting over.
+Now, a third point here is that MGN
+replicates source servers into your AWS accounts.
+And when you're ready to go on
+it will automatically convert and launch on AWS
+to help your migrations go a lot quicker.
+So it's replicating to the cloud so you can take advantage
+of all of the different benefits that live within it.
+So cost savings, resiliency, et cetera.
+Now, the 2 key features of this service are RTO and RPO.
+So, Recovery Time Objective
+which is measured in just minutes
+and that's usually dependent on the OS boot time.
+And the next thing is our Recovery Point Objective,
+and this is typically measured
+in this sub-second range, which is insanely impressive.
+So due to this RPO, you can pretty much recover
+at any point in time after your migration.
+Okay, let's go ahead and wrap things up with some exam tips.
+We'll first cover the Application Discovery Service.
+Remember that this is for application migrations to easily
+and quickly migrate them to the AWS Cloud.
+It offers an Agentless discovery
+which is performed via a deployed OVA file in vCenter,
+so this allows for easy migration of your virtual machines.
+It also offers an Agent Based discovery
+and this is an installable agent that you can put on
+Windows and Linux to collect detailed information
+of both the virtual machines and the physical host themself.
+Then we talked about
+the Application Migration Service, or MGN.
+Now, this service is meant to offer an automated
+lift-and-shift of migrating infrastructure up into AWS.
+It does this by replication.
+It will replicate your source servers,
+so your VMs, your physical servers,
+or even other cloud servers like Azure VMs, for example,
+and it will move them into AWS for you to choose
+when you want to have a non-disruptive cutover.
+And then the last thing here is our RTO and RPO.
+Remember, RTO is measured in minutes
+and usually is dependent on the boot time,
+and then RPO is measured in sub-seconds.
+Now that'll go ahead and do it for these 2 services.
+We'll go ahead and end this here
+and when you're ready, we'll move on.

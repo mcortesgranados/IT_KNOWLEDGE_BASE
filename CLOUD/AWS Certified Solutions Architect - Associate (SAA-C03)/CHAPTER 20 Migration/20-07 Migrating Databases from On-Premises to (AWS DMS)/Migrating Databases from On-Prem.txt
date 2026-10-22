@@ -1,0 +1,211 @@
+All right, welcome back Cloud Gurus.
+In this lesson, we're going to look at Migrating Databases
+from On-Premise to AWS
+with the AWS Database Migration Service.
+During this lesson,
+we're going to cover a lot of different topics.
+We'll have a service overview
+so we can get comfortable with what the service is.
+We'll talk about how the service actually works
+and then we'll break into some important concepts
+that you should know for your exam.
+We're going to look at something that is known
+as the AWS Schema Conversion tool,
+which is a powerful tool
+and you need to know how it is used in migrations.
+We'll talk about the different migration types
+that are offered as well as migrating large data stores
+via what is known as AWS Snowball.
+And then lastly, we'll wrap things up with some exam tips.
+So, what is AWS DMS?
+Well, high level, it's a migration tool.
+It's a service that allows you
+to easily migrate relational databases, data warehouses,
+NoSQL databases, and even other data stores to AWS.
+However, a neat feature of this service
+is you can migrate data into the Cloud,
+or a combination of into the Cloud and onto On-Premise.
+However, it's important to know that one of the endpoints
+must live in AWS
+so it can't migrate from On-Premise to On-Premise
+or between different Cloud providers,
+at least one of the target databases
+or the source databases must live in AWS.
+Now, with this service,
+you have the option of performing
+either a one-time migration for all of your data,
+or you can use it to continuously replicate
+your ongoing changes.
+So you can make sure your source and targets
+stay in sync the entire time.
+Now, if you want to migrate different database engines,
+you can use the Schema Conversion Tool
+which is SCT for short,
+which allows you to translate database schemas
+into new platforms.
+Now, since this is a Cloud service in AWS,
+you gain the advantages of using AWS.
+So, we're talking things like cost optimization,
+efficiency, your security, and much more.
+So that's cool, but how does it work?
+Well, at a very basic level,
+DMS is simply a server running replication software.
+You create a source and a target connection
+for loading from and to.
+So, where is your data living
+and where do you want your data to live?
+You schedule what are called tasks to run on your DMS server
+in order to move your data however you see fit.
+Now, a cool feature of this service
+is that AWS DMS will create the tables
+and the primary keys for you if they do not already exist
+on your target.
+Or optionally, you can create your target tables
+beforehand if you want to do that instead.
+The beautiful thing about this service is you have options.
+Now, you leverage the Schema Conversion Tool
+for creating either some, or all of your tables,
+indexes, and much more.
+It's a powerful tool
+and you really need to know what it's used for on this exam.
+Now, with your connections,
+the source and the target data stores
+that they're connected to are referred to as endpoints
+within this service.
+So, you'll see that term on the exam
+if this service comes up.
+Now, here are some important concepts
+for you to know about DMS.
+You can easily migrate between source and target endpoints
+with the same engine types.
+So, an example would be migrating
+an On-Premise MySQL database
+to an RDS MySQL database in AWS.
+However, you can also migrate to different engines.
+So you can migrate between a source and target
+that are using different engines.
+An example here would be an Oracle database
+migrating to a PostgreSQL database in AWS,
+and you would do that migration
+using the Schema Conversion Tool in addition to AWS DMS.
+Now, you need to know this.
+You must have one endpoint that lives within an AWS service.
+This service cannot be used exclusively outside of AWS.
+So for example, you can't migrate On-Prem
+to a different On-Prem location
+since none of those endpoints live in the AWS Cloud.
+Now, let's dive into the AWS Schema Conversion Tool.
+This tool is powerful, and I do mean powerful.
+You leverage it to convert existing database schemas
+from one engine type to another.
+So, like we talked about Oracle to MySQL for instance.
+Now, it supports many engine types.
+You can convert many different types
+of relational databases,
+including things like OLAP or OLTP databases,
+and it even supports data warehouses themselves.
+It also supports many different targets.
+So, your converted schemas can be used
+for any supported Amazon RDS engine type,
+Amazon Aurora, or even Amazon Redshift.
+So, it's extremely flexible.
+Now, another cool feature
+is you can use the converted schemas
+with databases running on EC2
+or even just data stored in S3.
+So you don't have to migrate to a database service
+in AWS as long as the endpoint is somewhere in AWS,
+so an EC2 instance, for example.
+So, if you have a requirement
+where you need to run a database on an EC2 instance,
+due to some configuration options
+you can do that with this tool.
+So, now that we know more
+about the schema conversion tool,
+let's move on to the different migration types
+that you should know.
+There are 3 different migrations
+that you need to know for the exam.
+The first is a full load migration,
+and this is where all existing data from your source
+is moved to your target.
+While this is in progress,
+any changes made to your tables
+that are being loaded are cached on your replication server.
+We also have full load and change data capture,
+or otherwise commonly referred to as CDC.
+So, this is used when you have a full load migration
+plus, you want to capture any data changes
+that are occurring on your tables
+while they're being migrated.
+And then the last is CDC-only.
+So, you're only replicating the data changes
+that are occurring from the source database.
+Now, it's important to know that CDC
+is the only one that guarantees transactional integrity
+of your target database.
+You need to know this for your exam.
+Understand that you use change data capture
+to guarantee the integrity of your target database.
+Now, let's talk about migrating large data stores
+via Snowball.
+There's going to be some scenarios
+where you're having to migrate terabytes of information.
+And a common issue with that scenario
+is a bandwidth throttle.
+These large migrations can take up a ton of bandwidth
+and cause network throttles on your company's network.
+This is where a Snowball Edge device could come into play.
+You can leverage certain Edge devices and Amazon S3
+with AWS DMS in order to quickly migrate large data sets.
+The cool thing about this
+is you can still leverage the AWS Schema Conversion Tool
+to extract your data into Snowball devices
+and then into Amazon S3.
+Once that's all done,
+you can still use DMS to load your extracted data
+from Amazon S3 and migrate that data
+to your chosen destination like RDS for example.
+And then the last cool feature is it is also CDC compatible.
+So, you're still able to leverage change data capture
+for capturing your changes when you're extracting data
+to store it in Amazon S3.
+So, any scenarios dealing with terabytes
+or petabytes of information with network throttling.
+You might want to think about a Snowball device
+and AWS DMS for any database migration portion of it.
+Let's wrap things up with some exam tips.
+Understand that this is for easy database migrations.
+You can migrate relational databases,
+non-relational databases, data warehouses,
+and even other data stores to and from AWS.
+It works by running a replication server
+that's running software
+which executes specified tasks that you assign.
+We need to know the different migration types.
+So, understand the differences between full load,
+full load with change data capture,
+and change data capture-only migrations.
+You don't need to know them at an extremely low level
+but you need to know where you would use each.
+It's also important to know that you have to live
+within AWS for at least one of your endpoints.
+You cannot leverage this service
+for external-only migrations.
+Learn to love these Schema Conversion Tool.
+This tool is very powerful
+and it allows you to convert your database schemas
+to a new or different schema within AWS.
+And lastly, remember Snowball.
+If you need to migrate massive databases to the AWS Cloud,
+it's probably more efficient to use Snowball devices
+with AWS DMS.
+Personally, to me,
+these 3 here are the most important takeaways.
+The migrations,
+understanding that you have to include AWS
+and understanding this schema conversion tool
+and its use cases.
+Now, that's going to do it for this lesson.
+Whenever you're ready,
+will wrap things up and we'll see you in the next one.

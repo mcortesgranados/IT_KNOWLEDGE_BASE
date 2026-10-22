@@ -1,0 +1,210 @@
+Hello, Cloud Gurus, and welcome back.
+In this lesson, we're going to take a look at moving data
+in and out of AWS, using the Snow Family.
+The first question that we have to ask
+is: how do we migrate data?
+Because there's not always a clear-cut answer
+of how we make this happen.
+So we'll explore and summarize
+some of the options that we've talked about
+in previous lessons,
+and then we'll move into the Snow Family.
+And what makes up the Snow Family?
+What are those members?
+We'll learn about Snowcone, Snowball Edge,
+and last but not least, the Snowmobile--
+all nicely snowed-themed, of course--
+before we end it out with some of those exam tips.
+So let's dive right on in.
+How do we get data into the cloud?
+How do we get data out of the cloud?
+These are fundamental questions
+that we have been asking for years and I can't tell you,
+"Oh, here's the one perfect solution,"
+because everybody's situation is going to be unique.
+How we've been getting data into AWS so far
+is using the internet,
+copying data over that internet gateway
+to get resources inside of the VPC access to our content,
+or just copying data straight up into that S3 bucket.
+And it works, but there's potentially a few issues here.
+It could be slow.
+I think we've all experienced
+that slow home internet connection.
+Maybe we don't have a very robust channel
+in our office or data center,
+and it could also be a security risk.
+We're using that public networking space,
+and that could pose problems with those auditors.
+Now, we could use Direct Connect.
+It could be faster,
+depending on how big of a pipe we're paying for,
+and it's going to be secure,
+but it's not always the most practical.
+What happens if I need to copy
+terabytes or petabytes of data into AWS
+and then I'm turning off my data center the very next day?
+Well, it's not going to be cost effective or speed effective
+to just use Direct Connect for a very short period of time.
+That's really meant for more ongoing sort of situations.
+That's where the physical transfer method comes into play.
+Have you ever copied something to a flash drive
+and walked it over to your coworker?
+Yeah, the old reliable sneakernet.
+That's what we're doing here,
+but this is really sneakernet 2.0.
+We're taking our data,
+we're using a physical enclosure provided by AWS,
+and we're bypassing the internet altogether.
+That brings me to, what is the Snow Family?
+Oh, our official definition is that
+it's a set of secure appliances
+that provide petabyte-scale data collection and processing
+and migration and computed... all those good words.
+In reality, what it is--
+it's just a sack of hard drives that Amazon ships to you.
+Some sacks are small, some sacks are large,
+varying amount of storage,
+and some of these have built in computing,
+but it allows you to load up your data,
+load up your content,
+throw it on the back of your friendly mail carrier truck,
+and ship it physically to AWS.
+Now, the first part of the Snow Family
+that we're going to take a look at is the smallest,
+and what I would say is the cutest, the Snowcone.
+The Snowcone gives you 8 TB of storage,
+4 GB of memory, and 2 vCPUs.
+So that's a pretty--
+kind of an M style sort of EC2 instance
+with 8 TB of storage.
+So what do you do with that storage? That compute?
+Well, it's really designed for applications
+that aren't in a data center.
+That aren't even necessarily
+by any sort of actual computing infrastructure.
+Maybe you're collecting information from wind farms.
+Maybe you're one of those techs that has to climb up
+to the top of the windmill.
+You don't want to haul a lot of stuff up there.
+You take the small device, you download your data,
+you process it onsite, and when you're ready,
+you ship it back to AWS.
+It has direct Internet of Things sensor integration,
+it works with the AWS IoT platform,
+and it's great for those edge computing environments
+where power and space are constrained.
+Now, if you need more storage
+than 8 TB or a little bit more juice
+for that computing side,
+well, that's where the Snowball Edge comes into play.
+A Snowball Edge is a much bigger physical device.
+You can still pick it up by yourself,
+but you're not going to be climbing up a ladder with this one.
+It has between 48 TB and 81 TB in storage.
+There's a few different flavors of this,
+and it really depends on your needs.
+That storage option, well,
+it's really a device that focuses primarily on storage.
+It has some compute,
+but not as much as the compute Snowball Edge.
+If you have that machine learning application
+and you need an actual physical GPU,
+you can get that one built in.
+Now, for the exam, you don't have to know the specifics
+around the actual numbers
+or how much CPU or how much RAM there is.
+Just know in general, 50 to 80 TB for Snowball Edge--
+that's a good number to remember.
+It has that varying amount of CPU and RAM.
+It's good to know.
+It's perfect for when you're on a boat
+in the middle of the ocean.
+You got space, you got data,
+but you don't have that connection.
+It's also great for doing that one-time migration into AWS.
+Now, if you need more storage,
+well, that's where the Snowmobile comes into play.
+This is the heavy hitter, the big one.
+This is literally a semi-truck full of hard drives
+that drives up to your data center
+and downloads 100 PB of storage.
+Yeah, let that one sink in.
+That is a lot of information that you are moving.
+It's designed for companies
+that have exabyte-scale data center migrations.
+Before I started learning about AWS,
+I didn't even know what an exabyte was.
+That is more data than I could possibly comprehend,
+but some companies have that much
+that they're moving to AWS.
+It's really cool.
+You don't really need to know about it for the exam,
+I just think it's awesome.
+It might casually show up as a distracter.
+You probably don't need this.
+Good to know that it's there.
+I'd focus the majority of your time looking at Snowball Edge
+and to a lesser extent, Snowcone, Snowmobile,
+maybe Google that photo of the semi-truck and call it a day.
+Now folks, I got to say, unfortunately,
+I could not get a Snowmobile to show you in person
+so no hands-on demo this time,
+but we will end it out with some handy-dandy exam tips.
+So how do you transport your data?
+Well, there's a variety of solutions.
+You're going to have to pick the right one on the exam.
+Pay attention to the restrictions that are given to you.
+It might say that you cannot transfer the data
+over the internet, that you have a large amount of data,
+you have a slow internet connection, or very importantly,
+the data needs to be encrypted at rest and in transit.
+All of these, or a few of these, situations should lead you
+to pick an answer that includes a Snowball Enclosure.
+Now, a few more tips here for us.
+Now, those general use cases.
+Like I said,
+primarily, it's going to be talking about either storage,
+compute, or GPU versions of the Snowball Edge,
+but generally know what Snowcone
+and Snowmobile does as well.
+Snowcone:
+small, robust, little bit of compute,
+decent amount of storage--8 TB--
+nothing to really write home about,
+but it's great for space and power constraints.
+Snowball: this is what you're going to be using
+most of the time.
+Storage, compute, GPU varieties.
+Remember, about that 50 to 80 TB range
+is going to be a good number for you.
+Snowmobile:
+100 PB,
+really cool,
+very large truck,
+You probably don't need it.
+And it's good to know that Snowball, Snowmobile, Snowcone--
+they all work in both directions.
+You can use it to ship the data to AWS.
+You can also use those same devices
+to ship that data back to you.
+That's important to remember for the test
+because I've seen questions that talk about data migration
+out of AWS, and Snowball will work for that.
+Generally, timing on this
+is something that a lot of folks ask about.
+Normally, it's about a week.
+It all depends, though, on mostly what you do.
+If you get that Snowball Enclosure
+and don't do anything with it for a couple of days,
+obviously that transfer is going to take longer.
+If you immediately upload your data to it
+and throw it on the back of the mail truck,
+you're looking at about a week.
+And finally, make sure to keep an emergency blanket, shovel,
+and first aid kit in your car.
+You never know when you're going to need them
+and it's better to be safe than sorry.
+Alright, folks,
+thanks for looking at the Snow Family with me,
+and I can't wait to see you in the next video.
