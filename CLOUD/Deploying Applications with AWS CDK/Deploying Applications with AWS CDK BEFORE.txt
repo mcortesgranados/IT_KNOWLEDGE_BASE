@@ -1,0 +1,25 @@
+Course Outline
+CHAPTER 1
+
+Deploying Applications with AWS CDK
+2:45:09
+
+Course Introduction
+01:17
+
+Introducing the AWS CDK
+05:01
+HANDS-ON LAB
+Setting Up a CDK Project
+30:00
+Building a Serverless Application
+04:48
+HANDS-ON LAB
+Creating a Serverless Application with the AWS CDK
+1:00:00
+Managing Environments with the CDK
+01:57
+HANDS-ON LAB
+Setting Up and Tearing Down Environments with the AWS CDK
+1:00:00
+Conclusion and What’s Next
