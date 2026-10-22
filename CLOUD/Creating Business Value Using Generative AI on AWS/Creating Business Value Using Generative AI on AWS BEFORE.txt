@@ -1,0 +1,66 @@
+Course Outline
+CHAPTER 1
+
+Creating Business Value Using Generative AI on AWS
+1:18:16
+
+Creating Business Value Using Generative AI on AWS
+1 MONTH AGO
+
+UPDATED
+03:08
+How Generative AI Is Transforming Businesses
+1 MONTH AGO
+
+UPDATED
+02:28
+Understanding FMs and LLMs in the Context of Machine Learning
+1 MONTH AGO
+
+UPDATED
+08:31
+Generative AI Services Available from AWS
+07:17
+
+
+Demo: Building a Generative AI Application Using AWS Services
+1 MONTH AGO
+
+UPDATED
+15:39
+
+
+Demo: Exploring Amazon Bedrock
+1 MONTH AGO
+
+UPDATED
+04:59
+Demo: Building A Serverless Generative AI Application
+1 MONTH AGO
+
+UPDATED
+11:15
+
+Implementing Responsible AI: Avoiding Bias and Hallucinations
+1 MONTH AGO
+
+UPDATED
+07:56
+
+Ensuring Data Privacy When Building Generative AI Applications
+1 MONTH AGO
+
+UPDATED
+06:29
+
+Architecting for Sustainability and Cost Optimization
+1 MONTH AGO
+
+UPDATED
+05:06
+
+The Future of Generative AI
+1 MONTH AGO
+
+UPDATED
+05:28

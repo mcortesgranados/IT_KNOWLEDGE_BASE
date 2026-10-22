@@ -1,0 +1,22 @@
+01-01 Creating Business Value Using Generative AI on AWS
+https://content.acloud.guru/5d2b65f1-9a0a-4ee8-993e-2ef889b22e4b/1351620000001-000001.mp4?Expires=1700524458&Signature=Fif/EqYFazoImPrmkYosn/XOdPjMYW7PfUC1yQJ6aollBuxstXUk3jHoVNneA2uk2oq28YKYLWRxZ/5Q++X5Z/PIicRDuJoiWtp4l8vfCm7NUm2erbzQXtIcdEtLy6/uQDR7eYd5LLGMZBAriBlhMkN8SYEB3/1LMCUk/v0taGVo58tNnYQDGLSRHCxdT46jx7ofJQElfD7+exU4uANQ6QSAlsi6G3K/I3OgSHXT+CPjP/7ZVcsgIQeQazKWEWm/hDjPOWMUw7KUKL376x8RDmBYTZvAhILBEYpeW1MMSMCsLjai4kXyQnrOc3iinYuVEeGdL51Au7YqApU86/mcGQ==&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jb250ZW50LmFjbG91ZC5ndXJ1LzVkMmI2NWYxLTlhMGEtNGVlOC05OTNlLTJlZjg4OWIyMmU0Yi8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzAwNTI0NDU4fX19XX0=&Key-Pair-Id=APKAISLU6JPYU7SF6EUA
+01-02 How Generative AI Is Transforming Businesses
+
+01-03 Understanding FMs and LLMs in the Context of Machine Learning
+
+01-04 Generative AI Services Available from AWS
+
+01-05 Demo Building a Generative AI Application Using AWS Services
+
+01-06 Demo Exploring Amazon Bedrock
+
+01-07 Demo Building A Serverless Generative AI Application
+
+01-08 Implementing Responsible AI Avoiding Bias and Hallucinations
+
+01-09 Ensuring Data Privacy When Building Generative AI Applications
+
+01-10 Architecting for Sustainability and Cost Optimization
+
+01-11 The Future of Generative AI
+
