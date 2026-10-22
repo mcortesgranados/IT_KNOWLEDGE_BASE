@@ -1,0 +1,177 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+14:52
+
+Course Introduction
+01:47
+Fundamentals of Machine Learning
+09:56
+
+
+
+
+Machine Learning Services on AWS
+03:09
+CHAPTER 2
+
+Artificial Intelligence Services
+1:54:13
+
+Introduction to Artificial Intelligence Services
+00:52
+Producing Text-to-Speech with Amazon Polly
+10:11
+
+
+
+Demo: Amazon Polly
+07:08
+
+
+
+Decoding Speech-to-Text with Amazon Transcribe
+07:19
+
+
+Demo: Amazon Transcribe
+05:50
+
+Extracting Text from Documents with Amazon Textract
+10:36
+
+
+Demo: Amazon Textract
+05:16
+
+Interpreting Text with Amazon Comprehend
+12:09
+
+
+Demo: Amazon Comprehend
+04:32
+
+Translating Languages Using Amazon Translate
+10:28
+
+
+Demo: Amazon Translate
+04:53
+
+Analyzing Images and Videos with Amazon Rekognition
+12:56
+
+
+
+Demo: Amazon Rekognition
+04:37
+
+Programming with Artificial Intelligence Using Amazon CodeWhisperer
+03:30
+
+
+Demo: Amazon CodeWhisperer
+10:59
+
+
+
+Section Review
+02:57
+CHAPTER 3
+
+Platform Services
+55:29
+
+Introduction to Platform Services
+01:02
+Creating Natural Language Bots with Amazon Lex
+06:49
+
+
+
+Generating Bespoke Recommendations with Amazon Personalize
+07:28
+
+
+
+Forecasting Data with Amazon Forecast
+11:58
+
+
+Analyzing Anomalies with Amazon Fraud Detector
+10:29
+
+
+
+
+Searching with Machine Learning Using Amazon Kendra
+13:54
+
+
+
+Section Review
+03:49
+CHAPTER 4
+
+SageMaker Family of Services
+58:30
+
+Introduction to the Amazon SageMaker Family
+02:20
+
+Setting Up Amazon SageMaker Studio
+12:44
+
+
+
+Demo: Using Stable Diffusion with SageMaker Studio
+07:26
+
+Training Models in Amazon SageMaker
+09:22
+
+Inference in Amazon SageMaker
+07:53
+
+
+
+
+
+
+Demo: Building a Custom Image Classification Model with SageMaker JumpStart
+14:41
+
+
+
+Section Review
+04:04
+
+CHAPTER 5
+
+Conclusion
+56:48
+
+Course Summary
+01:59
+Cleaning Up
+08:37
+
+
+Deeper Topics
+09:47
+
+
+Recommended Reading
+05:37
+
+
+
+
+
+
+Conclusion and What's Next
+00:48
+QUIZ
+Machine Learning Services on AWS
+30:00
