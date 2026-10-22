@@ -1,0 +1,149 @@
+Okay. Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at who owns
+what in the cloud, and by owns,
+we're talking about who is responsible
+for what in the cloud.
+So the first thing I'm going to do is give you an analogy
+of renting a car,
+then we're going to look at renting resources in the cloud,
+and then we're going to look at the crux of this lecture,
+which is the shared responsibility model.
+And it comes up time and time again
+in the Certified Solutions Architect -
+Associate exam as well as the security specialty
+and a whole bunch of other exams.
+So if you do want to go on and do other exams with AWS,
+you need to know the shared responsibility model inside out.
+We're just going to touch upon it briefly in this lecture.
+I would highly recommend by the time
+you finish the end of this course,
+that you go and actually read
+the shared responsibility model on AWS's website,
+and we'll have a link to it in the resources section.
+And then we'll cover off our exam tips.
+So I want you to think, when you go and rent a car,
+who is responsible for what?
+What is your responsibility,
+and what is the car rental company's responsibility?
+Well, at a high level, you're responsible for not to damage
+the vehicle when you're in control of it.
+You're responsible not to speed and get any speeding fines.
+And you're responsible for paying
+things like tolls, for example,
+whereas the rental car's responsibility is the car itself.
+So they have to be in charge of things
+like the tire pressure.
+They have to make sure there's enough air
+in the tires to responsibly lend it to you,
+and they have to make sure it has a full tank
+of gas when they give it to you.
+And their overall responsibility
+is in the mechanics of the car.
+There's no point giving you a car
+if it's suddenly going to break down.
+Let's say the, you know, the exhaust is about to fall off.
+So they're responsible for the physical parts of the car,
+and you're responsible for what you do with the car.
+And it's very similar in the cloud.
+So who is responsible for what
+when you rent resources in the cloud?
+What are you responsible for,
+and what is Amazon responsible for?
+And that's where the shared responsibility model comes in.
+So let's talk about Amazon's responsibility.
+They're responsible for security of the cloud.
+So they're responsible for the Regions,
+the Availability Zones, the edge locations.
+They basically don't advertise, you know,
+where the Availability Zones are,
+where the data centers are,
+because they don't want people
+just rocking up at their data centers trying to get in.
+They're responsible for the physical security
+of the data centers.
+So to get in, you have to go through security checkpoints.
+There'll be chain link fencing
+around the data centers, etc, etc.
+They're responsible for the hardware
+and physical assets within the data center.
+They're responsible for the computers,
+the storage, the database, the network,
+and the overall software that runs the entire stack.
+So things like the hypervisor, for example,
+and this is basically just controls the virtualization
+on top of the physical components of AWS's cloud.
+So what are you responsible for?
+You're responsible for what you do with the cloud.
+You're responsible for the security in the cloud.
+So you're responsible for your customer data.
+You don't want to store that in a place
+that's publicly accessible where anyone can download it.
+If you do that, that's your fault--that's not Amazon's.
+You're responsible for things like your platform,
+the applications, identity and access management,
+which we're going to cover off in the next section.
+You're responsible for the configuration
+of your operating systems on your virtual machines,
+the network and firewall configurations.
+You're responsible for client-side encryption
+as well as server-side encryption.
+And you're also responsible
+for generally just protecting your network traffic.
+If you don't come from a tech background,
+a lot of these are new words to you.
+Don't worry as we go throughout the course
+it'll make a lot more sense.
+That's why I recommend reading the shared
+responsibility model at the end of the course.
+But going into the exam, basically, this is our exam tips.
+I want you to think, when you get a scenario question and
+they're talking about who's responsible for what,
+ask yourself can you do this yourself
+in the AWS Management Console?
+And if you can, then you're likely responsible.
+For example, security groups, IAM users,
+patching your EC2 operating systems,
+patching your databases running on EC2, etc.
+Because you can do this in the AWS console,
+you are going to be responsible.
+And again, if you don't understand
+what any of those words mean, don't worry about it.
+We are going to cover it off later on,
+but essentially you're responsible
+for the things that you can control. If you
+can't control it, then AWS is most likely responsible.
+So you can't control how AWS manage their data centers.
+You can't control what security cameras are turned on.
+You can't control the cabling
+that they've put into their data centers
+or the patching of their database servers
+or their operating systems, etc.,
+the security patching of that.
+You can't control that.
+So if you can't control that,
+then most likely AWS is responsible.
+So as you go into your exam,
+if you do get a scenario-based question
+talking about the shared responsibility model,
+who's responsible for what,
+I just want you to ask this 1 question in your head:
+Can I do this myself in the AWS Management Console?
+And if you can, then you're probably going to be responsible
+and if not, then AWS is likely to be responsible.
+And we have a shared responsibility
+between the 2 of you, is encryption.
+So you can do encryption. AWS can do encryption.
+For you, you can encrypt your clients' data.
+You can make sure that where you store
+all your clients' data, that it is encrypted.
+AWS, when you basically, you go in into the console
+and click a button saying, please encrypt this volume.
+When you click that, you are doing the encryption
+on your side. AWS actually has to follow through
+and make sure that that is encrypted.
+So that's why encryption is a shared responsibility.
+So keep all this in mind going into the exam.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

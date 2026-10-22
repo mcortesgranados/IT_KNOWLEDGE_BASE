@@ -1,0 +1,83 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're just going to briefly look
+at the Well-Architected Framework.
+So we're going to discuss whitepapers first,
+and then we'll go on to the pillars
+of the Well-Architected Framework.
+So you can get whitepapers from the following address.
+Just go to aws.amazon.com/whitepapers
+and there's literally hundreds of whitepapers available.
+So this is the whitepaper website.
+You can see in here we've got 427 whitepapers currently.
+Don't worry, you don't need to read every whitepaper
+in order to pass the exam.
+In here, you've got the methodology
+and you can actually click
+on the Well-Architected Framework,
+and that will load up 13 different whitepapers
+that will talk about it.
+The whitepaper you probably wanna start with
+is the AWS Well-Architected Framework Overview.
+And then the Well-Architected Framework consists
+of six different pillars that we're going to cover off
+in a second.
+Each pillar has its own whitepaper.
+Now, going into your exam,
+you really only need to read this.
+I wouldn't read this just yet
+because you won't understand what any
+of the technologies are
+'cause you haven't gone through the course,
+you haven't learned what EC2 is,
+you haven't learned what Direct Connect is
+or Storage Gateway, et cetera, et cetera.
+So I would leave reading this
+until the very end of the course
+but I would definitely 100% read this whitepaper
+before going into your exam
+because the exam is really structured
+around the Well-Architected Framework.
+If you want to be a solutions architect, well,
+of course, you wanna architect things well
+and this is the go-to whitepaper
+in terms of architecting things well on the AWS platform.
+So like I said, the most important whitepaper
+for the exam is the Well-Architected Framework
+and you can get to it
+by visiting that website we just looked at.
+So let's have a look
+at the six pillars of the Well-Architected Framework.
+And the first one is operational excellence
+and this is running and monitoring systems
+to deliver business value
+and continually improving processes and procedures.
+So continuously getting better.
+We then have performance efficiency
+and this is making sure you use IT
+and computing resources efficiently.
+We then have security
+and this is protecting your information systems.
+We have cost optimization,
+so this is where you can avoid any unnecessary costs.
+We have reliability, which is basically
+we're ensuring a workload performs
+its intended function correctly
+and consistently when it's expected to,
+so it doesn't go down and crash from having too much load.
+And then finally, we have sustainability
+and this is minimizing the environmental impacts
+of running cloud workloads.
+Now, I wouldn't go ahead
+and read this Well-Architected Framework just yet.
+I would only do it the night before your exam.
+The reason is is it's quite technical.
+There's a whole bunch of technologies in there
+that you won't understand at this stage
+that you are going to learn
+while doing this course, but it's well worth having a read
+or a skim through the night before your exam.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

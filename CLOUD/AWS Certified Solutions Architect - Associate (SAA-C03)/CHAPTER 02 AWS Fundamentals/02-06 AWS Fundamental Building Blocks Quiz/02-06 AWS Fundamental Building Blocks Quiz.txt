@@ -1,0 +1,227 @@
+QUESTION 1
+
+According to the Shared Responsibility Model, who is responsible for patching, updating, and maintaining the OS of EC2 instances in AWS?
+
+
+No one (EC2 instances never need to be updated)
+
+
+You
+
+
+Linus Torvalds
+
+
+AWS
+
+Sorry!
+In the shared responsibility model, it's your job to patch and manage the OS. Reference Documentation: Shared Responsibility Model
+
+Correct Answer
+In the shared responsibility model, it's your job to manage the OS. Reference Documentation: Shared Responsibility Model
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which statement best describes an Edge location?
+
+
+A virtual location that can be used to handle authentication and authorization of your users in the cloud.
+
+
+A virtual type of compute instance that is located all over the world to deliver your content to your customers in a speedy fashion.
+
+CORRECT
+A networking point of presence that is one of many spread across the globe that is commonly used to cache content.
+
+
+A physical location somewhere in the world where data is stored.
+
+Sorry!
+Edge Locations are a physical location. Reference Documentation: Regions and Availability Zones
+
+Correct Answer
+Edge locations are located around the world, and use cached content to distribute that content with reduced latency. Reference Documentation: Regions and Availability Zones
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Why is security one of the pillars of the Well-Architected Framework?
+
+
+Because the cloud will never be as secure as your own physical data center.
+
+
+Because security is the highest priority at AWS; if you don't have a securely built application, your customers won't trust you with their data.
+
+
+Because AWS does it all for you, you never have to worry about security in AWS.
+
+
+Because security is something you only have to do every once in a while. Every month ask yourself, "Is this secure enough?"
+
+Sorry!
+Not true. The cloud can easily be more secure than your physical environment. Reference Documentation: AWS Well-Architected Framework
+
+Correct Answer
+Security and trust are the highest priority for AWS, which they refer to as "Job 0" (meaning, it comes before everything else). Reference Documentation: AWS Well-Architected Framework
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What category would the VPC service fall into?
+
+
+Database
+
+
+Machine Learning
+
+
+Compute
+
+CORRECT	
+Networking
+
+Sorry!
+VPC is a networking service, not a database service. Reference Documentation: Amazon Virtual Private Cloud
+
+Correct Answer
+VPC is a networking service. Reference Documentation: Amazon Virtual Private Cloud
+
+__________________________________________________________________________________________________________________________________________________
+
+
+QUESTION 5
+
+Which statement best describes a Region?
+
+
+A virtual location around the world where you can create Availability Zones.
+
+
+The original location of your data center that you're going to migrate into AWS.
+
+
+A physical location around the world comprised of multiple, isolated, and physically separate Availability Zones within a geographic area.
+
+
+A networking point of presence in a country.
+
+Sorry!
+While this is somewhat correct, a Region is a physical location. Reference Documentation: Regions and Availability Zones
+
+Correct Answer
+A Region is a single isolated environment wholly contained within a single country's borders. Reference Documentation: Regions and Availability Zones
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+Which of the following is NOT an AWS storage service?
+
+
+Storage Gateway
+
+
+EBS
+
+
+S3
+
+CORRECT
+EC2
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which one of the following items are NOT managed by AWS according to the shared responsibility model?
+
+
+Preventing power outages
+
+CORRECT
+Customer data
+
+
+Security of the data center
+
+
+Physical networking infrastructure
+
+Sorry!
+AWS is responsible for the physical layers of the cloud. Reference Documentation: Shared Responsibility Model
+
+Correct Answer
+AWS will never manage your customer data. Reference Documentation: Shared Responsibility Model
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Which of the following is NOT a pillar of the AWS Well-Architected Framework?
+
+CORRECT
+Harmony
+
+
+Cost Optimization
+
+
+Security
+
+
+Reliability
+
+Good work!
+Harmony is not a pillar of the Well-Architected Framework. Reference Documentation: AWS Well-Architected Framework
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which statement best describes an Availability Zone?
+
+CORRECT
+One or more discrete data centers with redundant power, networking, and connectivity in an AWS Region.
+
+
+A physical data center that is connected to AWS cloud services.
+
+
+A single data center that makes up an Edge location.
+
+
+A collection of EC2 instances that is guaranteed not to fail.
+
+Good work!
+An Availability Zone (AZ) is one or more discrete data centers with redundant power, networking, and connectivity in an AWS Region. AZs are physically separated by a meaningful distance, many kilometers, from any other AZ, although all are within 100 km (60 miles) of each other. Reference Documentation: Regions and Availability Zones
+
+__________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which category would the EC2 service fall under?
+
+
+Machine Learning
+
+CORRECT
+Compute
+
+
+Networking
+
+
+Database
+
+Good work!
+EC2 is a compute service. Reference Documentation: Amazon EC2
+
+__________________________________________________________________________________________________________________________________________________
+
+
