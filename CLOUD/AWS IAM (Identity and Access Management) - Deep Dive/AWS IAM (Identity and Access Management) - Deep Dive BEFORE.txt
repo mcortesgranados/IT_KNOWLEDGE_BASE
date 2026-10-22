@@ -1,0 +1,179 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+11:39
+
+Course Introduction
+02:32
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+About the Training Architect
+01:14
+Introduction to IAM Secure Corporation
+03:57
+AWS Free Tier: Usage Tracking and Billing Widget
+03:56
+CHAPTER 2
+
+Account Setup With Root Account
+1:09:27
+
+Manage Your Root User
+11:05
+Creating an Admin Group and User
+15:12
+Create Admin Users and Groups from the CLI
+18:57
+Tasks That Require Root User
+09:13
+QUIZ
+QUIZ: IAM Account Setup with Root Account
+15:00
+CHAPTER 3
+
+Setup of Company Accounts
+1:03:02
+
+Creation of Employee Accounts
+11:26
+
+Access Key Management for All Users
+12:55
+Creating IAM Groups for Your Teams
+11:45
+Add Users to Groups
+07:09
+Configuring MFA For Users
+04:47
+QUIZ
+QUIZ: IAM Setup of Company Accounts
+15:00
+CHAPTER 4
+
+BONUS Material: Introduction to a Cloud Assessment Learning Activity
+46:39
+
+Cloud Assessments Learning Activity: Identity and Access Management (IAM)
+01:39
+HANDS-ON LAB
+Introduction to AWS Identity and Access Management (IAM)
+45:00
+CHAPTER 5
+
+Identity Based IAM Policies
+1:20:32
+
+Policy Overview For IAM Secure Corporation
+10:08
+Implementing IAM Policies For All Users
+09:18
+Implementing IAM Policies For Specific Users/Groups
+13:49
+Enable Users to Configure Their Own Credentials and MFA
+14:31
+Using Managed Access Policies to Create a Limited Administrator
+08:28
+Granting Limited Permissions With Inline Policies
+09:18
+QUIZ
+QUIZ: IAM Identity Based Policies
+15:00
+CHAPTER 6
+
+Using Policies To Access Resources
+1:40:13
+
+Overview of Using Policies to Control S3 Bucket Access
+08:46
+Configuration of IAMSecure Corp S3 Bucket Folder Structure
+09:58
+Attaching Policies to Groups For S3 Bucket Access
+14:40
+Using Policies to Grant Users Specific S3 Bucket Permissions
+11:48
+Accessing S3 Buckets From Outside the Account
+08:12
+
+Creating Policies With The Visual Editor
+16:49
+QUIZ
+QUIZ: IAM Using Policies to control S3 Bucket access
+15:00
+QUIZ
+QUIZ: IAM Resource Policies and the Visual Editor
+15:00
+CHAPTER 7
+
+Understanding and Applying IAM Roles
+1:00:17
+
+Strategies for IAM Roles
+09:55
+Resource Level Permission for EC2 Instances via Roles
+08:48
+Cross-Account Access
+09:30
+Web Identity Federation
+10:00
+Providing Access to AWS Accounts Owned by Third Parties
+07:04
+QUIZ
+QUIZ: IAM Roles
+15:00
+CHAPTER 8
+
+IAM Advanced Concepts
+1:15:54
+
+The Confused Deputy Problem
+08:22
+Sharing CloudTrail Log Files Between AWS Accounts
+06:18
+EC2 Instance Profiles
+12:04
+Delegate Access to the Billing Console
+07:19
+Calling AssumeRole From Python
+10:57
+Creating IAM Users and Groups with CloudFormation
+15:54
+QUIZ
+QUIZ: IAM Advanced Concepts
+15:00
+CHAPTER 9
+
+Best Practices and Troubleshooting
+1:17:59
+
+Best Practices
+12:48
+General Troubleshooting of IAM
+08:41
+Troubleshooting Policies
+08:58
+Troubleshooting Policies 2 (with Intro to AWS Auto Scaling)
+16:44
+Troubleshooting IAM Roles and EC2
+15:48
+QUIZ
+QUIZ: IAM Troubleshooting and Best Practices
+15:00
+CHAPTER 10
+
+Final Steps
+01:40
+
+What's Next?
