@@ -1,0 +1,202 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+02:39
+
+Course Introduction
+02:39
+
+CHAPTER 2
+
+What Is Cost Optimization?
+31:44
+
+Section Overview
+02:00
+Working with AWS and Cost Optimization
+03:09
+Reviewing the 5 Best Practices of Cost Optimization
+09:53
+
+
+Section Review
+01:42
+QUIZ
+What Is Cost Optimization?
+15:00
+CHAPTER 3
+
+Practicing Cloud Financial Management
+46:49
+
+Section Overview
+02:18
+Getting Started and Staying in the Know!
+05:10
+
+
+
+
+
+
+Budgeting and Reporting Costs in AWS
+10:11
+
+
+
+
+Quantifying Business Value
+06:26
+Demo: Exploring Cost Explorer
+06:03
+Section Review
+01:41
+QUIZ
+Cloud Financial Management
+15:00
+CHAPTER 4
+
+Expenditure and Usage Awareness
+2:08:32
+
+Section Overview
+02:30
+Using AWS Organizations, IAM, and AWS Control Tower
+06:35
+Using Tags to Monitor and Maintain Costs
+07:11
+
+
+Meeting QuickSight, S3 Storage Lens and Analytics, and Cost Categories
+07:41
+Strategizing Costs with Auto Scaling and Instance Scheduler
+14:02
+
+HANDS-ON LAB
+Curbing Costs Using an Auto Scaling Group
+30:00
+HANDS-ON LAB
+Optimizing Costs Using the Instance Scheduler
+30:00
+Examining AWS Backup
+13:48
+Section Review
+01:45
+
+
+
+QUIZ
+Expenditure and Usage Awareness
+15:00
+CHAPTER 5
+
+Cost-Effective Resources
+3:43:30
+
+Section Overview
+03:15
+Evaluating Your Needs Using AWS
+15:01
+
+
+
+
+Reviewing Managed Services
+06:20
+
+
+
+HANDS-ON LAB
+Using ElastiCache to Improve DynamoDB Performance and Cut Costs
+45:00
+Summarizing Serverless Options
+08:43
+
+
+
+Optimizing Instance Costs
+10:36
+
+
+Using S3 Effectively to Optimize Costs
+09:24
+
+HANDS-ON LAB
+Creating an S3 Lifecycle Policy to Optimize Costs
+30:00
+HANDS-ON LAB
+Estimating Costs of CloudFront Workloads Using the AWS Pricing Calculator
+30:00
+Pricing Models and You
+06:40
+
+
+
+
+
+Optimizing Your Network Costs for Data Transferring
+10:38
+
+
+
+
+HANDS-ON LAB
+Update Your Network to Optimize Costs
+30:00
+Section Review
+02:53
+QUIZ
+Cost-Effective Resources
+15:00
+CHAPTER 6
+
+Manage Demand and Supply Resources
+43:40
+
+Section Overview
+01:17
+Throttling vs. Buffer-Based Demand
+05:24
+
+HANDS-ON LAB
+Optimizing SQS Usage to Cut Costs
+15:00
+Determining Which Supply Base to Use
+05:48
+
+Section Review
+01:11
+QUIZ
+Manage Demand and Supply Resources
+15:00
+CHAPTER 7
+
+Optimizing Over Time
+1:05:57
+
+Section Overview
+01:24
+Diving into CloudWatch and CloudTrail
+10:07
+
+
+HANDS-ON LAB
+Using CloudWatch Billing Alarms to Manage Costs
+30:00
+Leveraging Trusted Advisor and Config
+08:09
+
+Section Review
+01:17
+QUIZ
+Optimizing Over Time
+15:00
+CHAPTER 8
+
+Conclusion
+03:51
+
+Course Review and Congrats!
+02:11
+What’s Next?
