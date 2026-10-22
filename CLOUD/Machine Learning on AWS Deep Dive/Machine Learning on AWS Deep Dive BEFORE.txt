@@ -1,0 +1,188 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+17:06
+
+Course Introduction
+03:43
+
+How to Follow Along with Demos in This Course
+13:23
+
+
+CHAPTER 2
+
+Machine Learning on AWS: Tools and Services
+1:17:44
+
+Section Introduction
+09:50
+SageMaker Canvas Overview
+02:58
+
+Setting Up SageMaker Canvas
+04:45
+
+Running Predictions in SageMaker Canvas
+14:09
+SageMaker Studio Lab Overview
+02:36
+
+Setting Up a SageMaker Studio Lab Account
+06:35
+
+Exploring the SageMaker Studio Lab Examples
+07:46
+SageMaker Studio Overview
+02:41
+Setting Up SageMaker Studio for Course Demos
+09:34
+
+Section Summary
+01:50
+QUIZ
+Quiz: Machine Learning on AWS: Tools and Services
+15:00
+CHAPTER 3
+
+Preparing Data with SageMaker Data Wrangler and Feature Store
+1:32:30
+
+Section Introduction
+04:31
+Importing Data into Data Wrangler
+13:48
+Analyzing and Visualizing Data in Data Wrangler
+12:34
+Transforming Data in Data Wrangler
+14:56
+Exporting Data for Training
+10:59
+Working with the SageMaker Feature Store
+04:40
+Ingesting and Accessing Features in SageMaker Feature Store
+15:01
+Section Summary
+01:01
+QUIZ
+Quiz: Preparing Data with SageMaker Data Wrangler and Feature Store
+15:00
+CHAPTER 4
+
+Building and Training Models with SageMaker Studio
+1:30:14
+
+Section Introduction
+02:54
+Using SageMaker's Built-In Algorithms
+09:17
+
+SageMaker's Algorithms in Action
+15:01
+Using Popular Frameworks
+05:42
+Working in Script Mode with a Framework
+09:46
+Using SageMaker Experiments to Manage Training Jobs
+11:05
+Detecting Bias with SageMaker Clarify
+13:10
+
+
+Using SageMaker for Collaboration
+06:11
+Section Summary
+02:08
+QUIZ
+Quiz: Building and Training Models with SageMaker Studio
+15:00
+CHAPTER 5
+
+Deployment and Inference with SageMaker Studio
+42:24
+
+Section Introduction
+03:04
+Working with SageMaker Batch Transform
+08:02
+Hosting Real-Time Endpoints for Live Inference
+09:22
+Optimizing Machine Learning Deployments
+05:36
+
+
+Section Summary
+01:20
+QUIZ
+Quiz: Deployment and Inference with SageMaker Studio
+15:00
+CHAPTER 6
+
+Security Best Practices for Machine Learning on AWS
+48:33
+
+Section Introduction
+02:51
+Securing Your Resources in a VPC
+05:08
+Using the Principle of Least Privilege
+04:11
+Encrypting Data at Rest and in Transit
+08:12
+Protecting Credentials with Secrets Manager
+03:28
+Monitoring Model Input and Output
+01:19
+Enabling Logging for Model Access
+02:55
+Using Version Control on Model Artifacts
+03:39
+Section Summary
+01:50
+QUIZ
+Quiz: Security Best Practices for Machine Learning on AWS
+15:00
+CHAPTER 7
+
+Conclusion
+07:02
+
+Course Summary
+04:56
+Conclusion and What's Next
+02:06
+
+
+Your Progress
+0%
+
+COMPLETE
+
+Lesson Completion
+
+0%
+
+Quiz Completion
+
+0 of 5
+
+NEW
+
+Learning Scheduler
+Tell us how many hours per week you can study.
+
+4
+2 Dec.
+HRS PER WEEKCOMPLETION DATE
+MEMBERS ONLY
+
+Cloud Playground
+Cloud along in real time. This course supports Cloud Playground sandbox environments, so you can learn by doing in a real cloud environment.
+
+Certificate of Completion
+Complete at least 80% of the course before you can request a certificate of completion.
+
+Rate this course
+Loved it? Room for improvement? Let us know!
+

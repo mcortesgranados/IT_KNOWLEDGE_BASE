@@ -1,0 +1,140 @@
+CHAPTER 01 Introduction
+01-01 Course Introduction
+
+01-02 How to Follow Along with Demos in This Course
+
+CHAPTER 02 Machine Learning on AWS: Tools and Services
+02-01 Section Introduction
+
+02-02 SageMaker Canvas Overview
+
+02-03 Setting Up SageMaker Canvas
+
+02-04 Running Predictions in SageMaker Canvas
+
+02-05 SageMaker Studio Lab Overview
+
+02-06 Setting Up a SageMaker Studio Lab Account
+
+02-07 Exploring the SageMaker Studio Lab Examples
+
+02-08 SageMaker Studio Overview
+
+02-09 Setting Up SageMaker Studio for Course Demos
+
+02-10 Section Summary
+
+02-11 QUIZ Quiz: Machine Learning on AWS: Tools and Services
+CHAPTER 03 Preparing Data with SageMaker Data Wrangler and Feature Store
+03-01 Section Introduction
+
+03-02 Importing Data into Data Wrangler
+
+03-03 Analyzing and Visualizing Data in Data Wrangler
+
+03-04 Transforming Data in Data Wrangler
+
+03-05 Exporting Data for Training
+
+03-06 Working with the SageMaker Feature Store
+
+03-07 Ingesting and Accessing Features in SageMaker Feature Store
+
+03-08 Section Summary
+
+03-09 QUIZ Quiz: Preparing Data with SageMaker Data Wrangler and Feature Store
+CHAPTER 04 Building and Training Models with SageMaker Studio
+04-01 Section Introduction
+
+04-02 Using SageMaker's Built-In Algorithms
+
+04-03 SageMaker's Algorithms in Action
+
+04-04 Using Popular Frameworks
+
+04-05 Working in Script Mode with a Framework
+
+04-06 Using SageMaker Experiments to Manage Training Jobs
+
+04-07 Detecting Bias with SageMaker Clarify
+
+04-08 Using SageMaker for Collaboration
+
+04-09 Section Summary
+
+04-10 QUIZ Quiz: Building and Training Models with SageMaker Studio
+CHAPTER 05 Deployment and Inference with SageMaker Studio
+05-01 Section Introduction
+
+05-02 Working with SageMaker Batch Transform
+
+05-03 Hosting Real-Time Endpoints for Live Inference
+
+05-04 Optimizing Machine Learning Deployments
+
+05-05 Section Summary
+
+05-06 QUIZ Quiz: Deployment and Inference with SageMaker Studio
+CHAPTER 06 Security Best Practices for Machine Learning on AWS
+06-01 Section Introduction
+
+06-02 Securing Your Resources in a VPC
+
+06-03 Using the Principle of Least Privilege
+
+06-04 Encrypting Data at Rest and in Transit
+
+06-05 Protecting Credentials with Secrets Manager
+
+06-06 Monitoring Model Input and Output
+
+06-07 Enabling Logging for Model Access
+
+06-08 Using Version Control on Model Artifacts
+
+06-09 Section Summary
+
+06-10 QUIZ Quiz: Security Best Practices for Machine Learning on AWS
+CHAPTER 07 Conclusion
+07-01 Course Summary
+
+07-02 Conclusion and What's Next
+
+07-03 Your Progress
+
+07-04 0%
+
+07-05 COMPLETE
+
+07-06 Lesson Completion
+
+07-07 0%
+
+07-08 Quiz Completion
+
+07-09 0 of 5
+
+07-10 Learning Scheduler
+
+07-11 Tell us how many hours per week you can study.
+
+07-12 4
+
+07-13 2 Dec.
+
+07-14 HRS PER WEEKCOMPLETION DATE
+
+07-15 MEMBERS ONLY
+
+07-16 Cloud Playground
+
+07-17 Cloud along in real time. This course supports Cloud Playground sandbox environments, so you can learn by doing in a real cloud environment.
+
+07-18 Certificate of Completion
+
+07-19 Complete at least 80% of the course before you can request a certificate of completion.
+
+07-20 Rate this course
+
+07-21 Loved it? Room for improvement? Let us know!
+
