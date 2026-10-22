@@ -1,0 +1,137 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+06:49
+
+Course Introduction and Course Scenario
+04:13
+
+The Exam Blueprint
+02:36
+
+CHAPTER 2
+
+VPC
+6:25:19
+
+Scenario Review
+00:47
+Understanding the Default VPC Structure
+08:19
+Networking Overview
+07:00
+
+
+
+
+Designing Subnets
+05:15
+
+Routing Overview and Adding an Internet Gateway
+06:01
+Creating Network Access Control Lists (NACLs)
+08:45
+Creating Security Groups
+05:03
+Building a Custom VPC: Part One
+10:59
+
+Building a Custom VPC: Part Two
+04:51
+What Are Bastion Hosts?
+05:24
+Creating a NAT Gateway and Egress-Only Gateway: Part One
+11:00
+
+Creating a NAT Gateway and Egress-Only Gateway: Part Two
+06:15
+Adding VPC Peering to Our Custom VPC
+07:58
+VPC Endpoints Overview
+10:12
+Adding Network and VPC Cost Optimization
+02:30
+HANDS-ON LAB
+Configuring a Basic VPC in AWS
+1:45:00
+HANDS-ON LAB
+Connecting VPCs with VPC Peering in AWS
+1:30:00
+HANDS-ON LAB
+Creating a Basic VPC and Associated Components in AWS
+45:00
+HANDS-ON LAB
+Create a VPC Endpoint and S3 Bucket in AWS
+30:00
+QUIZ
+VPC Quiz
+15:00
+CHAPTER 3
+
+EC2
+4:37:31
+
+Scenario Review
+00:47
+Understanding Virtualization and EC2 Architecture
+09:03
+EC2 Instances Overview
+09:22
+Understanding EC2 Storage
+07:56
+
+EBS Volumes and Snapshots Overview
+07:24
+EC2 Instance Store Overview
+04:45
+Elastic File System Overview
+03:18
+Using EC2 Instance Metadata and Bootstrap Scripts
+04:56
+EC2 Instances, Network Interfaces, IP Addresses, and DNS Essentials
+03:25
+Auto Scaling Group Overview
+06:10
+Creating an Auto Scaling Group
+14:20
+How to Use EC2 Placement Groups
+07:38
+Creating a WordPress Site on EC2
+13:13
+Adding Compute Cost Optimization
+05:14
+HANDS-ON LAB
+Using EC2 Roles and Instance Profiles in AWS
+1:30:00
+HANDS-ON LAB
+Using AWS Tags and Resource Groups
+1:15:00
+QUIZ
+EC2 Quiz
+15:00
+CHAPTER 4
+
+ECS
+26:02
+
+Scenario Review
+01:01
+Understanding Containers
+02:58
+Understanding ECS Concepts
+03:51
+
+
+
+ECS Cluster Overview
+03:12
+QUIZ
+ECS Quiz
+15:00
+CHAPTER 5
+
+Conclusion
+03:00
+
+How to Prepare for Your Exam
