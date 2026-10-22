@@ -1,0 +1,198 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+04:57
+
+Course Introduction
+01:19
+About the Training Architect
+00:33
+Prerequisites
+01:13
+Understanding Amazon DocumentDB
+01:52
+CHAPTER 2
+
+Creating and Connecting
+1:13:51
+
+Section Introduction
+01:27
+Creating an Amazon DocumentDB Cluster
+05:06
+Connecting to an Amazon DocumentDB Cluster
+05:51
+Section Recap
+01:27
+HANDS-ON LAB
+Create and Connect to an Amazon DocumentDB Cluster
+45:00
+QUIZ
+Creating and Connecting to Amazon DocumentDB
+15:00
+CHAPTER 3
+
+Migrations
+2:30:00
+
+Section Introduction
+02:06
+Exploring DocumentDB Tools
+11:10
+Discovering Migration Sources
+04:05
+Understanding Cluster Requirements
+03:56
+
+Defining Migration Approaches
+03:13
+Testing Your Migration
+03:01
+Section Recap
+02:29
+HANDS-ON LAB
+Perform an Online Migration of a MongoDB Instance to Amazon DocumentDB
+45:00
+HANDS-ON LAB
+Perform an Offline Migration of a MongoDB Instance to Amazon DocumentDB
+30:00
+QUIZ
+Migrating to Amazon DocumentDB
+45:00
+CHAPTER 4
+
+Backing Up and Restoring
+1:52:36
+
+Section Introduction
+01:04
+Creating Snapshots
+02:14
+Restoring Snapshots
+03:02
+Section Recap
+01:16
+HANDS-ON LAB
+Create a Manual Cluster Snapshot of Amazon DocumentDB
+45:00
+HANDS-ON LAB
+Restore an Amazon DocumentDB Cluster from a Snapshot
+45:00
+QUIZ
+Backing Up and Restoring Amazon DocumentDB
+15:00
+CHAPTER 5
+
+Troubleshooting
+3:41:55
+
+Section Introduction
+00:39
+Connection Issues
+03:14
+Discovering Index Creation
+03:53
+Exploring Performance Issues
+03:14
+Section Recap
+00:55
+HANDS-ON LAB
+Troubleshoot the Connection to an Amazon DocumentDB Endpoint
+45:00
+QUIZ
+Troubleshooting Amazon DocumentDB
+2:45:00
+CHAPTER 6
+
+Security
+2:42:38
+
+Section Introduction
+00:57
+Using Data Encryption
+05:14
+Exploring User Management
+03:04
+Understanding Resilience and Compliance
+02:04
+
+Section Recap
+01:19
+HANDS-ON LAB
+Enable Storage Encryption on Amazon DocumentDB
+30:00
+HANDS-ON LAB
+Enable Transport Layer Security (TLS) on Amazon DocumentDB
+30:00
+HANDS-ON LAB
+Create a New User Account on Amazon DocumentDB
+45:00
+QUIZ
+Securing Amazon DocumentDB
+45:00
+CHAPTER 7
+
+Monitoring
+4:19:24
+
+Section Introduction
+00:39
+Monitoring Clusters vs. Monitoring Instances
+02:20
+Exploring Event Subscriptions
+02:54
+Monitoring DocumentDB with CloudWatch
+03:25
+Monitoring DocumentDB with CloudTrail
+03:07
+Discovering Audit Logging
+05:11
+Section Recap
+01:48
+HANDS-ON LAB
+Subscribe to Amazon DocumentDB Events
+45:00
+HANDS-ON LAB
+View CloudWatch Data for Amazon DocumentDB
+45:00
+HANDS-ON LAB
+View Audit Events for Amazon DocumentDB
+1:45:00
+QUIZ
+Monitoring Amazon DocumentDB
+45:00
+CHAPTER 8
+
+Scaling Amazon DocumentDB
+4:27:44
+
+Section Introduction
+00:41
+Exploring Storage Scaling
+01:05
+Understanding Compute Instance Scaling
+01:43
+Discovering Read Scaling
+03:15
+Learning about Write Scaling
+04:44
+Section Recap
+01:16
+HANDS-ON LAB
+Scale an Amazon DocumentDB Cluster for Write Performance
+1:45:00
+HANDS-ON LAB
+Scale an Amazon DocumentDB Cluster for Read Performance
+1:45:00
+QUIZ
+Scaling Amazon DocumentDB
+45:00
+CHAPTER 9
+
+Conclusion
+02:35
+
+Course Summary
+02:05
+Conclusion and What’s Next
