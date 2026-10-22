@@ -1,0 +1,39 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+03:30
+
+Course Introduction
+01:48
+
+About the Training Architect
+01:42
+CHAPTER 2
+
+Event-Driven Architecture
+35:48
+
+Introduction to Event-Driven Architecture
+03:44
+Legacy Event Processing
+05:55
+Event-Driven Architecture: Part 1
+08:30
+Event-Driven Architecture: Part 2
+09:05
+Message vs. Event
+05:18
+A Word on Idempotency
+03:16
+CHAPTER 3
+
+Conclusion
+32:26
+
+QUIZ
+Quiz: Introduction to Event-Driven Architecture
+30:00
+Course Summary
+01:14
+Conclusion and What’s Next
