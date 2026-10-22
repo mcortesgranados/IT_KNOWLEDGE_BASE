@@ -1,0 +1,65 @@
+Course Outline
+CHAPTER 1
+
+Course Introduction
+04:03
+
+Course Introduction and Scenario Review
+02:54
+About the AWS Training Architect and Join Our Community
+01:09
+CHAPTER 2
+
+S3 Basics
+41:09
+
+Getting to Know S3
+04:18
+Creating an S3 Bucket Plus S3 Storage Classes (Part One)
+09:13
+Choosing Your S3 Storage Class (Part Two)
+06:12
+Adding S3 Security
+08:22
+
+Using Encryption with S3
+05:31
+
+
+
+
+
+Adding Object Versioning in S3
+06:41
+S3 Basics Wrapped Up
+00:52
+CHAPTER 3
+
+S3 Features
+56:37
+
+Scenario Review
+00:52
+How to Use Lifecycle Policies in S3
+06:03
+Adding S3 Replication and Sharing Your S3 Buckets
+04:46
+S3 Performance and Optimization Overview
+02:09
+Using Pre-Signed URLs
+04:26
+Creating an S3 Static Website
+06:57
+
+
+S3 Features Wrapped Up
+01:24
+HANDS-ON LAB
+Creating Amazon S3 Buckets, Managing Objects, and Enabling Versioning
+30:00
+CHAPTER 4
+
+Course Conclusion
+03:10
+
+What's Next?
