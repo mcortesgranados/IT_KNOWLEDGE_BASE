@@ -1,0 +1,92 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+02:46
+
+Course Introduction
+01:48
+Course Prerequisites
+00:58
+CHAPTER 2
+
+Overview of ASP.NET Web API Applications on Lambda
+22:41
+
+Let’s Get Started with ASP.NET Web API on Lambda
+03:36
+Diving into the Three Ways to Host a Web API Application
+03:02
+What Is a Cold Start, and Why Should You Care?
+06:53
+Not Every Application Should Be in the Lambda Service
+03:59
+Demo: Deploying a Web API Application to the Lambda Service
+02:52
+Summary of Key Concepts to Consider When Using ASP.NET Web API on Lambda
+02:19
+CHAPTER 3
+
+Deploying Web API Applications to the Lambda Service
+1:55:53
+
+Introduction to Deploying Web API Applications
+01:49
+AWS Web API Templates
+07:46
+HANDS-ON LAB
+Deploy a New Web API Application to the Lambda Service Using an AWS Template
+45:00
+HANDS-ON LAB
+Deploy an Existing Web API Application to the Lambda Service
+1:00:00
+Summary of Deploying Web API Applications
+01:18
+CHAPTER 4
+
+Using a Database with Your Web API Application
+1:07:23
+
+Database Choices with Your Web API Application
+01:35
+Connecting Your Application to a Database
+03:15
+HANDS-ON LAB
+Create a Nonpublicly Accessible SQL Server Database
+45:00
+Demo: Store Database Credentials in Secrets Manager, and Access the Credentials from the Web API Application
+12:57
+
+Improving Performance with Relational Database Service Proxies
+02:29
+Summary of Using a Database with Your Web API Application
+02:07
+CHAPTER 5
+
+Cross-Cutting Concerns
+55:53
+
+Introduction to Cross Cutting Concerns
+01:27
+Logging
+02:51
+Monitoring
+02:20
+Authentication and Authorization
+02:33
+HANDS-ON LAB
+Review CloudWatch Logs and X-Ray Traces for Your Application Running in the Lambda Service
+45:00
+Summary of Cross-Cutting Concerns
+01:42
+CHAPTER 6
+
+Conclusion
+49:23
+
+Course Summary
+03:41
+QUIZ
+Working with ASP.NET Web API on AWS Lambda
+45:00
+Conclusion and What's Next
