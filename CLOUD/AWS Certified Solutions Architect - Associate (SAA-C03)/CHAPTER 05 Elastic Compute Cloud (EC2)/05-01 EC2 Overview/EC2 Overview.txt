@@ -1,0 +1,381 @@
+Okay, Hello, Cloud Gurus.
+And welcome to this lecture.
+In this lecture we're going to look at EC2.
+So EC2 is 1 of the most fundamental services of AWS.
+And for that reason, it comes up an awful lot
+in your Solutions Architect Associate exam.
+So if you want to have any chance of passing the exam
+you need to learn EC2 inside out.
+So in this lesson, what we're going to do
+is we're going to start with the basics.
+We're going to learn what EC2 is.
+We're going to look at the different pricing options.
+Then we'll go onto our exam tips.
+So EC2 just stands for Elastic Compute Cloud,
+or "EC2" is the way it's pronounced.
+And this is basically secure, resizable compute capacity
+in the cloud.
+And basically all it is, is it's a virtual machine,
+but this virtual machine is hosted in AWS
+instead of your own data center.
+So it's just a virtual server that sits in the cloud,
+hosted on AWS.
+And it's designed to make web-scale cloud computing easier
+for developers, and we'll look at
+what that means in the next slide.
+But essentially what it does is it gives you
+the capacity that you want when you need it.
+And you're in complete control of your own instances.
+It's not managed by AWS.
+AWS can't go in and log into your EC2 server.
+It's completely controlled by you.
+And EC2 was launched in 2006,
+and it was a complete game changer.
+It literally changed the entire industry
+pretty much overnight.
+And the reason for that is a few reasons,
+but 1 of them is you only pay for what you use.
+So it changed the economics of cloud computing.
+Before you'd have to go out and physically buy
+or rent servers.
+And they basically would have a very long-term contracts.
+Great thing about EC2 is you don't need
+to waste any capacity.
+You can select the capacity that you need right now,
+and you can grow and shrink your servers as you go.
+And with on-premise infrastructure, like I was saying
+you basically had to estimate your capacity,
+and then you had these long-term investments
+over 3 to 5 years.
+So I used to work at Rackspace,
+and we would get orders in from customers
+and we'd have to try and figure out what kind of capacity
+that they were going to need.
+And the contract lengths would run
+from anywhere to 1 to 5 years.
+And at the time when I worked there, this was early 2010.
+Most of it was physical infrastructure.
+So they would have physical servers dedicated
+to our customers.
+And we had to basically estimate how much is this going
+to grow over the next 5 years.
+And take all that into account.
+So you have to do a lot of capacity planning
+with on-premise infrastructure.
+And you always basically buy hardware
+that you don't need now, but you know
+you probably will need it in 2 years
+so you have this expectation that your application
+is going to grow into your hardware.
+And because of that, you have a lot of wasted capacity
+you're paying for stuff that you don't actually need.
+And 1 of the big problems was it takes,
+when I worked at Rackspace
+and other managed service providers,
+the average time to provision a server
+would be 10 to 20 business days,
+depending on the environment.
+So a customer would place an order with me,
+and within 10 to 20 business days later,
+we'd have that order racked ready, networked,
+basically ready to go for the customer.
+Now in AWS release EC2, it's done using an API call.
+You could literally have your EC2 instances
+up in minutes, and you didn't have to wait for months.
+All you needed was to basically provide credit card details.
+Your infrastructure guys, didn't have to worry about
+waiting for these things to be provisioned.
+It would be done through software,
+but basically via an API call,
+and it would provision our EC2 instances in minutes.
+And you could essentially within 5 or 10 minutes,
+have your web servers, database servers,
+application servers up and running
+and being able to test and develop on them.
+And you didn't have to wait these 10 to 20 business days
+for this capacity to become available.
+So it really did change the industry overnight.
+So in terms of EC2 comes in these
+4 different pricing options,
+and you are going to be quizzed
+about this a lot in your exam.
+So let's cover off the 4 fundamental ones.
+We've got On-Demand.
+This is where you pay by the hour or second
+depending on the type of instance you run.
+We then have Reserved Capacity.
+This is where you, essentially, you get into a contract
+with AWS for between 1 to 3 years.
+The longer the contract and the more you pay upfront
+the greater discount you get.
+So that's all you have to remember going into your exam.
+If you want to save the most amount of money,
+if you want to save money compared to On-Demand,
+what you do is you reserve capacity you say,
+Hey, I need 3 web servers this size,
+I'm going to do it for 3 years,
+I'm going to pay it all up front,
+and you'll get the most discounts on that.
+So that's the way of making it most cost efficient.
+We then have Spot, and this is where you purchase
+unused capacity at a discount of up to 90% of prices,
+but prices fluctuate with supply and demand.
+So with spot prices, basically the price
+of your EC2 instance moves up and down
+sort of like the way a share price moves up and down.
+And we'll cover that off in a bit more detail later on.
+And then we have Dedicated, and this is more expensive.
+This is where you have a physical EC2 server
+that's dedicated for your use.
+It is the most expensive option
+but there's a few reasons why you do that.
+Now going into your exam, you are going to get
+a whole bunch of different scenario questions,
+and it will ask you what the best pricing options are
+to suit that scenario, to suit your objectives.
+So you do need to know the 4 different pricing options
+and their use cases going into the exam.
+So let's deep dive a little bit further
+into the 4 different pricing options.
+And we'll start with On-Demand Instances.
+So where would you use an On-Demand instance?
+Well, this is where you need flexibility.
+So if you need the low cost and flexibility of EC2
+without any upfront payment or long-term commitment.
+Typical use case so this is where you're building
+a site from scratch, and you just want to see
+what the application looks like,
+And you're coding it for the very first time.
+It's also good and useful for short term.
+So applications with short term or spiky
+or unpredictable workloads that can't be interrupted.
+Perhaps you're launching an application for the first time,
+but you just don't know what the market is going to be like
+it could go viral or people could not be very interested
+and you don't want to waste your money
+doing long-term commitments until you understand
+how the market is going to react to your application.
+And that's basically the third point as well.
+You're just testing the waters.
+So your applications are being developed
+or tested on Amazon EC2 for the first time.
+So typically, always think of On-Demand Instances
+as where you need flexibility. It's short term,
+and you're doing it for test and dev purposes.
+That's typically where you would use On-Demand Instances.
+Moving on to Reserved Instances,
+and essentially it's the opposite of that.
+So it's where you've got predictable usage.
+This is where you understand the usage patterns
+of your applications, and it's a steady state
+predictability behind it.
+It's also where you've got specific capacity requirements.
+So you know that your web servers, your database servers
+are going to need 4 vCPUs and 16 Gigs of RAM
+or something like that because you've got the data
+over the last 2 years to back that up.
+It's also very useful way you can afford to pay upfront
+maybe you've gone out and gotten VC funding,
+so you're able to burn some cash for a couple of years.
+You can make some upfront payments
+to reduce the total computing costs even further.
+And typically, the more you pay upfront, the longer
+the contract term, the better discount you can get.
+With a standard reserved instance,
+you can get up to 72% off the On-Demand price.
+So you can save more than 2/3 if you pay 3 years upfront
+and you pay it all upfront.
+We then have the Convertible Reserved Instances.
+So these are similar to Standard Reserved Instances
+except you have the option to change
+to a different reserved instance type
+with equal or greater value.
+And so, as we go through this course, you'll start to learn
+that there are different types of EC2 instances.
+So of EC2 instances that will focus primarily on RAM.
+You have compute-based EC2 instances.
+You might have GPU-based EC2 instances.
+And the cool thing about Convertible Reserved Instances,
+it allows you to change between the different classes
+of EC2 instances.
+But you do save less. It's only 54% compared to On-Demand.
+So if you want to save the most amount of money
+then you want standard reserved instances.
+And then finally we have Scheduled Reserved Instances.
+And this could be, let's say you're running an intranet
+inside your organization. You've got 2000 seats.
+And every time everyone comes into work in the morning
+about nine o'clock they all log into the intranet
+for the first time.
+So you might need a huge amount of capacity at 9:00 a.m
+just to handle that.
+But then you can scale back capacity as everyone has
+first logged in and start sending their emails et cetera.
+So you only need a capacity reservation
+for let's say 2 hours.
+That's what Scheduled Reserved Instances are.
+They basically allow you to launch
+within the time window that you find,
+so you can match your capacity reservation
+to a predictable recurring schedule that only requires
+a fraction of the day, week, or month.
+So that's all Scheduled Reserved Instances are.
+Now the thing to understand about reserved instances
+is they operate at a regional level.
+So when you reserve an instance in say us-east-1,
+you are just doing that inside us-east-1.
+You can't take that reservation
+and apply it to say the London region
+or to Paris, et cetera.
+So just to summarize your savings plans
+with Reserved Instances, you can save up to 72%
+versus On-Demand Instances regardless of the type or region.
+Essentially what it is is the more you pay upfront
+and the longer the contract term
+then the greater discount that you get.
+So if you commit to 1 or 3-year contract
+and you pay for it all upfront, you will hit that 72%.
+And just also remember that it is super flexible.
+So you don't have to just use reserved instances with EC2.
+You can actually use it with other technologies
+like Lambda and Fargate, and we'll get into what they are
+later on, but there are other compute technologies as well.
+We're going to move on to Spot Instances.
+Now we have a whole lecture on Spot Instances.
+But I mentioned that the spot price moves
+around sort of like a share price.
+And essentially you basically say at which price
+that you want to have instance capacity at
+and when it hits that price you'll have your Spot Instances
+as soon as it moves away from that price
+you'll lose your Spot Instances.
+So a good use case for Spot Instances
+is where you have applications
+that have flexible start and end times.
+Now you wouldn't want this use Spot Instances
+for a web server, for example,
+because if the spot price changes,
+your instances will get terminated
+and your website will go down.
+So you wouldn't use it for websites.
+It's really good for applications that are cost sensitive
+because you can get really, really low compute prices
+using spot prices.
+So if you're running applications in the middle of the night
+on a Sunday morning when there's a huge amount
+of capacity available, you'll get a much better price
+than if you were doing it at 9:00 a.m
+on Monday morning, for example.
+And typically this is where you would use Spot Instances
+where you've got an urgent need for large amounts
+of additional computing capacity.
+So you could do Spot Instances
+for things like image rendering or genomic sequencing.
+So this is where you might be trying
+to come up with a vaccine for a new virus
+or something like that.
+Or algorithmic trading engine.
+So you're trying to figure out whether Tesla is going to go
+up or down using algorithmic trading
+and then automate the sale and purchases of those shares.
+So Spot Instances is where you are very flexible
+on your compute capacity.
+And you're trying to save the most amount of money.
+You would not use it if you needed a guaranteed uptime
+for example, like with web servers.
+Now we will cover off Spot Instances in a lot more detail
+in a lecture later on in the course.
+Right now I just want to introduce what they are
+and where you would use them.
+So moving on to Dedicated Hosts
+and we'll have a look at different use cases
+for Dedicated Hosts, and we'll start with compliance.
+So this is where you've got regulatory requirements
+that may not support multi-tenant virtualization.
+And by multi-tenant virtualization
+all we mean is the underlying hardware
+is shared with other AWS customers.
+Now, the way they do it is
+essentially they're using software.
+So my EC2 instance, can't see
+or talk to another customer's EC2 instance.
+But, they are using the same processor, the same RAM,
+they're on the same virtual hard disk potentially.
+So in some regulatory environments,
+whether it be banking perhaps,
+or perhaps it's a government regulations, they will say,
+"Hey, no you need to have this on dedicated hardware.
+We don't want to take any risks that other tenants
+on that server could access the data."
+So that's where you get Dedicated Hosts,
+if you've got compliance requirements.
+You can also do it for licensing.
+So this is where you've got licensing that aren't portable.
+So it doesn't support multi-tenancy or cloud deployments.
+So it could be some legacy Microsoft licensing
+or Oracle licensing, and you need Dedicated Hosts
+in order to obey your licensing conditions.
+Good thing about Dedicated Hosts is they can be purchased
+on-demand so you can pay for a dedicated host hourly.
+It is going to be expensive though.
+And of course you can also reserve them
+so you can purchase a dedicated host for up to 70%
+off the on-demand price, and like with anything
+the longer your contract and the more you pay upfront
+the greater the discount that you get.
+Now, I would recommend that you go over to calculator.aws,
+and this will allow you to use AWS pricing calculator.
+And it allows you to figure out
+what your infrastructure would look like on AWS
+so you can go in there and add web servers,
+database servers, et cetera.
+That can come up as an exam question scenario-based question
+where it's talking about you need to estimate
+the costs of a move to AWS, what should you use?
+Well, you can use the AWS calculator.
+So check it out. It's at calculator.aws.
+So that is it for this lecture.
+Let's go onto my exam tips.
+So EC2 is basically like a virtual machine.
+It's hosted in AWS instead of your own data center.
+You can select the capacity that you need right now.
+You can grow and shrink it when you need it.
+You only pay for what you use
+and you only have to wait minutes
+for an EC2 instance to provision.
+You don't have to wait for months
+in order to get access to it.
+And remember the 4 different pricing models.
+So we had On-Demand. This is where you pay by the hour
+or the second depending on the type of instance
+that you want to run.
+It's great for flexibility.
+We've got Reserved.
+This is where you've got reserved capacity
+for 1 or 3 years, you get up to 72% of the discount
+on the hourly charge.
+This is great if you've got no unfixed requirements
+such as you need these dedicated web servers
+or dedicated database servers.
+We then have Spot.
+This is where you're purchasing unused capacity
+of a discount up to 90%.
+But the price moves around all the time
+with supply and demand.
+So this is where you've got applications
+with flexible start and end times.
+And then finally we have Dedicated Instances
+and this will be where you've got compliance
+or licensing regulations to meet.
+So it's still a physical EC2 instance.
+You're not sharing it with anybody else.
+And like I said, it's where you've got compliance
+and licensing base requirements.
+And again, we'll cover that off a little bit more detail
+later on in the course.
+So that is it for this lecture everyone.
+In the next lecture we're going to go ahead
+and get our hands dirty by provisioning an EC2 instance.
+So if you've got the time
+please join me in the next lecture.
+Thank you.

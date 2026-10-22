@@ -1,0 +1,255 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at the AWS command line.
+So what we're gonna do is just have a quick review
+of what the console looks like,
+then we'll talk about what the command line, what it is
+and have a look at one of the most basic commands.
+Then we'll cover off
+what we're gonna cover off in this demo,
+the different steps that we'll go through.
+We'll do the demo and then we'll move on to my exam tips.
+So this is the AWS Management Console.
+So this is the GUI way or the Graphical User Interface way
+of interacting with AWS.
+It's basically where you've got your mouse,
+you can point and click and you can provision resources.
+However, there's another way you can interact with AWS
+and this is by using the command line.
+And this allows you to interact with AWS
+simply by typing commands.
+So whenever you are using the command line,
+you always start with AWS and then you type the service.
+So if we were using S3, we'd type S3
+and then LS just means list.
+So this very simple command will say,
+hey, tell me all of the S3 buckets
+that exist in this AWS account.
+So that's what we're gonna do.
+We're gonna go have a look at how this works.
+In terms of the lesson objectives,
+the first thing we're gonna do
+is launch an EC2 instance.
+This is where we're going to use the command line.
+Then we're gonna create an IAM user
+and we're gonna give this user permissions
+to access and create S3 resources,
+and then we'll go in and configure the AWS command line.
+So we're gonna configure it using the user's credentials
+and then we're going to use the CLI
+to create an S3 bucket
+and we'll even upload a file to that S3 bucket.
+So that's what we're going to do in this lesson.
+So if you've got the time,
+please join me in the AWS console.
+Okay, so here I am in the AWS console.
+I'm just going to go over to EC2 under compute
+and we can see that I've got no instances running.
+If I click in here, there's no instances there,
+so it has deleted my last instance from the last lecture.
+So what we're gonna do is go ahead and launch an instance.
+This one, again, we're just gonna call it my web server.
+And I'm gonna scroll down.
+I'm gonna leave everything as default
+and I'm going to select an existing security group.
+I'm just going to use the launch wizard
+that we created last time
+so that we don't have to keep creating launch wizards.
+But everything else I'm going to leave as default.
+And I'm gonna go ahead and hit launch instance.
+I need to select my key pair.
+So I'm gonna use the same key pair that I had last time
+and that is now launching my instance.
+So be able to see my instance in here,
+and you can actually see my old web server now.
+Sometimes the UI will show terminated web servers
+up to a couple of hours after you've terminated them.
+Really depends.
+Before we just went into it and didn't show up,
+but now it's showing it
+because we've got an instance pending.
+So I'm just gonna wait for this instance to come up online.
+Okay, so my instance is now up and running
+and I can click in here and I can go ahead and connect.
+I'm gonna use the EC2 instance connect
+and go ahead and hit connect.
+And then that's using my key pair in the background,
+we're going through our security group
+which is open to the world, and we are now connected
+into our Amazon Linux AMI, can run pseudo SU
+to elevate your privileges to root,
+and then we can just do DNF update minus yes
+to check if there's any updates available.
+There's nothing available.
+So let's go ahead and clear the screen.
+So what we can do is we can use the command line
+to interact with AWS.
+And the way we do that is we just type in AWS.
+So AWS is the command line tool.
+We then type the service that we want to use.
+So in this case, let's do S3,
+and then we'll go ahead and type LS.
+So we're basically saying, hey, let's use AWS
+to identify all our S3 buckets and hit enter.
+Now, of course, this says unable to locate credentials.
+You can configure your credentials
+by running AWS Configure.
+So the command line tools are installed
+on your Amazon Linux AMIs by default,
+especially if you're using the Amazon Linux AMI.
+But you can also download them and use them on your PC,
+so you can have them on your Mac
+or on your Windows operating system.
+But you still need to configure it.
+So you need to configure your credentials
+and you need basically a username
+and password essentially to log in.
+So the way we configure that
+is we just type in AWS configure
+and then it's going to ask you for your AWS access key
+and then your secret access key.
+So what we need to do is go ahead and generate those.
+So let's go back over to the AWS console.
+So back in the AWS console, gonna go over to services,
+go down to security, and we're gonna open up IAM,
+which we used in the last section of the course.
+And what we need to then do is go ahead
+and create our access key IDs.
+So what we want to do is, first of all, we want to go over
+and we want to create a user group
+and we want to create a user group
+that has admin access to S3.
+So I'll call this Admin-S3.
+And down here we can add our policies.
+So if we just type in S3 and hit enter, here we go,
+AmazonS3FullAccess.
+That's essentially what we want to do.
+So then we can go ahead and hit create group.
+So that has now created a group called Admin-S3
+and it's going to allow any user in that group
+to have administrator access to S3.
+What we now want to do is go ahead and create a user.
+So I'm gonna go ahead and create a user.
+I'm just gonna call this, let's call this AlexSmith.
+And we don't want to provide the user access
+to the AWS Management console.
+We just want programmatic keys.
+And it says here, if you're creating programmatic access
+through access keys or service specific credentials
+for AWS CodeCommit or Keyspaces,
+you can generate them after you create this user.
+We're not doing that
+but we're going to go ahead and hit next.
+And then we can add this user to the group
+and we're gonna add them to the Admin-S3 group and hit next.
+And we'll go ahead and create our user.
+So we've now created our user, AlexSmith.
+We can click in here and what we can do
+is go over to our security credentials
+and then what we can do is scroll down
+and we can create our access keys.
+So let's go ahead and create our access keys.
+And our use case is we want AlexSmith
+to be able to access the command line.
+So we just click on command line
+and go ahead and click I understand,
+go ahead and hit next.
+Description value, we're just gonna leave that
+and go ahead and hit create.
+So here is our access key.
+I'm going to copy that into my clipboard,
+and I'm back in the console
+and I'm just going to paste in my access key ID.
+And now I just need my secret access key,
+secret access key is here.
+I can just copy that to my clipboard
+without revealing it to everyone,
+and then I can go ahead and paste it in here.
+I have blurred that out.
+Default region, we'll just hit enter as none
+so there's no default region.
+Our default output, we'll hit enter as none.
+And what I'm gonna do now
+is just go ahead and clear the screen.
+So now if we type AWS S3 LS,
+we'll be able to see all of our buckets.
+So here are our buckets within S3.
+So we can now programmatically access the S3
+using the command line interface using the CLI.
+And this is great for writing scripts,
+if you don't want to use the console for whatever reason,
+if you're more of a command line interface person,
+then you can basically interact with AWS
+using the command line using your PC at home
+as well as EC2 instances.
+So there we go.
+What we can now do is we can do things like AWS S3,
+we're gonna make a bucket
+and then what we can do is just give the bucket a name.
+So it's just gonna be a whole bunch of random letters.
+See if that works.
+And there we go, we've made our bucket.
+If I type in AWS S3 LS,
+you can see that that bucket is now created.
+It's just here.
+So it works exactly the same as the command line.
+And if we were to go into the console,
+we'd be able to see that bucket in there.
+We can move files around between our EC2 instances
+to our buckets and vice versa.
+It's basically just like using a shell command
+that you would normally use
+either inside Windows or inside Linux.
+So really, you just need to know at a high level
+that you can use the command line interface
+to interact with AWS.
+You don't have to use the console.
+If you are doing it via user credentials,
+then you need to generate an access key ID
+and secret access key.
+So let's go over to my exam tips.
+So onto my exam tips.
+And always remember the principle of least privilege.
+So always give your users the minimum amount
+of access required to do their job.
+That's why we only gave them S3 admin access.
+We didn't give them access to any other services
+because we just wanted to demonstrate S3.
+Next thing is to use groups.
+So create IAM groups
+and assign your users to those groups.
+And group permissions are assigned
+using IAM policy documents,
+so we added the S3 IAM policy document,
+the S3 administrator policy document,
+and of course our users will always
+automatically inherit the permissions
+of the group in which they're assigned.
+Moving on to my three CLI exam tips.
+So number one, just remember
+what a secret access key is.
+Basically the password for using your AWS command line.
+So you're only ever gonna see this once.
+And if you lose it, you can delete the access key
+and secret access key and regenerate them,
+but you'll need to run AWS configure again.
+So you'll need to reconfigure the command line.
+Don't share your key pairs.
+So each developer should have their own access key ID
+and secret access key.
+Just like passwords, they should never be shared.
+And just remember that CLI is supported
+on Linux, Windows and Mac OS.
+So you can actually go in and install the CLI on your Mac
+or on Linux or a Windows PC,
+and you can also use it on EC2 instances.
+So we just use it on an EC2 instance,
+but you can actually install the command line
+at home on your laptop or desktop
+and then go in and provision resources
+within AWS just by using the command line.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

@@ -1,0 +1,89 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+This lecture's about
+extending AWS beyond the cloud with AWS Outposts,
+and this has recently been added to the exam,
+so it's important you remember the contents of this lecture.
+So in this lecture,
+we are going to explore what Outposts is.
+We're going to look at the benefits.
+We're going to look at the different family members.
+We're going to look at the process,
+and then we're going to look at my exam tips.
+So what is Outposts?
+Well, basically Outposts brings the AWS data center
+directly to you on-premises.
+Outposts allows you to have a large variety of AWS services
+in your data center,
+and you can have Outposts in sizes such as 1U and 2U servers
+all the way up to 42U racks and multiple-rack deployments.
+So all Outposts is
+is bringing AWS services directly to you
+in your own data centers.
+So you can have things like EC2 instances, for example,
+or S3 buckets using AWS Outposts.
+So in terms of the benefits of Outposts,
+it allows you to have a hybrid cloud.
+This is where you can leverage AWS services
+inside your own data center.
+It's fully managed infrastructure.
+So AWS will manage the infrastructure to you.
+You don't need your own dedicated team
+to look after Outposts infrastructure.
+And it brings consistency to your environment.
+So it brings the AWS Management Console, APIs,
+and SDKs into your data center,
+allowing uniform consistency in your hybrid environment.
+So let's have a look
+at the different Outposts family members.
+So we've got Outposts Rack and we've got Outposts Servers,
+and a common exam scenario will be asking you
+which one of the family members you should be using
+given your circumstances.
+So with an Outposts Rack, this is a whole rack of servers.
+And it's available starting with a single 42U rack,
+and it scales all the way up to 96 racks.
+So you can have 96 racks with Outposts racks.
+And this basically provides AWS compute, storage, database,
+and other services locally,
+and it gives you the same AWS infrastructure, services,
+and APIs, but in your own data center.
+So you would only use racks in a data center
+or a place where you've got a lot of storage.
+Whereas Outposts servers are just individual servers
+in 1U or 2U form factor.
+So they're just basically 1 or 2 servers,
+and their use cases are for small space requirements,
+such as retail stores or branch offices
+or healthcare provider locations or factory floors.
+Basically, you wouldn't take Outposts servers
+and deploy them in your own racks in your own data center.
+You'd use Outposts racks for that.
+So Outposts Servers is just for small space requirements.
+And it provides local compute and networking services only.
+So in terms of the process,
+first of all, you just log into the AWS Management Console
+and you order your Outposts configuration.
+AWS staff will then come on site
+to install and deploy the hardware.
+This includes things like power, networking,
+and connectivity.
+And then you go ahead and launch your instances
+using the AWS Management Console,
+and you can be launching your instances
+on your Outposts on site.
+And then you can go ahead
+and start building your on-site AWS environment.
+So in terms of my exam tips, know what Outposts is.
+So if you see a scenario
+about extending AWS to your data center,
+I want you to think of AWS Outposts.
+And just remember that AWS Outposts Rack
+for large deployments, so within a data center,
+whereas AWS Outposts Servers are for smaller deployments.
+So this might be things like in a retail environment,
+in a shop, et cetera.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

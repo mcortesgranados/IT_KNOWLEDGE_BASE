@@ -1,0 +1,359 @@
+QUESTION 1
+
+What is user data most commonly used for?
+
+
+For updating the content of your S3 bucket
+
+
+For rotating your IAM passwords
+
+
+For deploying EC2 instances into an Auto Scaling group
+
+CORRECT
+For bootstrapping an EC2 instance as it comes online
+
+Sorry!
+While you could pass user data to update the content of your S3 bucket, doing so is more commonly used to bootstrap instances. Reference: Run Commands on Your Linux Instance at Launch
+
+Correct Answer
+User data is commonly used to bootstrap instances. Reference: Run Commands on Your Linux Instance at Launch
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which of the following statements about IAM roles is true?
+
+
+IAM roles can only be associated with one user.
+
+CORRECT
+IAM roles can be used with a variety of AWS services.
+
+
+IAM roles are associated with standard, long-term access keys and passwords for each role.
+
+
+IAM roles can only be used to allow EC2 instances to talk to other AWS services.
+
+Sorry!
+Instead of being uniquely associated with one user, an IAM role is can be assumed by anyone who needs it. Reference: IAM Roles
+
+Correct Answer
+IAM roles can be used with a variety of AWS services. Reference: IAM Roles
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which command uses your Access key ID, Secret access key, AWS Region, and Output format to set up your default profile in the AWS CLI?
+
+
+aws s3 ls
+
+
+aws configure set
+
+CORRECT
+aws configure
+
+
+aws configure list
+
+Sorry!
+aws s3 ls is used to list available S3 buckets. aws configure uses your Access key ID, Secret access key, AWS Region, and Output format to set up the AWS CLI.
+
+Correct Answer
+aws configure uses your Access key ID, Secret access key, AWS Region, and Output format to set up the AWS CLI. The AWS CLI stores this information in a profile named default in the credentials file. By default, the information in this profile is used when you run an AWS CLI command that doesn't explicitly specify a profile. The option --profile can be used to define different profile settings. You can then invoke the profile when issuing commands. As an example, the following would list S3 buckets using the information stored in the prod profile: aws s3 ls --profile prod.
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+When would you need to create an EC2 Dedicated Instance?
+
+
+When you want to ensure that your instance will never fail
+
+CORRECT
+When you have an auditing requirement to run your hosts on single-tenant hardware
+
+
+When you need to make sure that AWS support can assist you with a hardware failure
+
+
+When you need the cheapest price for an instance
+
+Sorry!
+A Dedicated Instance won't ensure that your instance will never fail. A Dedicated Instance is designed to be used when your instances need to be physically isolated from other users instances. Reference: Amazon EC2 Dedicated Instances
+
+Correct Answer
+A Dedicated Instance is designed to be used when you can't have other users on the hardware that you're using. Reference: Amazon EC2 Dedicated Instances
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which is a use case for deploying vCenter on AWS?
+
+CORRECT
+Cloud migration
+
+
+Decreased reliability
+
+
+Complicated disaster recovery plans
+
+
+Increased costs
+
+Good work!
+Migrate your existing cloud environment to AWS using VMware’s built-in tools.
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+What is the EC2 metadata URL?
+
+CORRECT
+"http://169.254.169.254/latest/meta-data/"
+
+
+"http://255.169.255.169/latest/meta-data/"
+
+
+"http://127.0.0.2/latest/meta-data/"
+
+
+"http://255.255.255.254/latest/meta-data/"
+
+Good work!
+The "http://169.254.169.254/latest/meta-data/" URL can be used to view instance metadata. Reference: Retrieve Instance Metadata
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+When would you need to create an EC2 Dedicated Instance?
+
+
+When you need to make sure that AWS support can assist you with a hardware failure
+
+
+When you want to ensure that your instance will never fail
+
+
+When you need the cheapest price for an instance
+
+CORRECT
+When you have an auditing requirement to run your hosts on single-tenant hardware
+
+Sorry!
+A Dedicated Instance doesn't ensure that AWS support can assist you in the event of a hardware failure. A Dedicated Instance is designed to be used when you can't have other users on the same hardware that you're using. Reference: Amazon EC2 Dedicated Instances
+
+Correct Answer
+A Dedicated Instance is designed to be used when you can't have other users on the hardware that you're using. Reference: Amazon EC2 Dedicated Instances
+
+_____________________________________________________________________________________________________________________________
+QUESTION 3
+
+What is the minimum time that AWS requires you to keep an EC2 instance online after you've turned it on?
+
+
+15 minutes
+
+
+1 hour
+
+
+1 day
+
+CORRECT
+None (no minimum run time)
+
+Sorry!
+15 minutes is not the minimum amount of time that an EC2 instance must be online once it is turned on. Reference: How Are Amazon EC2 Instance Hours Billed?
+
+Correct Answer
+There is no minimum uptime requirement for an EC2 instance once it has been enabled. Reference: How Are Amazon EC2 Instance Hours Billed?
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What is user data most commonly used for?
+
+CORRECT
+For bootstrapping an EC2 instance as it comes online
+
+
+For deploying EC2 instances into an Auto Scaling group
+
+
+For rotating your IAM passwords
+
+
+For updating the content of your S3 bucket
+
+Good work!
+User data is commonly used to bootstrap instances. Reference: Run Commands on Your Linux Instance at Launch
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What happens when your Spot instance is chosen by AWS for termination?
+
+
+You will get a one-hour notification sent via Amazon SNS directly to your EC2 instance on port 65.
+
+CORRECT
+While it is possible that your Spot Instance is interrupted before the warnings can be made, AWS makes a best effort to provide two-minute Spot Instance interruption notices to the metadata of your EC2 instance(s).
+
+
+Your will get no notification and your host will be terminated without warning.
+
+
+You will get a 10-minute notification sent to your specified email address.
+
+Sorry!
+If your Spot Instance has been marked for termination, a notification will be posted to the metadata of your EC2 instance two minutes before it will be stopped or terminated by AWS. Reference: Spot Instance Interruption Notices
+
+Correct Answer
+If your Spot Instance has been marked for termination, a notification will be best-effort posted to the metadata of your EC2 instance two minutes before it is stopped or terminated. Reference: Spot Instance Interruption Notices
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which statement best defines an EC2 instance?
+
+
+It is a service that allows you to bridge the gap securely and easily between your physical data center and the AWS Cloud.
+
+
+It is a service that provides durable and reliable remote object-based storage.
+
+CORRECT
+It is a service that provides secure, resizable compute capacity in the cloud.
+
+
+It is a service that provides simple and easy to use messaging queues.
+
+Sorry!
+This describes a VPN, not EC2. Reference: What Is Amazon EC2?
+
+Correct Answer
+An EC2 instance provides scalable computing capacity in the AWS Cloud, which you can use to launch virtual servers, configure security and networking, and manage storage. Reference: What Is Amazon EC2?
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which of the following is not a valid use case for IAM roles?
+
+
+Providing access to your AWS resources to users that are authenticated using an external identity provider.
+
+
+Allowing a user from another AWS account to assume a role in your account and interact with your AWS architecture.
+
+CORRECT
+Defining a set of permissions for an IAM role, and directly associating that role with an IAM group.
+
+
+Attaching a role to an EC2 instance to allow it to talk to other AWS resources.
+
+Sorry!
+Providing access to your AWS resources to externally authenticated users is a valid use of an IAM role.
+
+Reference Documentation: IAM Roles (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html)
+
+Correct Answer
+This is not a valid use case for an IAM role. AWS doesn't allow users to add an IAM role to an IAM group at this time.
+
+Reference Documentation: IAM Role Management (https://aws.amazon.com/iam/faqs/#IAM_role_management)
+
+_____________________________________________________________________________________________________________________________
+
+
+QUESTION 4
+
+Which command uses your Access key ID, Secret access key, AWS Region, and Output format to set up your default profile in the AWS CLI?
+
+
+aws configure list
+
+CORRECT
+aws configure
+
+
+aws s3 ls
+
+
+aws configure set
+
+Sorry!
+aws configure list is used to list the AWS CLI configuration data. aws configure uses your Access key ID, Secret access key, AWS Region, and Output format to set up the AWS CLI.
+
+Correct Answer
+aws configure uses your Access key ID, Secret access key, AWS Region, and Output format to set up the AWS CLI. The AWS CLI stores this information in a profile named default in the credentials file. By default, the information in this profile is used when you run an AWS CLI command that doesn't explicitly specify a profile. The option --profile can be used to define different profile settings. You can then invoke the profile when issuing commands. As an example, the following would list S3 buckets using the information stored in the prod profile: aws s3 ls --profile prod.
+
+_____________________________________________________________________________________________________________________________
+
+
+QUESTION 5
+
+Why would you want to spin up an EC2 Dedicated Host?
+
+
+Because your boss told you to
+
+
+Because you have sensitive workloads that you don't want AWS to see
+
+
+Because you need to create a cluster of EC2 instances
+
+CORRECT
+Because your application has hardware-specific licensing requirements
+
+Sorry!
+Dedicated Hosts can't provide a solution to any issue that your boss instructs you to fix. They are used to solve hardware-specific licensing requirements. Reference: Amazon EC2 Dedicated Hosts
+
+Correct Answer
+Dedicated Hosts are designed to solve hardware-specific licensing requirements. Reference: Amazon EC2 Dedicated Hosts
+
+_____________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Which AWS service allows you to bring the power of AWS to your on-premises data center?
+
+
+AWS Storage Gateway
+
+
+vCenter on AWS
+
+
+EC2 On-Premises
+
+
+AWS Outposts
+
+Sorry!
+There is no such service as EC2 On-Premises.
+
+Correct Answer
+This allows you to deploy AWS on-site in your own data center.
+
+
+
+_____________________________________________________________________________________________________________________________
+
+

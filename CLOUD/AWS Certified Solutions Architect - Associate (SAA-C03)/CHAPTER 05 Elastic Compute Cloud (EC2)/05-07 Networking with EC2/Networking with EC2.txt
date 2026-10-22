@@ -1,0 +1,156 @@
+Okay, hello Could Gurus,
+and welcome to this lecture.
+This lecture, we're going to look at
+our different networking options with EC2.
+So we're going to explore what they are
+at a very high level.
+What they're going to look at ENIs.
+We're going to look at it Enhanced Networking.
+We're going to look at ENA versus VFs.
+We're then going to look at elastic fabric adapters
+and then we'll go onto my exam tips.
+So let's just start
+with the different networking options with EC2.
+So you can attach 3 different types
+of virtual networking cards to your EC2 instances
+and the 3 are as follows.
+You've got ENI which stands
+for elastic and network interface.
+And this is for basic day-to-day networking.
+We then have EN, which is enhanced networking.
+And this uses a thing called single root I/O virtualization
+or SRIOV
+And this allows you to basically have
+very high performance networking
+on your virtual network cards.
+And then we have EFA, which is elastic fabric adapter
+and this accelerates high-performance computing
+and machine learning applications.
+So those are our three different types.
+Let's start with ENI.
+ENI is simply a virtual network card
+that allows you the following options.
+So you get a private IPv4 address,
+you get a Mac address, you get a public IPv4 address,
+you get one or more security groups
+which is basically just a virtual firewall in the Cloud.
+And then they also allow many IPv6 addresses.
+So that's all an ENI is.
+And basically where you'd use an ENI
+is if you want to create a management network
+or you want to use network
+and security appliances in your VPC
+and you can use ENIs to create dual-homed instances
+with workloads and roles on distinct subnets.
+This allows you to have private network addresses
+that are separate,
+so you could have 10.0.1.0 as your management network
+and then 10.0.2.0
+as let's say another internal network that's separate
+from your management network
+and ENIs are a way of creating a low budget,
+high availability solution.
+So ENIs are very, very common
+when you create a instance by default,
+it will have an ENI attached to it.
+So what is enhanced networking?
+Well, this is the high performance networking
+between 10 gigabits per second
+and 100 gigabits per second.
+And it uses single root I/O virtualization
+or SR-IOV to provide higher I/O performance
+and lower CPU utilization.
+And so enhanced networking just provides higher bandwidth,
+higher packets per second performance,
+and it gives you a consistently lower
+inter-instance latency.
+So with enhanced networking,
+it comes into different flavors.
+You can use it using elastic network adapter, or ENA,
+and you could also use it using the Intel 802599
+virtual function or VF interface.
+Now your elastic network adapter
+basically supports network speeds
+of up to a hundred gigabits per second
+for supported instance types.
+Whereas your Intel 82599 virtual function interfaces
+only support speeds of up to 10 gigabits per second,
+for your instance types.
+And this is typically used on older instances.
+Now, if you come up with a scenario question in your exam,
+it's talking about using enhanced networking,
+and then it's saying,
+hey should you be using it in an elastic network adapter?
+Or should you be using the Intel 82599
+virtual function interface?
+Well, to be honest
+you always want to be using the elastic network adapter
+always choose that over the VF interface
+because it's a lot faster
+and it's a lot more modern.
+Moving on to EFA.
+So what is an EFA?
+Well, this is just an elastic fabric adapter
+and it's a network device that you can attach
+to your Amazon EC2 instances
+to accelerate high performance computing
+and machine learning applications.
+And it's going to provide you with a lower
+and more consistent latency and a higher throughput
+than TCP transport traditionally used
+in cloud-based HP systems.
+So if you see anything again,
+in a scenario-based question where they're talking
+about high performance computing
+and what network adapters should you use,
+I want you to think of elastic fabric adapters.
+So elastic fabric adapter can also use this thing
+called an OS-bypass.
+And this basically makes it a lot faster
+with a much lower latency
+and OS-bypasses enable high performance compute
+and machine learning applications
+to bypass the operating system kernel
+and communicate directly
+with the elastic fabric adapter device.
+Now it's not currently supported with Windows,
+it's only supported with Linux,
+but again if you see anything about an OS-bypass
+and how you can enhance your HPC
+and machine learning applications,
+I just want you to think of using OS-bypass
+with elastic fabric adapter.
+So onto my exam tips.
+There is a entire certification
+on networking called advanced networking specialty with AWS.
+So you really don't need to know a huge amount
+of advanced networking.
+You just really need to know the 3 different types
+of network adapters that are available to you
+and what scenarios you should use those for.
+So we've got ENI and this is basic networking.
+So perhaps you need a separate management network
+for your production network or a separate logging network
+or even a monitoring network.
+And you need to do this at a low cost.
+Well, in this scenario, you want to use multiple ENIs
+for each network and then have enhanced networking.
+This is where you need speeds
+between 10 gigabits per second
+and 100 gigabits per second,
+and essentially use this way anywhere you need
+reliable and high throughput.
+And then we have our EFAs
+and every time you see the term high performance computing
+or machine learning,
+I want you to think of EFAs straight away
+or if you need to do an OS level bypass.
+So if you see a scenario question
+talking about HPC or machine learning
+and asking what network adapter you want to use,
+choose an elastic fabric adapter.
+So that is it for this lecture everyone.
+If you have any questions,
+please let me know, if not,
+feel free to move on to the next lecture.
+Thank you.

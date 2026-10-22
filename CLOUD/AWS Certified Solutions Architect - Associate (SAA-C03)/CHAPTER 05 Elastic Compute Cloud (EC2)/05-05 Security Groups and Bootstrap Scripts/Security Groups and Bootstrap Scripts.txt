@@ -1,0 +1,217 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look
+at "Security Groups and Bootstrap Scripts."
+So the first thing we're going to look at
+is how humans sense things, so how we perceive things,
+and then we're going to look at how computers communicate.
+And then we'll look at security groups
+and then what a bootstrap script is,
+and then we'll tie it all in together into a demo,
+and then we will go on to my exam tips.
+So let's start with basic human senses.
+So we see, hear, and feel using different mechanisms.
+So light--we see light using our eyes.
+And sound--we hear sound using our ears.
+And heat--we can feel heat using our skin.
+So we have these different senses and different ways
+of interpreting our outside environment.
+And so that really leads on to how computers communicate.
+So Linux, for example--when you want to administer Linux,
+you do this over SSH, and this is over a port number.
+So it's over port 22. Port 22 is the SSH port.
+Windows uses RDP, and this is done on Port 3389,
+so this is how you interface with Windows machines remotely.
+So when you remote desktop in,
+you're doing that over port 3389.
+When you're accessing websites using HTTP,
+that's on port 80,
+and when you access HTTPS, that's on port 443.
+And so when you communicate with a computer,
+you do so over different mechanisms
+depending on what it is you're trying to communicate.
+So if you're trying to communicate over SSH,
+you want to do that over port 22.
+If you're trying to just do some basic web browsing
+that's not encrypted using SSL,
+then that's on port 80.
+If you want to use the HTTPS site, that's on port 443.
+So that's all you need to understand
+about how computers communicate
+for this purpose of this exam,
+and of course, if you really want to get
+into advanced networking,
+we have a great advanced networking course,
+where we deep dive into advanced networking.
+So that leads us on to security groups.
+So security groups are basically just virtual firewalls
+for your EC2 instance,
+and by default, everything is blocked.
+So when you create an EC2 instance,
+you won't be able to SSH into it.
+You won't be able to go and use it as a web server
+because port 22 is going to be blocked,
+and port 80 is going to be blocked.
+So in order to unblock it,
+you need to open up those ports in a security group,
+and to do that, you just basically open up
+this IP address range, which is 0.0.0.0/0.
+So in order to be able to communicate to your EC2 instances
+via SSH or RDP or HTTP, then you're going to need
+to open up the correct ports,
+and we're going to do that in a console demo in a second.
+Now, in a production environment,
+you'd only open up 0.0.0.0/0 to port 80 and to port 443,
+so HTTP and HTTPS.
+You wouldn't do it for RDP or for SSH
+because it means anyone could start brute forcing
+their way into your EC2 instance.
+But just for the purposes of this demo and this course,
+we're just going to open it up
+because most of the time, your EC2 instances won't exist
+longer than a couple of minutes,
+so it's fairly safe.
+Now, bootstrap script is a script that runs
+when the instance first runs.
+So when you first boot up an EC2 instance,
+a bootstrap script will go in
+and start running at root level.
+So it has root-level permissions,
+and it can go in and do anything.
+So here's a good example of a bootstrap script.
+So on the very first line, we've got the number symbol,
+and we've got an exclamation mark,
+and this is called a shebang.
+And then we've got /bin/bash,
+and that's the path to our interpreter.
+And our interpreter just basically takes our commands
+and interprets basically what to do, how to run them.
+So it's almost as if you're on the command line,
+so anything you type underneath that will run automatically.
+So here, we've got yum install httpd -yes,
+so we're installing Apache.
+And then we're starting the Apache service.
+So yum service httpd start.
+So by adding these tasks at boot time,
+it adds to the amount of time it takes to boot the instance.
+However, it allows you to automate the installation
+of your application, so you can go in
+and create a web server straightaway.
+You don't need to log in and physically do it.
+You can run a script that goes in,
+installs the Apache service, and then starts that service.
+So that's what bootstrap scripts are,
+and they'll save you an awful lot of time in the long run.
+So this is in the resources section of the course.
+This is the bootstrap script we're going to run.
+So here, we've got our shebang
+and the path to our interpreter.
+Then we're running a yum update.
+We're installing Apache.
+We're starting the Apache service.
+We're going over to our /var/www/html directory,
+which is basically the root directory for our web server,
+and then essentially, we're just creating
+a little index.html file that says, "Hello Cloud Gurus."
+So all you need to do is copy that into your clipboard,
+go over to the AWS Management Console,
+and we're going to go and use EC2 under Compute.
+And what we're going to do is we're going to go ahead
+and launch an instance.
+And we're going to go in, and we're going to use
+an Amazon Linux 2 AMI.
+And then what we're going to do
+is we're going to use a t2.micro.
+Go ahead and hit Next.
+Now, to do your bootstrap scripts,
+you've got to go down here, and it's under here as User
+data. So this is what we're going to pass to our instance.
+So all you need to do is paste that in there.
+So you can see it in there, paste as text,
+and that's how bootstraps script.
+And we leave everything else as default,
+and we're going to go ahead and add our storage.
+We're just going to use our standard storage.
+And in here, we've got our tags.
+We're going to leave that.
+And in here, we've got our security group.
+So let's create a new security group,
+and we basically edit--everything in the security group
+is going to be a web server, so we'll call it WebDMZ.
+So it's our Web Demilitarized Zone, so DMZ.
+And here, I'm going to add a rule,
+and I'm going to go ahead and add HTTP.
+So you don't need to know all your port numbers,
+and you'll never be quizzed on it
+in the Solutions Architect Associate exam.
+Amazon pre-populate the port numbers here,
+so if I select HTTP, you can see
+that that is open to Port 80.
+If I add in HTTPS, so we'll go in here,
+and HTTPS, you can see automatically,
+it's going to populate that with port 443.
+So that's a great way of saving some time.
+So let's go ahead and hit Next,
+and we'll go ahead and hit Launch.
+And now, we're going to launch our instance,
+and go ahead and hit Launch,
+and so that is now launching our instance.
+So our instance is going to sit behind a security group
+that's open to port 80.
+So we'll be able to go ahead and view that.
+You actually click on Security and scroll down,
+you'll be able to see the security group here,
+and you'll be able to see the rules
+that are associated with it here as well.
+So we're going to just pause the video
+and wait for this instance state to come up.
+Okay, so my instance state is now up and running,
+and what I'm going to do is just going to go back
+to the bottom of the page.
+I'll just make this a bit bigger so I can see it,
+and scroll all the way to the top and go to Details,
+and I'm just going to grab my public IP address
+and copy that into my clipboard,
+and I've just pasted it in here,
+and you can see it says, "Hello Cloud Gurus."
+So essentially, what we've done is we've automated
+the deployment of a web server.
+So we've gone in,
+we've started and installed the Apache service.
+We've updated all the security patches.
+We've started the Apache service,
+and then we've just created a little webpage
+that says, "Hello Cloud Gurus,"
+and we haven't needed to log in to the command line at all.
+We've been able to do that automatically
+using a bootstrap script,
+and the reason we can go in and view a website
+is because we've opened up port 80 on our security group.
+Now, if you were to make any changes on the security group,
+those changes will take effect immediately.
+So if we were to delete port 80,
+we would no longer be able to access that EC2 instance
+over HTTP, so do remember that also going into your exam.
+So on to my exam tips.
+Like I said, just remember that changes to security groups
+take effect immediately.
+You can have any number of EC2 instances
+within a security group.
+You can have multiple security groups
+attached to EC2 instances as well.
+And then all inbound traffic is always blocked by default,
+and all outbound traffic is allowed.
+So that's all you need to remember
+about security groups going into your exam.
+And then with bootstrap scripts,
+just simply remember what a bootstrap script is.
+It's a script that runs when the instance first starts,
+and it passes all user data to the EC2 instance
+and can be used to install applications like web servers,
+which is what we just did, or databases,
+as well as do updates and more.
+Now, a bootstrap script is called user data.
+We also have a thing called metadata,
+and we're going to cover that off in the next lecture.
+So if you got the time, please join me in the next lecture.
+Thank you.

@@ -1,0 +1,101 @@
+Okay, hello Cloud Gurus, and welcome to this lecture.
+In this lecture, we're going to look at
+how we can optimize EC2 using placement groups.
+So, first we're going to look at our
+three different types of placement groups.
+We're then going to deep dive into
+clustered placement groups, spread placement groups,
+partition placement groups,
+and then we'll move on to my exam tips.
+So, the 2 types of placement groups are, guess what?
+Clustered placement groups, spread placement groups,
+and partitioned placement groups.
+Well, what does that actually even mean?
+Well, let's look at a clustered placement group.
+And this is basically a grouping of instances
+within a single availability zone.
+And this is recommended for applications
+that need really low network latency,
+high network throughput, or both.
+And essentially because they're
+in the same availability zone
+they're very very close to each other.
+So, it's a way of speeding up the rate
+at which your EC2 instances communicate.
+And only certain types of EC2 instances can be launched
+into a clustered placement group
+Moving on we then got spread placement groups.
+And this is where you've got a group of instances
+that are each place on distinct underlying hardware.
+And this is recommended for applications
+that have a small number of critical instances
+that should be completely separate from each other.
+So, they spread out rather than being close together.
+This is used for individual instances.
+So, you might say, hey I don't want my primary database
+to be on the exact same hardware as my secondary database
+or my backup database.
+I need them to be on different hardware.
+So, that's where you would use spread placement groups.
+And then we have partition placement groups.
+And this is where every partition placement group
+has its own set of racks.
+And each rack has its own network and power source.
+So, no 2 partitions within placement groups
+share the same racks which allows you to isolate
+the impact of hardware failure within your application.
+So, EC2 divides each group
+into logical segments called partitions.
+So, partition basically it's a rack.
+It's a way of grouping your EC2 instances
+into dedicated network and power sources.
+So, that's all it is.
+And this is used when you've got multiple instances
+and you want them to be on their own dedicated network
+and power sources.
+So, going into your exam
+just remember three different types of placement groups.
+So, if you've got EC2 applications
+that are running high performance compute
+and you need really low network latency
+or high network throughput
+then you are going to want a clustered placement group.
+If you've got individual critical EC2 instances
+that need to be on their own dedicated hardware
+then you want to use spread placement groups.
+And if you've got multiple EC2 instances
+so this could be things like HDFS or HBase and Cassandra
+and they need to be on their own racks
+and dedicated network infrastructure
+then you've got petitioned placement groups.
+So, clustered placement group
+can't span multiple availability zones
+whereas a spread placement group
+and a partition placement group can.
+And only certain types of instances
+can be launched in a placement group.
+So, these are compute optimized, GPU optimized,
+memory optimized, or storage optimized.
+And AWS recommends that you have homogenous instances
+within a clustered placement groups.
+You always have the same type of instances
+within a clustered placement group.
+Also remember you can't merge placement groups.
+You can't have 2 different clustered placement groups
+and then merge them together
+and you can move an existing instance
+into a placement group but
+before you move the instance
+the instance must be in the stop state and then you can move
+or remove an instance using the command line, the SDK,
+but you can't do it using the console just yet.
+So, that's all the placement groups are
+they're a way of logically grouping your EC2 instances
+depending on what it is you want to do.
+You just need to remember the 3 placement group types
+going into your exam and the different are
+use cases for those placement groups.
+So, that is it for this lecture everyone
+if you have any questions please let me know.
+If not feel free to move on to the next lecture.
+Thank you.

@@ -1,0 +1,241 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture,
+we're going to do a deep dive on spot instances
+and how we can time our workloads using spot instances
+and spot fleets.
+So we're just gonna do a reminder
+of what spot instances are.
+We're then going to go ahead and look at our spot prices.
+We're going to look at what spot blocks are.
+We're going to look at different use cases
+and then going to look at what happens
+when our spot instances get terminated.
+We'll then look at spot fleets,
+we'll look at launch pools,
+we'll look at different strategies,
+and we'll move on to our exam tips.
+And then you are basically done
+with this section of the course.
+So an Amazon EC2 spot instance lets you take advantage
+of unused EC2 capacity in the AWS Cloud.
+And basically spot instances are available
+for up to a 90% discount compared to on-demand prices,
+but they come with a catch.
+So where would we use spot instances?
+Well, basically spot instances used
+where you need stateless, fault-tolerant,
+or flexible applications.
+So you wouldn't use spot instances
+for things like web servers, for example,
+simply because a web server needs to be on
+and running all the time.
+Where you would use it is for your applications
+that are big data applications
+where you've got containerized workloads, CI/CD,
+where you've got high-performance computing
+and then other tests and development workloads.
+So that's where you would use spot instances.
+So let's talk about spot instances.
+So to use spot instances,
+you must first decide on your maximum spot price
+and the instance will be provisioned so long
+as the spot price is below your maximum spot price.
+So let's just say you are prepared to pay,
+let's say, a dollar an hour just to throw something,
+an easy figure out there.
+If Amazon's spot price is at 50 cents an hour
+then your instances will be provisioned.
+If it then raises up to say a $1.50 an hour,
+then, 'cause your maximum price is $1,
+your instances will either be stopped
+or terminated depending on what you choose.
+So the hourly spot price basically varies depending
+on the capacity and the region.
+So it's different even down
+to the individual availability zones.
+It's different.
+So it's not just the regions itself,
+it's completely different depending on the capacity
+of the availability zones as well as the regions.
+And like I said, if your spot price goes above the maximum,
+then you have two minutes to choose
+whether or not you want to stop or terminate your instances.
+So you can either stop them and resume the workloads
+once the spot price has gone below your maximum spot price
+or you can go in and terminate your EC2 instances.
+So the great thing about AWS
+is you can actually get all the historical data
+for spot instances and you can break this
+down across your different operating systems,
+against your different instance types
+of the different EC2 families types.
+You can do this over specific date ranges
+and then it breaks it down to individual availability zones
+and it compares it with the on-demand price.
+So in this one you can see that for some reason,
+US East 1F has been significantly more expensive
+than the other availability zones within US East 1.
+So you maybe you wouldn't want
+to provision your spot instances in US East 1F
+maybe you would want to do it in say US East 1D,
+which seems to be the lowest cost availability zone
+within the US East region.
+So it gives you great flexibility
+in terms of picking your maximum spot price just
+by doing some research onto your pricing history.
+So we talked about where spot instances are useful.
+So we talked about the different tasks,
+big data and analytics, containerized workloads,
+CI/CD and testing, image and media rendering,
+or high-performance computing.
+And to be honest, spot instances mostly come up
+in the exam around high performance computing.
+So where spot instances are not useful for things
+like persistent workloads, so for example web servers
+or database servers where you are always going
+to have a load on them or things like critical jobs
+because you don't want your spot instances to be stopped
+or terminated in a critical job.
+And like I said, databases.
+So you definitely don't want a database running
+on a spot instance because it can be terminated,
+it can be stopped,
+and then you won't have access to that data.
+So this is where you would not use spot instances
+and I cannot tell you how many times it'll come up
+in a scenario-based question where you have to decide
+whether you're going to be using on-demand,
+reserved, spot instances or dedicated hosts
+and you basically have to make a decision
+based on that scenario.
+So definitely don't use spot instances for anything critical
+or where you need persistent workloads or databases.
+So moving on spot instances and, more importantly,
+how to terminate spot instances.
+So when we create our spot instances,
+we're creating a spot request.
+And essentially, what we're doing
+is we're defining the maximum price.
+So it might be 10 cents an hour.
+We might have 100 instances in this spot request.
+We then define our launch specifications.
+So what AMI is it?
+So it might be a Linux, Amazon Linux 2 AMI.
+And then we've got our request type.
+And our request type can either be one-time
+or it can be persistent.
+And if it's persistent,
+you have to say when the request is valid from
+and when it's valid too.
+Now with the request type as one-time,
+it's really, really simple.
+Once we create our spot request,
+our instances will be provisioned, they'll be launched.
+As soon as the spot price goes above our maximum price,
+then that's it.
+The spot request has been completed.
+It's a one-time spot request
+and these instances will all be stopped
+or terminated depending on what you configure.
+So we don't need to worry about that.
+If however, we have a persistent request,
+what essentially it's doing
+is it's looking to see if the request
+is open, active or disabled
+as opposed to failed, canceled, or closed.
+And you can go read the guide
+that does a big in-depth explanation on this.
+But essentially what you need to understand for your exam
+is if you've got a spot request that's open and persistent,
+you can't just go in and terminate your instances
+'cause your spot request is going to look
+at the spot price and it's gonna say,
+"Hey, well you said that we needed 100 instances,
+there's currently none in there
+and the spot price is still lower than your maximum price,"
+it'll then just keep re-provisioning those instances.
+So you get stuck in this loop.
+What you have to first do is go in
+and cancel the spot request.
+You have to go in and cancel the spot request.
+That in itself won't terminate your instances.
+You still need to go in and terminate those instances.
+So this is a very popular scenario-based question.
+Essentially, you know what it's asking is how do you go in
+and terminate spot instances
+under a persistent spot request?
+Well, it's pretty simple.
+You just go in and you cancel the spot request
+and then you go in and you terminate your instances.
+And I would go ahead and read that guide
+if you've got the time.
+Moving on to spot fleets. What is a spot fleet?
+Well, it's just a collection of spot instances
+as well as optionally on-demand instances.
+And a spot fleet attempts to launch the number
+of spot instances and on demand-instances
+to meet the target capacity that you specified
+in the spot fleet request.
+And the request for spot instances is fulfilled
+if there's available capacity
+and the maximum price you specified
+in the request exceeds the current spot price.
+So the spot price is below your maximum price.
+The spot fleet also attempts
+to maintain its target capacity fleet
+if your spot instances are interrupted.
+So spot fleets will try
+and match the target capacity with your price restraints.
+That's all you need to remember with spot fleets.
+It's just a way of meeting your capacity
+within your budget essentially.
+So you can set up different launch pools.
+So you can define things like EC2 instance types,
+operating systems, and availability zones.
+They can all be in different pools.
+And then you can have multiple pools
+and the fleet will choose the best way
+to implement depending on the strategy that you define.
+And we'll come to strategies in one second.
+So spot fleets will stop launching instances
+once you reach your price threshold or capacity desire.
+So let's look at the different strategies.
+So we've got capacityOptimized
+and this is where your spot instances will come
+from the pool with optimal capacity
+for the number of instances launching.
+So it's where you are basically optimizing your capacity.
+We've got diversified.
+This is where the spot instances are distributed
+across all of the different pools.
+We've got lowestPrice,
+It's probably one of the most popular
+and this is where your spot instances come from the pool
+with the lowest price and this is the default strategy.
+And then we have our InstancePoolIsToUseCount.
+And this is where the spot instances are distributed
+across the number of spot instance pools you specify,
+and this parameter's only valid when used
+in combination with lowestPrice.
+So that is it for spot instances and spot fleets.
+Onto my exam tips.
+Just remember spot instances save up to 90%
+of the cost of on-demand instances.
+It's useful for any type of computing
+where you don't need persistent storage.
+You can block spot instances
+from terminating by using a spot block.
+And then a spot fleet is basically just a collection
+of spot instances and, optionally, on-demand instances.
+And you can configure it in a variety of different ways
+and using the four different strategies we just covered.
+And you do them in pools
+and you can have multiple pools in a spot fleet.
+So that is it for this lecture everyone.
+If you have any questions, please let me know.
+If not, it's time to move on to the very last lecture
+in this section of the course.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

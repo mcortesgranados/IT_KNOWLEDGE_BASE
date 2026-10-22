@@ -1,0 +1,73 @@
+Okay. Hello Cloud Gurus
+and welcome to this lecture.
+In this lecture, I just wanted to explore
+a little bit deeper about solving licensing issues
+with Dedicated Hosts.
+So a few lectures ago, we looked at
+the different types of pricing models with AWS.
+So we had our On-Demand,
+we had Reserved Instances,
+we had Dedicated Hosts,
+and we have Spot.
+In here, we're just going to look at Dedicated Hosts.
+In the next lecture, we'll look at Spot,
+and we'll just explore that in a bit more detail,
+and then we finish with this section of the course.
+So, in terms of this lesson,
+we're just going to look at the different pricing models.
+Just have a reminder.
+We're going to look at Dedicated Host,
+and we'll go on to my exam tips.
+So like I said, we had On-Demand,
+which is you pay by the hour, or by the second,
+depending on the type of instance you run.
+We then have Reserved,
+and this gives you the most amount of savings
+possible compared to On-Demand.
+So you can reserve capacity for 1 to 3 years.
+The more you pay up front, the more discount you get.
+You can get up to 72% discount on the hourly charge.
+We have Spot, and this is where you're purchasing
+unused capacity at a discount of up to 90%.
+But the prices fluctuate with supply and demand.
+And then finally we have Dedicated,
+and this is a physical EC2 server
+that's dedicated for your use.
+And this is the most expensive option.
+So we looked at different use cases for this
+and we talked about compliance.
+So this is where you've got regulatory requirements
+that may not support multi-tenant virtualization
+or it could be that you've got licensing requirements.
+So this is great for licensing
+that doesn't support multi-tenancy or cloud deployments.
+So this could be Microsoft licensing
+or Oracle licensing, et cetera.
+You can purchase Dedicated Hosts On-Demand,
+so you can pay for them by the hour,
+and you can reserve Dedicated Hosts as well.
+For, and you can save up to 70% off the On-Demand price
+if you go ahead and reserve your Dedicated Hosts.
+But really the whole point of this lecture
+is just to tell you this exam tip.
+So any question that you see
+about special licensing requirements,
+I want you to think of Dedicated Host.
+So Dedicated Host is just simply a physical server
+with an EC2 instance capacity
+that's fully dedicated to your use.
+Dedicated Host allow you to use
+your existing per-socket, per-core
+or per virtual machine software licensing.
+This can include things like Windows Server,
+Microsoft SQL Server, SUSE Linux Enterprise Server,
+and some Oracle licensing as well.
+So really any exam scenario question
+where it's talking about
+you've got special licensing requirements
+or compliance requirements.
+I just want you to think of Dedicated Host.
+So that is it for this lecture everyone.
+If you've got any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

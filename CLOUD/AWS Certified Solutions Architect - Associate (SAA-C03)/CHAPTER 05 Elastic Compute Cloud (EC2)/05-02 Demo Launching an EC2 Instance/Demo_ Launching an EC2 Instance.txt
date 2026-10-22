@@ -1,0 +1,188 @@
+Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at how we can launch an EC2 instance.
+So this is a demonstration
+and I'm going to now log into the AWS console.
+Okay, so here I am in the AWS console.
+We can find EC2 by going down to Compute
+and then EC2 is in here.
+So let's open up EC2.
+Note that I'm in the Northern Virginia region.
+EC2 does work on a regional basis
+just like most of AWS services.
+And in here I can see that I've got no running instances,
+I've got no Load Balancers,
+got no Auto Scaling Groups, et cetera.
+We'll learn what all these things are
+as we go through the course.
+And so the first thing I want to do,
+is basically launch an instance.
+I'm gonna click here and go and Launch Instance.
+And then the first thing we need to do is,
+give our instance a name.
+So I'm gonna call it MyWebServer1.
+And in here we've got our operating system image
+or sometimes referred to as Amazon Machine Image or AMI.
+And here we've got the different flavors.
+So we're going to be using the Amazon Linux AMI
+for the rest of this course.
+You can use macOS, you can use Ubuntu,
+you can use Windows, you can use Red Hat,
+you can use a whole bunch of different AMIs,
+but we're gonna use Amazon Linux AMI
+for the rest of this course.
+It is free tier eligible,
+so it is does fall within free tier,
+so we don't have to pay for it
+so long as the instant size is small
+and depending on how many instances we run.
+And here we can have a look at the architecture.
+So you've got /86 or (indistinct)
+we're just gonna do the default, which is /86.
+And in here we've got our instance type.
+So we're gonna be using a t2.micro
+which has one vCPU and one gig of memory.
+If you wanted to do something quite a bit bigger,
+you could scroll all the way down
+and do like a c5.18xlarge.
+This says 72 vCPUs and 144 gigs of memory.
+But of course you will be paying for that.
+So we're just gonna leave everything as default.
+In here, we've got our Key Pair.
+So we're gonna create a new key pair
+and I'm just gonna call this MyKeyPair.
+Key pair is essentially,
+I want you to think of a lock and a key.
+So when you provision your EC2 instances,
+they're locked automatically
+and the way you access them is you need a key to get in.
+It's basically sort of like a password.
+So what we're doing now is we're provisioning in the key.
+So I'm calling it MyKeyPair.
+You can either have it as a .pem,
+which is what we're gonna use the rest of this course.
+Or if for some reason you are using Windows
+and you're trying to SSH in using Putty
+you can use a .ppk.
+But to be honest, it's so much easy to SSH
+in using the AWS console now.
+So we're just gonna leave it as .pem.
+So go ahead and create our key pair
+and that will now download for us.
+I'm gonna scroll down.
+This is our Network Settings.
+So when you provision an EC2 instance,
+it's always going to be behind a security group.
+And a security group is essentially just a virtual firewall.
+So in here we can hit Create Security Group
+or Select an Existing Security Group.
+We're gonna create a security group
+for the purposes of this lecture.
+And the security group is going to have
+a name of launch-wizard-1
+so you can see it there.
+And we're gonna say allow SSH traffic from anywhere.
+And we're also gonna allow HTTPS and HTTP traffic
+from the internet 'cause it is a web server after all.
+Scrolling down, we've got our storage.
+So how big do you want the hard drive to be?
+I'm just gonna leave it at eight gigs,
+gp3 is general purpose three
+so we'll learn about EBS volume types later on.
+But this is just a type of hard disk
+so it just means it's running
+on solid state drives or SSD drives.
+And that's it really.
+We won't go into Advanced Details yet.
+We'll do that in the next lecture of the course.
+And all we need to do is go ahead
+and hit Launch Instance.
+That is now launching our instance
+and we can see here successfully launched.
+So if we want to view it,
+we'll just go over to Instances.
+We can see that its state is pending.
+You can click here and have a look at the different details.
+So we've got our details here.
+Security will show you what security group it's in.
+So here's my security group in here
+and we can see that port 22
+port 443 and port 80 are open to the world.
+So that's all that 0.0.0.0/0 means.
+It means that anyone can connect
+to the SSH port using port 22.
+And same with HTTPS 443
+and then HTTP, which is port 80.
+If we go back to our instance at the top,
+we can do our networking.
+Here is our Public IP address.
+We could open that but it won't do anything
+'cause we haven't installed a web server on it.
+So we haven't installed Apache for example.
+Storage is in here.
+So this is our root device volume or our EBS volume
+which is essentially just our hard drive.
+You can see it's eight gigs and it's attached.
+Status check just tells us
+basically the system status check that it's running
+and that the instant status check that it's running.
+We've got monitoring in here,
+which is just some basic monitoring
+such as CPU Utilization, et cetera.
+And then we've got our tags.
+And right now the only tag that we've got is the name
+and it's MyWebServer
+and we can add additional tags to it.
+So I can see now that it is up and running.
+Now in order to connect to it,
+we just select this little checkbox,
+go to Connect
+and then we're going to use EC2 Instance Connect.
+You can use your own SSH clients.
+So this might be terminal on Mac
+or it might be Putty on Windows,
+but to be honest, Amazon make it so easy.
+Now you can actually just connect
+in through your web browser
+and all we need to do is go ahead and hit Connect.
+So we are now connecting to our EC2 instance.
+And there we go.
+We can elevate our privileges to root.
+So sudo su and then I can go and do some updates.
+So type in dmf and then update and then -yes.
+And that's checking for updates.
+And there's nothing to update at this stage.
+So I am connected to my Amazon Linux AMI right now
+and if I want to quit out,
+I just type exit and then exit,
+and that logs me out.
+So if I go back to Instances
+what we can do now do,
+is just go over to MyWebServer
+and we can go ahead and terminate it
+'cause we don't need this instance.
+And that's it.
+You've basically spun up
+your very first EC2 instance in the AWS cloud.
+So go in and hit Terminate.
+It can take a minute or two
+depends on the speed of your connection.
+You can see now that,
+the instant state is shutting down.
+Can move these along, they are dynamic.
+You can see that this was deployed
+in an availability zone us-east-1c.
+So that is random.
+And if as we go through the course,
+we'll learn about how we can deploy
+to particular availability zones
+and how we can create high availability architecture
+by deploying to multiple availability zones.
+And now you can see in here that it has been terminated.
+So congratulations everyone,
+you have taken your first step into a bigger world
+by creating your first EC2 instance in the AWS Cloud.
+If you've got any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

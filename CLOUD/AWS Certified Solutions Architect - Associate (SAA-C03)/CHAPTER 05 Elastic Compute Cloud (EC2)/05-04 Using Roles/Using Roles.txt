@@ -1,0 +1,193 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look at using roles.
+So first of all, we'll look at what is an IAM role,
+we'll then look at the fact that roles are temporary,
+we'll also look at what else roles can do,
+and then I'll show you how to set up a role
+in the console and we'll go through and create an EC2 unit
+that will assume that role to create an S3 bucket
+and then we will go onto my exam tips.
+So what is an IAM role?
+Well, basically, it's an identity that you can create
+in IAM that has specific permissions.
+So role is similar to a user, as it is an AWS identity
+with permission policies that determine
+what that identity can and can not do.
+So it's all just using the JSON and policy documents,
+that's how you go ahead and create a role.
+However, instead of being uniquely associated
+with one person, a role is intended to be assumable
+by anyone who needs it.
+So it's not the same thing as a user,
+it's basically designed to be assumed by anyone
+who's going to need access to it,
+and the important thing to remember
+is that roles are temporary.
+So it doesn't have the standard long-term credentials
+the same way passwords or access keys do.
+Instead, when you assume a role, it provides you
+with temporary security credentials for your role session.
+So what else can roles do?
+Well, roles can be assumed by people, AWS architecture,
+or other system-level accounts,
+and roles can allow cross account access
+and this basically allows one AWS account the ability
+to interact with resources in other AWS accounts.
+So in this console demo, what we're gonna do
+is we're gonna go in and create an IAM role
+and we're going to ensure that it has S3 access.
+We're then gonna go ahead and provision an EC2 instance,
+I'm going to log in to that EC2 instance
+and we're going to make sure that we attach the role
+that we just created to that EC2 instance.
+Once I'm logged in, we're gonna go ahead
+and create an S3 bucket using the Command Line
+and then we're going to try
+and access S3 from our EC2 instance.
+So let's go ahead and log into the AWS console.
+Okay, so here I am in the AWS console,
+we're gonna go over to EC2,
+I'm just gonna delete that instance that we had running,
+so the MyWebServer, I'm just gonna go ahead
+and terminate that.
+So as you remember, in order to use the AWS Command Line,
+we had to create an access key ID and secret access key,
+we don't wanna do that in the future.
+So what we're gonna do now
+is we're gonna go over to Services.
+We're gonna go into IAM,
+so you can just type IAM up here
+and what we're gonna do is we're going to create a role
+and so this role will essentially allow us
+to attach the role to the EC2 instance
+as we provision the EC2 instance
+and then we should have S3 access.
+So I'm gonna click in Roles here
+and what I'm gonna do is I'm gonna go ahead
+and hit Create Role, and so the different...
+There's different entity types.
+So you can do an AWS service, AWS account,
+web identity, SAML.
+The thing that comes up most in the exam is the AWS service.
+So basically, it's allow AWS service like EC2 or Lambda
+or others to perform actions in this account.
+So that's what we're going to do.
+We're going to do AWS service.
+In common use case, we're going to basically do EC2,
+and so what we're gonna do is go ahead and hit Next
+and then in here, we're just gonna type in S3
+and then we want S3 full access.
+So we're basically attaching this policy to the role,
+very similar to when we attach this policy to the user,
+but the role we then attach to our EC2 instance.
+So I'm gonna go ahead and hit Next,
+I'm just gonna call this S3 Role as my role name
+and here is the statement.
+You don't need to know this for the exam, but essentially,
+it's allowing the security token service to assume a role
+and so this is basically allowing our EC2 instance
+to assume a role.
+The role gives us administrator access to S3.
+So I'm gonna go ahead and hit Create
+and that role has now been created,
+I can see it in here, S3 role,
+and then what I'm gonna do is just go back over
+to my Services and go back over to EC2.
+I have no instances running,
+so let's go ahead and launch an instance
+and in here, I'm just gonna call it MyAmazonServer,
+something like that.
+I'm going to leave everything as default,
+instance type, my key pair, I'm just gonna use
+the same key pair as last time.
+Gonna use an existing security groups,
+so the Launch Wizard 1 that we created.
+I'm gonna scroll all the way down
+and then I'm just gonna go ahead
+and hit Launch Instance in here.
+That is now launching my instance,
+and if I go over to my Instances,
+you can see it's here, MyAmazonServer.
+I'm just gonna pause the video
+and wait for this instance to come up online.
+Okay, so we can now see
+that MyAmazonServer is up and running.
+What I'm gonna do is click on it.
+I'm gonna go to Actions, I'm going to go to Security,
+and I'm gonna say Modify IAM Role,
+and in here, we can attach an IAM role to our instance.
+So we're going to attach the S3 IAM role to our instance,
+so we're gonna go ahead and hit Update.
+That is now attached the role to our instance.
+If we click in here and we go over to Security,
+we can see IAM role here
+and we've got the S3 role attached to our instance.
+Let's go ahead and connect to this instance.
+So I'm just gonna go ahead and hit Connect
+and we can now see it's just establishing a connection,
+but once it's connected in, I can type in...
+So if I just type in here, SUDO SU,
+elevate my privileges to root and type in AWS S3 LS.
+Now, before, it asked us for an access key ID
+and secret access key, it asked us to enter in credentials,
+but because we've got the role attached,
+we can automatically go in and access S3
+and I can do things like AWS S3 make bucket S3
+and then I can do random letters and numbers again
+and that has now created a bucket.
+I can type in AWS S3 LS in here
+and you can see that that bucket has now been created.
+Now, the reason we use roles instead of credentials
+is if this web server got hacked
+and somebody seize control of it,
+they can actually go in and view my AWS credentials.
+They're stored in a file and they'd be able
+to take my access key ID and secret access key
+and then they could use those credentials
+to access my S3 account from anywhere in the world
+'cause that's all you need is the access key ID
+and secret access key.
+However, if they then were to compromise this web server,
+it doesn't store the access key ID
+and secret access key on this web server,
+it's just using a role.
+So the only way they could access S3
+is by basically hacking this server
+and then they'd have to use this server
+as a entry point into S3.
+So the moment I terminate this server, that's it,
+they've lost their access to my S3 account.
+So using roles is a lot more secure
+'cause you're not storing credentials on a EC2 instance,
+you're just using a role and you can remove that role
+from the EC2 instance at any time
+or you can terminate the EC2 instance at any time.
+So let's go onto my exam tips.
+So onto my exam tips.
+What should you remember when using roles?
+Well, they're the preferred option
+from a security perspective and that's so you can avoid
+hard coding your credentials.
+You don't have to hard code your access key ID
+and secret access keys, you can basically use roles
+with EC2, for example, to grant you temporary credentials,
+and roles, roles are made up of policy documents
+so they control a role's permissions
+and you can actually go in and update a policy attached
+to a role and it will take effect immediately,
+so there's no waiting involved,
+and you can also attach and detach a role running
+to an EC2 instance without having to stop
+or terminate those instances.
+So going into the exam, you'll probably see
+a scenario question where it's talking
+about whether you should use access key IDs
+or secret access keys for your application
+or if you should just grant your EC2 instance
+a role that gives you the ability to interact
+with another service of AWS.
+You always choose roles over hard coding your credentials.
+So that is it for this lecture everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.

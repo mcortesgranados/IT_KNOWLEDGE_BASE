@@ -1,0 +1,116 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at EC2 metadata
+and user data.
+So first, we're gonna learn what EC2 metadata is.
+We're going to look at how we can retrieve this.
+We're then going to look at how we can use user data
+to actually save metadata.
+I'm gonna show you a bootstrap script,
+and then we're gonna go onto my exam tips.
+So what is EC2 metadata?
+Well, basically, it's simply data about your EC2 instance.
+So this can include information
+such as your private IP address, your public IP address,
+your MAC address, your host name,
+your security groups, et cetera.
+It's simply data about your EC2 instance.
+Now, in order to retrieve metadata,
+the command used to be really, really simple.
+It used to just be a curl command
+and then to an IP address,
+which was http://169.254.169.254
+and then /latest and then /metadata.
+And it used to come up in the exam quite a bit,
+but the command has now changed and it's a lot more complex.
+This is the command here.
+You'll not be quizzed on this command in your exam.
+You just simply basically need to know what metadata is,
+and all metadata is its data about your EC2 instance.
+So we are going to run this command inside the lab,
+but we'll get to that in a second.
+Essentially, what we're going to do
+is we're going to combine our user data with our metadata.
+So remember, user data is just a bootstrap script,
+and we're gonna run the following bootstrap script.
+It's available in the resources section of the course,
+and all it's doing is it's running a yum update.
+It's installing httpd,
+so it's installing Apache,
+basically making it a web server.
+It's starting the Apache service,
+and then it's going over to the var/www/html directory,
+and then it's basically creating a webpage,
+and it's using that curl command
+to get the public IP address of your EC2 server,
+and then it's just going to basically write that out
+as a webpage
+and then that's it and that's all it does.
+So we're using user data to save metadata.
+So let's go over to the AWS console.
+So here I am in the AWS console.
+I'm gonna click on EC2
+and then I'm going to go ahead and launch an instance.
+I'm gonna call it My, I don't know, WebData,
+something like that.
+Scroll down.
+I'm gonna leave everything as default.
+I'm going to use an existing security group
+and just going to use my launch-wizard-1,
+and then I'm gonna go down to my advanced details
+and I'm going to copy and paste my user data,
+which we just got from the resources section, into here,
+and then that's it.
+I'm gonna go ahead and hit Launch Instance.
+In here, of course, I need to select MyKeyPair,
+but let's go ahead and hit Launch Instance.
+That is now launching the instance.
+I'm gonna go back over to my instances,
+and I'm just going to terminate this one
+from one of the last lectures
+so it doesn't confuse me what I'm doing.
+And in here, we can see that this one is still pending,
+so what I'm gonna do now is just pause the video.
+Okay, so we can now see that my instance is running.
+I can click in here.
+We can see my public IP address is 54.164.74.48.
+What I'm gonna do is quickly connect
+and just see if it made that webpage.
+So I'm gonna go ahead and hit Connect,
+and it's now establishing a connection.
+So I'm just going to wait one second.
+I'm going to elevate my privileges to root,
+and then I'm gonna go over to my var/www/html directory,
+gonna hit ls,
+and we can see my index.html in there
+and we can just go ahead and open that up,
+and there we go.
+We can see it's created the webpage
+with our public IP address in it.
+So that bootstrap script has basically used our metadata,
+it's queried our metadata,
+and then it's used that metadata to create a website
+and it's passing our public IP address out to the world.
+So let's go onto my exam tips.
+So onto my exam tips,
+basically, you just need to remember the difference
+between user data and metadata.
+User data is simply bootstrap scripts,
+so it's things like installing Apache,
+starting the Apache service, creating webpages, et cetera,
+where metadata is just data about your EC2 instances.
+And remember that you can use bootstrap scripts or user data
+to access metadata.
+You won't be queried on the command in the exam.
+Maybe in the developer exam they might do that
+but definitely not in solutions architect.
+It is useful to know the IP address, though,
+so it's 169.254.169.254.
+That used to be a popular exam question
+but seems to have died away now,
+and they're more interested in you just knowing
+the difference between user data and metadata.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

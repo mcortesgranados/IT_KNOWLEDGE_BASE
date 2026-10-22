@@ -1,0 +1,78 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at deploying vCenter
+in AWS with VMware Cloud on AWS,
+and basically we're going to cover off
+why you should be using VMware on AWS
+or why people do use VMware on AWS.
+Then look at use cases for VMware.
+We'll then look at how we actually do a deployment
+with the vCenter on AWS, and then we'll go to my exam tips.
+So why would you use VMware on AWS?
+Well, VMware actually predates AWS
+and VMware's been around for a long time.
+And lots of people have their own
+private cloud deployments on VMware.
+So it's basically used by organizations
+around the world for private cloud deployments.
+Some organizations opt for a hybrid cloud strategy
+and they'd like to leverage AWS services.
+So why would you use VMware on AWS?
+What are the use cases?
+Well, the first one is Hybrid Cloud
+and this is where you're connecting your on-premises cloud
+to the AWS public cloud
+and you're managing a hybrid workload.
+Now, you could have resources in the AWS public cloud
+where you don't exactly know how much
+you're going to be using.
+So you don't know how many EC2 instances
+that you're going to need at any given time.
+So that might be where you would use hybrid cloud approach.
+And we could also be looking at doing a cloud migration,
+and this is pretty common.
+So basically you're trying to get off
+your legacy private cloud in your own data center
+and you're trying to migrate your existing environment
+to AWS, but you want to use VMware's built-in tools.
+A third scenario is disaster recovery.
+Again, this is really, really common.
+So VMware is famous for its disaster recovery technology.
+And using hybrid clouds, you can have
+an inexpensive disaster recovery environment on AWS.
+And then finally, they, you might just want to leverage AWS.
+You might want to use Lambda or API Gateway
+or things that are not native within VMware.
+So you can use over 200 AWS services to update
+your applications or to create new ones.
+So let's talk about VMware cloud on AWS
+and how it's deployed.
+It basically runs on dedicated hardware
+hosted in AWS using a single AWS account.
+Each host has two sockets with 18 cores per socket,
+512 gigs of RAM and 15.2 terabytes of raw SSD storage.
+And each host is capable of running
+multiple VMware instances up to the hundreds,
+depending on how big your instances are.
+And then your clusters can start with 2 hosts
+with a maximum of 16 hosts per cluster.
+And basically, Amazon will always say you need to start
+with a minimum of 2 hosts for availability.
+So these clusters are going to be your vCenter clusters
+and this is how you're going to
+basically run vCenter on AWS.
+So to be honest, it is not yet in the exam
+that we have seen, but it is covered in the new syllabus.
+So you really just need to go into the exam remembering
+that you can deploy vCenter on the AWS cloud using VMware.
+And you actually order it through VMware themselves.
+So it's a perfect solution for extending
+your private VMware cloud into the AWS public cloud.
+So that is it for this lecture, everyone.
+Just remember, like I said, you can run vCenter on AWS,
+but you need to order it through VMware.
+That's all you need to know
+going into your exam for this topic.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.
