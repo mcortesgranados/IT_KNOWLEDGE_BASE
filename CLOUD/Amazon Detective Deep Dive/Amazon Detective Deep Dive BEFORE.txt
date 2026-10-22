@@ -1,0 +1,63 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+14:05
+
+Getting Set up for This Course
+01:36
+Course Overview
+01:16
+What Is Amazon Detective?
+01:39
+How Does Amazon Detective Work?
+02:44
+Amazon Detective Use Cases
+01:52
+How Does Pricing Work?
+02:09
+Supporting Services
+02:49
+CHAPTER 2
+
+Primary and Secondary Accounts
+09:45
+
+Understanding Terms and Concepts
+02:09
+The Primary and Secondary Account Types
+02:31
+Configuring a Primary Account in Amazon Detective
+04:03
+Configuring a Secondary Account in Amazon Detective
+01:02
+CHAPTER 3
+
+Using Amazon Detective
+19:46
+
+Data in Behavior Graphs
+05:12
+
+Lab: Using Amazon Detective to Investigate an Issue
+09:35
+Lab: Further Investigation Using Amazon Detective
+04:59
+CHAPTER 4
+
+Amazon Detective Security
+07:02
+
+Data Protection
+04:04
+Identity and Access Management
+02:58
+
+CHAPTER 5
+
+Conclusion
+02:49
+
+Disabling Amazon Detective
+01:44
+Course Wrap-Up
