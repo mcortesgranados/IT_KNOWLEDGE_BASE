@@ -1,0 +1,198 @@
+Course Outline
+CHAPTER 1
+
+Intro & Theory
+1:00:10
+
+Introduction
+01:06
+
+
+A Quick Refresher
+16:37
+
+
+Template Anatomy
+12:17
+
+
+
+
+Template Operations
+10:28
+
+
+
+
+Tips and Watchouts
+18:48
+
+
+
+
+
+
+
+
+
+
+
+A Note About Demo Lessons
+00:54
+CHAPTER 2
+
+Custom Resources
+48:18
+
+Overview
+10:24
+
+
+
+
+
+What We Are Building
+07:22
+
+
+
+
+Let's Make One
+19:33
+
+Let's Use It
+10:59
+
+CHAPTER 3
+
+Macros & Transforms
+52:59
+
+Overview
+11:22
+
+
+
+
+Macro: String Operations
+09:35
+Macro: Common Tags
+08:21
+Macro: Custom Resource Types
+17:02
+
+Unit Testing
+06:39
+CHAPTER 4
+
+Best Practices
+1:07:17
+
+Nested Stacks Create
+15:36
+
+
+
+
+Nested Stacks Recover
+18:01
+Working with Secrets
+12:02
+
+
+
+
+Template Strategies
+05:48
+Template Storage and Revisions
+15:50
+
+CHAPTER 5
+
+Mastering Stacks
+1:09:29
+
+Service Roles
+15:43
+Change Sets
+09:38
+Stack Sets Part 1
+20:11
+
+Stack Sets Part 2
+15:36
+Stack Policies
+08:21
+
+CHAPTER 6
+
+Working with EC2 Instances
+54:39
+
+CloudFormationInit
+05:38
+ConfigSets
+08:28
+Resource Policies
+23:36
+
+cfn-hup
+16:57
+CHAPTER 7
+
+Working with Serverless
+1:06:19
+
+Serverless Application Repository - Part 1
+09:23
+
+Serverless Application Repository - Part 2
+19:45
+Serverless Application Repository - Part 3
+09:11
+JAMStack Deployment Part 1
+15:51
+
+
+JAMStack Deployment Part 2
+12:09
+CHAPTER 8
+
+Putting it all Together
+1:08:02
+
+Programmatic CloudFormation
+10:04
+Portal Code Walkthrough
+16:11
+Complete Course Clean-up
+11:47
+
+QUIZ
+Mastering AWS CloudFormation
+30:00
+CHAPTER 9
+
+Other Tools
+15:05
+
+Frameworks
+08:32
+
+
+
+
+
+
+
+
+
+CloudFormation Registry and CLI
+05:18
+
+
+
+
+
+
+Conclusion
