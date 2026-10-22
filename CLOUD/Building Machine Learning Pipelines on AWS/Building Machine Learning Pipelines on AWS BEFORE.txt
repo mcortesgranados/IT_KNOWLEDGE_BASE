@@ -1,0 +1,134 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+05:27
+
+Course Introduction
+01:33
+Dataset Overview
+03:54
+CHAPTER 2
+
+Training Models with SageMaker
+52:36
+
+Introduction to Training Models with SageMaker
+00:54
+Machine Learning with Amazon SageMaker
+07:07
+Built-In Algorithms
+05:56
+
+Demo: Training a Model with SageMaker
+08:08
+
+
+Model Deployment with SageMaker
+07:38
+Demo: Deploying a Model
+05:40
+
+Review of Training Models with SageMaker
+02:13
+QUIZ
+Training Models with SageMaker
+15:00
+CHAPTER 3
+
+SageMaker Pipelines
+1:07:36
+
+Introduction to SageMaker Pipelines
+00:55
+SageMaker Pipelines
+09:51
+Demo: Creating a Pipeline
+08:12
+
+Pipeline Parameters
+05:03
+Demo: Adding Parameters to a Pipeline
+03:55
+
+Quality Gates
+04:36
+Demo: Adding a Quality Gate to a Pipeline
+05:28
+
+
+Deploying a Model
+07:22
+Demo: Automatic Model Deployment
+05:30
+
+
+Review of Creating SageMaker Pipelines
+01:44
+QUIZ
+SageMaker Pipelines
+15:00
+CHAPTER 4
+
+Extending SageMaker Pipelines
+1:07:05
+
+Introduction to Extending SageMaker Pipelines
+01:14
+Data Processing with Pipelines
+07:56
+Demo: Implementing a Processing Step
+07:26
+
+
+
+Custom Algorithms in SageMaker
+06:51
+
+Demo: Using a Custom Algorithm in SageMaker Pipelines
+08:19
+
+
+
+Hyperparameter Optimization in Pipelines
+08:27
+
+Demo: Selecting a Model with the Highest Accuracy
+09:46
+
+
+
+
+Review of Extending SageMaker Pipelines
+02:06
+QUIZ
+Extending SageMaker Pipelines
+15:00
+CHAPTER 5
+
+Using Other Services with SageMaker Pipelines
+49:09
+
+Introduction to Using Other Services
+01:12
+Implementing MLOps with Projects
+06:31
+Demo: Creating a SageMaker Project
+07:24
+Using AutoML
+05:55
+Improving Data and Model Quality
+11:15
+Summary of Using Other Services with SageMaker Pipelines
+01:52
+QUIZ
+Using Other Services with SageMaker Pipelines
+15:00
+CHAPTER 6
+
+Conclusion
+04:46
+
+Course Summary
+03:41
+Conclusion and What's Next
