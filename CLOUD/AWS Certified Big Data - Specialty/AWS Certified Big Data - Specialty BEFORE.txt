@@ -1,0 +1,311 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+28:02
+
+What Does Legacy Mean?
+00:55
+Exam Blue Print
+05:28
+
+
+How Was This Course Created?
+01:16
+Disclaimer - This Course Will Not Guarantee That You Will Pass Your Exam!
+01:38
+What You’ll Need, To Do This Course
+03:20
+
+
+
+
+Generating a Dataset
+15:25
+
+
+CHAPTER 2
+
+Domain 1 - Collection
+1:49:26
+
+Kinesis Streams Introduction
+06:13
+Kinesis Streams Core Concepts
+17:20
+
+
+
+
+Kinesis Streams Emitting Data to AWS Services
+12:58
+
+Kinesis Firehose
+13:21
+
+SQS
+08:24
+IoT
+14:31
+
+
+Data Pipeline
+07:55
+Getting Data into AWS
+13:44
+
+
+QUIZ
+AWS Certified Big Data - Specialty 2019 - Domain 1 - Collection Quiz
+15:00
+CHAPTER 3
+
+Domain 2 - Storage
+1:36:56
+
+Glacier
+04:03
+DynamoDB Introduction
+11:44
+
+DynamoDB Partitions
+11:16
+
+DynamoDB GSI/LSI
+20:46
+
+
+DynamoDB Streams and Replication
+08:03
+
+DynamoDB Performance Deep Dive Part 1
+15:29
+
+DynamoDB Performance Deep Dive Part 2
+10:35
+
+QUIZ
+AWS Certified Big Data - Specialty 2019 - Domain 2 - Storage Quiz
+15:00
+CHAPTER 4
+
+Domain 3 - Processing
+3:43:24
+
+EMR Introduction
+05:38
+
+Apache Hadoop Part 1
+04:39
+Apache Hadoop Part 2
+04:02
+EMR Architecture Part 1
+07:20
+
+EMR Architecture Part 2
+12:48
+EMR Operations Part 1
+12:24
+
+
+EMR Operations Part 2
+10:59
+
+
+EMR Operations Part 3
+07:12
+EMR Operations Part 4
+16:30
+
+Using Hue with EMR
+09:01
+
+Hive on EMR
+16:40
+HBase on EMR
+16:08
+
+
+
+Presto on EMR
+06:13
+Spark on EMR Part 1
+12:21
+Spark on EMR Part 2
+09:49
+
+
+
+
+
+
+
+EMR File Storage and Compression
+04:38
+EMR Lab
+13:10
+
+Lambda in the AWS Big Data Ecosystem
+15:55
+
+
+
+
+
+
+
+
+HCatalog
+07:56
+
+Glue
+07:28
+Glue Lab
+07:33
+
+QUIZ
+AWS Certified Big Data - Specialty 2019 - Domain 3 - Processing Quiz
+15:00
+CHAPTER 5
+
+Domain 4 - Analysis
+4:39:21
+
+Introduction to Redshift
+02:28
+
+Redshift Architecture
+10:23
+
+Redshift in the AWS Ecosystem
+05:52
+Columnar Databases
+05:16
+Redshift Table Design - Introduction
+05:20
+Redshift Table Design - Distribution Styles
+10:15
+
+Redshift Table Design - Sort Keys
+14:58
+
+Redshift Table Design - Data Types
+04:56
+Redshift Table Design - Compression
+09:31
+Redshift Table Design - Constraints
+04:58
+Redshift Table Design - Review Design
+03:43
+Redshift Workload Management
+14:57
+
+Redshift Loading Data Part 1
+17:41
+Redshift Data Loading Part 2
+06:32
+Redshift Loading Data Part 3
+11:09
+Redshift Loading Data Part 4
+03:54
+
+
+Redshift Maintenance and Operations Part 1
+10:17
+
+Redshift Maintenance and Operations Part 2
+13:24
+
+
+
+
+Redshift Lab
+22:29
+
+
+Machine Learning Introduction
+13:21
+
+
+
+
+
+
+Machine Learning Multiclass Classification Model
+09:05
+
+Machine Learning Binary Classification Model
+11:32
+
+Machine Learning Regression Model
+04:38
+
+Machine Learning Lab
+08:56
+
+
+Elasticsearch
+13:01
+
+
+RStudio
+02:43
+
+
+
+
+RStudio Lab
+07:53
+
+
+Athena
+07:40
+Athena Lab
+07:29
+
+QUIZ
+AWS Certified Big Data - Specialty 2019 - Domain 4 - Analysis Quiz
+15:00
+CHAPTER 6
+
+Domain 5 - Visualization
+56:16
+
+QuickSight Introduction
+11:47
+QuickSight Visualization
+19:14
+Big Data Visualization
+08:17
+
+
+Microstrategy
+01:58
+QUIZ
+AWS Certified Big Data - Specialty 2019 - Domain 5 - Visualization Quiz
+15:00
+CHAPTER 7
+
+Domain 6 - Security
+46:41
+
+EMR Security
+17:27
+
+
+Redshift Security
+14:14
+
+
+QUIZ
+AWS Certified Big Data - Specialty 2019 - Domain 6 - Security Quiz
+15:00
+CHAPTER 8
+
+Good Luck!
+08:12
+
+Exam Strategy
+07:14
+
+Good Luck!
