@@ -1,0 +1,120 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+05:46
+
+Course Introduction
+01:29
+
+Meet Christine, Our Heroine
+04:17
+CHAPTER 2
+
+Unpacking Lambda
+1:29:16
+
+Introduction to Unpacking Lambda
+01:34
+What Is Lambda?
+10:55
+How Lambda Works
+10:56
+Lambda Use Cases
+12:03
+When to Use Lambda
+09:39
+Accessing Lambda
+10:52
+
+Unpacking Lambda: Recap
+03:17
+QUIZ
+Quiz Your Lambda Skills
+30:00
+CHAPTER 3
+
+Processing Data with Lambda
+3:49:43
+
+Introduction to Processing Data with Lambda
+01:32
+
+Processing Data: Overview
+09:25
+Understanding Lambda Layers
+15:00
+
+
+Demo: Converting JSON to CSV Using Lambda
+14:26
+
+Demo: Ingesting CSV Files from S3 to DynamoDB
+13:28
+
+Processing Real-Time Data Using Kinesis and Lambda: Overview
+08:05
+Demo: Processing Real-Time Data Using Kinesis and Lambda
+11:48
+
+
+
+Testing and Debugging Lambda Failures
+14:58
+
+Processing Data with Lambda: Recap
+06:01
+QUIZ
+Quiz Your Knowledge on Using Lambda to Process Data
+30:00
+HANDS-ON LAB
+Orchestrating Lambda Functions Using AWS Step Functions
+1:00:00
+HANDS-ON LAB
+Automatically Processing Data in S3 Using Lambda
+45:00
+CHAPTER 4
+
+Conclusion
+00:48
+
+Conclusion and What’s Next
+00:48
+
+
+Your Progress
+0%
+
+COMPLETE
+
+Lesson Completion
+
+0%
+
+Lab Completion
+
+0 of 2
+
+Quiz Completion
+
+0 of 2
+
+NEW
+
+Learning Scheduler
+Tell us how many hours per week you can study.
+
+4
+30 Nov.
+HRS PER WEEKCOMPLETION DATE
+MEMBERS ONLY
+
+Cloud Playground
+Cloud along in real time. This course supports Cloud Playground sandbox environments, so you can learn by doing in a real cloud environment.
+
+Certificate of Completion
+Complete at least 80% of the course before you can request a certificate of completion.
+
+Rate this course
+Loved it? Room for improvement? Let us know!
+
