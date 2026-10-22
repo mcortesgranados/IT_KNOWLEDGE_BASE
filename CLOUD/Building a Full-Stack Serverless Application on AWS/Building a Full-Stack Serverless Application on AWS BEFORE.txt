@@ -1,0 +1,92 @@
+Course Outline
+CHAPTER 1
+
+Course Introduction
+07:12
+
+Course Introduction
+01:33
+
+About the Training Architect
+01:12
+AWS Free Tier: Usage tracking and Billing Widget
+03:39
+What You Should Know Beforehand: Prerequisites
+00:48
+CHAPTER 2
+
+Serverless Defined
+11:03
+
+Why Use Serverless?
+03:39
+Serverless Architectures
+03:56
+Limitations of Serverless
+03:28
+CHAPTER 3
+
+Front-End Serverless Layer: S3 and CloudFront
+1:51:45
+
+Overview
+04:11
+Setting Up AWS S3 as a Standalone Website via Console
+08:21
+AWS CloudFront as an HTTPS Endpoint Provider
+09:13
+HANDS-ON LAB
+Setting Up an S3 Static Website Using AWS CLI
+30:00
+HANDS-ON LAB
+Setting Up AWS CloudFront as an HTTPS Endpoint for S3
+1:00:00
+CHAPTER 4
+
+Application Layer: AWS Lambda Functions
+1:33:11
+
+Overview
+05:00
+Creating a Lambda Function and Lambda IAM Execution Role
+07:22
+Event Triggers for AWS Lambda
+11:18
+Testing and Debugging Lambda Functions
+09:31
+
+HANDS-ON LAB
+Setting Up Lambda Functions with S3 Event Triggers
+1:00:00
+CHAPTER 5
+
+Back-End Data Persistence Layer: AWS Aurora Serverless
+2:56:31
+
+Overview
+03:10
+What Is Amazon Aurora Serverless?
+03:22
+Aurora Serverless Concepts
+09:05
+Integrating Aurora Serverless with Lambda Functions
+10:54
+HANDS-ON LAB
+Creating and Connecting to an Aurora Serverless Database via CLI
+45:00
+HANDS-ON LAB
+Integrating Aurora Serverless with Lambda Functions Using Python and PyMySQL
+1:45:00
+CHAPTER 6
+
+Monitoring Serverless Application Metrics
+16:19
+
+Metrics and CloudWatch Dashboard for Serverless
+16:19
+CHAPTER 7
+
+Conclusion
+01:29
+
+What's Next?
