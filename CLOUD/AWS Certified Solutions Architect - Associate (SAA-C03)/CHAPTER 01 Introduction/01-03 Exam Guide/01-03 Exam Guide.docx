@@ -1,0 +1,150 @@
+Okay. Hello, Cloud Gurus.
+Welcome to this lesson
+where we're going to walk through the exam guide
+so we can see what we can expect when we take our exam.
+Let's have a quick lesson breakdown.
+The first thing we'll do
+is we'll go over our response types.
+So this is where we'll talk
+about what kind of questions we'll see.
+We'll look at the previous exam domains.
+And then using that,
+we'll talk about the difference in the new exam domains.
+After talking about the differences between the two exams,
+we'll start looking at each domain individually
+and see what we really need to know
+to become an expert in those said domains.
+And then we'll wrap everything up with some exam tips.
+So let's take a look at the response types.
+The first question you'll get is a scenario-based response.
+So a large majority of the questions on the exam
+will be based on real-world scenarios.
+So you really need to do well in picking out keywords
+and requirements in these scenarios
+to pick the best answer for it.
+There will also be multiple choice questions,
+so there will be one correct response
+and usually three incorrect responses,
+which are known as distractors.
+Now, these distractors are written usually in a way
+that makes them seem as if they can be correct.
+However, they are not.
+There's always at least one thing in each distractor
+that makes them an incorrect answer
+based on the scenario in question.
+And you'll also have multiple response questions,
+so you'll have to pick two correct responses
+out of five response options.
+Again, this follows the same principle
+as the multiple choice
+where they will likely have distractors
+for three of the incorrect answers.
+So let's take a look at the previous exam.
+There were four original domains and their breakdowns.
+We had design resilient architectures at 30%,
+design high-performing architectures at 28%,
+design secure applications and architectures
+which came in at 24%,
+and then we finished up
+with design cost-optimized architectures,
+which weighed in at 18% of the total exam.
+Well, with this third version of the exam,
+AWS switched some things up.
+They moved some weights around
+and they renamed one of the domains.
+So now we have design resilient architectures at 26%.
+We have design high-performing architectures
+which is now at 24%.
+And they renamed the secure architecture domain
+to design secure architectures, which weighs in at 30%.
+So there's a big emphasis on this particular domain now.
+And then lastly,
+they kept design cost-optimized architectures
+and they bumped it up to 20%.
+So you can see they moved some of the weights around
+and then they renamed this one domain.
+So what can we expect
+in the design resilient architectures domain questions?
+Well, a lot of the questions you're gonna encounter
+are based around designing
+multi-tier architecture solutions.
+So how can you make them scalable
+or loosely coupled and multi-tiered?
+You also need to know how you can design highly-available
+and/or fault-tolerant architectures.
+You need to know the key differences
+between being highly available and fault tolerant
+and we'll cover those throughout this course.
+You also need to know how you can design
+decoupling mechanisms using different services,
+so when you use message queuing
+or notification topics within your architectures.
+And lastly, you need to know when you need to choose
+the appropriate resilient storage.
+So what are the requirements for your storage?
+How often is data accessed, et cetera?
+Now let's move on
+to designing high-performing architectures.
+In this, we need to know how we can identify
+elastic and scalable compute solutions for our workloads,
+so things like auto-scaling groups or elastic load balancers
+for handling and dispersing load.
+We need to know how we can select high-performing
+and scalable storage solutions for workloads as well.
+You also need to know how to select
+the best high-performing networking solution
+for your workload.
+So will VPN cut it
+or do you need something like a Direct Connect?
+And lastly, you need to know
+which database solution fits your workload best.
+So do you need a non-relational database like DynamoDB?
+Do you need something more like Amazon Redshift, et cetera?
+Now let's move on to designing secure architectures.
+This is the newly named domain,
+but it follows similar concepts as the previous exam.
+You'll need to know how you can design
+secure access to AWS resources.
+So things like IAM, AWS Single Sign-On,
+things of that nature.
+You need to know how you can design
+secure application tiers.
+We also need to know
+how to select appropriate data security options,
+so think of things like encryption at rest
+and in transit for instance.
+And then the last domain
+design cost-optimized architectures.
+We're going to explore how we can identify
+cost-effective storage solutions,
+so maybe different tiers in S3 storage, for example.
+We're gonna look at how we can identify
+the most cost-effective compute and database services,
+so Aurora serverless, maybe spot instances for EC2,
+different things like that.
+We'll also look at designing
+cost-optimized network architectures.
+Now let's move on to our exam tip.
+So what does it take to pass?
+Well, your result on the exam is going to be a score
+from 100 all the way to 1,000.
+The minimum pass mark is 720.
+So as long as you score 720 points out of 1,000,
+you officially reach this certification.
+There are 65 questions
+and you're going to have 130 minutes to complete the exam,
+so be sure to pace yourself correctly.
+Now, we also wanted to pass along some testing tips.
+We recommend not spending too much time
+on your hard questions at first.
+Select an answer, flag them, and then review them later on.
+Be sure to watch for keyword indicators
+in certain scenarios.
+There's going to be very specific keywords
+that make the difference in which service you should choose.
+And lastly, always remember
+the well-architected framework pillars.
+These have a big play in a lot of the scenario answers.
+Now, that's gonna do it for this lesson.
+Let's go ahead and wrap up
+and then we'll start getting into the course.
