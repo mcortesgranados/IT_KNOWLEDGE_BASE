@@ -1,0 +1,110 @@
+Okay, hello, cloud gurus and welcome to this lecture.
+So congratulations, you're at the end
+of the elastic load balancing section of the course.
+What we're gonna do now is just cover off what you need
+to know going into your exam.
+So you need to remember the four different types
+of elastic load balancers.
+So we have our application load balancers.
+These operate at Layer seven and do intelligent
+load balancing.
+Network load balancers.
+These operate at Layer four
+and they're used for extreme performance.
+Gateway load balancers.
+These operate at Layer three
+and are used for inline virtual appliances.
+And then our classic load balancers.
+These operate a combination of cross between
+Layers four and seven, and mostly are used for test and dev.
+Remember what a health check is.
+Basically you can use health checks to route your traffic
+to instances or targets that are healthy.
+Remember, with application load balancers,
+just remember what a listener is.
+A listener checks for connection requests from clients
+using the protocol and the port that you configure.
+So it's either going to be port 80 or port 443.
+And then you have rules, and these determine
+how the load balancer routes your request
+to its registered target,
+and each rule consists of a priority,
+one or more actions and one or more conditions.
+And then we have our target groups, and our target groups,
+basically each target group routes request to one
+or more registered targets,
+such as our EC2 instances using the protocol
+and port numbers that you specify.
+Remember that there is a limitation
+to application load balancers.
+It does only support HTTP and HTTPS.
+And to use a HTTPS listener,
+you must deploy at least one SSL
+or TLS service certificate on your load balancer.
+And the load balancer uses the service certificate
+to terminate the front end connection
+and decrypt the requests from your clients
+before sending them to the targets.
+Moving on to network load balancers,
+remember they operate at Layer four.
+You're going to use them when you need extreme performance.
+Other use cases are where you need protocols
+that are not supported by application load balancers.
+And network load balancers can also decrypt your traffic,
+but you're going to need to install the certificate
+on the load balancer.
+Moving on to gateway load balancers.
+Just watch for any questions about load balancers
+operating at Layer three for inline virtual appliances.
+To be honest, it doesn't really come up that much,
+but if you see anything talking about Layer three
+or inline virtual appliances, I want you to think
+of gateway load balancers.
+Moving on to classic load balancers.
+Remember what a 504 error means.
+It just means that the gateway has timed out,
+and this means your application is not responding
+within the idle timeout period.
+And to basically solve this,
+you just need to troubleshoot the application.
+Is your web server down
+or is it your database server, et cetera.
+And remember, if you need the IPV 4 address
+of your end user, you're going to be looking
+for the X-forwarded-for-header.
+Moving on to sticky sessions.
+So just remember what sticky sessions are.
+They enable your users to stick to the same EC2 instance.
+And this can be useful if you're storing information
+locally to that instance.
+And you may see scenario based questions
+where you remove an EC2 instance from a pool,
+but the load balancer continues to direct traffic
+to that EC2 instance.
+In a scenario like that, you just need to disable
+sticky sessions.
+Remember the application load balancers
+also have sticky sessions
+so you can enable sticky sessions
+for your application load balancer,
+but it's going to be sent to the target group level,
+not to the individual EC2 instances in that target group.
+If you do want it to go to individual EC2 instances,
+then you basically just need one target group
+per EC2 instance.
+Also, remember deregistration delay
+or connection draining,
+depending on if it's an application load balancer
+or a classic load balancer.
+They're exactly the same thing.
+So you basically want to enable deregistration delay
+and this will keep existing connections open
+if the EC2 instance becomes unhealthy,
+or you could choose to disable deregistration delay
+or connection draining.
+And you do this if you want your load balancer
+to immediately close connections to the instances
+that are deregistered or that have become unhealthy.
+So that is it for this lecture
+and this is the end of the load balancing section.
+So if you've got the time, I'll see you in the next section.

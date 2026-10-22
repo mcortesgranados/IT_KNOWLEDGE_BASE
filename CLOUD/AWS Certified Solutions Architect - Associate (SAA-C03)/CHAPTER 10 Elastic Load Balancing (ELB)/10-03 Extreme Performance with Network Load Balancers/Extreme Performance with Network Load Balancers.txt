@@ -1,0 +1,104 @@
+Okay. Hello, Cloud Gurus.
+And welcome to this lecture. In this lecture,
+we're going to look at Extreme Performance
+with Network Load balancers.
+So again, I use the analogy of a Lamborghini
+but essentially,
+if you want a layer 4 connection
+or you need thousands or even tens of thousands
+of concurrent connections you probably
+want to look at a Network Load Balancer.
+So cover off what layer 4 load balancing is,
+we'll then talk about Request Received,
+Listeners, and Target Groups.
+Then talk about different Ports and Protocols.
+We'll look at our different Use Cases
+for a Network Load Balancer.
+We'll look at Encryption
+and then we'll just go onto my exam tips.
+So Layer 4 load Balancing.
+Basically a Network Load Balancer
+of functions that the fourth layer
+of the Open Systems Interconnection or OSI model
+and it can handle
+millions of requests per second.
+So let's talk about how
+a Network Load balancer Works.
+Basically,
+after the load balancer receives
+a connection request,
+it's going to select a target
+from the target group for the default rule.
+And it's going to attempt
+to open a TCP connection
+to the selected target on the port specified
+in the listener configuration.
+And we'll have a look at
+what to ports are supported in one second.
+But essentially, a listener checks
+for connection requests from clients
+using the protocols
+and the port that you specify.
+And the listener on a Network Load Balancer then
+forwards the request to the target group.
+So there are no rules.
+Unlike with Application Load Balancers
+you can't do intelligent based routing.
+If you want to do intelligence based routing,
+you need a layer 7 Load Balancer.
+However, we do have target groups
+just like with Application Load Balancers
+and each target group
+then routes requests to one or more
+registered targets such as EC2 instances
+using the protocol
+and the port number you specify.
+So what are the protocols
+and ports that are supported?
+Well, the protocols that are supported
+are TCP, TLS, UDP, and TCP_UDP,
+and the Network Load Balancer supports
+ports from 1-65535.
+So basically, any port and protocol.
+And then finally moving on to Encryption.
+So you can use a TLS listener to offload the work
+of encryption and decryption
+to your load balancer
+so your applications can focus
+on their business logic.
+So in other words, your EC2 instances don't
+need to worry about encryption or decryption.
+But if the listener protocol is TLS
+you must deploy exactly one SSL certificate
+on the listener.
+So going into your exam,
+just remember the use cases
+for a Network Load Balancer.
+So they're best suited for load balancing
+of TCP traffic
+where extreme performance is required.
+They're operating at the connection level.
+So operating at layer 4.
+And network Load balancers are capable
+of handling millions of requests per second
+while maintaining ultra low latencies.
+And you basically want to use
+a Network Load Balancer for extreme performance.
+So just remember these four tips
+going into your exam.
+I've already covered off two of them.
+So Network Load Balancers operate at layer 4,
+use where you need extreme performance,
+and then other use cases
+are where you need protocols
+that are not supported
+by Application Load Balancers.
+So basically anything that's not port 80
+or 443.
+And Network Load balancers can decrypt traffic
+but you will need to install the certificate
+on the Load Balancer itself.
+That is it for this lecture everyone.
+If you have any questions, please let me know
+If not, feel free to move on to the next lecture.
+Thank you.

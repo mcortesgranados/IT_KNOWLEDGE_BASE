@@ -1,0 +1,152 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at
+using Classic Load Balancers.
+So explore what a Classic Load Balance is.
+We'll then look at the X-Forwarded-For header.
+We'll do a network diagram as well.
+Then look at gateway timeouts.
+We'll then go on and do a demo in the console
+so you can see how to set up a Classic Load Balancer.
+And then we will move on to my exam tips.
+So, Classic Load Balancers are basically
+the Legacy Load Balancers and you can load balance
+HTTP and HTTPS applications,
+and then, you can also use Layer 7 specific features
+such as X-Forwarded-For and sticky sessions.
+You can also use strict Layer 4 load balancing
+for applications that rely purely on the TCP protocol.
+So, let's explore what an X-Forwarded-For header is.
+Essentially when traffic is sent from a load balancer,
+the server access logs contain the IP address of the proxy
+or of the load balancer only.
+So when your EC2 instances are basically logging
+all the data that's coming in from your load balancer,
+it's actually just getting the internal IP address
+of the load balancer,
+so you don't know where this traffic is coming from.
+And to see the original IP address of the client,
+the X-Forwarded-For request header is used.
+So let's have a quick look at how this works.
+Here's our user, they've got an external IP address
+of 124.12.3.231.
+And that might be an IP address in,
+you know, the US on the eastern seaboard or something.
+You want to collect that data because you need to know
+where your customers are coming from.
+They then browse to your website
+and they hit your Classic Load Balancer.
+And the Classic Load Balancer
+has an internal IP address of 10.0.0.23.
+And so, what happens is is your EC2 instance
+that acts as a web server,
+in the logs it's just going to see
+the Classic Load Balancers internal IP address,
+and you're not going to be able to see
+where your user is coming from,
+but you can find it in the X-Forwarded-For header.
+So that's where you look for
+the external IP address of your users,
+and this can be a very popular exam topic
+that comes up on Classic Load Balancers.
+So just remember if you need an external IP address
+for your end user, you're going to do it
+in the X-Forwarded-For header.
+Moving on to gateway timeouts.
+If your application stops responding,
+the Classic Load Balancer will respond with a 504 Error.
+And this basically means either
+your web server is having an issue
+or your database server is having an issue.
+But essentially it means that the load balancer
+is up and running but it can't make a connection
+or something is going wrong
+to the things that are behind it.
+So again, if you see an Error 504
+as a exam scenario-based question,
+you need to go in and troubleshoot either the web layer
+or the database layer of your applications.
+So, let's go ahead and provision
+a Classic Load Balancer in the AWS Console.
+Okay, so here I am in the AWS Console.
+I'm just gonna go over to EC2.
+I've got my three running instances,
+so web server one, web server two, and web server three.
+What I wanna do is to go over two my load balancers
+and we're gonna go ahead and create a load balancer.
+Now you can see Classic Load Balancers are legacy,
+even just in the UI, it's hard to see.
+You can only see that there's three here.
+If you scroll down,
+you can see Classic Load Balancers right at the bottom.
+So I'm gonna go ahead and hit Create.
+And in here we're gonna give out a load balancer a name,
+so, MyClassicLB,
+and then you can say whether
+it's internet facing or internal.
+If it's internal, it's just in a private subnet
+and it would load balance to other instances
+inside a private subnet,
+we want ours to be internet facing.
+I'm going to put this into my default VPC
+and I'm gonna use all three availability zones.
+So, I'm gonna click in there.
+And then my security groups in here,
+I'm just gonna select my Web DMZ security group.
+And I'll also do it to my Default security group.
+In here we've got our Listeners.
+So what are we listening in on?
+So just port 80 is fine.
+You can add things like SSL if you want.
+Health checks, so in here we can set
+all our advanced health check settings,
+and it's going to our index.html.
+Basically gonna leave that in here.
+We can add our instances.
+So we're gonna add in web servers one, two, and three.
+So there we go, I've added them in.
+And then in here we can do cross zone load balancing,
+enable connection draining, et cetera.
+And then our tags are here.
+So, it's pretty simple to set up.
+Let's go ahead and hit Create load balancer.
+So that's now creating my load balancer.
+It can take a couple of minutes for it to come up.
+So what I'm gonna do is I'm just
+going to go ahead and pause the video.
+Okay, so that is now ready.
+If I click on my load balancer, I can see it in here.
+So, we can go and look at our instances that are behind it.
+We can see that they're in service,
+we can look at our health check settings, et cetera.
+If I go back to my description,
+I'll be able to go and get the DNS name of my load balancer.
+So, it's in here,
+and I can just copy that into my clipboard.
+And then let's go over and see if this has worked.
+So browse to that in my browser.
+If I repetitively refresh,
+you can see that it's going across all three EC2 instances.
+So as you can see, Classic Load Balancers
+are super easy to set up and that's probably why
+a lot of people just use them for test and dev purposes.
+So, let's go onto my exam tips.
+Going into your exam, just remember that a 504 error
+means that the gateway has timed out,
+and this basically means that the application
+is not responding within the idle timeout period
+and you basically just have to go in
+and troubleshoot the application.
+Is it the web server or is it a database server?
+What's going on?
+But it's not going to be your Classic Load Balancer.
+So, a 504 error just simply means
+your application has stopped working.
+And then the other thing you need to remember
+going into your exam is just if you need
+the IPv4 address of your end user,
+you need to look for the X-Forwarded-For header.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

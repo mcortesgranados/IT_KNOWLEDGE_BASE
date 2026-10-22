@@ -1,0 +1,68 @@
+Okay, hello, Cloud Gurus and welcome
+to this lecture.
+In this lecture,
+we're going to look at leaving the load balancer
+with deregistration delay.
+With classic load balancers,
+it's actually called connection draining,
+but it's all the same thing.
+So look at what deregistration delay is.
+We'll then look at how we can do this in the console
+and then we'll go onto my exam tips.
+So what is deregistration delay or connection draining?
+Well, basically, it allows load balancers
+to keep existing connections open if the EC2 instances
+are deregistered or become unhealthy.
+And this enables the load balancer
+to complete in-flight requests made to the instances
+that are deregistered or unhealthy.
+So if you go in and deregister a EC2 instance,
+deregistration delay will just keep that connection open
+for people who are already using that EC2 instance.
+Now, you can disable deregistration delay
+if you want your load balancer
+to immediately close the connections
+to the instances that are deregistered
+or have become unhealthy.
+So let's have a look at how we can do this
+in the AWS console.
+Okay, so here I am in the EC2 portal
+and then what I wanna do is just go down
+to my load balancers.
+We'll start with classic load balancers
+'cause it's super easy.
+So if you just click on your classic load balancer,
+all you need to do is go over to your instances
+and then in here, you can see connection draining.
+This is the same thing as deregistration delay.
+So you go in and hit edit,
+and then you essentially just uncheck that box
+and that will disable connection draining.
+So that's how you do it for classic load balancers.
+For application load balancers,
+it's a little bit more tricky, but it's not too bad.
+So if you just go over to your application load balancer,
+what you actually need to do is go over
+to your target groups over here
+and then you edit the target groups.
+You're doing this at the target group level,
+not at the application load balancer level.
+What you do is you just go over two attributes,
+and in here, you can see target deregistration management.
+So go ahead and hit edit
+and then to disable it, you just change that to zero.
+So just onto my exam tips.
+You will probably see a scenario question
+where it's talking about deregistration delay
+or connection draining.
+Just remember to enable deregistration delay,
+it's going to keep existing connections open
+if the EC2 instance becomes unhealthy
+and if you disable deregistration delay, you're going
+to do this if you want your load balancer
+to immediately close the connections to the instances
+that are deregistered or have become unhealthy.
+So that is it for this lecture, everyone.
+In the next lecture, we're just going to review everything
+that we have learnt in this section of the course,
+and then you're free to move on to the next section.
