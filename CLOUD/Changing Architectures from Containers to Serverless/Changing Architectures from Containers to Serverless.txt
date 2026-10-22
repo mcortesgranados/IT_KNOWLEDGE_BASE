@@ -1,0 +1,27 @@
+CHAPTER 01 Introduction
+01-01 Course Introduction
+
+CHAPTER 02 Changing Architectures
+02-01 Containers and Serverless At a Glance
+
+02-02 Stateless Architectures
+
+02-03 Event-Driven Architectures
+
+02-04 Concerns and Cautions
+
+02-05 HANDS-ON LAB Migrating a Service from a Container to Serverless
+
+CHAPTER 03 Serverless Landscapes
+03-01 AWS
+
+03-02 Azure
+
+03-03 GCP
+
+03-04 Final Looks and Comparisons
+
+03-05 QUIZ Changing Architectures from Containers to Serverless
+CHAPTER 04 Conclusion
+04-01 Conclusion and What’s Next
+

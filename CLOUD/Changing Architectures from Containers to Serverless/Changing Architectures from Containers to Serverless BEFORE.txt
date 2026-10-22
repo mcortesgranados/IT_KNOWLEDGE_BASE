@@ -1,0 +1,50 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:40
+
+Course Introduction
+01:40
+
+CHAPTER 2
+
+Changing Architectures
+1:01:55
+
+Containers and Serverless: At a Glance
+07:14
+Stateless Architectures
+07:04
+Event-Driven Architectures
+07:38
+Concerns and Cautions
+09:59
+HANDS-ON LAB
+Migrating a Service from a Container to Serverless
+30:00
+CHAPTER 3
+
+Serverless Landscapes
+33:21
+
+AWS
+05:58
+
+Azure
+05:10
+
+GCP
+03:54
+
+Final Looks and Comparisons
+03:19
+QUIZ
+Changing Architectures from Containers to Serverless
+15:00
+CHAPTER 4
+
+Conclusion
+01:11
+
+Conclusion and What’s Next
