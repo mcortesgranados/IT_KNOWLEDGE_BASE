@@ -1,0 +1,121 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+02:08
+
+Course Introduction and About the Training Architect
+02:08
+CHAPTER 2
+
+IAM Essentials
+34:40
+
+Section Introduction
+00:47
+Understanding IAM
+06:57
+
+Exploring Key Components and Terms
+05:11
+Understanding the Root User
+04:17
+Exploring IAM in the Real World
+03:29
+Understanding What Causes Bad Things to Happen
+02:50
+Discovering the AWS Management Console
+05:17
+Exploring Programmatic Access
+04:22
+Section Review
+01:30
+CHAPTER 3
+
+Identities
+18:55
+
+Section Introduction
+00:42
+Creating and Managing Individual IAM Users
+08:05
+Understanding Federated Users
+05:16
+Understanding Groups
+03:57
+Section Review
+00:55
+CHAPTER 4
+
+Access Management
+2:59:35
+
+Section Introduction
+00:36
+Understanding Policies
+11:17
+Leveraging Policies
+14:10
+HANDS-ON LAB
+Managing AWS IAM User Permissions Using Groups and Policies
+30:00
+HANDS-ON LAB
+Preventing Deletion of an Amazon S3 Bucket Using a Resource-Based Policy
+30:00
+Understanding Roles
+05:24
+Leveraging Roles
+11:14
+
+HANDS-ON LAB
+Giving an AWS Lambda Function Access to a DynamoDB Table via an Execution Role
+30:00
+Controlling Access via Tags
+08:47
+Setting Permissions Boundaries
+06:52
+HANDS-ON LAB
+Limiting Privileged User Access by Setting Permissions Boundaries in AWS IAM
+30:00
+Section Review
+01:15
+CHAPTER 5
+
+Testing and Troubleshooting
+46:34
+
+Section Introduction
+00:33
+Using the Policy Simulator
+04:28
+Exploring Common Errors and Resolutions
+10:52
+HANDS-ON LAB
+Troubleshooting and Resolving AWS IAM Errors
+30:00
+Section Review
+00:41
+CHAPTER 6
+
+Monitoring
+42:23
+
+Section Introduction
+00:47
+Tracking the Lifecycle of Passwords and Access Keys
+03:31
+Auditing Resource Policies
+03:48
+Logging Access to Resources
+03:05
+HANDS-ON LAB
+Monitoring, Auditing, and Logging Users and Resource Usage in AWS IAM
+30:00
+Section Review
+01:12
+CHAPTER 7
+
+Conclusion
+02:47
+
+Conclusion and What’s Next
