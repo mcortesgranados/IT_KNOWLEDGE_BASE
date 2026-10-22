@@ -1,0 +1,363 @@
+Okay. Hello, gurus.
+In this lesson we're going
+to look at application monitoring using CloudWatch Logs.
+In this lesson, we're gonna cover several different topics.
+We're gonna talk about what CloudWatch Logs is.
+We're gonna look at log terms that you should know.
+We'll talk about some features
+that you should also be aware of.
+We're going to go into the console
+and have a demo sending custom logs
+from an operating system to CloudWatch,
+and then we'll wrap things up with some exam tips.
+All right, picture this.
+We have finally migrated
+and refactored our entire hybrid application
+to live within the AWS Cloud.
+We've designed everything so perfect
+regarding high availability, scaling, disaster recovery,
+and everything else you can think of,
+except we realize we need to find a way
+to handle our logs from our application servers.
+In addition to that, we realize we also have our databases
+that are generating logs.
+We have serverless logs being created,
+and then we can't forget about our audit logs
+for compliance requirements from CloudTrail.
+Oh, and we even have on-premise application servers
+that are going to generate logs
+that we need to store as well.
+What can we do with all of these logs?
+Well, we can leverage Amazon CloudWatch Logs.
+Amazon CloudWatch Logs is a powerful service
+that enables you to effectively monitor, store,
+and access your log files from various sources
+within your AWS environment
+and even from on-premise solutions.
+With this service, you have the ability
+to collect and centralize log data
+for easy analysis and troubleshooting.
+In logs, you can query your data to identify issues,
+track performance, and even see valuable insights.
+The service provides easy to use methods to search, filter,
+and visualize log information.
+Now for custom logs,
+the CloudWatch agent is a software tool developed by AWS,
+and it enables users to collect and monitor system
+and application metrics on their compute
+and send it to CloudWatch.
+There are three primary terms that you need to know
+whenever you are dealing with CloudWatch Logs.
+These include log events,
+and a log event is the fundamental record of what happened.
+This will contain a timestamp
+as well as the data associated with the event.
+Log events provide specific information about events
+or activities that occur within your system or application.
+Essentially, think of them as a log entry.
+We also have log streams.
+Now these are a sequence of log events
+that originate from the same source
+such as a single instance or component.
+Think of a log stream as a continuous set of log records
+from a specific source or context.
+It makes it easier to trace events back to their origin
+if they're in the same log stream.
+An example of this could be a Linux log file
+like /var/log/secure being sent to CloudWatch.
+Now these records and events would all go
+to the same log stream, making it easy to identify.
+Lastly, we have a log group.
+This is a logical grouping of related log streams.
+Log groups allow you to organize
+and manage log data effectively.
+For example, maybe you wanna group all
+of your Apache web server logs across different hosts
+into a single log group.
+And then within that log group,
+you can have separate log streams for a host instance.
+This makes it much easier to search, filter,
+and analyze logs at a higher level of abstraction.
+By using log events, log streams,
+and log groups in CloudWatch Logs,
+you can efficiently collect, manage,
+and analyze your log data.
+Now let's go ahead and move on
+to CloudWatch Logs features that we should know.
+So we've collected our logs, but now what?
+Well, there are many features we can use within the service.
+The first one I wanna call out is a filter pattern.
+You can use filter patterns to extract
+and analyze specific log events
+or data from your log streams and your log groups.
+Filter patterns allow you to monitor
+for relevant information and identify patterns
+or trends within your log data.
+This helps you monitor system performance
+and troubleshoot quicker.
+For example, you may monitor for specific lines of logs
+that contain an error message.
+Next is CloudWatch Logs Insights.
+This is a powerful tool that enables you to query
+and analyze your log data using SQL-like query languages.
+So it provides a flexible and efficient way to explore
+and then gain insights from your log data.
+Since it's SQL-like it makes it easier to identify
+and troubleshoot issues in real time
+using a very common syntax.
+And finally, we have CloudWatch alarms.
+Once you've identified trends
+or patterns within your log data,
+and you find out that they indicate specific conditions
+or events, you can set up CloudWatch alarms.
+These alarms are going to allow you to define thresholds
+and conditions that when met trigger automated actions.
+You can do things like sending notifications
+or even really initiating automated remediation processes.
+CloudWatch alarms help you proactively respond
+to critical events and help ensure the reliability
+and availability of your apps and your infrastructure.
+Now let's go ahead, we're gonna take a break from all
+of this information and jump into our sandbox.
+I'm going to deploy a custom EC2 instance
+into our default VPC.
+I'm going to install the CloudWatch agent.
+I'm going to configure that agent.
+And then we're gonna send some logs
+from that instance to CloudWatch.
+And once those are in there, I'll demo
+at least how you can look at filter patterns
+and what they look like.
+So let's go and get started.
+All righty, welcome back.
+I'm in my sandbox environment here,
+and the first thing I want to do is I want
+to launch an EC2 instance.
+So I'm gonna click on Launch instance.
+I'm gonna give my server a name.
+I'm gonna select Amazon Linux 2023.
+And there is one thing I want to call out here
+when we're using the user data to install some packages,
+and I'll cover that here in a moment.
+But for now, I'm using the latest AMI at this time,
+I'm gonna select a slightly bigger instance type
+so it spins up a little bit quicker.
+For the key pair, I'm going to proceed without a key pair,
+because I'm going to connect via session manager,
+which is covered in later lessons.
+And from a networking standpoint,
+I don't need any permissions.
+So I'm gonna select default, which has no rules.
+And then that brings us down to Advanced details.
+Now, one thing I have to do here
+is I have to select an instance profile that I made,
+and this is available in the GitHub repository as well.
+And this just allows our EC2 instance permissions
+to connect to session manager,
+and it has the permissions to allow us
+to put CloudWatch Logs.
+And I can look at that here in a moment.
+For now, I'll select this.
+I'm gonna scroll down to user data,
+and I'm gonna paste a simple command in here.
+So all I'm doing is updating the packages.
+I'm installing the Amazon CloudWatch agent here,
+so it's just a simple yum install.
+And then dnf is actually used
+for the Amazon Linux 2023 versions of the AMI.
+So I'm using dnf to install rsyslog.
+And the reason that is
+is because the normal typical syslogs,
+like /var/log/messages and /var/log/secure,
+are not installed and running by default.
+So I'm installing those and then enabling those
+so they start collecting that information.
+So what I'm gonna do here is click on Launch instance.
+We're gonna give this a moment to spin up.
+And then when this loads,
+what I'm gonna do is select the role that we're using
+and let's look at that really quickly
+while this actually starts up.
+I'll open this in a new tab,
+and let's just look at the policy really fast.
+Now again, this will be available
+for you to copy and paste within the GitHub repo,
+but what I've done for this is I've used a managed policy
+from AWS, which allows session manager,
+and then the big one here is CloudWatch Logs.
+So I'm allowing CreateLogGroup, CreateLogStream,
+PutLogEvents, and DescribeLogStreams.
+So if you notice all of the terms,
+log group, log stream, log event,
+remember those three concepts that we covered earlier.
+Now let me go ahead and close this.
+I'm going to refresh here.
+I'm gonna select this,
+and I'm going to connect really quickly.
+Now, once I'm in here, I'm gonna go ahead
+and sudo ls a directory to make sure
+that the agent is installed.
+Okay, so this is installed
+and we can see some of the configuration files here.
+I'll clear my screen, I'll zoom in.
+And let's go ahead and create the configuration file
+that's required for the CloudWatch agent.
+So after you install the agent,
+you have to configure a configuration file
+and then load that file into the agent service
+in order for it to work.
+Now by default, I'm going
+to copy and paste this in here really quickly.
+The agent configuration file is a JSON file,
+and the service looks for that file in this directory.
+So I'm going to use that for my configuration.
+So one thing I do need to do here is I need to run sudo,
+because this is a protected directory.
+Once we're in here, I'm going to paste in my JSON config.
+And let's look at this.
+Now, this configuration file can get extremely complex.
+The documentation will be linked to the lesson,
+and I just made this simple so we can see how it works.
+The top level is configuring the agent itself.
+We're setting a metrics collection interval of 60.
+We're running the agent as root. We give the region.
+And I use debug, because I like to look
+at the files within the logs if I need to.
+Now, what we're doing for this demo is sending logs.
+So under the logs object,
+we're saying the logs collected are going to be these files.
+And then here's the list.
+So the first file is /var/log/messages.
+We're creating a log group name of instance_id.
+So this should translate to our instance_id
+that we see here at the top.
+And then the log stream name will be messages.
+Now we created a second entry for /var/log/secure,
+same log group name, different log stream name.
+So this should aggregate these log files
+under the same log group, but within separate log streams.
+So what I'm gonna do is quit outta here.
+And the next thing I need to do is I need to go ahead
+and fetch that config and then start the agent.
+So I'm gonna go ahead and paste this in here.
+And all this is doing is
+using the Amazon CloudWatch agent control service.
+It's fetching our config for our EC2 mode,
+and we're pointing at the file here,
+which is what we just wrote.
+So I'm gonna click on Enter.
+We see that it's restarting, it found the config file,
+it's validating it, et cetera.
+So now this is running.
+So in theory now, this should be pushing logs
+to our CloudWatch log group.
+So I'm gonna go back here. I'm gonna load CloudWatch.
+Let me go ahead and reset my zoom.
+We're gonna go to Log groups.
+And there we go. We have our instance ID log group.
+Now under here is where we would have our log streams,
+once they start collecting messages.
+So it looks like secure is not capturing right now,
+and that's fine, but it does look like messages is pushing.
+So messages is actually collecting events,
+and you can see them here.
+Every log entry here or log record,
+also known as a log event in CloudWatch,
+is a separate line within this log file.
+Now these are all getting pushed automatically
+via this agent.
+So now what we could do is use this
+and create a filter pattern
+to go ahead and match for certain log entries.
+So what I'll do is I'll copy this run_as_user text.
+I'm gonna go up to the top.
+I'm gonna go back to my instance log group.
+I'm gonna click on subscription filter,
+because we want to filter based on log group entries.
+So I'm gonna create a new one,
+and you'll notice the different options.
+We can do a subscription filter to OpenSearch, Kinesis,
+Kinesis Firehose, or Lambda.
+Now I'm not gonna have a Lambda function,
+so this is not gonna work.
+I just wanna show you how the formats work.
+I'm gonna give it a pattern. I'm gonna give it a name.
+And what this is doing is looking
+for any log event structures that match this filter.
+So in theory, any line that has run_as_user
+should get picked up within this filter pattern.
+Now for testing this, they make it easy.
+You can copy and paste your own custom log data,
+or we can reference an existing log stream.
+So I'm gonna select messages. I'm gonna test my pattern.
+And there we go.
+We found two matches on event number one and four,
+and this gives us the output here, detecting run_as_user.
+So this is working perfectly.
+So in theory, what you could do for applications is look
+for things like error or warning
+and then trigger a Lambda function
+or some other type of automation
+via this subscription filter.
+What would happen is anytime this was detected,
+it would immediately send this exact event
+to our Lambda function for processing.
+Now I'm gonna cancel this, and that's really gonna do it.
+We went ahead, we installed the CloudWatch agent.
+We set up logging and specific log streams
+for different local logs,
+and we saw that it's pushing our log events
+to our log streams,
+and we're getting all of that information.
+Let's go ahead and wrap this up here.
+We'll jump back into the presentation
+and wrap things up with some exam tips.
+Okay, welcome back.
+Hopefully, that demo was helpful
+in reinforcing the knowledge we learned
+about CloudWatch Logs.
+And one important tip I want to go over
+before the typical exam tips is that you need to understand
+that any logs in your applications likely need
+to be going to CloudWatch Logs.
+It offers simple long-term storage,
+and it allows for easy access and processing of the logs.
+The one major exception
+for this situation is when you don't need
+to actually process or analyze them.
+If you just need long-term storage,
+you might just look at sending them to S3.
+With those points in mind, you also need
+to have a high level understanding of the different services
+that act as a source for CloudWatch Logs.
+A ton of AWS services supported by default.
+And if they don't, you can leverage that agent we looked at
+in order to send your own custom logs.
+Okay, onto the normal exam tips.
+First things first, you're going
+to generally favor CloudWatch Logs as the go-to tool
+for any logging scenarios.
+An exception would be for a scenario
+that defines real-time needs.
+In that case, you might leverage something directly
+like Kinesis Data Streams.
+Remember, we can create CloudWatch alarms based
+on different filter patterns,
+which was something like that subscription filter.
+And then there's also a thing known as a metric filter.
+And you can trigger different remediations
+and alerts based on those filter patterns.
+You can use these alarms to both alert teams
+and even initiate automated remediation efforts.
+Another major tidbit of info is
+that you need to use the CloudWatch agent
+to send custom log files to CloudWatch.
+Remember, you can configure that file
+for your own application services
+and specify which custom logs you want to send.
+And finally,
+if the exam mentions SQL commands and CloudWatch Logs,
+think of using what is known as CloudWatch Logs Insights.
+Now, that's gonna do it for this lesson.
+Let's go ahead and end things here,
+and then we'll pick back up with the next lesson.
