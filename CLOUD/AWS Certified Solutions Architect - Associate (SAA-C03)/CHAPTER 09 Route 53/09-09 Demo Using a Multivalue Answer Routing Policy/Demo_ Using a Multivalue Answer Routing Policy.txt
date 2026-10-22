@@ -1,0 +1,86 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+So congratulations, you're on the very last routing policy
+and this is a multivalue answer routing policy.
+It actually sounds quite complex
+but actually, it's just simple routing with health checks.
+That's all it is.
+So let's go through what multivalue answer routing is.
+Then we'll have a look at how we set this up in the console
+and then we'll go onto my exam tips.
+So multivalue answer routing
+lets you configure Amazon Route 53
+to return multiple values,
+such as IP addresses, via web servers
+in response to DNS queries,
+just as the same as what simple routing does.
+And you can specify multiple values for almost any record.
+But multivalue answer routing also allows you
+to check the health of each resource.
+So Route 53 returns only the values for healthy resources.
+So like I said, it's basically simple routing
+but with health checks.
+So it's similar to simple routing.
+However, it allows you to put health checks
+on each record set.
+And just remember
+that a health check monitors the health of your endpoints.
+So this is the way it works.
+We've got our user, they want to visit our website,
+hellocloudgurus123.com.
+So they visit Route 53
+and then we have our first IP address, which is 30.0.0.1
+and we have our second IP address, which is 30.0.0.2.
+Now, if one of those IP addresses becomes unavailable,
+multivalue answer routing will only send us
+to the healthy one.
+So it'll send us to 30.0.0.2.
+It will basically not send us to 30.0.0.1.
+So it's very similar to simple routing.
+It's just got health checks built in.
+Okay, so here I am in the AWS console.
+I'm in Route 53.
+Just gonna go over to my hosted zone.
+Just gonna go through and delete some A records
+from my last lecture.
+And now we're gonna go ahead and create a record.
+So multivalue answer is very similar
+to simple routing policy, except with simple routing policy,
+essentially you just put in multiple values in here,
+whereas with multivalue answer,
+you're putting a health check against each value.
+So you only have one IP address in here.
+So if I grab my London IP address in here,
+drop my TTL to 60 seconds, multivalue answer in here,
+and then my health check ID.
+So I'm going to do London, and then my record ID,
+I'm just going to type in London, can add another record
+and then it's exactly the same.
+So my Tokyo one in here, drop that down to 60 seconds.
+Multivalue answer, health check ID is going to be Tokyo.
+And in here, I'm going to type Tokyo.
+And then that's it.
+It's really, really simple.
+So go ahead and hit create our records.
+And so now we've got our multivalue answer.
+It's tied to a health check and depending on whether
+or not it passes that health check,
+it'll just basically, it's simple routing policy,
+but with a health check essentially.
+So let's go over to my exam tips.
+So going into your exam,
+just remember that multivalue answer routing
+is essentially just simple routing, but with a health check.
+So when your user sends a request to Route 53
+and you've got two multivalue answers is set up in there.
+So 30.0.0.1 and 30.0.0.2.
+If one of them becomes unavailable,
+then multivalue answer routing
+will only send the DNS request
+to the healthy instance or instances.
+So that is it for this lecture, everyone.
+In the next lecture, we're just going
+to review everything we've learned in this section.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

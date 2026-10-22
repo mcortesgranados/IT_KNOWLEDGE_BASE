@@ -1,0 +1,353 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at Route 53,
+and we're just going to give you a broad overview
+before we go and deep dive
+into all the different rooting algorithms
+that we can use with the AWS platform.
+So the first thing we're going to do is
+just explain what DNS is.
+We're going to look at IPv4 versus IPv6.
+We're then going to talk about top level domains.
+We'll talk about domain registrars.
+So, where you can go ahead and register a domain name.
+We'll then talk about common DNS record types.
+We'll talk about what a time to live is.
+We'll then cover off alias records,
+rooting policies that are available to us with Route 53,
+and then we will go on to my exam tips,
+and then, in the next lecture,
+what we're going to do is,
+we'll look at how to register a domain name,
+get set up for this next section of the course,
+and then we'll actually go in
+and demonstrate each of the individual rooting policies.
+So we've got a lot to cover in this section of the course.
+So let's start with, what is DNS?
+So, if you've used the internet before, you've used DNS,
+and DNS is basically used
+to convert human-friendly domain names.
+So, for example,
+acloud.guru into an internet protocol or IP address,
+and this is just going to be a number
+like 82.124.53.1.
+So IP addresses are used by computers
+to identify each other on the network
+and IP addresses commonly come in 2 different forms,
+IPv4 and IPv6.
+So, basically, DNS is something that computers use
+to convert domain names into IP addresses,
+and an example I like to use is,
+when you go and look up a telephone number in a phone book,
+that's all you're doing,
+is you're basically converting
+the business name or the person's name
+into a telephone number.
+Basically, a phone book was the original form of DNS.
+It's a great analogy I like to use
+to remember how DNS works.
+So IPv4 addresses are running out.
+So IPv4 was created a while ago.
+Their space is 32-bit friendly
+and has over 4 billion different addresses,
+and that was fine before the internet became widespread,
+but, of course,
+we're going to have more than 4 billion devices online now.
+For that reason,
+we are starting to run out of IPv4 addresses.
+Now to visualize an IPv4 address,
+if every single IPv4 address
+was a grain of sand,
+4 billion would basically be enough to fill up a dump truck.
+So that's how many IPv4 addresses there are.
+So IPv6 was created to solve the depletion issue
+and has an address space of 128 bits,
+and in theory, there's 340 undecillion addresses.
+And, again, to put that into perspective,
+if every single IPv6 address was a grain of sand
+and you bought them all together,
+it would be enough to fill the entire sun.
+So we go from having an IPv4 address range,
+which would fill a dump truck,
+all the way to an IPv6 address range that fills the sun.
+Unfortunately, it is taking a bit longer
+to move over to just universally using IPv6 addresses.
+I'm not going to get into why that is,
+but eventually we will completely have migrated
+off IPv4 to IPv6.
+So Route 53 supports both IPv4 and IPv6,
+and you just need to remember that going into your exam.
+So we'll move on to top-level domains,
+and if we look at common domain names,
+things like google.com, or bbc.co.uk, or acloud.guru,
+you'll notice a string of characters
+that are separated by dots or periods,
+and so, the last word in a domain name represents
+the top level domain name.
+The second word in a domain name is known as
+the second level domain name,
+and this is optional
+and depends on the domain name.
+So, like ".co.uk,"
+the ".co" is the second level,
+whereas the top level is ".uk".
+So that's how top level domains work.
+Obviously, everyone's familiar with .com,
+but then you can get things like .gov or .gov.uk,
+and these will be reserved
+for governments such as the UK government or US government.
+So, in here,
+we've got our top level domain names
+like I said, .gov, .gov.uk,
+.com.au is another popular one, or .edu.
+So these top level domain names are controlled
+by the Internet Assigned Numbers Authority,
+or IANA, in a root zone database,
+which, essentially is a database
+of all available top level domain names,
+and you can actually go and view this database
+just by visiting ina.org/domains/route/db.
+So, because all the names
+in a given domain name must be unique,
+there needs to be a way to organize this all,
+so that domain names aren't duplicated,
+and this is where domain registrars come in.
+So registrar's basically an authority
+that can assign domain names directly
+under 1 or more top level domains,
+and these domains are then registered with InterNIC,
+which is a service of ICANN,
+and it basically enforces
+the uniqueness of domain names across the internet.
+And each domain name becomes registered
+in a central database known as the WHOIS Database.
+So, some 5 popular domain registrars.
+Some of these you've probably heard of.
+So, domain.com, GoDaddy, there's Hover, there's AWS,
+which is a domain registrar now,
+and there's Namecheap as well.
+So in this course we're going to be using AWS
+as our domain registrar,
+because it's all integrated into the AWS platform.
+Moving on to some common DNS record types,
+and we're going to start with what we should start with,
+which is the start of authority, or SOA, record,
+and this basically stores information
+about the name of the server
+that supplied the data for the zone,
+who the administrator is of the zone,
+the current version of the data file,
+and then the default number of seconds
+for the time to live file on the resource records.
+So we'll move on to look at how the SOA works in action,
+and to do that,
+we need to have a look at our NS records.
+So our NS just stands for name server records,
+and name server records are used by
+top level domain servers
+to direct traffic to content DNS servers
+that contain the authoritative DNS records.
+So let's say we've got our user,
+and our user types "hellocloudgurus.com" into their browser.
+Now what will happen is
+their browser will basically go to the.com record,
+and it will look up "hellocloudgurus,"
+and it'll give it an NS record.
+In this case, it's going to be ns.awsdns.com.
+So this is where our SOA will be stored.
+So then our browser will basically browse
+over to the NS records,
+and we're going to go to ns.aws.dns.com,
+and we're going to get our SOA.
+And our SOA is just our start of authority,
+and this is what's going to
+contain all our DNS records in there.
+So, things like A records, MX records, CNA, etc.,
+and we're going to cover off all the
+different types of DNS records.
+Now, just a brief overview.
+So, what's an A record?
+This is the most common DNS record,
+and this is basically what the computer uses
+to look up the name of the domain
+and translate that into an IP address.
+So, if I was to go to hellocloudgurus.com,
+and we look up the A record,
+it's going to have an IPv4 or IPv6 address.
+So acloud.guru might point to
+http://123.10.10.80 for example.
+So that's all an A record is.
+It's basically the most common type of DNS record.
+Now, when we update our A records,
+when we move our IP dresses over,
+we're going to come across this thing called TTLs.
+So what is a TTL?
+TTL just stands for time to live.
+So the length that a DNS record is cached
+either on the resolving server
+or on the user's own local PC
+is equal to the value of the time to live in seconds.
+So, say we've got acloudguru.com,
+and it goes to 123.10.80.80,
+and then for some reason,
+we have set up a new web server somewhere else,
+and we want to migrate the DNS records
+from 1 web server to another.
+So we're just going in and updating our IPv4 address.
+We can go and update that address immediately,
+but that effect won't take place immediately,
+because some other browsers would've cached it,
+some other DNS servers would've cached it,
+which basically means that that record
+will just sit in the cache
+until the time to live has expired.
+So the lower the time to live,
+the faster the changes to DNS records take to propagate
+throughout the internet.
+So when I worked as a sys admin, for example,
+if we were planning for a server migration,
+we would lower our TTLs from 48 hours,
+basically, down to 5 minutes,
+and we do that a couple of days before the migration.
+That way when we updated our A records,
+the migration would only take 5 minutes,
+as opposed to 48 hours.
+Now, this is one of my favorite haikus.
+I have tweeted this,
+I live and died by this when I was a sys admin.
+DNS--If you don't set your time to live's correctly
+or if you don't reduce them before doing a migration,
+it can take days for DNS to propagate.
+You've got customers calling you up,
+saying, "What's going on?"
+And this haiku sums it all up.
+Basically, as a sys admin,
+you're like, "It's not DNS.
+"There's no way it's DNS,"
+and then 48 hours later, "It was DNS."
+So that's one of my favorite haikus on the internet.
+So TTLs, basically,
+is just how long it's going to cache your DNS records
+in the cloud, essentially.
+So, what's a CNAME?
+A CNAME is a canonical name,
+and this can be used to resolve 1 domain name to another.
+So, for example, you might have a mobile website
+with the domain name, m.acloud.guru,
+and that's used for when users browse to your domain name
+on their mobile devices.
+So it's just a way of mapping one domain name to another.
+You may also want the name mobile.acloud.guru
+to resolve to the same address.
+So you could set up a CNAME where m.acloud.guru
+maps to mobile.acloud.guru,
+and we'll have a look at
+how we can do this a little bit later on,
+but, essentially,
+you're just going in to the console
+and you're setting up a CNAME.
+So you can see it in here.
+We've got m,
+and then this domain name, certifiedcloudpractitioner.com,
+and we're going to basically map that
+to mobile.certifiedcloudpractitioner.com.
+So CNAME is just a way of translating
+1 web address to another.
+Moving on to alias records.
+Alias records are used
+to map resource records sets in your hosted zones
+to load balancers, cloud front distributions,
+or S3 buckets that are configured as websites.
+So an alias record really exists within the AWS ecosystem.
+It's not a type of DNS record
+that you could set up with GoDaddy
+or on your own web server, for example.
+Alias is just a way of mapping resources within AWS
+within your hosted zones
+to other AWS resources,
+such as load balancers,
+cloud front distributions, S3 buckets, etc.
+So alias is basically work like a CNAME record
+in that you can map one DNS name to another target DNS name.
+So that's all an alias record is.
+Just remember that CNAMEs
+cannot be used for naked domain names.
+So this is your zone Apex record.
+So, for example,
+you cannot have a CNAME just for acloudguru.com.
+You need to have it
+for something like m.acloudguru.com,
+and also, remember that your alias records
+can be used for naked domain names or zone apex records,
+because these are mapping to individual AWS services.
+Okay, so now that we've covered off
+all the different types of DNS and what DNS is,
+we now need to look at,
+what is Route 53?
+And as you may have guessed,
+Route 53 is Amazon's DNS service.
+It allows you to register domain names,
+create hosted zones,
+and manage and create DNS records,
+and Route 53 is actually named after Route 66,
+which is one of the original highways
+that went across the United States,
+but it's actually called Route 53,
+because DNS operates on Port 53.
+Now that won't come up in your exam,
+but it is definitely a very popular interview question
+if you are interviewing for an AWS job.
+So there's 7 different rooting policies
+available with Route 53
+and in this section of the course,
+we're going to cover off each one of them
+with a demo as well.
+So we'll start with simple routing.
+We'll then move on to weighted routing,
+latency-based routing, failover rooting,
+geolocation routing, geoproximity routing,
+and then we'll move on,
+finally, to multivalue answer routing.
+So I'm going to explain
+what each of these are in the individual lectures,
+and then we'll go through and demo them.
+So, just onto my exam tips,
+just understand the difference
+between an alias record and a CNAME.
+Remember, an alias record can map onto a naked domain name.
+So, if I want to go to acloud.guru.com,
+I can set up an alias record,
+which will map back to an elastic load balancer,
+for example, or an S3 bucket.
+Whereas with a CNAME, you cannot do that,
+and if you get a scenario-based question
+where you're given the choice
+between an alias record versus a CNAME,
+for anything to do with AWS,
+always choose an alias record over a CNAME.
+And then, finally, going into your exam,
+you should just understand the common DNS record types,
+because they might come up in scenario-based questions.
+So, an SOA is just the start of authority record.
+This is where your DNS starts.
+CNAME records are
+where you can map 1 domain name to another.
+NS records are just your name server records,
+so where is the DNS information stored,
+and then your A records are your most common DNS types,
+and this just basically
+maps your domain name back to an IP address.
+So, in the next lecture,
+we're going to look at
+how we can go ahead and register domain name with AWS.
+We're then going to provision a couple
+of EC2 instances around the world,
+and then that will get us set up
+to explore all the different rooting policy types,
+and we're going to look at each one individually
+with our setup,
+using our domain name that we register,
+and using the EC2 instances that we've provisioned.
+So, if you've got the time,
+please join me in the next lecture.
+Thank you.

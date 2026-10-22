@@ -1,0 +1,104 @@
+[Ryan Kroonenburg] Okay, hello, cloud gurus
+and welcome to this lecture.
+In this lecture, we're going to look at
+our very first routing policy
+and we're going to start with Simple Routing Policy.
+So, look at what Simple Routing Policy is.
+We'll look at how to set it up in the console
+and then we'll just go to my exam tips.
+So, what is Simple Routing Policy?
+Well, basically if you choose the Simple Routing Policy
+you can only have one record with multiple IP addresses.
+If you specify multiple values in a record,
+then Route 53 returns all values to that user
+in a random order.
+So, we've got our user.
+They're basically typing in our domain name.
+It's going to Route 53 and it could be that it goes
+to 30.0.0.1 or it could go to 30.0.0.2.
+It's just returned in a random order.
+So, that's all Simple Routing Policy is.
+Let's go have a look at how we can set this up
+in the console.
+Okay, so here I am in the AWS console.
+I'm gonna go over to Route 53
+and I'm gonna go in and click on my hosted zone.
+And I'm gonna go in and click in here.
+So, in here we've got our records.
+So, we're gonna go ahead and create a record.
+So, in here we can create our records
+and we're going to use the naked domain names.
+So, we're not gonna put a subdomain in here like www.
+So, we're just going to use, Hello, cloud gurus, 2023
+hyphen ryan.com, and in here we've got our record types.
+So, you've got A records, quadruple A records,
+C names, MX Records, which is for mail servers,
+TXT records, PTR records, SRV Records, SPF records.
+I'm not gonna read them all, but you've got a whole bunch
+of different records in here,
+primarily 'cause we're routing DNS to IPV for using HTTP.
+We're just going to be using A records.
+So, in here we've go down
+and we can do our different values.
+And here, you can see it says enter multiple values
+on separate lines.
+So, what I'm gonna do is just cut
+and paste my public IP addresses.
+So, just pasted them in here.
+This is London and then this one here is Tokyo.
+Now, the TTL, for the purposes of these lectures,
+always do the lowest TTL possible.
+Always do one minute.
+One of my favorite haikus is about DNS
+and it goes, "It's not DNS.
+"There's no way it can be DNS, it was DNS."
+So, go check that out, but essentially, you want your TTL
+to be as low as possible because anytime you make a change,
+that's how long the change exists in your browser.
+So, if we were to change this
+and the TTL was only 60 seconds,
+well then, you only have to wait 60 seconds
+for it to make a change.
+If you select two days, then you're gonna have to wait
+for two days for it to change.
+And in here we've got our routing policies.
+So, this is what we're going to be going through over
+the next few lectures is all the different routing policies.
+So, right now, we're just using Simple Routing Policy
+and it's just basically going to route
+between these two different IP addresses.
+It will send one request here, one request there,
+one request here, one request there.
+It's just a Simple Routing Policy.
+So, let's go ahead and hit create records.
+And that is now creating our record
+and we can see it in here.
+It's our A record.
+And you can see that it's a Simple Routing Policy
+and these are the two different values.
+So, in order for us to test this, all you need to do
+is open up a browser, but do it in incognito mode.
+And then, all you need to do is then
+just browse to your domain name.
+So, I'm going to go ahead and do this now.
+So, I've got my browser here, going to paste,
+"Hello Cloud Gurus," and there we go.
+We've hit Tokyo.
+Okay, so I managed to get Tokyo in incognito mode in Chrome
+and then in Safari I managed to get it.
+I managed to get London.
+So, there you go.
+That is definitely working.
+I'm getting basically direct,
+my traffic's being directed between the London
+and Tokyo regions using a Simple Routing Policy.
+So, onto my exam tips.
+Just remember going into your exam
+what Simple Routing Policy is and how it works.
+So, if you choose the Simple Routing Policy,
+you can only have one record with multiple IP addresses.
+If you specify multiple values in a record,
+Route 53 returns all values to a user in a random order.
+So, that is it for this lecture, everyone.
+If you've got the time, please join me in the next lecture.
+Thank you.

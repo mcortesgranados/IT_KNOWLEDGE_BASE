@@ -1,0 +1,166 @@
+Okay.
+Hello Cloud Gurus and welcome to this lecture.
+In this lecture, we're going to just review
+everything we've learned in this section of the course
+around Route 53.
+So the first thing I'd remember going into the exam
+is just understand the difference between an alias
+record and a CNAME.
+And given the choice in a scenario-based question
+always choose an alias record over a CNAME.
+Just remember the alias records are unique to AWS.
+So it's a way of translating your naked domain name
+to a resource.
+Could be an Elastic load balancer, an S3 bucket, et cetera.
+And it doesn't just have to be the naked domain name.
+It could also be a sub domain.
+So it could be mobile.hellocloudguru123.com, et cetera.
+Whereas a CNAME only allows you to translate
+a sub domain names from one to another.
+So M might go M.Acloudguru.com.
+It might go to mobile.Acloudguru.com, et cetera.
+But like I said,
+given the choice always choose an alias record
+over a CNAME When you see mention of it in your exam.
+Also remember going into the exam,
+the common DNS record types.
+So we've got our start of authority record,
+we've got CNAME, we've got our NS records
+or name server records
+and the record that we've been using throughout
+the whole part of this course is our A Records.
+And A Records essentially just turn our web addresses
+in to IP addresses.
+Remember you have 7 different routing policies
+available with Route 53
+and you will need to know definitely 6 of them.
+So simple routing, weighted routing, latency based routing,
+failover routing, geolocation routing,
+geoproximity routing.
+This is using traffic flow only.
+Like I said that's a bit beyond the scope of this exam.
+So that's why I said you really only need to know 6,
+but we cover it off just to be fully transparent
+of all the different routing algorithms with Route 53.
+And then we have multi value answer routing.
+Also remember going into your exam
+that registering a domain name.
+You can buy domain names directly with AWS
+and it can take up to 3 days to register.
+But it just depends on the circumstances
+of the domain names.
+So, before we go on to all our different routing policies
+and cover off what they are just in a bit more detail,
+remember what health checks are.
+You can set a health check on individual record sets
+and if a record sets fails a health check
+it's going to be removed from Route 53
+until it passes the health check.
+And you can even configure SNS notifications to alert you
+about failed health checks.
+So let's review our routing policies
+and we'll start with simple routing policy.
+So if you choose simple routing policy,
+you can only have one record with multiple IP addresses.
+And if you specify multiple values in a record,
+Route 53 returns all values to the user in a random order.
+So you've got our user,
+they're going to hellocloudgurus123.com.
+And we basically have different IP addresses
+in this one record set.
+So we've got 30.0.0.1 and 30.0.0.2.
+And basically Route 53 is going to pick one of them randomly
+and return it to to our user.
+So that's all simple routing policies are they do not work
+with health checks and we'll come back to that later.
+Weighted routing policies.
+So in this example, we've got our user.
+They visit Route 53 and we want to send basically 20%
+of our user base off to us-east-1
+and 80% of our user base off to us-west-1.
+So to do this, we basically use weighted routing.
+And I like to keep it simple.
+I like it all to add up to a hundred.
+But essentially it would just take the weighting
+and add up the sum of all the weighting
+and then divide by the individual weighting by that.
+And that's how it calculates the percentages.
+So if you see any scenario based questions
+that's talking about you want to direct a certain percentage
+of your traffic to a particular region
+or availability zone or whatever.
+Then, I want you to think of weighted routing policies.
+Moving on to latency based routing policies.
+So we've got our user they're in South Africa.
+They connecting into Route 53.
+They get a 54 millisecond latency when connecting
+into eu-west-2 or 300 millisecond latency
+when connected into ap-southeast-2.
+So Route 53 will give them the lowest latency possible
+and then will redirect them to eu-west-2.
+So if you see an exam question that's talking about latency,
+I want you to think about latency routing.
+That's going to be the correct answer.
+Failover routing.
+Now if you remember, we have our user
+and basically we've built our applications
+so that we've got an active passive setup.
+So our active might be in us-west-1 or us-west-2.
+And our passive setup might be an ap-souteast-2.
+And essentially fail over routing
+will have a health check on each region.
+And if we lose a region, it will switch from our active site
+to our passive site automatically.
+So it's a way of just failingover.
+So if you see a mention in the scenario based question
+about how to failover from one site to another,
+I want you to think of failover routing.
+Next we have Geolocation routing.
+So this is where we've got a group of customers.
+They might be European customers
+and we want to only send them to our European web servers.
+It might be that those European web servers
+have been configured with Euros or with the local languages.
+So it might be in French or Italian.
+And then we have our US-based customers.
+And then they basically only want to go to our web servers
+in the US.
+So again you might get a scenario based question
+where it's talking about how can you make sure
+that a group of users in a particular location
+only go to a group of web servers in a particular location.
+And as soon as you hear the word location
+in a scenario based question talking about Route 53,
+I want you to think of Geolocation routing.
+Geoproximity routing.
+This basically lets Amazon Route 53 route your traffic
+to resources based on the geographic location
+of your users and resources.
+But you can optionally choose to route more traffic
+or less traffic to given resources by specifying a value
+known as a bias.
+And a bias basically expands or shrinks the size
+of a geographic region from which traffic is routed
+to a resource.
+And to use geo proximity routing
+you must be using Route 53 Traffic Flow.
+Route 53 Traffic Flow was that GUI where we can do all kinds
+of complicated routing architectures with Route 53.
+And then finally, Multivalue Answer Routing.
+So, what is Multivalue Answer Routing?
+Well, we've got our user they're connecting
+into hellocloudgurus.com or hellocloudgurus123.com.
+Our first IP address is 30.0.0.1.
+We then have a second record which is got another IP address
+of 30.0.0.2.
+And we have health checks on each record.
+And so if we lose our first first record,
+Route 53 will automatically just redirect all our traffic
+to healthy instance at 30.0.0.2.
+So that is it for this section of the course,
+you've done really, really well.
+Hope you enjoyed it.
+And it's now time to move on to the next section.
+So if you've got the time,
+please join me in the next section.
+Thank you.

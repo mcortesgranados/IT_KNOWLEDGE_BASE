@@ -1,0 +1,95 @@
+Okay, hello cloud gurus,
+and welcome to this lecture.
+In this lecture we're going to look at
+geolocation routing policies.
+So explore what that is.
+I'll show you how to set it up
+and then we'll go onto my exam tips.
+So geolocation routing policies lets you choose
+where your traffic will be sent based on the geographic
+location of your users.
+So this is the location from which
+the DNS queries originate.
+So it's the end location of your end users.
+So good use case for this is you might want all queries
+from Europe to be rooted to a fleet of EC2 instances
+that are specifically configured
+for your European customers.
+So this might have the local languages
+of your European customers, this might be French
+or Italian web servers.
+And it would display all the prices in Euros
+as opposed to US dollars, for example.
+So let's have a look at an example.
+So we've got our European customers
+and we want Route 53 to automatically direct them
+to EU-West- 1.
+And for our US customers, we want Route 53
+to automatically redirect all our US customers
+to US-East-1.
+So let's go ahead and have a look at
+how we can set this up in the AWS console.
+Okay, so here I am, the AWS console in Route 53.
+Just gonna go in and delete those last two records
+from the previous lecture.
+So go ahead and hit delete.
+And then what I'm gonna do is I'm gonna go ahead
+and create a new record.
+So I'm gonna use the naked domain name.
+It's gonna be an A record.
+I'm gonna put in my Tokyo IP address in here,
+drop my TTL down to 60 seconds.
+And my routing policy, we're going to do geolocation.
+Now my location, you can do this by continents
+or you can do it by countries.
+I am currently recording in Texas,
+so I'm going to send all the North American traffic
+to Tokyo.
+And in here we're gonna choose our Tokyo health check.
+And then I'm just going to call this Tokyo as my record ID.
+And then we're gonna add another record
+and I'm gonna grab my London IP address.
+So just gonna paste that in here, drop my TTL to 60 seconds,
+do geolocation.
+And I'm gonna send all my European customers
+over to London.
+And so we're gonna use the London health check
+and I'm going to create a record ID called London.
+So I'm gonna go ahead and hit create records
+that's now creating my record.
+I can see it in here.
+Geolocation.
+Here's my differentiator.
+So it's gonna send all my North American customers
+over to Tokyo and it's gonna send all my European customers
+over to London.
+So now I'm just gonna go and test this.
+So right now it's at London.
+I'm gonna do a hard refresh, see if we can break this TTL.
+And there we go.
+It's sending all my traffic to Tokyo
+'cause I'm based in the North American region currently.
+So let's go onto my exam tips.
+So quickly onto my exam tips.
+Just remember what geolocation is and how it works.
+So in our example,
+we were sending our European customers to London,
+and I'm based in the US right now in Texas,
+and it was sending me onto Tokyo.
+So where this might come up in the exam is you'll just get
+some scenario based questions
+basically asking you exactly that,
+is that you need to send your European customers
+to say a European website that has their specific languages.
+So French customers might need to go to the French website.
+German customers might need to go to the German website,
+and your Japanese customers might need to go
+to your Japanese website.
+So that's where you'll see it in the exam.
+Just remember, if it's basically asking you
+to do routing based on geolocation,
+you want geolocation routing.
+Well that's it for this lecture everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

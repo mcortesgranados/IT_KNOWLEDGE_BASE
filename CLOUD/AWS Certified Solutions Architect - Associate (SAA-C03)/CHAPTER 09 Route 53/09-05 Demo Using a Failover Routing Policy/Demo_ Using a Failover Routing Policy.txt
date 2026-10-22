@@ -1,0 +1,120 @@
+Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at the failover routing policy.
+So explore what it is.
+I'll show you how to set it up in the console
+and then we'll go onto my exam tips.
+So failover routing policies are used when you want
+to create an active passive setup.
+So for example, you might want your primary site to be
+in EU-WEST-2 and your secondary disaster recovery site
+in AP-SOUTHEAST-2.
+And essentially what's gonna happen is Route53
+will monitor the health of your primary site
+using a health check.
+And if you remember, health check just basically
+monitors the health of your endpoints.
+Let's have a look at how this would work in practice.
+Let's say we've got our user and we've designed our website
+so that we've got an active and a passive site.
+And let's say that the active site is in EU-WEST-2
+and that might be a load balancer
+with a thousand EC2 instances behind it.
+And then just in case EU-WEST-2 goes down
+we might have a passive site in Asia Pacific
+so AP-SOUTHEAST-2, and that might be a load balancer
+with just say a hundred EC2 instances behind it.
+And it's just there in case EU-WEST-2 fails.
+So if we do get a failure, what will happen is
+basically Route53 will automatically redirect our traffic
+from EU-WEST-2 over to AP-SOUTHEAST-2.
+So that's the way it works.
+So let's go ahead and have a look
+at how we can set this up in the AWS console.
+Okay, so here I am in Route53, just gonna go in
+and go to my DNS records and delete the last two
+that we created.
+So I'm gonna go ahead and delete those records.
+And then what we're gonna do is we're going to go in
+and create a new record and we're gonna do it
+to our naked domain name.
+I'm gonna get my London IP address in here.
+Gonna do it the TTL for 60 seconds
+and in here we're going to do failover routing.
+So the failover record type, we're gonna make this
+our primary, so our primary is London.
+We're going to do the health check to London
+and I'm just going to do the record ID as London.
+Then I'm gonna go in and add another record.
+Scroll down, leave it as my naked domain name,
+pasting in the IP address of my Tokyo server.
+Record type's gonna be A record.
+The routing policy is going to be failover.
+And I'm going to do a 60 second TTL,
+and this is going to be my secondary site.
+Then I'm going to put that as my health check to Tokyo.
+And then my record ID is going to be Tokyo here.
+Just check that everything's the same.
+Yep and we're gonna go ahead and hit create records.
+So, as now creating our record, we can see our primary
+and our secondary, and you can see that primary is London,
+secondary is Tokyo.
+So in, first of all, I'm just going to go ahead
+and browse to this domain name.
+So browse to the domain name.
+We can see that it is hitting London
+so it is hitting my primary site.
+Now what I wanna do is simulate a failover.
+So there's a number of ways you can do this.
+You could just go into EC2 and delete your EC2 instance.
+That'd be a bit annoying though 'cause you're gonna lose
+your IPV4 address and you know, essentially
+when we get a new one, we're gonna have to keep
+basically setting that up in Route53.
+I wanna keep my existing IP address.
+So what I'm gonna do is I'm gonna be a little bit sneaky.
+I'm gonna go over to London and I'm not going to shut down
+my instance or terminate it or anything like that.
+All I'm gonna do is I'm gonna go over to my security groups
+and I'm going to go to my Launch-Wizard-1 security group
+which has an inbound rule allowing Port 80.
+And I'm just gonna go ahead and delete HTTP and HTTPS
+from there.
+So just gonna go in and hit delete and delete
+and save my rules and that will automatically break
+my health check within a period of, I think it was,
+30 seconds that we had set up.
+And then that should stop our DNS from working.
+So if we go over to services, go over to Route53,
+we can click on our health checks.
+Right now it says it's healthy.
+I'm just gonna pause the video.
+Now, I'm just gonna hit refresh and we can see
+that it is unhealthy and I'm just on my website.
+Now, if I do a hard refresh,
+we can see it's flipped over to Tokyo.
+So that is how failover routing policy works.
+Now you might just wanna go back to your security group
+and open up port 80 and 443 so that you can continue on
+with the rest of this section of the course.
+Now let's go onto my exam tips.
+So onto my exam tips.
+Let's say you've got an application
+and you've architected it so that you've got an active site
+and a passive site, and your active site is in EU-WEST-2
+and your passive site might be in AP-SOUTHEAST-2
+and then you lose your active site.
+Then what will happen is Route53 with fail over
+routing policy will automatically fail over your active site
+to your passive site.
+So if you get a scenario based question
+where it's talking about active passive,
+I want you to think of failover routing policies.
+And likewise, if they also mention the word failover,
+then that should give you a very big hint
+that you're looking for failover routing policies
+with Route53.
+So that is it for this lecture, everyone.
+If you've got the time, please join me in the next lecture.
+Thank you.

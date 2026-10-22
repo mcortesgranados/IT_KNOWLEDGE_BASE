@@ -1,0 +1,198 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look
+at weighted routing policies.
+So we're gonna explore what a weighted routing policy is.
+I'll show you how to set this up in the console,
+and then we'll move on to my exam tips.
+So what is a weighted routing policy?
+Well, basically, it allows you
+to split your traffic based on different weights assigned.
+So for example, you could send 10% of your traffic to go
+to us-east-1 and 90% to go to us-west-1.
+So it's just a way of splitting your traffic
+based on particular weights.
+Now, before we get into how that all works,
+let's also just have a quick look at health checks.
+So you can set health checks on individual record sets,
+so on individual EC2 instances
+or on individual load balancers.
+But you can also set them on individual records,
+such as weightings.
+So if we set up weight A at 10% and then weight B at 90%,
+and let's say us-east-1 is at 10%
+and it goes down for some reason,
+then it basically will fail the health check
+and it'll send 100% of our traffic to us-west-1.
+So that's all a health check is.
+If a record set fails a health check,
+it will be removed from Route 53
+until it passes the health check.
+And you can actually set up SNS notifications
+to alert you about failed health checks.
+So if us-east-1 goes down,
+you can set up an SNS notification
+where it will basically send a message to your phone
+or to your email telling you that it has gone down.
+So let's go ahead and have a look
+at how we can do this in the AWS console.
+Okay, so I'm in the AWS console in Route 53,
+and in here, we've got our hosted zones.
+So what I'm gonna do is just delete the last record
+that we created from the last lecture, so my A records.
+I'm gonna go in here and just hit delete
+and that will then go ahead and delete it.
+Now, if you have a look over here,
+we've got our health checks.
+So go ahead and click on health check.
+So we go in here and hit Create Health Check.
+So health check, I'm going to give this a name.
+So I'm just going to call it London-HC, London Health Check.
+We're going to be monitoring an endpoint.
+So we're going to be monitoring an IP address.
+In here, we're gonna specify our endpoint by IP address.
+We're gonna be using the HTTP protocol.
+Gonna paste it in here, and then just make sure
+that it is just the naked IP address.
+So this is my London IP address.
+The host name, I'm going to use index.html,
+and it's gonna be on port 80.
+And then we're not going to use a specific path.
+So you could monitor things
+like an images subdirectory, for example.
+So that is all ready to go.
+So I'm gonna go ahead and hit next.
+And then do we wanna get notified
+when our health check fails?
+Do we want to get an SNS notification?
+You know, do we wanna get a text on our phone
+or an email or something like that?
+I'm gonna say no 'cause I don't really care.
+(Ryan chuckling)
+And so that is my health check
+that's now being created for London.
+And then I'm gonna have to do the same for Tokyo.
+So again, I'm just gonna call this Tokyo-HC.
+It's gonna be an endpoint.
+And so we're gonna be using IP address, paste it in here.
+So this is my Tokyo IP,
+and I'm going to be using index.html.
+And then that's it.
+I'm gonna leave everything else as default
+and go ahead and hit next.
+And I'm not going to create an alarm.
+So now I've set up my two health checks.
+We can see London is in here.
+And then in here, we've got our Tokyo one.
+We can click on London and we can go to monitoring.
+And it basically gives us a health check status.
+In here, we can see the setup.
+So we're doing a request interval,
+and this is in the advanced configuration.
+You can change this.
+So basically, the failure threshold is three,
+and the request interval's 30 seconds.
+So it's gotta be down for 90 seconds
+in order for that to fail.
+So it's gonna be doing a health check every 30 seconds.
+If it's failed three times in a row, then it's going
+to come up as as an error.
+Now, if you do wanna go in and change that, you can.
+You can just go to edit health check,
+and then you can go down
+to the advanced configuration.
+Failure threshold.
+Let's see what my...
+If I can do one.
+Let's go ahead and hit save.
+And it does allow me to do one, so I might just do that
+for Tokyo as well.
+So it just means that instead of waiting for 90 seconds,
+we're only waiting for 30 seconds.
+So go in and edit my health check,
+go to advanced configuration and change this to one.
+So go ahead and hit save.
+And so I've got both my health checks configured now.
+So London and Tokyo.
+Now that we have our health checks configured,
+we go over to our hosted zones.
+And what we wanna do is go ahead
+and click on our domain name,
+and then in here, we're gonna create a record.
+Okay, I'm gonna leave the sub-domain
+as a my naked domain name.
+So it's just going to be blank.
+And then in here, I'm going
+to paste in my London IP address.
+I'm gonna drop this down to 60 seconds.
+My routing policy, I'm going to change to weighted.
+And you can see here, we've got a weight.
+So the easiest way that I like to use this
+is you just make the weights add up to 100.
+So if you want 10% of your traffic to go to London,
+then you put a weight in here of 10,
+and then you do 90% to another region.
+I'm gonna do 30 and 70.
+So I'm going to enter in 30 to go to London.
+And then here, we can do our health check.
+So I'm going to point it at the London Health Check.
+And then in here, you've just got your record ID.
+This just makes it easier to view what it is you've created.
+So I'm just gonna say London.
+And then we're gonna go ahead and hit Create Records.
+So that is now creating a weighted routing policy.
+And you can see in here,
+right now, it's giving a weight of 30.
+Now, of course, it adds it all up.
+And a weight of 30 out of 30 is 100.
+So it's sending everything right now to London.
+So what we wanna do is just go ahead
+and create another record.
+We're going to paste in our IP address.
+So I've pasted in my IP address for Japan.
+Gonna drop this down to 60 seconds.
+I'm gonna go to weighted.
+And in here, I'm going to do 70.
+And so 70% of the traffic will go to Japan,
+the other 30% will go to London.
+In here, our health check ID, I'm going to choose Tokyo.
+And then I'm just going to write in here Tokyo, and go ahead
+and create my record.
+So that has now created a weighted routing policy,
+and you can see it in here.
+So we've got 30% of our traffic that's going to London,
+and then 70% of our traffic is going to Tokyo,
+and our TTL is down at 60.
+So you can go in and test this, it will work, I promise you.
+It can sometimes be a bit frustrating trying it
+in different browsers and having to deal with TTLs,
+et cetera, but it definitely does work.
+So let's go over to my exam tips.
+So onto my exam tips.
+Just remember what weighted routing policies are.
+Essentially allows you to divvy up your traffic
+and send certain percentages to one area in the world
+and then the rest to another area.
+So you could have 10% going to Tokyo, 20% going to Sydney,
+70% going to London, et cetera.
+In this example, we did 30% to London and 70% to Tokyo.
+So we've got our user, they're hitting Route 53.
+30% of the queries are going to London,
+70% are going on to Tokyo.
+So you really just need to understand
+what weighted routing policies are.
+And let's say the London one failed a health check
+and for some reason wasn't online,
+you're still not gonna get any downtime.
+Route 53 is going to detect that
+and then just send everything over to Tokyo.
+We also learned what health checks are.
+So you can set health checks on individual record sets.
+If a record set fails a health check,
+it'll be removed from Route 53
+until it passes the health check.
+And you can also set up SNS notifications
+to alert you about failed health checks.
+So that is it for this lecture, everyone.
+If you've got the time, please join me
+in the next lecture, thank you.

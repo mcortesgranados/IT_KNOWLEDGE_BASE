@@ -1,0 +1,114 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look at
+how we can use latency-based routing policies.
+So what is a latency routing policy?
+We're then going to look at how we can set this up
+in the console and then we'll look at my exam tips.
+So latency routing policies allow you to route your traffic
+based on the lowest network latency for your end user.
+And this will be the region
+that will give them the fastest response time.
+So that's all latency-based routing policies are.
+So to use latency-based routing,
+you create a latency-based resource record set for EC2
+or for your Elastic Load Balancer resource
+in each region that hosts your website.
+And when Route 53 receives a query for your site,
+it selects the latency resource records set for the region
+that gives the user the lowest latency possible.
+So Route 53 then responds with the value associated
+with that resource record set.
+So in this case, it will be the IPv4 address
+for one of our EC2 instances.
+So let's have a look at this in action.
+So in this example,
+Route 53 will send the traffic to eu-west-2,
+because it has a much lower latency for the user,
+the user's in South Africa,
+and the reason it's going to send it to eu-west-2,
+is because it has a lower latency than ap-southeast-2.
+So their latency might be 54 milliseconds
+versus 300 milliseconds, 54 milliseconds
+to visit eu-west-2,
+where it's 300 milliseconds to visit ap-southeast-2.
+Now for the purposes of this demo,
+I am currently based in London,
+so it'll be very interesting
+to see if it's gonna be quicker for me to cross the Atlantic
+or go over the continent, all the way over to Japan.
+I'm very interested to see what Route 53 will do.
+So let's go ahead and have a look at how we can set this up
+in the AWS Console.
+Okay, so I'm in the Route 53 section of the AWS Console.
+I'm gonna go over to my hosted zone
+and I'm gonna go ahead and delete those two records
+that I just created in the last lecture.
+Let's go ahead and delete those.
+And so now we're gonna go ahead and create a record
+and we're going to use the naked domain name,
+it's going to be an A record.
+The value in here we're going to put in for London,
+and then TTL I'm gonna drop to 60 seconds.
+And in here I'm going to go latency-based routing.
+So for London, we're essentially in
+eu-west-1, so click in there.
+Health check, we can do our London Health Check.
+Our record ID, I'm gonna go ahead and type in London
+and then I'm gonna go,
+and you can actually just do add another record,
+which makes it a lot simpler
+than coming out and going back in.
+Gonna leave everything as default,
+paste in my IP address for Tokyo,
+drop this down to 60 seconds.
+And again, I'm gonna do latency-based routing.
+Region, I'm going to go ahead and click ap-northeast-1.
+Health Check, We're gonna use our Tokyo Health Check.
+And in our record ID just type in Tokyo.
+And then I'm gonna go ahead and hit create records,
+that has now created my latency-based routing records,
+which we can see here.
+And it will take about 60 seconds to propagate.
+But I'm gonna go ahead and just wait and then type it in.
+I'm actually quite interested to see which one's closest.
+So at the time of recording,
+I'm on the south coast of Texas,
+a place called South Padre Island,
+which is essentially on the border of Texas and Mexico,
+off to the west, sorry, off to the east coast of the Gulf.
+So yeah, we'll see,
+will I get faster latency going to London
+or will I get faster latency going to Tokyo?
+I'm gonna guess London, but let's see what happens.
+And there we go, I've just gone to the DNS address,
+and I'm hitting London,
+so I do get faster latency going to London.
+So let's go onto my exam tips.
+So onto my exam tips.
+Just remember what latency-based routing essentially is,
+and it's just routing on the basis of latency.
+So I am in South Padre Island in Texas right now.
+We created latency-based routing
+and the fastest one for me was going over to London.
+If we had a South African user
+and they got a latency of 54 milliseconds
+going to eu-west-2, so London,
+or 300 milliseconds going to Tokyo,
+then Route 53 would send that South African user
+over to eu-west-2.
+One key thing to remember is latency changes,
+it depends on network conditions.
+So it might be directing our South African user
+to London today, but then for some reason,
+let's say London gets really congested
+and the latency just goes up massively,
+then it would be quicker for them
+to access the Tokyo based region.
+And so one week it might be going to London,
+the next week it might be going to Tokyo.
+So just remember that going into your exam
+is that latency-based routing does change from time to time.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.

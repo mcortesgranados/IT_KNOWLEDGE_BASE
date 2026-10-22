@@ -1,0 +1,119 @@
+Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at using a geoproximity routing policy.
+So we'll look at what they are,
+we'll then do a demo and we'll go on to our exam tips.
+So let's talk about Route 53 traffic flow.
+And basically you can use Route 53 traffic flow
+to build a routing system that uses a combination
+of both your geographic location,
+your latency and availability to route traffic
+from your users to your cloud or on-premise endpoints.
+And it's basically route 53 on acid.
+It's a way of doing very highly complex routing
+of your DNS traffic
+across multiple assets across multiple regions in the world.
+And you basically build it out using a GUI,
+like what we see off to the right.
+So you can build your traffic routing policies from scratch
+or you can also actually go in
+and pick a template from a library and then customize it.
+So geoproximity routing is only available
+under when you are using traffic flow,
+so when you've created a traffic flow routing policy
+so geoproximity routing lets Amazon's Route 53 route
+to traffic to your resources based
+on the geographic locations
+of your users and your resources.
+But you can also optionally choose to route more traffic
+or less to a given resource
+by specifying a value known as a bias.
+So you can set biases and say,
+"Okay, well I want the majority
+of my traffic to go to North America
+'cause that's where the majority of my customers are."
+But if there's latency issues or
+if maybe there's an embargo or something and you, you know,
+you need to route customers to particular regions
+then you can do this using geoproximity routing.
+So it all gets very complicated.
+And to be honest, the reason we do cover this
+off is 'cause we've covered
+off every other routing policy in Route 53,
+but you pretty much won't see this in your exam.
+And we aren't going to go into a lot of detail as
+to how to set this up because it does get extremely complex
+and it's just beyond the scope of this course.
+The main thing you need to know is a bias expands
+or shrinks the size of the geographic region
+from which traffic is routed to resource.
+So you can have a bias in, if you look at this example,
+we've got a massive bias towards Europe
+and a smaller bias towards, let's say South Africa.
+So that's all biases are.
+It allows you to expand
+or shrink the size of the geographic region
+for which the traffic is routed to in a resource.
+So let's go ahead and have a look
+at how this works in the AWS console.
+Okay, so I'm in Route 53.
+Now we're not gonna click on hosted zone.
+What we're gonna do is we're gonna go over to traffic flow
+and then click on traffic policies.
+And this is where you basically create
+your traffic policies.
+So you can click in here and create your traffic policy.
+Just give it a name, just call it test.
+And then this is version one.
+And in here,
+essentially, you're just drawing out your traffic policies.
+So we could have a DNS type.
+So we've got our A records.
+So let's just start with an A record.
+We're going to connect to a weighted rule.
+We're going to give this a 30 weighting
+and then this a 70 weighting.
+And then over here we're going to connect
+into let's say a failover rule.
+And we're gonna have a primary for this 30 and a secondary,
+let's have a look, a failover over here,
+primary and a secondary for your 70.
+And essentially it allows you to build
+out extremely complex and highly customized traffic rules
+for your AWS environment.
+Now really all you need to know in the exam is what this is.
+And essentially if you've got a really,
+really complex set of DNS requirements
+then you pretty much wanna create a traffic policy.
+'cause this GUI helps you draw it all out and makes
+it a lot easier to understand what it is you're doing.
+But to be honest, it is beyond the scope of this course.
+to go into this in a lot of detail.
+I'm sure you get the point.
+You can just create really complicated
+DNS rules using traffic policies.
+So let's go onto my exam tips.
+So really going into the exam, you just need
+to know what geoproximity routing policies are.
+It lets Amazon Route 53 route traffic
+to your resources based
+on the geographic location of your users and resources.
+And you can also optionally choose to route more traffic
+or less traffic to a given resource
+by specifying a value known as a bias.
+And a bias basically expands
+or shrinks the size of your geographic region
+from which traffic is routed to a resource.
+And to use geoproximity routing,
+you must have Route 53 traffic flow set up.
+So we have to go in and set
+up traffic flow and then you can use geoproximity routing.
+That's why you'll never see geoproximity routing
+as a record set when you're creating records
+just inside normal Route 53.
+You can only do this through traffic flow.
+So that is it for this lecture everyone.
+If you've got any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

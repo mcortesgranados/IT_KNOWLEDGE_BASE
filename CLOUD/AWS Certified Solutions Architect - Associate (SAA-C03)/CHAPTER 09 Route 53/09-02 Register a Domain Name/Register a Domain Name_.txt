@@ -1,0 +1,154 @@
+Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look at how we
+can register a domain name with AWS,
+and then we're gonna go in and provision two EC2 instances,
+one in Northern Virginia and one in Tokyo.
+And that will gear us up for the rest
+of the lectures in this section of the course.
+So like I said, you can register a domain name
+directly with AWS.
+This is the preferred method
+because it integrates with all of the AWS services
+and they'll automatically set up the hosted zone for you
+when you buy a domain through AWS.
+But it can take up to three days
+to register your domain name depending on the circumstances.
+In most cases, you should be able to get it in an hour,
+but it can take up to three days.
+So let's go ahead and log in to the AWS console.
+Okay, so here I am in the AWS console
+and I wanna go to Route 53.
+So I'm gonna type in Route 53. We can see it in here.
+And so I'm gonna click in here.
+Now, I've not used this service before,
+so just getting this splash screen.
+Straightaway, you can see down the bottom,
+it's asking me if I want to register a domain name.
+So I'm gonna go ahead and do that.
+I'm going to do "hellocloudgurus2023-ryan".
+Hopefully no one's taken that.
+And then .com and go ahead and hit check.
+And that is available for 13 US dollars a year.
+And so I'm gonna go ahead and select that
+and then I'm gonna go ahead and proceed to check out.
+Now whether or not you want to do this,
+it's to totally up to you.
+Having your own domain name can be useful,
+especially if you're studying DNS.
+But if you don't wanna watch, pay the $13 a year,
+then you don't have to.
+I'm not going to auto-renew
+'cause I'll probably forget about it
+and then it will just keep charging me $13 a year
+for the next 10 years.
+So I'm gonna go ahead and hit next.
+In here I'm just going
+to enter all my registrar contact information
+and leave privacy information turned on.
+And then I'm gonna go ahead and hit next.
+So I'm just gonna pause the video.
+Okay, so I've gone ahead and registered that domain.
+You can see here it's in progress.
+You'll receive registration status email for each domain.
+So now while I'm waiting for that, I'm gonna go ahead
+and create a couple of EC2 instances
+in different parts of the world.
+So I'm gonna go over to EC2
+and it's up to you where you want to do this.
+I'm gonna use a couple of regions that I've not used before.
+I'm recording this in Texas at the moment,
+so I want it to be quite far away-ish.
+So I'm going to pick probably Tokyo
+and then I think I will also pick London.
+So let's start with London. So I'm gonna use EU West 2.
+It's totally up to you which ones you want to choose,
+but I'm basically just going to launch instances
+in each one.
+So I'm gonna go ahead and launch my instance.
+I'm gonna call this "WebServer01"
+and I'm gonna use Amazon Linux AMI, t2.micro.
+I'm going to need a new key pair
+'cause I've not used this region before,
+so I'm gonna just call it "MyLondonKP".
+And I'm gonna go ahead and hit Create and then network.
+We're gonna have to create a security group.
+So we wanna allow HTTPS
+and HTTP traffic in from the internet.
+So that will be the Launch Wizard 1 Security Group.
+Storage I'm just going to leave as default.
+With advanced details though,
+I'm going to go and paste in this bootstrap script.
+Now this will be available
+to you in the resources section of the course.
+It's really simple script.
+It's basically just running an update, installing Apache,
+starting the Apache service, going
+to the var www html directory.
+And then it's writing out a little webpage,
+so it says, "Hello Cloud Gurus."
+And then in here I'm just gonna type, "This is London,"
+and it's outputting that to index.html.
+So I'm gonna go ahead and hit launch instance
+and that is now launching my instance.
+And then what I'm gonna do is go back over to EC2
+and I'm gonna change it from London
+and I'm gonna go over to Tokyo
+and do exactly the same thing.
+So in Tokyo I'm gonna go ahead and launch an instance.
+Going to call this "WebServer02".
+I'm gonna do it as Amazon Linux AMI, t2.micro.
+Key pair. I'm gonna need to create a new key pair.
+So just call it "MyTokyoKP".
+And then I'm gonna go ahead and hit Create.
+And then down here, network settings,
+we're gonna create a security group, allow HTTPS
+and HTTP traffic.
+And Advanced details, I'm just going to go ahead
+and paste in my bootstrap script
+and I'm going to write, "Hello Cloud Gurus, This is Tokyo,"
+and go ahead and hit launch instance.
+So that is now launching my instance.
+And if I go back to EC2
+and I change my region back to London,
+I should hopefully be able
+to get my web server up and running.
+So something that just when you click here,
+if you click this link here, open address, it's gonna open
+that IP address, but it's gonna be using HTTPS
+and we don't have any SSL certificates,
+so it's just going to stall.
+So just copy that and then go up into your browser.
+If you just go up into your browser
+and paste in http colon forward slash forward slash
+and then your IP address, you will be able to resolve this.
+Assuming your security groups are allowing http access,
+that should all work.
+So "Hello Cloud Gurus, This is London".
+Don't do what I did, which is wonder for like five minutes.
+Why the hell I can't access my web servers?
+And it's 'cause I'm trying to use HTTPS
+and there's no SSL certificates installed.
+So that is the London one.
+I'm just gonna test the Tokyo one. And there we go.
+This is Tokyo is also up and running.
+So now I'm just gonna go ahead
+and check on the status of my Route 53 domain name.
+And we can see in here it still says domain registration
+is in progress.
+So I'm just going to pause video
+and wait for that to come up.
+Still says domain registration in progress.
+I'm just going to refresh the page
+and yay, domain registration is successful.
+So I now have a registered domain name.
+hellocloudgurus2023-ryan.com.
+And what I can do now is go into my hosted zone
+and have a look at this domain name.
+So here it is here, you can click in your hosted zone
+and then you can start adding your different records.
+And we're going to cover this off in the next lecture
+of the course.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

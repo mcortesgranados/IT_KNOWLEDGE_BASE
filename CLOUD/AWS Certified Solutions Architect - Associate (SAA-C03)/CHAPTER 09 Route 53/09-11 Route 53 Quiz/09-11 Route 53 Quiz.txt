@@ -1,0 +1,342 @@
+QUESTION 1
+
+Using Route 53, how would you direct "example.com" traffic to various IPs based on the country the user was sending traffic from?
+
+
+Use a failover routing policy.
+
+CORRECT
+Use a geolocation routing policy.
+
+
+Use a simple routing policy.
+
+
+Use a latency routing policy.
+
+Sorry!
+A geolocation policy would solve this for you. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+Correct Answer
+A geolocation policy would solve this for you. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which of the following statements about Route 53 and domain names is true?
+
+
+If you register the wrong domain name in Route 53, you have 24 hours to change it to the one you want.
+
+
+You will need to create a hosted zone before you register your domain with Route 53.
+
+CORRECT
+Route 53 allows you to register a domain programmatically.
+
+
+It can take up to 3 hours for domain names to be registered through Route 53.
+
+Sorry!
+If you accidentally register the wrong domain name, you can't change it. Instead, you need to register another domain name and specify the correct name. You also can't get a refund for a domain name that you registered accidentally. Reference Documentation: Registering a new domain (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html)
+
+Correct Answer
+AWS allows you to register a domain programmatically through the CLI and appropriate AWS SDKs. Reference Documentation: Setting up Amazon Route 53 (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/setting-up-route-53.html)
+
+
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which of the following statements about Route 53 is true?
+
+CORRECT
+Route 53 supports both IPv4 and IPv6.
+
+
+Route 53 only supports IPv6.
+
+
+Route 53 only allows you to create alias records.
+
+
+Route 53 only supports IPv4.
+
+Good work!
+All computers on the internet, from your smart phone or laptop to the servers that serve content for massive retail websites, communicate with one another by using numbers. These numbers, known as IP addresses, are in one of the following formats: Internet Protocol version 4 (IPv4) format, such as 192.0.2.44 Internet Protocol version 6 (IPv6) format, such as 2001:0db8:85a3:0000:0000:abcd:0001:2345 Reference Documentation: How internet traffic is routed to your website or web application (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Using Route 53, how would you direct "example.com" traffic to 2 different IPs based on which one is most performant for a user?
+
+
+Use a failover routing policy.
+
+CORRECT
+Use a latency routing policy.
+
+
+Use a weighted routing policy.
+
+
+Use a geolocation routing policy.
+
+Sorry!
+A latency routing policy will find the most performant endpoint. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+Correct Answer
+A latency routing policy will find the most performant endpoint. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What is a Route 53 health check?
+
+
+It's a type of DNS entry.
+
+CORRECT
+It's a test that allows you to determine if your endpoint is online.
+
+
+It's a test to see if Route 53 is online.
+
+
+It's a check to see if your data center is serving DNS failover packets.
+
+Sorry!
+Route 53 health checks allow you to determine if your application endpoint is online. Reference Documentation: Types of Amazon Route 53 Health Checks (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html)
+
+Correct Answer
+Route 53 health checks allow you to determine if your application endpoint is online. Reference Documentation: Types of Amazon Route 53 Health Checks (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+Using Route 53, how would you direct "example.com" traffic to 2 different IPs based on which one is most performant for a user?
+
+
+Use a weighted routing policy.
+
+CORRECT
+Use a latency routing policy.
+
+
+Use a geolocation routing policy.
+
+
+Use a failover routing policy.
+
+Sorry!
+A latency routing policy will find the most performant endpoint. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+Correct Answer
+A latency routing policy will find the most performant endpoint. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Using Route 53, how would you direct "example.com" traffic to 1 primary IP with a second one for backup?
+
+CORRECT
+Use a failover routing policy.
+
+
+Use a geolocation routing policy.
+
+
+Use a weighted routing policy.
+
+
+Use a latency routing policy.
+
+Good work!
+A failover routing policy would allow you to have a backup endpoint. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Route 53 is a managed ______ service.
+
+
+Compute
+
+
+Routing
+
+CORRECT
+DNS
+
+
+CDN
+
+Good work!
+Route 53 is a DNS service. Reference Documentation: Amazon Route 53 (https://aws.amazon.com/route53/)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Using Route 53, how would you direct "example.com" to a single IP address?
+
+CORRECT
+Use a simple routing policy.
+
+
+Use a weighted routing policy.
+
+
+Use a multi-value routing policy.
+
+
+Use a failover routing policy.
+
+Good work!
+With simple routing, you typically route traffic to a single resource, for example, to a web server for your website. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which of the following statements about Route 53 and domain names is true?
+
+
+It can take up to 3 hours for domain names to be registered through Route 53.
+
+CORRECT
+Route 53 allows you to register a domain programmatically.
+
+
+If you register the wrong domain name in Route 53, you have 24 hours to change it to the one you want.
+
+
+You will need to create a hosted zone before you register your domain with Route 53.
+
+Sorry!
+Domain registration is usually completed within an hour, but it can take up to 72 hours to finish.
+
+Correct Answer
+AWS allows you to register a domain programmatically through the CLI and appropriate AWS SDKs. Reference Documentation: Setting up Amazon Route 53 (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/setting-up-route-53.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Which of the following statements about Amazon Route53 is true?
+
+
+Route 53 does not support domain registration; users must use external services for registering domains.
+
+CORRECT
+You can associate multiple IP addresses with a single record.
+
+
+Route 53 only provides DNS for public IPs.
+
+
+Route 53 does not support alias records.
+
+Sorry!
+Route 53 provides domain registration services, allowing users to register and manage domain names directly through the service. This integration simplifies the process of acquiring and configuring domains for applications hosted on AWS.
+
+Correct Answer
+Yes. Associating multiple IP addresses with a single record is often used for balancing the load of geographically-distributed web servers. Amazon Route 53 allows you to list multiple IP addresses for an A record and responds to DNS requests with the list of all configured IP addresses. (https://aws.amazon.com/route53/faqs/)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What is the purpose of DNS?
+
+
+To terminate unused EC2 instances
+
+
+To allow IP addresses to point to load balancers
+
+
+To deploy your networking applications
+
+CORRECT
+To give a friendly name to IP addresses
+
+Sorry!
+DNS allows you to assign something that's easy to remember to an IP address (e.g., "example.com" —> 1.2.3.4).
+
+Correct Answer
+DNS allows you to assign something that's easy to remember to an IP address (e.g., "example.com" —> 1.2.3.4).
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+Which of the following statements about Route 53 failover policies is true?
+
+CORRECT
+With DNS failover, if a record set fails a health check, it will be removed from the Route 53 response until it passes the health check.
+
+
+With DNS failover, if a record set fails a security check, it will be removed from the Route 53 response until it passes the security check.
+
+
+With DNS failover, if a record set fails a security check, it will be removed from the Route 53 response until the owner adds it again.
+
+
+With DNS failover, if a record set fails a health check, it will be removed from the Route 53 response until the owner adds it again.
+
+Good work!
+DNS Failover consists of two components: health checks and failover. Health checks are automated requests sent over the Internet to your application to verify that your application is reachable, available, and functional. With DNS failover, if a record set fails a health check, it will be removed from the Route 53 response until it passes the health check. Health Checks & DNS Failover.
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Using Route 53, how would you direct "example.com" to 2 different IPs with different distribution levels of traffic?
+
+
+Use a geolocation routing policy.
+
+
+Use a failover routing policy.
+
+CORRECT
+Use a weighted routing policy.
+
+
+Use a simple routing policy.
+
+Good work!
+A weighted routing policy will allow you to split the traffic evenly or in different levels of distribution. Reference Documentation: Choosing a Routing Policy (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html)
+
+__________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Using Route 53, how would you direct "example.com" to an ELB?
+
+
+By creating an AAAA record
+
+
+By creating a TXT record
+
+CORRECT
+By creating an alias record
+
+
+By creating a CNAME
+
+Sorry!
+An AAAA record, or IPv6 Address record, is a type of DNS record that points a domain name to an IPv6 address. It is used to enable IPv6 connectivity for websites and other services.
+
+Correct Answer
+An AWS DNS alias record is a type of record that points a domain name to an AWS resource, such as an Elastic Beanstalk environment, an Amazon CloudFront distribution, or an Amazon S3 bucket. It is used to create subdomains or point a domain name to a different AWS service. Reference: Values for Alias Records (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-values-alias.html)
+
