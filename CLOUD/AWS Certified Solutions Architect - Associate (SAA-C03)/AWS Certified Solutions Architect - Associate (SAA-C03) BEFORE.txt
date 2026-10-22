@@ -1,0 +1,1100 @@
+
+Next Lessons
+Course Introduction thumbnail
+03:12
+Course Introduction
+
+CHAPTER 1.1
+
+About the Training Architect thumbnail
+03:11
+About the Training Architect
+
+CHAPTER 1.2
+
+Exam Guide thumbnail
+06:53
+Exam Guide
+
+CHAPTER 1.3
+
+Course Outline
+CHAPTER 1
+
+Introduction
+44:16
+
+Course Introduction
+03:12
+
+
+
+
+About the Training Architect
+03:11
+Exam Guide
+06:53
+
+QUIZ
+Check Your Readiness for the CSA-A
+30:00
+Course Updates and Changelogs
+01:00
+
+CHAPTER 2
+
+AWS Fundamentals
+44:23
+
+The Building Blocks of AWS: Availability Zones and Regions
+1 MONTH AGO
+
+UPDATED
+08:27
+Who Owns What in the Cloud?
+05:44
+Compute, Storage, Databases, and Networking
+1 MONTH AGO
+
+UPDATED
+08:27
+What Is the Well-Architected Framework?
+1 MONTH AGO
+
+UPDATED
+03:01
+AWS Fundamentals Exam Tips
+1 MONTH AGO
+
+UPDATED
+03:44
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - AWS Fundamental Building Blocks Quiz
+15:00
+CHAPTER 3
+
+Identity and Access Management (IAM)
+2:19:56
+
+Securing the Root Account
+1 MONTH AGO
+
+UPDATED
+06:54
+Controlling Users' Actions with IAM Policy Documents
+1 MONTH AGO
+
+UPDATED
+06:21
+
+
+
+
+Permanent IAM Credentials
+THIS MONTH
+
+NEW
+17:15
+IAM Exam Tips
+04:26
+HANDS-ON LAB
+Introduction to AWS Identity and Access Management (IAM)
+45:00
+HANDS-ON LAB
+Create and Assume Roles in AWS
+45:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Identity and Access Management (IAM) Quiz
+15:00
+CHAPTER 4
+
+Simple Storage Service (S3)
+3:22:32
+
+S3 Overview
+13:06
+Securing Your Bucket with S3 Block Public Access
+08:16
+Hosting a Static Website Using S3
+1 MONTH AGO
+
+UPDATED
+09:31
+
+Versioning Objects in S3
+THIS MONTH
+
+NEW
+07:57
+
+
+
+S3 Storage Classes
+1 MONTH AGO
+
+UPDATED
+11:22
+
+
+
+Lifecycle Management with S3
+2 WEEKS AGO
+
+UPDATED
+05:36
+
+
+S3 Object Lock and Glacier Vault Lock
+06:19
+Encrypting S3 Objects
+1 MONTH AGO
+
+UPDATED
+08:43
+Optimizing S3 Performance
+08:02
+
+
+
+Backing up Data With S3 Replication
+THIS MONTH
+
+NEW
+07:30
+
+
+
+S3 Exam Tips
+11:10
+
+
+
+
+
+
+
+HANDS-ON LAB
+Set Up Cross-Region S3 Bucket Replication
+30:00
+HANDS-ON LAB
+Create a Static Website Using Amazon S3
+30:00
+HANDS-ON LAB
+Creating Amazon S3 Buckets, Managing Objects, and Enabling Versioning
+30:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Simple Storage Service (S3) Quiz
+15:00
+CHAPTER 5
+
+Elastic Compute Cloud (EC2)
+4:22:34
+
+EC2 Overview
+15:40
+
+Demo: Launching an EC2 Instance
+1 MONTH AGO
+
+UPDATED
+07:37
+AWS Command Line
+1 MONTH AGO
+
+UPDATED
+10:55
+Using Roles
+1 MONTH AGO
+
+UPDATED
+08:58
+Security Groups and Bootstrap Scripts
+08:41
+
+EC2 Metadata and User Data
+6 DAYS AGO
+
+NEW
+05:06
+
+
+
+Networking with EC2
+06:15
+Optimizing with EC2 Placement Groups
+04:15
+
+Solving Licensing Issues with Dedicated Hosts
+02:48
+Timing Workloads with Spot Instances and Spot Fleets
+09:48
+Deploying vCenter in AWS with VMware Cloud on AWS
+03:24
+Extending AWS Beyond the Cloud with AWS Outposts
+03:45
+EC2 Exam Tips
+10:22
+HANDS-ON LAB
+EC2 Instance Bootstrapping
+1:00:00
+HANDS-ON LAB
+Using EC2 Roles and Instance Profiles in AWS
+1:30:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Elastic Compute Cloud (EC2) Quiz
+15:00
+CHAPTER 6
+
+Elastic Block Storage (EBS) and Elastic File System (EFS)
+2:30:38
+
+EBS Overview
+1 MONTH AGO
+
+UPDATED
+16:41
+
+
+Volumes and Snapshots
+6 DAYS AGO
+
+NEW
+14:50
+Protecting EBS Volumes with Encryption
+1 MONTH AGO
+
+UPDATED
+06:28
+
+
+EC2 Hibernation
+6 DAYS AGO
+
+NEW
+03:45
+EFS Overview
+1 MONTH AGO
+
+UPDATED
+06:53
+FSx Overview
+03:35
+
+
+
+
+Amazon Machine Images: EBS vs. Instance Store
+1 MONTH AGO
+
+UPDATED
+10:33
+
+
+AWS Backup
+03:30
+EBS Exam Tips
+09:23
+HANDS-ON LAB
+Reduce Storage Costs with EFS
+1:00:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Elastic Block Storage (EBS) and Elastic File System (EFS) Quiz
+15:00
+CHAPTER 7
+
+Databases
+2:32:32
+
+Relational Database Service (RDS) Overview
+1 MONTH AGO
+
+UPDATED
+17:16
+Increasing Read Performance with Read Replicas
+1 MONTH AGO
+
+UPDATED
+08:42
+
+
+What Is Amazon Aurora?
+05:34
+DynamoDB Overview
+05:54
+
+
+When Do We Use DynamoDB Transactions?
+03:51
+Saving Your Data with DynamoDB Backups
+01:54
+Taking Your Data Global with DynamoDB Streams and Global Tables
+6 DAYS AGO
+
+UPDATED
+10:28
+Operating MongoDB-Compatible Databases in Amazon DocumentDB
+03:05
+Running Apache Cassandra Workloads with Amazon Keyspaces
+01:57
+Implementing Graph Databases Using Amazon Neptune
+02:45
+Leveraging Amazon Quantum Ledger Database (Amazon QLDB) for Ledger Databases
+03:34
+Analyzing Time-Series Data with Amazon Timestream
+02:21
+Databases Exam Tips
+10:11
+HANDS-ON LAB
+Set Up a WordPress Site Using EC2 and RDS
+1:00:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Databases Quiz
+15:00
+CHAPTER 8
+
+Virtual Private Cloud (VPC) Networking
+2:48:52
+
+VPC Overview
+08:33
+Demo: Provisioning a VPC - Part 1
+5 DAYS AGO
+
+UPDATED
+11:13
+
+
+Demo: Provisioning a VPC - Part 2
+5 DAYS AGO
+
+NEW
+18:04
+Using NAT Gateways for Internet Access
+6 DAYS AGO
+
+NEW
+05:58
+
+Protecting Your Resources with Security Groups
+03:33
+Controlling Subnet Traffic with Network ACLs
+4 DAYS AGO
+
+UPDATED
+12:36
+
+
+Private Communication Using VPC Endpoints
+06:04
+Building Solutions across VPCs with Peering
+6 DAYS AGO
+
+NEW
+03:55
+
+Network Privacy with AWS PrivateLink
+03:01
+
+Securing Your Network with VPN CloudHub
+01:58
+Connecting On-Premises with Direct Connect
+04:58
+Simplifying Networks with Transit Gateway
+02:56
+5G Networking with AWS Wavelength
+02:23
+VPC Networking Exam Tips
+08:40
+HANDS-ON LAB
+Build Solutions across VPCs with Peering
+1:00:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Virtual Private Cloud (VPC) Networking Quiz
+15:00
+CHAPTER 9
+
+Route 53
+1:19:30
+
+Route 53 Overview
+14:25
+
+
+
+
+
+
+Register a Domain Name
+4 DAYS AGO
+
+NEW
+07:07
+
+Demo: Using a Simple Routing Policy
+1 MONTH AGO
+
+UPDATED
+04:28
+Demo: Using a Weighted Routing Policy
+4 DAYS AGO
+
+NEW
+08:14
+
+Demo: Using a Failover Routing Policy
+1 MONTH AGO
+
+UPDATED
+05:33
+
+Demo: Using a Geolocation Routing Policy
+4 DAYS AGO
+
+NEW
+03:47
+Demo: Using a Geoproximity Routing Policy
+1 MONTH AGO
+
+UPDATED
+05:03
+Demo: Using a Latency Routing Policy
+4 DAYS AGO
+
+NEW
+05:09
+Demo: Using a Multivalue Answer Routing Policy
+1 MONTH AGO
+
+UPDATED
+03:33
+Route 53 Exam Tips
+07:11
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Route 53 Quiz
+15:00
+CHAPTER 10
+
+Elastic Load Balancing (ELB)
+1:54:29
+
+ELB Overview
+4 DAYS AGO
+
+NEW
+04:55
+
+
+
+Using Application Load Balancers
+15:20
+
+Extreme Performance with Network Load Balancers
+03:29
+Using the Classic Load Balancer
+4 DAYS AGO
+
+NEW
+06:13
+Getting "Stuck" with Sticky Sessions
+02:26
+Leaving the Load Balancer with Deregistration Delay
+4 DAYS AGO
+
+NEW
+02:43
+ELB Exam Tips
+4 DAYS AGO
+
+NEW
+04:23
+
+HANDS-ON LAB
+Use Application Load Balancers for Web Servers
+1:00:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Load Balancing Quiz
+15:00
+CHAPTER 11
+
+Monitoring
+3:01:28
+
+CloudWatch Overview
+17:41
+
+
+Application Monitoring with CloudWatch Logs
+6 DAYS AGO
+
+NEW
+16:19
+
+
+
+Monitoring with Amazon Managed Service for Prometheus and Amazon Managed Grafana
+07:56
+Monitoring Exam Tips
+04:32
+
+
+HANDS-ON LAB
+Implement Advanced CloudWatch Monitoring for a Web Server
+30:00
+HANDS-ON LAB
+Work with AWS VPC Flow Logs for Network Monitoring
+1:30:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Monitoring Quiz
+15:00
+CHAPTER 12
+
+High Availability and Scaling
+1:44:29
+
+Horizontal vs. Vertical Scaling Overview
+05:59
+What Are Launch Templates and Launch Configurations?
+12:59
+
+
+Scaling EC2 Instances with Auto Scaling
+6 DAYS AGO
+
+NEW
+17:19
+
+
+
+Diving Deeper into Auto Scaling Policies
+11:02
+
+
+
+
+
+Demo: Diving Deeper into Auto Scaling Policies
+6 DAYS AGO
+
+NEW
+07:20
+
+Scaling Relational Databases
+12:44
+
+
+
+
+Scaling Non-Relational Databases
+11:10
+High Availability and Scaling Exam Tips
+10:56
+
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - HA and Scaling Quiz
+15:00
+CHAPTER 13
+
+Decoupling Workflows
+2:12:35
+
+Decoupling Workflows Overview
+08:35
+Messaging with SQS
+14:59
+
+Sidelining Messages with Dead-Letter Queues
+15:27
+
+
+Ordered Messages with SQS FIFO
+09:11
+
+
+
+
+
+Delivering Messages with SNS
+15:08
+
+
+Fronting Applications with API Gateway
+15:16
+
+
+
+
+
+Executing Batch Workloads Using AWS Batch
+THIS MONTH
+
+UPDATED
+10:29
+
+
+Brokering Messages with Amazon MQ
+05:38
+
+
+
+Coordinating Distributed Apps with AWS Step Functions
+08:52
+Ingesting Data from SaaS Applications to AWS with Amazon AppFlow
+06:54
+Decoupling Workflows Exam Tips
+07:06
+
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Decoupling Workflows Quiz
+15:00
+CHAPTER 14
+
+Big Data
+1:29:27
+
+Exploring Large Redshift Databases
+08:52
+
+
+Processing Data with EMR (Elastic MapReduce)
+07:25
+
+
+
+
+Demo: Processing Data using EMR
+6 DAYS AGO
+
+NEW
+09:55
+Streaming Data with Kinesis
+09:05
+Amazon Athena and AWS Glue
+06:23
+Visualizing Data with QuickSight
+THIS MONTH
+
+NEW
+06:05
+
+
+Moving Transformed Data Using AWS Data Pipeline
+07:19
+Implementing Amazon Managed Streaming for Apache Kafka (Amazon MSK)
+06:47
+Analyzing Data with Amazon OpenSearch Service
+04:35
+
+Big Data Exam Tips
+THIS MONTH
+
+UPDATED
+08:01
+
+
+
+
+
+
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Big Data Quiz
+15:00
+CHAPTER 15
+
+Serverless Architecture
+2:48:07
+
+Serverless Overview
+06:46
+Computing with Lambda
+12:54
+
+
+
+
+Leveraging the AWS Serverless Application Repository
+03:37
+Container Overview
+11:26
+Running Containers in ECS or EKS
+6 DAYS AGO
+
+NEW
+06:21
+
+
+Removing Servers with Fargate
+6 DAYS AGO
+
+UPDATED
+14:35
+
+
+
+Amazon EventBridge (CloudWatch Events)
+16:13
+
+
+
+Storing Custom Docker Images in Amazon Elastic Container Registry (Amazon ECR)
+06:29
+Using Open-Source Kubernetes in Amazon EKS Distro
+01:56
+Orchestrating Containers Outside AWS Using Amazon ECS Anywhere and Amazon EKS Anywhere
+08:04
+Auto Scaling Databases On Demand with Amazon Aurora Serverless
+06:02
+Using AWS X-Ray for Application Insights
+06:18
+Deploying GraphQL Interfaces in AWS AppSync
+01:59
+Serverless Architecture Exam Tips
+05:27
+HANDS-ON LAB
+Triggering AWS Lambda from Amazon SQS
+45:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Serverless Architecture Quiz
+15:00
+CHAPTER 16
+
+Security
+2:41:05
+
+DDoS Overview
+05:38
+Logging API Calls with CloudTrail
+03:27
+
+
+Protecting Applications with Shield
+03:55
+
+
+Filtering Traffic with AWS WAF
+03:17
+Guarding Your Network with GuardDuty
+02:55
+Centralizing WAF Management via AWS Firewall Manager
+01:46
+Monitoring S3 Buckets with Macie
+04:04
+Securing Operating Systems with Inspector
+03:01
+Managing Encryption Keys with KMS and CloudHSM
+07:58
+
+
+Storing Your Secrets in Secrets Manager
+03:04
+Storing Your Secrets in Parameter Store
+01:38
+Temporarily Sharing S3 Objects Using Presigned URLs or Cookies
+05:39
+Advanced IAM Policy Documents
+09:11
+AWS Certificate Manager
+02:20
+Auditing Continuously with AWS Audit Manager
+01:52
+Downloading Compliance Documents from AWS Artifact
+02:10
+Authenticating Access with Amazon Cognito
+05:21
+Analyzing Root Cause Using Amazon Detective
+02:47
+Protecting VPCs with AWS Network Firewall
+02:36
+Leveraging AWS Security Hub for Collecting Security Data
+01:23
+Security Exam Tips
+12:03
+HANDS-ON LAB
+Using Secrets Manager to Authenticate with an RDS Database Using Lambda
+2 MONTHS AGO
+
+UPDATED
+1:00:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Security Quiz
+15:00
+CHAPTER 17
+
+Automation
+2:11:13
+
+Why Do We Automate?
+10:04
+CloudFormation
+THIS MONTH
+
+NEW
+17:57
+
+
+
+Elastic Beanstalk
+6 DAYS AGO
+
+NEW
+03:49
+
+Systems Manager
+6 DAYS AGO
+
+NEW
+17:10
+
+
+Automation Exam Tips
+07:13
+HANDS-ON LAB
+Getting Started with CloudFormation
+1:00:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Automation Quiz
+15:00
+CHAPTER 18
+
+Caching
+57:06
+
+Caching Overview
+06:26
+Global Caching with CloudFront
+11:27
+Caching Your Data with ElastiCache and DAX
+07:52
+Fixing IP Caching with Global Accelerator
+08:12
+
+
+
+Caching Exam Tips
+08:09
+
+
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Cache (Lowering Latency) Quiz
+15:00
+CHAPTER 19
+
+Governance
+2:51:39
+
+Managing Accounts with Organizations
+10:41
+
+
+
+
+
+Sharing Resources with AWS RAM
+05:45
+
+
+
+Setting Up Cross-Account Role Access
+07:17
+
+
+Inventory Management with AWS Config
+THIS MONTH
+
+NEW
+12:39
+
+
+
+Offloading Active Directory to Directory Service
+04:57
+Exploring with Cost Explorer
+6 DAYS AGO
+
+NEW
+06:18
+
+
+Using AWS Budgets
+6 DAYS AGO
+
+NEW
+03:07
+
+Optimizing Costs with AWS Cost and Usage Reports
+08:09
+
+
+Reducing Compute Spend Using Savings Plans and AWS Compute Optimizer
+08:40
+Auditing with Trusted Advisor
+6 DAYS AGO
+
+NEW
+09:18
+
+
+Enforcing Account Governance via AWS Control Tower
+08:43
+Managing Software Licenses in AWS with AWS License Manager
+02:44
+Monitoring Health Events in the AWS Personal Health Dashboard
+06:12
+Standardizing Deployments Using AWS Service Catalog and AWS Proton
+04:52
+Optimizing Architectures with the AWS Well-Architected Tool
+03:21
+Governance Exam Tips
+08:56
+
+
+
+
+
+
+
+
+
+HANDS-ON LAB
+Creating AWS Tags and Resource Groups
+2 MONTHS AGO
+
+UPDATED
+45:00
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Governance Quiz
+15:00
+CHAPTER 20
+
+Migration
+1:20:50
+
+Migrating Data with AWS Snow Family
+09:27
+Storage Gateway
+07:48
+
+
+
+
+
+
+AWS DataSync
+05:15
+
+
+AWS Transfer Family
+04:57
+Moving to the Cloud with Migration Hub
+08:01
+Migrating Workloads to AWS Using AWS Application Discovery Service or AWS Application Migration Service (AWS MGN)
+06:56
+
+Migrating Databases from On-Premises to AWS with AWS Database Migration Service (AWS DMS)
+10:17
+Replicating and Tracking Migrations with AWS Migration Hub and AWS Server Migration Service (AWS SMS)
+05:48
+Migration Exam Tips
+07:21
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Migration Quiz
+15:00
+CHAPTER 21
+
+Front-End Web and Mobile
+29:24
+
+Front-End Web and Mobile Overview
+01:04
+Quickly Deploying Web Apps with AWS Amplify
+03:47
+Testing App Services Using AWS Device Farm
+01:56
+Engaging Customers with Amazon Pinpoint
+04:17
+Front-End Web and Mobile Exam Tips
+03:20
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Front-End Web and Mobile Quiz
+15:00
+CHAPTER 22
+
+Machine Learning
+51:49
+
+Machine Learning Overview
+01:37
+Analyzing Text Using Amazon Comprehend, Amazon Kendra, and Amazon Textract
+06:06
+Predicting Time-Series Data Using Amazon Forecast
+02:35
+Protecting Accounts with Amazon Fraud Detector
+01:55
+Working with Text and Speech Using Amazon Polly, Amazon Transcribe, and Amazon Lex
+05:16
+
+Analyzing Images via Amazon Rekognition
+03:39
+Leveraging Amazon SageMaker to Train Learning Models
+08:17
+Translating Content into Different Languages with Amazon Translate
+01:49
+Machine Learning Exam Tips
+05:35
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Machine Learning Quiz
+15:00
+CHAPTER 23
+
+Media
+21:16
+
+Media Overview
+00:41
+Converting Media Files with Amazon Elastic Transcoder
+01:51
+Streaming Live Video in AWS Using Amazon Kinesis Video Streams
+02:35
+Media Exam Tips
+01:09
+QUIZ
+AWS Certified Solutions Architect - Associate (SAA-C03) - Media Quiz
+15:00
+CHAPTER 24
+
+Exam Preparation
+10:33:43
+
+Revision for Success
+6 DAYS AGO
+
+NEW
+06:42
+
+Tackling Exam Questions
+11:20
+Booking Your Certification Exam
+09:27
+Preparing for Remote Proctored Exams
+06:14
+
+PRACTICE EXAM
+AWS Certified Solutions Architect - Associate (SAA-C03) - Practice Exam 1
+2:00:00
+PRACTICE EXAM
+AWS Certified Solutions Architect - Associate (SAA-C03) - Practice Exam 2
+2:00:00
+PRACTICE EXAM
+AWS Certified Solutions Architect - Associate (SAA-C03) - Practice Exam 3
+2:00:00
+PRACTICE EXAM
+AWS Certified Solutions Architect - Associate (SAA-C03) - Practice Exam 4
+2:00:00
+PRACTICE EXAM
+AWS Certified Solutions Architect - Associate (SAA-C03) - Practice Exam 5
+2:00:00
+CHAPTER 25
+
+Conclusion
+01:02
+
+Conclusion
