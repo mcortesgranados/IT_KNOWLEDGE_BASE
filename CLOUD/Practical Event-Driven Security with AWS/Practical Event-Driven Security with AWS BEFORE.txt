@@ -1,0 +1,191 @@
+Course Outline
+CHAPTER 1
+
+Course Introduction
+03:35
+
+Introduction to Event-driven Security
+02:41
+A Note About Demo Lessons
+00:54
+CHAPTER 2
+
+CloudTrail
+58:05
+
+CloudTrail Overview
+01:00
+Introduction
+04:13
+
+Setting Up CloudTrail
+06:30
+Querying Events
+09:59
+Athena Queries
+08:14
+
+Cross Account CloudTrail
+12:04
+
+CloudTrail Summary
+01:05
+QUIZ
+Practical Event-Driven Security with AWS - CloudTrail Quiz
+15:00
+CHAPTER 3
+
+CloudWatch
+58:58
+
+CloudWatch Overview
+01:14
+Introduction
+03:52
+Events
+10:51
+Auto-Remediation
+09:30
+
+
+Metrics and Alarms
+10:13
+
+CloudWatch Dashboards
+06:38
+CloudWatch Summary
+01:40
+QUIZ
+Practical Event-Driven Security with AWS - CloudWatch Quiz
+15:00
+CHAPTER 4
+
+GuardDuty Overview
+46:10
+
+GuardDuty Overview
+00:52
+Introduction
+04:06
+Configuring GuardDuty
+05:53
+
+Trusted IPs
+07:19
+
+
+
+
+
+Monitoring With CloudWatch
+05:06
+Multi-Account Configuration
+06:48
+
+GuardDuty Summary
+01:06
+QUIZ
+Practical Event-Driven Security with AWS - GuardDuty Overview Quiz
+15:00
+CHAPTER 5
+
+Macie
+48:46
+
+Macie Overview
+01:18
+Introduction
+05:24
+Basic Configuration
+05:16
+
+
+Compliance Dashboard
+07:06
+Queries
+06:47
+
+
+Notifications
+06:24
+
+Macie Summary
+01:31
+QUIZ
+Practical Event-Driven Security with AWS - Macie Quiz
+15:00
+CHAPTER 6
+
+AWS Config
+55:30
+
+AWS Config Overview
+01:07
+Introduction
+04:54
+Basic Configuration
+06:36
+Custom Rules
+12:17
+
+Auto Remediation
+07:11
+Aggregating Results
+07:15
+Summary
+01:10
+QUIZ
+Practical Event-Driven Security with AWS - AWS Config Quiz
+15:00
+CHAPTER 7
+
+WAF
+42:52
+
+WAF Overview
+01:16
+Introduction
+03:14
+Setting Up Cloudfront
+07:05
+
+WAF Configuration
+08:58
+Real Time Alerts
+05:52
+
+Summary
+01:27
+QUIZ
+Practical Event-Driven Security with AWS - WAF Quiz
+15:00
+CHAPTER 8
+
+Security Hub
+37:57
+
+Security Hub Overview
+00:47
+Security Hub Introduction
+01:37
+Security Baselines
+04:31
+
+CIS Benchmarks
+05:18
+
+Setting Up Security Hub
+04:56
+Security Hub Integrations
+04:30
+security-hub-summary
+01:18
+QUIZ
+Practical Event-Driven Security with AWS - Security Hub Quiz
+15:00
+CHAPTER 9
+
+Course Conclusion
+01:39
+
+Course Conclusion
