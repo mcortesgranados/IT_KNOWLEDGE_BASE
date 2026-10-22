@@ -1,0 +1,38 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at
+how we can use AWS Security Hub
+for Collecting Security Data.
+So explore what Security Hub is,
+its use cases, and then my exam tips.
+So what is Security Hub?
+Well, basically it's a single place to view
+all your security alerts from services
+like Amazon Guard Duty,
+Amazon Inspector, Amazon Macie, and AWS Firewall Manager,
+and it works across multiple accounts.
+So this is just a single pane of glass
+to see what's going on
+with all your different security alerts
+across multiple AWS accounts.
+That's all it is.
+So you can conduct Cloud Security Posture Management,
+or CSPM,
+and this is basically using automated checks
+that comply with common frameworks
+such as the Center for Information Security,
+PCI DSS, etc.
+And you can also correlate security findings
+to discover new insights.
+You can aggregate all your findings in one place
+allowing your security staff
+to more easily identify threats and alerts.
+So, going on to my exam tips,
+if you have a scenario question
+about a single place to view all your security alerts
+across multiple AWS security services as well as accounts,
+I want you to think of AWS Security Hub.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

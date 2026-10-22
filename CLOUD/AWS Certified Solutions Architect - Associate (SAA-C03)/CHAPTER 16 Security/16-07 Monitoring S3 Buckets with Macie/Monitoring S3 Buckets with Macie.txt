@@ -1,0 +1,96 @@
+Hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look
+at how we can monitor our S3 buckets with Macie.
+So what we're going to learn is what is Macie?
+We're going to learn about personal identifiable
+information, or PII.
+We're going to look at automated analysis of data.
+We'll look at what Macie alerts we can have,
+and then we'll move on to my exam tips.
+So almost any business that you deal with now
+stores some kind of information about you
+on their computer system.
+So we have our social networks
+who track who we're friends with,
+what we like, even our conversations.
+But even your local plumber, or your local electrician
+might be storing things such as your name, your address,
+your credit card information, or even your banking,
+either on their local servers
+or as more businesses move to AWS they're starting
+to store it in the cloud.
+And a lot of businesses choose
+to store this information in S3.
+And in the past, there's been a lot of businesses
+who will store this stuff in S3
+but then forget to really lock down their S3 buckets
+because they are new to the cloud.
+And what they're storing is what's called PII,
+or personally identifiable information.
+So this is personal data used
+to establish an individual's identity,
+and this data could be exploited by criminals,
+used in identity theft, as well as financial fraud.
+And this could be things like your home address,
+your email address, your Social Security number--
+in the UK we call it our National Insurance number.
+It could be your passport number,
+or your driver's license number,
+or it could be your date of birth, your phone number,
+your bank account, and even your credit card numbers.
+So what Macie does is it gives us automated analysis
+of data.
+And basically what Macie is is it's a service
+that uses machine learning and pattern matching
+to discover sensitive data that's stored in S3.
+So essentially it's using AI to recognize
+if your S3 objects contain sensitive data
+such as personally identifiable information,
+personal health information, as well as your financial data.
+And it's going to alert you
+if you have any unencrypted buckets,
+and it's going to alert you about your public buckets.
+And it can also alert you about buckets
+that are shared with AWS accounts
+that are outside of those that are defined
+in your AWS organizations.
+And basically Macie is really great for frameworks
+like HIPAA, which governs the way
+we store health information in the United States,
+as well as GDPR, which basically governs the way
+we store personally identifiable information in the UK.
+So Macie comes with alerts.
+You can basically go ahead and filter and search
+for Macie alerts in the AWS console.
+Alerts are sent to Amazon EventBridge
+and they can be integrated with your security incident
+and event management or CM systems.
+And they can also be integrated
+with AWS Security Hub for a broader analysis
+of your organization's security posture.
+And it can also be integrated
+with other AWS services such as step functions
+to automatically take remediation actions.
+So that's all Macie is. On to my exam tips.
+Just remember going into the exam what Macie is
+and what it allows you to do.
+So basically it's an automated way
+of discovering personally identifiable information.
+So it's using AI to analyze data in S3
+and it'll look for PII, PHI, and financial data.
+It's great for HIPAA and GDPR compliance
+as well as preventing identity theft.
+Macie alerts can be sent to Amazon EventBridge
+and integrated with your event management systems.
+And you can also automate remediation actions
+using other AWS services such as step functions.
+So if you go into your exam
+and you see a scenario-based question
+where it's talking about PII and how you can prevent this
+from being leaked accidentally in S3,
+I want you to immediately think of Macie.
+So that is it for this lecture everyone.
+If you have any questions please let me know,
+if not feel free to move on to the next lecture.
+Thank you.

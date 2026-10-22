@@ -1,0 +1,405 @@
+QUESTION 1
+
+In general, what does a DDoS attack entail?
+
+
+A small number of users have connected to your backend database. These connections lead to a denial of requests being sent through.
+
+
+AWS is unable to handle the scale of traffic that it is receiving. This causes your EC2 instances to go offline.
+
+
+Your local users left too many computers running in the data center. This has drawn too much power and starts to cause rolling outages in your compute platform.
+
+CORRECT
+A large number of connections overwhelms your architecture. Your application is unable to answer the legitimate requests that are sent to it.
+
+Good work!
+This describes what a DDoS attack looks like. Reference Documentation: What is a DDoS Attack?
+
+_________________________________________________________________________________________________________________________________________________
+
+
+QUESTION 2
+
+Which of the following statements is true?
+
+
+Amazon Inspector identifies software vulnerabilities only in OS packages.
+
+CORRECT
+Amazon Inspector requires an agent for host assessment rules packages.
+
+
+Amazon Inspector automatically performs scans once a day.
+
+
+Amazon Inspector does not allow integration with other services.
+
+Sorry!
+Amazon Inspector identifies software vulnerabilities in OS and programming language packages.
+
+Correct Answer
+The agent is required for host assessment rules packages. Reference Documentation: Amazon Inspector FAQs.
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+What three components are required in all IAM policy documents?
+
+
+Resource, Action, Permissions
+
+
+Easy, Always, Allowed
+
+
+Effect, Allow, Deny
+
+CORRECT
+Effect, Action, Resource
+
+Sorry!
+Permissions is not a valid element that make up an IAM policy document. Reference Documentation: Policy structure
+
+Correct Answer
+Effect, Action, and Resource are the only required parts. Reference Documentation: Policy structure
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Where is the most cost effective place to store your database passwords in a secure manner?
+
+CORRECT
+Parameter Store
+
+
+S3
+
+
+EBS
+
+
+Secrets Manager
+
+Sorry!
+Only Parameter Store allows you to store credentials for free. Reference Documentation: AWS Systems Manager Parameter Store
+
+Correct Answer
+Only Parameter Store allows you to store credentials for free. Reference Documentation: AWS Systems Manager Parameter Store
+
+_________________________________________________________________________________________________________________________________________________
+
+
+QUESTION 5
+
+What would you use Amazon Cognito for?
+
+
+To view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager.
+
+
+To get the compliance-related information that matters to you, such as AWS security and compliance reports or select online agreements.
+
+
+To deploy physical firewall protection across your VPCs via its managed infrastructure (e.g., a physical firewall that is managed by AWS).
+
+CORRECT
+To provide authentication, authorization, and user management for your web and mobile apps without the need for custom code.
+
+Sorry!
+AWS Security Hub is a single place to view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager.
+
+Correct Answer
+Amazon Cognito is a service that provides authentication, authorization, and user management for your web and mobile apps without the need for custom code.
+
+_________________________________________________________________________________________________________________________________________________
+
+
+QUESTION 1
+
+What would you use Amazon Cognito for?
+
+
+To get the compliance-related information that matters to you, such as AWS security and compliance reports or select online agreements.
+
+
+To deploy physical firewall protection across your VPCs via its managed infrastructure (e.g., a physical firewall that is managed by AWS).
+
+
+To view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager.
+
+CORRECT
+To provide authentication, authorization, and user management for your web and mobile apps without the need for custom code.
+
+Sorry!
+AWS Artifact is a single source you can visit to get the compliance-related information that matters to you, such as AWS security and compliance reports or select online agreements.
+
+Correct Answer
+Amazon Cognito is a service that provides authentication, authorization, and user management for your web and mobile apps without the need for custom code.
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+You need a single place to view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager. What is the best service to fulfill this need?
+
+
+AWS Artifact
+
+
+AWS Firewall Manager
+
+
+AWS Audit Manager
+
+CORRECT
+AWS Security Hub
+
+Sorry!
+Artifact is a single source you can visit to get the compliance-related information that matters to you, such as AWS security and compliance reports or select online agreements.
+
+Correct Answer
+Security Hub is a single place to view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager.
+
+_________________________________________________________________________________________________________________________________________________
+QUESTION 4
+
+What kind of protection are you adding to your AWS account when you enable GuardDuty?
+
+
+High availability monitoring
+
+CORRECT
+Intelligent threat detection
+
+
+System-level monitoring
+
+
+Global threat detection and response coordination
+
+Sorry!
+Amazon GuardDuty offers threat detection enabling you to continuously monitor and protect your AWS accounts, workloads, and data stored in Amazon Simple Storage Service (Amazon S3).
+
+Correct Answer
+Amazon GuardDuty is a threat detection service that continuously monitors your AWS accounts and workloads for malicious activity and delivers detailed security findings for visibility and remediation. Amazon GuardDuty.
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which of the following security issues is something that WAF could NOT block?
+
+
+Blocking specific countries from accessing your application.
+
+
+A SQL injection attack.
+
+CORRECT
+Stopping users from torrenting movies.
+
+
+A cross-site scripting attack.
+
+Sorry!
+WAF would be able to stop this. Reference Documentation: How do I configure AWS WAF to protect my resources from common attacks?
+
+Correct Answer
+WAF would not be able to stop this. Reference Documentation: How do I configure AWS WAF to protect my resources from common attacks?
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+You need an automated service that produces reports specific to auditors for PCI compliance, GDPR, and more. Which service would best provide this?
+
+
+AWS Security Hub
+
+CORRECT
+AWS Audit Manager
+
+
+Amazon Detective
+
+
+Amazon Cognito
+
+Sorry!
+Security Hub is a single place to view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager.
+
+Correct Answer
+Audit Manager is an automated service that produces reports specific to auditors for PCI compliance, GDPR, and more.
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+What is the easiest way to log API calls in AWS?
+
+
+Enable KMS API logging and select a Lambda function to process these events.
+
+
+Enable CloudTrail and select an EBS volume to store the logs in.
+
+CORRECT
+Enable CloudTrail and pick an S3 bucket to store the logs in.
+
+
+Enable API logging in AWS Config.
+
+Sorry!
+CloudTrail is the best way to log API calls in AWS. Reference Documentation: AWS CloudTrail
+
+Correct Answer
+CloudTrail is the best way to log API calls in AWS. Reference Documentation: AWS CloudTrail
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which of the following statements is NOT true?
+
+
+You can create, edit, and manage policies and roles in the IAM console, or via AWS APIs or the AWS CLI.
+
+CORRECT
+You must explicitly deny all IAM policy API calls that a user shouldn't be able to make.
+
+
+IAM recommends applying the least-privilege principle when setting permissions with IAM policies.
+
+
+AWS supports six types of policies: identity-based policies, resource-based policies, permissions boundaries, Organizations SCPs, ACLs, and session policies.
+
+Sorry!
+This is a correct statement regarding IAM policies and permissions.
+
+Correct Answer
+All calls are denied by default and must be allowed. Reference Documentation: Policies and permissions in IAM
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Your boss requires automatic key rotation for your encrypted data. Which AWS service supports this?
+
+
+EC2
+
+CORRECT
+KMS
+
+
+SQS
+
+
+EBS
+
+Sorry!
+KMS supports key rotation. Reference Documentation: Rotating customer master keys
+
+Correct Answer
+KMS supports key rotation. Reference Documentation: Rotating customer master keys
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+What is the easiest way to ensure your CloudTrail logs haven't been tampered with?
+
+
+Enable "disable API edit" in Config.
+
+
+Disable users permissions to delete content from any S3 bucket.
+
+
+Enable anti-log-taper in S3.
+
+CORRECT
+Make sure that you have enabled log file integrity validation within the CloudTrail console for your trails.
+
+Sorry!
+You'd need to enable CloudTrail log file validation. Reference Documentation: Validating CloudTrail Log File Integrity
+
+Correct Answer
+CloudTrail offers this as a feature, but you must enable it. The setting is now enabled by default for new trails. Reference Documentation: Validating CloudTrail Log File Integrity
+
+_________________________________________________________________________________________________________________________________________________
+
+
+QUESTION 3
+
+What is a good use case for AWS Audit Manager?
+
+
+To provide authentication, authorization, and user management for your web and mobile apps without the need for custom code.
+
+
+To analyze, investigate, and quickly identify the root cause of potential security issues or suspicious activities.
+
+CORRECT
+To automatically produce reports specific to auditors for PCI compliance, GDPR, and more.
+
+
+To view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager in a single location.
+
+Sorry!
+Detective is a security investigation service that helps you analyze, investigate, and quickly identify the root cause of potential security issues or suspicious activities.
+
+Correct Answer
+AWS Audit Manager is an automated service that produces reports specific to auditors for PCI compliance, GDPR, and more.
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What kind of data can Macie identify?
+
+CORRECT
+All of the other answers
+
+
+Credit card numbers
+
+
+Personal identifiable information (PII) such as names and addresses
+
+
+Social security numbers
+
+Sorry!
+Macie can detect all of these types of data. Reference Documentation: Amazon Macie
+
+Correct Answer
+Macie can detect all of these types of data. Reference Documentation: Amazon Macie
+
+_________________________________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+What would you use AWS Network Firewall for?
+
+
+As a single source you can visit to get the compliance-related information that matters to you, such as AWS security and compliance reports or select online agreements.
+
+
+As a single place to view all your security alerts from services like Amazon GuardDuty, Amazon Inspector, Amazon Macie, and AWS Firewall Manager.
+
+CORRECT
+As a way to deploy physical firewall protection across your VPCs via its managed infrastructure (e.g., a physical firewall that is managed by AWS).
+
+
+As a security management service for firewalls in a single pane of glass.
+
+Sorry!
+AWS Artifact is a single source you can visit to get the compliance-related information that matters to you, such as AWS security and compliance reports or select online agreements.
+
+Correct Answer
+AWS Network Firewall is a managed service that makes it easy to deploy physical firewall protection across your VPCs via its managed infrastructure (e.g., a physical firewall that is managed by AWS).

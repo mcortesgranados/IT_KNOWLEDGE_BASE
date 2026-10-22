@@ -1,0 +1,41 @@
+Okay. Hello Cloud Gurus and welcome to this lecture.
+In this lecture, we're going to look
+at centralizing our WAF Management
+via AWS Firewall Manager.
+So we'll start off with exploring what Firewall Manager is
+then we'll look
+at how we can manage security across multiple accounts.
+Then we'll look at the benefits
+of Firewall Manager and then we'll go onto my exam tips.
+So what is Firewall Manager?
+Well, basically it's a security management service
+in a single pane of glass.
+And this allows you to centrally set
+up and manage Firewall rules across multiple AWS accounts
+and applications in AWS organizations.
+So that's all it is.
+It's a single pane of glass
+for managing your Firewall rules across multiple accounts
+and applications using AWS organizations.
+So using Firewall Manager, you can create new AWS WAF rules
+for your application load balancers,
+API gateways, Amazon CloudFront distributions, et cetera.
+And you can also mitigate DDoS attacks using
+AWS Shield Advance for your application load balancers,
+Elastic IP addresses, CloudFront distributions, and more.
+So the benefits of Firewall Manager is
+that it is a single pane of glass,
+that it simplifies the management of firewall rules
+across your accounts and you can also ensure compliance
+of existing and new applications.
+So Firewall Manager automatically enforces security
+policies that you create across existing
+and newly created resources across multiple accounts.
+So just going into the exam,
+if you see a scenario about multiple AWS accounts
+and resources that need to be secured centrally
+I want you to think of AWS Firewall Manager.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

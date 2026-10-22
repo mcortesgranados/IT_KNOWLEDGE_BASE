@@ -1,0 +1,128 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can temporarily share S3 objects
+using either presigned URLs or cookies.
+So first we'll start talking about privacy,
+then we'll talk about presigned URLs,
+we'll talk about access, we'll look at the difference
+between a presigned URL and a presigned cookie,
+I'll show you how to set up a presigned URL
+using the console,
+and then we'll move on to my exam tips.
+So in terms of privacy,
+all objects in S3 are private by default,
+and only the object owner has permission
+to access these objects.
+However, the object owner can optionally share objects
+with others by creating a presigned URL,
+and using their own security credentials
+to grant time-limited permission to download the objects.
+So when you create a presigned URL for your object,
+you must provide your security credentials,
+you have to specify a bucket name and an object key,
+and indicate the HTTP method,
+or get to download the object
+as well as the expiration date and time.
+And the presigned URLs are only valid
+for the specified duration.
+So in terms of access,
+anyone who receives the presigned URL
+can then access the object.
+For example, if you have a video in your bucket
+and both the bucket and the object are private,
+you can share the video with others
+by generating a presigned URL.
+And this is a very popular scenario-based question.
+So if they're talking about you need to share a file
+but it's in a private bucket, how can you do it?
+Well, you're using a presigned URL.
+Now, presigned cookies can be useful
+when you want to provide access
+to multiple restricted files.
+And the cookie will be saved on the user's computer,
+and they'll be able to browse the entire contents
+of the restricted content.
+So a good example of this is a photo template website.
+So if you want template pictures,
+like pictures of these cookies, for example,
+and your users have to basically sign up to your website,
+and create an account, and then pay you some money.
+And once they have enabled their subscription,
+they're then free to download any content they want.
+So that's a typical scenario question you'll see.
+If you want to give access to multiple files
+in a restricted area, then of course you're going to use
+presigned cookies.
+So let's go ahead and have a look at how we can set up
+a presigned URL in the AWS Console.
+Okay, so here I am in the AWS Management Console,
+I'm going to go over to S3 and we're going to go ahead
+and create an S3 bucket.
+So I'm going to go ahead and create my bucket.
+I'm going to give it a name, something like
+acloudgurukroonenburg123, something like that.
+I'm going to deploy it into US East 1.
+I'm going to leave everything as default,
+and go ahead and hit Create, and there we go,
+so acloudgurukroonenburg123.
+I'm just going to go in there and upload a photo of me
+and one of my co-instructors, Faye.
+So I've selected the ryanandfaye JPEG file,
+I'm going to go ahead and hit Upload,
+and that is now uploading,
+and now I'm going to go ahead and hit Close.
+So in there we can now see I've got my ryanandfaye JPEG.
+If I was to click on that,
+and then click over here onto the object URL,
+of course I'm going to get an error
+because by default everything in S3 is private.
+So what I'm going to do now, is I'm going to go over to EC2
+and I am just going to change my region to London,
+because I have a server that's already set up
+over in the London region that has S3 admin access
+as an IAM role.
+So if I click on this instance in here,
+this is my instance, you can see it here,
+and you can see the IAM role is S3_Admin_Access.
+So what I'm going to do is I'm going to go ahead
+and SSH into this instance.
+So I've SSH into this instance, if I just type in
+aws s3 and then ls,
+I'll be able to see my different buckets.
+And then if I type in aws s3 and then ls and then s3
+and then it's acloudgurukroonenburg123 and hit Enter,
+I'll be able to see my objects in that bucket.
+Now if I want to presign that object,
+all I need to do is type in aws s3 and then presign,
+and then the link,
+so s3 acloudgurukroonenburg123 and then forward slash,
+and then it's ryanandfaye.jpeg.
+And then I could also do expires, and then in,
+and then if I enter a number in here, so say it's 3,600,
+that will be a 3,600 seconds.
+So that will be 60 times 60, which is exactly an hour,
+and that is the default value.
+So you basically use this to set the time
+for how long this link is valid.
+And that has now generated this URL.
+So if I cut and paste this URL into my browser,
+so I've just opened up a new tab,
+I hit Enter in here, and there we go,
+we can see me and Faye,
+there's the object that I've just uploaded to S3.
+And I didn't need to do anything to make this object public,
+all I needed to do was go ahead and create a presigned URL.
+So onto my exam tips, presigned URLs.
+If you see a scenario question
+where you need to share private files in your S3 buckets,
+then I want you to think of presigned URLs.
+And they're very easy to generate,
+you can do it through the command line
+or you can do it programmatically as well.
+And then you can also set the expiration date
+which is in seconds.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know,
+if not, feel free to move on to the next lecture.
+Thank you.

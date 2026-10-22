@@ -1,0 +1,224 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to talk
+about Advanced IAM Policy Documents.
+So first of all, we're going to start off
+with Amazon Resource Names or ARNs,
+we're then going to look at IAM policies,
+we'll look at permission boundaries,
+and then we'll move on to my exam tips.
+So ARNs stand for Amazon Resource Names,
+and they basically uniquely identify
+a resource within Amazon.
+And ARNs all follow the same syntax.
+So we have our ARN,
+we then have our partition,
+and not many people know this
+but Amazon is split into different partitions.
+So the main one that you'll see most of the time is AWS,
+but then there's a separate partition, which is AWS China.
+So that partition is completely separate,
+so it'd be AWS-CN.
+We then have our service.
+So we've got things like S3, EC2, RDS, et cetera.
+We then have our regions, so us-east-1 or eu-central-1.
+And then we have our account ID
+and that's just a 12 digit account number.
+And then it will end with either our resource,
+our resource type/resource
+or our resource type/resource/qualifier,
+or any of those other ones underneath.
+Now, you might be thinking, what does this mean?
+What is this guy talking about?
+Well, let's have a look at some examples
+and it'll make a lot more sense.
+So with our top line, we're under examples.
+We've got ARN and then we've got AWS,
+so it's in the AWS partition.
+And then we've got colon, we've got IAM,
+which is the service.
+And then we've got 2 colons,
+and that's called an omitted value.
+And the reason it's an omitted value
+is because there is no region for IAM.
+IAM is a global service.
+So we've omitted that value.
+We then have our 12 digit account number
+and then we have our resource type, which is user.
+And then we have our resource itself, which is Ryan.
+So it's me the user.
+Underneath that we've got our ARN with AWS,
+so it's in the AWS partition.
+And then we have S3
+and then we have an omitted value with 3 colons.
+So we're missing out the region
+and we're missing out the account ID.
+Now, why is that?
+Well, we know that S3 is a universal namespace
+so you don't need a region and an account ID in there
+because it's using DNS to resolve our S3 buckets.
+And then we have our bucket name
+and then we have our object within our bucket.
+So it could be image.png.
+Looking at the DynamoDB example,
+we've got ARN, we've got AWS
+and then we've got DynamoDB,
+so that's our service.
+Our region is us-east-1.
+Our account ID is our 12 digit account number.
+Then we've got our resource, which is our table.
+And our resource type is our orders within that table.
+And then finally, if we have a look at the very bottom one
+we've got ARN, AWS, and then EC2.
+This is in us-east-1 region.
+We've got our account number and then we've got our instance
+and then we've got a qualifier.
+And this is basically saying,
+Hey, this is a wildcard.
+So I'm now referring to all my instances within this region.
+So within us-east-1 for this account number within EC2.
+So that's how Amazon Resource Names work.
+We have IAM Policies,
+and IAM policies are basically just a JSON document
+that defines permissions.
+And we talked a little bit about this in KMS
+with the different types of policies.
+So when we are applying policies to users and groups
+that's an identity policy,
+but we can also apply policies
+to things like S3 buckets or to our KMS, CMKs, et cetera;
+and that's a resource policy.
+And it's all great building out these policies,
+but they actually have no effect
+until they are attached to something.
+So you can give someone S3 admin access
+or you can have a policy
+that gives someone S3 admin access,
+but until you apply that to the group that they're in
+or to their user account
+they won't be able to access S3.
+And basically, it comes as a list of statements.
+This basically looks like this.
+So we always start with our version number.
+And this just allows AWS to identify
+what format the statement is going to be in.
+So at the time of recording,
+the version number is 2012-10-17.
+We then have our statements.
+And in here, the statement start with the square brackets
+and then a policy document is just a list of statements.
+And so we've got 3 different statements in here,
+they're inside our curly brackets.
+So we've got our 3 in there.
+And each statement matches an AWS API request.
+So every time we do something in AWS,
+whether it's through using the console
+or if it's programmatically through the command line,
+we're making an API request.
+So if we provision an EC2 instance,
+that's an API request.
+If we go ahead and create a user in IAM,
+that's an API request.
+If we retrieve an object from S3, that's an API request.
+So let's have a look
+at a more concrete example of an IAM policy.
+And so here, we've got our version
+and then we've got our statement.
+And then the first thing you'll see
+within our statement is the SID,
+so the Statement ID,
+and this is basically just a human readable string
+to tell you what this policy is going to do.
+And then we have an effect.
+An effect is either an allow or deny.
+So in this particular case,
+we're going to allow an action
+and we're going to define what actions we allow
+with which AWS Service.
+So you can see the actions we've got DynamoDB.
+So we're going to allow
+these following actions with DynamoDB.
+And then it's basically matched based on their actions.
+We always have our resource,
+so DynamoDB and then the action.
+And some of these actions have wildcards after them.
+So we've got Batch Get wildcard,
+we've got Get wildcard,
+we've got Batch Write wildcard,
+we've got Delete wildcard,
+Update wildcard and that's it.
+Finally, underneath that we have our resource.
+So the resource is always what the action is against.
+So with DynamoDB, we're allowed to go
+and do gets to this resource
+and you can see the resource is called table
+and then my table.
+Moving on to permission boundaries.
+So permission boundaries are used
+to delegate administration to other users,
+and basically it prevents privilege escalations
+or unnecessarily broad permissions.
+So for example you probably don't want your developers
+to have full admin access to the AWS Console;
+you probably only want them to be able to create roles
+that they could attach to EC2 instances
+or to Lambda functions, for example.
+So permission boundaries
+basically control maximum permissions
+that an IAM policy can grant.
+So use cases is like what I said.
+Developers creating roles for Lambda functions,
+application owners creating roles for EC2 instances
+and then admin creating ad hoc users
+so it might be people in your finance team need
+to be able to go in
+and check the AWS billing and pull reports, et cetera.
+So that's what permission boundaries are.
+So onto my exam tips.
+Going into your exam you are going to get some IAM policies
+that you have to read and understand.
+So I would go into the IAM Policy Generator
+and just get a feel for how IAM policies work.
+Remember that if you don't explicitly allow something
+it's going to be implicitly denied.
+So if you haven't specifically allowed
+an access to a particular service,
+then by default, it's going to be implicitly denied.
+And if you have an explicit deny,
+that's going to trump everything else.
+So let's say you had an explicit deny
+for a user to access S3,
+but then you had an allow
+for them to access a particular S3 bucket.
+Well, they're not going to be able to access that bucket
+because the explicit deny is greater than everything else.
+Remember that you can write all the policies that you want
+but you have to attach them to something,
+so only attached policies have an effect.
+Also, just remember
+that you can have multiple policies joined
+to a specific resource.
+So we could have an EC2 admin access policy
+that's attached to our developers,
+and then we could also have an S3 admin access policy
+that's attached to our developer group.
+And what AWS will do is join all these applicable policies.
+Now, if you have something
+that's explicitly denying something in one policy
+and then it ends up being allowed in another policy,
+like I said, an explicit deny always
+is greater than everything else.
+And then don't forget,
+we've got AWS managed policies
+and then customer managed policies.
+And there's a ton of AWS managed policies,
+so if you just want a administrator access to S3
+that's an AWS managed policy,
+but if you want to create your own custom managed policies
+so only certain people can do certain things,
+you can do that and save those policies.
+But remember, only attached policies have an effect.
+So that is it for this lecture everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

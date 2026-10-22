@@ -1,0 +1,93 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can protect our applications using Shield.
+So first thing we'll do is learn what Shield is.
+We'll then look at what Shield Advanced is.
+We'll look at what the costs are.
+I'll show you how to turn on Shield Advance in the console
+and then we'll go onto my exam tips.
+So what is AWS Shield?
+Well, essentially it's free DDoS protection,
+and it protects all AWS customers on Elastic Load Balancers,
+on Amazon CloudFront, and on Route 53.
+And essentially what it does is it protects
+against SYN or UDP floods, reflection attacks,
+and other Layer 3 and Layer 4 attacks.
+So that's all that AWS Shield is.
+So moving on to AWS Shield Advanced
+and what's the difference?
+Well, this gives you more enhanced protection
+for your applications that are running
+on your Elastic Load Balancers, CloudFront,
+or Route 53 against larger and more sophisticated attacks.
+And it offers always on flow-based monitoring
+of network traffic and active application monitoring
+to provide near realtime notifications of DDoS attacks.
+So if you want to know if you're getting DDoS in real time,
+you want AWS Shield Advanced.
+It also gives you 24/7 access to the DDoS Response Team,
+or the DRT to help manage
+and mitigate application layer DDoS attacks.
+And it protects your AWS bills against higher fees
+due to Elastic Load Balancers,
+CloudFront, or Route 53 usage spikes during a DDoS attack.
+So if you want to protect yourself against having
+an insane bill because you've been DDoS,
+you probably do want to turn on AWS Shield Advanced.
+But there's a catch.
+What are the costs?
+Well, we looked at Shield, it came free.
+So you don't need to worry about just normal Shield.
+But with Shield Advanced,
+it does cost $3000 US dollars per month.
+So if you're a small startup, maybe you don't need it,
+but if you're a large FinTech company
+or something like that,
+then it's probably worth turning it on.
+So let's look at how we can turn on Shield Advanced.
+It's super, super easy.
+First thing we need to do is just go down to Security,
+and you'll find Shield here under WAF and Shield.
+Go in and click on that.
+In here, it will give you an overview
+of the different features for WAF.
+If you click over here, you can go
+and have a look at getting started with AWS Shield.
+And it'll show you basically, global activity
+that's being detected by Shield,
+so over the last couple of weeks.
+And then if we scroll down, it'll give you the comparison
+between Shield Standard and Shield Advanced.
+Now to turn it on, it's super easy.
+You just go back up to the top
+and you click in here, subscribe to Shield Advanced.
+And you just need to tick those 4 boxes,
+and hit Subscribe, and then it will be set up for you.
+I'm not going to do that though
+because I don't want to spend $3,000 a month
+on my test and dev account.
+So onto my exam tips.
+Just remember that Shield protects
+against Layer 3 and Layer 4 attacks only.
+You need to remember what Shield is at a high level,
+and that it's used to protect against DDoS attacks.
+And if you see a scenario-based question
+where it's talking about DDoS mitigation
+or protection against Layer 3 and Layer 4 attacks,
+I want you to think of AWS Shield.
+If it's talking about application-level attacks,
+that's going to be AWS WAF.
+Also, remember going into your exam,
+what Advanced Shield is,
+it costs $3,000 a month,
+but it's going to give you a dedicated 24/7
+DDoS Response Team, or DRT.
+So again, if you see a scenario question
+where it's talking about having a dedicated team
+at AWS to respond to DDoS attacks,
+I want you to think of AWS Shield Advanced.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

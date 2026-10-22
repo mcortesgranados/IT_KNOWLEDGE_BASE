@@ -1,0 +1,71 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look
+at how we can analyze root cause using Amazon Detective.
+So first of all, we'll look at what Detective is.
+We'll look at the different sources for Detective.
+We'll look at its use cases, and we'll look at my exam tips.
+Now, Detective is basically going to be a detractor.
+They might try and basically confuse you
+with Inspector or Trusted Advisor.
+You basically just need to know what Detective is.
+So what is Detective?
+Well, using Detective,
+you can analyze, investigate,
+and quickly identify the root cause
+of potential security issues or suspicious activities.
+And it basically pulls data in
+from your AWS resources and then uses machine learning
+and statistical analysis and graph theory
+to build a linked set
+of data that enables you
+to quickly figure out the root cause
+of your security issues.
+In terms of the sources that it uses,
+well it uses a number of sources within your AWS account.
+And this can be things like VPC Flow Logs, CloudTrail logs,
+Elastic Kubernetes Service, audit logs
+and Amazon GuardDuty findings.
+And basically it automatically creates an overview
+of your users, your resources,
+and the interactions between them over time,
+which is where you're using graph theory.
+So the use cases for Detective:
+it basically allows you to triage your security findings.
+So if you have a suspected security incident
+and you need to be able to quickly assess
+whether it's real or if it's a false positive,
+basically, Detective will generate the visualizations
+that can show you what resources, IP addresses,
+and AWS accounts are connected
+to your security incident to determine
+if the finding is an actual malicious activity or not.
+And you can also use it for threat hunting.
+So in comparison to root cause analysis,
+you can be proactive and go threat hunting.
+So Detective helps you with threat hunting
+by creating detailed visualization on specific resources,
+again, such as IP addresses, AWS accounts,
+VPC, and EC2 instances.
+So the key takeaway from Detective:
+it operates across multiple AWS services
+and analyzes the root cause of an event.
+So if you see that term, "root cause,"
+you need to quickly use graph theory to analyze a root cause
+of a security event,
+or figure out if it's a malicious activity
+or a false positive--we want you to think of Detective.
+Do not confuse it with Inspector,
+which is an automated vulnerability management service
+that continually scans EC2
+and container workloads for software vulnerabilities
+and unintended network exposure.
+So like I said, Detective can be a distractor.
+So always just look
+for the term "root cause" in your scenario-based questions.
+If you don't see that,
+then Detective is most likely going to be a distractor.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

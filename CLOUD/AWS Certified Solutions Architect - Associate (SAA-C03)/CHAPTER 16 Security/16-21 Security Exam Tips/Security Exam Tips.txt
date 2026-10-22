@@ -1,0 +1,274 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're just going to review everything
+that we've learned in the security section of the course.
+So we'll start with DDoS, and we had 3 exam tips.
+So just remember what a DDoS is.
+It's a distributed denial of service attack,
+and it basically attempts to make your website
+or application unavailable to your end users.
+And common DDoS attacks include Layer 4 attacks
+such as SYN floods or NTP amplification attacks.
+And then we have common Layer 7 attacks,
+which include things like floods of GET or POST requests.
+We then had a quick look at CloudTrail,
+and what CloudTrail allows,
+gives you after the fact incident investigation.
+You get near real time intrusion detection,
+and you get industry and regulatory compliance.
+Going into the exam, you're going to get a whole bunch
+of different scenario questions
+asking if you should use CloudWatch or CloudTrail
+or Inspector or Trusted Advisor.
+Always just remember that CloudTrail
+is basically a CCTV for your AWS account.
+This is going to log all API calls that are made to
+your AWS account, and it's going to store these logs in S3.
+Moving on to Shield. Shield protects against Layer 3
+and Layer 4 attacks only.
+Then basically you just have to remember
+what Shield is at a high level,
+and it's used to protect against DDoS attacks.
+And if you see a scenario question that's talking
+about DDoS mitigation or protecting against Layer 3
+and Layer 4 attacks, I want you to think of AWS Shield.
+And you get Shield for free.
+But then you can also use Advanced.
+That costs $3,000 a month,
+but it will give you a dedicated 24/7 DDoS Response Team.
+We then looked at AWS WAF, and at its most basic level
+it allows 3 different behaviors.
+It's going to allow all requests,
+except the ones you specify.
+Or you can block all requests,
+except the ones you specify.
+Or it can count the requests that match
+the properties that you specify.
+So just remember that WAF operates at Layer 7.
+And in the exam, like I said,
+you're going to get scenario based questions
+asking how to block Layer 7 attacks.
+So with Layer 7, you want to use a WAF.
+Layer 4, you're going to use Shield.
+Always think of a WAF, whenever you hear the term Layer 7.
+WAF can block Layer 7 DDoS attacks,
+as well as things like SQL injections
+and cross-site scripting.
+And if you need to block access to specific countries
+or IP addresses, you can also achieve this using AWS WAF.
+Moving on to AWS Firewall Manager.
+So if you see a scenario about multiple AWS accounts
+and resources that need to be secured centrally
+then I want you to think of AWS Firewall Manager.
+At this point all you need to know
+is what the service is and what it does.
+Moving on to GuardDuty, just remember what GuardDuty is
+and what it allows you to do.
+It uses AI to learn what normal behavior looks like
+in your account to alert you of any abnormal
+or malicious behavior, and it updates a database
+of non-malicious domains using external feeds
+from third parties.
+And it also monitors your CloudTrail logs, VPC Flow logs
+and DNS logs, and your findings appear
+in the GuardDuty dashboard.
+CloudWatch events can also be used to trigger
+a Lambda function to proactively address a threat.
+We then looked at Macie, so just remember what Macie is
+and what it allows you to do.
+Basically, it's using AI to analyze your data in S3
+and help you identify personally identifiable information,
+personal health information, as well as financial data.
+And it's great for HIPPA and GDPR compliance
+as well as preventing identity theft.
+Remember, you can set up alerts with Macie,
+and these can be sent to Amazon Event Bridge
+and then integrated with your event management systems.
+And then you can also automate the remediation actions
+using other AWS services such as Step Functions.
+So if you see any scenario-based question where it's talking
+about analyzing S3, using AI, or preventing the leak
+of personally identifiable information,
+I want you to automatically think of Macie.
+We then looked at Inspector,
+and again just remember what Inspector is.
+It's used to perform a vulnerability scans
+on both EC2 instances and your VPCs.
+On EC2 instances, it's called host assessments.
+And on your VPCs, it's called network assessments.
+And you can run these assessments once
+or alternatively you can run them weekly.
+We then looked at KMS and CloudHSM.
+So KMS is a managed service that makes it easy
+for you to create and control the encryption keys
+used to encrypt your data.
+And you can start the service by requesting
+creation of a customer master key
+and you control the life cycle
+of customer master keys as well
+as those who can use or manage it.
+There's 3 ways to generate a customer master key.
+First of all, AWS creates the customer master key for you.
+The key material for a CMK is generated
+within a hardware security module that's managed by AWS KMS.
+You can also import key material
+from your own key management infrastructure
+and associate it with a customer master key.
+Or you can have the key material generated
+and used in an AWS CloudHSM cluster
+as part of the custom key store feature in AWS KMS.
+Now, there's 3 ways to control permissions within KMS.
+You can use the key policy.
+And controlling access this way means
+the full scope of access to the CMK
+is defined in a single document,
+so this is the key policy.
+You can use IAM policies in combination with the key policy.
+And controlling access this way enables you to manage
+all the permissions for your IAM identities
+in Identity Access Management.
+And then you can also use grants
+in combination with the key policy.
+And controlling access this way enables you
+to allow access to the CMK in the key policy,
+as well as allowing other users to delegate
+their access to others.
+So in terms of KMS versus CloudHSM,
+KMS, basically you're using a shared tendency
+of underlying AWS hardware.
+You do get automatic key rotation,
+and you get automatic key generation.
+If you're going to use your own CloudHSM,
+it's a dedicated physical hardware device
+that's dedicated to you.
+You get full control of the underlying hardware,
+and you have full control of users' groups and keys,
+but there is no automatic key rotation.
+Moving on to Secrets Manager.
+Just remember that Secrets Manager can be used to securely
+store your application secrets, your database credentials,
+your API keys, SSH keys, passwords, et cetera.
+Applications use the Secrets Manager's API
+and rotating credentials is super easy,
+but just be careful because when enabled,
+Secrets Manager will rotate these credentials immediately.
+So you need to make sure all your application instances
+are configured to use Secret Manager
+before enabling credential rotation.
+Now you will get scenario-based questions
+where it's going to test if you should use Parameter Store
+or Secrets Manager.
+So that will come up quite a bit.
+If you're trying to minimize cost,
+you always choose Parameter Store.
+If you need more than 10,000 parameters,
+key rotations, or the ability to generate passwords
+using CloudFormation, then you want Secrets Manager.
+Moving on to presigned URLs,
+if you see a scenario question where you need
+to share private files in your S3 bucket,
+think of presigned URLs.
+And then finally we moved on to Advanced IAM policies.
+So remember, if something is not explicitly allowed
+then it's going to be implicitly denied.
+And explicit deny always trumps everything else,
+so it's always greater than everything else.
+Only attached policies have an effect,
+so if you have multiple policies, but haven't attached them
+to any groups for example, then of course
+they're not going to have an effect.
+And you can have multiple policies attached to a group
+and AWS joins all of these.
+Now, if there's any kind of conflict,
+like an explicit deny on one policy,
+and then an allow on the other policy,
+remember that explicit deny will always beat that allow.
+And then remember, you've got your different types
+of policies, so you've got your AWS managed policies,
+and then you've got your customer managed policies as well.
+And then finally, we looked at AWS Certificate Manager.
+So basically all you need to do
+is know what it is in the exam.
+You're going to get scenario based questions
+around SSL certificates and what services you should use
+to integrate SSL certificates with.
+So just remember the supported services,
+so things like Elastic Load balancer,
+CloudFront and API Gateway.
+And also just remember the benefits of Certificate Manager.
+It is a free service that saves time and money.
+You can automatically renew your SSL certificates
+and rotate the old certificates with new certificates,
+so long as it's with the supported AWS services.
+So moving on to continuous audits with AWS Audit Manager.
+Basically, if you see a question
+about HIPPA or GDPR compliance
+that talks about continuous auditing
+or automating your auditing reports,
+I want you to think of AWS Audit manager.
+Moving on to AWS Artifact,
+this is often used as a distractor.
+You simply need to know what it is.
+So if you see a scenario question asking about audits
+and then the needs to basically go in
+and get compliance reports,
+I want you to think of AWS Artifact,
+but 9 times out of 10,
+Artifact's going to be the wrong answer.
+So Artifact's where you go in
+and you get your compliance reports for your audits.
+Moving on to Cognito to remember what a user pool is,
+basically it's user directories that provide sign up
+and sign in options for users of your application.
+You then have identity pools which allow your users
+to access other AWS services.
+And you can use identity pools
+and user pools separately or together.
+The most important thing though,
+with Cognito going into the exam,
+is understanding the process.
+You've got a device, basically it connects to a user pool
+and authenticates and gets tokens.
+It then basically exchange the those tokens
+with an identity pool and that will give it AWS credentials.
+And then your device will have AWS credentials,
+and it can use those AWS services using those credentials.
+So basically you just need to remember
+the chronological order of the way it works.
+So you have your device,
+it connects to a user pool, authenticates, and gets tokens,
+then takes those tokens and it exchanges them
+for credentials using an identity pool.
+And then you can go in and store your databases
+in DynamoDB, or store files in S3, et cetera,
+so just using those AWS credentials.
+Moving on to Detective, again,
+it's normally a big distractor in the exam.
+Basically, it operates across multiple AWS services
+and it analyzes the root cause of an event.
+Do not confuse it with Inspector,
+which is an automated vulnerability management service
+that continually scans your EC2
+and container workloads for software vulnerabilities
+and unintended network exposure.
+Detective is 9 times out of 10 a distractor.
+Moving on to Network Firewall,
+this is where you'll get scenario questions
+about filtering your network traffic
+before it reaches your internet gateway,
+or you require intrusion prevention systems,
+or if you have any hardware firewall requirements.
+We want you to think of AWS Network firewall,
+especially around the hardware firewall requirements.
+And remember AWS manage all the hardware for you.
+Moving on to AWS Security Hub.
+If you have scenario questions about a single place
+to view all your security alerts
+across multiple AWS security services
+as well as AWS accounts,
+I want you to think of AWS Security Hub.
+So it's just a single pane of glass
+to view all your security incidents.
+So that is it for this section of the course.
+If you have any questions, please let me know.
+If not, feel free to move on to the next section. Thank you.

@@ -1,0 +1,55 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can download compliance documents from AWS Artifact.
+So I'm going to give you a warning.
+Basically, AWS Artifact is probably 9 times
+out of 10, a distractor question.
+That being said, you should know what it is
+so that you can understand when you should choose it
+on your exam. So
+we're going to cover off what Artifact is, what's available.
+I'll show you it in action
+and then we'll go onto my exam tips.
+So what is Artifact?
+Well, basically it's a single source you can visit
+to get the compliance related information
+that matters to you,
+such as an AWS security and compliance reports
+or select online agreements.
+So what's available?
+Well, there's a huge number of compliance reports available,
+such as an AWS service organization control,
+or SOC reports, payment card industry or PCI reports,
+GDPR reports, as well as other certifications.
+And this includes things like ISO reports, HIPAA, and more.
+So let's go ahead and see it in action.
+So here I am in the AWS console.
+I'm just going to go ahead and type in artifact,
+and you can see that we've got Artifact here.
+Do not confuse it with CodeArtifact.
+This is AWS's compliance reports and agreements.
+You can go ahead
+and view your reports or view your agreements.
+So I'm going to go ahead
+and do my report and I'm just going to type in PCI.
+And so here's my PCI, 3DS Attestation of Compliance
+or AOC and Responsibilities summary.
+So you can go ahead and click on it
+and then you could go ahead and download your report.
+So onto my exam tips.
+It's super simple,
+don't stress too much about Artifact.
+Like I said, it comes up in the exam quite a bit,
+but it's often used as a distractor.
+So you simply have to know what Artifact is.
+So if you see a scenario question asking
+about audits and the need to download compliance reports,
+I want you to think of Artifact.
+If it has nothing to do with compliance reports
+that you need to give to auditors,
+then Artifact is definitely going to be the wrong answer,
+it's simply a distractor.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.

@@ -1,0 +1,63 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at protecting VPCs
+with AWS Network Firewall.
+So first thing we'll do is look at what Network Firewall is,
+the benefits, the use cases,
+and then we'll go onto my exam tips.
+So what is AWS Network Firewall?
+Well, I want you to just remember,
+if you see a scenario-based question
+where it's talking about
+deploying a physical firewall to your VPC,
+then think of AWS Network Firewall.
+So it says managed service that makes it easy
+to deploy a physical firewall protection across your VPCs,
+and it's managed infrastructure.
+So basically, AWS are going to do all the management
+of the physical firewall itself.
+It includes firewall rules engines
+that give you complete control over your network traffic,
+allowing you to do things such as
+block outbound Server Message Block, or SMB requests
+to stop the spread of malicious activity.
+So in terms of the benefits,
+it has physical infrastructure in the AWS datacenters,
+and it's managed by AWS staff,
+so you don't have to worry about the management overheads,
+but you still get all the goodies
+of having a physical firewall.
+And AWS Network Firewall works with AWS Firewall Manager,
+so you can centrally manage security policies
+across existing and newly created accounts and VPCs.
+It also provides intrusion prevention system,
+that gives you active traffic flow inspection.
+So if you see a scenario-based question
+where they're talking about IPS,
+intrusion prevention systems,
+I want you to think of Network Firewall.
+So you can filter internet traffic,
+you can use methods like access control list,
+stateful inspection, protocol detection,
+and intrusion prevention to filter your internet traffic.
+You can filter outbound traffic.
+So you can use Network Firewall to provide
+the URL/domain name, IP address,
+and content-based outbound traffic filtering.
+And this basically can help you to stop possible data loss,
+and block known malware communications.
+You can also inspect VPC-to-VPC traffic,
+and you can automatically inspect traffic
+moving from one VPC to another,
+as well as across multiple accounts.
+So onto my exam tips.
+Basically, if you see a scenario question
+about filtering your network traffic
+before it even reaches your internet gateway,
+or if you require intrusion prevention systems
+or any other hardware firewall requirements,
+I want you to think of AWS Network Firewall.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

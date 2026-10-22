@@ -1,0 +1,71 @@
+Okay. Hello Cloud Gurus and welcome
+to this lecture and this lecture.
+We're going to look
+at how we can log API calls using CloudTrail.
+So first we'll explore what CloudTrail is.
+We'll then look at a network diagram as to how it works.
+We'll then look at how CloudTrail does its logging
+and then we will move on to our exam tips.
+So what is CloudTrail?
+Well, basically it increases visibility
+into your user and resource activity
+by recording AWS management console actions and API calls.
+And you can identify which users and accounts called AWS,
+the source IP address from which the calls were made,
+and even when the calls occurred.
+So I want you to think
+of CloudTrail as CCTV monitoring for your AWS account.
+All it is doing is tracking API calls,
+who made them, and when they made them.
+And so it works like this.
+Basically, we've got our end user
+we've got our control plane, which is our public API
+which is essentially just our interface into AWS.
+And then that goes in and makes API calls to the AWS cloud.
+So we might be calling DynamoDB
+we might be setting up a DynamoDB table.
+We might be storing files in S3 or deleting them.
+We might be provisioning an EC2 instance, et cetera.
+So when our user goes and does this
+every single API call is logged
+in an S3 bucket using CloudTrail.
+Things that aren't logged though is RDP or SSH traffic.
+So it's not like CloudTrail can go in there
+and log what command somebody's entering
+in using SSH to EC2.
+It's only going to basically log the API calls made to AWS
+and this includes anything that you do in the console.
+So what is logged when it comes to CloudTrail?
+Well, metadata around API calls, the identity
+of the API caller, the time of the API call,
+the source IP address of the API call, the request
+parameters, and the response elements returned
+by the service.
+So what CloudTrail allows is after the fact
+incident investigation.
+So if something has happened and you need to
+investigate what that was, you can basically do it
+through your CloudTrail logs.
+It also gives you near real-time intrusion detections.
+So you can basically integrate CloudTrail
+with Lambda functions, for example, and it'll give you
+an intrusion detection system that you can customize.
+And it also gives you industry and regulatory compliance.
+So just remember that CloudTrail is basically just CCTV
+for your AWS account.
+It logs all API calls made to your AWS account
+and it stores these logs in S3.
+Now in the exam, you're going to get a whole bunch
+of different scenario questions and they'll always try
+and confuse you
+between let's say CloudTrail and CloudWatch or CloudTrail
+and Amazon Inspector
+or Trusted Advisor, et cetera, et cetera.
+So just remember what CloudTrail is.
+It's really, really important.
+It's just a CCTV system for monitoring and logging what goes
+on in your AWS account using the API calls or the console.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

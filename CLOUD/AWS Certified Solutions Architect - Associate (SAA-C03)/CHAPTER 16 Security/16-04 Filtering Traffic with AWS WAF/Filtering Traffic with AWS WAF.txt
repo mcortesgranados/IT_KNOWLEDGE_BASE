@@ -1,0 +1,76 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look at filtering traffic
+with AWS Web Application Firewall or AWS WAF.
+So we'll look at what a WAF is,
+we'll look at layer 7, we'll look at the different behaviors
+we can configure.
+We'll look at different conditions,
+and then we will look at my exam tips.
+So, what is the AWS WAF?
+Well, it just simply stands for a web application firewall,
+and it lets you monitor the HTTP and HTTPS
+requests that are forwarded to Amazon CloudFront
+or an application load balancer.
+And essentially it just lets you control access
+to your content.
+So using AWS WAF, you can configure conditions
+such as what IP addresses are allowed to make this request,
+or what query strings parameters need to be passed
+for the request to be allowed.
+And the application load balancer
+or CloudFront will either allow this content
+to be received or it will give a HTTP 403 status code.
+So some important information about AWS WAF,
+it operates at layer 7.
+So you are going to get scenario-based questions where it
+talks about layer 4 attacks, what should you use,
+well you should use Shield in that case,
+if you are getting attacked at layer 7
+then you want to be using AWS WAF.
+So that's the most important thing to remember
+going into your exam
+if you see any scenario based questions
+where it's talking about layer 7 attacks, you want AWS WAF.
+And so at its most basic level, AWS WAF allows
+3 different behaviors.
+So it'll allow all requests except the ones you specify.
+It'll block all requests except the ones that you specify
+or it'll count the requests that match the properties
+that you specify.
+So you can define conditions by using characteristics
+of web requests such as the following.
+So you can do it through IP addresses that the requests
+originate from, you can do it from the country
+that the requests originate from,
+and then you can also do it in the values
+in the request headers.
+You can do it from the presence of SQL code that is likely
+to be malicious.
+So this is known as a SQL injection.
+So it will say, you know, drop table for example,
+or you can do it using the presence of a script
+that is likely to be malicious
+and this is known as cross-site scripting
+or you can do it through using strings that appear
+in requests, either specific strings or strings
+that match regular expression patterns or regex patterns.
+So you can define all these conditions
+by using characteristics of the web request
+as we've just shown you.
+So onto my exam tips,
+really the main thing to remember is that WAF operates
+at layer 7.
+And in the exam you will get scenario-based questions
+asking how to block layer 7 attacks,
+and I want you to always think of web application firewalls
+whenever you hear the term layer 7.
+WAF can block layer 7 DDoS attacks,
+as well as things like SQL injections
+and cross-site scripting.
+And if you need to block access to specific countries
+or IP addresses, you can also achieve this using AWS WAF.
+So that is it for this lecture everyone,
+if you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

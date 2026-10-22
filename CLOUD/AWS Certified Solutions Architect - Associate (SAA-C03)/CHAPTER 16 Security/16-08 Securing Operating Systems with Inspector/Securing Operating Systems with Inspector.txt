@@ -1,0 +1,73 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look at how we can secure
+our operating systems using Inspector.
+So the first thing we're going to look at is
+what is Amazon Inspector?
+We're going to look
+at our assessment findings and assessment types.
+We're going to look at how it works,
+whether or not you have to use an agent or not,
+and then we'll go on to my exam tips.
+So what is Inspector?
+Well, it's an automated security assessment service
+that helps improve security
+and compliance of applications deployed on AWS.
+What does that mean?
+Well, basically it's going to inspect your network
+and your EC2 instances.
+So it automatically assesses applications
+for vulnerabilities or deviations from best practice.
+So it could be that you've left port 22 open
+on your security group, for example.
+Amazon inspector will pick that up.
+So we have our assessment findings
+and basically after performing an assessment,
+Amazon Inspector is going to produce a detailed list
+of security findings prioritized by the level of severity.
+And these findings can be reviewed directly
+or as part of a detailed assessment reports
+that are available via the Amazon Inspector Console or API.
+So there's 2 different types of assessment.
+We've got our network as assessments
+and this is basically looking
+at network configuration analysis
+and it checks what ports are reachable from outside the VPC.
+You don't need an agent for this.
+It basically is just telling you, hey,
+you've left port 22 open, what are you doing?
+And then we have host assessments.
+And the host assessments
+are actually vulnerable software assessments
+as well as host hardening.
+So it's using the Center for Information Security benchmarks
+as to how you should configure your operating system
+and then also just security best practices.
+Now to do a host assessment, you will need to go
+into your host and install an inspector agent.
+So you do need an agent on Inspector.
+So how does it work?
+Well, what you do is you go into the Inspector dashboard,
+you create an assessment target,
+you then install your agents on your EC2 instances.
+Now AWS will actually automatically install the agents
+for instances that allow system manager run command.
+You then create an assessment template.
+You perform an assessment run, and then you go ahead
+and you review your findings against the rules.
+And like I said, it will give you a great report
+and it will tell you how severe its findings are.
+So Inspector, in terms of going into your exam,
+just remember what Inspector is.
+It's used to perform vulnerability scans
+on both your EC2 instances and your VPCs.
+These are called host assessments and network assessments.
+And you can run these assessments once
+or alternatively run them weekly.
+So if you see any scenario-based questions talking
+about vulnerability scans and what service you should use,
+I want you to think of AWS inspector.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

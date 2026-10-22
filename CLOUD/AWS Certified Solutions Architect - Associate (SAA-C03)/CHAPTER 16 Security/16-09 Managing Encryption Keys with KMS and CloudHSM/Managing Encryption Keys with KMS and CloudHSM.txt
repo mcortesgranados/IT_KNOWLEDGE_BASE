@@ -1,0 +1,165 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+managing encryption keys with Key Management Service
+or KMS, and CloudHSM.
+So we're going to learn what KMS is.
+We're then going to look at encryption keys.
+We'll learn what AWS CloudHSM is.
+We'll look at KMS versus CloudHSM,
+and then we will go onto my exam tips.
+So what is KMS?
+Well, basically KMS stands for Key Management Service
+and it's a managed service that makes it easy for you
+to create and control the encryption keys
+used to encrypt your data.
+So there's literally just a way
+of managing your encryption keys.
+In terms of integration, it integrates with other
+AWS services, such as EBS, S3, RDS,
+as well as other services to make it simple
+to encrypt your data with the encryption keys
+that you manage.
+In terms of controlling your keys,
+basically KMS provides you with centralized control
+over the lifecycle and permission of your keys,
+and you can create new keys whenever you want,
+and you can control who can manage keys separately
+from who can use them.
+So let's talk about the CMK,
+and that just stands for customer master key.
+And basically it's a logical representation of a master key.
+And the CMK includes things like metadata,
+such as the key ID, the creation date,
+the description and the key state.
+So the CMK also contains the key material that's used
+to encrypt and decrypt your data.
+So when we get started with KMS,
+basically you start using the service by requesting
+the creation of a CMK, and you control the lifecycle
+of the CMK, as well as who can use or manage it.
+Now let's talk about HSM.
+So HSM just stands for hardware security module.
+And basically this is a physical computing device
+that safeguards and manages digital keys
+and performs encryption and decryption functions.
+And a HSM will usually contain one or more
+secure crypto processor chips.
+So like I said, you start using KMS by generating a CMK,
+and there's 3 ways to generate a CMK.
+This first one is the easiest
+which is where AWS creates the CMK for you.
+The key material for a CMK is generated within HSMs
+or hardware security modules that are managed by AWS KMS.
+The second way to do it is to import key material
+from your own key management infrastructure
+and then associate it with the customer master key,
+and the third way is to have the key material generated
+and used in an AWS CloudHSM cluster
+as part of the custom key store feature in AWS KMS.
+So we will talk about AWS CloudHSM in a second.
+Before we do that, let's just have a look at key rotations.
+So you can choose to have AWS KMS automatically
+rotate your customer master keys every year,
+provided that those keys were generated within AWS KMS HSMs.
+So basically you can do key rotation automatically
+if you did the first methodology in the last slide.
+So this is where AWS generate the CMK for you,
+and they're doing that using their own HSMs.
+Automatic key rotation is not supported for imported keys,
+asymmetric keys, or keys generated in AWS CloudHSM clusters
+using the AWS KMS custom key store feature.
+Moving on to policies.
+So the primary way to manage access to your AWS KMS CMKs
+is with policies, and policies are documents that describe
+who has access to what.
+So you've seen them with IAM,
+but there is a fundamental difference here.
+So policies that are attached to an IAM identity
+are called identity-based policies or IAM policies,
+but policies that are attached to other kinds of resources
+are called resource-based policies.
+And in terms of our key policies in AWS KMS
+you must attach resource-based policies
+to your customer master keys
+and these are called key policies
+and all KMS CMKs have a key policy.
+Now there's 3 ways to control permission.
+You can use the key policy, and controlling access this way
+means the full scope of access to the CMK
+is defined in a single document
+and this is called the key policy.
+You can use IAM policies in combination with the key policy.
+So controlling access this way enables you to manage
+all the permissions for your IAM identities in IAM.
+And then you can use grants in combination
+with the key policies and controlling access this way
+enables you to allow access to the CMK in the key policy
+as well as allow users to delegate their access to others.
+Let's move on to CloudHSM.
+So AWS CloudHSM is a cloud-based HSM that enables you
+to easily generate and use your own encryption keys
+on the AWS Cloud.
+So it's just a hardware security module
+and basically you're renting it from AWS.
+It's a physical device that's entirely dedicated to you,
+that can be deployed quickly in a highly available fashion.
+So what's the difference between KMS and CloudHSM?
+Well, with KMS, basically, you've got shared
+tenancy of underlying hardware and this includes
+the HSMs that are used to generate your CMKs.
+You have automatic key rotation,
+and you get automatic key generation.
+With CloudHSM, you have a dedicated HSM to you.
+You have full control of the underlying hardware.
+So you have complete control in terms of all the users
+that you can set up, the groups, the keys, et cetera
+but there's no automatic key rotation.
+So moving onto my exam tips, just remember what KMS is,
+it's a managed service that makes it easy
+for you to create and control encryption keys
+used to encrypt your data.
+You start the service by requesting the creation of a CMK,
+and you control the lifecycle of the CMK
+as well as who can use or manage it.
+There's 3 ways to generate a CMK,
+and this is really important to remember.
+So it's where AWS creates the CMK for you,
+and the key material for a CMK is generated
+within the hardware security modules
+that are managed by AWS KMS.
+You can import key materials from your own
+key management infrastructure, so maybe you have your own
+on-site HSM, and associate it with a CMK,
+or you can have the key material generated and used
+in a AWS CloudHSM cluster, as part of the custom
+key store feature in AWS KMS.
+Remember that there's 3 ways to control permissions.
+This is where you use the key policy.
+So controlling access this way means
+the full scope of access to the CMKs
+is defined in a single document,
+and this is the key policy document.
+You can use IAM policies in combination
+with your key policy, and controlling access this way
+enables you to manage all the permissions
+for your IAM identities in IAM.
+And then you can actually use grants
+in combination with the key policies.
+And controlling access this way enables you
+to allow access to the CMK in the key policy,
+as well as allow users to delegate
+their access to other people.
+And just remember the key differences between
+KMS versus CloudHSM, KMS you have shared tenancy
+of the underlying hardware.
+You have automatic key rotation
+and you have automatic key generation.
+CloudHSM, you've got a dedicated hardware security module
+to you and you have full control of the underlying hardware.
+You have full control of the users, groups, keys, et cetera,
+and we have no automatic key rotation.
+So that is it for this lecture everyone,
+if you have any questions, please let me know,
+if not, feel free to move on to the next lecture.
+Thank you.

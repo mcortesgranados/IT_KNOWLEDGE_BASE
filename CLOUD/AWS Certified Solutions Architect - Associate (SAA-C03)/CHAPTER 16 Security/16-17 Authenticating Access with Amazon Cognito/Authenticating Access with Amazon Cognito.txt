@@ -1,0 +1,129 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at
+authenticating access with Amazon Cognito,
+and please really do pay attention during this lecture
+because you will at least get one question.
+When I last did my exam,
+I got 2 or 3 questions on Cognito
+and how it all works.
+So the first thing we're going to look at in this lecture
+is what is Cognito?
+We're going to look at the features, the use cases,
+going to look at user pools and identity pools.
+Going to look at how it works broadly.
+And then we're going to look at the Cognito sequence,
+which is a key part of the exam.
+And then we're going to go onto my exam tips.
+So what is Cognito?
+Well, basically it provides an authentication,
+authorization, and user management
+for your web and mobile apps
+in a single service without the need for custom code.
+So it's basically just an authentication engine.
+Your users can sign in directly
+with a username and password that they create,
+or they can use a third-party
+such as Facebook, Amazon, Google, or Apple, etc.
+So Cognito provides the following features.
+It basically gives you sign-up and sign-in options
+for your applications,
+gives access for guest users,
+and it acts as an identity broker
+between your application and web ID providers.
+You don't need to write any custom code.
+And it synchronizes user data across multiple devices.
+And basically Amazon recommend it
+for all mobile applications that call AWS services.
+So in terms of its use cases
+the obvious one is authentication.
+This is where users can sign in
+using a user pool or a third-party identity provider,
+again such as Facebook.
+You can also use it for third-party authentications.
+So users can authenticate using identity pools
+that require an identity provider token.
+We'll look at how that works in a second.
+You can access service-side resources.
+So basically a signed in user is given a token
+that allows them to access resources that you specify
+and you can access AWS AppSync Resources.
+So users can be given access to AppSync Resources
+with tokens received from a user or identity pool
+in Cognito.
+So let's talk about user pools and identity pools.
+And these are the 2 main components of Cognito.
+User pools are directories of users
+that provide sign up and sign in options
+for your applications or users.
+And then identity pools allow you to give your users access
+to other AWS services.
+So you can use identity pools and user pools
+either separately or together.
+So let's have a look at how it works broadly.
+We've got our device, we've got our login provider,
+we've got Amazon Cognito,
+and then we've got the AWS Security Token Service or STS.
+So our device basically sends a login request
+to our login provider
+and then it'll send a GetId request to Amazon Cognito.
+And Cognito, what it will do is basically
+do a validation to the login provider
+to make sure that you are an authorized user.
+Once that happens, you send a GetOpenIdToken to Cognito.
+It will do validation with the login provider.
+And then basically you get an AssumeRoleWithWebIdentity,
+which is sent to the Amazon Security Token Service
+and that then validates back against Amazon Cognito.
+And so we do cover this a lot more deeply
+in the Security section of the course.
+Don't worry, you don't need to remember
+this sequence of events are for the exam.
+What you specifically need to know is this.
+So step one, you've got an application on your phone
+and you're trying to log in and access the resources that
+that application is designed to use.
+So this could be something like Dropbox
+and you're trying to store files up in S3.
+Let's use that as an example.
+So basically you are using your Dropbox app to log in
+and it's connecting to a user pool in Cognito
+and you're authenticating and getting tokens.
+Once you've got that token,
+your device is then going to exchange that token
+to an identity pool,
+and the identity pool is going to go ahead
+and give some AWS credentials.
+And then you can use those AWS credentials
+to access your AWS services.
+So that's all it is. That's how it works.
+So your device sends a request to a user pool
+that then authenticates and gets a token,
+it then takes that token
+and exchanges it with an identity pool
+and then it will get AWS credentials,
+and then you'll be able to access things
+like S3 or DynamoDB using those credentials.
+So that's what you really need to know for the exam.
+So onto my exam tips,
+just remember that a user pool is basically
+a user directory that provides sign up and sign in options
+for the users of your applications.
+An identity pool allows your users
+to access other AWS services,
+and you can use identity pools and user pools
+together or separately.
+And then, like I said,
+you just got to remember this sequence of events.
+So you've got your device,
+you're connecting to Cognito to a user pool,
+you're authenticating and getting a token.
+You are then taking that token
+and you're sending it to an identity pool.
+And that identity pool will then give you AWS credentials.
+And then using those credentials,
+you can access S3 or DynamoDB.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

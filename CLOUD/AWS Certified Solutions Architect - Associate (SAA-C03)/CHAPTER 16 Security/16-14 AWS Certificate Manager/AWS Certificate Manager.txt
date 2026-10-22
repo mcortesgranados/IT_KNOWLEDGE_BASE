@@ -1,0 +1,58 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+This is a really quick lecture.
+We're just going to look at what AWS Certificate Manager is.
+So we'll explore what it is, what are the benefits,
+and then we'll move on to my exam tips.
+So what is AWS Certificate Manager?
+Well, basically it allows you to create, manage, and deploy
+public and private SSL certificates
+for use with other AWS services.
+It actually integrates with other services
+such as Elastic Load Balancing and CloudFront distributions
+and API Gateway, and it allows you to easily manage
+and deploy your SSL certificates in your AWS environment.
+So that's all that it is.
+In terms of the benefits, one of the major benefits
+of AWS Certificate Manager is cost.
+So you don't have to pay for SSL certificates anymore
+if you use Certificate Manager.
+Basically AWS Certificate Manager provisions
+both public and private certificates for free.
+And you'll still pay for the resources
+that are utilizing your certificates
+such as Elastic Load Balancing.
+But it means you don't need to go to Thorpe or Verisign
+or any of the other SSL providers
+and pay for a certificate.
+AWS will give it to you for free.
+And the cool thing is it actually automates the renewal
+and deployment of your certificate.
+So Certificate Manager can automate the renewal
+of your SSL certificate
+and then automatically update the new certificate
+with ACM Integrated Services, again,
+such as Elastic Load Balancing, CloudFront, and API Gateway.
+And it's really, really easy to set up.
+So it removes a lot of the manual processes
+such as generating key pairs
+or creating certificate signing requests or CSRs.
+And you can create your own SSL certificates
+with just a few clicks in the AWS management console.
+So really going into the exam,
+all you need to remember is what AWS Certificate Manager is.
+You're going to get scenario-based questions
+around SSL certificates and what services you should use
+to integrate SSL certificates with.
+So the supported services are going to be things
+like Elastic Load balancer, CloudFront, and API Gateway.
+And just remember the benefits
+that essentially it's a free service
+that saves you time and money
+and the cool thing is it automatically renews
+your SSL certificates and rotates the old certificates
+with the new certificates with those supported AWS services.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

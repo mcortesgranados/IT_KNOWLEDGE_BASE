@@ -1,0 +1,49 @@
+Okay.
+Hello Cloud Gurus and welcome to this lecture.
+In this lecture, we're going to look
+at how we can do continuous auditing
+with AWS Audit Manager.
+So we're going to have a look at what Audit Manager is.
+We'll look at its use cases
+and then we'll go to my exam tips.
+So, what is Audit Manager?
+Well basically,
+it allows you to continuously audit your AWS usage.
+And make sure you stay compliant
+with industry standards and regulations.
+And Audit Manager is an automated service,
+that produces reports specific to auditors
+for things like PCI compliance, GDPR, et cetera.
+So all it is, is it's a way of continuously
+auditing your AWS accounts.
+You don't need to do it manually
+and then revisit it like 3 months
+later when your auditors are doing another audit.
+This does it continuously and produces the reports for you.
+So you can transition from manual
+to automated evidence collection.
+So it allows you to produce automated reports for auditors
+and reduces the need to compile these reports manually.
+You get continuous auditing and compliance.
+So it works on a continuous basis,
+so that as your AWS environment grows and changes,
+you can produce automated reports
+to evaluate your environment against industry standards,
+such as PCI compliance.
+And it allows you to do internal risk assessments.
+You can create a new framework from the beginning.
+Or you can customize pre-built frameworks.
+You can also launch assessments to automatically
+collect evidence, helping you validate
+if your internal policies are being followed.
+So that's where you would use Audit Manager.
+So going into the exam,
+if you see a scenario question where it's talking
+about continuous auditing to a particular standard,
+could be HIPPA, could be GDPR,
+could be PCI compliance.
+I just want you to think of AWS Audit Manager.
+So, that is it for this lecture, guys.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

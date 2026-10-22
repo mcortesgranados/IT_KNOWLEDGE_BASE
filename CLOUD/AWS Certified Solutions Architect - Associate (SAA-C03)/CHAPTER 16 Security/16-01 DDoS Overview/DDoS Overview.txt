@@ -1,0 +1,129 @@
+Okay. Hello Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look at what DDoS is.
+So we're going to learn what a DDoS attack is.
+We'll then look at Layer 4 attacks.
+We'll look at amplification attacks.
+We'll look at layer 7 attacks
+and then we'll move on to my exam tips.
+Now, I'm sure you've all heard
+of what a DDoS attack is before
+but just in case you haven't, basically DDoS stands
+for a Distributed Denial of Service attack
+and it's an attack that attempts to make your website
+or application unavailable to your end users.
+And this can be achieved by a multiple mechanisms,
+such as large packet floods,
+using a combination of reflection
+and amplification techniques all by using large bot nets.
+So what is a Layer 4 DDoS attack?
+Well a Layer 4 DDoS attack is often
+referred to as a SYN flood,
+and it's called that
+because it works at the transport layer, the TCP layer.
+So to establish a TCP connection
+a three-way handshake takes place
+and the client sends a SYN packet to a server.
+The server replies with a SYN-ACK,
+and then the client then responds
+to that with an ACK, or an acknowledgement.
+So what should happen?
+Well, basically after the three-way handshake is complete
+the TCP connection is established.
+And after this applications begin sending data
+using Layer 7.
+So the application layer protocol such as http, et cetera.
+So in terms of SYN floods,
+a SYN flood uses the built in patience
+of the TCP stack to overwhelm a server
+by sending a large number of SYN packets
+and then ignoring the SYN-ACKs returned by the server.
+So it's basically manipulating the three-way handshake.
+And this causes the server to use
+up resources waiting for a set amount
+of time for the anticipated acknowledgement that should come
+from a legitimate client.
+So there are only so many concurrent TCP connections
+that a web or application server can have open.
+So if an attacker sends enough SYN packets to a server
+it can easily eat through the allowed number
+of TCP connections.
+And this then prevents legitimate requests
+from being answered by the server.
+So that's a SYN flood attack.
+Moving onto what an amplification attack is.
+An amplification attack, or reflection attacks,
+can include things such as NDP SSDP, DNS, CharGEN,
+SNMP attacks, et cetera.
+And this is basically where an attacker may send
+a third-party server, such as an NTP server,
+a request using a spoofed IP address.
+If you don't know what an NTP server is, it just stands
+for network time protocols.
+The way the internet or way computers sync
+up using atomic clock so that they all have the same time.
+So essentially you get an attacker sending a third party
+server, an NTP request, using a spoofed IP address.
+And so what's going to happen?
+Well, that server will then respond to the request
+with a greater payload than the initial request.
+And usually this will be in the region of
+about 28 to 54 times larger than
+the request to the spoofed IP address.
+So it's responding to the spoofed IP address.
+And this means that the attacker can send a packet
+with a spoofed IP address of about 64 bytes.
+The NTP server would then respond
+with up to 3,456 bytes of traffic.
+And attackers can coordinate this
+and use multiple NTP servers a second to
+send legitimate NTP traffic to the target.
+And that's why basically, as you can imagine
+it's called an amplification attack.
+So let's have a look at it in action.
+We've got the hackers real IP address.
+It's 190.1.2.3,
+and we've got our victim's IP address
+which is 245.1.2.3.
+And then we've got our NTP server over here.
+So what happens is our hacker sends a spoofed source address
+to the destination.
+So it's sending the spoofed source address
+to the NTP server, and that is 64 bytes in size.
+The NTP server then replies back
+to the spoofs source IP address, so 245.1.2.3,
+and it's sending 3,456 bytes of traffic.
+So you can see that's how an amplification attack works.
+Moving on to a Layer 7 attack, and this is pretty basic.
+A Layer 7 attack occurs when a web server
+receives a flood of GET or POST requests,
+usually from a botnet
+or a large number of compromised computers.
+So typical Layer 7 attack will be something like this.
+We've got our attacker, we've got a web server,
+and we're going to send them a flood of GET requests.
+So we're just going to say, "hey, get this page
+"get this page, get this page," over and over again.
+And that would be done using let's say, a botnet.
+We then have our end user
+they're trying to access the website, but they can't
+because the web server is sitting there responding to all
+of these GET requests from the attacker or from the botnet.
+Okay, so onto my exam tips.
+So just going into the exam, remember what a DDoS attack is
+it stands for the Distributed Denial of Service Attack,
+and it attempts to make your website
+or application unavailable to your end users.
+And common DDoS attacks include Layer 4 attacks such
+as SYN floods or NTP and amplification attacks.
+And then common Layer 7 attacks include floods
+of GET and POST requests.
+And you do really need to know the difference
+between a Layer 4 and a Layer 7 attack
+because there's different ways of using AWS to
+prevent a Layer 4 attack versus a Layer 7 attack.
+And we're going to cover that
+off in the next couple of lectures.
+So if you've got the time
+please join me in the next lecture.
+Thank you.

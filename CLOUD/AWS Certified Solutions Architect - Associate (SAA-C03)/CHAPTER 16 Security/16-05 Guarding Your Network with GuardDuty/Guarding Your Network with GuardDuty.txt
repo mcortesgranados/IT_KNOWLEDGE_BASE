@@ -1,0 +1,72 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at how you can guard your network with GuardDuty.
+So to begin with, we'll look at what is GuardDuty,
+we'll look at the different features of it,
+we'll look at how you can set it up
+and then we'll move on to my exam tips.
+So what is GuardDuty?
+Well, it's a threat detection service
+that uses machine learning to continuously monitor
+for malicious behavior.
+And it's basically looking for things
+like unusual API calls or calls known
+from a malicious IP address.
+And it also looks at things like attempts
+to disable CloudTrail logging,
+unauthorized deployments, compromised instances,
+and then reconnaissance by would be attackers as well
+as port scanning and failed logins.
+So in terms of GuardDuty's features,
+basically alerts appear in the GuardDuty console
+and also in CloudWatch Events.
+And it receives feeds from third parties
+like Proofpoint and CrowdStrike, as well as AWS Security
+about known malicious domains and IP addresses.
+And it monitors your CloudTrail logs,
+it monitors your VPC Flow Logs
+and it can also monitor your DNS logs as well.
+And essentially it allows you to centralize threat detection
+across multiple AWS accounts.
+And you can also have automated responses built in
+using CloudWatch Events and Lambda
+and it gives you machine learning and anomaly detection.
+So basically GuardDuty is threat detection with AI.
+It takes 7 to 14 days to set up a baseline,
+so it's basically looking for what is normal behavior
+on your account.
+And once active, you'll see findings
+on the GuardDuty console and in CloudWatch Events
+only if GuardDuty behavior it considers a threat.
+In terms of GuardDuty's pricing,
+you get 30 days free
+and then your charges are based
+on the quantity of your CloudTrail Events
+and the volume of DNS and VPC Flow Logs data.
+So onto my exam tips.
+Going into the exam, just remember what GuardDuty is
+and what it allows you to do.
+It uses AI to learn what normal behavior looks like
+in your account
+and to alert you of any abnormal or malicious behavior.
+And it updates a database of non-malicious domains
+using external feeds from third parties.
+And it monitors your CloudTrail Logs, your VPC Flow Logs,
+and your DNS logs.
+And then all the findings will appear
+in the GuardDuty dashboard.
+CloudWatch Events can be used to trigger a Lambda function
+to address a threat,
+so you can have a proactive threat response
+that's completely automated.
+So if you see any scenario-based questions
+where it's talking about using AI and automation
+to protect your whole AWS account
+and to monitor things like CloudTrail,
+VPC Flow Logs, DNS logs, et cetera,
+I want you to think of AWS GuardDuty.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.
