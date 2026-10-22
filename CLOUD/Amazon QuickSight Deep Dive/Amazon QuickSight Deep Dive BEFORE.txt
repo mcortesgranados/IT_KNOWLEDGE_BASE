@@ -1,0 +1,183 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+13:17
+
+Course Introduction
+01:27
+
+Introducing Amazon QuickSight
+03:29
+Breaking Down Amazon QuickSight
+06:59
+A Note on Following Along
+01:22
+CHAPTER 2
+
+Getting Started with QuickSight
+3:24:10
+
+Creating Your QuickSight Subscription
+04:52
+Administering Access Management
+03:34
+Understanding QuickSight Roles
+03:37
+Demo: Configuring a Standard QuickSight Subscription
+06:31
+Demo: Configuring an Enterprise QuickSight Subscription
+03:24
+Reviewing QuickSight Setup
+02:12
+QUIZ
+Getting Started with QuickSight
+3:00:00
+CHAPTER 3
+
+Connecting Data Sources
+3:16:25
+
+Understanding Data Source Types
+04:59
+Exploring Data Sources
+07:14
+Getting SPICE-y
+02:48
+HANDS-ON LAB
+Generating a CSV Report from a DynamoDB Table
+1:00:00
+Demo: Creating a Dataset from S3 Files
+04:50
+HANDS-ON LAB
+Populating Your RDS Table with Mock Data
+1:00:00
+Connecting QuickSight to Your VPC
+08:15
+Demo: Creating a Dataset from RDS
+06:52
+
+
+Connecting to Outside Data Sources
+04:24
+Creating Datasets from Datasets
+04:01
+Reviewing Data Sources
+03:02
+QUIZ
+Connecting Data Sources to QuickSight
+30:00
+CHAPTER 4
+
+Preparing Datasets
+1:06:52
+
+Breaking Down QuickSight Datasets
+00:46
+Exploring Dataset Preparation
+03:23
+Demo: Getting to Know the Data Preparation Interface
+02:52
+Joining Data from Different Sources
+04:48
+Filtering Datasets
+05:47
+Adding Calculated Fields
+03:34
+Working with Geospatial Data
+04:05
+Demo: Preparing Your Dataset from S3 Files
+03:42
+Demo: Preparing Your Dataset from RDS
+05:40
+Reviewing Dataset Preparation
+02:15
+QUIZ
+Preparing Datasets in QuickSight
+30:00
+CHAPTER 5
+
+Authoring Data Visualizations
+1:11:42
+
+Introducing Data Visualization on QuickSight
+00:50
+Getting to Know Visuals
+04:29
+Understanding Analyses, Sheets, and Dashboards
+01:56
+Demo: Analyzing and Visualizing Your Data
+07:38
+Exploring Advanced Visual Formatting
+04:57
+Creating Analyses from Multiple Datasets
+03:31
+Filtering Data During Analysis
+03:54
+Demo: Exploring QuickSight’s Visualization Options
+05:01
+Demo: Visualizing Geospatial Data
+03:33
+Creating Dashboards
+03:38
+Reviewing Data Visualizations
+02:15
+QUIZ
+Authoring Data Visualizations in QuickSight
+30:00
+CHAPTER 6
+
+Sharing Data Visualizations
+53:22
+
+Exploring Options for Sharing Analyses
+00:32
+Sharing and Publishing Dashboards
+04:58
+Demo: Copying and Modifying a Dashboard
+02:56
+Generating and Subscribing to Reports
+03:30
+Creating Threshold Alerts in QuickSight
+01:53
+Embedding Analytics in Your Application
+03:14
+Demo: Embedding a Public Dashboard
+03:40
+Reviewing Visualization Sharing
+02:39
+QUIZ
+Sharing Data Visualizations in QuickSight
+30:00
+CHAPTER 7
+
+Advanced QuickSight Features
+56:53
+
+Bringing the Power of AI/ML to Your Data Insights
+00:41
+Generating Insights with QuickSight ML
+05:51
+Creating Forecasts with QuickSight ML
+02:50
+Introducing QuickSight Q
+03:00
+Understanding Topics in QuickSight Q
+03:39
+Demo: Creating Topics in QuickSight Q
+05:01
+Asking Questions in QuickSight Q
+02:49
+Reviewing Advanced QuickSight Features
+03:02
+QUIZ
+Advanced QuickSight Features
+30:00
+CHAPTER 8
+
+Conclusion
+06:40
+
+Course Summary
+05:31
+Conclusion and What’s Next
