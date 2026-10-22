@@ -1,0 +1,201 @@
+Hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at VPCs.
+Now, this is the networking component of the course.
+This is going to be one of the most difficult sections
+but we will take it easy.
+And basically by the end of this section of the course
+you need to know how to build a VPC from memory.
+If you can do that,
+you are absolutely going to ace every networking question
+in your exam.
+Go ahead, follow through this section and then try and--
+it can take a couple of times,
+but try and build a VPC from memory from scratch.
+So let's look at what we're going to learn in this lesson.
+So we're going to learn what VPCs are,
+we're going to learn about networking, VPNs,
+we're going to have a look at a network diagram
+of the VPC that we're going to build in the next lecture,
+then we're going to look at some features of VPCs,
+we're going to compare VPCs,
+and then we'll go on to my exam tips.
+So what is a VPC?
+We'll just think of a VPC
+as a virtual data center in the cloud.
+And you've already been using VPCs
+when you provisioned EC2 instances
+in the EC2 section of the course.
+That goes into your default VPC.
+And every region in every AWS account has a default VPC
+that set up automatically.
+So VPC is basically just a logically isolated part
+of the AWS cloud, where you can define your own network.
+And it gives you complete control of virtual networks
+including your own IP address ranges, subnets, route tables,
+and network gateways.
+And we'll learn what all those are in one second.
+So basically, it's a fully customizable network.
+And you can leverage multiple layers of security
+including security groups and network access control lists
+to help you control access to your EC2 instances
+in each subnet.
+So typically, you would have a three-tier architecture.
+So you've got your web servers
+and your web servers need to be public-facing,
+and by public-facing,
+we simply mean that they're Internet accessible.
+So people from the Internet can access those web servers.
+And this would be done over port 80 or port 443,
+so HTTP or HTTPS.
+We then have our application tier.
+And so this could be our application servers
+and they're doing some form of business logic,
+perhaps they're rendering an image or something like that.
+And they're in a private subnet
+and they can only speak to the web tier
+and then to the database tier.
+And then we have the database tier on the backend.
+And this is a private subnet,
+and they can only speak directly to the application tier
+which then passes information back to the web tier.
+So this is an example of a fully customizable network
+and the only front-facing servers
+are going to be your web servers.
+Additionally, you can also create
+hardware virtual private network connections
+between your corporate data center and your VPC.
+And essentially, this allows you to leverage the AWS cloud
+as an extension of your corporate data center.
+And we'll look at different methodologies
+of how to do that later on in this section of the course.
+Now, before we look at our network diagram,
+I just want to show you a really cool website.
+It's just called cidr.xyz.
+And so this is how you calculate your IP address ranges.
+And there's 3 common IP address ranges
+which we'll cover off.
+But throughout the rest of this section of the course,
+we're going to use 10.0.0
+and then it's going to be a forward slash
+and then it's a 16 network.
+So let's do a 16.
+Now that will tell us straight away using this website
+what our first usable IP address is,
+what our last usable IP address is,
+how many IP addresses in this network range.
+And you can go ahead and you can make it a /24
+if you want a smaller amount of IP addresses.
+And the smallest network size
+that you can have with AWS and VPCs is a slash 28,
+which will give you 16 IP addresses.
+Amazon do reserve some IP addresses themselves though.
+So the largest we can have with VPCs is a /16.
+That will give us 65,536 IP addresses.
+And then using this website,
+we can see what our first usable one is,
+what our last usable one is,
+and then what our subnet mask is.
+So let's have a look at a typical network diagram for a VPC.
+And this is pretty much what we're going to create
+in the next lecture.
+So, first of all, we have our regions.
+Let's say we deploy this into us-east-1.
+And what we need to do is when we create a VPC
+is choose our IP address range.
+So you can use 10.0.0.0, or you could use 172.16.0.0,
+or you could use the most common one for home networking
+which is 192.168.0.0.
+Most corporations use 10.0.0.0.
+So that's what we're going to do
+throughout the rest of this course.
+And we're going to use
+the maximum addressable size for VPCs,
+which is just a /16.
+So that will give us the most number of IP addresses
+inside our VPC.
+So when we create a VPC, what's going to happen
+is it's going to create a route table, a network ACL,
+as well as a router.
+And then what we're going to do is:
+we're going to go in and create our own public subnets.
+We're going to have an instance in there.
+We're going to have a security group.
+We're going to attach an Internet gateway to our VPC.
+And as soon as we do that,
+our instance in our public subnet
+will become Internet accessible.
+And this typically would be a web server or something.
+We can then also build in a backend.
+So we could build in a private subnet.
+Note, the public subnet
+has a IP address range of 10.0.1.0/24,
+and then our private subnet could be 10.0.2.0/24.
+And then if we wanted to be able to connect to our instances
+in our private subnet
+from let's say our corporate data center,
+we could attach a virtual private gateway to our VPC,
+establish a VPN connection,
+and then we'd be able to communicate to our instances
+in our private subnet as well.
+So this is pretty much what we're going to build
+in the next lecture.
+Before we do that, though, let's just have a quick look
+at what we can do with our VPCs.
+So we can launch instances into a subnet of our choosing,
+so we can launch them into private subnets
+or into public subnets.
+We can create custom IP address ranges for each subnet.
+So like I said, we had 10.0.1.0 as our public,
+and we could have 10.0.2.0 for our private.
+We can configure route tables between subnets,
+and we'll look at how we can do that in the next lecture.
+We can attach an Internet gateway to our VPC.
+The cool thing about VPCs is it just gives us more control
+and better security controls over our AWS resources.
+We can provision things like access control lists,
+and this basically allows us
+to create network access control lists,
+and we can actually block specific IP addresses
+using network access control lists.
+And that is a very popular exam topic
+that will come up around VPCs, is,
+do you use security groups to block IP addresses
+or do you use network ACLs?
+Well, it's network ACLs,
+and we'll have a lecture on that coming up as well.
+So in terms of our default VPC versus our custom VPC.
+Like I said, when you provision--
+Every account within AWS comes with a default VPC
+in every single region, so it's much more user-friendly.
+It's basically a way for you to launch EC2 instances
+and not have to worry
+about any of the networking components whatsoever.
+All subnets in default VPCs
+have a route out to the Internet,
+so that is to say that they're all public.
+And each EC2 instance has both a public and private address
+within a default VPC.
+Now with our custom VPCs, they're fully customizable
+but it does take some time to set up.
+And we'll look at how we can set that up
+in the next lecture.
+So just at this stage, we'll just go through my exam tips.
+So I just want you to remember
+that a VPC is a logical data center in AWS.
+It consists of Internet gateways
+or virtual private gateways, consists of route tables,
+network access control lists, subnets, and security groups.
+And we'll look at how to create all of those
+in the next lecture.
+And then always remember that one subnet
+is always in one availability zone.
+And this is again, a very popular exam topic.
+So when you create a subnet,
+that subnet is defined in one availability zone.
+So you can't have a subnet
+that spans multiple availability zones.
+And we will, like I said, look at that in the next lecture.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

@@ -1,0 +1,295 @@
+QUESTION 1
+
+Fill in the blank: Network Access Control Lists (NACLs) are ________.
+
+
+Stateless
+
+
+Stateful
+
+
+Even more confusing than security groups
+
+
+Stateish
+
+Good work!
+NACLs are stateless. Reference Documentation: VPC Network ACLs (https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html)
+
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which AWS service embeds AWS compute and storage services within 5G networks, providing mobile edge computing infrastructure for developing, deploying, and scaling ultra-low-latency applications?
+
+
+Amazon Lightsail
+
+
+Amazon EC2
+
+
+Amazon RDS
+
+
+AWS Wavelength
+
+Sorry!
+This is a service for provisioning single-instance virtual machines.
+
+Correct Answer
+AWS Wavelength embeds AWS compute and storage services within 5G networks.
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+When would you want to use Direct Connect?
+
+
+When you need to talk directly to AWS and don't want to use the normal support channels for a request
+
+
+When you need your database to be able to move from one region to another
+
+
+When your EC2 instance needs to enable enhanced networking
+
+CORRECT
+When you need a high-speed private connection from your on-premises environment to AWS
+
+Sorry!
+Direct Connect is designed for on-premises to AWS communication. Reference Documentation: Direct Connect (https://aws.amazon.com/directconnect/)
+
+Correct Answer
+Direct Connect is designed for on-premises to AWS communication. Reference Documentation: Direct Connect (https://aws.amazon.com/directconnect/)
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What is the safest way to open up a single API endpoint to another AWS VPC?
+
+
+Host your API behind a publicly accessible IP address.
+
+
+Upload your API to an S3 bucket and enable "API Share". Input the ID of the other VPC.
+
+
+Peer the VPCs together to allow them to communicate.
+
+CORRECT
+Use PrivateLink to securely share out your API.
+
+Sorry!
+PrivateLink allows you to share out a single endpoint and not your entire VPC. Reference Documentation: PrivateLink (https://aws.amazon.com/privatelink/)
+
+Correct Answer
+PrivateLink allows you to share out a single endpoint and not your entire VPC. Reference Documentation: PrivateLink (https://aws.amazon.com/privatelink/)
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What is the IPv4 CIDR block of the default VPC?
+
+
+10.0.0.0/16
+
+CORRECT
+172.31.0.0/16
+
+
+192.168.1.0/16
+
+
+172.0.0.0/16
+
+Sorry!
+172.31.0.0/16 is the IPv4 CIDR block for the Default VPC provided by AWS out of the box. Reference Documentation: Default VPC (https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html)
+
+Correct Answer
+172.31.0.0/16 is the IPv4 CIDR block for the Default VPC provided by AWS out of the box. Reference Documentation: Default VPC (https://docs.aws.amazon.com/vpc/latest/userguide/default-vpc.html)
+
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+Why would you use Transit Gateway over VPC peering?
+
+
+VPC peering causes networking bottlenecks.
+
+
+VPC peering isn't as secure as Transit Gateway.
+
+
+Transit Gateway works across regions where VPC peering doesn't.
+
+CORRECT
+You have too many VPCs to reasonably peer together.
+
+Sorry!
+This is not true, as Transit Gateway is designed for when you have too many VPCs to peer together. Reference Documentation: Transit Gateway (https://aws.amazon.com/transit-gateway/)
+
+Correct Answer
+Transit Gateway is designed for when you have too many VPCs to peer together. Transit Gateway has: easy connection of thousands of VPCs, support for hybrid connectivity (VPN and Direct Connect connections), centralized routing configuration, and low operational costs. VPC peering has: lower overall cost, no bandwidth limits, lower latency, security group compatibility with intra-Region VPC peering. Reference Documentation: Transit Gateway (https://aws.amazon.com/transit-gateway/)
+
+
+__________________________________________________________________________________________________________________________
+
+
+QUESTION 2
+
+Which of the following items are NOT a part of a VPC?
+
+
+Route Table
+
+
+Subnet
+
+CORRECT
+Service Gateway
+
+
+Internet Gateway
+
+Sorry!
+A route table is part of a VPC. Reference Documentation: VPC Route Tables (https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)
+
+Correct Answer
+This is not an AWS service.
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which of the following is a reason that VPC peering could fail?
+
+
+The VPCs are in different regions.
+
+CORRECT
+The VPCs have overlapping IP addresses.
+
+
+The VPCs are in different accounts
+
+
+The VPCs use different numbers of AZs.
+
+Sorry!
+VPCs can be peered cross-region. Reference Documentation: Invalid Peering Configurations (https://docs.aws.amazon.com/vpc/latest/peering/invalid-peering-configurations.html)
+
+Correct Answer
+Overlapping IP addresses would prevent this. Reference Documentation: Invalid Peering Configurations (https://docs.aws.amazon.com/vpc/latest/peering/invalid-peering-configurations.html)
+
+
+__________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+By default, what range of IP addresses and ports do security groups leave open for inbound traffic?
+
+
+127.0.0.1, port 3389
+
+
+0.0.0.0/0, port 80
+
+CORRECT
+None. They are closed by default.
+
+
+0.0.0.0/0, port 22
+
+Sorry!
+No inbound ports are open by default. Reference Documentation: VPC Security Groups (https://docs.aws.amazon.com/quicksight/latest/user/vpc-security-groups.html)
+
+Correct Answer
+No inbound ports are open by default. Reference Documentation: VPC Security Groups (https://docs.aws.amazon.com/quicksight/latest/user/vpc-security-groups.html)
+
+
+__________________________________________________________________________________________________________________________
+
+
+QUESTION 5
+
+What is the purpose of a NAT gateway?
+
+
+To act as a firewall for your resources
+
+
+To forward traffic to other EC2 instances
+
+CORRECT
+To forward traffic from private subnets to services outside your VPC
+
+
+To block malicious traffic from leaving your network
+
+Sorry!
+NAT gateways allow instances in a private subnet to connect to services outside your VPC. Reference: NAT Gateways (https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
+
+Correct Answer
+A NAT gateway is a Network Address Translation (NAT) service. You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services cannot initiate a connection with those instances. Reference: NAT Gateway (https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html)
+
+
+__________________________________________________________________________________________________________________________
+
+
+QUESTION 1
+
+Your security team will only approve S3 usage if your EC2 instances don't transmit data over the public internet. What service can you use to comply with this requirement?
+
+
+NACL
+
+CORRECT
+VPC Endpoint
+
+
+NAT Gateway
+
+
+Route Table
+
+Sorry!
+VPC Endpoints are used to keep your traffic to AWS services out of public networking space. Reference Documentation: VPC Endpoints (https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints.html)
+
+Correct Answer
+VPC Endpoints are used to keep your traffic to AWS services out of public networking space. Reference Documentation: VPC Endpoints (https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints.html)
+
+__________________________________________________________________________________________________________________________
+
+
+QUESTION 3
+
+You need to deliver AWS compute at the edge within a 5G network. Which service should you use?
+
+
+AWS IoT
+
+
+Amazon DynamoDB
+
+CORRECT
+AWS Wavelength
+
+
+Amazon Route 53
+
+Sorry!
+This is an IoT service.
+
+Correct Answer
+AWS Wavelength is used to deploy compute and storage services within 5G networks.
+
+__________________________________________________________________________________________________________________________
+

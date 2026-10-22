@@ -1,0 +1,217 @@
+Okay, hello Cloud Gurus,
+and congratulations.
+You're at the end of the VPC section of the course.
+This is actually one of the more difficult sections,
+but if you know VPC inside out,
+then you're going to do very, very well on the exam.
+So let's go through what we learned
+in this section of the course.
+So just think of a VPC as a logical data center inside AWS.
+It consists of internet gateways,
+or virtual private gateways,
+route tables, network access control lists,
+subnets, and security groups.
+Remember that 1 subnet is always in 1 Availability Zone.
+You can't have a subnet
+that spans multiple Availability Zones.
+And let's move on to NAT gateways.
+So we remember
+that it is redundant inside the Availability Zone,
+so you don't need to worry about that.
+It starts at 5Gb per second
+and scales currently to 45Gb per second.
+You'll never actually be quizzed about that on the exam,
+like it's individual throughput levels,
+but just remember that it does give you
+sufficient network throughput.
+You don't need to go in and patch the operating system
+or anything for your NAT gateway,
+and it's not associated with any security groups.
+And it automatically is assigned a public IP address
+when you create it.
+Now, in terms of high availability for NAT gateways,
+and this can be a very popular scenario-based question,
+if you have resources in multiple Availability Zones
+and they share a NAT gateway,
+in the event that that NAT gateway's
+Availability Zone is down,
+then the resources in the other Availability Zones
+are going to lose internet access.
+So to create an Availability Zone-independent architecture,
+you need to create NAT gateways in each Availability Zone.
+And then, you just need to configure your routing
+to ensure that the resources use the NAT gateway
+in the same Availability Zone.
+We looked at security groups,
+and we learned that they are stateful
+if you send a request from your instance,
+the response traffic to that request is allowed to flow in
+regardless of the inbound security group rules.
+And responses to allowed inbound traffic are
+allowed to flow out regardless of the outbound rules.
+We then looked at Network ACLs.
+So when you create a VPC,
+you get a default Network ACL automatically,
+and that, by default, also allows all inbound
+and outbound traffic.
+We can then go and create our own custom Network ACLs,
+and we did this to, basically,
+create a custom Network ACL that was public.
+So, essentially, anything that we associated
+with that Network ACL
+would be publicly accessible via the internet.
+So by default, each custom Network ACL
+denies all inbound and outbound traffic until you add rules.
+So it's the opposite of your default Network ACL.
+When you create a custom Network ACL,
+by default, it denies all inbound and outbound traffic
+until you go in and add those rules.
+We learned about subnet associations.
+So each subnet in your VPC must be associated
+with a Network ACL.
+If you don't explicitly associate a subnet
+with a Network ACL,
+then that subnet is automatically associated
+with the default Network ACL.
+And for that reason,
+you probably don't want your default Network ACL
+to have a public route out to the internet
+because it means, as soon as you create a subnet,
+that subnet is always going to be public.
+Remember, you can also block IP addresses
+using Network ACLs,
+and you don't do that using security groups,
+and that can be a common exam question
+or scenario-based question.
+Be talking about a hacker or something,
+and you need to block access.
+What level do you do it at?
+Well, you always do that at the Network ACL-level.
+You can associate a Network ACL with multiple subnets.
+However, a subnet itself can be associated
+with only 1 Network ACL at a time.
+So when you associate a Network ACL with a subnet,
+the previous association is removed.
+Network ACLs contain a numbered list of rules
+that are evaluated in order,
+starting with the lowest number first.
+And Network ACLs have separate inbound and outbound rules,
+and each rule can either allow or deny traffic.
+And most importantly,
+just remember Network ACLs are stateless.
+So responses to allowed inbound traffic are
+subject to the rules for outbound traffic and vice versa.
+We then learned about Direct Connect,
+and this is a way of directly connecting
+your data center to AWS.
+It's useful for high-throughput workloads.
+So you know, for example, lots of network traffic,
+and it's helpful for when you need a stable
+and reliable secure connection.
+So you will see scenario questions
+where they're talking about,
+"You've got a VPN connection,
+it keeps dropping out.
+You need a stable and reliable connection
+that can handle high-throughput."
+I want you to think of Direct Connect.
+Moving on to VPC endpoints,
+so this is when you want to connect AWS services
+without leaving the Amazon's internal network.
+There's 2 types of VPC endpoints.
+There's interface endpoints and gateway endpoints.
+And gateway endpoints, basically, at the moment,
+just support S3 and DynamoDB.
+Moving on to peering,
+so this allows you to connect 1 VPC with another
+via a direct network route using private IP addresses.
+Instances behave as if they were
+on the same private network.
+And you can peer VPCs with other AWS accounts,
+as well as other VPCs in the same account.
+Peering is always done in a star configuration,
+so this is a hub-and-spoke model.
+So you have one central VPC that peers with 4 others.
+You can't have transitive peering.
+You can peer VPCs between regions,
+and like I said, VPCs are just a way of one VPC
+being able to talk to another one.
+And here is a good network diagram of VPCs.
+If you want VPC B to talk to VPC C
+and it's peered with VPC A,
+you can't do transitive peering.
+So you need to create a peering connection
+between VPC B and VPC C.
+Moving on to AWS PrivateLinks.
+So if you see a question asking
+about peering VPCs to tens, hundreds,
+and thousands of customer VPCs,
+I want you to think of AWS PrivateLink.
+It doesn't require VPC peering.
+There's no route tables, net gateways,
+internet gateways, et cetera.
+But it does require a network load balancer
+on the service VPC,
+and it requires an ENI on the customer VPC.
+Moving on to Transit Gateways,
+so you can use route tables to limit
+how VPCs talk to one another.
+Transit Gateway works with Direct Connect
+as well as VPN connections,
+and it supports IP multicast,
+which is basically a way of allowing a host
+to send a single packet to thousands of hosts
+across a rooted network.
+So for example, the internet.
+It's mostly used for audio,
+so radio, for example,
+as well as video distribution.
+Also, going into the exam,
+if you just see a question
+about simplifying network topology,
+or they're talking about IP multicasting,
+just think of Transit Gateway.
+Transit Gateway is fantastic technology
+that, basically, stops you from having
+to have all these different peering connections,
+et cetera, et cetera.
+You just set up Transit Gateway.
+You connect one thing to it at once,
+so it could be a VPN connection
+or a VPC peering connection or whatever.
+And then, Transit Gateway will allow you
+to communicate directly to everything else.
+So it's just a way of simplifying your network topology.
+And the very last thing we learned about
+was securing your network with VPN Hub.
+And this is essentially just a way
+of allowing your customers,
+let's say you've got an office in New York
+and you've got an office in Miami,
+and you're connecting in through a VPN connection
+to your VPC hosted with AWS.
+If you use VPN Hub,
+it means that you can basically have
+the New York office talk to Miami via the VPN Hub.
+So again, it's a way
+of simplifying your VPN network topology.
+So if you see a scenario-based question
+where they're talking about that,
+"How can you simplify your VPN network topology?"
+I want you to think of VPN Hub.
+And then, finally, if you see any scenario-based questions
+about mobile edge computing or 5G,
+and it will be about increasing
+your application speed at edge,
+then I want you to think of AWS Wavelength.
+So that is it for this section of the course.
+You've done really, really well.
+I would, definitely, before taking the exam,
+just try and build a VPC by yourself from memory.
+If you can do that,
+you're going to absolutely smash
+all the networking questions.
+So that's it for this section of the course.
+If you have any questions, please let me know.
+If not, feel free to move on to the next section.
+Thank you.

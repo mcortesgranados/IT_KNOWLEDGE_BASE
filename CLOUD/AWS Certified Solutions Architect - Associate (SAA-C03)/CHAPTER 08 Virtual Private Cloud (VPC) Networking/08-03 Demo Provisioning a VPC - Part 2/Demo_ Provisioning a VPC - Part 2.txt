@@ -1,0 +1,347 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going
+to continue on building our custom VPC.
+Okay, so I'm back in the VPC section of the AWS console.
+And in here, we can go ahead and click on our subnets.
+We can see the two subnets
+that we created in our last lecture.
+And what I'm gonna do is I'm just gonna scroll
+all the way across and we're gonna go over to auto-assign
+public IPv4 addresses.
+You can see for these two subnets
+that we created in the last lecture, it's set as default
+to be no, but with our default subnets
+that basically live within inside our default VPC,
+they automatically assign public IPv4 addresses.
+So what does this mean?
+Well, if you remember in the last lecture,
+we were talking about making this subnet a public subnet.
+So that's where we're gonna put our EC2 web servers into.
+And in order to do that, we basically need them
+to be automatically assigned public IPv4 addresses
+'cause they're going to be in a public subnet.
+So what we need to do is enable that.
+So what we're gonna do is go ahead and hit actions
+and we're gonna edit our subnet settings.
+And we're just gonna click this little box,
+enable auto-assign public IPv4 addresses.
+And then we'll go ahead and hit save.
+And so that has now, if we go across,
+we'll just select this one, make it easy to see.
+If we go all the way across, we'll be able to see.
+Now it says auto-assign public IPv4 addresses.
+So we can now make this a public subnet.
+So how do we make this a public subnet?
+Well, the first thing we need is an internet gateway.
+We need to be able to access our VPC via the internet.
+You can see there's already an internet gateway in here,
+and this is for our default VPC.
+So we're gonna go ahead and create a new internet gateway.
+And we're gonna go ahead and call it MyIGWACG.
+So my Internet Gateway A Cloud Guru.
+So I'm gonna go ahead and hit create internet gateway.
+that has now created this internet gateway.
+If I click on my internet gateway
+so we can see it in here,
+but we can see that it is not attached to anything.
+So let's go ahead and hit and go to actions.
+And we're going to attach it to a VPC.
+In here, we select our VPC.
+Now note, there's only one available option,
+and that's the acloudguru-vpc.
+We can't attach this internet gateway to our default VPC
+because it already has an internet gateway attached to it.
+And that can be a popular exam question.
+You might get something silly like you need
+to increase throughput or something to your network.
+You know, what's an option?
+And one of the incorrect answers will be
+just add another internet gateway to your VPC.
+Well, you can't do that.
+VPCs can only have one internet gateway.
+So remember that going into your exam.
+So I'm gonna go ahead and click here,
+and we're gonna go ahead and attach our internet gateway.
+And that has now been attached to our acloudguru-vpc.
+And you can see it in here. Its status is now attached.
+So now that we have our internet gateway,
+what we need is a route out to the internet.
+So if we click on route tables, we'll be able
+to see our two route tables in here.
+And you can see that the route table
+for our custom VPC is this one.
+So let's go ahead and click on this route table.
+Now, if we look at our subnet associations,
+well, first of all, we can see this route
+and it's just 10.0.0.0/16.
+And this basically allows our subnets to talk to each other.
+If we click on our subnet associations,
+we can see that we've got two different types.
+We've got explicit subnet associations,
+and then we've got subnets without explicit associations.
+Now, because this is our main route table,
+every time we create a new subnet,
+it's going to be associated to this route table.
+So what we don't wanna do is create a route out
+to the internet on this route table
+because what that would do
+is every time we create a new subnet,
+that subnet would be a public subnet.
+So it'd be a security concern.
+So what we really wanna do is just create a new route,
+which is not the default route table.
+So what we're gonna do is we're gonna go back over
+to our route tables and we're gonna create a route table.
+So we're gonna give this route table a name.
+We're gonna call it MyInternetRouteTable.
+And then in here, we select the VPC.
+So we're gonna select our acloudguru-vpc.
+We're gonna go ahead and create that route.
+So now what we wanna do is we want to edit.
+We wanna basically allow a route out to the internet.
+So with this route table, if we go to our edit routes,
+gonna add a route and we're gonna go 0.0.0.0.
+And we're going to point that at our internet gateway
+and we're gonna select our internet gateway in here,
+and then we're gonna go ahead and save changes.
+And that just gives us a route out to the internet.
+That's all it does.
+Now what we wanna do is associate our public subnet
+to this route.
+So we're gonna go over to our subnet associations
+and if you remember, we had our 10.0.1.0
+was going to be our public subnet.
+So back in our route table, and let's have a look.
+So here's our internet route.
+So we wanna click on this route table ID.
+You can see here, we've got our routes out to the internet.
+And then we wanna do our subnet associations.
+So we've got our explicit subnet associations
+and our subnets without explicit associations.
+So I want to explicitly allow our public subnet
+to go into this route table.
+So I'm gonna go ahead and just click on it
+and save our associations.
+And that will now basically make anything in this subnet
+will now have internet access essentially.
+So this is where we're gonna put our web servers.
+So we can see in here our different route tables.
+And if I click on our route table, our main route table
+for the VPC, so it's this one here,
+and if I go down to my subnet associations, we can now see
+that my public subnet is no longer explicitly,
+or sorry, without explicit associations.
+So it's no longer in this route table.
+It's explicitly associated to my route table
+with internet access.
+So now that we've set all this up,
+what we needed to go in and do is test it.
+So what we're gonna do is we're gonna go over to services.
+We're gonna go over to compute,
+and we're gonna go to EC2.
+We're gonna start provisioning some EC2 instances
+inside this environment.
+So we're gonna have a public web server
+and then basically a private,
+like maybe a backend database server or something like that.
+So let's go ahead and hit launch instance.
+In here, we can just call it Web01, so Web01.
+And then down here, we're gonna use the Amazon Linux AMI,
+and we're gonna use a t2.micro.
+Our key pair,
+we're just gonna use one that we've used before.
+So MyKeyPair.
+And then down here, we've got our network settings.
+So it in here, we can see it's going into our default VPC.
+So we don't wanna do that.
+What we wanna do is we wanna go into our acloudguru-vpc,
+and then we wanna select which subnet
+that we want it to go into.
+So we're gonna select our public subnet 1.0.
+Now, here you can see,
+we've got auto-assign public IP address.
+So if you remember, we set that up.
+So basically, our public subnet
+will automatically assign IP addresses
+to our EC2 instances.
+In here, we can create a security group.
+So we'll just call it WebDMZ.
+So WebDMZ and description, I'm gonna do the same thing.
+So WebDMZ.
+And then down here, what we're gonna do
+is we're gonna go add a security group rule,
+and we're just gonna allow HTTP traffic.
+So if we scroll down, HTTP,
+and we're gonna say from anywhere.
+And then we'll just leave everything else as default.
+And then down here, we're gonna go to our advanced details.
+And I'm gonna go ahead
+and put a bootstrap script in right at the bottom.
+And all it's doing is it's running a yum update.
+It's installing Apache, it's starting the Apache service,
+it's going to our /var/www/html directory.
+And then essentially, it's creating a little webpage
+that says Hello Cloud Gurus.
+And we're calling that index.html.
+This will be available
+in the resources section of the course.
+So let's go ahead and hit launch instance.
+This is now launching our instance.
+It's created our security groups.
+If we go over to our instances,
+we'll be able to see it in here.
+And we're just gonna wait for this instance state
+to come up.
+So we can see our web server is now up and running.
+If we click in here,
+we can see we've got a public IPv4 address.
+So it has automatically assigned our address.
+If we click open address, remember, what it's gonna do,
+it's gonna open it in HTTPS,
+and we don't have SSL enabled on here.
+So all you need to do is change that public IP address
+from HTTPS to HTTP.
+And there we go, we can see my web server,
+it's in my public subnet,
+it's in its own custom route table.
+And we have a route out
+to the internet using our internet gateway
+for this EC2 instance.
+The next thing we're gonna do
+is just create a database instance
+and put it in our private subnet,
+and we're gonna put it in its own private security group.
+And then we'll see if we can connect in from our web server
+to our database server.
+So now what we wanna do is create our database server.
+What I'm gonna do quickly is just create a security group
+for our database server.
+So I'm gonna go ahead and create the security group.
+I'm just gonna call it MyDBSG, something like that.
+And in our VPC, we're going to click in here.
+We're going to do a our our acloudguru-vpc,
+our custom VPC.
+And for our inbound rules,
+what we're gonna do is we're going to allow all SSH traffic
+coming in from our custom source.
+And we're going to basically use our security groups.
+We're gonna say our WebDMZ security group.
+So that's all we're going to do.
+I'm gonna go ahead and create this security group.
+It's just saying I need a security group description,
+so I'm just gonna type in here database,
+something like that.
+And so we're gonna go ahead and create our security group.
+So that has now been created.
+Let's go over to EC2.
+Gonna launch an instance,
+I'm just gonna call this MyDBServer, something like that.
+Server.
+And I'm gonna do the Amazon Linux AMI.
+I'm gonna leave everything as default.
+I'm just gonna actually create a new key pair
+because I'm on a different computer
+from when I first started,
+and I don't actually have that key pair saved.
+So I'm gonna call it MyDBKP,
+and I'm going to download this as a PEM.
+So gonna go ahead and create that key pair.
+And that has now downloaded.
+And then in here, we're going
+to select an existing security group.
+So I'm gonna select my...
+This is clearly not going into my right VPC.
+So let's go over to the network and click in here.
+And then I just wanna go ahead and edit it.
+I want it to go to my acloudguru-vpc.
+And the subnet that we're gonna put this in,
+So we're gonna put this into our private subnet,
+so 2.0, and we're gonna select our existing security group.
+I'm gonna use MyDBSG.
+And leave everything else as default
+and I'm gonna go ahead and launch this instance.
+So this is now launching this instance.
+So what I want to do is I'm gonna go over to my web server
+and I'm gonna go ahead and hit connect.
+And I'm gonna connect using EC2 Instance Connect.
+So that will connect straightaway.
+So let's go ahead and hit connect.
+And so in here,
+we'll be able to connect into our web server.
+So our web server is sitting inside our WebDMZ.
+And so this is inside our public subnet.
+So I'm just gonna elevate my privileges to root.
+So sudo su, gonna clear the screen.
+So what I'm gonna do is just create my key pair
+inside this web server.
+I'm just gonna call it mykeypair,
+keypair.pem.
+And what I'm gonna do is just paste in the private key
+and then I'm just gonna go ahead and quit out of it.
+So save, yes, and then hit enter.
+So if we then ls, you can see it's in there.
+Then I'm just gonna change the permissions on it.
+So I'm gonna go chmod 400,
+mykeypair.pem.
+And that has now changed the permissions.
+So you can see it in there.
+Let's go ahead and clear the screen.
+And what I'm gonna do is go back to the AWS console.
+So I'm back in the console.
+I'm gonna click on EC2,
+and I'm gonna go over to my running instances.
+And we can see my database server is still initializing,
+but if I click in here, I should be able to go
+and get its private IP address.
+So this is its private IP address here, 10.0.2.231.
+So I'm gonna type in ssh ec2-user, and then @.
+I'm gonna paste in my private IP address.
+Then I'm going to be using my key pair, so -i,
+then mykeypair.pem.
+And there you go.
+We have now SSHed into our database server
+that's in our private subnet.
+So essentially, we're connecting in to our public subnet
+and then SSHing into our web server.
+And then we're using our web server to connect
+to our database server.
+So let's go ahead and clear the screen.
+So what would happen, let's elevate our privileges to root,
+and then I'm gonna clear the screen again.
+So what would happen if we run a yum update minus yes?
+Look what's happening. Nothing.
+'Cause it has no route out to the internet.
+So it is sitting in a private subnet,
+but it has no route out to the internet.
+So we can't run any updates.
+Now, if this was our primary database server,
+that's a really risky scenario to be in
+because we can't update MySQL, for example.
+So what we're gonna do in the next lecture is look
+at how we can have our database servers in a private subnet
+and still have routes out to the internet
+where they can do updates.
+First, let's review everything we've done
+in the last two lessons.
+So just to remind you what we just did,
+we basically built a custom VPC in us-east-1.
+As soon as we created our VPC, created a route table,
+a network ACL, and a default security group,
+we then added in a public subnet and a private subnet.
+We then attached an internet gateway, and then we went in
+and we added some more route tables, another security group.
+And then we deployed some instances in our public subnet
+and our private subnet,
+and then we SSHed into our public subnet.
+And then we used a connection
+to SSH into our private subnet from our public subnet.
+So we've done an awful lot.
+The issue we have right now is, like I said,
+the instance in our private subnet has no way
+of installing software or doing updates.
+So what we're going to look at in the next lesson
+is how we can resolve this.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

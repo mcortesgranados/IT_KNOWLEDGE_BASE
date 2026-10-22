@@ -1,0 +1,274 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at how we can build our own custom VPC.
+This is going to be very hands-on,
+and it's going to be split over two different lectures,
+but by the end of this,
+you should be able to build a custom VPC from scratch,
+and it would definitely go into the exam
+being able to do it from memory.
+So watch this a couple of times
+and build your own VPC the day before you do your exam.
+And then you're going to ace any networking questions.
+Okay, so here I am in the AWS console.
+Now to get to VPCs,
+we can go all the way down to networking
+and content delivery,
+and then you'll see VPC down here.
+You can also do a search for it in the search bar.
+So we open up VPCs
+and here we can see our splash screen or our landing screen.
+And here you can do your VPCs by all regions
+so you can see what VPCs you've got
+in what different regions around the world.
+So we're gonna go into US East one,
+so Northern Virginia.
+And in here we can see our default VPC.
+So it's been set up for us
+as soon as we open our AWS account essentially.
+If we go across,
+we can see we've got a main route table
+and a main network ACL,
+and they're created by default.
+So every time you create a VPC,
+it basically creates a route table
+and a network ACL by default.
+Tenancy,
+since it's default tenancy
+we'll look at what that means in a second.
+And in here we can see that it's the default VPC.
+So we go ahead and click on our route tables.
+We'll be able to go in and see our subnet associations.
+We click in here, you can see our subnet associations.
+So we can see all our different subnets
+that are associated with this route table.
+And if you wanna click into subnets,
+this is quite an important exam topic.
+You can see that we've got six different subnets
+for this region.
+If we actually select one of the subnets,
+we'll be able to see the availability zone.
+So in here you can see that this is US East one E.
+If I then click into another one,
+I can see it's US East one B.
+And actually, it's much easier to see it over here,
+but you can see our availability zone.
+So we've got one E, one B, one A, one F,
+one D, and one C.
+So each subnet
+is specifically associated to an availability zone.
+And this can be a really important exam topic that comes up.
+So you must always remember
+that one subnet equals one availability zone.
+We subnet cannot span availability zones.
+So let's go ahead and go back to our VPC dashboard.
+And what we're gonna do
+is we're gonna go ahead and hit create VPC.
+Now in here we've got two options.
+We've got VPC only and VPC and more.
+So if we do VPC only,
+we can see that this area disappears.
+If we do VPC and more,
+what it basically does is it creates a VPC,
+but then it also helps us
+to create our subnets and route tables.
+So you can do it all here.
+I want to do it manually
+just to show you how we're going to do it.
+So let's go ahead and do VPC only.
+So I'm gonna give my VPC a name,
+I'm gonna call it a Cloud Guru then hyphen VPC.
+In here we've got our IPv4 CIDR address block.
+So we have an option of either doing manual input
+or using an IPAM allocated IPv4.
+If you wanna know what IPAM is,
+you can click on the little info button.
+So basically if there's an Amazon VPC IP address manager
+or IPAM-IPv4 address pool available in this region,
+then you can get a CIDR from an IPAM pool.
+We're not gonna do that,
+we're just gonna go ahead and do a manual input.
+Now in here,
+I can just put in my CIDR address range.
+You can see by default it's 10.0.0.0/24.
+What I'm gonna do is I'm gonna go 10.0.0.0
+and then forward slash
+and let's just do a 10
+and scroll all the way down and try and create our VPC.
+Now here you can see
+that it's saying that the block sizes
+must be between a /16 and a /28.
+So that is actually a quite a popular exam question
+that can come up sometimes in the Solutions Architect exam,
+but definitely in the Networking specialty.
+So what we're gonna do is we're just gonna change this over
+to a /16.
+We're not gonna use an IPv6 CIDR address block.
+And here we've got our tenancy.
+So we've got default or dedicated.
+So I mentioned that before.
+Default just means it's gonna be our default tenancy,
+dedicated where it's on dedicated infrastructure.
+So it's gonna cost us a lot of money.
+So we're just gonna use default tenancy.
+And when in here you could add your tags such as employee ID
+or you know, which section of the business owns this VPC,
+I'm not gonna do that.
+Let's go ahead and create our VPC.
+So you can see our VPC has been created.
+We can see that it's created a route table
+and a network ACL by default.
+You can see in here our CIDR address block.
+So it's 10.0.0.0/16
+and it's created at basically instantaneously.
+Now, very popular exam topic
+is what is automatically created when you create a VPC.
+So we've covered off route tables and our network ACL.
+If we go over here
+and we just go down to our security groups under security,
+you'll be able to see we've got some launch wizards,
+our web DMZ
+this is from our previous lectures
+that we've done earlier on in the course.
+But if we go ahead and just scroll over,
+we'll be able
+to see under VPC ID,
+we've got this unique ID.
+So this is the VPC that we've just created.
+So when you create a VPC,
+by default, you're creating a network ACL,
+A route table,
+and then you are also creating a security group.
+So those are the three things
+that are created by default when you create a VPC.
+So let's go ahead and have a look at our subnets.
+And you can see in here,
+these are all the subnets for our default VPC.
+It's not for our VPC
+that we just created called our A Cloud Guru-VPC.
+So we've got no subnets set up inside our VPC.
+So let's go ahead
+and create some subnets for our custom VPC.
+So I'm gonna click on subnets.
+I'm gonna go ahead and hit create subnet.
+And here we select our VPC.
+So we're gonna be using the A Cloud Guru-VPC
+that we just created.
+And in here we get to name our subnets.
+Now what I like to do
+is basically have a good naming convention.
+So I'll show you what I always like to do.
+So we're gonna select US East one A
+as our availability zone.
+So I'm gonna give my subnet a name,
+so I'm gonna call it 10.0.1.0
+then forward slash and then 24.
+And then what I'm gonna do
+is I'm going to put in the availability zone.
+So this is US and then East and then one A.
+So that is the name of my subnet.
+And this way I can always tell
+what the CIDR address range is
+and then what availability zone it is.
+It's good practice to get into.
+So in here we enter in the actual CIDR address range.
+So 10.0 then .1.0 and forward slash 24.
+And in here we can add our tags.
+I'm not gonna add any tags,
+I'm just gonna leave it as default.
+And we are gonna go ahead and create our subnet.
+We can now see that subnet has been created
+and it's in the A Cloud Guru-VPC.
+So if I click on my subnet ID,
+I'll be able to bring up all the details around my subnets
+and have a look here.
+We've got available IP addresses 251.
+Now if we go back to our website
+that we were using in the previous lecture,
+and if we type in that address range,
+so 10.0.1.0 and then this was at forward slash 24,
+you'll notice
+that it's says that there's 256 available IP addresses,
+but in the VPC wizard it says there's only 251.
+Now if we actually go to the AWS documentation
+and you scroll down,
+and I'll leave a link to this in the Resources section,
+you'll see here it talks about the IP reservations.
+So the reason we're missing five
+is that AWS reserve the first four IP addresses
+and then the last IP address in each subnet CIDR block.
+So the first one that they reserve
+is the network address so .0
+and then they reserve the .1
+for the AWS VPC router.
+And then they are reserve .2,
+this is reserved by AWS
+and it basically, it's the IP address of the DNS server.
+And then they actually reserve .3 for future use.
+So they don't actually use it,
+but they reserve it just in case they need
+an extra IP address.
+And then the 255 is the network broadcast address.
+So they don't support broadcast in a VPC,
+therefore they reserve this address.
+So you're always going to lose five IP addresses
+from a traditional like /24 network.
+So that can be a popular exam question.
+It used to be in the Solutions Architect associate exam.
+I don't know if it still is,
+but it certainly is a question
+that will come up in Network specialty as well.
+So just bear that in mind
+when you are sizing your VPCs.
+Okay, so now I'm gonna go back and create my second subnet.
+So just click on subnets in here.
+I'm gonna sort by VPC
+so we can see our public subnet up there.
+I'm just gonna copy this into my clipboard
+to save me a little bit of time.
+And then what I'm gonna do is go ahead
+and hit create subnet.
+So we're gonna create our subnet into our A Cloud Guru-VPC.
+I'm gonna paste this in here,
+but I'm gonna change this to a two
+and I'm gonna go ahead and change this to a B.
+With our availability zone,
+we're just gonna go in and select US East one B,
+and then I'm gonna type in my CIDR address range.
+So it is 10.0.2.0 and then slash 24.
+And then I'm not going to add any tags.
+So we're gonna go ahead and hit create subnet,
+and that has now created our subnet.
+Okay, so let's review what we've done so far.
+So we went into US East one
+and we provisioned a VPC
+and we gave it a CIDR address range of 10.0.0.0/16.
+As soon as we created that VPC,
+it created a route table,
+a network ACL, and a security group.
+And then we went in and we created two subnets,
+a public subnet and a private subnet.
+And really, we've actually just given them IP addresses.
+We haven't made either public or private yet.
+So in the next lecture,
+what we're going to do
+is we are going to assign an internet gateway.
+We're gonna add some more route tables, network ACLs,
+and we're going to move some security groups
+so that they're specifically within public subnets
+and private subnets.
+And then we'll have a fully working custom VPC
+with instances in both public and private subnets.
+So in terms of what we've learned so far,
+just onto my exam tips,
+just think of a VPC as a logical data center in AWS.
+It consists of internet gateways
+or virtual private gateways, route tables,
+network access control lists, subnets and security groups.
+And one subnet is always anchored to one availability zone.
+You can't have a subnet
+that spans multiple availability zones.
+So if you've got the time,
+please come and join me in the next lecture.
+Thank you.

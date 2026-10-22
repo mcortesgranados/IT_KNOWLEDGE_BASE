@@ -1,0 +1,66 @@
+Hello Cloud Gurus
+and welcome to this lecture. In this lecture,
+we're going to look
+at how we can simplify our networks using transit gateway.
+So I'm going to show you a network architecture diagram
+of how networks can suddenly get very, very complex
+when you add more and more components to it. I'm
+going to show you how transit gateway solves that problem
+and basically how you can simplify your network
+topology, look at some facts about transit gateway,
+and then we'll move on to my exam tips.
+So let's have a look
+at a typical network architecture diagram.
+So you might just start out small and you have your own VPC.
+And then you want to basically expand a little bit
+and have separate VPCs
+and open your main VPC up to those separate VPCs.
+So you create 2 VPC peering connections
+but then you might want to add in more VPCs
+and VPN connections, AWS direct connect connections,
+and you can see that it all starts getting very complicated.
+So that's what transit gateway was designed to solve.
+It basically connects VPCs
+and on-premise networks using a central hub.
+And this basically simplifies your network
+and puts an end to complex peering relationship.
+So it acts as a cloud router
+and each new connection is only made once.
+So we can take that very complicated network diagram
+and we can simplify it.
+So by creating a AWS Transit Gateway
+we can connect our VPCs to transit gateway.
+We only need to do that connection once
+and then it's the same
+with direct connect and our VPN connections
+and then everything that's connected into transit gateway
+will be able to talk to each other directly.
+So it's a way of really simplifying your network topology.
+So in terms of transit gateway facts
+it allows you to have transitive peering between thousands
+of VPCs as well as on-premise data centers.
+It works on a hub and spoke model, similar to VPC peering,
+and it works on a regional basis
+but you can have it across multiple regions
+and you can use it across multiple AWS accounts using RAM,
+which is resource access manager.
+So onto my exam tips about transit gateway.
+You can use route tables to limit how VPCs talk to one
+another. Transit gateway works with direct connect
+as well as VPN connections.
+And it also supports IP multicast,
+which is not supported by any other AWS service.
+If you want to know what that is,
+basically it allows a host to send a single packet
+to thousands of hosts across a routed network.
+So like for example, the internet,
+and it's mostly just used for audio,
+so like radio as well as a video distributions.
+So if you see transit gateway, and
+if you see any scenario-based questions where it's talking
+about simplifying your network topology,
+I want you to think of transit gateway.
+So that is it for this lecture
+Everyone, if you have any questions, please let me know
+if not, feel free to move on to the next lecture.
+Thank you.

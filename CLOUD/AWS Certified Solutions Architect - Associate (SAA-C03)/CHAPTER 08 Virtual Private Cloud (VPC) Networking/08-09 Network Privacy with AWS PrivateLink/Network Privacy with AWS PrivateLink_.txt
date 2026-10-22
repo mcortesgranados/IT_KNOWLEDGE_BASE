@@ -1,0 +1,70 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture,
+we're going to look at network privacy with AWS PrivateLink.
+So we're going to look at opening up our services
+in a VPC to another VPC.
+I realize that we covered that off VPC peering,
+but we'll just remind you of that.
+Then we'll look
+at how we can share applications across VPCs.
+And then we'll look at how we can use PrivateLink,
+and then we'll go onto my exam tips.
+So as we learn in the last lesson,
+you can open up your services in a VPC to another VPC.
+And you can do this in really two ways.
+You can do this by opening the VPC up to the internet
+or you can use VPC peering.
+So it's possible to basically have your resources
+publicly accessible or use VPC peering
+to share your services in a VPC to another VPC.
+So to open our applications up to other VPCs,
+we can either open the VPC up to the internet,
+but this comes with different security considerations.
+So everything in the public subnet is going to be public,
+and it also means there's a lot more to manage
+because we have to manage internet gateways,
+route tables, et cetera, et cetera.
+We can also use VPC peering,
+and you have to create and manage
+many different peering relationships,
+especially if you think about scaling this VPC.
+Let's say you wanted to scale it up
+so that you were sharing the resources in this VPC
+to 100 different VPCs.
+Yes, you can use VPC peering, but you're gonna have to go in
+and create and manage many different peering relationships.
+And don't forget the whole network will be accessible,
+and this wouldn't be good if you have multiple applications
+within your VPC.
+So the best way to expose a service VPC to tens, hundreds,
+or thousands of customers is by using PrivateLink,
+and that's what it was designed to do.
+It doesn't require VPC peering, there's no route tables,
+NAT gateways, internet gateways, et cetera.
+But what it does is it requires network load balancer
+on the service VPC,
+and then you need an Elastic Network Interface, or ENI,
+on the customer VPC.
+So this is a way of scaling up.
+Basically, it's kind of like VPC peering,
+except you're doing it at scale
+and you're not actually creating a peering relationship.
+You are using PrivateLink.
+So it's just a way to open up your VPC
+to hundreds or thousands of customer VPCs.
+So that's all it is.
+So going into the exam, just remember what PrivateLink is.
+If you see a question asking about peering VPCs
+to tens, hundreds, or thousands of customers' VPCs,
+then I want you to think of AWS PrivateLink.
+Remember, it doesn't require VPC peering.
+There's no route tables, NAT gateways,
+or internet gateways, et cetera,
+but it does require a network load balancer
+in the service VPC
+and an elastic network interface on the customer VPC.
+So that's it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

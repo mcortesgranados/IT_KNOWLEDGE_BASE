@@ -1,0 +1,90 @@
+Okay, hello Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at VPC peering.
+So we're going to look at why we might need multiple VPCs,
+we'll look at VPC peering and how it works,
+we'll talk about transitive peering.
+I'll give you a demo of how to do this in the consults,
+super, super easy.
+And then we will move on to my exam tips.
+So sometimes you might have to have multiple VPCs
+for different environments,
+and it may be necessary to connect these VPCs to each other.
+So we could have our production web VPC,
+so this is our external website,
+so it's maybe an online store.
+And then we have our content VPC,
+this is where we upload all our product information to.
+And then we have our internal intranet
+that we use to do all the backend stuff for sales.
+And then it might be necessary for all of these
+three different VPCs to be able to talk to each other.
+And that's all VPC peering is,
+it allows you to connect one VPC with another
+via a direct network route using private IP addresses.
+And instances behave as if they were
+on the same private network.
+And you can peer VPCs with other AWS accounts
+as well as other VPCs in the same account.
+And peering is done in a star configuration,
+so you always have one central VPC with four others,
+you can't do transitive peering.
+And if that doesn't make sense,
+I'll show you on the next slide.
+The other thing you just need to note
+is you can peer between regions.
+So this is what I was trying to explain before
+with transitive peering.
+So if you've got VPC A,
+it's connected to VPC B, C, D, and E.
+But let's say we need VPC B to be able to talk to VPC C.
+It can't do it through VPC A,
+we need to establish a direct peering connection
+between VPC B and VPC C.
+So that's all transitive peering is,
+we basically can't let VPC B talk to VPC C through VPC A.
+Transitive peering is not supported with VPCs,
+so you just need to create a new connection
+between VPC B and VPC C.
+So let's go ahead and have a look at
+how we can create a peering connection in the AWS console.
+Okay, so here I am in the AWS console, I'm in VPC.
+All I need to do is go ahead
+and click on Peering connections.
+You can see we don't have any peering connections
+created at this stage.
+So let's go ahead and create a peering connection,
+give it a name, we'll call it MyPeer.
+And here we've got our VPC requester,
+so in here we're gonna do our custom VPC.
+Note our CIDR address range in here, so 10.0.0.0/16.
+And then you can say I wanna peer it
+with my account or another account
+in this region or another region.
+I'm gonna do it with my account in this region,
+and then we're gonna do it to our default VPC.
+Now here you can see the CIDR address range is different.
+If they had the same CIDR address range,
+like identical ones, then it wouldn't work.
+So we'll go ahead and hit Create peering connection.
+That has now created peering connection pending acceptance.
+So it says you can accept or reject this peering connection
+using the Actions menu,
+and then it gives you a period of time.
+So if you just go in and hit Actions
+and then hit Accept request,
+and then that will go ahead and accept the request.
+And that is it, we have just gone ahead
+and created our peering connection.
+So let's go on to my exam tip.
+So on to my exam tips, just remember what VPC peering is.
+It allows you to connect one VPC with another
+via a direct network route using private IP addresses.
+Transitive peering is not supported,
+it must always be in a hub-and-spoke model.
+You can peer between regions
+and you can't have overlapping CIDR address ranges.
+So that's it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

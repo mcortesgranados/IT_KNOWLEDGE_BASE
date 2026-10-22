@@ -1,0 +1,138 @@
+Okay.
+Hello cloud gurus and welcome to this lecture.
+In this lecture, we're going to look at
+how we can use NAT gateways to get internet access
+for our instances that are in a private subnet.
+So start with what is a NAT gateway.
+We'll then have a look at a network diagram of how it works.
+We'll then go onto my NAT gateway tips
+and then I'll show you how to set it up in a console
+and we'll move on to my exam tips.
+So what is a NAT gateway?
+Well, you can use network address translation
+or NAT gateways to enable instances in a private subnet
+to connect to the internet or other AWS services
+while preventing the internet from initiating
+a connection with those instances.
+And that's exactly what we wanna do with our database server
+that is in the private subnet from the last lecture.
+So this is a summary of our environment
+that we created in the last lecture.
+And let's have a look at what happens when an instance
+in our public subnet tries and does a yum update.
+Well, essentially it's sending traffic
+through the network ACL, through the route table.
+The route table has a route out to the internet
+and it points to the internet gateway
+and it can then get that update.
+Now when our instance in the private subnet runs yum update,
+it's going out through the network ACL,
+and then it hits the route table,
+but there's no route out to the public internet.
+So that's why it can't speak to anything on the internet.
+But likewise, the internet can't go in
+and connect directly to our instances in our private subnet.
+So what is the solution?
+Well, the solution is to basically provision a NAT gateway
+and we provision that NAT gateway in the public subnet.
+And remember, one subnet always equals
+one availability zone.
+You can't have subnets that span across availability zones.
+So the NAT gateway is going to be
+in the same availability zone as your public subnet.
+And the NAT gateway is basically redundant.
+It's more than one EC2 instance.
+It's basically a collection of EC2 instances
+that Amazon basically handle for you behind the scenes.
+So you can't log into the NAT gateway, for example.
+The NAT gateway acts as a means for internet traffic
+to go out through the NAT gateway, to the network ACL,
+to the route table, which then goes to the internet gateway.
+So it's a way we can get our instances
+in our private subnets internet access without the internet
+being able to directly access our instances
+in our private subnet.
+So let's have a look at some facts
+to remember about NAT gateways.
+So like I said, it's redundant inside the availability zone.
+They start at five gigabits per second throughput,
+and they scale up to 45 gigabits per second.
+You don't need to patch NAT gateways,
+Amazon handle it all for you.
+And NAT gateways are not associated with security groups.
+You don't need to worry about opening up ports
+on your security group to a NAT gateway
+and they're automatically assigned a public IP address.
+So that's not something you have to worry about either.
+So let's go ahead and provision our NAT gateway.
+Okay, so just a reminder, in the last lecture,
+we tried to run a yum update
+and then it was just timing out.
+That's 'cause there's no route out to the internet.
+So let's go over to the AWS console.
+So I'm back in the AWS console and I'm in the VPC section.
+So what we want is we want a NAT gateway
+and you can see NAT gateway down here.
+and you can see that we don't have any NAT gateways.
+So let's go ahead and create a NAT gateway
+and we can just call this MyNG, my NAT gateway.
+And here we select a subnet and we're going to use,
+it has to go into our public subnet
+'cause we need to route out to the internet.
+And this is why that naming convention can be so useful.
+I can see here that it's my US East 1a, 10.0.1.0.
+So that's my public subnet.
+And then in here the connectivity type is public
+and we're going to have to allocate an elastic IP address
+so it needs an elastic IP address in order for it to work.
+And then we're gonna go ahead and create our NAT gateway.
+Now NAT gateways can actually take a fair bit of time
+to create sometimes five or 10 minutes.
+So I'm just gonna pause the video
+and wait for this NAT gateway to come up.
+And so now what we wanna do is go over to our root tables.
+So we can see in here our different root tables.
+And if we sort by VPC, we've got our main root table
+and then our internet root table.
+So any new subnets we create will automatically
+be associated to our main root table.
+And so what we want is to basically create a subnet
+and it automatically have a root out to the internet
+to do yum updates, for example.
+But we don't want it to be public by default.
+So essentially what we want to do is
+we want to go into our main route table.
+And in here we're gonna go ahead
+and we're going to edit our routes.
+And we're gonna say, hey, if you need a route out
+to the internet, then the target's going
+to be our NAT gateway and we're gonna use this NAT gateway.
+We're gonna go ahead and hit save.
+And that has now saved.
+So let's go over to our EC2 instance.
+So now I'm here in my EC2 instance,
+and if I just type in yum update and then -y,
+and look at that, it is running and doing an update.
+So you can see we've got 39 megabits per second,
+et cetera, et cetera.
+And there's nothing to do.
+So it didn't need any updates,
+but we were able to get a connection out to the internet.
+So let's go ahead and review what we've learned.
+So onto my exam tips.
+Just remember that NAT gateways are redundant
+inside the availability zone.
+They start at five gigabits per second
+and is currently scaled to 45 gigabits per second.
+You don't need to go in and run yum updates on NAT gateways.
+You don't need to patch them.
+Amazon do it for you.
+And they're not associated with any security groups.
+So we didn't have to go in and open up
+any ports on our security groups.
+We didn't have to attach them to a security group.
+And it's automatically assigned
+a public IP address when we provision it.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.
