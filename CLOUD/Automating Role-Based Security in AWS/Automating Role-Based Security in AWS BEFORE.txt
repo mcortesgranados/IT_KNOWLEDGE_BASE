@@ -1,0 +1,67 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+06:03
+
+Course Introduction
+02:00
+Before You Begin
+04:03
+CHAPTER 2
+
+Role Management for AWS Services
+25:46
+
+The Power of AWS Service Roles
+03:25
+Working with AWS Service Roles
+08:21
+Demo: Implementing AWS Service Roles
+07:06
+Service Roles Wrap-Up
+06:54
+CHAPTER 3
+
+Creating Roles Using AWS Tools
+32:13
+
+AWS Tools and Role Automation
+04:07
+Automating AWS Role Creation
+07:37
+Demo: Creating Roles with AWS CloudFormation
+13:08
+
+Creating Roles Wrap-Up
+07:21
+CHAPTER 4
+
+Bringing It All Together
+1:34:31
+
+Globomantics: Role Automation Challenge
+05:54
+Scenario One: Automating AWS Role Management
+05:00
+HANDS-ON LAB
+Working with AWS Roles Using AWS CloudFormation
+45:00
+Scenario Two: Automating Role Management
+04:05
+HANDS-ON LAB
+Working with AWS Roles Using AWS CloudShell
+30:00
+Role Automation Challenge Met
+04:32
+CHAPTER 5
+
+Conclusion
+23:20
+
+Course Summary
+06:51
+Conclusion and What's Next
+01:29
+QUIZ
+Automating Role-Based Security in AWS
