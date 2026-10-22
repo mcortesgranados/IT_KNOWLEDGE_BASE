@@ -1,0 +1,64 @@
+Okay, hello Gurus,
+In this lesson we're gonna talk about using AWS Budgets.
+In this very short lesson,
+we're gonna cover what the service is,
+we'll talk about the different types of budgets you can set,
+and we'll have some exam tips.
+AWS Budgets, what is it?
+Well, this is a service
+that allows organizations and accounts
+to easily plan and then set expectations around cloud costs.
+Using this service, you can track the ongoing spend
+within your accounts,
+and then you can even create alerts
+to actually let users know
+when they're close to exceeding the allotted spend
+that you set.
+Now within the service,
+there are different types of budgets.
+There's a cost budget,
+and this is where you plan
+how much you actually want to spend on services.
+A usage budget is going to help you plan
+how much you want to use on one or many services.
+The next is a reserved instance utilization budget.
+So this is gonna deal with the utilization threshold.
+You're essentially seeing if your reserved instances
+are going to be unused or are they being underutilized?
+An RI coverage budget talks about the coverage threshold,
+so how much of instance usage
+is actually covered by a specific reservation.
+And then the next one deals with savings plans utilization.
+Similar to the RI utilization budget,
+this is going to see if your savings plans
+are unused or underutilized.
+And then there's a savings plans coverage budget.
+So just like it's predecessor, the RI coverage,
+this deals with coverage thresholds specific
+to your savings plans.
+Now, you should be familiar with these at a high level,
+but the big thing is to understand what AWS Budgets offers.
+And with that, let's have some exam tips.
+Now, this likely won't be on the exam in depth,
+but you do need to know that you can create budgets.
+Budgets within this service are going to be
+the absolute best way to let your users know
+when they're getting close
+to overspending in their accounts.
+You can actually leverage Cost Explorer with this
+in order to create even better, more fine-grained budgets.
+Now, of course, it's always best to be proactive
+because once your money is spent, that money is gone.
+So be sure you're setting appropriate budget alerts.
+Do your best to remember
+the six different types of budgets that we just covered.
+Again, you likely won't need to know them too in depth,
+but you do need to know they're available.
+And lastly, you can actually use tags
+to create specific budgets,
+so you can leverage the tag values to create budgets
+around those tag values and set isolated spending limits.
+Okay, that's gonna do it for this short lesson
+on AWS Budgets.
+Let's end things here
+and then we'll pick back up with the next lessons.

@@ -1,0 +1,107 @@
+Hello Cloud Gurus, and welcome back. In this lesson,
+we're going to take a look
+at how do we deal with active directory inside of AWS.
+Now that means we're going to have to define
+what is the Directory Service,
+what are the different types of Directory Service
+that we're going to encounter, and when do we use each one?
+And then we're going to go ahead
+and wrap this all up with some exam tips.
+So those will be a little bit of a shorter lesson.
+So let's go ahead and dive right on in.
+So what is the Directory Service?
+Well, AWS Directory Service,
+it's a fully managed version of active directory.
+So if you've ever worked with active directory before,
+you've basically worked with the Directory Service.
+Effectively, what it allows you to do
+is run AD inside of AWS
+without having to do all that heavy lifting setup
+that normally goes with running active directory on-prem.
+Now that's great to know at a high level,
+but we need to take a look
+at the different kinds of Directory Service
+that we might see.
+So, each type that we're going to talk about here
+has a particular use case
+that you're going to need to be aware of.
+The first is called Managed Microsoft AD.
+You can probably guess by the name,
+this is an entire active directory suite.
+It's managed, it's built by AWS,
+it gives you all of the AD tools that you know and love,
+but without the heavy lifting
+of having to set it up yourself.
+So this is great if you're building out
+a complete active directory suite inside of AWS,
+and you don't want to do it anywhere else,
+you don't want to have it on-prem.
+Now, a lot of times--especially in the exam--
+you're going to see situations presented to you
+where maybe you want to leave AD in a physical data center
+in the physical office,
+but you need to have something inside of the cloud,
+something in AWS.
+This is where AD Connector comes into play.
+And what it does, is it's going to create a tunnel
+between your AWS environment and your on-prem AD.
+Now that basically means that you get an endpoint
+that you can authenticate against inside of AWS
+while leaving all of your actual users in data on-prem.
+And the third type it's called Simple AD.
+Now has the name makes it sound, this one's pretty simple.
+It doesn't have all of the standard AD architecture
+that you love, but it's got the basics.
+It's effectively just an authentication service
+that's up and running inside of AWS
+and it's actually powered
+by Linux Samba Active Directory compatible server.
+That's great to know.
+The exam itself is going to focus primarily
+on Managed Microsoft AD and AD Connector,
+but it can't hurt to know
+that there is that third type of Simple AD
+if you don't want all of the bells and whistles
+that you normally get from the full suite.
+So this lesson was rather quick.
+We just need to know the Directory Service
+at a very high level.
+And in particular, the use cases
+behind the Managed Microsoft AD and AD connector.
+You're going to have to understand that Managed Microsoft AD
+is for when we want to migrate everything into AWS.
+And AD Connector is for when we want to leave that on-prem
+or somewhere else
+and don't want to move that into the cloud just yet.
+You don't have to know all of the steps
+around group policies and password expirations,
+that's an entire other sort of exam.
+And that knowledge is not going to be particularly useful
+on this test.
+So a few more tips here for us before we call it quits.
+Know the types;
+you have to know manage Microsoft AD, AD Connector
+and Simple AD and know what they each do.
+It is a fully managed service.
+So when possible, use the Directory Service
+over just running AD on an EC2 instance,
+and remember, the exam always favors using managed services
+over unmanaged services.
+It's okay to leave AD on-prem, it happens.
+Some of the scenarios you might see,
+might talk about a customer not being comfortable,
+moving their user accounts into the cloud just yet
+and that's okay.
+That's where the AD Connector comes into play.
+So it's one of the few tools on the exam
+that you might leave during that lift and shift
+sort of question.
+And my final tip here for us,
+in order to prevent car door dings,
+make sure you park very far away
+from anyone else in the parking lot.
+In fact, sometimes I actually just walk to where I'm going
+and leave my car parked at home.
+Alright folks, thanks for taking that quick look
+at the Directory Service with me
+and I can't wait to see you in our next lesson.

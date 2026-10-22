@@ -1,0 +1,107 @@
+All right, Cloud Gurus, welcome to this lesson,
+"Standardizing Deployments using AWS Service Catalog
+and AWS Proton."
+Let's have a quick rundown
+on what we're going to learn throughout this lesson.
+We're going to take a look
+at the AWS Service Catalog service.
+We're going to talk about the benefits of using it.
+We'll look at what AWS Proton is,
+and then we'll have some exam tips with some takeaways.
+So what is AWS Service Catalog?
+Well, it's a service that allows organizations
+to create and then manage catalogs of IT services
+that are preapproved for deployment in AWS.
+They're multipurpose catalogs.
+They can include everything from virtual machine images
+to servers themselves, different software or databases,
+and even preconfigured components
+for multitier applications.
+Another big benefit is that it's a centralized service.
+So using Organizations,
+you can centrally manage all of these IT services
+and then help maintain compliance.
+What this does is it helps organizations
+maintain a consistent governance throughout the org.
+Now, end users can use this,
+and they are allowed to easily deploy
+preapproved catalog items
+within the organization itself.
+Now, all the end user is doing
+when they're deploying these preapproved services
+is they're provisioning CloudFormation templates.
+That's all catalog templates are,
+is just written CloudFormation templates
+uploaded as a catalog item for easy deployment.
+So what are some benefits of using this service?
+Well, the first one that sticks out
+is it allows you to standardize.
+So you can restrict launching products
+to a specific list of preapproved solutions
+throughout an entire organization.
+It also grants users self-service capabilities.
+So end users can actually browse your products
+and then deploy those approved services on their own.
+So in that aspect, it decentralizes the overhead
+of actually deploying everything.
+It also comes with fine-grained access control.
+So after portfolios and catalogs are assembled,
+you can add constraints and resource tags
+that get added at the provisioning,
+and then you can grant access to those products
+using AWS IAM.
+And then the last tidbit here is versioning.
+The cool thing about this
+is your catalogs can be updated to newer versions,
+and you can propagate those changes automatically
+to all of your end users.
+All right, so now that we've looked at Service Catalog,
+let's look at AWS Proton.
+In short, it's a service that creates and manages
+infrastructure and deployment tooling for users,
+as well as their serverless
+and container-based applications.
+So the first big thing we want to point out
+is that it automates Infrastructure as Code provisioning
+and the deployment process itself.
+You define standardized infrastructure
+for your serverless and container-based applications.
+After you do that,
+you use templates to define
+and then manage application stacks
+that contain all of the components within the application.
+Fourthly, AWS Proton will automatically
+provision the resources in the stack,
+but it also configures the CI/CD pipelines,
+and it will deploy the code for you.
+So it really is an all-encompassing tool and service
+for deployments of your applications.
+Now, the cool thing here is that it supports,
+of course, AWS CloudFormation,
+but it also supports Terraform providers as well.
+Terraform is obviously a super popular
+Infrastructure as Code provider,
+and the fact that they've built in support for this
+is amazing.
+Okay, so let's go ahead and wrap things up
+with some exam tips and some important takeaways.
+Remember, Service Catalog is just that:
+It provides catalogs of preapproved services
+written as CloudFormation templates.
+And what's nice about it
+is it allows your end users in your org
+to deploy the approved services
+into their own accounts.
+So it frees up that operational overhead.
+Now, AWS Proton offers full Infrastructure
+as Code provisioning and deployment
+for serverless and container-based architectures.
+And this service, as well, empowers the end users--
+in this case, developers.
+They're able to move faster with a self-service tool
+to provision their infrastructure
+and manage the code deployments themselves.
+All right, that's going to go ahead and do it
+for this lesson.
+Let's end here, and when you're ready to pick back up,
+we'll see you in the next one.

@@ -1,0 +1,113 @@
+Welcome back, gurus.
+In this lesson, we're going to talk
+about sharing resources using AWS RAM.
+In this lesson, we're going to cover
+a few different topics.
+We'll discuss what AWS Resource Access Manager actually is,
+we'll talk about the different resources
+that could be shared
+and the popular ones that get shared,
+we'll discuss owners and participants
+within some of those shared resources,
+and then we'll wrap things up with some exam tips.
+So what is AWS Resource Access Manager?
+Well, this is a service offered by AWS
+that facilitates the sharing of your resources
+with other accounts.
+Now, this service works by allowing you
+to share resources even if those other accounts
+are outside your organization.
+With RAM, you can seamlessly share your AWS resources,
+which helps eliminate the need to create duplicates
+of those resources across different accounts.
+This service is essentially simplifying
+resource sharing and management
+while also improving resource utilization
+and access control across accounts.
+Now, here is a quick list of resources
+that can be shared using RAM,
+and these are popular to come up on this exam.
+Transit gateways can be shared
+in order to enable simplified network connectivity
+across accounts within an org.
+You can even share VPC subnets,
+which allows for enhancing the flexibility
+of network architectures,
+and it enables secure communications
+between resources between accounts.
+You can share license manager resources,
+which help you manage software license effectively.
+You can share Route 53 Resolver rules and endpoints,
+which is going to further help manage
+DNS routing and resolution
+across your different accounts within your org.
+Another one you can share are dedicated hosts.
+These can be shared to efficiently allocate
+and then manage physical hosts between your accounts.
+And, really, these listed here are just a few examples.
+Now, they are very popular to come up on the exam,
+and that's why we picked them out,
+but do understand that RAM supports sharing
+of various other resources
+and it allows your org to optimize resource utilization.
+Now, let's go ahead
+and break down owners and participants.
+Now, this is specific to sharing VPC resources.
+Owners create and manage the actual resources
+that are intended to be shared.
+These owners are responsible
+for setting up and configuring the resource.
+You should know that owners cannot delete,
+nor can they modify resources
+that get deployed by the participant accounts
+in these shared resources.
+The owners strictly maintain control
+over the configuration and management.
+Now, on the other side of things,
+participant accounts are the recipients
+of the shared resources.
+They can actually provision services like compute,
+such as EC2, into the shared VPC subnets
+that are created and managed by the owners.
+It is essential to note
+that participant accounts cannot modify
+or delete these shared resources.
+In other words, they can't delete the subnets
+or the VPCs that get shared.
+They can strictly only use the resources.
+In other words, they don't have the ability
+to change the configuration
+or the settings of the subnets, et cetera.
+This separation of roles ensures
+that ownership and control of the shared resources
+is always maintained by the owners,
+while the participants can actually utilize them
+without being able to alter them.
+Now, let's go ahead and move into the last part here
+where we'll have some exam tips regarding AWS RAM.
+Remember, RAM simplifies resource sharing
+across different accounts within an organization.
+It eliminates the need
+to recreate resources for each account.
+Now, RAM by itself is a free service to use,
+but do remember you're paying for the resources
+that you're sharing,
+so think things like Transit Gateway, et cetera.
+Keep cost considerations in mind when using this.
+RAM also enables organizations
+to efficiently share components like VPC subnets,
+and it allows you to reduce redundancy
+and resource duplication.
+Understand when it's more appropriate
+to share VPC resources like subnets, et cetera,
+as opposed to using VPC peering.
+Both methods have their own specific use cases.
+Also, be aware that participant accounts
+can use the shared resources,
+but they cannot modify or delete them.
+Understanding these limitations is essential
+for effective resource sharing in the accounts.
+Now, that's gonna do it for AWS RAM.
+Let's end things here.
+We'll take a break, and when you're ready,
+I'll see you in the next lesson.

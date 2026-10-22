@@ -1,0 +1,257 @@
+Hello again.
+In this lesson we're gonna look
+at inventory management using AWS Config.
+In this lesson, we're going to cover several topics.
+We're gonna touch on what Config is.
+We'll discuss how it's used
+to monitor the state of your architecture.
+We'll discuss Config rules and remediations.
+We'll look at alerts and events.
+We'll have a quick in-Console demo,
+and then we'll wrap things up with some exam tips.
+All right, what is AWS Config?
+AWS Config is a valuable service provided by AWS
+that serves as an inventory management
+and control tool for your infrastructure.
+It enables you to maintain a historical record
+of the configuration changes
+that are made to your resources over a period of time.
+This allows you to gain visibility into the evolution
+and history of your resources.
+You are able to define
+and create rules within Config
+to ensure that your resources adhere
+to specific compliance and configuration requirements.
+Now, the service natively integrates with Amazon SNS,
+and it allows you to receive notifications
+and alerts when specific resource configurations change
+or do not comply with your defined rules.
+Now, a critical topic for the exam
+is that this service is configured on a per region basis.
+What this means is you must enable it independently
+in each region
+where you have resources that you need to record.
+And lastly, the service provides the capability
+to aggregate all of your configuration data
+and compliance information across multiple regions
+and even across multiple accounts.
+This allows you to really gain a view
+of your infrastructure's overall compliance
+and status at an entire organizational level.
+Moving on, let's discuss three key facts about using Config
+to monitor the state of your architectures.
+First, using this service allows you
+to easily discover the different architecture components
+that are being ran within your accounts.
+What's neat about this
+is that you can actually query based on resource type,
+based on tags,
+and even based on deletion of infrastructure resources.
+You can use what are known as rules
+that can be created to flag
+when something is actually going wrong
+compared to how you want your baseline infrastructure
+to actually be configured.
+Whenever one of these rules gets violated,
+you can actually have it alert a team via SNS.
+You can have it automatically remediated
+using SSM Automation documents,
+and you can even leverage Lambda functions
+to help perform the automation.
+And the last point here,
+you can use this service
+to check the history of your environments.
+In other words, you can see when something changed
+and who actually made that change.
+Now, let's talk about Config rules in a bit more detail.
+AWS provides a set of predefined managed Config rules
+that cover common best practices
+and specific compliance checks.
+These rules are ready for you to use right away,
+and they help ensure your resources adhere
+to standard configurations based on AWS best practices.
+In addition to AWS-managed rules,
+you can create custom Config rules
+that are tailored to your specific requirements.
+These custom rules actually allow you to define
+and evaluate resource configurations according
+to your organization's unique standards.
+Config rules are evaluated either on a schedule,
+like daily, hourly, or weekly,
+or they can be based on a trigger.
+And a trigger is initiated by a configuration change event.
+What this means is that rules
+can be set to trigger evaluations
+whenever a resource's configuration changes,
+or on your own specific schedule.
+It's very flexible.
+An example of a change event could be something
+like someone changing AVPC security group's inbound rules.
+It is very, very important to understand:
+AWS Config is a monitoring and assessment tool.
+It is not preventative.
+What that means is it is only meant
+to provide visibility and alerting
+in to resource Config changes.
+It's used to detect non-compliance,
+and it can alert you for other deviations.
+However, it will not prevent configuration changes.
+Please understand this.
+And finally here, while AWS Config is a valuable service,
+it is not a free service.
+You are billed based on the number
+of configuration items you're recording
+and the number of rules that are enabled.
+Please keep that in mind.
+Now, moving on,
+let's talk about remediating Config findings.
+Remember that AWS Config enables automatic remediation
+of non-compliant configurations.
+You can use Systems Manager Automation Documents
+to be ran whenever a non-compliant resource is detected.
+The Automation Documents that get used
+can be either AWS-managed,
+or they can be custom documents created by you.
+AWS does provide a range of built-in Automation Documents
+to address common remediation tasks.
+For more complex
+or custom remediation tasks,
+you can create your own documents
+that also leverage Lambda functions.
+These Lambda functions can execute specific logic
+to correct your resource configurations.
+And in case an automatic remediation attempt fails,
+Config does provide the option to enable a retry.
+This ensures that the systems
+will continue to attempt remediation
+until that non-compliant configuration is corrected.
+Now, please keep all of this information in mind
+when you're having to choose automatic-remediation efforts
+for Config on the exam.
+Moving on, let's look at alerts and events.
+Now, this is a slight review, but it is important to know.
+AWS Config easily integrates with SNS topics
+to send notifications and alerts
+when configuration changes,
+or compliance state deviations get detected.
+You can configure your topics to deliver messages
+to different subscribers, of course,
+including things, like email addresses for operations teams,
+maybe you need to send an SMS to someone on call,
+or you can even trigger other services
+to start remediation efforts.
+Config can also send events to EventBridge,
+and this allows you to route events to other services.
+With EventBridge, you can trigger actions based
+on the events generated by the Config service.
+For example, you can send events to SQS or Lambda
+to also automate responses
+to specific changes that are recorded.
+These integrations enable you to set up real-time alerting
+and event-driven automation
+in response to configuration changes
+and compliance status updates.
+Okay, let's do this.
+We're going to take a break from all of this information,
+we'll jump into the Console sandbox,
+and we're going to look at different Config rules
+that are available for us to use,
+as well as dig into
+some of the current statuses based on those rules.
+Okay, hello gurus.
+I'm in my Console sandbox environment,
+and what I'm going to do is navigate to AWS Config.
+Now, once this loads, we land on the dashboard.
+And one thing I do want to call out here
+is that this account, of course, is part of an organization.
+Now, in the organization,
+there's a delegated administrator account
+that's setting all of the different rules
+and all of the different enforcements.
+So because of that, all of this rule statuses
+and compliance statuses get aggregated
+and sent up to that delegated admin account,
+and that's where they can set other enforcements
+or let stuff go.
+So with that being said, we wanna look at the rules here,
+so I'll open up Rules.
+And you'll notice there are
+a ton of different rules available,
+notice all of the pages.
+Now for this, I'm just gonna explore this EC2 rule.
+What this is doing is it's looking for EBS encryption,
+being enabled by default for our EC2 instances.
+You'll notice it says this rule is non-compliant
+if encryption is not enabled.
+You'll also notice the trigger type.
+So this is set to periodic or otherwise on a schedule,
+and it's checking every 24 hours.
+Now if we look down here in the second section,
+there is remediation set in place.
+You'll notice that they're calling an Automation Document
+to actually turn on EBS encryption by default.
+So what's going on is it's gonna go ahead
+and enable encryption using a role that's set here,
+and it's gonna scan through all noncompliant resources
+and take care of that remediation effort for us.
+Now, if I jump down to the bottom here,
+you'll see right now there's no resources
+and scope that are noncompliant.
+So this is just an example of what a rule looks like.
+Now, if we want, I can actually look up
+this Automation Document.
+So if I copy this, let's go to Systems Manager,
+I'll navigate to Documents,
+and in Documents, I'm going to search All,
+and I'm gonna search for
+this last portion here, EnableEbsEncryptionByDefault.
+Now, the reason I'm not searching
+the entire document name
+is because there is a character limit,
+so if I searched the whole thing,
+it would come up with an error.
+So instead, I'm gonna search for this specifically.
+We see Amazon owns it, so it's an Amazon-owned document,
+and let's look at this really quickly before we leave.
+You'll notice like the input was in the rule,
+we're passing the ARN of the role
+that this document will assume,
+and let's just quickly look at the content.
+So this is just a nice little example to look at.
+It's modifying the account,
+and it's saying, "Hey, we want to enable EBS encryption
+by default for all future instances."
+Okay, that's gonna do it for this look at a Config rule
+as well as an automation document.
+Let's go ahead and jump back in the presentation.
+Okay, welcome back.
+Let's wrap things up with some exam tips.
+AWS Config is a valuable tool
+for assessing and monitoring standards
+and compliance of your architectures.
+It helps you ensure that your resources adhere
+to specific requirements.
+It can be used to track and provide information
+about resources that were previously deleted.
+This historical data can be valuable
+for auditing and compliance purposes.
+You can use Automation documents within Systems Manager,
+as well as Lambda functions
+to enforce your standards and automate responses.
+Also remember, that Config allows you
+to aggregate results from multiple regions
+and even multiple accounts.
+This helps provide a centralized view of your configuration
+and compliance data across an org.
+You do need to know that Config is regional.
+What this means is that it operates independently
+in each region where it's enabled.
+Please remember that.
+And lastly, it's important to remember
+that Config is a monitoring and assessment tool.
+This service is not preventative.
+Please remember that.
+It only records and alerts on changes.
+Now, that's gonna do it on AWS Config.
+Let's go ahead and end things here,
+and then I will see you in the next lesson.

@@ -1,0 +1,185 @@
+Hello, Cloud Gurus.
+Welcome to this lesson:
+Enforcing Account Governance via AWS Control Tower.
+Throughout this lesson,
+we're going to cover a number of things.
+We'll talk about what Control Tower is,
+we'll look at features and terms
+that you should be familiar with,
+we'll explore what are called guardrails,
+we'll take a look at an example diagram,
+and then we'll wrap things up with some exam tips.
+So, first thing's first, what is this service?
+AWS Control Tower offers you a straightforward way
+to govern AWS multi-account environments.
+It's essentially an orchestration service
+that automates account creation
+and then helps you implement security controls
+using other AWS services, like AWS Organizations,
+AWS IAM Identity Center, and AWS Config.
+Now, it's an extension or offers extensions
+to AWS Organizations.
+It allows you to prevent governance drift
+and leverages different guardrails,
+which we'll touch on here in a little bit.
+So for new AWS accounts, admin users
+can provision these new accounts very quickly
+and in an automated fashion using
+central administrative established compliance policies.
+So using what is called Account Factory,
+which is essentially a template for new accounts,
+Cloud Admins can monitor all account usage
+and make sure they are all aligned
+and falling within the established guidelines
+for company-wide compliance policies.
+And in short, simple terms, it's the quickest way to create
+and manage a secure compliant multi-account environment
+based on best practices.
+These best practices have been established in the Cloud
+by working with thousands of other enterprises.
+What are some features and some terms
+that you should know for this exam?
+The first is landing zone.
+Now, this is a well architected, multi-account environment
+based on compliance and security best practices.
+It's essentially a container
+that holds all of your organizational units,
+your accounts within those OUs,
+and users and other resources
+that you want to enforce compliance on.
+The beauty of a landing zone is that it can scale to fit
+whatever needs you need for the size of your company.
+Next, we have guardrails.
+Now, guardrails are high level rules
+that provide continuous governance
+for your AWS environments.
+There are 2 different types that exist:
+preventative and detective.
+Now, we will dive into these a little bit deeper later on.
+Just understand what the term is for now.
+We also have account factory.
+We briefly touched on this,
+but it's a configurable account template
+for standardizing pre-approved configurations
+for new AWS accounts.
+So this is where you would standardize
+and implement compliance policies for new accounts.
+The next is a CloudFormation StackSet.
+Now these are automated deployments of templates
+that deploy repeated resources for governance.
+So generally, the management account would deploy a StackSet
+to either an entire organizational unit
+or the entire org itself
+using repeatedly deployed resources,
+so things like config rules, for instance,
+so that you don't have to manually
+keep track of this governance in the accounts.
+We also have shared accounts.
+Now, the shared accounts are 3 accounts
+used by Control Tower, 2 of which are created
+during the landing zone creation period.
+So let's move on.
+What are guardrails?
+Well, like we said, these are high level rules,
+but they're written in plain language
+to provide ongoing governance.
+There are 2 different types.
+We have preventative and we have detective.
+So preventative versus detective.
+What does one do that the other doesn't?
+Well, preventative rules ensure
+that accounts maintain governance
+by actually disallowing violating actions.
+And it does this by leveraging
+service control policies in AWS organizations.
+Now for these guardrails,
+they have statuses of being enforced or not enabled.
+And they are supported in all regions,
+and that's because they leverage the SCP capability
+within organizations in our AWS environments.
+So, then what does detective do?
+Well, these detect and then alert
+on non-compliant resources within all accounts.
+And since this is more detective
+instead of remediating things, you might have guessed
+that it leverages AWS config rules.
+Remember, AWS Config can alert,
+but it doesn't do any actual remediation
+unless you leverage other resources,
+like Lambda, for example.
+Now, the statuses for detective guardrails
+are clear, in violation, or just not enabled.
+The other thing about these is that they only apply
+to certain regions, and that's only going to work
+in regions that are supported by Control Tower,
+which is not every region currently.
+So let's take a look at an example diagram
+so we can get a better view into how Control Tower operates.
+We start off with our management account,
+and we have organizations
+and then we have AWS Control Tower enabled.
+Now, initially, AWS Control Tower
+is going to create a log archive account for us
+and an audit account,
+and you'll see examples of what go each here in a moment.
+So these 3 accounts at the top here in the diagram
+are considered the shared accounts.
+And let's just assume
+we have 3 AWS accounts that are member accounts
+and they belong to our team organizational unit.
+Well, AWS Control Tower is going to first
+place preventative guardrails into each account.
+So it's going to put an SCP
+in every account that exists within our OU.
+It's also going to place AWS config rules
+or detective guardrails in each account as well.
+After that, it's going to set up CloudTrail logging
+in all of these accounts, as well as notifications
+for any governance violations that may occur.
+So all of our config and CloudTrail logs get aggregated
+and sent to the log archive account where you can view them
+and do whatever you need to do on the backend.
+So you might need to send them to some log analysis software
+or have security do some type of analysis.
+It's really up to you, but with the shared account
+known as the log archive account,
+it allows you to centralize all of this logging.
+Now, any governance notifications that occur
+will be sent to an audit account,
+so this is configuration events,
+security notifications, or drift notifications.
+And they go to an SNS topic in the audit account
+which you can use to alert the correct team.
+So maybe a security operations team, for example,
+so that they can go ahead and set up some type of automation
+or remediation based on the incoming event.
+Okay, that's going to do it.
+Let's go ahead and move on to some exam tips
+and then we can wrap things up.
+The first thing I want you to remember
+is anything related to governance
+and automating account setup.
+AWS Control Tower gives you an easy way to set up
+and maintain governance in multi-AWS account environments.
+It does this by offering
+an automated account deployment method
+using preconfigured compliance rules.
+Remember there are 3 shared accounts.
+There's a management account, a log archive account,
+and an audit account.
+We have preventative guardrails,
+which leverage service control policies
+to actually prevent actions,
+and we have detective guardrails,
+and these leverage config rules
+to detect and alert on violating actions or changes.
+Some keywords and scenarios to look out for
+are anything related to automated multi-account governance,
+guardrails, account orchestration,
+and even governing user account provisioning.
+And user account provisioning here means
+a user actually provisioning an AWS account.
+Okay, that's going to do it.
+I hope you learned a lot about AWS Control Tower.
+We'll go ahead and wrap things up here
+and then we'll move on whenever you're ready.

@@ -1,0 +1,187 @@
+Okay. Hello again, Gurus.
+In this lesson, we're gonna look at further optimizing cost
+using AWS Cost and Usage Reports.
+Throughout this lesson,
+which is gonna be mainly theoretical,
+we're going to cover Cost and Usage Reports,
+also known as CUR.
+We're gonna talk about use cases for them.
+We'll look at the process to enable them,
+and then we'll have some exam tips.
+Okay, first things first, Cost and Usage Reports.
+Now this is commonly abbreviated as A-W-S C-U-R,
+so please be familiar with that abbreviation.
+What this is is the most comprehensive set
+of cost and usage data that is available to you
+for AWS spending.
+A key feature that you do need to know about
+is that it allows you to publish your billing reports
+to an Amazon S3 bucket for centralized collection.
+So this is especially useful
+if you need to use those reports
+with a third party spending application.
+What these reports do is they break down the costs
+by certain time span, like hour, day, and month.
+They can break it down by service and resource
+or even by tags.
+So it's very similar to Cost Explorer
+that we looked at earlier.
+Now the fourth point here is
+that CUR updates reports in your buckets
+at least once a day, and it uses a CSV format.
+Now, it's important to note that it's a once a day update.
+Please remember that.
+Your updates don't occur whenever you want them to.
+As soon as you enable it,
+it's gonna be once a day from that point forward.
+And lastly, the service easily integrates
+with services like Athena for analyzation,
+Redshift, for data transformations,
+or QuickSight for data visualizations.
+These all support this service for better cost analysis.
+Now let's move on to some use cases.
+The first primary use case
+is that you can use this within an organization
+or entire organizational groups or individual accounts.
+It allows for that granularity.
+So for instance, maybe you have an application team
+that owns five accounts and they're in their own OU,
+where you can generate a Cost and Usage Report
+for just that OU.
+It's very handy.
+You can also use it to generate reports,
+to track your savings plans.
+So you can track things like utilization,
+the different charges that occurred and current allocations,
+or maybe you want to use it to monitor
+on demand capacity reservations,
+so to see what you're spending on your on-demand instances.
+The fourth scenario is you can use it
+to break down your data transfer charges.
+So you can easily generate a daily report
+to see what your external
+and inter-region charges are for your data.
+This can be extremely useful for realizing
+that you need to implement VPC endpoints
+instead of using public internet transfers.
+And then fifthly, and lastly, it does allow you
+to dive deeper into cost allocation tags
+for your resource spending.
+So if you set cost allocation tags
+at the organization level,
+you're requiring people go ahead
+and use those tags on the resources.
+You can easily dive deep into resource spending
+based on those tags.
+So an example could be an environment like development
+or production or maybe an application team owner
+where they have their own member ID
+that you leverage in your billing reports.
+Okay, so those are some use cases.
+Let's talk about how you can enable this.
+We'll do a step-by-step walkthrough using some graphics,
+only because we don't have access
+in the sandbox environments.
+But in case you have access,
+I walk you through doing this process.
+The first thing you need to do
+is navigate to the billing dashboard,
+and you can see that here on this snippet.
+The next step is we're gonna go ahead
+and locate and select Cost and Usage Reports
+on the left side of that billing menu.
+After we get there,
+you're gonna see a screen similar to this.
+You provide your Cost and Usage Report name here.
+You fill out the report content
+if it's desired or even possible.
+So for this instance, all the defaults have to be left.
+But I did add additional content, which you can see here.
+I'm including the resource IDs
+to further identify the cost and the spend.
+And then on the bottom here,
+report data processing settings,
+is where we're allowing AWS to automatically update
+this report for us.
+And notice how it says on the bottom,
+the report in your bucket gets updated at least once a day.
+So when that report refreshes,
+a new report is going to be uploaded to your bucket.
+Now moving on, the next section you would see
+is to set the delivery options.
+So if we are uploading that report,
+which that's the point of it,
+you configure an S3 bucket for storage.
+In addition to that,
+you can optionally define a path prefix.
+So if you have several different reports
+you want to generate, all using the same bucket,
+you can use a path prefix like I have here,
+cur_daily to indicate that this is a daily report.
+In speaking of time granularity,
+you can notice you can choose hourly, daily, or monthly.
+So in this example, I chose daily.
+Now below this on report versioning,
+which I didn't call out,
+you don't necessarily need to know this for the exam,
+but I'd like to point it out just for this,
+is you can choose if you want
+to create a new report version,
+based on the date and the time,
+or overwrite the existing.
+Typically, people use create new report
+so they can have all of the different reports
+to use later on for analysis.
+But if you wanted to save on cost,
+you could do that by overwriting.
+Now the next section is the integrations.
+So we can select what services we want
+to natively integrate with, if we choose to.
+Notice the three we talked about,
+Athena, Redshift, and QuickSight.
+Now these affect the way the data is stored
+when you're integrating, so you need to be aware of that.
+In addition to this, you have to choose
+the correct compression type, based on your needs.
+So if you are using a third party
+SaaS vendor for billing and analysis,
+they might require that it's either in GZIP
+or maybe ZIP or even Parquet,
+which are the three compression types, offered by default.
+Okay, so that's how you enable Cost and Usage Reports.
+Let's have some exam tips.
+First, remember, this is the most comprehensive
+and detailed view of your spending,
+even more so than Cost Explorer.
+You need to also know that these easily integrate
+with S3 for storing centralized reports.
+Remember, you select a bucket to store each report in,
+and you can select a path prefix
+depending on the report itself.
+You can use CURs within organizations,
+at an organizational level.
+You can also use it at an organizational unit level
+or even a specific member account level.
+It allows for a lot of flexibility.
+There's built-in support for your reports
+to be queried with Athena,
+ingested for transformations with Redshift
+or visualized with QuickSight.
+Remember those three integrations.
+Also, remember, an automatic report update
+will occur at least once a day.
+It's out of your control,
+but AWS is pretty good at about making this,
+roughly, on a 24 hour schedule.
+Now, lastly, any mention of detailed cost breakdowns
+and delivery of daily usage reports,
+in addition to tracking Savings Plans utilizations
+will likely include this service,
+if one is in the answer.
+Now, that'll do it for this lesson
+on Cost and Usage Reports.
+Let's go ahead and take a break,
+grab some caffeine, grab some water,
+take a nap, do whatever you need to do,
+and then when you're ready,
+I will see you in the next lesson.

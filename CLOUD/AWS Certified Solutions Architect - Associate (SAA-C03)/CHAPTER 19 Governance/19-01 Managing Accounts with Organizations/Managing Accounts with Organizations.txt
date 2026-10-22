@@ -1,0 +1,209 @@
+Okay, welcome back.
+In this lesson, we're going to look at managing AWS accounts
+with AWS Organizations.
+Throughout this lesson,
+we're going to touch on several topics.
+We'll look at what Organizations is.
+We'll talk about the two different account types.
+We'll discuss features you should know,
+as well as some concepts.
+We'll look at some service control policy examples.
+We'll actually look at an example in depth,
+and then we'll have some exam tips.
+What is AWS Organizations?
+AWS Organizations is a valuable governance tool
+provided by AWS that enables organizations as a whole
+to create and efficiently manage multiple AWS accounts.
+With organizations, you can centralize the control
+of your accounts and streamline management processes
+while eliminating the need to navigate
+between different accounts individually.
+The service really simplifies the management
+of all of your accounts while enhancing things
+like security, billing, and even organizational structures.
+In other words, it organizes your accounts.
+Now, there are two major categories
+of account types in organizations.
+The first you need to know is a management account.
+This is also referred to as the payer account.
+This is the primary account that
+serves as the central administrative
+and billing account
+for the entire organization.
+The management account hosts
+and manages the AWS organization,
+which means it controls various aspects
+of the org's structure.
+It includes security policies, billing, et cetera.
+This is where orgs are actually started and managed.
+There is only one of these per organization.
+The second type is a member account.
+Member accounts are all other AWS
+accounts that belong to the organization.
+These accounts are linked to the management account,
+and then they can be managed and
+governed collectively under the umbrella of the org.
+Member accounts may include
+things like development accounts,
+testing accounts, and production accounts.
+It really just depends on your needs of the org.
+Think of these as essentially application accounts
+and other team accounts.
+Generally speaking, it's going to be a best practice
+to have multiple accounts for your design.
+So you would separate accounts based on environments
+and team ownership.
+Moving on, let's look at some features you should know.
+Understanding these key features of organizations
+is crucial for effective management and governance.
+AWS Organizations allows you to enable
+what is called consolidated billing.
+Using this, consolidates the bills
+from all of your different member accounts
+and rolls them up to the single-payer account.
+What this does is it simplifies the billing process
+by allowing a single payment method
+for all of the accounts within the ORC.
+Just because it's a single bill,
+you can still go ahead and isolate costs by account
+within things like cost explorer.
+In other words, you can still view your bill
+in a granular fashion.
+Now, one big advantage of consolidated billing
+is that it offers aggregate usage discounts.
+So, by combining the usage of all member accounts,
+your organization can qualify for volume-based discounts.
+This results in cost savings throughout the entire org.
+And lastly, Organizations makes it easy
+to share reserved instance purchases,
+and savings plans purchases across the organization.
+What this means is that these plans
+and reserved instances are purchased in one account,
+and they can be shared and utilized with other accounts.
+Now next up, we have six concepts
+you should be familiar with for the exam,
+and really, honestly, any real-world implementations.
+Organizations enables you to implement
+a multi-account design and strategy.
+This allows you to manage multiple accounts
+from a centralized location.
+This approach, which is a best practice,
+offers improved security, cost management,
+and resource organization.
+You can also enforce specific tags
+across all resources within the org.
+This ensures consistent tagging practices
+and it enables better resource categorization and tracking.
+Organizational units, or OUs for short,
+are logical groupings of multiple accounts within the org.
+These provide a way to organize and manage your accounts,
+which allows for a structured approach
+to account separation and account management.
+Service Control Policies, which you need to know,
+or SCPs for short, are just JSON policies
+that get applied to OUs or even just individual accounts.
+These policies define permissions and restrictions
+for different resources
+and actions within the accounts,
+and it allows organizations to control
+what actions are permitted or denied from a central place.
+It's good to know that SCPs applied to OUs
+and accounts do not affect the management account.
+The management account is the primary account in the org,
+and its primary responsibility
+is for centralizing governance.
+And the last point here is that it's recommended
+to create centralized logging accounts
+for things like CloudTrail logs
+from all of the member accounts.
+This enhances security and it simplifies auditing.
+Additionally, you can leverage cross-account roles
+for accessing member accounts, which is a best practice
+for managing resources across the org.
+Now, let's go ahead and look at an example
+of how service control policies are applied
+throughout an org.
+To start things off, we have a simple AWS organization
+at the top here, and within the green box,
+we have our management account.
+In addition to that management account,
+we have three other team accounts that we need to manage.
+Two of the accounts, Team A and Team B accounts,
+belong to their own OU, and we call that development.
+And then we have the security operations account,
+and this belongs to its own OU, and we call that security.
+These are logically isolated groups of accounts.
+Now, the first thing we do here is we implement
+an organizationally-wide service control policy
+that we want to apply to all accounts within the org.
+Now, this could be something as simple as
+preventing all root user access within the accounts.
+So, basically, they cannot log in as root at all.
+We then can define even more specific
+service control policies, one for each OU.
+These different service control policies
+might have different levels
+of control based on the environments they're running in.
+For example, within the development environment,
+since it's just an application team,
+we might restrict services and actions a little more
+when compared to the security operations account.
+When we apply these service control policies
+to their respective OU, that SCP will only
+apply to that specific group of accounts within that OU.
+In other words,
+the Security Operations service control policy
+does not affect the development OU.
+So, to review, all accounts
+in the development organizational unit
+have the development service SCP,
+and the organizational SCP applied to them.
+And then the security operations account
+has only the security SCP,
+and the organizationally wide SCP applied.
+You can see how this allows for more granular control,
+and it simplifies the process.
+Okay, let's go ahead and look at an example SCP,
+as you really should be familiar with these for the exam.
+In this example policy,
+what you can see on the left is
+a simple JSON document,
+and it's a valid policy that denies any
+attempt to stop, or terminate all EC2 instances
+within the account.
+If you notice, these are extremely similar to IAM policies,
+because they pretty much are.
+You really want to be sure you know
+how to read documents like this for the exam.
+Okay, let's have six quick exam tips
+and then we can move on.
+Organizations allows you to centrally manage
+multi-account AWS designs in a hierarchical manner.
+This simplifies administrative tasks
+and enhances governance.
+Service control policies, or SCPs,
+are a powerful way to control
+and restrict actions within the accounts.
+These provide the final say in what actions are allowed,
+or denied in your accounts.
+Remember, consolidated billing allows for the aggregation
+of bills from multiple accounts
+into a single-payer account
+for a streamlined payment process.
+And in addition to that, within organizations
+you can share reserved instances and savings plans purchases
+across accounts within the org.
+Now, a best practice is to designate a single AWS account
+in the org to hold your CloudTrail logs
+from all accounts.
+Again, remember this enhances security
+and it simplifies auditing across the org.
+You need to be familiar when to leverage organizations
+and how organizational units work.
+You need to be aware and know how they can be used
+to efficiently structure
+and manage multi-account environments.
+Now, that's gonna do it for this lesson.
+Let's go ahead and end it here.
+And then if you're ready and when you're ready,
+we'll pick back up with the next lesson.

@@ -1,0 +1,152 @@
+Welcome back gurus.
+In this lesson we're gonna look at exploring cost,
+using a service known as Cost Explorer.
+In this lesson, we're gonna cover a few things.
+We'll talk about why you should budget,
+what is Cost Explorer,
+we'll discuss some of the features in there,
+we'll look at a monthly cost example snippet,
+and then we'll have some exam tips.
+Alright, so why budget?
+Well, cost optimization is part
+of the well architected framework.
+Being able to budget appropriately
+using these different services together,
+like Cost Explorer and AWS Budgets,
+allows you to get a finer grained control
+over what you're spending in the cloud.
+You don't wanna overspend, trust me.
+While Cloud offers the ease of spinning up
+and spinning down resources,
+it's a very common scenario to see
+that companies and teams
+accidentally leave things running,
+and they don't know where the bill's coming from.
+All of a sudden they have a bill for thousands of dollars
+and they don't even know why.
+Well, that's where Cost Explorer comes in.
+Cost Explorer is going to be an easy to use tool,
+that allows you to go ahead and visualize,
+and then even analyze at a granular level,
+your different cloud costs in your accounts.
+The cool thing about this service,
+is you can leverage it to generate
+custom reports that you get to base
+on a variety of factors.
+One of the big common scenarios,
+is including resource tags for generating reports.
+One of the other neat things here,
+is that you can break down the cost bi-monthly,
+hourly, and even more.
+There's a lot of flexibility
+on generating your reports and looking at your data.
+The last point here, which is huge,
+is that Cost Explorer has a built-in
+forecasting algorithm that it uses,
+and it will forecast up to 12 months in advance.
+It does this by estimating
+based on current usage and potential future usage.
+Now, we don't have insights to
+what the algorithm does exactly,
+but you can view the output of it,
+via forecasted spend in this service.
+Now let's talk about some features.
+The first feature is time.
+Now this is self-explanatory,
+and you're specifying what time,
+or time period you want to cover for your reports.
+The second is a filter.
+So where is the spend actually coming from?
+Do you wanna filter on tags,
+categories of services, account IDs, et cetera.
+And then lastly, we have service.
+This allows you to easily break down the cost
+based on service by service options.
+So you can look and see,
+"Hey, how much is Lambda costing me
+compared to my overall bill?"
+Or even more advanced than that,
+you can look at data transfer out charges.
+There's a lot of different
+capabilities built into this service.
+Now moving on, let's look at a snippet of a cost example.
+Unfortunately, we don't have access
+to Cost Explorer in our sandboxes,
+so the best I could do is take a personal snippet
+from a different account,
+and then paste it in here
+so you can see what it looks like.
+You'll notice here at the top right,
+we have the date range and the granularity.
+So I set the last six months as the date range,
+I set the monthly for granularity,
+so it's breaking it down per month.
+And then I can do service filters.
+So if I wanted to, you can notice all of the different
+services in this breakdown, route 53, KMS, S3, et cetera.
+And under services, I could actually filter
+based on the services that are showing up,
+so I can get a more detailed view of just that service.
+It also offers an organization's account view.
+So if you're in consolidated billing,
+Cost Explorer by default would include
+all of the accounts within your org.
+But luckily for us,
+we can use this linked account filter
+to choose the different linked accounts
+that we want to view.
+So maybe you just want to view
+one or two accounts out of the hundred
+of accounts that you manage.
+You can do that using this filter.
+And then at the bottom are the other filters.
+I'm not gonna get too in depth with these.
+You really need to explore them to understand how they work.
+But you'll notice we have cost category,
+tags, usage type, et cetera.
+Now the usage type and instance type stuff
+will change based on the service you choose.
+So that's the only reason I don't cover 'em.
+They get way too in depth,
+and you really don't need to know them for this exam.
+Just understand you can use these filters,
+and these different views to go ahead
+and get the exact view that you want.
+Okay, let's go ahead and have some
+exam tips before we move on.
+You need to watch for any answers that use Cost Explorer
+whenever the question is about budgeting
+and controlling spend.
+It works hand in hand with AWS Budgets.
+Second, use tags.
+Seriously, tags are one of the most most important ways,
+and one of the best ways that you can track your spend.
+Cost Explorer and AWS Budgets,
+like we mentioned earlier, go hand in hand.
+Really use these together
+to generate accurate reports,
+and accurate budget spend.
+Remember that Cost Explorer can forecast
+spending up to 12 months using an AWS internal algorithm.
+You also need to know and remember,
+that you can view things hourly or monthly,
+or even longer than that.
+Remember in the example,
+we looked at the last six months.
+And finally, if you're part of an organization,
+and you have consolidated billing in place,
+the payer account can
+break down costs per linked account.
+So you can see just one or two accounts
+out of your entire organization
+using that linked account view.
+Alright, that's gonna do it
+for this lesson on Cost Explorer.
+If you have access to it,
+I highly recommend you play around with it.
+You can get very detailed with your different reports,
+and it's pretty interesting to see some of the costs
+that are occurring in your account.
+For now, let's go ahead and end this.
+And when you're ready,
+we'll pick back up with the next lesson.

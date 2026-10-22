@@ -1,0 +1,173 @@
+Hello, Cloud Gurus.
+Welcome to this lesson on Reducing Compute Spend
+Using Savings Plans and AWS Compute Optimizer.
+During this lesson, we're going to cover several topics.
+We're going to talk about what is AWS Compute Optimizer.
+We'll talk about the different resources that work with it.
+We'll look at supported accounts and types.
+We'll discuss things that you should know about the service,
+and then we'll move on to what are Savings Plans?
+We'll explore the Savings Plans types.
+We'll talk about how to use and apply them,
+and then we'll finish everything up
+with some exam tips and important takeaways.
+So what is AWS Compute Optimizer?
+Well, it's a service that analyzes configuration
+and utilization metrics of your resources
+and it helps you optimize them, as the name would imply.
+It'll report your current usage optimizations
+and then also give you potential recommendations
+so that you can improve performance
+and maybe even save some money.
+The cool thing about this service
+is it does provide you a graph
+so you can see graphical history data
+and also view the projected utilization metrics
+that it's seeing.
+You can use these recommendations
+to make informed decisions.
+So you use the graphs, the metric data,
+and the recommendations for moving
+or even resizing your resources.
+So which resources actually work with this service?
+Well, there's several.
+There's Amazon EC2,
+EC2 Auto Scaling Groups, Amazon Elastic Block Store, EBS,
+and even AWS Lambda functions.
+These all integrate with AWS Compute Optimizer.
+Now, another thing to know are the supported account types.
+The first is a standalone AWS account,
+so this is a normal single account
+that does not have AWS Organizations enabled.
+It can be a member account,
+so this is a single member AWS account
+within an AWS organization.
+And when you opt in to this service,
+whichever account you do it in, if it's in a member account,
+then it will only generate optimization recommendations
+for that individual member account.
+Now, you can also do the management account
+in an organization.
+And when you do this and you enable it and opt in,
+you can actually generate recommendations
+based on the entire organization itself,
+or you can lock it down to this one specific account,
+so there are options.
+So as you can see, it's pretty flexible.
+Now, what are some things
+that you should know for this service?
+Well, the biggest is that it is disabled by default.
+You must opt in to leverage this service.
+And after opting in, you actually want to probably
+enable enhanced recommendations
+via activation of recommendation preferences in the menu.
+An example of one of these recommendations is seen here,
+enhanced infrastructure metrics, which is a paid feature.
+What this does is it extends your metrics analysis
+and you can look back further
+and get a better view of your historical data
+and get more accurate recommendations.
+Okay, so with AWS Compute Optimizer out of the way,
+let's start diving into Savings Plans.
+What are they?
+Well, Savings Plans offer flexible pricing models
+to give you savings on your AWS usage.
+You can actually save up to 72% on compute,
+which is significant.
+Now, compute Savings Plans
+provide you lower prices on EC2 instances
+regardless of the instance family,
+the size, the operating system, the tenancy choice,
+or even the region.
+And the cool thing is compute plans also apply to things,
+like AWS Lambda and even AWS Fargate.
+They also offer SageMaker plans,
+and these, as the name would imply, offer you lower pricing
+for your Amazon SageMaker instances.
+Now, there are some commitments to get the savings.
+So savings are provided to you as a trade
+for long-term commitments.
+You can agree to 1-year or 3-year pricing options
+and those pricing options have different choices to them.
+You can choose to pay all upfront,
+which gives you the greatest amount of savings,
+partial upfront, or even no money upfront.
+So what are the Savings Plans types?
+Well, the first, which we briefly covered,
+is a Compute Savings plan.
+Now, this is the most flexible savings plan offered.
+It applies to any EC2 compute, any AWS Lambda,
+and any Fargate usage.
+It gives you up to 66% savings on typical on-demand pricing.
+So the savings are slightly lower on this type of plan
+because it offers you more flexibility
+like EC2 instance size, region, etc.
+However, they do offer a more strict savings plan
+called EC2 Instance Savings Plans.
+These apply only to EC2 instances
+of a specific family in specific regions.
+But in the tradeoff of being more specific
+and a little bit more strict,
+you get a higher savings up to 72%.
+And then the last one,
+which we also briefly covered, is SageMaker Savings Plans.
+These apply only to SageMaker instances,
+but they are regardless of the instance family and size.
+It can be for any region and any component,
+so things like notebooks, training, etc.
+And they offer up to 64% in savings
+compared to the typical compute spend.
+All right, so you know what they are,
+but how do you use and how do you apply these Savings Plans?
+Well, the first thing you do
+is you view and visit the recommendations section
+within your AWS billing console.
+The cool thing is recommendations in there
+are automatically calculated
+to make your purchasing decisions way easier.
+These recommendations give you more optimal Savings Plans
+to help you save the most amount of money.
+You literally add these to a cart
+and purchase them directly within your account.
+So it's essentially a normal shopping experience,
+but it's for saving money.
+Now, a little tidbit is they do only apply to usage rates
+after your Reserved Instances are applied and exhausted.
+So if you have Reserved Instances purchased,
+those have to be used up first
+before you start using your savings plan usages.
+And if you're in a consolidated billing family,
+the Savings Plans are applied to the account owner first,
+but then they can be spread to others if you enable sharing.
+Okay, so that covers both services.
+Let's have some exam tips with some important takeaways
+and then we can get you out of here.
+AWS Compute Optimizer,
+just remember that this provides recommendations
+based on collected utilization and configuration metrics.
+It works with several resources
+including EC2, Auto Scaling, Lambda, and Amazon EBS.
+It also integrates with Organizations,
+so you can use it in a management account
+for an entire organization, at a member account level,
+or even just a standalone account outside of an org.
+Now, Savings Plans are flexible offerings
+for pricing on compute usage.
+They're similar to Reserved Instances.
+Remember, there are different plan types.
+There's Compute Savings Plans, which are more flexible
+and apply to things like Lambda and Fargate,
+in addition to EC2.
+There are EC2 Instance Savings Plans, which are more strict,
+but offer you a higher rate of savings.
+And then there's SageMaker Savings Plans,
+which can apply to any component
+within a SageMaker instance.
+And then the last tidbit here are pricing terms.
+Savings Plans come in 1 or 3-year agreements
+and you can pay either all upfront
+and receive the greatest savings,
+partial upfront, or nothing upfront.
+All right, that'll do it.
+Let's go ahead, we'll end here, and then when you're ready,
+we'll move on and pick up in the next one.

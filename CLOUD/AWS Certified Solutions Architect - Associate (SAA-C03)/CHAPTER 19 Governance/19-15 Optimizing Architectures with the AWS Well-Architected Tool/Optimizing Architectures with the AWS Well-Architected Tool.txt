@@ -1,0 +1,65 @@
+All right, welcome back, Cloud Gurus.
+This lesson is going to look at optimizing architectures
+with the AWS Well-Architected Tool.
+During this lesson, we're going to have
+a review of the Well-Architected Framework.
+You should know that very well for this particular exam,
+so we're just going to review it
+so we can talk about how this tool references it.
+We'll look at the tool itself, and then we'll wrap things up
+with some exam tips and takeaways again,
+so you can take those into the exam with you.
+All right, Well-Architected Framework review.
+So if you recall, there are 6 pillars.
+We're not going to dive into these deep.
+It's just a reminder or a review that there are 6 of them.
+We have Operational Excellence. We have Reliability.
+There's Security, Performance Efficiency, Cost Optimization,
+and can you guess the last one?
+Sustainability.
+You need to learn to love the Well-Architected Framework,
+and you need to know it very well.
+I cannot stress that enough.
+So with that review out of the way,
+let's look at the tool itself.
+The AWS Well-Architected Tool is a service that provides
+a consistent process for measuring your cloud architectures.
+What it's measuring is, essentially,
+your architecture against AWS best practices.
+Now, a nice feature of it is that it enables
+assistance with documentation of your workloads,
+as well as your architecture choices.
+It comes with guides for making workloads more reliable,
+more secure, much more efficient,
+and even more cost effective.
+Now, the fourth point we kind of brushed on.
+It measures your workloads against years
+of AWS best practices.
+These best practices were collected over many years
+by either solutions architects at AWS
+or even a variety of businesses
+that run their architectures in the cloud.
+Now, this service is intended for specific audiences,
+and these include things like technical teams, CTOs,
+architecture teams, and even operations teams.
+They try and do a good job of making a well-rounded report
+so you can cover kind of a wide gamut of people
+within your companies.
+All right, that's going to do it for this,
+so let's just have a few exam tips and some takeaways
+and then we'll wrap things up.
+The biggest thing you need to remember
+is the Well-Architected Tool, or AWS WA Tool for short,
+is used for measuring current workloads
+against established AWS best practices.
+Remember, these best practices are from years of collection
+from solutions architects and just successful companies
+that use AWS Cloud.
+The last big thing to remember is it aids you
+in documentation of your workloads
+and your architectural decisions,
+so you can see why you made a certain decision,
+or why you did not make that decision.
+Okay, that'll do it for this lesson.
+Let's go ahead, we'll end here, and then when you're ready,
+I'll see you in the next one.

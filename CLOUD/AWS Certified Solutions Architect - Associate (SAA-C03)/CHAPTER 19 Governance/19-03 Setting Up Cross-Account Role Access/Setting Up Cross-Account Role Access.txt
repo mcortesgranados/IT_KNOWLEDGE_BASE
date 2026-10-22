@@ -1,0 +1,153 @@
+Okay, welcome back gurus.
+In this lesson, we're going to cover
+a very specific scenario
+dealing with setting up cross-account role access.
+In this lesson,
+which is very short and succinct,
+we're gonna look at setting up cross-account access,
+and then we'll have some exam tips.
+Now, as you manage an increasing number of AWS accounts
+within an enterprise or within a company,
+it really becomes essential to establish efficient
+and secure cross-account access.
+Creating duplicate IAM users across all of your accounts
+really introduces security vulnerabilities
+and it results in a ton
+of administrative challenges and overhead.
+Cross-account role access is going to be the go-to solution
+to solve this problem.
+What this does is it allows you to set up temporary access
+with well-defined permissions and access controls.
+Let's look at how you would set this up with an example.
+In this example,
+we're going to assume there's a need
+for a third party auditor
+to go ahead and access our AWS accounts
+so that they can complete their audit process.
+Now, there are two primary requirements for this example.
+First, the audit team only requires read-only access
+to our account.
+Second, they have their own AWS account
+that they leverage for this process.
+On the right side here,
+we can see we have our own separate account
+and it's running our private applications
+using many different AWS services.
+The first step of this process
+is that we need to create a new role
+with an attached permissions policy
+that has the least amount of privileges required
+for this audit team to complete their process.
+This is the critical concept
+of principle of least privilege access.
+You do need to know this for the exam
+and that's why we stress it so much.
+You should only ever grant
+the bare minimum access that's needed.
+So in this case,
+we grant the audit team's new role in our account
+read-only access,
+so things like get, list, and describe.
+The next step on our end of things
+is to update the trust policy
+that is actually attached to our role
+to allow the auditor account's role
+to assume this role within our account.
+I know, that's a lot of roles in one sentence.
+But let's look at a real life example
+on how this trust policy would be attached and configured.
+Notice in the example,
+the principle is specifying an ARN
+that would be provided to us by the audit team.
+The action there is allowing it to assume a role
+via our STS API.
+One thing to call out here is that if you wanted to,
+you could even add a conditional block here
+to add another level of security.
+A specific example of this
+would be to add an external ID block
+so that whenever this API call is made,
+they also have to pass in a specific string of characters
+to add additional verification.
+This is essentially just another security layer
+to enforce that the source caller
+is indeed who they say they are.
+So it's essentially protecting against accidental leakage.
+And you do need to know this is a possible scenario
+that could come up on the exam,
+so please be familiar with it.
+The third step of this process
+is to then provide our ARN of our internal role
+to the audit team.
+They need this in order to grant
+the correct permissions for their role
+to be able to assume our role that we created.
+After they set up their permissions policy,
+the fourth step here is simply to test.
+The audit team could assume our role from their account,
+and once they do this,
+they now have essentially become the role that we created.
+What this means is that all of their API calls
+to AWS services
+will then leverage our AWS account.
+So in other words,
+when they run something like list buckets on Amazon S3,
+it would actually list buckets in our account
+and not theirs.
+Now this is a simple example
+on how you could leverage cross-account access
+through an organization.
+You could also do something similar for an org account role
+or you have a group of admins
+in the organization's payer account
+and they assume roles within all of the member accounts.
+This allows easy access and secure access
+to all of the accounts within the organization.
+And the neat thing here
+is that you can easily redeploy this architecture
+with the same role to all accounts
+using automation like cloud formation stack sets.
+Now, moving on,
+just remember that cross-account role access
+is the most secure and efficient method
+for achieving account access within AWS from other accounts.
+This solution eliminates the need
+for managing long-term access keys
+and maintaining numerous IAM users across multiple accounts.
+Instead, it's going to offer rolling temporary credentials
+that users can't assume to perform specific tasks
+in other accounts.
+Another benefit for this solution
+is that the temporary credentials
+actually can be easily revoked or rotated as needed,
+so it further enhances your security and your control.
+Long story short, use this method.
+Okay, let's jump into some exam tips and wrap things up.
+Anytime temporary credentials are mentioned,
+immediately scan answers looking for roles
+and specifically cross-account roles
+if one account needs access to another.
+It will always be preferred to create
+and leverage cross-account IAM roles
+instead of using duplicate long-term IAM users
+in each account.
+In other words,
+use roles everywhere you can instead of users.
+Now, you will need to know that you can set this up
+and how to set it up.
+And remember, there are two policies.
+You have a permissions policy and the trust policy.
+Anytime you have a scenario
+where a temporary employee or an external person
+needs access to an account,
+you really should avoid using permanent credentials
+like access keys.
+Again, use roles.
+And lastly, remember that role assumption is temporary.
+What this means is that their credentials will expire
+based on the amount of time you've set for that role.
+Now, that's gonna do it for cross-account role access.
+We covered a pretty specific topic and scenario
+for you to take into your exam.
+Let's go ahead and wrap things up here
+and we'll pick back up with the next lesson.

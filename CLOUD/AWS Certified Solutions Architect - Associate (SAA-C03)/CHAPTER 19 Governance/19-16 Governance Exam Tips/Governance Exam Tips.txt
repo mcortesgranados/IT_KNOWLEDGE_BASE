@@ -1,0 +1,212 @@
+Okay, congrats, Cloud Gurus.
+You've made it to the end
+of this section on governance,
+so let's just have a review
+and have some governance exam tips
+for you to take away.
+First things first,
+what to ask yourself in the exam.
+We've broken it down to 4 questions,
+and let's go over those here.
+First question, can it be centralized?
+So, can we use things
+like AWS RAM to share resources through an org?
+Do we want to use Control Tower to centralize
+our account governance and deployments?
+Things like that.
+We also want to ask, how do we standardize it?
+So again, like Control Tower,
+we can leverage those guardrails
+to standardize our infrastructure deployments,
+as well as our account deployments.
+We also need to know
+how we can enforce standards that we want set.
+So, we can use things like service control policies,
+AWS Config rules, guardrails in Control Tower,
+and we can use CloudTrail
+for auditing our history of our API actions.
+And then lastly,
+are the users in question internal or external?
+And either way, how do we want to grant them access
+to resources and accounts?
+Now let's get a little bit more specific.
+First off, we'll look at AWS organizations.
+Remember, service control policies,
+or SCPs for short,
+have the ultimate say
+as to whether an API call can go through.
+These are the only way you can restrict
+what the root account can do within your accounts.
+Be sure to remember that.
+We can also use it to centralize logs,
+and usually,
+centralizing your logs is usually the correct answer.
+CloudTrail offers support
+to log everything into a single account.
+Remember that as well.
+We also need to know that we can isolate workloads,
+or groups of workloads,
+into separate accounts,
+and this is a great way to add layers
+of security and control.
+It's best to break things apart
+and avoid lumping them all together.
+So use things like organizational units
+at a higher level to group like accounts,
+but keep different accounts for different purposes.
+So an example would be having a dev account,
+a test account, and maybe a product account,
+for the same application.
+Now let's move on to AWS Config.
+The first point is standardization.
+Any time a rule needs to be set up for an account,
+think about using Config to check for compliance.
+We also need to know that you can automate responses.
+So, Config offers the ability
+to automatically remediate problems
+using automation documents
+or Lambda functions.
+So while the service itself doesn't do the remediation,
+it just does the detection,
+it can trigger workloads to remediate things for you.
+And thirdly, here, know what changed.
+So AWS Config is the one-stop-shop
+to see what has changed in your account.
+It provides you with a history
+of all of your tracked architectures and resources.
+Now, let's talk about authentication.
+User management requires the right tool.
+You need to remember that.
+You need to make sure you're using AWS Single Sign-On,
+which is moving to Identity Center now,
+for any internal user management,
+and then tend to lean
+toward services like Cognito for external users.
+Active Directory is a common topic that comes up,
+and any time it does come up,
+you should immediately think Directory Service in AWS.
+If it's lift and shift,
+pick Managed Microsoft AD.
+If AD is staying on-premises,
+it's AD Connector.
+These are very common scenarios that come up,
+so really make sure that you understand how these work.
+Lastly, we need to know
+when to leverage cross-account roles.
+Usually, cross-account role access
+is always the best solution.
+It's way better than creating IAM users
+and trying to provide external users
+those access keys to authenticate in,
+or even just a username and password.
+Anytime you can leverage a role,
+usually you want to lean that way.
+Okay, we can move on now to cost management.
+Tracking costs is a very common exam topic,
+especially since it's one of the main pillars.
+You really want to use combinations of tags,
+Cost Explorer, and AWS Budgets.
+Now, you can get ahead of problems
+by creating proactive alerts.
+For instance, when users get to the 80% threshold,
+you can tell someone via SNS.
+So, an example is if you set a $10 limit per month
+as a threshold,
+as soon as they hit $8 in the account,
+you can alert the account manager.
+You also want to work on automating responses.
+If you're spending too much money,
+you can probably shut something down
+in an automated fashion.
+Always think about how you can remove the human
+from the interaction itself.
+The next thing here is detailed reports and exploring costs.
+These questions will usually involve AWS Cost
+and Usage Reports, or Cost Explorer
+for in-depth reporting purposes.
+Remember, Cost and Usage Reports are delivered daily,
+and Cost Explorer gives you a very in-depth process
+of exploring those costs.
+And the last point here is using AWS Compute Optimizer
+to generate recommendations
+for implementing more accurately-sized compute,
+based on your actual needs.
+You can save a lot of money
+by running accurately-sized compute instances,
+instead of just guessing.
+Next is Trusted Advisor.
+Now, this is free to use,
+but you need a Business or Enterprise Support plan
+to get the most useful checks,
+and there are limits to Trusted Advisor.
+Remember, this is strictly an auditing tool.
+It's not going to solve the problem for you.
+This is a common trap on the exam,
+so do not fall for it.
+It's only for auditing and reporting.
+Again, try and automate as much as you can.
+If you can't tell,
+automation is a common theme here,
+and that's because it's very important
+to try and do that as much as possible.
+So, use things like EventBridge
+to maybe kick off a Lambda function
+to solve the problem for you.
+Again, remove the human interaction
+to speed things up.
+Next is accounts and licenses.
+AWS Control Tower can be used to implement compliance
+and account governance within multi account environments
+using automated account setups.
+Within Control Tower,
+you can leverage preventative or detective guardrails,
+and remember, these are implemented either
+via SCPs for preventative,
+or AWS Config for detective,
+and then, AWS License Manager provides you a service
+to simplify license management
+for supported vendors.
+What this does, is it allows you
+to prevent license abuse
+and the associated overcharges.
+And the cool thing about this service is
+it works both in AWS and on-premises.
+It's not just cloud-specific.
+Next, we have infrastructure and deployments.
+Remember, AWS Service Catalog allows end users
+to provision pre-approved products
+and services via catalog portfolios.
+Now, these catalogs are written in CloudFormation
+and deployed for them
+to deploy in their own accounts.
+And also remember, AWS Proton can empower developers
+to automate the provisioning
+of their entire application stacks
+for container-based or serverless architectures.
+It will do everything for them,
+ranging from the code itself,
+to the infrastructure,
+the CICD pipeline, and even the actual deployment.
+And then, we have the Well-Architected Tool.
+Remember, you use this tool
+to document architectural decisions,
+and their measurements
+against well-established industry AWS best practices.
+And then the last service we want
+to cover is AWS Health.
+Remember, AWS Health is a dashboard
+and service meant to provide notifications
+of both public and account-specific events within AWS.
+Any questions about service alerts or notifications,
+especially of EC2 hardware maintenance reboots,
+will leverage AWS Health in some manner.
+And again, remember,
+you can automate these events using things
+like EventBridge and AWS Lambda.
+Okay, that'll do it
+for this Governance Exam Tips lesson.
+Hopefully, you've learned a lot,
+and you've now reinforced a lot.
+So, when you're ready,
+we can wrap this section up,
+and I'll see you in the next one.

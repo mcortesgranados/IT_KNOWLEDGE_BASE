@@ -1,0 +1,208 @@
+Okay, hello gurus.
+In this lesson,
+we're gonna look at auditing our AWS accounts
+using Trusted Advisor.
+In this lesson, we're gonna cover what Trusted Advisor is.
+We'll have an overview of the service,
+we'll talk about the different categories that are checked.
+We'll have an in console demo to see what it looks like,
+and then we'll go over some exam tips.
+So what is AWS Trusted Advisor?
+This is a fully managed auditing tool
+that looks at your entire account for best practices.
+It inspects your environments or
+otherwise known as your account,
+and it makes different recommendations
+whenever it sees opportunities for saving money,
+improving availability,
+or even really helping close important security gaps.
+Now for this service,
+there are several key concepts
+you need to know regarding it.
+The first is that it uses industry
+and customer established best practices
+in order to check your AWS accounts.
+So it uses this ever-growing library
+of these different standards.
+It checks your accounts and it says whether you meet
+or you do not meet those objectives.
+It is very important to note
+that this works at an account level.
+It requires nothing else but the service itself.
+In other words, it's not looking at your entire resource
+configurations specifically,
+it's only doing an account level scan.
+Now, there are different support levels.
+Basic and developer are going to come
+with all checks in the service limits category,
+which we'll check later, but only six checks in
+the security category.
+However, if you have business enterprise on-ramp
+or enterprise support,
+you get 100% full access to all checks.
+In addition to that, you also get full integration
+with Amazon Event Bridge, so you can go ahead
+and trigger certain responses and alerts.
+Now moving on, let's talk about the categories you need
+to be familiar with what these are.
+The first is cost optimization.
+These are going to be recommendations
+where Amazon Web Services think
+that you can actually be saving money with your account.
+So it might be inappropriately sized instances
+on used storage, et cetera.
+The next is performance.
+These are going to check where
+and how you can improve things like your speed,
+your efficiency, and even your responsiveness
+of your resources hosting your applications.
+We also have security.
+In other words, how are you able
+to alter your settings in your account
+to secure the account better?
+These really help maintain a much stricter security posture
+and they're provided automatically.
+Next is fault tolerance.
+So what can be done with our architectures
+to help increase things like resiliency
+and even high availability?
+And then lastly, we have service limits.
+This is going to essentially check the usage
+of your accounts for your different resources
+and let you know when you're approaching specific service
+limits for those services and those resources.
+So things like VPC Count, for example.
+Okay, let's do this.
+Let's jump into the Sandbox account.
+We're going to look at the trusted advisor checks,
+and then we'll jump back in here for some exam tips.
+Okay, welcome back Gurus.
+We're in my AWS Sandbox environment.
+Let's go ahead and check out Trusted Advisor.
+Okay, so I have loaded Trusted Advisor,
+and when we get here, we land on the recommendations screen.
+Now, as you can see,
+this dashboard offers you a check summary,
+potential savings,
+and then some other small lists of recent changes
+that have occurred in the account.
+So as we expected,
+Trusted Advisor is advising recommendations
+for us based on the resources in this account.
+Now, this Sandbox account is part
+of an enterprise support system,
+so we get access to all of the checks here.
+So let's just poke through each of these categories.
+We won't get too far into them,
+but I wanna show you some of the recommendations
+that go along with them if they are there.
+So first is cost optimization.
+And you'll notice the different findings that are there.
+So the green ones are obviously okay,
+but we do have a warning,
+which is saying,
+"Hey, this investigation is recommended
+for this particular finding."
+And when we scroll down here,
+it's gonna show you the volumes
+that fall under this underutilized EBS volumes advisory.
+So it gets pretty detailed.
+Now, next up, we have performance.
+Under performance, we have no problems,
+but you can see some of these checks
+that go along with this.
+Under-provisioned, we can look at provision IOPS,
+Lambda under-provision functions, et cetera.
+So these are just a series of checks related to performance
+for our resources in the account.
+Now remember, this doesn't get into
+the resources themselves,
+for instance, EC2,
+it's only looking at how you've configured them
+from the AWS side of things.
+So for instance, the instance type and the different size,
+and then how utilized that is based on metrics
+that are being collected.
+The third we have is security.
+Now in security, this is a Sandbox account,
+so I'm not surprised.
+We have a lot of recommendations
+and actions that we should take.
+Let's just look at one really quick example here
+regarding this first finding.
+EC2 instances should use the newest metadata service.
+So if I open this up and I scroll down,
+you can see it's listing the actual instances,
+the region, the arms,
+and then the time that they were last
+updated with this finding.
+So one of these is good, the other is not.
+So we could use this finding to go in,
+locate this instance,
+and then maybe reconfigure it, et cetera.
+Now, one thing I did wanna show here,
+if I scroll up and I collapse,
+you can actually filter
+based on the different types or categories.
+So I can do actions recommended.
+And if I scroll through here,
+you're gonna notice there are 10 actions now.
+So we can use this filter
+to quickly filter based on those recommendations.
+Now next step is fault tolerance.
+So remember, this is gonna see
+how we can increase availability and redundancy.
+So you'll notice right now we have three recommended
+and one that you really should look into.
+The fifth category is service limits.
+Now, service limits,
+remember, is going to check at how close you are
+compared to the service quota
+for a particular service and resource.
+So for instance, checking usage for more than 80%
+of autoscaling group limits,
+cloud formation stack limits,
+capacity unit limits, et cetera.
+So these are all service limit related findings,
+and obviously in this account we have no problems.
+And then the last one here,
+the last category,
+operational excellence.
+So how can we improve our operational readiness,
+like they say, of our resources?
+Now, this was just from an experimental
+VPC that I made earlier.
+We're not going to look at it because it doesn't exist,
+but it's just saying, "Hey, our VPC flow logs created
+for the VPC, because that's a best practice."
+So you can monitor and analyze your networking traffic.
+Now that's gonna do it for this short demonstration
+on Trusted Advisor.
+Let's go ahead and wrap things up here
+and we'll jump back into the presentation
+where we will wrap things up with some exam tips.
+Okay, welcome back.
+Let's go over some exam tips before we move on.
+Remember, AWS trusted advisor leverages
+established industry best practices
+whenever it's checking your AWS accounts.
+It's important to note this works at an account level.
+In other words, it makes recommendations based
+on the entire account.
+Remember the five categories that go along with it,
+cost optimization, performance,
+security, service limits,
+and even fault tolerance.
+Remember what each of those actually cover.
+Understand that basic and developer support
+only come with limited free checks.
+However, the enterprise offerings are going
+to grant full access to every check.
+They also enable event bridge automation as well.
+My advice for this exam is to remember some
+of the high level checks that are available for you
+to use in addition to just what this overall service does.
+Now that's gonna be it for this exam tips portion
+of this lesson on Trusted Advisors.
+So let's go ahead and end this lesson here
+and then we'll pick back up with the next one.

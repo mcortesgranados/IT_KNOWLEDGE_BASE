@@ -1,0 +1,135 @@
+Welcome back, Gurus.
+This lesson is going to be about monitoring health events
+in the AWS Personal Health Dashboard. During this lesson,
+we're going to go over a service overview.
+We'll take a look at AWS Health Concepts,
+and AWS Health is the name
+that they're kind of shifting toward
+instead of Personal Health Dashboard.
+We're going to look at different health event examples
+and we'll wrap things up with some exam tips
+and important takeaways for you to take into your exam.
+So what is this service?
+Well, first things first, AWS Health.
+Now AWS is shifting
+to calling this service AWS Health within the documentation.
+So from here on out, I'll refer to it
+as AWS Health instead of AWS Personal Health Dashboard.
+Now, this service is meant to provide you visibility
+of your resource performances as well
+as availability of different AWS services or even accounts.
+You can leverage the service to view how
+these health events actually affect you,
+your services, your resources, and your accounts
+so you can get very specific
+to how it's actually affecting you.
+Now, AWS does provide, or it does its best to provide,
+I should say, to maintain timeliness
+and relevant information with the events.
+They try and be fast and they try to be accurate.
+And because of all of this
+it helps you be better prepared and allows you to
+implement automation regarding these different event types.
+You can view upcoming maintenance tasks
+that may affect your accounts and resources
+and remediate them before they cause any issues.
+Another neat feature of AWS Health is that it gives you
+near instant delivery of notifications and alerts.
+So this is going to speed up your troubleshooting
+or even your prevention of problems by allowing you
+to leverage these notifications
+or alert events to perform some type of action.
+Now, a little pro tip here, and please remember this,
+you can automate actions based
+on incoming events using Amazon Event Bridge.
+So you can look for an event coming into this service,
+kick off some type of automation via Event Bridge,
+which may be connected
+to an SNS topic or maybe a Lambda function.
+Now let's dive into some concepts that you should know.
+The first is AWS Health event.
+And these are notifications that are sent
+on behalf of AWS services or just AWS overall.
+There's account-specific events,
+so these are events that are specific
+to your accounts or your organization.
+There's public events, which are reported
+on services that are public
+and are not necessarily specific to any accounts.
+We also have the Health Dashboard, and this is
+just a dashboard showing account and public events
+and it will show you the service health as well.
+We have event type code,
+and these include the affected services
+and the specific type of event.
+In addition to the code, there's also a category.
+So this is strictly the associated category
+and this will be attached to every event.
+Each event will have a category.
+There's event status, so this reports
+if the event is open, closed,
+or maybe an upcoming maintenance task.
+And then lastly, we have affected entities.
+So which resources in AWS are,
+or may be, affected by the event?
+So let's take a look at some examples.
+On the right you can see this is an example
+from the AWS Health dashboard,
+and I just want to show you a few different examples.
+The first example is
+an EC2 system reboot maintenance scheduled.
+So hardware running an EC2 instance
+in your account needs to be rebooted
+for systems maintenance.
+Usually to remediate this on your end or prevent it
+you can go ahead, go in,
+stop and then start your EC2 instance,
+which should shift it to another piece of hardware.
+The second is an EC2 operational issue.
+So this indicates that there's an actual service issue
+that could be affecting your EC2 instances.
+This could be as simple as delays
+in response times all the way to actual downtimes
+of the service.
+So I don't know if you recall, but years ago
+there was an S3 outage that caused obviously a global issue
+and that would show up
+in the health dashboard for everyone to see.
+And then the last example I wanted to include
+is a billing suspension notice.
+So your AWS account, or one within your org,
+has outstanding charges, so it's at risk of suspension
+or even closure.
+And these are just 3 of many,
+and I do mean many, event examples.
+So if you want to, feel free to look them all up,
+there are tons in the documentation, but I just
+wanted you to be familiar with what they look like
+and kind of what they contain.
+Okay, let's go ahead and have some exam tips
+and some takeaways.
+Remember that this service allows you to gain visibility
+into service and resource health for AWS resources
+and your accounts.
+It provides alerting, which enables you to
+receive notifications for these alerts
+for effective resources or even upcoming events.
+Remember, and please do remember this,
+you can automate actions based on incoming events
+using Amazon EventBridge.
+So for instance, if we go back to that reboot example
+you could look for that type of event,
+use Amazon Event Bridge to trigger a Lambda,
+which automatically stops and then starts that EC2
+that's affected.
+Remember, there are specific and there are public events.
+So you're going to receive both within the dashboard
+but you can filter.
+And then lastly, some keyword or scenarios.
+Look out for questions about checking alerts
+for service health
+and automating reboots of instances for AWS maintenance,
+which we kind of just talked about.
+Now that's going to do it.
+Let's go ahead and wrap up here, and then when
+you're ready to move on, we'll see you in the next one.
