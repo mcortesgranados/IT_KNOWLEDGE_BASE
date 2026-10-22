@@ -1,0 +1,128 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+06:51
+
+Course Introduction and Course Scenario
+04:15
+
+The Exam Blueprint
+02:36
+
+CHAPTER 2
+
+S3
+3:50:34
+
+Scenario Review
+00:51
+Understanding S3 Storage Classes
+13:11
+
+Adding S3 Security: Bucket Policies, ACLs, and Resource Policies
+09:23
+
+Using S3 Encryption
+05:18
+
+
+
+
+
+Object Versioning and MFA Overview
+07:44
+Using Lifecycle Policies and Glacier Overview
+05:59
+Adding S3 Replication and Sharing S3 Buckets
+04:47
+
+Adding S3 Performance and Optimization Overview
+02:19
+Using Pre-Signed URLs
+04:53
+Athena vs. Macie
+02:31
+Creating an S3 Static Website
+08:38
+
+HANDS-ON LAB
+Creating Amazon S3 Buckets, Managing Objects, and Enabling Versioning
+30:00
+HANDS-ON LAB
+Create a Static Website Using Amazon S3
+30:00
+HANDS-ON LAB
+Querying Data in Amazon S3 with Amazon Athena
+1:00:00
+HANDS-ON LAB
+Creating and Configuring an S3 Lifecycle Policy
+30:00
+QUIZ
+S3 Quiz
+15:00
+CHAPTER 3
+
+Storage
+37:55
+
+Scenario Review
+00:41
+Understanding AWS Storage
+09:07
+
+Storage Gateway Overview
+05:20
+FSx for Windows vs. FSx for Lustre
+02:10
+Securing Your Data
+05:37
+
+QUIZ
+Storage Quiz
+15:00
+CHAPTER 4
+
+Databases
+2:13:06
+
+RDS Overview
+17:18
+Amazon Aurora Overview
+11:21
+
+DynamoDB Overview
+16:21
+Redshift Overview
+02:46
+ElastiCache and DAX Overview
+03:28
+Adding Database Cost Optimization
+06:52
+HANDS-ON LAB
+Deploy an Amazon RDS Multi-AZ and Read Replica in AWS
+1:00:00
+QUIZ
+Databases Quiz
+15:00
+CHAPTER 5
+
+Migration
+55:49
+
+AWS Snowball, Snowball Edge, and Snowmobile Overview
+05:41
+Database Migration Service and DataSync Overview
+05:08
+HANDS-ON LAB
+Using Data Pipeline to Export DynamoDB Data to S3
+30:00
+QUIZ
+Migration Quiz
+15:00
+CHAPTER 6
+
+Conclusion
+03:00
+
+How to Prepare for the Exam
