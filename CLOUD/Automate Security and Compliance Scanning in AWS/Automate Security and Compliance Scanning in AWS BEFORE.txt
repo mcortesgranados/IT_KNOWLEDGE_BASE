@@ -1,0 +1,122 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+06:02
+
+Course Introduction
+02:08
+Before You Begin
+03:54
+CHAPTER 2
+
+Introducing Security and Compliance in AWS
+36:25
+
+Globomantics: Security and Compliance in AWS
+05:00
+Understanding Security and Compliance in AWS
+08:37
+Demo: Working with AWS Artifact
+09:52
+AWS Security and Compliance Tools
+07:30
+Security and Compliance Wrap-Up
+05:26
+CHAPTER 3
+
+Working with AWS Config
+32:48
+
+Globomantics: Resource and Compliance Challenge
+05:17
+Implementing AWS Config
+09:58
+Demo: Working with AWS Config Rules
+12:01
+Resource and Compliance Wrap-Up
+05:32
+CHAPTER 4
+
+Working with AWS Inspector
+36:31
+
+Globomantics: Vulnerability Identification Challenge
+04:36
+Introducing Amazon Inspector
+08:36
+Demo: Working with Amazon Inspector
+16:01
+
+
+Section Summary Vulnerability Identification Wrap-Up
+07:18
+CHAPTER 5
+
+Working with Amazon GuardDuty
+33:05
+
+Globomantics: Security Threat Detection Challenge
+04:55
+Understanding Amazon GuardDuty
+08:31
+Demo: Working with Amazon GuardDuty
+13:13
+Security Threat Detection Wrap-Up
+06:26
+CHAPTER 6
+
+Working with Amazon Detective
+32:05
+
+Globomantics: Root Cause Challenge
+04:44
+Working with Amazon Detective
+05:50
+Demo: Implementing Amazon Detective
+12:12
+Root Cause Wrap-Up
+09:19
+CHAPTER 7
+
+Working with AWS Security Hub
+38:13
+
+Globomantics: AWS Security Hub Challenge
+06:31
+Exploring AWS Security Hub
+10:41
+Demo: Working with AWS Security Hub
+13:38
+AWS Security Hub Wrap-Up
+07:23
+CHAPTER 8
+
+Bringing It All Together
+2:07:51
+
+Globomantics: Security and Compliance Challenge Accepted
+07:17
+Scenario One
+04:31
+HANDS-ON LAB
+Implementing Amazon GuardDuty and Amazon EventBridge
+45:00
+Scenario Two
+05:28
+HANDS-ON LAB
+Implementing AWS Security Hub
+1:00:00
+Security and Compliance: Challenge Met
+05:35
+CHAPTER 9
+
+Conclusion
+53:27
+
+Course Summary
+07:35
+Conclusion and What's Next
+00:52
+QUIZ
+Automate Security and Compliance Scanning in AWS
