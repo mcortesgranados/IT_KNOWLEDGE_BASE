@@ -1,0 +1,32 @@
+Course Outline
+CHAPTER 1
+
+Hands-On Kubernetes Clustering for Cloud
+4:09:08
+
+Course Introduction
+01:11
+
+Kubernetes in Google Cloud
+09:44
+
+HANDS-ON LAB
+Deploying a Kubernetes Cluster Using Google Kubernetes Engine
+30:00
+Kubernetes in Azure
+07:16
+
+HANDS-ON LAB
+Deploying a Kubernetes Cluster Using Azure Kubernetes Service
+1:00:00
+Kubernetes in AWS
+10:51
+
+HANDS-ON LAB
+Deploying a Kubernetes Cluster Using Elastic Kubernetes Service
+1:00:00
+Deploying a Web App Using Kubernetes in the Cloud
+10:06
+
+HANDS-ON LAB
+Deploying a Web App Using Elastic Kubernetes Service in AWS
