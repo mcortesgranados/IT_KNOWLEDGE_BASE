@@ -1,0 +1,3 @@
+# Local backups and one-off reports generated during maintenance
+*.bak
+reporte_jpg_huerfanos.html
