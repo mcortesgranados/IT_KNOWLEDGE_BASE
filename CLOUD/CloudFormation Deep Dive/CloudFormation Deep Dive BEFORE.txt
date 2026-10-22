@@ -1,0 +1,233 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+05:10
+
+About the Training Architect
+01:14
+AWS Free Tier: Usage Tracking and Billing Widget
+03:56
+CHAPTER 2
+
+Introduction to CloudFormation
+2:38:15
+
+CloudFormation Introduction and Syllabus
+05:00
+
+CloudFormation Essentials
+14:38
+Introduction to JSON
+14:59
+Introduction to YAML
+12:59
+CloudFormation and IAM Part 1
+12:32
+CloudFormation and IAM Part 2
+13:11
+CloudFormation Resource Types
+09:56
+HANDS-ON LAB
+Understanding CloudFormation Template Anatomy
+1:15:00
+CHAPTER 3
+
+Templates In-Depth
+4:54:51
+
+Template Format and Structure
+12:38
+Template Sections In-Depth Part 1
+12:38
+
+Template Sections In-Depth Part 2
+10:10
+Intrinsic Functions
+18:10
+Intrinsic Function Examples
+12:37
+CloudFormation Pseudo Paramaters
+05:18
+Condition Functions
+11:32
+Condition Functions Part 2
+09:27
+Templates to Stack
+15:47
+Using CloudFormation Designer
+13:02
+CloudFormation Templates For VPCs
+16:16
+Template Best Practices
+07:16
+HANDS-ON LAB
+Introduction to Templates and Stacks
+1:00:00
+HANDS-ON LAB
+Deploying a Web Server with CloudFormation Designer
+1:00:00
+HANDS-ON LAB
+Working with CloudFormation Condition Functions
+30:00
+CHAPTER 4
+
+Stacks In-Depth
+4:25:36
+
+A Deeper Dive Into Stacks
+16:29
+More Stack Details
+11:04
+Protecting Your Stacks
+14:38
+Protecting Your Stacks Part 2
+11:30
+Rollback Triggers
+12:04
+Using AWS Config to Monitor Stacks
+12:41
+Drift Detection
+10:53
+Drift Detection from the CLI
+09:39
+Drift Alerts via AWS Config
+09:38
+Drift Remediation
+08:24
+VPC Endpoints For CloudFormation
+08:42
+CloudFormation Guardrails
+04:54
+HANDS-ON LAB
+Using CloudFormation Drift Detection
+1:00:00
+HANDS-ON LAB
+Using AWS Config to Monitor CloudFormation Stack Resources
+1:15:00
+CHAPTER 5
+
+Updating Stacks
+3:23:12
+
+Updating Stacks: Part 1
+13:55
+Updating Stacks: Part 2
+13:19
+Change Sets
+16:11
+Cross-Stack References
+14:42
+Nested Stacks
+10:05
+HANDS-ON LAB
+Working with CloudFormation Nested Stacks
+45:00
+HANDS-ON LAB
+Deploying an EC2 Instance Using Cross-Stack References
+30:00
+HANDS-ON LAB
+Updating CloudFormation Stacks with Direct Updates and Change Sets
+1:00:00
+CHAPTER 6
+
+CloudFormation from the CLI
+19:16
+
+CLI Installation
+05:10
+CLI Configuration
+04:34
+CloudFormation from the CLI
+09:32
+CHAPTER 7
+
+Template Advanced Concepts
+2:04:23
+
+Bootstrapping
+13:09
+Wait Conditions
+11:45
+Creation Policies
+10:04
+Update Policies
+16:33
+Helper Scripts
+12:21
+Helper Script Walkthrough
+15:58
+Systems Manager Parameter Store
+10:45
+Dynamic References
+08:15
+Handling of Secrets
+14:04
+CloudFormation Macros
+11:29
+CHAPTER 8
+
+CloudFormation Custom Resources
+1:00:46
+
+Introduction to Custom Resources
+10:11
+Introduction to Lambda
+09:51
+Custom Resources by Example: AMI Selection
+09:52
+Custom Resources by Example: Password Checker
+10:00
+Serverless Application Model Part 1
+10:17
+Serverless Application Model Part 2
+10:35
+CHAPTER 9
+
+Stack Sets
+59:22
+
+Provisioning at Scale
+08:05
+Introduction to Stack Sets
+13:22
+Creating Stack Sets
+06:45
+Updating Stack Sets
+07:00
+Adding Stacks To Stack Sets
+07:04
+Stack Set Override Parameters
+10:06
+Stack Set Best Practices and Deleting Stack Sets
+07:00
+CHAPTER 10
+
+CloudFormation Deployment With Continuous Delivery
+26:30
+
+Continuous Delivery With CloudFormation And Code Pipeline Part 1
+12:00
+
+Continuous Delivery With CloudFormation And Code Pipeline Part 2
+14:30
+
+CHAPTER 11
+
+CloudFormation Best Practices and Troubleshooting
+44:03
+
+Troubleshooting CloudFormation Part 1
+12:52
+Troubleshooting CloudFormation Part 2
+07:31
+CloudFormation Best Practices
+11:25
+CloudFormation for Disaster Recovery
+12:15
+CHAPTER 12
+
+Conclusion
+01:48
+
+What's Next?
