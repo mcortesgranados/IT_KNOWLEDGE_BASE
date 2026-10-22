@@ -1,0 +1,35 @@
+Course Outline
+CHAPTER 1
+
+Securing Applications with AWS
+6:57:22
+
+Course Introduction: Securing Applications with AWS
+07:41
+
+Securing Your Application Secrets in AWS
+07:30
+
+HANDS-ON LAB
+Using AWS Secrets Manager for Storing and Rotating Database Credentials
+45:00
+An Overview of Amazon Inspector
+06:30
+HANDS-ON LAB
+Configuring Amazon Inspector with Systems Manager to Assess Application Compliance
+2:00:00
+Protecting against Top 10 Web App Security Risks
+08:27
+
+HANDS-ON LAB
+Using AWS WAF for Web Application Security
+30:00
+Available AWS Tools and Services for Application Security
+06:43
+HANDS-ON LAB
+Securing an Application with Multiple AWS Services
+2:00:00
+Comprehensive Application Security and a Security Checklist
+05:31
+HANDS-ON LAB
+Techniques for Securing an Application in AWS
