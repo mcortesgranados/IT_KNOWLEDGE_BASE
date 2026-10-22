@@ -1,0 +1,27 @@
+Course Outline
+CHAPTER 1
+
+Evolving CloudFormation Deployments
+1:02:19
+
+Course Introduction
+01:17
+
+
+Course Overview and CloudFormation 101
+12:38
+
+
+Evolution Stage 1: Your First Deployment
+11:37
+
+Pre-Evolution Revolution: Fixing the Existing Environment
+14:23
+
+Evolution Stage 2: Building a Better Deployment
+08:52
+
+Evolution Stage 3: Future-Proofing Your Template
+11:58
+
+Course Summary and What’s Next
