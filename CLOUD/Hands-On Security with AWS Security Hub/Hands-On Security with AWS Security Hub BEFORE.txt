@@ -1,0 +1,30 @@
+Course Outline
+CHAPTER 1
+
+Hands-On Security with AWS Security Hub
+4:31:11
+
+Course Introduction: Prioritizing Security Issues with AWS Security Hub
+06:50
+Security Posture Management with AWS Security Hub
+07:52
+
+
+HANDS-ON LAB
+Using AWS Security Hub to Analyze an AWS Account
+45:00
+Automatic Remediation with AWS Security Hub
+05:00
+HANDS-ON LAB
+Automating Findings Identified by AWS Security Hub
+30:00
+Using AWS Security Hub to Become Proactive about Our Security Posture
+06:39
+HANDS-ON LAB
+Proactive Security with AWS Security Hub
+1:15:00
+What Is a Threat Emulation Exercise?
+04:50
+
+HANDS-ON LAB
+Identifying and Remediating Threats with AWS Security Hub
