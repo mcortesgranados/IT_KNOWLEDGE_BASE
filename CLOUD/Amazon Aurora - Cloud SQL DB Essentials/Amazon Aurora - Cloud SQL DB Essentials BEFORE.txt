@@ -1,0 +1,140 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+04:26
+
+Course Introduction
+02:24
+
+Using the Interactive Diagram
+02:02
+CHAPTER 2
+
+Introduction to Amazon Aurora
+1:46:50
+
+What Is a Database?
+09:45
+What Is Amazon Aurora?
+10:42
+Aurora Database Cluster - Part One
+26:43
+Aurora Database Cluster - Part Two
+09:04
+How Are Databases Used?
+05:36
+HANDS-ON LAB
+Create and Configure an Aurora MySQL Database Cluster
+45:00
+CHAPTER 3
+
+Amazon Aurora Features
+59:40
+
+MySQL and PostgreSQL
+14:40
+Global Database
+11:03
+Multi-Master
+01:55
+Parallel Query
+03:42
+Performance Insights
+03:36
+Backtrack
+06:40
+Aurora Serverless
+04:42
+Machine Learning
+04:00
+RDS Proxy
+03:04
+Additional New Aurora Features
+06:18
+CHAPTER 4
+
+Pricing
+07:43
+
+Amazon Aurora Pricing
+07:43
+CHAPTER 5
+
+Creating and Managing Your Aurora DB Cluster
+1:19:30
+
+Performing a Proof of Concept
+19:01
+Security, Configuring Access, and Connecting to Your Aurora Database
+08:45
+Importing and Exporting Data
+11:47
+Managing Performance and Scaling for Your Aurora DB Cluster
+03:59
+Best Practices
+03:11
+Connecting to an Aurora DB to Transfer Data
+02:47
+HANDS-ON LAB
+Creating an Aurora DB Cluster with an Instance Parameter Group and a Custom Cluster Endpoint
+30:00
+CHAPTER 6
+
+Aurora Serverless
+38:08
+
+Using Amazon Aurora Serverless
+09:18
+How Amazon Aurora Serverless Works
+10:09
+Creating an Aurora Serverless DB Cluster
+09:01
+Restoring, Modifying, and Viewing Your Aurora Serverless DB
+04:13
+Using the Data API for Aurora Serverless
+03:09
+Using the Query Editor for Aurora Serverless
+02:18
+CHAPTER 7
+
+Amazon Aurora Storage and Reliability
+13:56
+
+Storage and Reliability with Amazon Aurora
+11:08
+High Availability with Amazon Aurora
+02:48
+CHAPTER 8
+
+Replication and Data Management
+1:06:43
+
+Working with Amazon Aurora Global Databases
+06:43
+HANDS-ON LAB
+Using the AWS DMS to Migrate Data to an Aurora Database
+1:00:00
+CHAPTER 9
+
+Performance and Troubleshooting
+07:08
+
+Performance Tuning and Benchmarking with Amazon Aurora
+07:08
+CHAPTER 10
+
+Amazon Aurora Troubleshooting
+16:25
+
+Troubleshooting
+09:57
+Setting the Capacity of an Aurora Serverless DB Cluster
+02:03
+Troubleshooting Data API Issues
+02:30
+Amazon Aurora Limits
+01:55
+CHAPTER 11
+
+Course Conclusion
