@@ -1,0 +1,26 @@
+Okay, hello Cloud Gurus and welcome
+to the end of this section of the course.
+So, as I mentioned at the beginning of this section,
+currently none of these services are on the exam.
+So we only covered them off at a very high level
+and what their use cases are.
+So we only have 2 services in the media section.
+So we've got Elastic Transcoder,
+this is where you basically convert your video files
+into optimized versions for particular devices.
+Basically, I record on an iMac, for example.
+And then when I upload this video to Elastic Transcoder
+it's going to convert the video format
+so that you can watch on an Android device,
+or on an iPad, or something, you know, a laptop, et cetera.
+So that's all Elastic Transcoder does,
+it optimizes your media files for particular devices.
+So just remember that going into your exam.
+And then, Amazon Kinesis Video Streams.
+So if you have a scenario-based question
+about video streaming at scale from millions of devices
+so think Ring, for example, then think
+of Amazon Kinesis Video Streams.
+So that is it for this section of the course, guys.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.

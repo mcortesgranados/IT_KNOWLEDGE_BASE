@@ -1,0 +1,46 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to talk
+about converting media files with Amazon Elastic Transcoder.
+So, first thing we're going to cover off is
+what is Elastic Transcoder?
+We're going to look at the benefits
+and then we'll go onto my exam tips.
+Now we at A Cloud Guru use Amazon Elastic Transcoder a lot
+and we always have since it first came out.
+So basically it allows businesses and developers
+to convert or to transcode media files
+from their original source format
+into versions that are optimized for various devices
+such as smartphones, tablets, and PCs.
+So if you're watching this on your phone,
+or if you're watching this on your laptop,
+or an iPad or something, it's going to look a bit different
+from when I first recorded it,
+and that's because basically I've loaded this video file
+into Transcoder and it's outputted it
+so that it's basically optimized for the device
+that you are viewing it on.
+So that's all Elastic Transcoder is and what it does.
+So it's really easy to use.
+We have been using it since the service first launched.
+So you can set up Elastic Transcoder using the APIs,
+the SDKs, or the management console
+and it's really easy to get started.
+Once you have gotten started,
+you can start transcoding immediately.
+It's also elastically scalable, so it scales on demand.
+So you can use Elastic Transcoder
+to transcode everything from small frequent files
+to extremely large video files in the thousands all at once.
+And it scales depending on your needs.
+So basically, it doesn't really come up in the exam yet,
+but it might do.
+So if you see a scenario question using the word transcode
+or if it's talking about converting your media files
+to an optimized format for a particular device,
+then what I want you to think of is Elastic Transcoder.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free, move on to the next lecture.
+Thank you.

@@ -1,0 +1,63 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to talk
+about how we can stream live video
+in AWS using Amazon Kinesis Video Streams.
+Now, like I said, this doesn't currently come up
+in the exam right now.
+You, basically, just have to understand
+what Kinesis Video Streams is,
+what use cases you can use it for and then my exam tips.
+So what is it?
+Well, Kinesis Video Streams is basically
+a way of streaming media content
+from a large number of devices to AWS,
+and then you can run things like analytics,
+machine learning, playback, and other processing,
+and all I want you to think
+about when you hear Kinesis Video Streams is Amazon Ring.
+That is a perfect example of it.
+So I don't know if you have a Ring at home.
+You can have a Ring doorbell.
+You can have the internal cameras, the external cameras.
+When someone hits your doorbell,
+you get a notification that someone's ringing your doorbell,
+but if you have the internal and external cameras,
+it can also say that there's a person detected,
+and that is literally Kinesis Video Streams recognizing
+that that's not a random dog or a cat walking through.
+It's actually a person.
+So it's using machine learning,
+and it's doing analytics, basically, live as you go.
+So that's all Kinesis Video Streams is,
+and it scales elastically to millions of devices.
+Again, think of Ring, and then stores, encrypts,
+and indexes the video data in your streams,
+and you can then access your data through easy-to-use APIs.
+So if you ever see the scenario Kinesis Video Streams,
+I want you to think of Ring as the easiest to remember.
+So what are our use cases?
+Well, like I said, smart homes.
+So think of Amazon Ring.
+You can stream video content from your Ring device
+to Kinesis Video Streams and then run analysis on the data.
+So where else can you use this?
+Well, think of smart cities.
+So many cities have things like CCTV cameras
+at traffic lights and junctions that can be used
+to monitor automatically using Kinesis Video Streams,
+and then we have industrial automation,
+and you can use Kinesis streams to ingest time-encoded data.
+This is things like LIDAR and RADAR signals
+and temperature sensors, for example,
+to provide industrial automation.
+So it's a very quick topic, again,
+because it's not really featured on the exam,
+but if you do have a scenario-based question
+where you can see video streaming
+at scale for millions of devices,
+I want you to think of Amazon Kinesis Video Streams.
+So that's it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

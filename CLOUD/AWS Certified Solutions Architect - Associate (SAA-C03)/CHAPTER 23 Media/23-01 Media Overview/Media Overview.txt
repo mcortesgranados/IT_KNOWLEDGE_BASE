@@ -1,0 +1,16 @@
+Okay, hello Cloud Gurus
+and welcome to this section of the course.
+In this section of the course, we're going to look at media.
+So we're going to look at really just 2 things:
+converting media files using Amazon Elastic Transcoder.
+Then we're going to look at streaming live video in AWS
+using Amazon Kinesis Video Streams.
+And then we'll go onto my exam tips.
+Now, having just recently set the exam,
+currently none of the media services
+are on the exam that we've seen,
+so we're just going to cover them at a very high level
+as well as what their used cases are.
+There's only 2 that you need to know
+and they may come up in the exam in the future.
+So, let's go ahead and get started.
