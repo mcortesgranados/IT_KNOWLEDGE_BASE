@@ -1,0 +1,357 @@
+[Ryan Kroonenburg] Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look at
+volumes and snapshots.
+So we're gonna start with what are volumes
+and then what are snapshots.
+We'll do three tips for snapshots
+and we'll look at what to know about EBS volumes.
+We'll go in and do a demo,
+and then we'll go onto my exam tips.
+So what are volumes?
+Well, volumes exist on EBS.
+So think of it as a virtual hard disk,
+volumes are simply virtual hard disks,
+and you need a minimum of one volume per EC2 instance.
+And this is always called the root device volume.
+This is where your operating system is installed.
+So this is where windows is installed,
+or where Linux is installed, et cetera.
+So that's all a volume is.
+So what are snapshots?
+Well, the camera might give it away.
+Snapshots exist on S3, so they do not exist on EBS.
+They're actually stored on S3.
+But essentially what it is, is it's a snapshot,
+is a photo of the virtual disc or of the volume.
+So you're literally taking a snapshot of the volume,
+how it exists when you initiate that snap.
+So snapshots are point in time.
+When you take a snapshot it's a point in time copy
+of a volume.
+So it's just like taking a photo.
+It's a point in time copy of something that is occurring.
+So snapshots are incremental.
+This means that only the data that has been changed
+since your last snapshot has been moved to S3.
+So essentially this saves dramatically on space
+and the time that it takes to take a snapshot.
+So let's say we installed a Linux OS
+and then we took a snap of it,
+and then we created a text file that just said
+hello cloud gurus, and it was called Hello.TXT.
+When we take a second snap, it's only the changes
+that have occurred from our first snap
+that will be replicated over to S3.
+So essentially it's just going to be a small text file.
+Now it's actually, it doesn't quite work like that.
+It's not like it's moving the file over,
+but it's basically taking a photograph of the volume,
+how it exists,
+and then essentially it just moves over the deltas,
+so the change in those volumes.
+So that's all it is.
+Snapshots are incremental
+and it saves you a lot of money on space and time
+because you're not moving the entire,
+you know, data set over.
+It's only the changes that are being moved over.
+That being said though,
+the first snapshot may take some time to create
+as there's no previous point in time copy.
+So when you take your first snapshot
+it's going to take longer
+than when you take your subsequent snapshots.
+So what are my three tips for snapshots?
+So if you want consistent snapshots,
+snapshots only capture the data that has been written
+to your EBS volume.
+And this might exclude any data
+that's been locally cached in your application
+or operating system.
+So for a consistent snapshot,
+it's recommended that you stop the instance and take a snap.
+Basically, if you are doing it on a running operating system
+and your application's running
+and it hasn't saved it to disc and you go and take a snap,
+because it's not saved to disk, it might still be in RAM
+or it might still be cached or whatever,
+then it's not going to be on that snapshot.
+So if you want a completely consistent snapshot,
+the best bet is to stop an instance and then take a snap.
+In terms of encrypted snapshots,
+if you take a snapshot of an encrypted EBS volume,
+then of course the snapshot will be encrypted automatically.
+And in terms of sharing snapshots, you can share snapshots,
+but only in the region in which they were created.
+To share to other regions,
+you first need to copy them to the destination region first,
+and we'll have a look at that in the demo,
+but that's a crucial point going into your exam.
+You do not know how many scenario-based questions
+where they'll test you on how
+to move EC2 instances from one region to another.
+Well, you can do it, you basically just take a snapshot,
+then you create a copy of that snap
+and you copy it to another region
+and then you can provision
+that EC2 instance in another region.
+So what should you know about EBS volumes?
+Well, you should always know the location.
+So EBS volumes will always be in the same availability zone
+as your EC2 instance.
+Crucial to know this.
+And that kind of makes sense
+because you do not want the latency.
+If you imagine an EBS volume being a virtual hard disk,
+you don't want your hard disk in one availability zone
+and the actual computer that it's supposed to be connected
+to in another availability zone,
+20 or 30 miles apart.
+Like that kind of latency is just not going to work.
+So your EBS volumes will always be in the same availability
+zone as your EC2 instances,
+and it's really important to remember that
+going into your exam.
+Also, remember that you can resize on the fly.
+So you can resize your EBS volumes on the fly.
+You do not need to stop or restart the instance.
+However, you will need to extend the file system
+in the operating system
+so the operating system can see the resized volume.
+And you can switch and change volume types on the fly.
+So you can go from GP2 to IO2,
+and you don't need to stop or restart the instance.
+And we'll have a look at how to do that right now.
+So let's log into the AWS console.
+Okay, so here I am in the AWS console.
+We're gonna go over to EC2 and we're gonna go ahead
+and provision a new instance.
+And I'm just gonna call this,
+my server something simple, one.
+And I'm gonna use the Amazon Linux AMI,
+my instance type's T2 Micro.
+I'm gonna use my standard key pair
+and then I'm gonna scroll down.
+I'm going to use an existing security group.
+So I'm just going to use my launch wizard one,
+and then I'm gonna scroll down
+and in here we can see our volume.
+So my root device volume is one eight gig
+GP3 root volume, which is not encrypted.
+And then what I'm gonna do is just add a new volume
+and in here I can select my different volumes.
+So what I might want to do is go
+and do a magnetic standard volume in here
+and I can add additional volumes if I want.
+So I could go and add a throughput optimize HDD,
+et cetera, et cetera.
+So you can add as many volumes as you want.
+I think I'm just gonna remove that just to keep it simple.
+Here we can see my volume two,
+so we can see that's eight gigs.
+We can see where it's mounted,
+we can see that it's a volume type standard.
+Here we can have it encrypted or not encrypted.
+Delete on termination.
+So if I'm gonna terminate my EC2 instance,
+do I want this EBS volume to be terminated with it
+or do I want it to persist?
+This is entirely up to you.
+Let's say this is a file server
+and you were storing all your files on this particular
+volume and you wanted to make sure that
+if the file server was accidentally deleted,
+that the files would remain,
+then you would have delete on termination as no.
+I'm just gonna put it as yes.
+And we're gonna go ahead and launch this instance.
+So that instance is now launching, go into instances,
+we'll be able to see it in here,
+and we can see that it is pending.
+So I'm just gonna pause the video
+and wait for this instance to come up online.
+Okay, so my EC2 instance is now online.
+I can click on it in here.
+And if we're dealing with EBS,
+then we want to click on storage.
+And in here we can see our volumes.
+So we've got our two different volumes.
+We can see that they're attached,
+we can see that they're not encrypted.
+We will cover off encryption later on in the course.
+You can actually click on the volume ID,
+that will bring you up into your volumes.
+And then this is basically sorted by a filter
+so you can hit clear filters
+and you'll be able to see all your EBS volumes here.
+So we've got one here that's standard
+and we've got one here that's GP3.
+And we can see that this essentially
+is not our route device volume,
+it's attached to our EC2 instance as an additional volume.
+Now what we can do is go in here
+and we can see that it's in use.
+We can see all kinds of different things, you know,
+information about it such as not encrypted.
+What we can do is go over to our actions and we can go
+and modify our volume.
+So we can go from magnetic standard all the way up to,
+let's say we want GP3 and we can even change the size.
+So the minimum's one gig, the maximum 16 gigs,
+here's our IOPS, here's our throughput, et cetera.
+So I'm going to change that volume
+and it's going to essentially do it on the fly.
+Says here if you're increasing the size of the volume,
+you must extend the file system
+to the new size of the volume.
+You can only do this when the volume enters
+the optimizing state.
+And then it'll give you instructions on how to do that.
+Don't worry too much about that.
+Let's go ahead and hit modify.
+And you can see here this is the volume
+that we were trying to modify.
+If we hit refresh, look how fast that is.
+It's almost like black magic to me,
+because it's come such a long way in the last 10, 15 years.
+You can literally just go from a magnetic volume
+to SSD in the blink of an eye.
+So that is now a GP3 volume.
+We can go in here and we can go to actions
+and we can detach this volume,
+so we can detach it from our EC2 instance.
+Basically it's just like unplugging your hard drive,
+an additional hard drive from your EC2 instance.
+So I'm gonna go ahead and hit detach.
+This actually does take a bit more time
+than modifying the volume.
+So I'm just gonna pause the video
+and wait for it to come up online.
+Okay, and we can now see that
+it's successfully detached the volume.
+If I refresh in here
+we can see that it is no longer connected
+to any EC2 instance.
+So the way you can see that is
+under attached instances it's got nothing.
+And then the volume state, it says that it's available.
+So what we can do now, if you just wanna go in
+and delete that, we can go actions, delete volume,
+and then we can go ahead and delete it.
+So what we're going to look at now is
+how can we migrate our EC2 instances
+from one region to another?
+And that is a very important exam topic that comes up again
+and again and again.
+Well, the first thing we need to do
+is click on our root device volume.
+So root device volumes,
+just where we've got our operating system installed on it.
+We've only got one EC2 instance, which is this one.
+So we know that this is our root device volume
+'cause there's only one volume.
+And then what we wanna do is go over two actions
+and then what we wanna do is create a snapshot.
+And a snapshot is exactly like what you would think.
+It's just a photograph of that root device volume in time.
+So call it my first snap, something like that.
+And then what I'm going to go ahead
+and do is hit create snapshot.
+So that is now creating snapshot.
+It says here that it successfully created it,
+but if you need your snapshot to be immediately available,
+consider using Fast Snapshot Restore.
+What we can do is click down here and go to snapshots
+and we can see that that has now been completed.
+It has sped up a lot, used to take a couple of minutes
+before to create snapshots.
+It is almost instantaneous now.
+So the next thing we're going to do is we're going
+to look at how can we deploy an EC2 instance
+across to another region.
+And the trick is, is using snapshots.
+So we've got a snapshot of our root device volume
+of our operating system.
+We're gonna go over here
+and we're going to copy this snapshot.
+And in here we've got a description,
+it's copied snap, my first snap.
+And in here we're going to change the destination region.
+So we could go over to EU West one for example.
+We can click encrypt
+and that would encrypt the snapshot.
+Not gonna do that just yet,
+but this is how we can move our snapshots
+from one region to another.
+So you can create a gold template EC2 instance,
+it might be your gold template web server.
+And then you can deploy those templates all over the world
+just by creating a snapshot of it
+and then copying the snapshots to different regions.
+So I'm gonna copy this over to EU West one.
+You see it's successfully created snapshot copy.
+And then what we can do is just close this
+and we can go over to EU West one
+and see if that snapshot exists there.
+And we're over in EU West one
+and we can see the snapshot there.
+So we can see that the snapshot status is pending.
+So there's nothing I can do until this is completed.
+So what I'm gonna do is just pause the video.
+That is now completed.
+Now what I can do is click in here
+and I can go to my actions
+and then I can create an image from the snapshot,
+and then we'll just call this my default web server,
+something like that.
+So maybe this is our golden image for our default web server
+and leave everything else as standard
+and go in and create the image.
+So successfully request a new image,
+the image is being created,
+your images are saved under AMIs.
+So we can click in here
+and we can see that this image is now available.
+And from here I can click in
+and launch my instance from this AMI
+and call it my web server for example, web server.
+And then scroll down.
+And I'm not gonna go ahead and provision this
+'cause I don't have any key pairs and I don't have any,
+you know, security groups set up.
+So you can go and launch an EC2 server from that image,
+which is basically taken from your snapshot.
+So that's the most important thing to remember
+going into your exam.
+You can move EC2 instances around the world.
+All you need to do is first take a snapshot
+of the root device volume,
+you then create a copy of that snapshot
+and you change the region
+to the desired region that you want.
+Once that snapshot is in that region,
+you then create an image
+and then you launch your EC2 instances from that image.
+So let's go and have a look at my exam tips.
+So the five things you need to remember for EBS volumes
+and snapshots going into your exam is remember
+that volumes exist on EBS,
+whereas snapshots exist on S3.
+Snapshots are point in time photographs of volumes,
+and they're incremental in nature.
+The first snapshot will take some time to create
+and for consistent snapshots you need to stop the instance
+and then detach the volume.
+You can share snapshots between AWS accounts
+as well as between regions.
+But first you need to copy that snapshot
+to the target region, which is what we just did.
+And then finally just remember
+that you can resize your EBS volumes on the fly
+as well as changing the volume type
+and it won't cause you any downtime.
+So that is it for this lecture everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

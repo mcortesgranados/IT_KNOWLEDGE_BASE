@@ -1,0 +1,89 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at EC2 hibernation.
+So we're going to look at our EBS behaviors reviewed.
+Then we're gonna explore what EC2 hibernation is.
+Then we'll look at EC2 hibernation in action,
+and then we'll move on to my exam tips.
+So EBS behaviors reviewed,
+we've learned so far
+that we can stop and terminate EC2 instances,
+and if we stop the instance,
+the data is kept on disk with EBS
+and will remain on the disk until the EC2 instance started.
+If the instance is terminated, then by default,
+the root device volume will also be terminated,
+but we can save that EBS volume if we wanted.
+So when we start our EC2 instance, the following happens:
+the operating system boots up,
+and then the user data script is run.
+And this is your bootstrap script,
+which we covered off in the last section of the course.
+And then your application starts,
+so this might be things like Apache,
+might be, you know, MySQL, et cetera, et cetera.
+So your applications, when they're starting up,
+they can take some time, especially if you're dealing
+with very complicated Big Data applications, for example.
+So with EC2 hibernation,
+basically what happens is
+when you hibernate an EC2 instance,
+the operating system is told to perform hibernation,
+and this basically suspends to disk.
+Now hibernation saves the contents from the instance memory,
+so from its RAM, to your EBS volume.
+And we persist the instance's EBS root volume
+and any attached EBS data volumes.
+So essentially, what you're doing is you're taking
+what's in the RAM and you're saving it down to disk.
+So when you start your instance out of hibernation,
+the EBS root volume is restored to its previous state,
+and then the RAM contents are reloaded,
+and the processes that were previously running
+on the instance are also resumed.
+And previously attached data volumes are then reattached,
+and the instance retains its instance ID.
+So here's a good little diagram.
+We've got our EC2 instance that's running.
+It's got EBS root device volumes.
+We start hibernation,
+and then what happens is the RAM is then stopped,
+and it's saved to disk,
+and the instance is shut down and completely stopped.
+And then what happens is when we start that instance,
+the EBS root volume is restored to its previous state.
+The RAM contents are reloaded,
+and the processes that were previously were running
+on the instance are resumed.
+So what does this mean in practice?
+Well, with EC2 hibernation,
+the instance boots a lot faster
+because the operating system does not need to reboot
+because the in-memory state or the RAM is preserved.
+And this is useful for things like lon-running processes
+or services that take time to initialize.
+So going into your exam,
+you basically just need to know what EC2 hibernation is.
+So EC2 hibernation preserves the in-memory RAM
+on persistent storage, so on EBS,
+and it's much faster to boot up.
+You don't need to reload the operating system,
+and the RAM must be less than 150 gigs in size
+for EC2 hibernation to work
+And instance families,
+including instances in general purpose, compute, memory,
+and storage optimized groups, are supported.
+They may add more families later on.
+You don't need to remember all the families for your exam.
+Essentially, what you just need to know
+is what EC2 hibernation is.
+Remember that it's available for Windows,
+Amazon Linux 2 AMI, and Ubuntu.
+Instances can't be hibernated for more than 60 days,
+so 60 days is the maximum amount of time that you can do it,
+and it's available for On-Demand instances
+and Reserved instances.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

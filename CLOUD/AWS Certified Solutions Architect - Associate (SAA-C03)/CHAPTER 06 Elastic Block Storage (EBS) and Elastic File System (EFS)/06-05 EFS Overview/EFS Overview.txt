@@ -1,0 +1,161 @@
+Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look at Elastic File System
+or EFS as an overview.
+So we're gonna start with what EFS is,
+what the different use cases are.
+We'll do an overview of it
+and then we'll look at different performance elements
+and how we can control our performance with EFS.
+We'll then look at our different storage tiers.
+We'll do a demo as how to set this up in the AWS console
+and then we'll move on to our exam tips.
+So what is EFS?
+Well, EFS stands for Amazon Elastic File System
+and basically it's a managed NFS or network file system
+that can be mounted on many different EC2 instances at once.
+So EFS works with EC2 instances
+that are in multiple availability zones.
+So you can set up EFS and have centralized storage
+and attach it to multiple EC2 instances.
+So it's basically just shared storage
+and it's highly available, it's scalable,
+however it is expensive.
+So this is essentially what it would look like.
+We've got our AWS cloud and then we've got our VPC
+and inside it we've got our EC2 instances
+and they are basically have a mount target towards EFS
+and it's a way for them to share data.
+So you can have even up to,
+let's say a thousand EC2 instances,
+all connecting to the same file system.
+So this is a great way of having web server farms.
+It's a great way for things like content management systems
+or shared database access, et cetera.
+So it's a shared storage across multiple EC2 instances.
+So in terms of its use cases,
+we can use it for things like content management.
+So it's great fit for content management systems.
+This could be things like WordPress blogs for example
+or Joomla websites, because you can easily share content
+between your EC2 instances.
+Can also be used as a web server farm.
+Like I said, it's great fit for web servers.
+You basically just have a single folder structure
+for your website.
+In terms of EFS, it uses the NFSv4 protocol.
+It's compatible with Linux based AMIs.
+Windows is not supported at this time
+and we'll cover off shared storage for Windows
+in a later lecture,
+but right now this is Linux only for EFS.
+It uses encryption at rest using key management servers
+and we do cover that off later on
+in the security part of the course
+and basically it's a file system that scales automatically
+and you don't have to worry about capacity planning.
+So you don't have to say,
+"Hey I'm gonna need a hundred gigs."
+It basically scales automatically as you add files to it.
+So it's great way of having an elastic file system
+and it's pay per use, so the more you use, the more you pay
+and like I said, it is expensive.
+EFS has amazing performance capabilities.
+However, you can have thousands of concurrent connections.
+So EFS can literally support thousands
+of concurrent connections or thousands of EC2 instances.
+You can get 10 gigabits per second throughput.
+So it's really, you know,
+super fast in terms of throughput
+and it scales to the petabytes,
+so you can scale your storage up into the petabytes.
+So it has really, really good performance
+and now when you create your EFS file system,
+you can actually set what performance characteristics
+you want, so you can have general purpose.
+This is great for things like web servers,
+content management systems, et cetera.
+Then you can have things like Max I/O
+and this can be used for big data or media processing,
+et cetera.
+Moving on to storage tiers,
+EFS is very similar to S3,
+in that it comes with two different storage tiers
+and you can even use lifecycle management,
+which allows you to move your data
+from one tier to another after,
+and it's set number of days that you specify.
+So we've got our standard storage tier.
+This is for our frequently accessed files,
+but then we also have our
+infrequently accessed storage tier
+and this is for files that are not frequently accessed.
+So you can move your files after,
+let's say 30 days from standard to infrequently access
+and you'll save some money.
+So let's go ahead to the AWS console
+and have a look at how we can set up EFS.
+Okay, so here I am in the AWS console.
+We can get to EFS by going to storage and clicking on EFS,
+or you can type it in here.
+We're gonna open up EFS.
+Now because I haven't created EFS systems
+before in this account, get this splash screen,
+see our file systems over here.
+Let's go ahead and create a file system.
+In here, we just give it a name.
+So we'll call it MyEFS
+and in here we could just gonna put it
+into our default vpc in Northern Virginia.
+Go ahead and hit create
+and you can see that it has now been created
+or it is being, it's creating.
+You can see by default that it is encrypted
+and we can see that the size is very small at the moment,
+but we can increase that as we grow.
+It became available immediately.
+This has come a long way since that first came out.
+Used to take at least half an hour from memory,
+but now it just deploys instantaneously.
+In here, we can go ahead and view the details of our EFS,
+so we can look at the size, we can do some monitoring,
+do our file system policies, our access points,
+which we can cover off later
+in the VPC section of the course.
+Network and replication.
+To be honest, it's all beyond the scope
+of the solutions architect associate, playing with EFS.
+Essentially, all you really need to do
+is understand what EFS is.
+You can go in and edit it and so you can change things.
+So notice that backups are enabled automatically.
+We can do lifecycle management with EFS.
+We can change its performance settings,
+so we can have enhance, we can have bursting,
+we can have elastic, we can have provisioned,
+et cetera, et cetera,
+but like I said, it doesn't really come up too much
+in the Solutions Architect Associate exam,
+other than knowing what it is and where you would use it.
+So let's go onto my exam tips.
+So going into your exam, like I just said,
+what you really need to know about EFS
+is where you would use it.
+So EFS supports the Network File System Version four
+or NFSv4 protocol.
+You only pay for the storage that you use.
+You don't need to worry about pre-provisioning
+like we just saw then, you click it and it's there
+almost instantly.
+It can scale up to petabytes.
+It can support thousands of concurrent
+NFS connections at once
+and data is stored across multiple availability zones
+within a region and you get Read-after-write consistency
+and if you have a scenario based question,
+around highly scalable shared storage using NFS,
+I want you to think immediately of EFS.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

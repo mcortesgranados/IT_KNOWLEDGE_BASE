@@ -1,0 +1,224 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+Well, congratulations.
+You're at the end of the EBS section of the course.
+In this lecture,
+we're just going to review everything that we've learned
+in this section of the course.
+So let's start with EBS volumes themselves.
+I'll start with SSD Volumes.
+They're highly available and scalable storage volumes
+that you can attach to an EC2 instance.
+So we'll have a look at gp2, this is general purpose SSD.
+This is suitable for boot disks
+and general applications,
+gives you up to 16,000 IOPS per volume,
+and it gives you up to 3 nines durability.
+Then we looked at the newer one, which is gp3.
+This is suitable for high performance applications
+and it gives you a predictable
+3,000 IOPS baseline performance
+and 125 megabits per second, regardless of your volume size.
+And again, this is 99.9% durability.
+So 3 nines durability.
+If you need a faster SSD volumes
+than we have io1, this is provisioned IOPS SSD.
+This is suitable for online transaction processing
+and latency-sensitive applications.
+Get up to 50 IOPS per GiB and up to 64,000 IOPS per volume.
+It's high performance,
+but it's also the most expensive EBS volume
+that you can get and you get 3 nine durability.
+We then have io2, which is the new provisioned IOPS SSD.
+Again, this is suitable for online transaction processing
+and latency-sensitive applications.
+You get 500 IOPS per GiB
+and about 64,000 IOPS or up to 64,000 IOPS per volume.
+And with io2, you actually get 5 nines durability.
+So it has the best durability out of any EBS volumes.
+And it's the latest generation provisioned IOPS volume.
+Moving on to our magnetic storage.
+So we had throughput optimize hard disc drive.
+This is suitable for big data, data warehouses,
+extract, transform, and load.
+And the maximum throughput is 500 MBs per second
+and it cannot be a boot volume
+but you do get up to 3 nine's durability.
+We then have sc1,
+this has a max throughput of 250 MBs
+per second per volume.
+It gives you less frequently accessed data.
+It cannot be a boot volume,
+but it is the lowest cost
+and it gives you three nines durability.
+So, going onto some tips for volumes and snapshots.
+So just remember that volumes exist on EBS
+whereas snapshots exist on S3.
+And snapshots are basically like at what you would do
+with a camera.
+They're a point in time photograph of a volume
+and they're incremental in nature.
+Because of this,
+the first snap that you'll take
+is going to take some time to create
+and for consistent snapshots,
+you should really stop your instance and detach the volume.
+That way everything is then saved to disk.
+You can share your snaps between AWS accounts
+as well as between regions,
+but first you need to copy that snapshot
+to the target region.
+And you can also resize EBS volumes on the fly
+as well as changing the volume types.
+So you can go from gp2 to gp3, for example.
+Moving on to AMIs,
+and we're going to look at EBS versus Instance Store.
+So instance store volumes
+are sometimes called ephemeral storage,
+and you can reboot both EBS instances
+and instance store volumes and you'll not lose your data.
+However, instance store volumes cannot be stopped.
+And we saw that in our lecture.
+We tried to go in and stop it
+but we got that error message.
+So if the underlying host fails,
+you are going to lose your data with instance store volumes.
+By default, both root volumes
+will be deleted on termination.
+However, with EBS volumes,
+you can actually tell AWS to keep the root device volume.
+EBS-backed instances can be stopped,
+so you're not going to lose any data on your instance
+if it is stopped.
+And just as a bonus tip,
+an AMI is just a blueprint for an EC2 instance.
+So have things like the architecture type,
+whether it's Windows or Linux,
+and then the instance like size, for example,
+et cetera, et cetera.
+So that's all an AMI is.
+Moving on to encrypted volumes.
+So, data-at-rest is encrypted inside the volume.
+All data-in-flight,
+moving between the instance and the volumes
+going to be encrypted.
+All your snapshots of encrypted volumes are encrypted
+and all volumes created
+from your snapshots are encrypted as well.
+This is the really important thing to remember
+is how to encrypt existing root device volumes
+that are unencrypted.
+So you want to go ahead and create a snapshot
+of the unencrypted root device volume.
+You then create a copy of that snapshot
+and you select the encrypt option.
+You then create an AMI from the encrypted snapshot
+and then you use that AMI
+to launch a new encrypted instance,
+and that's what we did in our console demo.
+Moving on to EC2 hibernation.
+This is where it preserves the in-memory RAM
+on persistent storage.
+So it basically saves the RAM to disk on EBS.
+And it's basically much faster to boot up
+so you don't need to reload the operating system.
+Now, your instance RAM must be less than 150 GBs
+and it's only available across the C class families,
+the M class families, and the R class families.
+And it's available for Windows, Amazon Linux 2 AMI,
+and Ubuntu.
+And instances cannot be hibernated for more than 60 days.
+And it's available for on-demand instances
+and reserved instances.
+Moving on to EFS.
+So this supports the network file system version 4
+or NFSv4 protocol.
+It can support thousands of concurrent NFS connections.
+You only pay for the storage that you use.
+You don't have to worry about pre-provisioning
+and starting with, let's say a 100 GBs,
+you literally just create the EFS volume
+like we saw in our demo and it exists straight away.
+And then as you add more and more files to it,
+it will automatically adjust, it's elastic.
+So the data is stored across multiple AZs within a region.
+It can scale up to petabytes
+and it has read after write consistency.
+Now, if you have a scenario-based question
+around highly scalable shared storage using NFS,
+I want you to always think of EFS.
+In the exam,
+you are going to be given different scenarios
+and asked to choose whether you should be using EFS,
+FSx for Windows, or FSX for Lustre.
+EFS is when you need highly distributed
+and highly resistant storage for Linux instances
+and Linux-based applications.
+Amazon FSx for Windows is when you need centralized storage
+for Windows-based applications.
+So this could be things like SharePoint, SQL Server,
+Workspaces, IIS, or any other native Microsoft application.
+And then Amazon FSx for Lustre is when you need high-speed,
+high-capacity distributed storage.
+And this will be for applications
+that do high performance computing, financial modeling,
+and remember that FSx for Luster
+can store data directly on S3.
+So just summing up
+and comparing all our different storage options
+because this is a big chunk of the exams.
+It's definitely going to be 10 or 12 marks
+where you have to choose different storage options
+based on your different scenarios.
+So S3 is great for serverless object storage.
+So things like files, videos, et cetera,
+where you don't want to have to manage EC2 instances.
+Glacier, just think of every time you hear the word archive,
+that's going to be a Glacier question.
+So it's used for archiving objects.
+EFS is network file system, or NFS, for Linux instances.
+So it's a centralized storage solution
+across multiple availability zones.
+FSx for Lustre is file storage
+for high performance computing Linux file systems.
+EBS Volumes is persistent storage for EC2 instances.
+And your Instance Store is ephemeral storage
+for EC2 instances.
+FSx for Windows is file storage for Windows instances.
+So it's centralized storage across multiple AZs.
+And like I said, if you just get a SharePoint question,
+I want you to think of FSx for Windows.
+And then finally knowing the different use cases
+for the storage will gain you valuable points in the exam.
+And like I said, it's probably going to be worth about 12
+marks over all the different storage options.
+You'll be given all these different scenario questions
+and then you'll have to pick which the right storage
+option is.
+And then finally we looked at AWS Backups.
+So going into your exam, just remember what AWS Backup is.
+It's used for consolidations
+to back up your different AWS services.
+So this could be things like EC2, EBS, EFS,
+Amazon FSx for Luster, Amazon FSx for Windows File Server,
+and AWS Storage Gateway and essentially
+it's going to give you a single pane of glass
+to back up all these different services.
+You can also use it in conjunction with AWS organizations,
+and this allows you to back up different AWS services
+across multiple AWS accounts.
+And just remember the benefits of AWS backup
+going into your exam.
+So it gives you centralized control,
+letting you automate your backups
+and define your lifecycle policies for your data.
+And you get better compliance
+as you can enforce your backup policies
+make sure they're encrypted,
+and then audit them once they are complete.
+So hopefully you've learned an awful lot in this section
+of the course.
+You've done really, really well
+and if you have any questions, please let me know,
+if not feel free to move on to the next section.
+Thank you.

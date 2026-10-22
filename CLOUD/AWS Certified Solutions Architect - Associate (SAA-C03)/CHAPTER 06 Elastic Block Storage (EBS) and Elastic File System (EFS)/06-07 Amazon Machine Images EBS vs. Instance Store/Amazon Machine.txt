@@ -1,0 +1,237 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look
+at Amazon machine images, or AMIs.
+We're gonna look at the two different types
+that you can have.
+So we're going to look at EBS volumes versus instance store.
+So we're going to first explore what an AMI is.
+We're going to look at the five things
+you can base your AMI on.
+Then we're going to compare EBS volumes to instance store.
+Then we'll look at instance store volumes, EBS volumes,
+and we'll do a demo and then we will go on to our exam tips.
+So what is an AMI?
+Well, it's an Amazon Machine Image
+and this provides the information required
+to launch an instance.
+And you must specify an AMI when you launch an instance.
+And we basically have seen this
+in the console demos leading up to this lecture.
+So when we were selecting our Amazon Linux 2 AMI,
+that's the AMI that we were choosing.
+It's just an Amazon Machine Image.
+So the five things that you can base your AMI on
+are region, and an operating system, the architecture,
+so whether it's 32-bit or 64-bit,
+the launch permissions, and most importantly the storage
+for your root device volumes.
+So that's where your operating system is installed.
+And all AMIs are categorized as either being backed
+by Amazon EBS or by instance store.
+So with EBS, the root device for an instance launch
+from the AMI is an EBS volume
+created from an Amazon EBS snapshot,
+so it's what we've been looking at already.
+Whereas for instance store the root device
+for an instance launch from the AMI
+is an instance store volume, which is created
+from a template that's stored in Amazon S3.
+So that brings us onto instance store volumes.
+So instance store volumes
+are sometimes called ephemeral storage.
+So instance store volumes cannot be stopped.
+If the underlying host fails,
+so the underlying physical piece of hardware,
+so it could be a physical server,
+if that fails, then you're going to lose your data.
+You can however reboot the instance
+without losing your data.
+So ephemeral storage is basically means
+it's not going to be saved if the instance is stopped.
+If your underlying host does fail,
+you're gonna lose your data,
+that's all you need to remember going into your exam.
+If you delete the instance,
+you're going to lose the instance store volume.
+So that instance store volume is only ever going to exist
+while the hardware is functioning
+and you cannot go ahead and stop the volume.
+And obviously if you delete that instance
+then you're going to lose that instance store volume.
+Now EBS volumes, they can be stopped.
+You do not lose the data on the instance if it's stopped.
+You can also reboot an EBS volume and not lose your data.
+And by default the root device volume
+will be deleted on termination,
+however, you can tell AWS
+to keep the root device volumes with EBS volumes.
+So if you see anything about ephemeral storage,
+think instance store.
+If you need consistent and permanent storage,
+think EBS volumes.
+Okay, so here I am in the AWS console.
+If I click on EC2, I've got an instance
+that I've been running throughout this course
+called MyServer1.
+We click on it, we can go ahead
+and have a look at the storage.
+We can see that it's an 8 gig volume that's attached,
+it's not encrypted and we have delete on termination.
+So if I delete MyServer1
+it will delete this underlying storage device,
+so the underlying volume,
+as part of the termination process.
+Let's go back to our dashboard
+and we're gonna create a couple more instances.
+The first one we're going to just say, Delete,
+we'll call it Deleteontermination-NO,
+so this is very simple.
+And we're gonna do an Amazon Linux AMI.
+We're gonna leave everything as default.
+Our key pair is just MyKeyPair.
+Gonna do an existing security group.
+So my launch wizard that I created earlier.
+And then in here we've got our volumes.
+So right now we've got our Configure storage.
+We can click on Advanced, UI is a bit funny,
+if we want to be able to make sure
+that this is not deleted on termination
+you just need to click in there.
+And here we've got delete on termination,
+so we just hit No and now it will not delete on termination.
+Just gonna hit Hide details,
+I don't need any files systems.
+I'm gonna scroll down and then I'm gonna go ahead
+and launch my instance.
+So this is now launching an instance
+and this instance, essentially if I delete that instance
+the underlying root device volume won't be deleted.
+If we go back to my instances,
+so we've got our delete on termination
+which is now pending.
+Let's go ahead and launch another instance
+and this will be our ephemeral instance.
+And this will be using instance store as opposed to EBS.
+So we'll call it InstanceStore, our instance.
+Now in order to get this,
+what we need to do is we need to go down to here
+and we need to click on Browse more AMIs,
+go over to Community AMIs
+and you just want to minimize all these.
+And then eventually you'll get your root device type
+and we want an instance store device type.
+So I'm gonna use the Amazon one here.
+Gonna go ahead and hit Next.
+Unfortunately, because it is instance store,
+it's a c3.large, so this is gonna cost me money.
+You might not want to do this,
+you might just want to watch along yourself.
+And I'm gonna do MyKeyPair
+and leave everything else as default.
+Same security group, our launch-wizard-1
+and then I'm gonna go ahead and launch this instance.
+So this is now launching our instance store.
+So essentially we have three instances.
+We've got MyServer, which has delete on termination
+for its storage device, as you can see over here,
+delete on termination.
+If I click on our Deleteontermination-NO
+it hopefully will be able to show us that
+even though it's not provisioned yet.
+So delete on termination, no.
+And then our instance store in here is now pending.
+So this one is up and running.
+So if I do go ahead and let's just test it.
+So well, let's test it with this one first.
+So I'm gonna go to Instance state
+and I'm gonna go Terminate instance, Terminate.
+If we have a look at our storage
+and if we have a look at the volume ID, it ends in a2e.
+So if we go down to my volumes,
+eventually this a2e is going to disappear
+because it has delete on termination.
+So I'm just gonna pause the video
+and wait for this to disappear.
+So if I just refresh this now we've got our a2e
+and you can see that that has disappeared
+because we had delete on termination turned on.
+If I go back over to my instances
+and just close this and hit refresh
+we'll be able to see that my server has now been terminated.
+This one is up and running
+and then this one is still pending.
+So Deleteontermination, if we click in here
+and we have a look at our storage,
+we can see that the volume ID ends in bfc.
+If I then go to my instance state and hit Terminate
+I'm sure you will realize that, essentially,
+it's not going to terminate this instance.
+Sorry, it's not going to terminate the EBS volume.
+Let's go ahead and hit Terminate.
+So that is now terminating this EC2 instance.
+I'm just gonna pause the video
+and wait for it to be terminated.
+If we note the volume ID ends in bfc,
+I'm gonna hit refresh and we can now see
+that this has been terminated.
+However, if I go over to my volumes,
+we can see it persists here.
+So it hasn't been deleted on termination,
+we go back to my EC2 dashboard
+and have a look at my InstanceStore volume,
+it is now up and running.
+Let's see what would happen if I try and stop this instance.
+What do you think would happen?
+Well as you remember, at the beginning of this lecture,
+we said that you cannot basically stop instance store ones.
+See it says it does not have an EBS root device type
+and cannot be stopped.
+So if this instance store was running
+on a piece of hardware that subsequently failed
+and the instance went down, that would be it,
+you would lose everything on the root device volume,
+so it doesn't persist, it's not like EBS.
+And actually all EC2 instances
+used to just be instance stores and customers would complain
+'cause they're like, "Well, why would I move my data
+"onto Amazon if if there's an underlying hardware failure
+"and I just suddenly lose all my data?"
+So that's when EBS became a thing.
+So that is instance store in a nutshell.
+You just really need to remember that you can't stop it.
+And if for some reason that the hard drive
+or the hardware underneath it fails
+you will lose all your data using instance store.
+It's often referred to as ephemeral storage.
+What you can do is go in and terminate the instance.
+And that's what I've just done there,
+'cause that instance is costing me lots of money
+'cause it is a much bigger instance.
+So onto my exam tips,
+my EBS volumes versus my instance store volumes.
+Instance store volumes
+are sometimes called ephemeral storage
+and that is because the data is ephemeral.
+So instance store volumes cannot be stopped.
+If the underlying host fails
+you are going to lose your data,
+whereas EBS backed instances can be stopped
+and you're not going to lose the data
+on this instance if it's stopped.
+You can reboot both EBS volumes and instance store volumes
+and you will not lose your data.
+However, by default,
+both root volumes will be deleted on termination.
+But with EBS volumes, you can actually tell AWS
+to keep the root device volume,
+which is exactly what we did just then.
+And just remember, going into the exam,
+that an AMI is just a blueprint for an EC2 instance.
+So it has things like the CPU architecture,
+whether it's got instance store or EBS volumes,
+or what operating system it is, et cetera, et cetera.
+So that is it for this lecture everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

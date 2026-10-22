@@ -1,0 +1,154 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look
+at protecting our EBS Volumes with encryption.
+So first thing we'll do is we'll explore
+what EBS Encryption is.
+We'll look at what happens when you encrypt.
+We'll look at some basic facts about EBS Encryption.
+Then we'll look at how to encrypt existing volumes
+that are unencrypted.
+Then, I'll actually show you how to do this
+in the console and that is a very, very popular exam topic.
+So it's definitely something
+to remember going into your exam.
+And then, we'll just cover off my Exam Tips.
+So EBS Encryption basically,
+you can encrypt your EBS Volumes and you use a data key
+that's using the industry standard AES-256 algorithm.
+So, Amazon EBS Encryption uses AWS KMS,
+as well as customer master keys
+when encrypting encrypted volumes and snapshots.
+And like I said, we will explore KMS in a bit more detail
+in the security section of the course.
+But just for the purposes of this lecture, all you need
+to understand is you can encrypt your EBS Volumes
+and you can either manage the key yourself
+or you can have Amazon manage it for you.
+So what happens when you encrypt an EBS Volume?
+Well, the data at rest is encrypted inside the volume
+and all data in flight moving between the instance
+and the volume is encrypted, and all snapshots are going
+to be encrypted and all volumes created
+from your snapshot are going to be encrypted as well.
+So the encryption is basically end-to-end.
+So, in terms of EBS Encryption,
+it's handled transparently.
+Encryption and decryption are handled transparently.
+Basically, you don't need to do anything.
+In terms of latency,
+encryption has a minimal impact on latency
+so you won't get any performance degradation.
+Copying an unencrypted snapshot allows encryption
+and this is a very popular exam topic and that's
+what we're going to cover off in the console.
+Snapshots of encrypted volumes are
+automatically encrypted as well.
+So root device volumes, which is basically the volume
+in which your operating system is installed on by default,
+you can now encrypt the root device volumes upon creation.
+So that is definitely possible.
+If you don't, however, we will go through
+and we'll show you exactly
+how to encrypt those root device volumes.
+So four steps to encrypt an unencrypted volume,
+basically, you create a snapshot
+of the unencrypted root device volume.
+You then create a copy of the snapshot
+and you select the encrypt option.
+And then we create an AMI from the encrypted snapshot
+and then we use that AMI to launch a new encrypted instance.
+So let's go ahead and have a look
+at how this works in the AWS console.
+Okay, so a very popular exam topic is you've got
+an EC2 instance.
+It was created ages ago, and it's not encrypted.
+And a new security measure comes forward
+from your CTO saying,
+all your EC2 instances
+Route Device volumes must be encrypted.
+How do you go about doing that? Well, as we saw
+in a previous lecture, we launched this EC2 instance here
+with the root device volume.
+We called it MyServer1.
+And if we go to our Storage,
+we can see that it is not encrypted.
+So, if we scroll down here we can see
+that it's not encrypted.
+So the way we can go ahead and encrypt this is
+if we click on the Volume ID,
+what we did last time is we just created a snapshot of it.
+And so we actually do have that snapshot here.
+This is the snapshot that we created previously.
+And then all we need to do is go to Actions.
+And what we can do is go Copy Snapshot.
+And as you remember, we used the Copy Snapshot action
+to move to different regions.
+So we moved it from us-east to one,
+I think it was over the island, so eu-west-1.
+But we don't need to do that in this case.
+What we're gonna do is we're gonna go ahead
+and just say, "Hey, let's encrypt this snapshot."
+And here we can use the, choose our KMS keys.
+We're just gonna use the default AWS EBS key.
+So Amazon managed that key for us.
+And then, what we're gonna do is go ahead
+and hit Copy Snapshot.
+And that has now, is creating our encrypted snapshot.
+And you can see the difference here.
+One says "Encrypted,"
+and the other one says "Not encrypted."
+So it can take a little bit of time.
+I'm just gonna pause the video and wait for this
+to come up online.
+Okay, we can see that that has now been finished,
+is now completed.
+We can see that it's encrypted here.
+And then what we want to do is click in here,
+go to our Actions, and we want to create an image
+from this snapshot.
+We can call it MyEncryptedSnap, something like that.
+And then I'll leave everything else as default.
+Go ahead and create my image.
+So that has now created my AMI.
+And you can see it in here.
+And if we go across, we can see it's available.
+And if we go all the way over,
+see if it shows us if it's encrypted or not.
+I think if you click in here,
+you'll be able to go to your storage
+and then you'll be able to see that it's encrypted in here.
+And then, all we need to do is launch an instance
+from this AMI, and then that instance will encrypted.
+So that is how we go from taking an EC2 instance
+that has a root device volume that's not encrypted,
+and how we go about the encryption process.
+So all we do is create a snapshot.
+We then create a copy of the snapshot
+and we basically encrypt the copy.
+We then create an image from that copy,
+and then we launch the instance from that AMI.
+It is a very, very, very popular exam topic.
+So just remember that.
+So, let's go onto my Exam Tips.
+So onto my Exam Tips and with encrypted volumes,
+just remember that data at rest is encrypted
+inside the volume.
+All data in flight moving between the instance
+and the volume is encrypted.
+All snapshots are encrypted and all volumes created
+from the snapshot are encrypted.
+So this is with encrypted volumes only.
+In terms of how to encrypt volumes,
+so it's what we just covered off.
+But essentially, what you need to do is you need
+to create a snapshot of the unencrypted root device volume.
+You then create a copy of the snap
+and select the Encrypt option.
+You then create an AMI from the encrypted snap
+and then you use that AMI
+to launch the new encrypted instances.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

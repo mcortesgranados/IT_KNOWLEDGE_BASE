@@ -1,0 +1,85 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+This is a really quick lecture,
+and we're going to learn about AWS Backup.
+So we're going to look at what AWS Backup is.
+We'll look at how we can use
+AWS Backup with our Organizations.
+We'll look at the benefits of AWS Backup,
+and then we'll go onto my exam tips.
+So what is AWS Backup?
+Well, it's probably what you imagine.
+It's a way of backing up the different AWS services.
+So Backup allows you to consolidate your backups
+across multiple AWS services,
+so things like EC2, EBS, EFS, Amazon FSx for Lustre,
+FSx for Windows File Server, as well as Storage Gateway.
+And so it can include other AWS services,
+such as database technologies, like RDS and DynamoDB.
+You can also use AWS Backup with organizations.
+We will cover
+off what Organizations are later on in the course,
+but basically it's a way of having multiple AWS accounts
+and consolidating them into 1 organization.
+So Backups can actually be used
+with AWS Organizations to back
+up multiple AWS accounts in your organization.
+And it gives you centralized control
+across all AWS services in multiple AWS accounts
+across your entire AWS organization.
+So you can back up all those different services that I said
+across multiple accounts, provided those accounts are set
+up using AWS Organizations.
+And like I said, we will cover
+off what that is later on in the course.
+So in terms of the benefits of AWS Backup,
+just remember that you get central management.
+So you basically use a single, central backup console,
+which allows you to centralize your backups
+across multiple AWS services and multiple AWS accounts.
+You also get automation,
+so you can create automated backup schedules
+and retention policies.
+You can also create lifecycle policies
+which basically allow you to expire unnecessary backups
+after a period of time.
+And then you can get improved compliance.
+So your backup policies can be enforced
+and while backups can be encrypted both
+at rest and in transit as well.
+And this allows you alignment
+towards your regulatory compliance,
+and it's also great for auditing.
+So auditing is made easy due to consolidated view
+of backups across the many different AWS services.
+So you've got a single pane of glass.
+You can go in there and say,
+"Okay, I have backed up my RDS instances,
+"my EFS instances, my EBS instances, etc., etc."
+So then onto my exam tips.
+So just remember that AWS Backup gives you consolidation.
+So use it to back up AWS services, such as EBS, EFS
+Amazon FSx for Lustre, Amazon FSx for Windows File Server
+as well as Storage Gateway.
+So if you see any exam questions where it's talking
+about, "Hey, you need to back up all these services.
+"How do you do it and maintain a centralized point of view?"
+Then you want to use AWS Backup.
+You can also use it in conjunction
+with AWS Organizations to backup your different AWS services
+across multiple AWS accounts.
+And just remember the benefits
+of AWS Backup going into your exam.
+Basically, Backups gives you centralized control,
+letting you automate your backups
+and define lifecycle policies for your data.
+You get better compliance
+as you can enforce your backup policies
+and ensure your backups are encrypted.
+And then you can also audit them once complete.
+So literally you just need to know what AWS Backup is going
+into your exam.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

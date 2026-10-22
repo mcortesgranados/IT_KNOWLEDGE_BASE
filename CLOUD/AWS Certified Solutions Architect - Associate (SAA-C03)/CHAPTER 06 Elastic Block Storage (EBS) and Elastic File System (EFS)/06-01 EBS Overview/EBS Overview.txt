@@ -1,0 +1,379 @@
+Okay, hello Cloud Gurus
+and welcome to this section of the course.
+In this section of the course
+we're going to be looking at elastic block storage or EBS.
+And in this lecture we're going to have a look
+at an overview of EBS.
+So we're going to understand our EBS volumes,
+what EBS is.
+We'll look at where we would use EBS.
+So for mission critical applications,
+we're then going to explore the different volume types.
+So we'll start with our solid state discs
+and then we'll move onto our hard disk drive.
+And then we'll move on to our IOPS versus throughput
+what the differences are between them
+and then onto our exam tips.
+So what is EBS?
+Well, like I said,
+EBS just stands for elastic block storage
+and there are different types of EBS volumes available
+which we will cover off in a few slides.
+But basically there's different use cases
+for each type of EBS volumes.
+And as you go into your exam,
+you'll be given scenario based questions
+and you'll need to choose the best EBS volume type
+for that scenario.
+So like I said, EBS just stands for elastic block store,
+and these are storage volumes that you can attach your EC2
+instances to.
+So let's say we've got a T3EC2 instance,
+that's the compute side of it.
+We obviously need to attach storage,
+so we need to have a place where the operating system
+is installed or where the applications
+or database is installed.
+So let's say we're using an Amazon Linux operating system.
+So we would then install that on our EBS volume.
+We could also go ahead and install our applications.
+So maybe it's a WordPress app
+or maybe we're just running Apache on our own custom apps.
+And then we also can install our data or database
+on our EBS volume.
+So these could be files, or it could be a MySQL database
+or SQL server, or any kind of relational
+or non-relational database running on EBS.
+So EBS gives us the ability to install
+all kinds of things on it.
+It's basically just a virtual hard disk
+that is attached to your virtual EC2 instance.
+So you use them the same way that you use any system disk.
+You can go in and create a file system, run a database
+run an operating system, store data,
+or we can also install our application.
+So I want you to think of EBS as just a elastic block
+storage disk or a virtual disc in the cloud.
+'Cause that's all it is.
+It's a virtual hard disk in the cloud
+that's attached to our EC2 instance.
+So that's all that EBS is.
+And EBS is designed for our mission critical data.
+So things like our production workloads.
+So essentially it's built from the ground up
+for mission critical workloads.
+It's highly available and it's automatically replicated
+within a single availability zone to protect
+against hardware failures.
+So like I said, you can think of it as a virtual hard disk
+in the cloud, but it's not on one physical hard disk.
+Your EBS volumes will exist across multiple disks
+in probably multiple different data centers
+inside a single availability zone.
+But they'll always be within that same availability zone.
+And we'll get to that a bit later on.
+So that's all EBSs is.
+It's a virtual disc in the cloud that's automatically
+replicated within a single availability zone to protect
+against hardware failures.
+It's also very scalable.
+So you can dynamically increase capacity
+and change the volume type with no downtime
+or performance impact to your live systems.
+So this is really important to remember going into the exam.
+Let's say you've got a hundred gigs
+in terms of storage for your EC2 instance
+and you've suddenly run outta storage space.
+You can just increase that to 150 gigs
+and you're not gonna have any downtime
+or performance impact.
+You will have to go in and resize the file system
+but you can automatically add storage
+and you don't have to stress about downtime.
+So let's have a look at our different EBS volume types
+and we'll start with our solid state disk or SSSD drives.
+And essentially right now
+there's always two different types.
+So we will start with general purpose and it's gp2.
+So gp2 just start stands for general purpose.
+It's a balance of price and performance.
+You get three IOPS per gig
+and a maximum of up to 16,000 IOPS per volume.
+And gp2 volumes smaller than one terabyte
+can burst up to 3000 IOPS.
+And these are basically good for boot volumes or development
+and test applications that are not latency sensitive.
+And we'll be using gp2 by default throughout the rest
+of this course and it will be our boot volume.
+Now there is a new generation of gp called gp3.
+Now, before you worry going into your exam
+you're never gonna be asked to choose gp2
+over gp3 or gp3 over gp2, et cetera.
+They'll basically just update the questions
+and it'll either say gp2 as an option or gp3
+but you won't have to choose between them.
+So just remember that general purpose is basically
+there for your boot device volumes.
+This is where you're going to install your operating system.
+So gp3 has predictable 3000 IOPS baseline performance
+and 125 megabits per second.
+Regardless of volume size
+you don't need to size your volumes
+to a particular size in order to achieve that throughput.
+It comes as like that as base standard,
+and it's ideal for applications that require
+high performance at a low cost.
+So the things like MySQL, Cassandra, virtual desktops,
+and Hadoop analytics,
+And customers who are looking for higher performance
+can scale up to 16,000 IOPS and 1000 megabytes per second
+for an additional fee.
+Now again, going into your exam, don't worry
+you're never going to be asked to memorize the IOPS
+or throughput for any of these, EBS volume types.
+All you need to know is their use cases.
+So gp, whether it's gp2 or gp3
+you are just using that to install an operating system on.
+It's basically the default volume that we you would use
+when you provision an EC2 instance.
+And just remember that the top performance
+of gp3 is actually four times faster
+than the max performance of gp2 volumes.
+So I don't think it's likely
+you're gonna be asked to choose,
+between gp3 and gp2 in the exam.
+I've never seen a question like that,
+but if you do have the choice
+always choose gp3 because it is faster.
+If you need super fast performance with SSSD
+then we move on to provisioned IOPS.
+And just like gp2 and gp3
+you've got io1 and io2.
+So io1 is the legacy one.
+This is high performance option and is the most expensive.
+It gives you up to 64,000 IOPS
+per volume and you get 50 IOPS per gig.
+You basically use this if you need more than 16,000 IOPS.
+So the only thing you really need to remember
+going into your exam is if you've got a high performance
+let's say it's a database or something
+and it needs more than 16,000 IOPS straightaway.
+Just think of io1 or io2.
+It's designed for I/O intensive intensive applications
+so large databases, latency sensitive workloads, et cetera.
+And then we have provisioned IOPS2 or io2.
+This is the latest generation
+and it's got a higher durability and more IOPS than io1.
+And io2 is basically the same price as io1.
+You get 500 IOPS per gig with up to 64,000 IOPS.
+It gives you five nine durability
+instead of three nine durability.
+And it's used for IO intensive applications
+such as large databases and latency sensitive workloads.
+So basically applications that need high levels
+of durability.
+So those are all our solid state drives.
+Let's move on to our hard disk drives or HDDs.
+And we're going to start with throughput
+optimize hard disk drive.
+And this is known as st1.
+And basically this is a low cost hard disk drive volume.
+And by hard disk drive, I just mean it's magnetic
+it's not SSSD, it's magnetic storage.
+So it's the real old school hard drives,
+and you have a baseline throughput of 40 megabits per second
+per terabyte, and you have the ability to burst up to 250
+megabits per second per terabyte and your maximum throughput
+of 500 megabits per second per volume.
+And this is basically designed for frequently accessed
+and throughput intensive workloads.
+Now I know you're wondering, well what's the difference
+between IOPS and throughput?
+And we will cover that off.
+But every time you hear things like big data,
+data warehousing, ETL, which is extracts, transform and load
+and log processing, I want you to think of throughput.
+So I want you to think of throughput and not IOPS
+and that will help you very much in your exam
+when you're looking at different scenario questions.
+So throughput, optimize hard disk drives
+are a cost effective way to store mountains of data.
+And it cannot be a boot volume.
+So it cannot be a volume that Linux
+has already pre-installed on or Windows
+or any other operating system with EC2.
+So you have to do that.
+You can't do that on throughput optimize.
+This is only used for things like big data,
+data warehouses, ETL, and log processing.
+Next up we have our cold hug disk drives
+and this is known as sc1.
+And this is your lowest cost option.
+So if you hear a scenario based question
+where they're talking about what EBS volume to use
+to maximize cost reduction, just think of cold hard to drive
+or sc1, and this has a baseline throughput of 12 megabytes
+per second per terabyte.
+You have the ability to burst up to 80 megabytes per second
+per terabyte, and your max throughput is of 250
+megabytes per second per volume.
+And this is a good choice
+for colder data requiring fewer scans per day.
+So you might want to use this as a file server for example.
+So it's good for applications that need
+the lowest cost and performance is not a factor.
+So maybe this is where you store some of your static images
+for some reason you don't wanna do it on S3
+you wanna do it on an EBS volume
+and you need to have it on the lowest cost possible.
+Then you want your cold hard disk drive
+and like the other option.
+So our throughput optimize hard disk drive
+this cannot be a boot volume.
+So we've had our hard disk drive, we've had our SSSD
+and we've talked about IOPS versus throughput.
+So what is the difference?
+Where do you use IOPS and where do you use throughput?
+So what is IOPS?
+Well, it measures the number
+of reads and write operations per second.
+And this is an important metric
+for quick transaction load latency apps
+and transactional workloads.
+So I want you to think of a busy online store.
+Custom goes through your checkout and makes a transaction.
+They've got everything in their cart, they hit purchase
+and you need to save this to a database.
+It's a very transactional thing.
+Then you want as high as IOPS as possible
+so you can conduct this transaction more quickly.
+And of course you can have thousands of transactions
+or even maybe millions of transactions
+going on simultaneously.
+So IOPS is all about the ability
+to action reads and writes very, very quickly.
+And if you have a transactional database
+then you want to choose provisioned IOPS, SSSDs
+so io1 or io2.
+With throughput, this measures the number of bits read
+or written per second, so megabytes per second.
+And it's important metric for large data sets,
+large IO sizes and complex queries.
+So this is where you need the ability to deal
+with large data sets and you're gonna choose throughput
+optimize hard disk drives.
+So essentially what you're looking for in your scenario
+based questions is if they're talking about big data,
+data warehouses, ETLs, et cetera
+then you're gonna be putting it on throughput optimized.
+Whereas if you are talking about transactions
+you're going to either use general purpose
+or IOPS depending on your cost savings.
+Depending on what your appetite is for cost.
+If you wanna keep your cost down, then it's general purpose.
+If you wanna maximize your performance
+then you're gonna use io1 or io2.
+And then moving back on to cold hard disk drives.
+If you just want to have the lowest cost possible
+but still have an EBS volume
+then you want cold hard disk drives.
+So it's pretty simple just going into your exam.
+Look for the scenario question.
+If it's talking about big data
+you want throughput optimize.
+If it's a transactional database
+you're gonna need to move to SSSD.
+And then you just need to decide
+if you are using a general purpose two
+or if you're using provisioned IOPS
+sometimes it's called PIOPS in your exam
+and then you just choose io1 or io2
+depending on the scenario based questions.
+So onto my exam tips, let's just review all the different
+EBS volumes that we have learn.
+You will get scenario based questions going into your exam
+and you'll be asked to choose which EBS volume type
+is going to be the best choice for that particular scenario.
+It's probably gonna be worth four or five marks.
+So I would definitely learn your EBS volume types by heart.
+But don't worry, you don't need to remember specific IOPS
+or throughput or anything like that apart
+from maybe if you need more than 16,000 IOPS
+then you want to go up to provisioned IOPS.
+So io1 or io2.
+So general purpose too, this is basically suitable
+for our boot disk and general applications.
+You get up to 16,000 IOPS per volume,
+you get three nines durability.
+We then have gp3.
+So again, this is general purpose SSSD
+it's the next generation suitable
+for high performance applications.
+It gives you predictable 3000 IOPS based line performance
+and 125 megabytes per second regardless of your volume size.
+And you get three nines durability with it.
+Now, like I keep saying you're never gonna have to choose
+gp3 over gp2, it doesn't work like that.
+You just have to remember that if you want to install
+an operating system then you probably just want to use
+general purpose.
+And if they've updated the exam questions
+then it'll say gp3 on the exam.
+If they haven't, then it'll be gp2.
+Provisioned IOPS is where you need very fast performance.
+So it's suitable for online transaction processing
+and latency sensitive applications will cover
+what OLTP is in the databases section of the course.
+But essentially provisioned IOPS is basically required
+when you have very high performance databases.
+So it could be like an online shop or something,
+you want to install that on a EBS volume
+that gives you the fastest IOPS.
+You get 50 IOPS per gig
+and you get up to 64,000 IOPS per volume.
+And it's most high performance but also the most expensive.
+And you get up to three nines durability.
+And we have the latest generation, which is io2,
+again this is suitable for online transaction processing
+and latency sensitive applications.
+You get 500 IOPS per gig with io2
+and up to 64,000 IOPS per volume.
+And it gives you five nines durability.
+And it's basically the latest generation
+provisioned IOPS volume.
+So like I said, you're never gonna see an exam
+question where you have to choose gp2 over gp3
+or io1 over io2 or vice versa.
+It doesn't work like that.
+And you won't have to go in there memorizing
+specific performance metrics.
+The only thing I would just remember
+is if you need more than 16,000 IOPS per volume
+you're gonna go from general purpose to IO intensive.
+So io1 or io2.
+So those are our SSSD volumes in a nutshell.
+Let's move on to hard disk drive volumes.
+And these are our magnetic storage.
+So got st1, which is throughput optimize hard disk drive.
+This is suitable for big data, data warehouses, ETL
+which is this extract, transform, and load.
+And you have a max throughput
+of 500 megabytes per second per volume.
+And st1 cannot be a boot volume.
+You get three nines durability.
+And then we have our cold hard disk drive and this is sc1.
+And this gives you the max throughput
+of 250 megabytes per volume.
+And basically this is used for less frequently
+accessed data.
+So it could be file servers or something like that.
+And again, it cannot be a boot volume either
+but it is the lowest cost.
+So if they are asking you to choose the lowest
+cost EBS volume, then you always want to go with sc1
+or cold hard disk drive
+and it gives you up to 99.9% durability.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.
