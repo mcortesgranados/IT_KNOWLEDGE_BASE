@@ -1,0 +1,238 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+01:51
+
+Course Introduction
+01:51
+
+CHAPTER 2
+
+The Power of an AWS Account
+21:18
+
+An Overview of AWS Accounts and the Features of Free Tier
+04:49
+
+Learning How to Create an AWS Account and Navigating through the Console
+06:35
+Leveraging Billing Alerts
+05:27
+AWS Documentation: What It Is and Where to Find It
+04:27
+
+QUIZ
+AWS Account Essentials
+00:00
+CHAPTER 3
+
+Identity and Access Management (IAM)
+56:42
+
+Discovering What IAM Is
+01:28
+Provisioning IAM for the First Time
+06:24
+
+Creating Users, Groups, and Policies
+13:29
+Establishing IAM Roles
+05:21
+HANDS-ON LAB
+Create Users and Manage Permissions Using Groups and Policies in IAM
+30:00
+QUIZ
+IAM Essentials
+00:00
+CHAPTER 4
+
+Utilizing Elastic Cloud Compute (EC2)
+2:31:49
+
+An Overview of Elastic Cloud Compute
+04:01
+Understanding EC2 Basics
+04:17
+Reviewing Amazon Machine Images (AMI)
+06:22
+Understanding Elastic Block Store (EBS)
+08:21
+Creating Security Groups and Why They Are Important
+05:11
+What Is Auto Scaling and How Does It Work?
+09:19
+Associating IP Addressing
+04:41
+Defining Resource Groups and Tagging
+10:57
+Understanding Elastic Load Balancer Basics
+08:50
+How to Create and Utilize an EC2 Instance
+07:35
+How to Connect to an EC2 Instance
+13:51
+
+
+How to Install Software on Your EC2 Instance
+06:56
+
+What We Covered: EC2
+01:28
+HANDS-ON LAB
+Creating a Web Server with EC2
+30:00
+HANDS-ON LAB
+Curbing Costs Using an Auto Scaling Group
+30:00
+QUIZ
+EC2 Essentials
+00:00
+CHAPTER 5
+
+Storage Services
+1:07:35
+
+An Overview of Storage Services
+02:23
+Understanding S3 Basics
+02:28
+Creating Buckets and Objects
+06:21
+Exploring Permissions Associated with S3
+05:26
+
+Working with Object Versioning
+04:53
+What We Covered: S3
+01:04
+HANDS-ON LAB
+Creating S3 Buckets with Versioning and Encryption
+30:00
+QUIZ
+S3 Essentials
+15:00
+CHAPTER 6
+
+The Virtual Private Cloud (VPC) and How Networking Works with It
+1:51:54
+
+Understanding AWS Global Services
+03:10
+Understanding VPC Basics
+07:27
+Utilizing Gateways
+06:28
+Exploring Route Tables (RTs)
+09:11
+Reviewing Network Access Control Lists (NACLs)
+08:08
+Working with Subnets
+04:56
+Understanding How Availability Zones Work inside a VPC
+05:13
+Understanding the Basics of Route 53
+06:05
+What We Covered: VPC
+01:16
+HANDS-ON LAB
+Create a Virtual Private Cloud (VPC) and Launch an EC2 Instance
+30:00
+QUIZ
+VPC Essentials
+30:00
+CHAPTER 7
+
+Database Services
+1:01:32
+
+An Overview of Database Services
+03:07
+Understanding RDS Basics
+04:32
+Understanding DynamoDB Basics
+02:46
+Learning How to Provision RDS
+06:07
+
+HANDS-ON LAB
+Set Start and Stop Times with Instance Scheduler
+45:00
+QUIZ
+Database Essentials
+00:00
+CHAPTER 8
+
+CloudFormation
+1:09:22
+
+Understanding the Basics of CloudFormation
+03:53
+Exploring How You Would Use CloudFormation
+05:29
+HANDS-ON LAB
+Getting Started with CloudFormation
+1:00:00
+QUIZ
+CloudFormation Essentials
+00:00
+CHAPTER 9
+
+Management Tools
+2:35:38
+
+An Overview of Management Tools
+02:13
+Understanding CloudWatch Basics
+03:51
+Utilizing CloudWatch Metrics and Alarms
+07:46
+
+Exploring SNS
+07:40
+Learning about CloudTrail Basics
+06:56
+Exploring the AWS Health Dashboard
+04:14
+Reviewing Cost Explorer
+04:15
+AWS Trusted Advisor
+08:09
+Lambda Basics
+04:17
+What We Covered: Management Tools
+01:17
+HANDS-ON LAB
+Using CloudWatch for Resource Monitoring
+30:00
+HANDS-ON LAB
+Create a Lambda Function Using the AWS Management Console
+30:00
+HANDS-ON LAB
+Create and Subscribe to an AWS SNS Topic
+30:00
+QUIZ
+Management Essentials
+15:00
+CHAPTER 10
+
+Security Tools
+04:56
+
+An Overview of Security Tools
+02:15
+Utilizing GuardDuty
+01:25
+Understanding AWS Security Hub
+01:16
+QUIZ
+Security Essentials
+00:00
+CHAPTER 11
+
+Conclusion
+02:58
+
+What We Covered in This Course
+01:33
+Where Do You Go from Here?
