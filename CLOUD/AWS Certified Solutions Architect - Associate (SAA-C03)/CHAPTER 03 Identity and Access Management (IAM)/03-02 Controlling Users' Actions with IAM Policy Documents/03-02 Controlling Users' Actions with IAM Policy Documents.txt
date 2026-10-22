@@ -1,0 +1,157 @@
+Okay, hello, cloud gurus,
+and welcome to this lecture.
+In this lecture,
+we're going to look at how we can control our users' actions
+with IAM policy documents.
+So the first thing we're going to look at
+is how permissions work with IAM.
+Then we are gonna look at some JSON examples
+of policy documents.
+Then we're going to look at
+how policy documents actually work.
+Then we'll go in and view
+some policy documents within the console,
+and then we'll do our exam tips.
+So let's start with permissions.
+How do we control permissions
+using identity access management?
+Well, we assign our permissions using policy documents
+which made up of JSON,
+which stands for JavaScript Object Notation.
+And this is a good example of a policy document
+and you will need to know how to read
+and understand policy documents in your exam.
+So in here, we've got a statement
+and this is a JSON statement.
+So you've got the version
+and then we've got the statement itself.
+And then inside the statement,
+we've got a number of different key pairs.
+So we've got the Effect which is Allow,
+so basically, we're allowing.
+The Action is what, and then it's a wild card,
+so we're allowing everything.
+And the Resource is a wild card as well.
+So that just simply means everything.
+So this gives you full administrator access.
+This is saying, "Allow the action of everything
+on every resource."
+So this allows the person
+who this policy document's attached to
+or the group that this policy document's attached to,
+the ability to do everything with every resource.
+So that's the most basic policy document that you'll see.
+This gives you full admin access to the AWS Console.
+And what we typically will do
+is we will take our policy documents
+and we'll assign them to groups.
+We can also assign them to users
+and we can also assign them to roles.
+And we'll look at best practices going forward.
+Typically, you would not assign a policy document
+directly to a user
+because that can become difficult to manage.
+What you would do is add the user into a group
+and then assign the policy documents to a group.
+And what happens is, is the user inherits the permissions
+from the group.
+But all the permissions that are controlled within AWS
+come back to IAM policy documents.
+So let's go ahead and have a look at how this works
+in the AWS Console.
+So here I am in the AWS Console.
+If you go over here, you notice my region.
+So in the last lecture we're talking about us-east-1
+and it's probably the best region to go into.
+Now if we go over to IAM,
+I can click on my recently visited
+or I can type it up here under my search and type in IAM.
+If I click on that,
+let's have a look what happens to my region.
+You'll notice that it's changed, it's now gone to global.
+And this is a really important topic
+that can come up in the exam,
+is that IAM does not work at a regional level,
+it works at a global level.
+So when you create a user or a policy or a role,
+it's creating all of that at a global level.
+So you can't have a user
+that just exists in one particular region.
+When you create a user, that user exists across all regions.
+And if we go over here, we can click on Policies
+and then this will bring up all our different policies.
+And we can see if a policy is managed by AWS
+because it will have the little AWS icon.
+So in here, this is an AWS-managed policy.
+We can create our own policies by clicking up here
+and we would then have to do the appropriate JSON statement.
+And then when we create and save that policy,
+it wouldn't have this icon
+because it's our own custom policy.
+Now you can see right now there's over a thousand policies
+that Amazon provide to you.
+You pretty much can get away
+with just using most of their templated policies
+until you start doing really custom stuff.
+But especially when you're just learning,
+you can use their template of policies all the time.
+Now over here you can see the type,
+so this is by job function.
+And we can see that administrator access
+is at the very top,
+and we can actually click on that
+and see what this policy does.
+And you can see permissions defined in this policy,
+so it's going to allow 385 of 385 services.
+And there'll probably be more services
+by the time you watch this video.
+But essentially, it's allowing full access on all resources
+to all the different AWS services.
+And if you wanna see the actual JSON,
+it's incredibly simple.
+It's basically giving a statement.
+It's saying effect, allow, allow what,
+will allow action, and then we've got our wildcard.
+So we are allowing any action on all resources
+and that's all that this policy does.
+So we will go and show you how to assign
+administrator access to individual users.
+You might have some users who start at your company
+and you need to give them full admin access
+because they're your system administrators
+or your cloud administrators.
+We will show you that in the next lecture.
+But at this stage, I just wanted to show you
+how to access the policies.
+You can click into any policy.
+And then if you wanna see the actual JSON,
+you just click across here and click on the JSON,
+you'll be able to read the JSON statements.
+So let's go onto my exam tips.
+So onto my exam tips.
+Just remember going into your exam
+that you assign permissions using IAM policy documents.
+These consist of JSON,
+which is JavaScript Object Notation and it looks like this.
+Now you will have more complicated policy documents
+going into your exam.
+So we will cover that off later on in the course,
+how to read policy documents and how to understand them.
+Typically, your policy documents
+will be centered around S3,
+but it could be anything to be honest.
+They change the exam questions all the time.
+Really, you just need to get comfortable reading this.
+And what I would do honestly before going into your exam
+is just go into IAM
+and randomly click through different policies
+and have a look at how the language works,
+how the JSON works,
+how you can grant access to particular resources.
+So that is it for this lecture, everyone.
+In the next lecture,
+let's go ahead and create our users, our groups,
+and we'll look at how we can assign policies
+to our users and groups.
+So if you've got the time,
+please join me in the next lecture, thank you.

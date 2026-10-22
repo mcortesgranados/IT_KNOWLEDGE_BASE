@@ -1,0 +1,109 @@
+Okay.
+Hello, Cloud Gurus, and welcome to this lecture.
+Well, congratulations on completing
+your first practical section of the course.
+In this section we learned all about
+identity access management,
+which is a fundamental part of AWS.
+So you need to know how identity access management works
+not just for the exam
+but also for using AWS in real life.
+So let's cover off what we learned
+in this section of the course.
+The first thing was we looked at 4 steps
+to securing our root account.
+And in the very first lecture
+we enabled multi-factor authentication on the root account.
+Once multi-factor authentication
+is turned on for our root account,
+we need to take some more steps
+enable to secure our root account.
+And our end goal is to stop logging in
+using the root account to administrate our AWS account.
+We basically don't want to ever log in
+to our root account again if we can avoid it.
+And so to do that what we need to do
+is create an administrator group for our administrators
+and assign the appropriate permissions to that group.
+We then need to create user accounts for our administrators.
+And once we've created those user accounts,
+we need to add those users to our administrator group.
+And once we've done that, we then, in theory,
+should no longer have to log in to AWS
+using the root account again.
+So we then learned about policy documents
+and we can assign permissions using IAM policy documents.
+And these consists of JavaScript Object Notation (or JSON).
+And we looked at the most simplest policy document,
+most universal.
+This gives us administrator access to all AWS services.
+And you can see that
+because basically it says effect allow,
+action which is wildcards.
+So allow any action to any resource
+and that will give us full admin access.
+Now going into the exam,
+you will get some IAM policy documents in JSON format
+that you will need to interpret.
+I would just recommend going through your policy documents
+and looking at individual ones
+and trying to figure out what it is they do.
+And also to read the documentation.
+We will have in-depth lectures
+on IAM policy documents later on in the course as well.
+Going into your exam, remember the following.
+So, IAM is universal.
+Like I said, it doesn't apply to Regions at this time.
+When you create a user or a group, they're not created
+in the Northern Virginia Region or the London Region--
+they're created universally.
+The root account is the account that's created
+when you first set up your AWS account
+and it has complete administrator access.
+You should secure the root account as soon as possible.
+You should never use it to log in from day to day.
+And when you create a new user,
+that user has no permissions when they're first created.
+So you have to go in and add them to a group
+where they will inherit permissions.
+Or you could apply policy documents to a user
+to give them permissions.
+But like I said, that's not best practice
+because that can be very difficult to manage.
+When you create a user, it generates an access key
+and secret access key,
+when you essentially allow programmatic access
+to the AWS console.
+Remember that the access key and secret access key
+are not the same as usernames and passwords.
+These are used only for programmatic access--
+so when you're using the command line.
+We will cover that off later on in the course.
+And you're only ever going to view your access key ID
+and secret access key as well as your user password once.
+So you need to save them in a secure location.
+And you should always set up password rotation policies.
+So you can create and customize
+your own password rotation policies,
+which is what we looked at in the last lecture.
+And then finally, IAM federation.
+You can combine your existing user accounts with AWS.
+For example, when you log in to your PC,
+usually using Microsoft Active Directory,
+you can use the same credentials to log in to AWS
+if you set up federation.
+This is done using SAML, and that's the standard,
+which is essentially Active Directory.
+So that is it for this lecture, everyone.
+Congratulations, you've completed the very first
+technical section of the course.
+In the next section of the course,
+we're going to do an in-depth
+look at S3 (Simple Storage Service).
+And this is one of the oldest services in AWS.
+And because of that, it comes up on the exam an awful lot.
+The good news is it's very simple
+and it is lots of fun to learn.
+So if you've got the time,
+please join me in the next section.
+Thank you.

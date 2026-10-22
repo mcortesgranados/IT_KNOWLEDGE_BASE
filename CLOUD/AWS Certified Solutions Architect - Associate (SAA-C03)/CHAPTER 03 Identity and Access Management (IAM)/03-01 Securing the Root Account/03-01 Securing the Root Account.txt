@@ -1,0 +1,177 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look at
+how we can secure our root account to AWS.
+So we'll start with covering off what is IAM?
+IAM just stands for Identity Access Management.
+Next, we'll go on to understanding what IAM is
+and then we'll look at what the root account is.
+Then we'll look at how we can actually
+secure the root account using the console.
+And then we'll review everything
+that we've learned in this lesson.
+So what is IAM?
+Well, like I said, IAM stands for
+Identity Access Management
+and essentially it allows you to manage users
+and their level of access to the AWS console
+and allows you to go ahead and create users
+and grant permissions to those users.
+You can also create groups and roles
+which we'll cover off in a little bit.
+And you basically use IAM to control access
+to your AWS resources.
+So that's all that IAM is.
+It's a way of granting access to AWS resources,
+and really understanding IAM is essential
+both for passing the exam
+but also for working with AWS in real life.
+If you're administrating a company's
+AWS account in real life,
+you need to have an intimate understanding of IAM
+and IAM all starts with the root account.
+So what is the root account?
+Well, this is just the email address
+you use to sign up for AWS.
+So the root account
+has full administrative access to AWS
+and for this reason it's really important
+to secure this account
+because if somebody gets your password to this account
+and knows the email address,
+they can go in and mine as much Bitcoin as they want.
+They can literally use any service
+within the AWS console.
+For that very reason,
+it's super important to secure your root account.
+So let's go ahead and have a look
+at how we can do that in the AWS console.
+Okay, so here I am signed into the AWS console
+and if we look up here, we can see our different regions.
+Now for the rest of this course,
+I'd suggest you use us-east-1
+or the Northern Virginia region.
+And the reason for that is that this is the
+basically the primary region where Amazon
+rolls out all its new services first.
+So this was one of the very first regions within AWS.
+This is also the region that goes down the most
+because it has the most usage,
+but I would recommend doing the rest of this course
+in Northern Virginia because if there's any new services
+and you're doing it, let's say, outside of Canada Central
+or I don't know, Europe, Paris,
+they might not have some of those services
+rolled out to that region just yet.
+Us-east-1 always has the newest services
+rolled out to it by default.
+So we wanna have a look at Identity Access Management.
+If we click up into Services, you'll be able to find it
+by going all the way down to
+Security, Identity and Compliance
+and then clicking on IAM.
+But imagine if you didn't know how to do that.
+You'd be clicking on all these different,
+you know, services and then trying to find
+the individual service underneath it.
+So the easiest way to do anything
+if you're looking for a particular service
+is just to search for it.
+So we type in IAM and here we can see IAM loads up.
+So I've not used this account before.
+It is a brand new account.
+We can see that I've got no user groups,
+I've got no users.
+By default, it's come with two roles.
+I've got no policies, no identity providers, et cetera.
+And we can see straight away
+it's given me a security recommendation.
+It's saying hey, you need to add
+multi-factor authentication for your root user.
+You can also click up here on your username
+and click on Security Credentials.
+That will then bring up this My Security Credentials page
+and it will give you the same warning
+which is basically you don't have MFA assigned
+and we recommend that you do that.
+So that's what we're going to do in this lecture.
+It's very, very simple.
+All we do is click on Assign MFA
+and we can enter a device name for our MFA token.
+So it's probably just gonna be my phone.
+So I'm gonna do this on my phone.
+And then I'm going to download
+an authenticator app onto my smartphone.
+So you can use Google Authenticator.
+That's probably one of the most common.
+I use an authentication app called Authy
+which is spelled A-U-T-H-Y.
+The reason I do that is
+I can back it up to multiple devices.
+So if I do lose my phone,
+I don't lose all my two-factor authentications.
+Authy's a great product and I use it all the time
+but it's totally up to you
+what authentication app you want to use.
+You will need to download it on your smartphone.
+So we scroll down and go ahead to Next.
+And it basically says here
+you need to install a compatible application
+such as Google Authenticator, Duo Mobile
+or Authy app on your mobile device or computer.
+Once you've done that, you can hit Show QR Code.
+Then all you need to do
+is scan this QR code into your phone.
+So open up Google Authenticator or Authy then hit Add New.
+And then once you've got Add New,
+the camera will come up and you just need to scan
+this QR code into the app
+and then that will give you two MFA codes.
+So I'm gonna pause the video now and just do that.
+And so we can now see
+that my multi-factor authentication device
+has been assigned to get this nice little green box.
+And essentially all I did was I scanned the QR code
+using my Authy app and then I waited
+and it generated a code.
+I had to wait for 30 seconds, generated another code.
+I entered both those codes in
+and then that assigns multi-factor authentication.
+So in here I can go in and remove it if I want.
+I'm going to do that now
+just because you guys have all seen my QR code,
+so I'm going to do it as a matter of security.
+Go ahead and hit Remove.
+'Cause I've only just created it though,
+it's saying it's an unsuccessful HTTP response,
+so it probably needs a couple of minutes
+before I can remove it.
+But I'm gonna go ahead and remove that
+and then add another one.
+So that's all we are going to cover off in this lecture.
+Let's go onto my exam tips.
+So onto my exam tips.
+And if you're asked in the exam
+how to go ahead and secure the root account,
+always remember to turn on multi-factor authentication.
+That's critical.
+'Cause remember the root account
+has full administrated access to the AWS console,
+so you always want to turn on two factor
+or multi-factor authentication on the root account.
+The other ways you can secure the root account
+is by creating an administrator group
+for your administrators and then assigning
+the appropriate permissions to the group.
+You can also create user accounts
+for your administrators and then add them to the group.
+And we are gonna look at how to do that
+in a couple of lectures from now.
+But in the next lecture,
+we're just going to learn about permissions
+and how they work in identity access management.
+Once you get a handle on how permissions work,
+then we'll learn how we can assign permissions
+to things like groups, users and roles.
+So if you've got the time,
+please join me in the next lecture, thank you.
