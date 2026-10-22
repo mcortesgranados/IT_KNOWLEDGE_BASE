@@ -1,0 +1,41 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:40
+
+Course Introduction
+01:40
+
+CHAPTER 2
+
+Unpacking Amazon Athena
+2:27:14
+
+Unpacking Amazon Athena
+10:37
+
+
+When to Use Athena
+13:59
+Accessing Athena
+09:49
+
+
+
+Invoking Magic with Tables
+13:59
+Demo: Querying S3 with Athena
+08:50
+HANDS-ON LAB
+Querying Real Estate Data in S3 Using Amazon Athena
+1:30:00
+CHAPTER 3
+
+Conclusion
+31:28
+
+QUIZ
+Quiz Your Athena Skills!
+30:00
+Course Summary and Where to Go Next
