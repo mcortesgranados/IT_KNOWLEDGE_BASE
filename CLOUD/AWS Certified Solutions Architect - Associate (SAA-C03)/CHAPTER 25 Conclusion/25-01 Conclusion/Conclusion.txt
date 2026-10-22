@@ -1,0 +1,23 @@
+So, you've done it.
+You're at the end of the course, congratulations.
+So you've learned about the AWS fundamental building blocks,
+IAM, S3, EC2, EBS and EFS,
+databases, VPCs, Route 53, load balancing,
+monitoring, HA and scaling, decoupling workflows,
+big data, serverless architectures, security,
+automation, caching and lowering latency, governance,
+and then finally, migration.
+So what's next?
+Well, the world really is your oyster.
+If I was you I'd consider doing
+the Solutions Architect Professional exam,
+or you could consider doing a Specialty exam,
+or you could specialize in an area that you find
+fascinating, something like artificial intelligence
+or machine learning, or Alexa, big data, security,
+DevOps pro, or just general DevOps.
+You can do anything that you want
+and we are here to help you.
+It's been a pleasure teaching you this course,
+keep being awesome Cloud Gurus.
+(upbeat music)
