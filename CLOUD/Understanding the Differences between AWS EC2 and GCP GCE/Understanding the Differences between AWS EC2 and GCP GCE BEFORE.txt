@@ -1,0 +1,31 @@
+Course Outline
+CHAPTER 1
+
+Understanding the Differences between AWS EC2 and GCP GCE
+1:33:07
+
+Course Introduction
+01:13
+About the Architect
+00:45
+Overview of Compute Engine and AWS EC2
+03:19
+Deploying an EC2 Instance and a Compute Engine Instance
+08:30
+Instance Types for EC2 vs. Machine Types for Compute Engine
+03:11
+Storage Types for EC2 and Compute Engine
+02:37
+Understanding Launch Templates for AWS EC2
+05:52
+Understanding Managed Instance Templates for Compute Engine
+04:25
+HANDS-ON LAB
+Launching an Autoscaling Group in AWS
+30:00
+HANDS-ON LAB
+Launching a Managed Instance Group in Compute Engine
+30:00
+Course Summary
+00:45
+Conclusion and What’s Next
