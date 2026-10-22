@@ -1,0 +1,147 @@
+Hello Cloud Gurus, and welcome back.
+In this lesson,
+we're going to take a look at what does it take to prepare
+for our remote proctored exams?
+The first thing we're going to take a look at
+are those pesky rules.
+What do we need to be aware of to make sure
+that we don't make any mistakes?
+We'll take a look at a bad desk layout.
+Namely what my desk normally looks like
+on a day to day basis.
+And then we'll take a look at what do I do to clean it up,
+to make it acceptable for that remote exam.
+And then I'll walk you through,
+how do you test your own environment
+to make sure that you're ready to go for that virtual exam?
+So let's go ahead and dive right on in.
+We have our 5 rules here for our remote AWS exams.
+The first one, no hats or hoodies.
+Now, if you do have questions,
+if it is potentially a religious garment or something
+that's not easily taken off,
+I would recommend just to be safe,
+reaching out to the AWS support team
+on the aws.training website.
+The other option is to file for an exam accommodation.
+You've got to stay within the webcam view,
+namely, you can't go wandering off.
+If you do go out of view or break any of these rules,
+they will give you a warning or two,
+but eventually if you continually break the rules,
+they will fail you on the exam and keep your money,
+and nobody wants that.
+No one can enter or leave the testing environment.
+So you've got to tell your significant other, your friends,
+family, neighbor,
+whatever that looks like for you, to stay away.
+I'll talk to you as soon as the exam is over.
+Now, you can't mumble, talk aloud, or mouth anything
+as you take the test.
+This is really difficult for me
+because I like to read things aloud as I'm taking the exam,
+or at least mumble them to myself.
+And I've gotten scolded quite a few times.
+So just do your best,
+but you can't be talking to somebody off camera
+or anything along those lines.
+Now drinks are allowed,
+but no food or smoking is permitted.
+So you can't have that snack
+as you're going through the exam,
+but you are allowed a drink.
+Now I would recommend to put this drink
+in an unmarked or generally unlabeled container.
+I have mine in my water bottle here
+that only has one tiny logo on it.
+That way it doesn't look like you're trying to hide
+exam answers on the label or anything along those lines.
+Now let's take a look at a desk setup
+that wouldn't work
+and you can all make fun of my messy desk.
+Yes, this is actually my desk,
+where I've recorded all of these videos.
+We can see on here, I've been sorting the mail.
+I've got my headphones, looks like I had a smoothie there.
+I've got my glass, there's just too much stuff.
+This doesn't work.
+Another big problem, I've got a microphone.
+I've got my computer plugged into that docking station.
+Those are all big red flags.
+So how did I fix this?
+Well, the answer is I cleaned my desk.
+So I basically removed everything that wasn't nailed down.
+The microphone, the snack, the mail, my keyboard,
+notice that my laptop is just by itself.
+You can plug it into power, but that's it.
+They will want you to verify,
+and you'll have to show them on the webcam,
+that the docking station and additional monitors
+are not plugged in.
+The cleaner your workspace is,
+the easier of a time you will have
+passing their initial work based review
+at the start of the exam.
+You will have to take photos to show them the space
+that you're in
+and anything that could potentially be used to cheat
+such as your phone, wallet, keys, notes,
+anything like that needs to be more than an arm's length
+away from your test taking area.
+So the general rule of thumb is keep the environment bare,
+keep it simple, and you'll have no problems.
+Now let's actually walk through their sample software
+to make sure that my testing environment
+from a technical standpoint works.
+Alright, so I'm on the testing page
+for Pearson VUE for the AWS exams.
+Now I will have this link posted
+in the resource section of your video,
+if you're interested in giving this a shot yourself.
+So scrolling down here,
+we can see my general exam requirements.
+I have my layout of testing advice.
+Basically what I told you with a little bit more detail,
+you can view your ID requirements,
+I'll let you read those yourself if you have questions,
+but what I want to do here is run a system test.
+So this will be the actual software that I use
+on the day to take the exam.
+So what I'm going to do
+is I'm going to download their software
+and then I have to copy this access code.
+And what it's going to do
+is set up basically a fake testing environment,
+using their actual software
+to make sure that everything works appropriately.
+So I'm going to copy that code
+and open up the downloaded software.
+Okay, so opening the software
+will prompt you for that access code.
+Let's go ahead and paste that in, click Next,
+and now it's going to run a quick test for me
+to make sure that my microphone works,
+the internet works,
+and you can actually see me on webcam now.
+Hello, A Cloud Gurus.
+Oh, it looks like it just froze.
+That's a great photo.
+This is just a quick check to make sure
+that everything is up and running.
+Next, I can actually launch a practice test.
+Now this is not related to AWS,
+this is just a very generic test of their software.
+I cannot show you this because clicking the next button
+actually ends the video recording,
+which naturally it would
+because they don't want you recording
+what you're going to see.
+So I can't show you this part.
+I'll leave it to you to test this yourself.
+Mostly you just want to test before the day
+that your internet is fast enough,
+your webcam works, and your microphone is up and running.
+Alright, folks,
+that's all I've got for you on this lesson.
+We're going to go ahead and call it quits
+and I can't wait to see you in the next one.

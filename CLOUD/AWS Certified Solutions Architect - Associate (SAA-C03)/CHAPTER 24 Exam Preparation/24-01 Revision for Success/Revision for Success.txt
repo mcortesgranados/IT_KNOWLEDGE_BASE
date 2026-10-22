@@ -1,0 +1,147 @@
+Okay, hello gurus.
+Welcome to this next section, and in this lesson,
+we're gonna talk about revisions for success.
+In other words, how can you be successful
+in your exam journey?
+In this lesson, we're gonna have a few different topics.
+We'll have a congratulations section
+for completing this course, we're gonna have
+a last minute review of some important concepts,
+we'll go over practice exams
+and what would happen if you get stuck,
+we're gonna talk about taking notes,
+and then we'll dive into something
+known as the Architecture Center.
+So, first things first, congratulations.
+This is a very, very long course,
+and it can get very complex, especially if
+this is your first time diving into solutions architecture.
+This exam is one of the gold standards
+because it is so hard.
+There's so many different services,
+and you have to know how to configure just so many of them.
+And you really have to be familiar
+with some of the complexities and design structures
+around all of those services.
+So you're done, but what now?
+Well, a few different tips.
+First, exam tips.
+It's always a great idea to run through
+the exam tips again before the exam.
+Now that being said, I wouldn't recommend
+cramming them in before the exam.
+Just casually go through them and maybe focus on areas
+where you feel the least comfortable.
+Studies indicate that cramming hours before an exam
+actually result in worse scores for the most part.
+And maybe you're different, and if you are, congratulations.
+But for most of us, take your time and review these.
+Don't go in an hour or two before your exam
+and try and focus on all of this information.
+It's gonna make it a lot more difficult.
+Second, practice exams.
+Please run through a few practice exam questions
+or full exams just one more time.
+And then lastly, take a break.
+Please think about something non-AWS related.
+Go outside, ride a bike, sit indoors, read a book.
+Just let your brain rest.
+You really don't want to exhaust yourself.
+Don't exhaust yourself any more than you already have.
+Prepping and studying for this exam is difficult
+and you've already done a good job
+prepping and getting ready.
+Please trust yourself going into the exam.
+That's one of the most important factors.
+Be comfortable and trust yourself.
+Now, let's assume you get stuck.
+What happens?
+What should you do?
+Well try these different steps.
+First, of course, search for the answer yourself.
+Please learn how to Google and Bing, whatever.
+Learn how to do it properly.
+You might even use something like ChatGPT or some other
+AI model to do some answer explanations for you.
+It is very helpful.
+Second, try to build whatever you're having
+a problem with in an actual account.
+If you can, leverage the sandboxes on A Cloud Guru
+and play around with the stuff.
+By building it and breaking it, you're gonna have
+a better understanding of how the services work.
+Thirdly, read the FAQs.
+FAQs are frequently asked, thus the name,
+and because of that, your question
+is probably gonna be in there.
+Believe it or not, a large majority of issues
+can be solved by reading the FAQs.
+The fourth step here is to post in our forums.
+We do our best to check this and look for any discussions
+within the forums on a daily basis.
+So please feel free to reach out.
+In fact, someone else in the community might actually
+answer it for you before we get to it.
+And lastly, search again.
+Believe me, if you learn how to search properly online,
+you're gonna learn how to answer
+a ton of complicated problems by yourself.
+If you know how to search properly,
+you probably will get yourself unstuck.
+Okay, let's move on and talk about taking notes.
+In addition to taking actual regular notes,
+using visualizations like diagrams,
+and then writing notes in conjunction
+with each other help reinforce learning.
+Another popular concept and technique is mind mapping.
+And mind mapping is just simply visualizing your notes
+by connecting them in a giant map.
+If you need to, you can look it up.
+A lot of successful engineers and architects
+use mind mapping to take notes to prep for their exams.
+Okay, let's do this.
+We're gonna end the presentation here.
+I'm gonna scroll over to the browser
+and we're gonna look at two main pages
+that I recommend you leverage for this exam.
+Okay, hello again.
+Really quickly, I wanna cover two primary pages
+you should use for prepping for your exam
+outside of the course.
+The first is the Architecture Center.
+This is huge for any solutions architects.
+It provides reference architecture,
+examples, and even diagrams.
+So you'll notice just on the main page,
+they have different videos, different filters,
+and content browsing, and you can get very detailed
+with a lot of these different documents.
+It's cool because they include things like full solutions,
+they'll include guides, et cetera.
+So use this as much as you can, especially for services
+and concepts you might struggle on.
+These give you real world examples on how to leverage AWS
+and all of the different services
+that you're going to be tested on.
+Now, in addition to the Architecture Center,
+which has all of these different video series
+and libraries and documents, you need to of course
+check out the exam guide and the exam page.
+The exam page is gonna give you information on the exam,
+and then it's also gonna offer you the exam guide.
+Now the exam guide should always be studied
+before you go into an exam.
+It gives you all of the information on what to expect
+and all of the different services that are covered as well.
+So if I scroll to the bottom here, you're gonna notice
+it talks about out of scope and in scope services.
+Now, one last thing, on the exam page,
+you can also use sample questions.
+So these are real samples of real questions
+that could be on the exam.
+Please use these as well.
+If you use these in addition to our practice exams,
+you'll be very well prepared for your exam.
+Now that's gonna do it for this lesson.
+Let's go ahead and wrap things up here
+and we can move on to the next lesson.

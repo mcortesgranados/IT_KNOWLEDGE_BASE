@@ -1,0 +1,226 @@
+Okay hello, Cloud Gurus.
+Let's go ahead and take a look
+at booking your certification exam.
+During this lesson,
+we'll go over a few different things.
+We'll look at the different booking options
+that you're offered.
+We'll talk about your test results and what you can expect.
+We'll talk about the booking website, and then we'll walk
+through the actual process of booking your exam itself.
+First things first,
+let's talk about the booking options that you have.
+Currently, there are 2 different test taking options.
+You can do it in person,
+or you can do it fully remote at your home.
+Now, each of these comes with their own pros and cons,
+and it really comes down to personal preference.
+Now, in person, you're going to need to go
+to a physical testing location.
+Now, this is more than likely going to be
+either an actual testing center
+or some type of university that's near your city.
+Now, I've done both.
+I've gone to an actual testing center and a university,
+and there's really no difference to me.
+It's just usually the university has more people
+in the computer lab at the time.
+Now, virtually you're going to take the exam
+from the comfort of your own home,
+which is awesome.
+However, there are some downsides to that
+which we'll talk about here in a moment.
+As far as prep work goes for in person,
+you need to show up with 2 forms of identification.
+They usually do a great job of verifying
+that you are who you really said you are
+and it's enforced
+to make sure someone else is not taking the test for you.
+However, the virtual
+at home prep work is much more different.
+You do still have to prove you are who you are
+via forms of identification,
+but in addition to that,
+you also have to make sure that your environment
+where you're taking your test is neat and tidy.
+Now, this to me,
+is one of the biggest cons of doing it virtually
+because the proctors are extremely picky.
+You can't have any electronics plugged in,
+including monitors.
+You can't have external mouses or keyboards.
+Literally, your desk has to be empty.
+They'll have you stand up and take pictures
+of each wall within the room that you're taking the test in,
+as well as the view of your workspace.
+It gets very involved and it can be very cumbersome
+if you have a lot of stuff on your desk.
+Now, as far as privacy goes,
+a person will be in the room watching you
+when you're taking it in person.
+Now, this doesn't mean that they're literally sitting
+over your shoulder watching every single move,
+hoping you'll make a mistake.
+It means that they're just watching
+to make sure you're not cheating.
+Now, this is kind of flexible because they might
+actually be in the room or they could just be watching you
+on a monitor outside of the room
+via cameras that they have within the testing center.
+It's very simple.
+I wouldn't freak out about it.
+They're just ensuring people are not cheating.
+Now the virtual side of things is a little different.
+The people or the proctors are going to be watching you
+through your webcam and listening through your webcam audio.
+In addition to that,
+they're also watching your desktop itself,
+so they're monitoring your screen as well
+to ensure you are not cheating.
+Now, another con that we didn't really list here
+from a virtual perspective is that you cannot even
+silently read or move your lips
+while you're reading questions.
+I tend to like to read out questions out loud.
+It just helps me understand them a little bit better.
+And I have gotten warned several times
+about doing this on the virtual exams,
+so don't do it.
+Now, let's talk about the test results.
+The first thing we want to cover is the score.
+The minimum passing mark is 720 out of 1000,
+and this exam is pass or fail.
+So anything over 720 you can consider perfect.
+You are now fully certified in this exam,
+so don't stress if you get a 730.
+A pass is a pass.
+Now the results used to be immediately given to you,
+however, now AWS has implemented a 24 hour hold,
+and they say this is due
+to anomaly detection processes on their end.
+They want to make sure, again,
+that no one is cheating on their exams.
+However, within a few days,
+you're going to get your score,
+and then you're also going to get a detailed breakdown
+so you can understand at a high level how you did
+on each domain that they list on the exam.
+So this is going to say if you need work
+or if you meet competencies for that particular domain.
+Now let's move on to the booking website.
+The first thing
+I want to point out is this is an Amazon.com account,
+not an AWS account.
+Now it's a pretty simple process,
+but let's go ahead and have a quick walkthrough
+on how to book your certification exam
+on the page right now in the browser.
+All right, so I'm at the website.
+I've already navigated to it and logged in.
+And remember, I logged in with my amazon.com account.
+Now the first thing you're going to do is
+we're going to navigate to the Certification tab.
+This brings us to the Certification page.
+From here we can navigate to go to your account,
+and this is going to redirect us
+to their certification platform.
+There you go.
+So this is now the landing page for all things related
+to AWS certification.
+If this is your first time coming to this page,
+they're going to have you accept some terms and agreements
+before you continue on.
+Now, I've already done this,
+so I obviously can't show you it.
+However, it's a simple process
+that I'm sure everyone has done at least once in their life
+at some point or time.
+So from here,
+there are 2 different exam providers
+that you can use.
+There's PSI, and then there's Pearson.
+Now, personally, Pearson VUE
+I've had better luck with,
+but there are plenty
+of people out there that would say they prefer PSI.
+This is really going to come down to personal preference
+and the availability of exams at the time.
+So pick the one that works best for you.
+There's really not a major difference between them.
+Again, it's just personal preference.
+And before we move on,
+if you're a non-native English speaker,
+and you're taking the exam in the English language,
+you can request exam accommodations,
+which is going to give you an extra 30 minutes
+to take the exam.
+So if you need to,
+be sure to request those accommodations
+and get that extra time.
+Now for this,
+we're going to go ahead
+and go down to Manage Pearson VUE Exams,
+just for the sake of this walkthrough.
+It's going to redirect us to their system.
+And there you go.
+So you can see the list of exams that you're able to take,
+and let's just act
+like we're going to take our exam that we're studying for.
+So I'll select it
+and now we can select where we want to take our exam.
+Do we want to take it
+at a test center or online at home or in an office?
+I'll select At Home,
+which is their virtual offering.
+And you can see they tell you how to prepare
+for your exam at your home or office.
+They talk about your computer requirements,
+testing space, ID, and really what to expect.
+So take the time to read through this
+if this is your first time.
+I'm going to click on Next.
+You can select your preferred language.
+So I'm going to do English.
+You accept all of the exam policies
+and data processing that's required.
+You can select your proctor's language,
+so in my case,
+it would be English again.
+Select your preferred time zone.
+So how do you want to view the testing times
+that are available?
+I am in the Chicago time zone,
+so I'll say Yes, that's right.
+And once this loads,
+we can select our date and then our time.
+So I'll scroll down,
+I'll just pick a random date.
+We'll view the times that pop up here.
+I'll do a 24 hour clock.
+Let me go ahead and explore more times.
+And you could see they break it down.
+Now this is personally not my favorite way that they do it.
+It used to be a lot easier to read
+but you can select a timeframe.
+So let's just select 9:15 to one o'clock.
+You can select the time that you want.
+I'll book this appointment,
+and then from there,
+you would check out and then pay.
+So I'm not going to do this
+because I've already taken this exam,
+and I also don't want to pay the money for a retake.
+But from here it's literally an easy checkout process.
+You would click Proceed to Checkout,
+pay for it.
+You would receive an email
+that's basically confirming your exam details with a receipt
+and then that's it.
+You're scheduled for your exam.
+It's a pretty easy process.
+The PSI process is extremely similar
+just a slightly different look,
+but it still follows the same flow.
+Okay, so that's going to do it for this lesson.
+Go ahead and get your exam booked,
+get to studying, and good luck.

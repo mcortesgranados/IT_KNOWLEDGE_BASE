@@ -1,0 +1,269 @@
+Hello, Cloud Gurus and welcome back. In this
+lesson, we're going to take a look at some strategies
+for tackling those pesky exam questions.
+We'll start off by taking a look at our question strategy.
+What do we need to keep in mind
+as we start going through the questions on the exam?
+And we'll see a practice question,
+a not so real question,
+something that's not going to be on the test,
+but it can help illustrate that strategy
+and help drive those points home.
+And then we'll take a look at a very real question
+that you could see on the test
+followed by another very real question.
+So let's go ahead and dive right on in.
+So I've got 5 tips here
+for how we can tackle the exam questions.
+The very first one is spot the distractors.
+The exam is a single choice or multiple choice setup.
+There is not currently a hands-on scenario
+for the CSA Associate exam.
+It is all just theory.
+And in these questions,
+you are going to find answers
+that just don't quite sound right.
+One of my biggest tips that I can give you
+is if part of the answer is wrong, the whole thing is wrong.
+It doesn't matter if it is
+the most beautifully laid out three-tiered architecture
+that it's describing.
+If it makes an incorrect assumption
+or an incorrect statement somewhere in there,
+just move on to that next answer.
+Watch out for modifiers, things like most, least,
+they can sneak up on you.
+For example, you might see a question
+that says which of the following architecture patterns
+are the most cost-effective?
+Now, we have a tendency, or at least I do,
+to pick things that are very performant,
+and cool, and use a lot of AWS surfaces.
+And maybe the very first answer uses an Auto Scaling Group
+and scales at your architecture
+and handles the load immediately,
+and it's really technically complete.
+And if we pick that, we might've gotten the question wrong
+if it's looking for the most cost-effective.
+Because in a given situation,
+maybe the most cost-effective the thing
+is a single EC2 Instance,
+and they don't care about high availability.
+So always scan for those modifiers.
+The word soup is never right.
+We'll see an example of this in a minute,
+but you will run into situations where they just throw
+a lot of words together and try to confuse you.
+Now, if you know what the services are
+and you know what they do,
+they'll be pretty easy to spot.
+This will be something like, well,
+you would connect to the SQS queue to the load balancer
+and enable auto scaling on the load balancer
+to route DNS entries through Route 53
+and all of the edge locations.
+Now, I just used a lot of AWS words,
+but not in the right way.
+If you don't know what you're doing, that might sound great.
+But if you do, that should make you laugh,
+and then it's wrong.
+Word association is your friend.
+I have tried to do this
+in quite a few lectures in this course,
+things like real-time equals Kinesis,
+things like logging equals CloudWatch Logs,
+things like compute generally means EC2.
+That can easily allow you to spot the distractors,
+where are services misused,
+where are they not set up correctly?
+I can get you through some tough situations
+where maybe you're confused
+about some of the architecture patterns
+that they're talking about,
+but you remember some of that word association
+that we've done.
+Read every answer at least once.
+This piece of advice has saved me
+from picking the wrong answer quite a few times.
+That's because as you're going through,
+you might see answer A and say,
+answer A is the best answer that I've ever seen.
+But if you actually read through and saw answer C,
+maybe answer C is even better.
+So you want to go answer by answer
+no matter how much you know it's one particular answer,
+always read the other ones at least at a quick high-level
+to make sure that you're not missing something.
+Alright, that's enough advice here.
+Let's actually jump in and do
+one of these questions together.
+Now, normally, you're going to see the question
+and the answer pop up on the screen at once.
+In this case, this is an example of a not so real question.
+We need to make a tasty, delicious lunch to teach our boss
+what exactly that looks like.
+Now, we're going to walk through this one together.
+And in the next 2 questions,
+I'm going to let you try on your own
+before we review why an answer is right
+and why one is wrong.
+So let's take a look at the first answer here.
+So we're going to the break room fridge,
+we're collecting that tuna, peanut butter, and tomatoes,
+and we're putting it on bread and lightly toasting it.
+Now, at first glance, I want to say that sounds pretty
+gross, but sometimes weird food can be good.
+I've been told peanut butter pickle sandwiches are amazing.
+So, I don't feel like we can rule this one out just yet,
+but I am skeptical.
+So let's put a pin in this one
+and let's go on to answer 2..
+In this case, we're going to collect our clean socks
+that we were going to use for volleyball
+and put them in the freezer.
+Then we'll serve that to our boss.
+Now, as tempting as that can be from time to time,
+I would say that that clearly is not a delicious lunch.
+So we're going to keep moving.
+Decompile the Windows Firewall service,
+take the code and merge it
+with your containerized application
+to demonstrate how lunch works.
+Yeah, that's not how any of this goes.
+This is an example of a word soup answer.
+Does decompiling the Windows Firewall sound cool?
+Sure, but it's not the correct use,
+it's not the correct place,
+and I don't even really know what that means.
+So it made me laugh or at least chuckle.
+Hopefully, you did as well.
+We're going to go ahead and skip that one.
+Now, our last answer here,
+saute some vegetables in a pan with a delicious sauce.
+Once ready, serve on a bed of rice.
+That sounds pretty good to me.
+Now, as we go back through again,
+remember that we did not disqualify that first answer.
+But comparing those two together,
+it's clear which one is right.
+Now, hopefully, I didn't offend any tuna fish,
+peanut butter aficionados out there,
+but I think I would get the point across.
+The vegetables with the delicious sauce
+is clearly the winner.
+Now, I want you to use this same strategy
+on our next couple of questions.
+So take a second here and read question 2.
+Go ahead and pause the video for just a second
+and review this.
+In fact, try to think of what the answer
+is going to be before you even see the answers.
+Alright, you took a second, you read through it,
+we're looking for a cost-effective way
+and ensuring high availability for our static website.
+Now I want you to pause the video once again.
+Read each one of these answers and try it yourself.
+Figure out which one you would have picked
+before I walked through it here for you.
+Alright.
+Hopefully, you took a second.
+Hopefully, you got the right answer,
+but let's review this together.
+Now, I put all of the answers up
+at once because this is what it's going to be
+on the actual test.
+You will get all of your answers in front of you,
+and then you have to read through each one of them.
+So our first option, create a single t3.micro instance
+and place it in a public subnet,
+attach an Elastic IP address and Route DNS
+to that public IP.
+How did that sound to you?
+Is there anything technically wrong?
+You've got to ask yourself, could we build this?
+I'd say, absolutely, you could.
+Is it cost-effective?
+Yeah, I'd say so, but is it highly available?
+I think you can make the argument that it's not going to be.
+So I'm personally going to say it's probably not A.
+Let's look at answer B, create an Auto Scaling group
+of VC2 Instances,
+spread them across multiple AZs
+and register them behind an ELB.
+Route traffic to the load balancer.
+Now, my gut instinct is I love this answer.
+I love Auto Scaling,
+I love that fleet of EC2 Instances,
+multiple AZs, load balancers, great.
+However, we need to read the rest of the answers.
+So let's put a pin in answer 2.
+Let's go on to the third one.
+Create a new S3 bucket.
+Upload the static website to the bucket
+and enable website hosting on the bucket.
+Use Route 53 to create an alias record to that bucket.
+How does this one sound?
+Well, it's cost-effective,
+it's highly available, and it's a static website.
+Personally, I really like this one as well,
+but let's keep going.
+Our last answer here,
+create an SQS queue, route the web requests
+through the queue
+and process them with an auto scaled fleet
+of EC2 Instances.
+Now, there's a lot of things wrong with this.
+Sending web requests
+through an SQS queue doesn't really make sense.
+It just doesn't seem like a good idea.
+So on final review,
+we have answers 2 and 3, personally,
+I'm going to go with 3 because this is going to be
+the most cost-effective option compared
+to that fleet of EC2 Instances.
+Alright, how did you do on this one?
+Did you get answer three?
+And if not, do you know why that is?
+Because it's okay to pick the wrong answer,
+but you need to know why that happened,
+and that'll serve you really well
+as you start to go through some of our example exams
+that are coming up after this lesson.
+Let's do one more question together.
+So once again, same process,
+pause the video for just a minute.
+Hopefully, think of that right answer.
+And I'll put them up on the screen in just a second.
+The first answer, install the CloudWatch agent.
+Configure the agent to send logs to CloudWatch Logs.
+On first glance, this sounds great,
+but there's a fly in the ointment real-time.
+Remember, CloudWatch Logs is not real-time.
+Let's look at the second answer, install the Kinesis agent
+on your host, send the logs to Kinesis Data Streams,
+process the logs using Lambda, and store them
+in an S3 Bucket.
+Ooh, I really like this one.
+It hits all the bullet points, storage,
+it's got the agent installed and configured,
+and it's streaming those logs
+in real time using Kinesis Data Streams.
+Still, we need to look at the rest of them.
+Three, use Lambda to connect to your EC2 Instances
+every 15 minutes.
+You can immediately stop reading.
+It's wrong.
+Once you know it's wrong, move on.
+Four, configure Systems Manager
+to enable log streaming on your EC2 Instances.
+That is very, very vague.
+What are we using?
+It doesn't really specify.
+So we have to assume that this doesn't work.
+That leaves us with this second answer.
+Hopefully, you have an idea now of the strategy
+that you should be applying for every single question.
+And we have a lot more available to you
+in that practice exam.
+So, thanks for going through this with me, folks.
+And I can't wait to see you in the next lesson.
