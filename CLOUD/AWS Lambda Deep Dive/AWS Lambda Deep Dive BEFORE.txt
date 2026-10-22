@@ -1,0 +1,197 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+07:42
+
+Course Introduction
+01:25
+What Is AWS Lambda?
+03:17
+A Note on Following Along
+03:00
+CHAPTER 2
+
+Lambda Fundamentals
+1:45:27
+
+How Lambda Works
+05:13
+Lambda Use and Misuse
+14:18
+Runtime and Processors
+14:02
+
+
+Anatomy of a Lambda Handler
+11:54
+
+
+
+HANDS-ON LAB
+Creating a Lambda Function Using the AWS Console
+45:00
+QUIZ
+Lambda Fundamentals
+15:00
+CHAPTER 3
+
+Lambda Configuration
+54:57
+
+Memory and Computing Power
+08:41
+
+Networking
+08:10
+
+Storage
+07:41
+
+Roles, Permissions, and Policies
+08:01
+
+Environment Variables, Tags, and Signing
+07:24
+
+QUIZ
+Lambda Configuration
+15:00
+CHAPTER 4
+
+Triggers and Integrations
+1:40:54
+
+Synchronous Execution
+08:43
+
+Demo: API Gateway Integration
+13:17
+
+
+Asynchronous Execution
+10:13
+Error Handling, Retries, and Dead-Letter Queues
+09:34
+Amazon EventBridge and Event-Driven Architectures
+11:13
+Connecting to AWS Services
+07:29
+
+
+Keeping Secrets Secret
+10:38
+
+
+
+Demo: Connecting to Relational Databases
+14:47
+
+QUIZ
+Triggers and Integrations
+15:00
+CHAPTER 5
+
+Scaling and Optimization
+1:18:54
+
+The Execution Lifecycle
+06:59
+Cold and Warm Starts
+05:23
+Lambda SnapStart
+07:31
+Concurrency and Scaling
+09:22
+
+Lambda Layers
+06:29
+Cost and Cost Optimization
+13:19
+
+Demo: AWS Lambda Power Tuning
+14:51
+
+
+QUIZ
+Scaling and Optimization
+15:00
+CHAPTER 6
+
+Monitoring and Observability
+1:24:20
+
+Logging
+09:09
+
+Metrics
+09:49
+Demo: Logging and Metrics
+15:01
+
+
+Lambda Insights
+05:34
+
+Demo: Distributed Tracing with X-Ray
+14:12
+
+
+Extensions
+07:58
+Powertools for AWS Lambda
+07:37
+
+
+
+
+QUIZ
+Monitoring and Observability
+15:00
+CHAPTER 7
+
+Testing, Deployment, and Troubleshooting
+1:20:35
+
+Testing
+12:54
+
+Versions and Aliases
+06:09
+Deployment Strategies
+09:07
+
+Demo: Deployment via CDK
+14:46
+
+
+
+Demo: Deployment via Container Images
+12:33
+
+Common Issues and Troubleshooting
+10:06
+QUIZ
+Testing, Deployment, and Troubleshooting
+15:00
+CHAPTER 8
+
+Some Extras
+29:11
+
+Lambda Service Architecture
+07:20
+Lambda in Other Places
+06:51
+QUIZ
+Some Extras
+15:00
+CHAPTER 9
+
+Conclusion
+08:57
+
+Course Summary
+06:34
+Conclusion and What's Next
+02:23
