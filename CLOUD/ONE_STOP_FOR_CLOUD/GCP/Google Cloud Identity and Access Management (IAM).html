@@ -1,276 +1,407 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Google Cloud Identity and Access Management (IAM)</title>
-<link href="../estilos.css" rel="stylesheet" type="text/css" />
+<style>
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+
+</style>
 </head>
 
-<body class="texto8_1">
-<p><a href="../IAM_references_jpg_0540.html" target="_blank">ACG LINK</a></p>
-<p><strong><br />
-Google Cloud Identity and Access Management (IAM): Secure Access Control for Cloud Resources</strong></p>
-<p>Google Cloud Identity and Access Management (IAM) is a robust security and access control service that enables users to manage permissions and control access to Google Cloud Platform (GCP) resources. IAM ensures secure collaboration and helps organizations adhere to the principle of least privilege. Here's a comprehensive list of Google Cloud IAM features along with their definitions:</p>
+<body>
+<div class="container">
+<main>
+
+  <h1>Google Cloud Identity and Access Management (IAM)<span class="tag">Security</span></h1>
+
+  <a class="profile-link" href="../IAM_references_jpg_0540.html" target="_blank" rel="noopener">ACG LINK</a>
+
+  <div class="note">
+<p><strong><br/>
+Google Cloud Identity and Access Management (IAM): Secure Access Control for Cloud Resources</strong></p><p>Google Cloud Identity and Access Management (IAM) is a robust security and access control service that enables users to manage permissions and control access to Google Cloud Platform (GCP) resources. IAM ensures secure collaboration and helps organizations adhere to the principle of least privilege. Here's a comprehensive list of Google Cloud IAM features along with their definitions:</p>
+  </div>
+
 <ol>
-  <li>
-    <p><strong>Identity Management:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM allows users to manage and control access based on identities, such as Google Accounts, Google Groups, and service accounts. This ensures that only authorized individuals or entities can interact with resources.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Role-Based Access Control (RBAC):</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM implements RBAC, enabling users to assign roles to identities. Roles define the set of permissions granted to a user, determining their level of access to resources.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Predefined Roles:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM provides a set of predefined roles with specific sets of permissions. These roles cover common use cases, such as owner, editor, viewer, and more. Users can assign these roles to grant permissions easily.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Custom Roles:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> Users can create custom roles with a specific set of permissions tailored to their unique requirements. This allows for fine-grained control over access to resources.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Resource Hierarchy:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM operates within a resource hierarchy, allowing users to set permissions at the project, folder, or organization level. This hierarchical structure streamlines access management in complex environments.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Policy Binding:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM policies define the permissions granted to users, and these policies are bound to resources at different levels in the hierarchy. Policy binding ensures that access controls are applied effectively.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Conditional IAM Policies:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> Users can create conditional IAM policies that consider additional factors, such as device status, IP address, and time of day. This adds an extra layer of security and flexibility to access control.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Service Accounts:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> Service accounts are special types of Google Accounts that represent non-human users, such as applications and virtual machines. IAM allows users to assign roles to service accounts for secure automation.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Service Account Key Management:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM provides a way to manage and rotate keys for service accounts. This ensures secure access to resources by regularly updating and managing service account keys.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>IAM Audit Logging:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM generates audit logs that capture changes to IAM policies and permissions. These logs provide a comprehensive record of who made changes to access controls and when.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>IAM Conditions:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM conditions allow users to specify additional constraints on policies, such as requiring requests to come from a specific network or device. Conditions enhance the granularity of access controls.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Access Levels:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM allows users to define access levels based on context-aware access policies. Access levels consider various factors, including device status and location, to determine access.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Resource-level IAM:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM supports resource-level access control for certain GCP services. Users can set IAM policies directly on individual resources, providing more granular control over access.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Role Inheritance:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM roles can be inherited by child resources in the hierarchy. This simplifies access management, ensuring that permissions granted at a higher level automatically apply to lower-level resources.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Delegated Administration:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM allows users to delegate administration of IAM roles and permissions for specific resources. This enables distributed and role-based administration across an organization.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>IAM Recommender:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM Recommender provides recommendations to help users optimize their IAM policies. This includes suggestions for removing unused permissions and aligning permissions with best practices.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Integration with Cloud Identity:</strong></p>
-    <ul>
-      <li><strong>Definition:</strong> IAM integrates seamlessly with Cloud Identity, providing organizations with a unified solution for managing access across Google Cloud and other Google Workspace services.</li>
-    </ul>
-  </li>
+<li>
+<p><strong>Identity Management:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM allows users to manage and control access based on identities, such as Google Accounts, Google Groups, and service accounts. This ensures that only authorized individuals or entities can interact with resources.</li>
+</ul>
+</li>
+<li>
+<p><strong>Role-Based Access Control (RBAC):</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM implements RBAC, enabling users to assign roles to identities. Roles define the set of permissions granted to a user, determining their level of access to resources.</li>
+</ul>
+</li>
+<li>
+<p><strong>Predefined Roles:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM provides a set of predefined roles with specific sets of permissions. These roles cover common use cases, such as owner, editor, viewer, and more. Users can assign these roles to grant permissions easily.</li>
+</ul>
+</li>
+<li>
+<p><strong>Custom Roles:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can create custom roles with a specific set of permissions tailored to their unique requirements. This allows for fine-grained control over access to resources.</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource Hierarchy:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM operates within a resource hierarchy, allowing users to set permissions at the project, folder, or organization level. This hierarchical structure streamlines access management in complex environments.</li>
+</ul>
+</li>
+<li>
+<p><strong>Policy Binding:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM policies define the permissions granted to users, and these policies are bound to resources at different levels in the hierarchy. Policy binding ensures that access controls are applied effectively.</li>
+</ul>
+</li>
+<li>
+<p><strong>Conditional IAM Policies:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can create conditional IAM policies that consider additional factors, such as device status, IP address, and time of day. This adds an extra layer of security and flexibility to access control.</li>
+</ul>
+</li>
+<li>
+<p><strong>Service Accounts:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Service accounts are special types of Google Accounts that represent non-human users, such as applications and virtual machines. IAM allows users to assign roles to service accounts for secure automation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Service Account Key Management:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM provides a way to manage and rotate keys for service accounts. This ensures secure access to resources by regularly updating and managing service account keys.</li>
+</ul>
+</li>
+<li>
+<p><strong>IAM Audit Logging:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM generates audit logs that capture changes to IAM policies and permissions. These logs provide a comprehensive record of who made changes to access controls and when.</li>
+</ul>
+</li>
+<li>
+<p><strong>IAM Conditions:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM conditions allow users to specify additional constraints on policies, such as requiring requests to come from a specific network or device. Conditions enhance the granularity of access controls.</li>
+</ul>
+</li>
+<li>
+<p><strong>Access Levels:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM allows users to define access levels based on context-aware access policies. Access levels consider various factors, including device status and location, to determine access.</li>
+</ul>
+</li>
+<li>
+<p><strong>Resource-level IAM:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM supports resource-level access control for certain GCP services. Users can set IAM policies directly on individual resources, providing more granular control over access.</li>
+</ul>
+</li>
+<li>
+<p><strong>Role Inheritance:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM roles can be inherited by child resources in the hierarchy. This simplifies access management, ensuring that permissions granted at a higher level automatically apply to lower-level resources.</li>
+</ul>
+</li>
+<li>
+<p><strong>Delegated Administration:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM allows users to delegate administration of IAM roles and permissions for specific resources. This enables distributed and role-based administration across an organization.</li>
+</ul>
+</li>
+<li>
+<p><strong>IAM Recommender:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM Recommender provides recommendations to help users optimize their IAM policies. This includes suggestions for removing unused permissions and aligning permissions with best practices.</li>
+</ul>
+</li>
+<li>
+<p><strong>Integration with Cloud Identity:</strong></p>
+<ul>
+<li><strong>Definition:</strong> IAM integrates seamlessly with Cloud Identity, providing organizations with a unified solution for managing access across Google Cloud and other Google Workspace services.</li>
+</ul>
+</li>
 </ol>
 <p>Google Cloud IAM is a critical component for securing and managing access to cloud resources. Its flexible and granular access control capabilities, combined with features like conditional policies and auditing, empower organizations to enforce security best practices and compliance standards effectively.</p>
 <p>Google Cloud Identity and Access Management (IAM) allows you to manage access control for your Google Cloud resources. IAM enables you to define who (identity) has what access (roles) to which resources. Below is a basic example of using Google Cloud IAM:</p>
-<h3>Prerequisites:</h3>
+<h2 class="phase">Prerequisites</h2>
 <p>Ensure you have the necessary permissions to manage IAM policies for your Google Cloud project.</p>
-<h3>Example using gcloud CLI:</h3>
+<h2 class="phase">Example using gcloud CLI</h2>
 <ol>
-  <li>
-    <p><strong>List Existing IAM Policies:</strong></p>
-    <ul>
-      <li>Use the gcloud command to list existing IAM policies for a Google Cloud resource.</li>
-    </ul>
-  </li>
+<li>
+<p><strong>List Existing IAM Policies:</strong></p>
+<ul>
+<li>Use the gcloud command to list existing IAM policies for a Google Cloud resource.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud projects get-iam-policy PROJECT_ID<br />
+<p> </p>
+<p>gcloud projects get-iam-policy PROJECT_ID<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace PROJECT_ID with your Google Cloud project ID.</p>
-  </li>
-  <li>
-    <p><strong>Grant a Role to a User:</strong></p>
-    <ul>
-      <li>Use the gcloud command to grant a specific role to a user.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace PROJECT_ID with your Google Cloud project ID.</p>
+</li>
+<li>
+<p><strong>Grant a Role to a User:</strong></p>
+<ul>
+<li>Use the gcloud command to grant a specific role to a user.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud projects add-iam-policy-binding PROJECT_ID \<br />
---member=user:USER_EMAIL \<br />
---role=roles/ROLE_NAME<br />
+<p> </p>
+<p>gcloud projects add-iam-policy-binding PROJECT_ID \<br/>
+--member=user:USER_EMAIL \<br/>
+--role=roles/ROLE_NAME<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace PROJECT_ID, USER_EMAIL, and ROLE_NAME with your Google Cloud project ID, the user's email address, and the desired role, respectively.</p>
-  </li>
-  <li>
-    <p><strong>Create a Custom Role:</strong></p>
-    <ul>
-      <li>Use the gcloud command to create a custom role with specific permissions.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace PROJECT_ID, USER_EMAIL, and ROLE_NAME with your Google Cloud project ID, the user's email address, and the desired role, respectively.</p>
+</li>
+<li>
+<p><strong>Create a Custom Role:</strong></p>
+<ul>
+<li>Use the gcloud command to create a custom role with specific permissions.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud iam roles create CUSTOM_ROLE_NAME \<br />
---project=PROJECT_ID \<br />
---title=&quot;Custom Role Title&quot; \<br />
---description=&quot;Description of the custom role&quot; \<br />
---permissions=permissions.list,of,permissions<br />
+<p> </p>
+<p>gcloud iam roles create CUSTOM_ROLE_NAME \<br/>
+--project=PROJECT_ID \<br/>
+--title="Custom Role Title" \<br/>
+--description="Description of the custom role" \<br/>
+--permissions=permissions.list,of,permissions<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace CUSTOM_ROLE_NAME, PROJECT_ID, and permissions.list,of,permissions with your desired custom role name, Google Cloud project ID, and a comma-separated list of permissions.</p>
-  </li>
-  <li>
-    <p><strong>Grant a Custom Role to a User:</strong></p>
-    <ul>
-      <li>Use the gcloud command to grant a custom role to a user.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace CUSTOM_ROLE_NAME, PROJECT_ID, and permissions.list,of,permissions with your desired custom role name, Google Cloud project ID, and a comma-separated list of permissions.</p>
+</li>
+<li>
+<p><strong>Grant a Custom Role to a User:</strong></p>
+<ul>
+<li>Use the gcloud command to grant a custom role to a user.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud projects add-iam-policy-binding PROJECT_ID \<br />
---member=user:USER_EMAIL \<br />
---role=roles/CUSTOM_ROLE_NAME<br />
+<p> </p>
+<p>gcloud projects add-iam-policy-binding PROJECT_ID \<br/>
+--member=user:USER_EMAIL \<br/>
+--role=roles/CUSTOM_ROLE_NAME<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace PROJECT_ID, USER_EMAIL, and CUSTOM_ROLE_NAME with your Google Cloud project ID, the user's email address, and the custom role name, respectively.</p>
-  </li>
-  <li>
-    <p><strong>Revoke a Role from a User:</strong></p>
-    <ul>
-      <li>Use the gcloud command to revoke a role from a user.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace PROJECT_ID, USER_EMAIL, and CUSTOM_ROLE_NAME with your Google Cloud project ID, the user's email address, and the custom role name, respectively.</p>
+</li>
+<li>
+<p><strong>Revoke a Role from a User:</strong></p>
+<ul>
+<li>Use the gcloud command to revoke a role from a user.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud projects remove-iam-policy-binding PROJECT_ID \<br />
---member=user:USER_EMAIL \<br />
---role=roles/ROLE_NAME<br />
+<p> </p>
+<p>gcloud projects remove-iam-policy-binding PROJECT_ID \<br/>
+--member=user:USER_EMAIL \<br/>
+--role=roles/ROLE_NAME<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace PROJECT_ID, USER_EMAIL, and ROLE_NAME with your Google Cloud project ID, the user's email address, and the role name, respectively.</p>
-  </li>
-  <li>
-    <p><strong>Create a Service Account:</strong></p>
-    <ul>
-      <li>Use the gcloud command to create a service account.</li>
-    </ul>
-  </li>
-</ol>
-<p>&nbsp;</p>
-<p>gcloud iam service-accounts create SERVICE_ACCOUNT_NAME \<br />
---display-name=&quot;Service Account Display Name&quot;<br />
-</p>
-<p>&nbsp;</p>
-<ol>
-  <li>
-    <p>Replace SERVICE_ACCOUNT_NAME with your desired service account name.</p>
-  </li>
-  <li>
-    <p><strong>Grant a Role to a Service Account:</strong></p>
-    <ul>
-      <li>Use the gcloud command to grant a role to a service account.</li>
-    </ul>
-  </li>
-</ol>
-<p>&nbsp;</p>
-<p>gcloud projects add-iam-policy-binding PROJECT_ID \<br />
---member=serviceAccount:SERVICE_ACCOUNT_EMAIL \<br />
---role=roles/ROLE_NAME<br />
-</p>
-<p>&nbsp;</p>
-<ol>
-  <li>
-    <p>Replace PROJECT_ID, SERVICE_ACCOUNT_EMAIL, and ROLE_NAME with your Google Cloud project ID, the service account's email address, and the role name, respectively.</p>
-  </li>
-  <li>
-    <p><strong>List Service Account Keys:</strong></p>
-    <ul>
-      <li>Use the gcloud command to list keys for a service account.</li>
-    </ul>
-  </li>
-</ol>
-<p>&nbsp;</p>
-<p>gcloud iam service-accounts keys list \<br />
---iam-account=SERVICE_ACCOUNT_EMAIL<br />
-</p>
-<p>&nbsp;</p>
-<ol>
-  <li>
-    <p>Replace SERVICE_ACCOUNT_EMAIL with the email address of the service account.</p>
-  </li>
-  <li>
-    <p><strong>Remove a Member (Revoke Access):</strong></p>
-    <ul>
-      <li>Use the gcloud command to remove a member (revoke access) from a resource.</li>
-    </ul>
-  </li>
-</ol>
-<p>&nbsp;</p>
+<li>
 <p>Replace PROJECT_ID, USER_EMAIL, and ROLE_NAME with your Google Cloud project ID, the user's email address, and the role name, respectively.</p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
+</li>
+<li>
+<p><strong>Create a Service Account:</strong></p>
+<ul>
+<li>Use the gcloud command to create a service account.</li>
+</ul>
+</li>
+</ol>
+<p> </p>
+<p>gcloud iam service-accounts create SERVICE_ACCOUNT_NAME \<br/>
+--display-name="Service Account Display Name"<br/>
+</p>
+<p> </p>
+<ol>
+<li>
+<p>Replace SERVICE_ACCOUNT_NAME with your desired service account name.</p>
+</li>
+<li>
+<p><strong>Grant a Role to a Service Account:</strong></p>
+<ul>
+<li>Use the gcloud command to grant a role to a service account.</li>
+</ul>
+</li>
+</ol>
+<p> </p>
+<p>gcloud projects add-iam-policy-binding PROJECT_ID \<br/>
+--member=serviceAccount:SERVICE_ACCOUNT_EMAIL \<br/>
+--role=roles/ROLE_NAME<br/>
+</p>
+<p> </p>
+<ol>
+<li>
+<p>Replace PROJECT_ID, SERVICE_ACCOUNT_EMAIL, and ROLE_NAME with your Google Cloud project ID, the service account's email address, and the role name, respectively.</p>
+</li>
+<li>
+<p><strong>List Service Account Keys:</strong></p>
+<ul>
+<li>Use the gcloud command to list keys for a service account.</li>
+</ul>
+</li>
+</ol>
+<p> </p>
+<p>gcloud iam service-accounts keys list \<br/>
+--iam-account=SERVICE_ACCOUNT_EMAIL<br/>
+</p>
+<p> </p>
+<ol>
+<li>
+<p>Replace SERVICE_ACCOUNT_EMAIL with the email address of the service account.</p>
+</li>
+<li>
+<p><strong>Remove a Member (Revoke Access):</strong></p>
+<ul>
+<li>Use the gcloud command to remove a member (revoke access) from a resource.</li>
+</ul>
+</li>
+</ol>
+<p> </p>
+<p>Replace PROJECT_ID, USER_EMAIL, and ROLE_NAME with your Google Cloud project ID, the user's email address, and the role name, respectively.</p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+
+  <div class="footer">IT Knowledge Base &middot; GCP &middot; Google Cloud Identity and Access Management (IAM)</div>
+
+</main>
+</div>
 </body>
 </html>

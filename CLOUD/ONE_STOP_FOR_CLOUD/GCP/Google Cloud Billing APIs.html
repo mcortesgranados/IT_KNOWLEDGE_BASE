@@ -1,261 +1,352 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Google Cloud Billing APIs</title>
-<link href="../estilos.css" rel="stylesheet" type="text/css" />
+<style>
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+
+</style>
 </head>
 
-<body class="texto8_1">
-<p><a href="../Billing_references_jpg.html" target="_blank">ACG LINK</a></p>
-<div>
-  <div>
-    <div>
-      <div>
-        <div data-testid="conversation-turn-145">
-          <div>
-            <div>
-              <div>
-                <div>
-                  <div>
-                    <div data-message-author-role="assistant" data-message-id="5c5801e7-38a1-49f3-a2b2-b6985d545660">
-                      <div>
-                        <p><strong><br />
-                          Google Cloud Billing: Managing Cloud Costs and Invoices</strong></p>
-                        <p>Google Cloud Billing is a comprehensive service that enables users to manage and understand the costs associated with their usage of Google Cloud Platform (GCP) services. It provides tools for tracking expenses, setting budgets, and optimizing spending. Here's a comprehensive list of Google Cloud Billing features along with their definitions:</p>
-                        <ol>
-                          <li>
-                            <p><strong>Billing Account:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Users create a billing account to consolidate charges for all projects associated with their organization. The billing account serves as the central entity for managing costs and payments.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Cost Tracking and Reporting:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Billing offers detailed cost tracking and reporting features. Users can view breakdowns of costs by project, service, SKU (Stock Keeping Unit), and time period, helping them understand where resources are utilized.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Invoice Generation:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud generates monthly invoices based on actual usage. Invoices provide a summary of charges, including a breakdown of costs for each project and service.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Pricing Transparency:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Billing provides pricing transparency, allowing users to understand the costs associated with different services and resources. Detailed pricing information is available for each SKU.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Payment Methods:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Users can configure payment methods within their billing account, including credit cards and bank accounts. These payment methods are used to settle charges accrued during the billing cycle.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Currency and Billing Locations:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Billing accounts support multiple currencies and billing locations. Users can choose the preferred currency and set a billing location that aligns with their organizational structure.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Cost Management Dashboard:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> The Cost Management Dashboard provides an overview of current and past spending, helping users track their consumption trends and identify areas for potential cost optimization.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Budgets:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Users can set budget limits for their projects to control and monitor spending. Budgets trigger alerts when actual spending approaches or exceeds predefined thresholds.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Alerts and Notifications:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Billing allows users to configure alerts and notifications for budget-related events. This ensures that users are promptly notified of potential overruns or budget issues.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Exportable Cost Data:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Users can export detailed cost data in a variety of formats, including CSV and BigQuery. This data export capability facilitates custom analysis and integration with external reporting tools.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Linked Projects:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Billing accounts can be linked to multiple projects, making it easy for organizations to manage costs centrally. This is particularly useful for companies with a large number of projects.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Invoice Export to BigQuery:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Billing allows users to export invoice data to BigQuery for detailed analysis. This enables organizations to perform custom queries and generate insights beyond standard reports.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Billing Export to Cloud Storage:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Billing data can be exported to Cloud Storage for archiving and backup purposes. This provides organizations with a historical record of their billing information.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Cost Attribution Labels:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Users can apply labels to resources and costs using cost attribution labels. This facilitates custom categorization and helps organizations align costs with their internal accounting structures.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Organization-Level Cost Management:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Billing supports organization-level cost management, allowing administrators to view and manage costs across all projects associated with an organization.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Custom Invoicing:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud offers custom invoicing options for eligible customers. This allows organizations to receive invoices that match their billing and accounting processes.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Financial Export to Data Studio:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Billing data can be exported to Google Data Studio for creating custom reports and dashboards. This feature enhances visualization and reporting capabilities.</li>
-                            </ul>
-                          </li>
-                        </ol>
-                        <p>Google Cloud Billing is a crucial component for organizations using Google Cloud Platform, providing transparency, control, and optimization tools to effectively manage and understand cloud costs. Its features empower users to make informed decisions, set and enforce budgets, and optimize spending based on their unique requirements.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <button></button>
-                      <div>
-                        <button></button>
-                        <button></button>
-                      </div>
-                      <button>
-                        <div></div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<body>
+<div class="container">
+<main>
+
+  <h1>Google Cloud Billing APIs<span class="tag">Cost Management</span></h1>
+
+  <a class="profile-link" href="../Billing_references_jpg.html" target="_blank" rel="noopener">ACG LINK</a>
+
+  <div class="note">
+<p><strong><br/>
+                          Google Cloud Billing: Managing Cloud Costs and Invoices</strong></p><p>Google Cloud Billing is a comprehensive service that enables users to manage and understand the costs associated with their usage of Google Cloud Platform (GCP) services. It provides tools for tracking expenses, setting budgets, and optimizing spending. Here's a comprehensive list of Google Cloud Billing features along with their definitions:</p>
   </div>
-</div>
-<div>
-<form>
-<div>
-<div>
-<br />
-<p>&nbsp;</p>
-<p>Google Cloud Billing APIs allow you to programmatically access and manage billing information for your Google Cloud projects. The APIs provide a way to retrieve cost and usage data, manage budgets, and access billing accounts. Below is a basic example of using the Google Cloud Billing APIs:</p>
-<h3>Prerequisites:</h3>
-<p>Before using the Billing APIs, make sure to enable the Google Cloud Billing API for your project:</p>
-<p>gcloud services enable cloudbilling.googleapis.com<br />
-</p>
-<h3>Example using gcloud CLI and curl:</h3>
+
 <ol>
-  <li>
-    <p><strong>Authenticate with Google Cloud:</strong></p>
-    <ul>
-      <li>Ensure that you are authenticated with Google Cloud using gcloud auth login.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Enable Billing API:</strong></p>
-    <ul>
-      <li>Ensure that the Google Cloud Billing API is enabled.</li>
-    </ul>
-  </li>
+<li>
+<p><strong>Billing Account:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users create a billing account to consolidate charges for all projects associated with their organization. The billing account serves as the central entity for managing costs and payments.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cost Tracking and Reporting:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Billing offers detailed cost tracking and reporting features. Users can view breakdowns of costs by project, service, SKU (Stock Keeping Unit), and time period, helping them understand where resources are utilized.</li>
+</ul>
+</li>
+<li>
+<p><strong>Invoice Generation:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud generates monthly invoices based on actual usage. Invoices provide a summary of charges, including a breakdown of costs for each project and service.</li>
+</ul>
+</li>
+<li>
+<p><strong>Pricing Transparency:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Billing provides pricing transparency, allowing users to understand the costs associated with different services and resources. Detailed pricing information is available for each SKU.</li>
+</ul>
+</li>
+<li>
+<p><strong>Payment Methods:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can configure payment methods within their billing account, including credit cards and bank accounts. These payment methods are used to settle charges accrued during the billing cycle.</li>
+</ul>
+</li>
+<li>
+<p><strong>Currency and Billing Locations:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Billing accounts support multiple currencies and billing locations. Users can choose the preferred currency and set a billing location that aligns with their organizational structure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cost Management Dashboard:</strong></p>
+<ul>
+<li><strong>Definition:</strong> The Cost Management Dashboard provides an overview of current and past spending, helping users track their consumption trends and identify areas for potential cost optimization.</li>
+</ul>
+</li>
+<li>
+<p><strong>Budgets:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can set budget limits for their projects to control and monitor spending. Budgets trigger alerts when actual spending approaches or exceeds predefined thresholds.</li>
+</ul>
+</li>
+<li>
+<p><strong>Alerts and Notifications:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Billing allows users to configure alerts and notifications for budget-related events. This ensures that users are promptly notified of potential overruns or budget issues.</li>
+</ul>
+</li>
+<li>
+<p><strong>Exportable Cost Data:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can export detailed cost data in a variety of formats, including CSV and BigQuery. This data export capability facilitates custom analysis and integration with external reporting tools.</li>
+</ul>
+</li>
+<li>
+<p><strong>Linked Projects:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Billing accounts can be linked to multiple projects, making it easy for organizations to manage costs centrally. This is particularly useful for companies with a large number of projects.</li>
+</ul>
+</li>
+<li>
+<p><strong>Invoice Export to BigQuery:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Billing allows users to export invoice data to BigQuery for detailed analysis. This enables organizations to perform custom queries and generate insights beyond standard reports.</li>
+</ul>
+</li>
+<li>
+<p><strong>Billing Export to Cloud Storage:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Billing data can be exported to Cloud Storage for archiving and backup purposes. This provides organizations with a historical record of their billing information.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cost Attribution Labels:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can apply labels to resources and costs using cost attribution labels. This facilitates custom categorization and helps organizations align costs with their internal accounting structures.</li>
+</ul>
+</li>
+<li>
+<p><strong>Organization-Level Cost Management:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Billing supports organization-level cost management, allowing administrators to view and manage costs across all projects associated with an organization.</li>
+</ul>
+</li>
+<li>
+<p><strong>Custom Invoicing:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud offers custom invoicing options for eligible customers. This allows organizations to receive invoices that match their billing and accounting processes.</li>
+</ul>
+</li>
+<li>
+<p><strong>Financial Export to Data Studio:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Billing data can be exported to Google Data Studio for creating custom reports and dashboards. This feature enhances visualization and reporting capabilities.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud services enable cloudbilling.googleapis.com<br />
+<p>Google Cloud Billing is a crucial component for organizations using Google Cloud Platform, providing transparency, control, and optimization tools to effectively manage and understand cloud costs. Its features empower users to make informed decisions, set and enforce budgets, and optimize spending based on their unique requirements.</p>
+<br/>
+<p> </p>
+<p>Google Cloud Billing APIs allow you to programmatically access and manage billing information for your Google Cloud projects. The APIs provide a way to retrieve cost and usage data, manage budgets, and access billing accounts. Below is a basic example of using the Google Cloud Billing APIs:</p>
+<h2 class="phase">Prerequisites</h2>
+<p>Before using the Billing APIs, make sure to enable the Google Cloud Billing API for your project:</p>
+<p>gcloud services enable cloudbilling.googleapis.com<br/>
 </p>
-<p>&nbsp;</p>
+<h2 class="phase">Example using gcloud CLI and curl</h2>
+<ol>
+<li>
+<p><strong>Authenticate with Google Cloud:</strong></p>
+<ul>
+<li>Ensure that you are authenticated with Google Cloud using gcloud auth login.</li>
+</ul>
+</li>
+<li>
+<p><strong>Enable Billing API:</strong></p>
+<ul>
+<li>Ensure that the Google Cloud Billing API is enabled.</li>
+</ul>
+</li>
+</ol>
+<p> </p>
+<p>gcloud services enable cloudbilling.googleapis.com<br/>
+</p>
+<p> </p>
 <p><strong>Retrieve Billing Account ID:</strong></p>
 <ul>
-  <li>Use the gcloud command to list billing accounts and retrieve the billing account ID.</li>
+<li>Use the gcloud command to list billing accounts and retrieve the billing account ID.</li>
 </ul>
-<p>&nbsp;</p>
-<p>gcloud beta billing accounts list<br />
+<p> </p>
+<p>gcloud beta billing accounts list<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>Retrieve Cost Data using curl:</strong></p>
 <ul>
-  <li>Use curl to make a request to the Google Cloud Billing API to retrieve cost data.</li>
+<li>Use curl to make a request to the Google Cloud Billing API to retrieve cost data.</li>
 </ul>
-<p>&nbsp;</p>
-<p>BILLING_ACCOUNT_ID=YOUR_BILLING_ACCOUNT_ID<br />
+<p> </p>
+<p>BILLING_ACCOUNT_ID=YOUR_BILLING_ACCOUNT_ID<br/>
 PROJECT_ID=YOUR_PROJECT_ID</p>
-<p>curl -X GET -H &quot;Authorization: Bearer $(gcloud auth print-access-token)&quot; \<br />
-  &quot;https://cloudbilling.googleapis.com/v1/billingAccounts/${BILLING_ACCOUNT_ID}/projects/${PROJECT_ID}/costs?timeRange.start_time=2023-01-01T00:00:00Z&amp;timeRange.end_time=2023-01-31T23:59:59Z&quot;<br />
+<p>curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" \<br/>
+  "https://cloudbilling.googleapis.com/v1/billingAccounts/${BILLING_ACCOUNT_ID}/projects/${PROJECT_ID}/costs?timeRange.start_time=2023-01-01T00:00:00Z&amp;timeRange.end_time=2023-01-31T23:59:59Z"<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace YOUR_BILLING_ACCOUNT_ID and YOUR_PROJECT_ID with your actual billing account ID and project ID.</p>
-  </li>
-  <li>
-    <p><strong>Retrieve Budget Information:</strong></p>
-    <ul>
-      <li>Use the gcloud command to retrieve information about the budgets set for your project.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace YOUR_BILLING_ACCOUNT_ID and YOUR_PROJECT_ID with your actual billing account ID and project ID.</p>
+</li>
+<li>
+<p><strong>Retrieve Budget Information:</strong></p>
+<ul>
+<li>Use the gcloud command to retrieve information about the budgets set for your project.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud beta billing budgets list<br />
+<p> </p>
+<p>gcloud beta billing budgets list<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>Retrieve Billing Account Information using curl:</strong></p>
 <ul>
-  <li>Use curl to retrieve information about your billing account.</li>
+<li>Use curl to retrieve information about your billing account.</li>
 </ul>
-<p>&nbsp;</p>
-<p>curl -X GET -H &quot;Authorization: Bearer $(gcloud auth print-access-token)&quot; \<br />
-&quot;https://cloudbilling.googleapis.com/v1/billingAccounts/${BILLING_ACCOUNT_ID}&quot;<br />
+<p> </p>
+<p>curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" \<br/>
+"https://cloudbilling.googleapis.com/v1/billingAccounts/${BILLING_ACCOUNT_ID}"<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace YOUR_BILLING_ACCOUNT_ID with your actual billing account ID.</p>
-  </li>
-  <li>
-    <p><strong>Create a Budget using gcloud:</strong></p>
-    <ul>
-      <li>Use the gcloud command to create a budget for your project.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace YOUR_BILLING_ACCOUNT_ID with your actual billing account ID.</p>
+</li>
+<li>
+<p><strong>Create a Budget using gcloud:</strong></p>
+<ul>
+<li>Use the gcloud command to create a budget for your project.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud beta billing budgets create my-budget \<br />
---billing-account=${BILLING_ACCOUNT_ID} \<br />
---threshold-rule-projects=${PROJECT_ID}=0.8<br />
+<p> </p>
+<p>gcloud beta billing budgets create my-budget \<br/>
+--billing-account=${BILLING_ACCOUNT_ID} \<br/>
+--threshold-rule-projects=${PROJECT_ID}=0.8<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace my-budget, YOUR_BILLING_ACCOUNT_ID, and YOUR_PROJECT_ID with your desired budget name, billing account ID, and project ID.</p>
-  </li>
+<li>
+<p>Replace my-budget, YOUR_BILLING_ACCOUNT_ID, and YOUR_PROJECT_ID with your desired budget name, billing account ID, and project ID.</p>
+</li>
 </ol>
 <p>Remember to adapt the commands based on your specific requirements, including the time range for cost data retrieval, budget thresholds, and other parameters.</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
+<p> </p>
+<p> </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+
+  <div class="footer">IT Knowledge Base &middot; GCP &middot; Google Cloud Billing APIs</div>
+
+</main>
+</div>
 </body>
 </html>

@@ -1,287 +1,378 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Google Cloud Run</title>
-<link href="../estilos.css" rel="stylesheet" type="text/css" />
+<style>
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+
+</style>
 </head>
 
-<body class="texto8_1">
-<p><a href="../Cloud Run_references_jpg.html" target="_blank">ACG LINK</a></p>
-<div>
-  <div>
-    <div>
-      <div>
-        <div data-testid="conversation-turn-133">
-          <div>
-            <div>
-              <div>
-                <div>
-                  <div>
-                    <div data-message-author-role="assistant" data-message-id="7b90b83f-e8aa-498a-9b71-fc60d7f84cd7">
-                      <div>
-                        <p><strong>Google Cloud Run: Fully Managed Serverless Containers</strong></p>
-                        <p>Google Cloud Run is a fully managed serverless compute platform that allows developers to deploy and run containerized applications without managing the underlying infrastructure. It abstracts away the complexities of server management, enabling developers to focus on writing code. Here's a comprehensive list of Google Cloud Run features along with their definitions:</p>
-                        <ol>
-                          <li>
-                            <p><strong>Serverless Deployment:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run enables serverless deployment, abstracting away the need for developers to manage servers. Developers can deploy containerized applications and let Cloud Run automatically handle scaling and infrastructure management.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Containerized Applications:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run supports containerized applications using Docker containers. Developers can package their applications into containers, allowing for consistency and portability across environments.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Automatic Scaling:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run provides automatic scaling based on incoming request traffic. It scales up or down dynamically to handle varying loads, ensuring optimal resource utilization and cost efficiency.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>HTTP/S Requests Handling:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run is designed to handle HTTP and HTTPS requests, making it well-suited for web applications, APIs, and microservices.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Stateless Containers:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Containers running on Cloud Run are expected to be stateless. Any state or data persistence should be managed externally, such as using cloud storage or databases.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Zero Server Management:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Developers are relieved from server management tasks, including provisioning, scaling, and patching. Cloud Run abstracts away the infrastructure details, allowing developers to focus on building and deploying applications.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Concurrency and Scalability:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run supports high concurrency and scalability, allowing multiple requests to be processed concurrently. It automatically scales up or down based on demand.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Pay-as-You-Go Pricing:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run follows a pay-as-you-go pricing model. Users are billed based on the actual compute resources consumed during request handling, providing cost efficiency.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Integration with Google Cloud Services:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run integrates seamlessly with other Google Cloud services, allowing developers to leverage services like Cloud Storage, Cloud Pub/Sub, and others to build comprehensive applications.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Custom Domain Mapping:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Users can map custom domains to their Cloud Run services, allowing applications to be accessed using custom, branded URLs.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Managed SSL Certificates:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run provides managed SSL certificates, simplifying the process of securing applications with HTTPS. It automatically manages certificate renewal and updates.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Containerized Build and Deployment:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Developers can use containerized build tools and workflows for building and deploying applications to Cloud Run, ensuring consistency across development and deployment stages.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Environment Variables:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run allows developers to set environment variables for their applications, providing configuration flexibility without modifying code.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Logging and Monitoring:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run integrates with Google Cloud Monitoring and Logging, allowing developers to monitor application performance, view logs, and gain insights into request handling.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Revision and Rollback:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run allows developers to manage application revisions and roll back to a previous state if needed, providing flexibility in handling application updates.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Service Identity and Permissions:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run provides service identity and allows developers to set fine-grained permissions using Google Cloud Identity and Access Management (IAM).</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Regional Deployment:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Cloud Run enables developers to deploy their applications in specific regions, allowing them to optimize for latency and compliance requirements.</li>
-                            </ul>
-                          </li>
-                        </ol>
-                        <p>Google Cloud Run is an excellent platform for developers looking to deploy containerized applications in a serverless and fully managed environment. With its automatic scaling, pay-as-you-go pricing, and seamless integration with other Google Cloud services, Cloud Run simplifies the deployment and operation of modern applications.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <button></button>
-                      <div>
-                        <button></button>
-                        <button></button>
-                      </div>
-                      <button>
-                        <div></div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<body>
+<div class="container">
+<main>
+
+  <h1>Google Cloud Run<span class="tag">Containers</span></h1>
+
+  <a class="profile-link" href="../Cloud Run_references_jpg.html" target="_blank" rel="noopener">ACG LINK</a>
+
+  <div class="note">
+<p><strong>Google Cloud Run: Fully Managed Serverless Containers</strong></p><p>Google Cloud Run is a fully managed serverless compute platform that allows developers to deploy and run containerized applications without managing the underlying infrastructure. It abstracts away the complexities of server management, enabling developers to focus on writing code. Here's a comprehensive list of Google Cloud Run features along with their definitions:</p>
   </div>
-</div>
-<div>
-<form>
-<div>
-<div>
-<br />
-<p>&nbsp;</p>
-<p>Google Cloud Run is a fully managed compute platform that automatically scales your containerized applications. It abstracts away the underlying infrastructure, allowing developers to focus on building and deploying applications without managing servers.</p>
-<h3>Features:</h3>
+
 <ol>
-  <li>
-    <p><strong>Serverless Platform:</strong></p>
-    <ul>
-      <li>Cloud Run is a serverless platform that automatically scales based on demand.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Containerized Deployments:</strong></p>
-    <ul>
-      <li>Applications are packaged in containers, providing consistency across different environments.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Automatic Scaling:</strong></p>
-    <ul>
-      <li>Cloud Run automatically scales up or down to handle incoming requests, reducing infrastructure management overhead.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Pay-per-Use Pricing:</strong></p>
-    <ul>
-      <li>Pay only for the resources your application consumes during execution.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Easy Integration with Google Cloud Services:</strong></p>
-    <ul>
-      <li>Integrates seamlessly with other Google Cloud services and can be used as part of a larger cloud-native architecture.</li>
-    </ul>
-  </li>
+<li>
+<p><strong>Serverless Deployment:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run enables serverless deployment, abstracting away the need for developers to manage servers. Developers can deploy containerized applications and let Cloud Run automatically handle scaling and infrastructure management.</li>
+</ul>
+</li>
+<li>
+<p><strong>Containerized Applications:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run supports containerized applications using Docker containers. Developers can package their applications into containers, allowing for consistency and portability across environments.</li>
+</ul>
+</li>
+<li>
+<p><strong>Automatic Scaling:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run provides automatic scaling based on incoming request traffic. It scales up or down dynamically to handle varying loads, ensuring optimal resource utilization and cost efficiency.</li>
+</ul>
+</li>
+<li>
+<p><strong>HTTP/S Requests Handling:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run is designed to handle HTTP and HTTPS requests, making it well-suited for web applications, APIs, and microservices.</li>
+</ul>
+</li>
+<li>
+<p><strong>Stateless Containers:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Containers running on Cloud Run are expected to be stateless. Any state or data persistence should be managed externally, such as using cloud storage or databases.</li>
+</ul>
+</li>
+<li>
+<p><strong>Zero Server Management:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Developers are relieved from server management tasks, including provisioning, scaling, and patching. Cloud Run abstracts away the infrastructure details, allowing developers to focus on building and deploying applications.</li>
+</ul>
+</li>
+<li>
+<p><strong>Concurrency and Scalability:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run supports high concurrency and scalability, allowing multiple requests to be processed concurrently. It automatically scales up or down based on demand.</li>
+</ul>
+</li>
+<li>
+<p><strong>Pay-as-You-Go Pricing:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run follows a pay-as-you-go pricing model. Users are billed based on the actual compute resources consumed during request handling, providing cost efficiency.</li>
+</ul>
+</li>
+<li>
+<p><strong>Integration with Google Cloud Services:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run integrates seamlessly with other Google Cloud services, allowing developers to leverage services like Cloud Storage, Cloud Pub/Sub, and others to build comprehensive applications.</li>
+</ul>
+</li>
+<li>
+<p><strong>Custom Domain Mapping:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Users can map custom domains to their Cloud Run services, allowing applications to be accessed using custom, branded URLs.</li>
+</ul>
+</li>
+<li>
+<p><strong>Managed SSL Certificates:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run provides managed SSL certificates, simplifying the process of securing applications with HTTPS. It automatically manages certificate renewal and updates.</li>
+</ul>
+</li>
+<li>
+<p><strong>Containerized Build and Deployment:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Developers can use containerized build tools and workflows for building and deploying applications to Cloud Run, ensuring consistency across development and deployment stages.</li>
+</ul>
+</li>
+<li>
+<p><strong>Environment Variables:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run allows developers to set environment variables for their applications, providing configuration flexibility without modifying code.</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging and Monitoring:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run integrates with Google Cloud Monitoring and Logging, allowing developers to monitor application performance, view logs, and gain insights into request handling.</li>
+</ul>
+</li>
+<li>
+<p><strong>Revision and Rollback:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run allows developers to manage application revisions and roll back to a previous state if needed, providing flexibility in handling application updates.</li>
+</ul>
+</li>
+<li>
+<p><strong>Service Identity and Permissions:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run provides service identity and allows developers to set fine-grained permissions using Google Cloud Identity and Access Management (IAM).</li>
+</ul>
+</li>
+<li>
+<p><strong>Regional Deployment:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Cloud Run enables developers to deploy their applications in specific regions, allowing them to optimize for latency and compliance requirements.</li>
+</ul>
+</li>
 </ol>
-<h3>Configuration Example:</h3>
+<p>Google Cloud Run is an excellent platform for developers looking to deploy containerized applications in a serverless and fully managed environment. With its automatic scaling, pay-as-you-go pricing, and seamless integration with other Google Cloud services, Cloud Run simplifies the deployment and operation of modern applications.</p>
+<br/>
+<p> </p>
+<p>Google Cloud Run is a fully managed compute platform that automatically scales your containerized applications. It abstracts away the underlying infrastructure, allowing developers to focus on building and deploying applications without managing servers.</p>
+<h2 class="phase">Features</h2>
+<ol>
+<li>
+<p><strong>Serverless Platform:</strong></p>
+<ul>
+<li>Cloud Run is a serverless platform that automatically scales based on demand.</li>
+</ul>
+</li>
+<li>
+<p><strong>Containerized Deployments:</strong></p>
+<ul>
+<li>Applications are packaged in containers, providing consistency across different environments.</li>
+</ul>
+</li>
+<li>
+<p><strong>Automatic Scaling:</strong></p>
+<ul>
+<li>Cloud Run automatically scales up or down to handle incoming requests, reducing infrastructure management overhead.</li>
+</ul>
+</li>
+<li>
+<p><strong>Pay-per-Use Pricing:</strong></p>
+<ul>
+<li>Pay only for the resources your application consumes during execution.</li>
+</ul>
+</li>
+<li>
+<p><strong>Easy Integration with Google Cloud Services:</strong></p>
+<ul>
+<li>Integrates seamlessly with other Google Cloud services and can be used as part of a larger cloud-native architecture.</li>
+</ul>
+</li>
+</ol>
+<h2 class="phase">Configuration Example</h2>
 <p>Here's a basic example of setting up a containerized application on Google Cloud Run:</p>
 <ol>
-  <li>
-    <p><strong>Build and Push Container Image:</strong></p>
-    <ul>
-      <li>Build a container image of your application and push it to Google Container Registry.</li>
-    </ul>
-  </li>
+<li>
+<p><strong>Build and Push Container Image:</strong></p>
+<ul>
+<li>Build a container image of your application and push it to Google Container Registry.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p># Build Docker image<br />
+<p> </p>
+<p># Build Docker image<br/>
 docker build -t gcr.io/PROJECT_ID/my-cloud-run-app .</p>
-<p># Push the image to Container Registry<br />
-  docker push gcr.io/PROJECT_ID/my-cloud-run-app<br />
+<p># Push the image to Container Registry<br/>
+  docker push gcr.io/PROJECT_ID/my-cloud-run-app<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Replace PROJECT_ID with your Google Cloud project ID.</p>
-  </li>
-  <li>
-    <p><strong>Deploy to Cloud Run:</strong></p>
-    <ul>
-      <li>Deploy your container to Cloud Run.</li>
-    </ul>
-  </li>
+<li>
+<p>Replace PROJECT_ID with your Google Cloud project ID.</p>
+</li>
+<li>
+<p><strong>Deploy to Cloud Run:</strong></p>
+<ul>
+<li>Deploy your container to Cloud Run.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud run deploy my-cloud-run-app \<br />
---image gcr.io/PROJECT_ID/my-cloud-run-app \<br />
---platform managed<br />
+<p> </p>
+<p>gcloud run deploy my-cloud-run-app \<br/>
+--image gcr.io/PROJECT_ID/my-cloud-run-app \<br/>
+--platform managed<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Follow the prompts to configure the deployment, including choosing a region, allowing unauthenticated access (if needed), and confirming the deployment.</p>
-  </li>
-  <li>
-    <p><strong>Access the Deployed Application:</strong></p>
-    <ul>
-      <li>Once the deployment is complete, access the deployed application.</li>
-    </ul>
-  </li>
+<li>
+<p>Follow the prompts to configure the deployment, including choosing a region, allowing unauthenticated access (if needed), and confirming the deployment.</p>
+</li>
+<li>
+<p><strong>Access the Deployed Application:</strong></p>
+<ul>
+<li>Once the deployment is complete, access the deployed application.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud run services describe my-cloud-run-app --format 'value(status.url)'<br />
+<p> </p>
+<p>gcloud run services describe my-cloud-run-app --format 'value(status.url)'<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <ol>
-  <li>
-    <p>Open the provided URL in a web browser or use curl to test the application.</p>
-  </li>
-  <li>
-    <p><strong>View Logs and Monitoring:</strong></p>
-    <ul>
-      <li>View logs and monitoring information for your Cloud Run service.</li>
-    </ul>
-  </li>
+<li>
+<p>Open the provided URL in a web browser or use curl to test the application.</p>
+</li>
+<li>
+<p><strong>View Logs and Monitoring:</strong></p>
+<ul>
+<li>View logs and monitoring information for your Cloud Run service.</li>
+</ul>
+</li>
 </ol>
-<p>&nbsp;</p>
-<p>gcloud logging logs list --format 'value(logName)' --filter 'resource.type=&quot;cloud_run_revision&quot;'<br />
+<p> </p>
+<p>gcloud logging logs list --format 'value(logName)' --filter 'resource.type="cloud_run_revision"'<br/>
 </p>
-<p>gcloud monitoring dashboards describe --format 'value(name)' --filter 'displayName=&quot;Cloud Run Service Dashboard&quot;'<br />
+<p>gcloud monitoring dashboards describe --format 'value(name)' --filter 'displayName="Cloud Run Service Dashboard"'<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>Update Service (Optional):</strong></p>
 <ul>
-  <li>If you make changes to your application, rebuild the container image and update the Cloud Run service.</li>
+<li>If you make changes to your application, rebuild the container image and update the Cloud Run service.</li>
 </ul>
-<p>&nbsp;</p>
-<p>gcloud run deploy my-cloud-run-app \<br />
---image gcr.io/PROJECT_ID/my-cloud-run-app \<br />
---platform managed<br />
+<p> </p>
+<p>gcloud run deploy my-cloud-run-app \<br/>
+--image gcr.io/PROJECT_ID/my-cloud-run-app \<br/>
+--platform managed<br/>
 </p>
-<p>&nbsp;</p>
+<p> </p>
 <p><strong>Delete Service (Optional):</strong></p>
 <ul>
-  <li>If needed, delete the Cloud Run service.</li>
+<li>If needed, delete the Cloud Run service.</li>
 </ul>
-<p>&nbsp;</p>
-<p>gcloud run services delete my-cloud-run-app<br />
+<p> </p>
+<p>gcloud run services delete my-cloud-run-app<br/>
 </p>
-<p>&nbsp;</p>
-<p>Always refer to the <a target="_new">official documentation</a> for the most up-to-date and detailed information on configuring and using Google Cloud Run. Adjust the commands based on your specific application requirements and deployment needs.</p>
-<p>&nbsp;</p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
-<p>&nbsp; </p>
+<p> </p>
+<p>Always refer to the official documentation for the most up-to-date and detailed information on configuring and using Google Cloud Run. Adjust the commands based on your specific application requirements and deployment needs.</p>
+<p> </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+<p>  </p>
+
+  <div class="footer">IT Knowledge Base &middot; GCP &middot; Google Cloud Run</div>
+
+</main>
+</div>
 </body>
 </html>

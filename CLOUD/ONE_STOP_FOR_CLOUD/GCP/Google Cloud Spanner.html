@@ -1,249 +1,350 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Google Cloud Spanner</title>
-<link href="../estilos.css" rel="stylesheet" type="text/css" />
+<style>
+
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+.container { max-width: none; margin: 0; background: #fff; box-shadow: none; border-radius: 0; padding: 16px 20px; }
+h1 { color: #1565c0; }
+h2 { color: #2e7d32; margin-top: 32px; }
+h3 { color: #7b1fa2; margin-top: 24px; }
+.note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 16px 20px; margin: 18px 0; border-radius: 7px; }
+.note ul { list-style: disc inside; margin: 0; padding-left: 1.2em; }
+.note li { margin-bottom: 3px; line-height: 1.35; }
+.note p { margin: 0 0 6px 0; line-height: 1.5; }
+.footer { text-align: right; color: #888; font-size: 1em; margin-top: 40px; }
+.tag { background: #e3f2fd; color: #1565c0; border-radius: 4px; padding: 3px 8px; margin-left: 6px; font-size: 0.95em; }
+dt { color: #2e7d32; font-weight: bold; margin-top: 10px; }
+dd { margin-bottom: 10px; }
+.params table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+.params th, .params td { border: 1px solid #ccc; padding: 6px; }
+.traceability { border: 2px solid #90caf9; border-radius: 9px; padding: 6px; background: linear-gradient(135deg, #f8fbff, #f7fcf8); }
+.traceability th, .traceability td { padding: 10px; }
+.traceability th { background: linear-gradient(135deg, #1565c0, #2e7d32); color: #fff; border-color: #0d47a1; }
+.traceability tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+.traceability tbody tr:hover td, .traceability tbody tr:focus-within td { background: #dff3ff !important; }
+.traceability tbody tr:hover, .traceability tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.traceability .req-id { white-space: nowrap; text-align: center; font-weight: 900; color: #0d47a1; background: #e3f2fd; border-radius: 5px; }
+.traceability tbody tr:nth-child(-n+5) td { background: #eef8ff; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) td { background: #f3f0ff; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) td { background: #fff5e6; }
+.traceability tbody tr:nth-child(11) td { background: #fffde7; }
+.traceability tbody tr:nth-child(12) td { background: #e0f7fa; }
+.traceability tbody tr:nth-child(13) td { background: #fce4ec; }
+.traceability tbody tr:nth-child(-n+5) .req-id { color: #1b5e20; background: #dcedc8; border-left: 5px solid #2e7d32; }
+.traceability tbody tr:nth-child(n+6):nth-child(-n+8) .req-id { color: #4527a0; background: #e8eaf6; border-left: 5px solid #5e35b1; }
+.traceability tbody tr:nth-child(n+9):nth-child(-n+10) .req-id { color: #e65100; background: #fff3e0; border-left: 5px solid #ef6c00; }
+.traceability tbody tr:nth-child(11) .req-id { color: #795548; background: #fff8e1; border-left: 5px solid #f9a825; }
+.traceability tbody tr:nth-child(12) .req-id { color: #006064; background: #e0f7fa; border-left: 5px solid #00838f; }
+.traceability tbody tr:nth-child(13) .req-id { color: #880e4f; background: #fce4ec; border-left: 5px solid #c2185b; }
+/* Shared table interaction: colored row marker plus full-row hover */
+table tbody tr { transition: background .15s ease, box-shadow .15s ease; }
+table tbody tr td:first-child::before { content: '🔹 '; }
+table tbody tr:nth-child(4n+1) td:first-child { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+table tbody tr:nth-child(4n+2) td:first-child { background: #e3f2fd; border-left: 5px solid #1565c0; }
+table tbody tr:nth-child(4n+3) td:first-child { background: #fff3e0; border-left: 5px solid #ef6c00; }
+table tbody tr:nth-child(4n) td:first-child { background: #f3e5f5; border-left: 5px solid #7b1fa2; }
+table tbody tr:hover td, table tbody tr:focus-within td { background: #dff3ff !important; }
+table tbody tr:hover, table tbody tr:focus-within { box-shadow: inset 0 0 0 2px #1565c0; }
+.important { background: #fffde7; border-left: 4px solid #fbc02d; padding: 12px 18px; margin: 18px 0; border-radius: 5px; }
+.sideEffects ul, .solid ul { margin: 0; padding-left: 20px; }
+/* Code block styling */
+pre { background: #f6f8fa; padding: 14px; border-radius: 8px; overflow: auto; font-size: 0.92em; }
+code { font-family: Consolas, 'Courier New', monospace; }
+.row { display:flex; gap:20px; flex-wrap:wrap; }
+.col { flex:1 1 420px; }
+/* Small visual helpers */
+.endpoint { border: 1px solid #e0e0e0; padding: 12px 14px; border-radius: 8px; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.04); }
+.json { white-space: pre; font-family: Consolas, 'Courier New', monospace; font-size: 0.95em; }
+.success { color: #2e7d32; font-weight: 600; }
+.error { color: #c62828; font-weight: 600; }
+.phase { border-top: 3px solid #e3f2fd; padding-top: 8px; }
+.checklist li { margin: 7px 0; line-height: 1.45; }
+.time { color: #666; font-size: 0.95em; }
+/* Hierarchy-aware document indentation */
+main > h2 { padding-left: 0; }
+main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row { margin-left: 20px; }
+main > h3 { margin-left: 20px; padding-left: 12px; border-left: 3px solid #d1c4e9; }
+main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 40px; }
+main > h3 + dl dd { margin-left: 20px; }
+.profile-link { display:inline-block; margin:10px 0 4px; padding:9px 13px; border-radius:6px; background:#1565c0; color:#fff; font-weight:700; text-decoration:none; }
+.profile-link:hover, .profile-link:focus { background:#0d47a1; outline:2px solid #93c5fd; outline-offset:2px; }
+.candidate-sticky-header { position: sticky; top: 0; z-index: 90; display: grid; grid-template-columns: auto minmax(285px, auto) minmax(0, 1fr); align-items: center; gap: 10px 14px; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08); }
+.candidate-photo { width: 66px; height: 66px; border: 2px solid #bfdbfe; border-radius: 50%; object-fit: cover; background: #e3f2fd; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16); }
+.candidate-identity { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.candidate-identity strong { color: #1565c0; font-size: 1.28rem; font-weight: 950; white-space: nowrap; }
+.candidate-identity span { color: #475569; font-size: 0.92rem; font-weight: 800; white-space: nowrap; }
+.candidate-basic-data { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; min-width: 0; }
+.candidate-basic-data a, .candidate-basic-data span { display: inline-flex; align-items: center; min-height: 27px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.82rem; font-weight: 850; line-height: 1.1; text-decoration: none; white-space: nowrap; }
+.candidate-basic-data a:hover, .candidate-basic-data a:focus { border-color: #1565c0; background: #e3f2fd; color: #0d47a1; outline: 2px solid #93c5fd; outline-offset: 1px; }
+.collapsible-section { margin: 14px 0; border: 1px solid #d7e3f1; border-radius: 8px; background: #fff; overflow: hidden; }
+.collapsible-summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; color: #1f4f8c; background: linear-gradient(90deg, #f4f9ff, #f7fcf8); font-size: 1.2rem; font-weight: 800; list-style: none; }
+.section-number, .subsection-number, .subsubsection-number { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: 2px 6px; border-radius: 5px; background: #1565c0; color: #fff; font-size: .76em; font-weight: 950; line-height: 1.15; }
+.subsection-number { min-width: 2.7em; margin-right: 7px; background: #7b1fa2; vertical-align: middle; } .subsubsection-number { min-width: 3.6em; margin-right: 7px; background: #ef6c00; vertical-align: middle; }
+.section-subheading { color: #7b1fa2; } .section-subsubheading { color: #e65100; }
+.collapsible-summary::-webkit-details-marker { display: none; }
+.collapsible-summary::before { content: '➕'; font-size: 1rem; }
+.collapsible-section[open] > .collapsible-summary { border-bottom: 1px solid #d7e3f1; background: #eaf5ff; }
+.collapsible-section[open] > .collapsible-summary::before { content: '➖'; }
+.collapsible-section > :not(summary) { margin-left: 20px; margin-right: 20px; }
+.collapsible-section > .footer { margin-bottom: 20px; }
+.term-trigger { display: inline; padding: 0 2px; border: 0; border-bottom: 2px dotted #1565c0; background: #e3f2fd; color: #0d47a1; font: inherit; font-weight: 750; cursor: pointer; }
+.term-trigger:hover, .term-trigger:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+.term-modal[hidden] { display: none; }
+.term-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 18px; background: rgba(15, 23, 42, .58); }
+.term-modal-card { width: min(680px, 100%); max-height: min(600px, 90vh); overflow: auto; padding: 22px; border-radius: 10px; background: #fff; box-shadow: 0 22px 60px rgba(0,0,0,.28); }
+.term-modal-card h2 { margin: 0 38px 10px 0; color: #1565c0; font-size: 1.55rem; }
+.term-modal-card p { line-height: 1.6; }
+.term-modal-close { float: right; min-width: 34px; min-height: 34px; border: 1px solid #90caf9; border-radius: 6px; background: #e3f2fd; color: #0d47a1; font-size: 1.2rem; cursor: pointer; }
+.term-definition { padding: 12px 14px; border-left: 4px solid #1565c0; border-radius: 6px; background: linear-gradient(90deg, #e3f2fd, #f8fbff); color: #263238; }
+.term-definition .modal-emoji { display: inline-block; margin-right: 6px; font-size: 1.18em; } .term-definition strong { color: #0d47a1; }
+.term-feature-heading { margin: 16px 0 7px; color: #7b1fa2; font-size: 1.04rem; }
+.term-feature-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid #bbdefb; border-radius: 8px; font-size: .92rem; }
+.term-feature-table th { padding: 8px; background: linear-gradient(90deg, #1565c0, #2e7d32); color: #fff; text-align: left; }
+.term-feature-table td { padding: 8px; border-top: 1px solid #d7e3f1; vertical-align: top; transition: background .15s ease, color .15s ease; }
+.term-feature-table tbody tr:nth-child(1) td { background: #eef8ff; } .term-feature-table tbody tr:nth-child(2) td { background: #f3f0ff; } .term-feature-table tbody tr:nth-child(3) td { background: #f1f8e9; } .term-feature-table tbody tr:nth-child(4) td { background: #fff8e1; }
+.term-feature-table tbody tr td:first-child { color: #0d47a1; font-weight: 850; white-space: nowrap; } .term-feature-table tbody tr:hover td, .term-feature-table tbody tr:focus-within td { background: #bbdefb !important; color: #0d47a1; }
+.jd-document { margin: 18px 0; overflow: hidden; border: 1px solid #c5d8ec; border-radius: 10px; background: #fff; box-shadow: 0 6px 18px rgba(21,101,192,.08); }
+.jd-confidential { margin: 0; padding: 8px 16px; background: #b71c1c; color: #fff; font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+.jd-document h3 { margin: 0; padding: 18px 20px 6px; border: 0; color: #0d47a1; font-size: 1.65rem; }
+.jd-document h4 { margin: 22px 0 9px; padding: 8px 20px; border-left: 5px solid #2e7d32; background: #f1f8e9; color: #1b5e20; font-size: 1.08rem; }
+.jd-document p { margin: 10px 20px; line-height: 1.6; }
+.jd-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 20px 16px !important; color: #455a64; font-weight: 700; }
+.jd-meta span { padding: 4px 9px; border-radius: 999px; background: #e3f2fd; color: #0d47a1; }
+.jd-list { margin: 8px 28px 18px 46px; padding-left: 18px; }
+.jd-list li { margin: 7px 0; line-height: 1.45; }
+.jd-required { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; color: #6a1b9a !important; }
+.jd-preferred { border-left-color: #ef6c00 !important; background: #fff3e0 !important; color: #e65100 !important; }
+@media (max-width: 600px) { .container { padding: 10px 8px; } .collapsible-summary { padding: 10px; font-size: 1rem; } .collapsible-section > :not(summary) { margin-left: 8px; margin-right: 8px; } main > h2.phase + p, main > h2.phase + .note, main > h2.phase + .important, main > h2.phase + .params, main > h2.phase + .row, main > h3 { margin-left: 8px; } main > h3 + p, main > h3 + dl, main > h3 + ol, main > h3 + ul, main > h3 + .params, main > h3 + .row { margin-left: 16px; } .candidate-sticky-header { grid-template-columns: auto minmax(0, 1fr); gap: 3px 6px; padding: 4px 5px; } .candidate-photo { width: 52px; height: 52px; } .candidate-identity { justify-content: flex-start; flex-wrap: wrap; gap: 3px; } .candidate-identity strong { font-size: 1.05rem; } .candidate-identity span, .candidate-basic-data a, .candidate-basic-data span { font-size: 0.7rem; } .candidate-basic-data { grid-column: 1 / -1; justify-content: center; gap: 2px; }
+}
+
+</style>
 </head>
 
 <body>
-<p><a href="../Spanner_references_jpg.html" target="_blank">ACG LINK</a></p>
-<div>
-  <div>
-    <div>
-      <div>
-        <div data-testid="conversation-turn-99">
-          <div>
-            <div>
-              <div>
-                <div>
-                  <div>
-                    <div data-message-author-role="assistant" data-message-id="d6e8ba00-998c-4e81-bcfa-9204fb12332f">
-                      <div class="texto8_1">
-                        <p><strong><br />
-                          Google Cloud Spanner: Globally Distributed, Horizontally Scalable, and Strongly Consistent Database Service</strong></p>
-                        <p>Google Cloud Spanner is a globally distributed, horizontally scalable, and strongly consistent database service provided by Google Cloud Platform. It is designed to seamlessly integrate the best features of traditional relational databases with the benefits of NoSQL databases. Here's a comprehensive list of Google Cloud Spanner features along with their definitions:</p>
-                        <ol>
-                          <li>
-                            <p><strong>Global Distribution:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner allows users to deploy databases globally, distributing data across multiple regions for low-latency access and high availability.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Horizontally Scalable:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner is designed to scale horizontally by automatically sharding data across multiple nodes, providing the ability to handle large amounts of data and high transaction volumes.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Strong Consistency:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner guarantees strong consistency, ensuring that all nodes in the globally distributed database agree on the order of committed transactions.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>SQL Query Language:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner supports a SQL-based query language, making it familiar to developers who are accustomed to relational databases. This enables easy integration with existing applications.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Automatic Sharding:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner automatically shards data across multiple nodes, distributing the load and ensuring high performance even as the dataset grows.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Global Transactions:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner allows for global transactions that can span multiple regions, providing consistency and coordination across distributed data.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Schema Evolution:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner supports schema evolution, allowing users to modify the schema of the database without disrupting ongoing operations or requiring downtime.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Security and Encryption:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner provides robust security features, including data encryption at rest and in transit. Users can also utilize Identity and Access Management (IAM) for access control.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Automatic Backups:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner automatically takes backups of the database, allowing users to restore data to a specific point in time. Backups are incremental and efficient.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Point-in-Time Recovery:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner supports point-in-time recovery, enabling users to restore the database to any point within the backup retention period.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Integration with IAM:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner integrates with Identity and Access Management (IAM), allowing users to control access to databases and resources based on roles and permissions.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Real-Time Data Insights:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner enables real-time data insights with the ability to run complex queries across globally distributed data, supporting analytical workloads.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Serverless Mode:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner offers a serverless mode, allowing users to pay for the actual resources consumed without the need to manage the underlying infrastructure.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>High Availability:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner provides high availability by automatically replicating data across multiple zones and regions, minimizing the risk of data loss.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Integration with Cloud Logging and Monitoring:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner integrates with Cloud Logging and Monitoring, providing visibility into performance metrics, logs, and audit information for monitoring and troubleshooting.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Transaction Retry and Rollback:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Spanner supports transaction retry and rollback mechanisms, ensuring data integrity and consistency even in the face of temporary failures or interruptions.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Commit Timestamp:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Each transaction in Spanner is assigned a commit timestamp, providing a global order for transactions across the entire database, supporting consistent snapshot reads.</li>
-                            </ul>
-                          </li>
-                          <li>
-                            <p><strong>Managed Service:</strong></p>
-                            <ul>
-                              <li><strong>Definition:</strong> Google Cloud Spanner is a fully managed service, handling operational tasks such as maintenance, updates, and scaling, allowing developers to focus on building applications.</li>
-                            </ul>
-                          </li>
-                        </ol>
-                        <p>Google Cloud Spanner is a powerful and fully managed database service suitable for globally distributed applications that require high consistency, scalability, and SQL-based query capabilities. Its unique combination of features makes it well-suited for a variety of use cases, including transactional systems and real-time analytics.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <button></button>
-                      <div>
-                        <button></button>
-                        <button></button>
-                      </div>
-                      <button>
-                        <div></div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container">
+<main>
+
+  <h1>Google Cloud Spanner<span class="tag">Databases</span></h1>
+
+  <a class="profile-link" href="../Spanner_references_jpg.html" target="_blank" rel="noopener">ACG LINK</a>
+
+  <div class="note">
+<p><strong><br/>
+                          Google Cloud Spanner: Globally Distributed, Horizontally Scalable, and Strongly Consistent Database Service</strong></p><p>Google Cloud Spanner is a globally distributed, horizontally scalable, and strongly consistent database service provided by Google Cloud Platform. It is designed to seamlessly integrate the best features of traditional relational databases with the benefits of NoSQL databases. Here's a comprehensive list of Google Cloud Spanner features along with their definitions:</p>
   </div>
-</div>
-<div>
-<form>
-<div>
-<div>
-<br />
-<p>&nbsp;</p>
-<p>Google Cloud Spanner is a globally distributed, horizontally scalable, and strongly consistent database service. It provides the benefits of both traditional relational databases and NoSQL databases, offering a highly available and globally distributed database with ACID transactions.</p>
-<h3>Features:</h3>
+
 <ol>
-  <li>
-    <p><strong>Global Distribution:</strong></p>
-    <ul>
-      <li>Spanner is designed to provide global distribution of data with low-latency access. Data is automatically replicated across multiple regions.</li>
-    </ul>
-  </li>
-  <li><strong>Strong Consistency:</strong>
-    <ul>
-      <li>Spanner provides strong consistency for transactions, ensuring that all nodes in the globally distributed database see the same data at the same time.</li>
-    </ul>
-  </li>
-  <li><strong>Horizontal Scalability:</strong>
-    <ul>
-      <li>You can scale both storage and compute horizontally by adding new nodes to a Spanner instance.</li>
-    </ul>
-  </li>
-  <li><strong>Automatic Sharding:</strong>
-    <ul>
-      <li>Spanner automatically shards data to distribute it across nodes, ensuring efficient storage and retrieval.</li>
-    </ul>
-  </li>
-  <li><strong>Schema Changes Without Downtime:</strong>
-    <ul>
-      <li>Spanner allows you to perform schema changes on-the-fly without downtime.</li>
-    </ul>
-  </li>
-  <li><strong>Integrated Security:</strong>
-    <ul>
-      <li>Spanner integrates with Google Cloud IAM for access control and provides encryption at rest and in transit.</li>
-    </ul>
-  </li>
+<li>
+<p><strong>Global Distribution:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner allows users to deploy databases globally, distributing data across multiple regions for low-latency access and high availability.</li>
+</ul>
+</li>
+<li>
+<p><strong>Horizontally Scalable:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner is designed to scale horizontally by automatically sharding data across multiple nodes, providing the ability to handle large amounts of data and high transaction volumes.</li>
+</ul>
+</li>
+<li>
+<p><strong>Strong Consistency:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner guarantees strong consistency, ensuring that all nodes in the globally distributed database agree on the order of committed transactions.</li>
+</ul>
+</li>
+<li>
+<p><strong>SQL Query Language:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner supports a SQL-based query language, making it familiar to developers who are accustomed to relational databases. This enables easy integration with existing applications.</li>
+</ul>
+</li>
+<li>
+<p><strong>Automatic Sharding:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner automatically shards data across multiple nodes, distributing the load and ensuring high performance even as the dataset grows.</li>
+</ul>
+</li>
+<li>
+<p><strong>Global Transactions:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner allows for global transactions that can span multiple regions, providing consistency and coordination across distributed data.</li>
+</ul>
+</li>
+<li>
+<p><strong>Schema Evolution:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner supports schema evolution, allowing users to modify the schema of the database without disrupting ongoing operations or requiring downtime.</li>
+</ul>
+</li>
+<li>
+<p><strong>Security and Encryption:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner provides robust security features, including data encryption at rest and in transit. Users can also utilize Identity and Access Management (IAM) for access control.</li>
+</ul>
+</li>
+<li>
+<p><strong>Automatic Backups:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner automatically takes backups of the database, allowing users to restore data to a specific point in time. Backups are incremental and efficient.</li>
+</ul>
+</li>
+<li>
+<p><strong>Point-in-Time Recovery:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner supports point-in-time recovery, enabling users to restore the database to any point within the backup retention period.</li>
+</ul>
+</li>
+<li>
+<p><strong>Integration with IAM:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner integrates with Identity and Access Management (IAM), allowing users to control access to databases and resources based on roles and permissions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Real-Time Data Insights:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner enables real-time data insights with the ability to run complex queries across globally distributed data, supporting analytical workloads.</li>
+</ul>
+</li>
+<li>
+<p><strong>Serverless Mode:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner offers a serverless mode, allowing users to pay for the actual resources consumed without the need to manage the underlying infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>High Availability:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner provides high availability by automatically replicating data across multiple zones and regions, minimizing the risk of data loss.</li>
+</ul>
+</li>
+<li>
+<p><strong>Integration with Cloud Logging and Monitoring:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner integrates with Cloud Logging and Monitoring, providing visibility into performance metrics, logs, and audit information for monitoring and troubleshooting.</li>
+</ul>
+</li>
+<li>
+<p><strong>Transaction Retry and Rollback:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Spanner supports transaction retry and rollback mechanisms, ensuring data integrity and consistency even in the face of temporary failures or interruptions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Commit Timestamp:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Each transaction in Spanner is assigned a commit timestamp, providing a global order for transactions across the entire database, supporting consistent snapshot reads.</li>
+</ul>
+</li>
+<li>
+<p><strong>Managed Service:</strong></p>
+<ul>
+<li><strong>Definition:</strong> Google Cloud Spanner is a fully managed service, handling operational tasks such as maintenance, updates, and scaling, allowing developers to focus on building applications.</li>
+</ul>
+</li>
 </ol>
-<h3>Configuration Example:</h3>
+<p>Google Cloud Spanner is a powerful and fully managed database service suitable for globally distributed applications that require high consistency, scalability, and SQL-based query capabilities. Its unique combination of features makes it well-suited for a variety of use cases, including transactional systems and real-time analytics.</p>
+<br/>
+<p> </p>
+<p>Google Cloud Spanner is a globally distributed, horizontally scalable, and strongly consistent database service. It provides the benefits of both traditional relational databases and NoSQL databases, offering a highly available and globally distributed database with ACID transactions.</p>
+<h2 class="phase">Features</h2>
+<ol>
+<li>
+<p><strong>Global Distribution:</strong></p>
+<ul>
+<li>Spanner is designed to provide global distribution of data with low-latency access. Data is automatically replicated across multiple regions.</li>
+</ul>
+</li>
+<li><strong>Strong Consistency:</strong>
+<ul>
+<li>Spanner provides strong consistency for transactions, ensuring that all nodes in the globally distributed database see the same data at the same time.</li>
+</ul>
+</li>
+<li><strong>Horizontal Scalability:</strong>
+<ul>
+<li>You can scale both storage and compute horizontally by adding new nodes to a Spanner instance.</li>
+</ul>
+</li>
+<li><strong>Automatic Sharding:</strong>
+<ul>
+<li>Spanner automatically shards data to distribute it across nodes, ensuring efficient storage and retrieval.</li>
+</ul>
+</li>
+<li><strong>Schema Changes Without Downtime:</strong>
+<ul>
+<li>Spanner allows you to perform schema changes on-the-fly without downtime.</li>
+</ul>
+</li>
+<li><strong>Integrated Security:</strong>
+<ul>
+<li>Spanner integrates with Google Cloud IAM for access control and provides encryption at rest and in transit.</li>
+</ul>
+</li>
+</ol>
+<h2 class="phase">Configuration Example</h2>
 <p>Here's a basic example of creating and using a Google Cloud Spanner instance:</p>
 <ol>
-  <li>
-    <p><strong>Create a Spanner Instance:</strong></p>
-    <ul>
-      <li>Use the Google Cloud Console, gcloud command-line tool, or Spanner API to create a Spanner instance.</li>
-    </ul>
-    <pre><div><div>bash<button>Copy code</button></div><div>gcloud spanner instances create my-spanner-instance \    --config=regional-us-central1 \    --nodes=1  </div></div>
+<li>
+<p><strong>Create a Spanner Instance:</strong></p>
+<ul>
+<li>Use the Google Cloud Console, gcloud command-line tool, or Spanner API to create a Spanner instance.</li>
+</ul>
+<pre>bash
+gcloud spanner instances create my-spanner-instance \    --config=regional-us-central1 \    --nodes=1
+
 </pre>
-  </li>
-  <li><strong>Create a Database:</strong>
-    <ul>
-      <li>Create a database within your Spanner instance.</li>
-    </ul>
-    <pre><div><div>bash<button>Copy code</button></div><div>gcloud spanner databases create my-spanner-database --instance=my-spanner-instance  </div></div>
+</li>
+<li><strong>Create a Database:</strong>
+<ul>
+<li>Create a database within your Spanner instance.</li>
+</ul>
+<pre>bash
+gcloud spanner databases create my-spanner-database --instance=my-spanner-instance
+
 </pre>
-  </li>
-  <li><strong>Create a Table:</strong>
-    <ul>
-      <li>Create a table within your Spanner database.</li>
-    </ul>
-    <pre><div><div>sql<button>Copy code</button></div><div>gcloud spanner databases ddl update my-spanner-database --instance=my-spanner-instance --ddl=&quot;CREATE TABLE Users (UserId INT64, UserName STRING(MAX))&quot;  </div></div>
+</li>
+<li><strong>Create a Table:</strong>
+<ul>
+<li>Create a table within your Spanner database.</li>
+</ul>
+<pre>sql
+gcloud spanner databases ddl update my-spanner-database --instance=my-spanner-instance --ddl="CREATE TABLE Users (UserId INT64, UserName STRING(MAX))"
+
 </pre>
-  </li>
-  <li><strong>Insert Data:</strong>
-    <ul>
-      <li>Insert data into your Spanner table.</li>
-    </ul>
-    <pre><div><div>sql<button>Copy code</button></div><div>gcloud spanner databases execute-sql my-spanner-database --instance=my-spanner-instance --sql=&quot;INSERT INTO Users (UserId, UserName) VALUES (1, 'John')&quot;  </div></div>
+</li>
+<li><strong>Insert Data:</strong>
+<ul>
+<li>Insert data into your Spanner table.</li>
+</ul>
+<pre>sql
+gcloud spanner databases execute-sql my-spanner-database --instance=my-spanner-instance --sql="INSERT INTO Users (UserId, UserName) VALUES (1, 'John')"
+
 </pre>
-  </li>
-  <li><strong>Query Data:</strong>
-    <ul>
-      <li>Query data from your Spanner table.</li>
-    </ul>
-    <pre><div><div>sql<button>Copy code</button></div><div>gcloud spanner databases execute-sql my-spanner-database --instance=my-spanner-instance --sql=&quot;SELECT * FROM Users&quot;  </div></div>
+</li>
+<li><strong>Query Data:</strong>
+<ul>
+<li>Query data from your Spanner table.</li>
+</ul>
+<pre>sql
+gcloud spanner databases execute-sql my-spanner-database --instance=my-spanner-instance --sql="SELECT * FROM Users"
+
 </pre>
-  </li>
-  <li><strong>Scale and Monitor:</strong>
-    <ul>
-      <li>Scale your Spanner instance based on your application needs and monitor performance using Cloud Monitoring and Logging.</li>
-    </ul>
-  </li>
+</li>
+<li><strong>Scale and Monitor:</strong>
+<ul>
+<li>Scale your Spanner instance based on your application needs and monitor performance using Cloud Monitoring and Logging.</li>
+</ul>
+</li>
 </ol>
-<p>This is a simplified example, and in a real-world scenario, you would likely have a more complex schema and perform more sophisticated queries. Always refer to the <a target="_new">official documentation</a> for the most up-to-date and detailed information on using Google Cloud Spanner. Adjust the commands based on your specific requirements.</p>
+<p>This is a simplified example, and in a real-world scenario, you would likely have a more complex schema and perform more sophisticated queries. Always refer to the official documentation for the most up-to-date and detailed information on using Google Cloud Spanner. Adjust the commands based on your specific requirements.</p>
+
+  <div class="footer">IT Knowledge Base &middot; GCP &middot; Google Cloud Spanner</div>
+
+</main>
+</div>
 </body>
 </html>
