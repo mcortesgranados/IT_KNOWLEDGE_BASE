@@ -1,0 +1,67 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+08:05
+
+Course Introduction
+02:30
+
+Overview of Course Contents
+05:35
+
+CHAPTER 2
+
+Exploring Amazon EventBridge
+55:35
+
+Introducing EventBridge
+05:35
+Reviewing Serverless and Event-Driven Architectures
+06:17
+Calculating EventBridge Costs
+05:34
+Exploring Real-World Use Cases
+05:21
+Section Review
+02:48
+QUIZ
+Quiz: Exploring Amazon EventBridge
+30:00
+CHAPTER 3
+
+Diving Deeper into EventBridge
+1:43:09
+
+All Aboard the Event Bus
+07:50
+
+
+Generating Events, Applying Rules, and Sending to Targets
+14:54
+Replaying Events
+12:00
+
+Leveraging Schema Registries
+09:08
+Demo: Scheduling Events Using EventBridge
+04:51
+Demo: Triggering Rules with Event Patterns
+04:54
+
+Section Review
+04:32
+QUIZ
+Quiz: Diving Deeper into Amazon EventBridge
+15:00
+HANDS-ON LAB
+Remediating EC2 Auto Scaling Group Modifications with EventBridge
+30:00
+CHAPTER 4
+
+Conclusion
+07:48
+
+Course Summary
+05:06
+Conclusion and What’s Next
