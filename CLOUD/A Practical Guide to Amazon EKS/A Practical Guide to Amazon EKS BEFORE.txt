@@ -1,0 +1,172 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+39:38
+
+Welcome to the Course!
+05:14
+
+
+What You'll Learn
+03:48
+The Bookstore Project
+15:56
+
+
+The Bookstore Project: Prerequisites
+03:52
+
+Demo: Creation of the Physical Requisites
+10:48
+
+
+CHAPTER 2
+
+Networking and EKS
+1:44:29
+
+Networking & EKS
+03:38
+
+Go Private, Go Secure, Go OpenVPN
+24:02
+
+
+
+
+DNS – Do Not Suffer
+02:57
+Demo: ACM
+04:53
+
+
+External DNS
+16:51
+
+Installing the Bookstore – Part 1
+10:11
+
+Installing the Bookstore – Part 2
+17:28
+
+
+
+CNI and EKS – Integration with VPC
+05:34
+
+Demo: CNI
+18:55
+
+
+
+
+CHAPTER 3
+
+Achieve Least Privilege Principle
+50:34
+
+Achieve Least Privilege Principle – Containers with Their Own Permissions
+05:59
+IAM Roles for Service Accounts
+02:28
+
+Demo: IAM Roles for Service Accounts
+08:10
+Demo: Update all the Applications
+18:04
+
+Demo: Update all the Applications – Continuation
+15:53
+
+CHAPTER 4
+
+More Power for Less Money
+56:15
+
+Spot Instances
+07:23
+
+
+Spot Instances – Termination Handler
+14:08
+
+EKS Managed Node Groups
+09:37
+EKS + Fargate
+06:31
+Demo: EKS + Fargate
+11:54
+Comparison
+06:42
+CHAPTER 5
+
+CI/CD
+1:44:46
+
+CI/CD
+03:33
+Workflow Definition
+04:30
+Source Code and Building – Part 1
+17:28
+
+
+Source Code and Building – Part 2
+08:00
+Automatic Build and Deployment
+16:38
+
+Creation of the Production Environment – Part 1
+17:31
+Creation of the Production Environment – Part 2
+18:10
+Extending CI/CD for the Production Environment
+18:56
+CHAPTER 6
+
+Service Mesh with AppMesh!
+1:04:17
+
+Service Mesh with AppMesh
+10:25
+
+
+
+
+Installing the AppMesh Controller
+10:55
+
+
+
+Creating the Mesh through Kubernetes
+06:51
+Creating AppMesh Components for Each App
+10:48
+Enabling Visibility from X-Ray
+17:15
+
+
+
+
+
+
+Retry Policies, Retry Policies, Retry... Ok!
+05:20
+Conclusions
+02:43
+
+
+
+CHAPTER 7
+
+Wrap Up
+20:57
+
+Review
+04:13
+Clean Up
+14:06
+Next Steps
+01:58
+Thanks for Watching!
