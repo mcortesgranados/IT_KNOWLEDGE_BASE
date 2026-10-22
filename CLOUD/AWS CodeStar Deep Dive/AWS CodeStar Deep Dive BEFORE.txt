@@ -1,0 +1,123 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+05:53
+
+Course Introduction
+01:33
+What You Will Learn
+01:43
+Requirements for the Course
+02:37
+CHAPTER 2
+
+Getting Started with AWS CodeStar
+57:12
+
+Getting Started with AWS CodeStar
+08:27
+CodeStar Concepts
+05:32
+Project Templates
+14:36
+Managing Team Members in CodeStar
+13:37
+QUIZ
+Getting Started with AWS CodeStar
+15:00
+CHAPTER 3
+
+AWS CodeStar’s Core Services
+1:36:05
+
+Core Services: The Five Points of the Star
+06:10
+CodeCommit
+14:16
+
+CodeBuild
+14:35
+
+CodeDeploy
+13:51
+
+CodePipeline
+12:40
+
+CloudFormation
+14:31
+
+
+Recapping Core Services
+05:02
+QUIZ
+AWS CodeStar’s Core Services
+15:00
+CHAPTER 4
+
+AWS CodeStar Projects
+1:01:10
+
+Introduction to Projects
+04:04
+Customize Your Project Workflow
+14:29
+Modify the Elastic Beanstalk Environment Configuration
+14:59
+
+
+
+Add More AWS Resources to Your Project
+09:46
+
+
+Recapping Projects
+02:52
+QUIZ
+AWS CodeStar Projects
+15:00
+CHAPTER 5
+
+AWS CodeStar Integration with Other Tooling
+58:56
+
+Integration with Other Tools and Services
+01:34
+IDE Integrations
+10:02
+Tracing with X-Ray
+07:42
+Issue Tracking with Jira
+07:05
+Recapping Integrations
+02:33
+QUIZ
+AWS CodeStar Integration with Other Tooling
+30:00
+CHAPTER 6
+
+AWS CodeStar Best Practices
+46:19
+
+Best Practices Around AWS CodeStar
+03:54
+Security Considerations
+04:15
+Everything Infrastructure as Code
+05:22
+Recapping Best Practices
+02:48
+QUIZ
+AWS CodeStar Best Practices
+30:00
+CHAPTER 7
+
+Conclusion
+04:30
+
+Course Conclusion
+01:53
+Next Steps
+01:56
+Thanks for Watching!
