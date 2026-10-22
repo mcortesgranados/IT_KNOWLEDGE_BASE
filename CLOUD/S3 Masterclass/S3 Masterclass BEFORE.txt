@@ -1,0 +1,216 @@
+Course Outline
+CHAPTER 1
+
+Introduction To The Course
+12:57
+
+Public Introduction
+02:42
+What You'll Need For This Course
+09:21
+
+
+
+A Note About Demo Lessons
+00:54
+CHAPTER 2
+
+The Basics of S3
+1:22:32
+
+S3 Basics
+21:40
+
+Object Storage Classes
+14:55
+Buckets and Objects Demo Lab
+22:58
+
+S3 Select
+07:37
+S3 Select Demo Lab
+15:22
+
+CHAPTER 3
+
+Security: Access Control
+2:49:19
+
+An Introduction to S3 Permissions
+16:31
+Access Control Lists (ACLs)
+09:20
+Access Control Lists (ACLs) Demo Lab
+15:37
+
+
+Bucket & User Policies
+13:36
+Bucket & User Policies Demo Lab (Part 1)
+20:31
+
+
+
+
+
+Bucket & User Policies Demo Lab (Part 2)
+15:36
+
+
+S3 Block Public Access
+13:49
+S3 Block Public Access Demo Lab Pt 1
+10:54
+S3 Block Public Access Demo Lab Pt 2
+07:49
+Cross Account Access Using ACLs Demo Lab
+21:31
+
+Cross Account Access Using Bucket Policies Demo Lab
+09:10
+
+
+S3 Pre-signed URLs
+07:58
+S3 Pre-signed URLs Demo Lab
+06:57
+
+CHAPTER 4
+
+Security: Logging and Monitoring
+1:22:52
+
+Monitoring S3 With CloudWatch
+06:31
+Monitoring S3 With CloudWatch Demo Lab
+13:40
+S3 Access Logging
+05:48
+S3 Access Logging Demo Lab
+13:07
+CloudTrail Logging
+09:14
+CloudTrail Logging Demo Lab
+13:07
+CloudTrail & CloudWatch Metrics Demo Lab
+10:08
+CloudTrail & CloudWatch Events Demo Lab
+11:17
+
+
+CHAPTER 5
+
+Security: Data Protection
+2:30:50
+
+S3 Encryption
+18:18
+
+S3 Default Encryption
+10:34
+S3 Default Encryption Demo Lab
+10:22
+
+Server Side Encryption with S3 Managed Keys Demo Lab
+05:36
+Server Side Encryption with KMS Managed Keys Demo Lab
+20:18
+Server Side Encryption with Customer-Provided Keys Demo Lab
+06:47
+Encryption in Transit Demo Lab
+08:18
+
+Versioning
+15:24
+Versioning Demo Lab
+21:22
+Replication
+19:08
+Replication Demo Lab
+14:43
+CHAPTER 6
+
+Lifecycle Management
+54:51
+
+Lifecycle Management
+15:12
+Lifecycle Management Demo Lab
+20:14
+Storage Class Analysis
+19:25
+
+CHAPTER 7
+
+Event Notifications
+22:26
+
+Event Notifications
+06:18
+Event Notifications Demo Lab
+16:08
+
+CHAPTER 8
+
+Performance Optimisation
+1:18:09
+
+S3 Performance Optimisation
+11:28
+An Introduction To CloudFront
+09:18
+Transfer Acceleration
+07:59
+Transfer Acceleration Demo Lab
+06:40
+
+
+Optimising S3 PUTS, GETS & LISTS
+10:41
+Multipart Upload Demo Lab
+07:11
+
+Optimising GETS with CloudFront Demo Lab
+12:05
+
+S3 Inventory Demo Lab
+12:47
+
+CHAPTER 9
+
+Website Hosting
+37:37
+
+Static Website Hosting
+11:17
+Static Website Hosting Demo Lab
+11:06
+
+
+
+Cross-Origin Resource Sharing (CORS)
+02:56
+Cross-Origin Resource Sharing (CORS) Demo Lab
+12:18
+
+
+CHAPTER 10
+
+Practical Uses of S3
+26:06
+
+CloudBerry Backup
+03:06
+
+
+Backing Up Data With CloudBerry Backup Demo Lab
+16:26
+
+Restoring Data With CloudBerry Backup Demo Lab
+06:34
+CHAPTER 11
+
+Course Wrap Up
+09:29
+
+Course Wrap Up
