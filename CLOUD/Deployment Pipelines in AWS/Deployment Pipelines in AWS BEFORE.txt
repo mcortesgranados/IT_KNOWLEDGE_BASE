@@ -1,0 +1,73 @@
+
+Next Lessons
+Code Repository Options thumbnail
+07:20
+Code Repository Options
+
+CHAPTER 2.2
+
+Overview of CodeCommit thumbnail
+05:52
+Overview of CodeCommit
+
+CHAPTER 2.3
+
+How Can Elastic Beanstalk Assist Deployments? thumbnail
+06:43
+How Can Elastic Beanstalk Assist Deployments?
+
+CHAPTER 2.4
+
+Course Outline
+CHAPTER 1
+
+Introduction to Deployment Pipelines
+13:16
+
+Course Introduction
+02:18
+About the Training Architect
+01:02
+Overview of Deployment Pipelines
+09:56
+CHAPTER 2
+
+Learning about the AWS Developer Tools Suite
+31:07
+
+AWS Developer Tools Overview
+09:09
+Code Repository Options
+07:20
+Overview of CodeCommit
+05:52
+How Can Elastic Beanstalk Assist Deployments?
+06:43
+Developer Tools Section Wrap-Up
+02:03
+CHAPTER 3
+
+Creating a Deployment Pipeline - Walkthrough
+1:04:22
+
+A Deployment Pipeline to Meet Your Use Case
+07:08
+Create a Deployment Environment
+04:55
+Uploading Your Code to a Repository
+03:22
+Creating the CodePipeline
+05:58
+Activating the Pipeline
+11:42
+Deployment Pipeline Section Wrap-Up
+01:17
+HANDS-ON LAB
+Setting Up a Pipeline with a Manual Approval in AWS CodePipeline
+30:00
+CHAPTER 4
+
+Conclusion
+02:00
+
+Conclusion and What's Next
