@@ -1,0 +1,108 @@
+CHAPTER 01 Introduction
+01-01 Course Introduction
+
+CHAPTER 02 What Is Infrastructure as Code?
+02-01 Introduction to Infrastructure as Code
+
+02-02 Infrastructure as Code on AWS
+
+02-03 Overview of Deploying Infrastructure on AWS
+
+02-04 Where Do We Store This Code?
+
+02-05 IAM and Securing Our Infrastructure
+
+02-06 Section Review Whiteboarding Session
+
+02-07 QUIZ What is Infrastructure as Code
+CHAPTER 03 Authoring Templates and Building Stacks
+03-01 Introduction to CloudFormation and Turning Templates into Stacks
+
+03-02 JSON vs. YAML and Why We’ll Look at Both
+
+03-03 CloudFormation Editors and Tools to Know
+
+03-04 CloudFormation Template Format and Structure
+
+03-05 CloudFormation Intrinsic Functions
+
+03-06 CloudFormation Condition Functions for Flexible Deployments
+
+03-07 CloudFormation Modules for Reusability
+
+03-08 Section Review Whiteboarding Session
+
+03-09 HANDS-ON LAB Creating Simple and Reusable CloudFormation Templates
+
+03-10 QUIZ Authoring Templates and Building Stacks
+CHAPTER 04 CloudFormation Stacks in Depth
+04-01 A Deeper Dive into Stacks
+
+04-02 Protecting Your Stacks
+
+04-03 Rollback Triggers for Stacks
+
+04-04 Detecting and Remediating Stack Drift
+
+04-05 Importing Existing Resources into CloudFormation
+
+04-06 CloudFormation from the CLI
+
+04-07 Section Review Whiteboarding Session
+
+04-08 HANDS-ON LAB Using CloudFormation Import to Refactor Stacks
+
+04-09 QUIZ CloudFormation Stacks in Depth
+CHAPTER 05 Deploying and Testing CloudFormation Stacks
+05-01 Best Practices for Deploying CloudFormation Templates
+
+05-02 Developer Tools Key Services Part 1 CodeCommit
+
+05-03 Developer Tools Key Services Part 2 CodeBuild and CodePipeline
+
+05-04 Overview of Testing Infrastructure as Code
+
+05-05 Using cfn-lint for In-Depth Testing of Templates
+
+05-06 Running Pre-Deployment Checks
+
+05-07 Creating and Testing a CloudFormation Deployment Pipeline
+
+05-08 Error-Proofing CloudFormation Deployments with TaskCat
+
+05-09 Working with CloudFormation Guard
+
+05-10 Section Review Whiteboarding Session
+
+05-11 HANDS-ON LAB Creating and Testing a CloudFormation Deployment Pipeline
+
+05-12 QUIZ Deploying And Testing CloudFormation Stacks
+CHAPTER 06 Maintaining CloudFormation Stacks
+06-01 Updating CloudFormation Stacks with Direct Updates
+
+06-02 Using Change Sets to Update Stacks
+
+06-03 Organizing and Refactoring Stacks
+
+06-04 Disabling Rollbacks for CloudFormation Stacks
+
+06-05 Section Review Whiteboarding Session
+
+06-06 HANDS-ON LAB Automating CloudFormation Stack Updates with CodePipeline
+
+06-07 QUIZ Maintaining CloudFormation Stacks
+CHAPTER 07 Advanced CloudFormation Concepts
+07-01 CloudFormation StackSets
+
+07-02 CloudFormation Custom Resources
+
+07-03 An Introduction to the AWS Cloud Development Kit
+
+07-04 Section Review Whiteboarding Session
+
+07-05 HANDS-ON LAB Challenge Lab: Successfully Troubleshooting a Failed CloudFormation Deployment
+
+07-06 QUIZ Advanced CloudFormation Concepts
+CHAPTER 08 Conclusion
+08-01 Conclusion and What’s Next
+

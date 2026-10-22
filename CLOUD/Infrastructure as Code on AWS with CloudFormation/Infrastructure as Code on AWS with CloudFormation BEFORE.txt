@@ -1,0 +1,169 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+02:19
+
+Course Introduction
+02:19
+CHAPTER 2
+
+What Is Infrastructure as Code?
+1:12:17
+
+Introduction to Infrastructure as Code
+08:36
+Infrastructure as Code on AWS
+07:36
+Overview of Deploying Infrastructure on AWS
+10:46
+Where Do We Store This Code?
+10:33
+IAM and Securing Our Infrastructure
+12:58
+Section Review Whiteboarding Session
+06:48
+QUIZ
+What is Infrastructure as Code
+15:00
+CHAPTER 3
+
+Authoring Templates and Building Stacks
+2:19:21
+
+Introduction to CloudFormation and Turning Templates into Stacks
+09:00
+
+JSON vs. YAML and Why We’ll Look at Both
+09:15
+CloudFormation Editors and Tools to Know
+07:41
+
+
+
+
+
+
+
+CloudFormation Template Format and Structure
+14:17
+CloudFormation Intrinsic Functions
+14:08
+
+CloudFormation Condition Functions for Flexible Deployments
+09:23
+
+CloudFormation Modules for Reusability
+11:34
+Section Review Whiteboarding Session
+04:03
+HANDS-ON LAB
+Creating Simple and Reusable CloudFormation Templates
+45:00
+QUIZ
+Authoring Templates and Building Stacks
+15:00
+CHAPTER 4
+
+CloudFormation Stacks in Depth
+2:10:16
+
+A Deeper Dive into Stacks
+10:00
+Protecting Your Stacks
+09:44
+Rollback Triggers for Stacks
+08:11
+Detecting and Remediating Stack Drift
+07:39
+Importing Existing Resources into CloudFormation
+07:27
+CloudFormation from the CLI
+08:07
+Section Review Whiteboarding Session
+04:08
+HANDS-ON LAB
+Using CloudFormation Import to Refactor Stacks
+1:00:00
+QUIZ
+CloudFormation Stacks in Depth
+15:00
+CHAPTER 5
+
+Deploying and Testing CloudFormation Stacks
+3:00:20
+
+Best Practices for Deploying CloudFormation Templates
+08:10
+Developer Tools Key Services Part 1: CodeCommit
+08:35
+Developer Tools Key Services Part 2: CodeBuild and CodePipeline
+11:48
+Overview of Testing Infrastructure as Code
+05:42
+Using cfn-lint for In-Depth Testing of Templates
+07:34
+
+Running Pre-Deployment Checks
+07:21
+Creating and Testing a CloudFormation Deployment Pipeline
+04:16
+Error-Proofing CloudFormation Deployments with TaskCat
+08:34
+Working with CloudFormation Guard
+08:13
+Section Review Whiteboarding Session
+05:07
+HANDS-ON LAB
+Creating and Testing a CloudFormation Deployment Pipeline
+1:30:00
+QUIZ
+Deploying And Testing CloudFormation Stacks
+15:00
+CHAPTER 6
+
+Maintaining CloudFormation Stacks
+1:36:06
+
+Updating CloudFormation Stacks with Direct Updates
+08:46
+
+Using Change Sets to Update Stacks
+08:25
+Organizing and Refactoring Stacks
+08:50
+Disabling Rollbacks for CloudFormation Stacks
+06:34
+Section Review Whiteboarding Session
+03:31
+HANDS-ON LAB
+Automating CloudFormation Stack Updates with CodePipeline
+45:00
+QUIZ
+Maintaining CloudFormation Stacks
+15:00
+CHAPTER 7
+
+Advanced CloudFormation Concepts
+2:35:08
+
+CloudFormation StackSets
+08:59
+CloudFormation Custom Resources
+10:19
+An Introduction to the AWS Cloud Development Kit
+09:17
+Section Review Whiteboarding Session
+06:33
+HANDS-ON LAB
+Challenge Lab: Successfully Troubleshooting a Failed CloudFormation Deployment
+1:45:00
+QUIZ
+Advanced CloudFormation Concepts
+15:00
+CHAPTER 8
+
+Conclusion
+01:57
+
+Conclusion and What’s Next
