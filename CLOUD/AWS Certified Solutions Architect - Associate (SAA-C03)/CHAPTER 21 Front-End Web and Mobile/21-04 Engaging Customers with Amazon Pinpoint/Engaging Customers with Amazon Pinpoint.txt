@@ -1,0 +1,96 @@
+Hello, Cloud Gurus.
+This lesson is on engaging customers with Amazon Pinpoint.
+Throughout this lesson, we're going to go over several
+things. We'll talk about what Pinpoint actually is.
+We'll look at the different features
+that go along with Pinpoint.
+We'll talk about where we can use it
+in our architecture plans,
+and then we'll wrap things up with some exam tips.
+So, what is Amazon Pinpoint?
+Amazon Pinpoint is a service that enables you
+to engage with your customers through
+a variety of different messaging channels.
+So, think things like emails, SMS,
+other push notifications, many different platforms
+for communicating to your customers.
+So, who is this service meant for?
+Well, its primary audience is intended to be marketers,
+business users, and in some cases, even developers,
+depending on the company size.
+They want to make it as simple as possible
+to engage with their customers.
+Now, what are some features of this service?
+So, there are things called "Projects"
+and these are essentially collections of information,
+different segments, campaigns, and journeys.
+Now, we'll see some of these terms
+here coming up in a minute, so don't fret.
+We also have channels, and this is the platform
+where you intend to engage your audience segments.
+So, how are you engaging with your customers?
+Are you going to be emailing them?
+Are you sending them text messages,
+push notifications, whatever you choose.
+There are segments, and these can be dynamic or imported.
+And these strictly designate which users are going
+to receive specific messages that you send out.
+So, you can categorize and group people as you see fit.
+Then, there's campaigns,
+and these are simply initiatives engaging
+specific audience segments using your tailored messages.
+So, a good way to think of a campaign
+would be a release of a brand new feature
+or an application that you want to market to your customers.
+It might be a huge feature that's very important
+and took a lot of developer time
+and will have significant customer impact.
+There's also journeys,
+and journeys are customized, multi-step engagements.
+So within a journey, you might have multiple steps
+where you're reaching out to multiple segments
+with different types of messages,
+and they all make up one or more campaign.
+Now we also have message templates,
+and this is just content and settings
+that are allowing you to easily reuse repeated messages.
+So, it's exactly what it sounds like.
+Instead of having to carve out those
+tailored specific messages manually each time,
+you can just generate a message template
+and reuse that as you see fit.
+And lastly, a key feature here is machine learning.
+So, you can actually leverage machine learning models
+in order to predict user patterns for future engagements.
+This is a key feature, so be sure
+to understand you can use machine learning models
+to predict future patterns.
+Well, where do we use it?
+There are three primary uses.
+The first is marketing.
+So, marketers can use this to promote products
+and even services via emails, SMS notifications,
+or even just plain app push notifications.
+You can also leverage it for transactions,
+so you can send messages to your customers
+after a transaction occurs.
+So, think things like order confirmations
+or even shipping notifications.
+And then lastly, any bulk communication.
+So, you can send messages that are targeted
+to millions of people.
+Yeah, you heard that right. Millions of people.
+So, you can see why this service is effective
+for campaigns of new products and services.
+Now, let's go ahead and wrap things up with an exam tip.
+For any questions that you receive that are related
+to marketing campaigns, user engagements,
+or even sending emails to targeted audiences,
+think of Amazon Pinpoint.
+You also want to look out for scenarios
+that leverage machine learning
+with user engagement predictions for future campaigns.
+Now, that's going to go ahead
+and do it for this Amazon Pinpoint lesson.
+When you're ready, take a short break,
+and then we'll pick back up in the next lesson.

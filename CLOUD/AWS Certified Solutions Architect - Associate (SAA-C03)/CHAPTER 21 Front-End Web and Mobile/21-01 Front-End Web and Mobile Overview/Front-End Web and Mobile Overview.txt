@@ -1,0 +1,25 @@
+All right, welcome back Cloud Gurus.
+This section is about front-end web and mobile.
+So what are we going to look at throughout this section?
+Well, we'll first look at quickly deploying
+web applications using AWS Amplify.
+We're going to test application services
+using AWS Device Farm.
+We'll look at how we can engage customers
+with Amazon Pinpoint,
+and then we'll wrap everything up
+with some front-end web and mobile exam tips.
+Now, just a heads up here,
+There are very few of these services
+that have been seen on the exam right now.
+However, they are on the exam guide,
+so it's important that you know where they would be used
+within an architecture.
+The one service that is known to be covered
+on the exam so far is Amazon Pinpoint.
+So we'll go into a little bit more detail
+regarding that service,
+but the others are going to be covered at a high level
+and we'll talk about their potential use cases.
+So let's go ahead, and when you're ready,
+we'll dive in and get going.

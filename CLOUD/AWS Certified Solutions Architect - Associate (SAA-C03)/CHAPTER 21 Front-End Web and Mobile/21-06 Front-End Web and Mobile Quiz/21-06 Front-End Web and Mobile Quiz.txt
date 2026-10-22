@@ -1,0 +1,72 @@
+QUESTION 1
+
+Which service is best for customer engagements via different notification methods on both small and large scales?
+
+
+AWS Device Farm
+
+
+AWS SNS
+
+
+AWS Amplify
+
+CORRECT
+Amazon Pinpoint
+
+Sorry!
+This is an application testing service for when real phones and tablets are required.
+
+Correct Answer
+The main purpose of this service is to allow users to engage with customers via several methods in AWS.
+
+
+
+________________________________________________________________________________________________________________________________
+
+
+QUESTION 2
+
+Which service offers tools for simplified front-end web and mobile development on AWS?
+
+
+Amazon Pinpoint
+
+
+AWS AppSync
+
+CORRECT
+AWS Amplify
+
+
+AWS Device Farm
+
+Sorry!
+This service is meant to enable engagement with customers via various notifications.
+
+Correct Answer
+This service enables developers to build full-stack applications hosted on AWS and enables them to focus on coding instead of infrastructure.
+
+________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which service allows you to run automated testing on real phones and tablets hosted in AWS?
+
+
+AWS Amplify
+
+CORRECT
+AWS Device Farm
+
+
+AWS GraphQL
+
+
+Amazon Pinpoint
+
+Sorry!
+This service offers tools for simplified front-end web and mobile development.
+
+Correct Answer
+This service is meant for automated or manual testing on real, physical phones or tablets.

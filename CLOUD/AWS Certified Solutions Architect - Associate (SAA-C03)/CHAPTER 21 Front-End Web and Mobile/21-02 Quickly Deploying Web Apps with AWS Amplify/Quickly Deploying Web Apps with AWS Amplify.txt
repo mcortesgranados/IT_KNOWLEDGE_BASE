@@ -1,0 +1,80 @@
+Okay. Welcome back, Cloud Gurus.
+This lesson is on quickly deploying web apps
+with AWS Amplify.
+Throughout this lesson, we're going to touch
+on several key points.
+We'll first look at what Amplify is.
+We'll talk about the services that are offered within it.
+We'll look at what is called Amplify Hosting
+and then Amplify Studio
+and finally, we'll wrap things up with some exam tips.
+All right. So what is AWS Amplify?
+Well, that is a great question.
+AWS Amplify offers tools for front-end
+web and mobile developers.
+Now, these tools are allowing them
+to quickly build full stack applications on AWS.
+It essentially handles the burden
+of deploying the underlying infrastructure
+and it lets them focus on the code itself.
+So what is offered within the service?
+Well, there are 2 services for developers to use.
+The first is Amplify Hosting
+and the second is Amplify Studio.
+So let's take a look at both of these really quickly.
+The first on the list is Amplify Hosting.
+3 things that you should know:
+The first thing is it provides support
+for common single-page application frameworks
+like React, Angular, and Vue.
+This also supports Gatsby and Hugo,
+which are static site generators.
+Secondly, it allows developers
+to separate production and staging environments
+to have different front ends and back ends
+which, of course, is huge because you don't want to run
+production and staging environments
+on the same infrastructure necessarily.
+And then lastly, it has support
+for server-side rendering applications like Next.js.
+Now, a cool thing that Next.js offers
+over React and Angular and all those other frameworks
+is that you can actually generate static sites
+as well as use server-side rendering,
+but remember, you can't do server-side rendering
+with a static application in S3.
+So if that question comes up, think AWS Amplify.
+Okay. Let's move on to Amplify Studio.
+The first big point is that it allows for easy auth
+and in this case, it's both auths.
+We have easy authentication and easy authorization.
+So it allows you to quickly implement
+these controls within your applications
+using the suite of tools that are provided.
+The next is it allows for simplified development.
+This particular service is going to offer you
+a visual development environment in order to simplify
+creation of your full stack web or mobile applications.
+So you can basically do everything within the AWS console.
+And lastly, one of the cooler aspects
+is there are ready-to-use components.
+So when building your application,
+you can snag these ready-to-use components,
+which allow you to create your back ends easier
+or automate connections between the front ends
+and back ends.
+It really simplifies things
+so the developers don't have to get caught up again
+with the difficult underlying infrastructure setup.
+So let's move on to some exam tips.
+AWS Amplify could be an answer for scenarios
+that include managed server-side rendering in AWS,
+easy mobile development, or even allowing developers
+to run full stack applications
+with minimal knowledge of AWS.
+So if any of those scenarios come up,
+you should immediately start looking for answers
+that include AWS Amplify.
+Now, that's going to do it for this short lesson.
+When you're ready, let's take a break
+and then I'll see you in the next one.

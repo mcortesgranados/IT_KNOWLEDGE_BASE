@@ -1,0 +1,38 @@
+Hello, Cloud Gurus.
+This lesson is going to be about testing application
+services using AWS Device Farm.
+During this lesson, we'll go over a few different things.
+We'll talk about what Device Farm actually is
+and what its purpose is.
+We'll talk about the different ways that you can use it
+to test and then we'll wrap everything up
+with some good old fashioned exam tips.
+So what is AWS Device Farm?
+Device Farm is an application testing service
+that you can use for testing and interacting with Android,
+iOS, and web applications.
+The cool thing about this service is it uses
+actual phones and actual tablets that are hosted by AWS.
+Now, Device Farm offers 2 primary testing methods.
+The first is automated.
+So in this case, you would upload scripts
+or use built-in tests that are provided for you
+to automate and run tests in parallel on mobile devices,
+so phones and tablets.
+You can also do what is called remote access testing.
+And this is really neat.
+You can actually remote in and you can swipe,
+gesture, and even interact with the devices
+in real time via web browsers.
+So you're literally interacting with the device
+just via a browser, and it's that simple.
+So let's go over a quick scenario and exam tip.
+Now, if you see a scenario on the exam and it mentions
+requiring application testing on mobile devices in AWS,
+and more specifically, needing actual phones or tablets
+for automated testing, think AWS Device Farm.
+That is a key indicator that you should be leveraging
+this service in your architecture plans.
+And that's it.
+Let's go ahead and wrap this one up, short and sweet.
+When you're ready, I'll see you in the next one.

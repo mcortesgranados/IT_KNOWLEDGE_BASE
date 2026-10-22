@@ -1,0 +1,71 @@
+Congrats Cloud Gurus.
+You made it through this front-end web and mobile section.
+Let's go over a few exam tips
+so we can reinforce what we've recently learned
+and bring that into our exam.
+Now, the first thing I want to stress here is, again
+very few of these services have been seen on the exam.
+The one service we know to be covered is Pinpoint.
+For all other services,
+We just covered them at a high level,
+and we talked about where they could be used
+in their particular use cases.
+We talked about quickly deploying web apps with AWS Amplify.
+Remember, Amplify provides us tools
+for simplified front-end web and mobile development.
+It's really almost a suite of tools that allow
+for easy full stack applications to be hosted on AWS.
+The goal of this service is to enable developers
+to focus on their coding and not really have to worry
+about the pesky infrastructure that goes along with it.
+It supports frameworks like React, Vue.js, and Angular.
+It also works with static generator tools
+like Gatsby and Hugo.
+So, keep an eye out from mention of any of these frameworks
+or tools when you're thinking about which service to pick.
+Now, a really, really, really big feature
+that you need to know for this service
+is it does support server-side rendering.
+An example of a framework or application
+that would leverage this is Next.js.
+So, while you can generate static sites
+with Next.js, server-side rendering is where
+it gets its magic, and you can't do that
+with a simple S3 bucket.
+I know Amazon S3 static site hosting is a popular scenario
+for this exam,
+but if it mentions server-side rendering,
+think of AWS Amplify.
+Now let's move on to Device Farm.
+Remember, think of using this service for any scenarios
+that talk about requiring automated
+or manual testing on physical, real phones, or tablets.
+It can be used with
+different Android and iOS devices, as well
+as just simple web applications that you need to test
+on those mobile devices.
+We then can move on to Pinpoint.
+It's important that you understand that
+it enables you to engage with your customers
+on either a large or a small scale.
+It's very flexible.
+It is geared more towards marketing teams
+and business users, but even sometimes developers, again
+depending on the company size.
+It allows you to create segments,
+and these allow for more targeted messages
+and specific audiences so you don't have to just shotgun all
+of your messages out to all users.
+You can target who they're going to
+and what those people see.
+And a very big point that I want you to remember
+you can leverage machine learning models to
+predict future engagements.
+This is a key feature
+so keep an eye out for it on exam scenarios.
+Now, feel free to check out all of the lesson references
+which are available at the documentation sites
+for AWS.
+For now, that's going to do it.
+We'll end here
+and then we'll pick back up in the next section.
