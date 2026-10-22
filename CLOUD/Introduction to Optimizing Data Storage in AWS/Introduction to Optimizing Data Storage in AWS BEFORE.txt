@@ -1,0 +1,40 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:31
+
+Course Introduction
+01:31
+CHAPTER 2
+
+Optimizing Data Storage with AWS Services
+2:43:38
+
+Introduction to Data Storage Optimization
+06:12
+Migrating BLOB Data From Block Storage to S3 (Part 1)
+10:50
+
+
+
+
+
+
+Migrating BLOB Data From Block Storage to S3 (Part 2)
+09:12
+Leveraging EFS/FSX for Shared Autoscaling Group Data Storage (Part 1)
+04:38
+
+
+Implementing EFS/FSX for Shared Autoscaling Group Data Storage (Part 2)
+12:46
+HANDS-ON LAB
+Migrating BLOB Data in a MySQL Database to S3
+2:00:00
+CHAPTER 3
+
+Conclusion
+01:06
+
+Conclusion and What’s Next
