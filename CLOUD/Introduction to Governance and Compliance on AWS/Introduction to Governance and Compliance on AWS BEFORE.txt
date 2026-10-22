@@ -1,0 +1,53 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:31
+
+Course Introduction
+01:31
+CHAPTER 2
+
+Security and Compliance
+54:53
+
+Exploring the Different Types of Compliance
+14:22
+
+Understanding and Utilizing AWS Artifact
+06:05
+Leveraging AWS Audit Manager for Compliance Checks
+12:53
+Monitoring with AWS Inspector
+12:33
+Monitoring Security and Compliance with AWS Security Hub
+09:00
+
+CHAPTER 3
+
+Management and Governance Services
+1:05:47
+
+Understanding AWS Organizations, Organizational Units, and Service Control Policies
+07:06
+Introduction to AWS Control Tower, Landing Zones, and Guardrails
+07:54
+Monitoring Environment Changes with AWS Config and AWS CloudTrail
+10:15
+HANDS-ON LAB
+Using AWS Config and CloudTrail
+30:00
+Understanding AWS Trusted Advisor and the 5 Categories
+06:25
+
+Managing Cost with AWS Budgets
+04:07
+CHAPTER 4
+
+Conclusion
+31:22
+
+QUIZ
+AWS Compliance and Governance Quiz
+30:00
+Conclusion and What’s Next
