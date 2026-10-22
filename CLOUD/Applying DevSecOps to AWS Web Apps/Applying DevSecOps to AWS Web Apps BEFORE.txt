@@ -1,0 +1,47 @@
+Course Outline
+CHAPTER 1
+
+Apply DevSecOps to AWS Web Apps
+1:17:49
+
+Defining DevSecOps
+03:37
+
+Supporting DevSecOps
+07:03
+Lifecycles
+07:59
+
+
+
+Code Analysis
+07:03
+
+
+CI/CD Pipeline
+04:23
+
+
+Securing the CI/CD Pipeline
+08:43
+
+
+
+
+
+
+
+Common Web App Attacks
+09:27
+
+Securing AWS Web Apps
+10:52
+
+
+
+
+API Security
+06:37
+
+
+Conclusion
