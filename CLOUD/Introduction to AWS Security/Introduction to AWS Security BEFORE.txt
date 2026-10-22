@@ -1,0 +1,220 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:57
+
+Course Introduction
+01:57
+
+CHAPTER 2
+
+Security in AWS 101
+42:15
+
+Security in AWS 101 Overview
+02:48
+AWS and Security
+10:12
+
+
+
+Defining a Threat Model
+03:59
+Discovering Threats and Recommendations
+08:37
+Security in AWS 101 Review
+01:39
+QUIZ
+Security in AWS 101 Quiz
+15:00
+CHAPTER 3
+
+Managing Identities and Permissions
+3:08:23
+
+Managing Identities and Permissions Overview
+03:14
+Understanding Permissions in AWS
+08:52
+HANDS-ON LAB
+Creating Users and Groups with Custom Policies in IAM
+30:00
+Sharing Resources Securely
+05:33
+
+Understanding Secure Access
+11:39
+
+
+Exploring Directory Service and Cognito: Part 1
+11:23
+
+Exploring Directory Service and Cognito: Part 2
+10:30
+HANDS-ON LAB
+Using Cognito to Log In to a Custom Domain
+1:30:00
+Managing Identities and Permissions Review
+02:12
+QUIZ
+Managing Identities and Permissions Quiz
+15:00
+CHAPTER 4
+
+Securing Network Resources
+2:13:48
+
+Securing Network Resources Overview
+03:03
+Protecting Network Resources
+09:18
+Controlling Traffic at Each Layer : Part 1
+13:24
+Controlling Traffic at Each Layer : Part 2
+07:52
+HANDS-ON LAB
+Creating and Configuring a WAF
+45:00
+Inspecting Security at Each Layer
+07:56
+HANDS-ON LAB
+Optimizing Network Resources to Maintain a Secure Instance
+30:00
+Securing Network Resources Review
+02:15
+QUIZ
+Securing Network Resources Quiz
+15:00
+CHAPTER 5
+
+Securing Compute Resources
+1:00:21
+
+Securing Compute Resources Overview
+02:52
+
+Managing and Assessing Vulnerabilities
+06:19
+
+
+
+
+
+
+
+Protecting Compute Resources: Part 1
+06:59
+
+
+
+
+
+
+HANDS-ON LAB
+Create and Secure an EC2 Instance
+15:00
+Protecting Compute Resources: Part 2
+12:29
+
+
+
+
+
+
+
+
+Securing Compute Resources Review
+01:42
+QUIZ
+Securing Compute Resources Quiz
+15:00
+CHAPTER 6
+
+Securing Data
+2:09:01
+
+Securing Data Overview
+03:22
+Classifying Data
+05:27
+Encrypting Data at Rest
+09:23
+
+
+
+HANDS-ON LAB
+Configure At Rest Encryption for EFS
+45:00
+Securing Data in Transit
+05:04
+Securing S3
+13:19
+
+
+
+HANDS-ON LAB
+Advanced S3 Security Configuration
+30:00
+Securing Data Review
+02:26
+QUIZ
+Securing Data Quiz
+15:00
+CHAPTER 7
+
+Monitoring and Detecting in AWS
+1:21:20
+
+Monitoring and Detecting in AWS Overview
+01:39
+Utilizing Services to Detect Issues
+11:39
+
+
+
+
+HANDS-ON LAB
+Detecting Security Issues Using GuardDuty
+30:00
+Visualizing Security Across AWS
+14:32
+
+Auditing Regularly with AWS
+06:54
+
+Monitoring and Detecting in AWS Review
+01:36
+QUIZ
+Monitoring and Detecting in AWS Quiz
+15:00
+CHAPTER 8
+
+Planning for the Expected and Unexpected
+37:04
+
+Planning for the Expected and Unexpected Overview
+01:20
+Staying Vigilant
+04:45
+
+Using Incident Response Plans
+09:58
+
+
+Preparation Is Everything!
+04:44
+Planning for the Expected and Unexpected Review
+01:17
+QUIZ
+Planning for the Expected and Unexpected Quiz
+15:00
+CHAPTER 9
+
+Conclusion
+04:04
+
+Course Summary
+02:39
+What’s Next
+01:
