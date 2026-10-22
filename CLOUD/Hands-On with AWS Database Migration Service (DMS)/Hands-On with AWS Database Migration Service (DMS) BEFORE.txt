@@ -1,0 +1,55 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+02:21
+
+Course Introduction / About the Training Architect
+02:21
+CHAPTER 2
+
+Database Migration Service Introduction and Fundamentals
+41:41
+
+Section Introduction
+00:52
+
+Identifying Common Use Cases
+05:35
+Understanding Replication Instances
+07:23
+Configuring Sources
+07:13
+Configuring Targets
+06:03
+Creating Replication Tasks
+12:38
+Section Review
+01:57
+CHAPTER 3
+
+Monitoring and Security Considerations
+46:58
+
+Understanding DMS Task Monitoring
+11:30
+Understanding Security Considerations
+05:28
+HANDS-ON LAB
+Using DMS to Configure Ongoing Replication from RDS to Redshift
+30:00
+CHAPTER 4
+
+Schema Conversion Tool (SCT)
+15:59
+
+Exploring Schema Conversion Tool
+06:02
+Demonstrating Schema Conversion Tool
+09:57
+CHAPTER 5
+
+Conclusion
+01:45
+
+Conclusion
