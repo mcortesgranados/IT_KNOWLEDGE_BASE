@@ -1,0 +1,183 @@
+Okay, hello, cloud gurus
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can back up our data using S3 replication.
+Now, S3 replication used
+to be called cross region replication.
+That was because you do it from one region to another,
+but now you can do it just from one bucket to another bucket
+in the same region as well.
+So they've renamed it
+and it's just called S3 replication
+rather than cross region replication.
+So in this lecture, we're going to learn what, you know,
+S3 replication is.
+We're then going to go and have a look at
+how we can do this in the AWS console,
+and then we'll go onto my exam tips.
+So S3 replication is exactly what it sounds like.
+It's a way of replicating objects
+from one bucket to another.
+Now, versioning must be enabled
+on both the source and destination buckets
+in order for this to work,
+and objects in an existing bucket
+are not replicated automatically.
+Once replication is turned on,
+then all subsequent updated objects
+will be replicated automatically.
+So if you're going to do this,
+it's best to create two new buckets,
+a source bucket and then a destination bucket,
+turn replication on, and then upload your objects.
+And also remember going into your exam
+that delete markers are not replicated by default.
+However, you can turn that on if you want.
+So deleting individual versions or delete markers
+will not be replicated by default.
+So let's go into the AWS console
+and have a look at this in action.
+Okay, so here I am in the AWS console.
+I'm gonna go over to S3,
+and we're gonna go ahead and create two buckets.
+One's going to be our source bucket
+and one's going to be a destination bucket.
+So let's go ahead and hit Create.
+I'm going to call mine sourcebucket
+and then a whole bunch of random numbers and letters.
+And I'm gonna do this in us-east-1 in Northern Virginia.
+I'm gonna leave everything on as default.
+Bucket versioning, you do need bucket versioning
+turned on for replication to work,
+but we won't turn it on just yet.
+We'll see how we can do that a bit later.
+So let's go ahead and create this bucket.
+So there we go.
+We've got our source bucket.
+Now I'm gonna go ahead and create a destination bucket.
+So destinationbucket,
+and then a bunch of random numbers and letters.
+And in here, I'm going to make it
+go somewhere more interesting,
+so let's send it over to Tokyo.
+So we're going from Northern Virginia to Tokyo.
+So let's go ahead and create this bucket.
+Now, in order to create our replication links,
+what we need to do is, first of all,
+go to our source bucket, click in here,
+and we go over to Management.
+And we had our lifecycle rules.
+Down here, we've got our replication rules.
+So let's go ahead and hit Create Replication Rule.
+And straight away,
+it tells us replication requires versioning
+to be enabled for the source bucket.
+So enable object versioning on this bucket
+to continue creating the replication rule.
+Before I do any of this, let me go ahead
+and just upload some files.
+So I'm gonna go and upload and add some files.
+Going to upload a file of me
+and my son watching a rocket launch.
+And I'm gonna go ahead and hit Upload.
+So that has now uploaded it.
+If we then hit Close, go back over to Management,
+and we're gonna go ahead
+and create our replication rule.
+In here, replication rules enable version,
+require versioning to be enabled.
+So let's go ahead and enable versioning.
+And in here, I'm just going to call it MyReplicationRule.
+And I'm gonna scroll down.
+It's in here, it's asking me
+for my replication rules for my source bucket.
+So I'm going to apply it to all objects in the bucket.
+You could use it doing a bunch of filters.
+So you could say, hey, only do it
+to particular folders within this bucket.
+I'm gonna say Apply to All Objects in the Bucket.
+Destination, you can choose a bucket in this account
+or you can choose a bucket in another account.
+I'm gonna choose a bucket in this account.
+I'm gonna go ahead and hit Browse S3.
+And I'm going to go ahead and choose my destination bucket.
+And again, we're going to have to turn replication on
+for both our source bucket and our destination bucket.
+So go ahead and enable that there.
+In here we can say, choose from existing IAM roles
+or enter the IAM role.
+In here, we're gonna go ahead
+and have to create a new role.
+It should set that up for us.
+And in here, we've got server side encryption,
+so replicate objects encrypted with AWS KMS.
+Just gonna leave everything else as default,
+and we're gonna go ahead and hit Save.
+So we then get prompted with this,
+and that's why I uploaded an object.
+So essentially what used to happen was
+you'd have objects in your bucket,
+you turn on replication rules,
+and it would only replicate those objects
+when there'd been a change.
+It wouldn't replicate the objects existing in that bucket.
+Now you can say, hey, yeah, replicate my existing objects.
+It used to be really annoying
+'cause you're trying to back a bucket up
+and you've got all your objects in the bucket,
+and you turn on a replication rule,
+but it doesn't replicate everything automatically.
+You'd have to basically re-upload everything to that bucket.
+Now you get this option
+saying, yes, replicate existing objects.
+So we're gonna go ahead and do that.
+We go ahead and hit Save.
+Here, we're gonna need to specify our bucket.
+So it's our source bucket.
+And go ahead and hit Choose Path.
+And then we're gonna go ahead and hit Save.
+And that has now turned on our replication.
+Okay, so it's now created that batch job,
+which should replicate our objects.
+So if we go back over to our bucket,
+so we've got our source bucket.
+We can see our image in here,
+so our object in here.
+We've got our batch job that's just been created.
+Go back to our bucket,
+and if we go over to our destination bucket,
+we can see the object in there.
+There has been a little bit of editing magic in this.
+It did take a couple of minutes for the batch job to run
+and for this file to be replicated.
+So if it doesn't work straight away for you,
+just hit refresh, hard refresh,
+so Control + F5, or Control + R,
+and then you'll be able to see your object
+and the batch job in your destination bucket.
+So let's go over to my exam tips.
+So just remember what S3 replication is.
+It allows you to replicate from a source bucket
+to a destination bucket.
+Essentially, you can replicate objects
+from one bucket to another.
+Objects in an existing bucket
+are not replicated automatically.
+You have to go in and create that batch job
+like we just did in the demo.
+And delete markers are not replicated by default either.
+So that is it for this lecture, everyone.
+Essentially, where this will come up
+is just talking about how do you back up S3
+from one region to another?
+It'll be resiliency questions.
+So you maybe have critical infrastructure in Japan
+and you need to protect against earthquakes.
+So you need to replicate it over to somewhere
+where there's not many earthquakes, such as Australia.
+How do you do that?
+Well, you just turn on S3 replication.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture
+Thank you.

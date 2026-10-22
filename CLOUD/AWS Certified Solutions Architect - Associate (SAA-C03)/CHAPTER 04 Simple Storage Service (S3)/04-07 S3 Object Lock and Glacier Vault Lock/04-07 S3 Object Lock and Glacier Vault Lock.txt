@@ -1,0 +1,147 @@
+Okay. Hello, Cloud Gurus.
+And welcome to this lecture.
+In this lecture, we're going to look at S3 Object Lock
+and Glacier Vault Lock.
+So we're going to start off with S3 Object Lock
+and we'll look at what it is.
+It comes with 2 different modes.
+It comes with governance mode and compliance mode.
+So we'll explore what they are.
+We'll then look at retention periods and legal holds,
+and then we'll move on to what Glacier Vault Lock is,
+and on to my exam tips.
+Now, this definitely comes up in the exam, so
+you will need to know what S3 Object Lock is.
+And essentially, you use it to store objects
+using a WORM model.
+And a WORM model just stands for write once, read many.
+So you can only write once to your objects,
+but you can read them many, many times.
+And it can help prevent objects from being deleted
+or modified for a fixed amount of time or indefinitely.
+And you can use S3 Object Lock
+to meet your regulatory requirements.
+So it could be that you have regulatory requirements
+from the federal government, for example,
+and these regulatory requirements could require WORM
+storage, or you could also use it to add an extra layer of
+protection against object changes and deletions.
+So we have our 2 different modes,
+and we'll start with governance mode.
+And in governance mode,
+users can't overwrite or delete an object version
+or alter its lock settings
+unless they have special permissions.
+So with governance mode, you basically protect objects
+from being deleted for most users,
+but you still grant some users permission
+to alter the object or retention settings of that object
+or even allow those users to delete the object if necessary.
+And so this is the key thing.
+Essentially, if you get a scenario question
+where you do need some of your users
+to be able to alter an object, or to delete an object,
+then you want governance mode.
+If, however, you want to make sure
+that nobody can delete an object,
+then you want compliance mode.
+And this is where a protected object version
+can't be overwritten or deleted by any user,
+including the root user in your AWS account.
+And so when an object is locked in compliance mode,
+its retention mode can't be changed
+and its retention period can't be shortened.
+So you could set its retention mode and period for a year,
+and you can't then go in and change that object,
+even if you're the root user.
+So compliance mode ensures an object's version
+can't be overwritten or deleted
+for the duration of the retention period.
+So if you get a scenario-based question where it's talking
+about protecting your data and so that no users
+can go in and alter that data or delete that data,
+then you want S3 Object Lock with compliance mode.
+In terms of our retention periods--
+so a retention period protects an object version
+for a fixed amount of time.
+When you place a retention period on an object version,
+Amazon basically stores an S3 timestamp
+in the object's version's metadata.
+Metadata is just data about data.
+And this basically indicates
+when the retention period expires.
+So you might want to place a retention period
+for 10 days, 100 days, or a year.
+And after the retention period expires,
+the object version can be overwritten or deleted
+unless you also place a legal hold on the object version.
+And of course you might be wondering, "What's a legal hold?"
+Well, legal holds basically are S3 Object Locks
+that also enable you to place
+a legal hold on the object version.
+And so it's like a retention period,
+except a legal hold prevents an object version
+from being overwritten or deleted.
+However, a legal hold doesn't have
+an associated retention period
+and remains in effect until it's removed.
+So you have to remove a legal hold
+in order to go in and delete that object.
+So legal holds can be freely placed and removed by any user
+who has the S3 put object legal holds permission.
+So remember that going into your exam as well.
+So that's Object Locks covered off.
+Next thing we need to look at is Glacier Vault Lock.
+So Glacier Vault Lock basically allows you to easily deploy
+and enforce compliance controls for individual
+S3 Glacier vaults with a vault lock policy.
+So you can specify controls, such as WORM,
+in a vault lock policy
+and lock the policy from future edits.
+And once locked, the policy can no longer be changed.
+So essentially, Glacier Vault Lock
+is a way of applying a WORM model to Glacier.
+That's all Glacier Vault Lock is.
+Just remember the WORM model,
+which is write once and read many.
+And if you hear that being applied
+in a scenario-based question, they're talking about Glacier,
+and you're going to want to store it in Glacier Vault Lock.
+So onto my exam tips.
+So if you see the term WORM in a scenario based question
+and it's talking about S3,
+then you're going to want to use S3 Object Lock
+to store your objects using a write once, read many model.
+Object Lock can be done on individual objects,
+or it can be applied across the bucket as a whole.
+And Object Locks come in 2 modes which we covered off.
+So we have governance mode and compliance mode.
+So remember that compliance mode is simply
+where a protected object version
+can't be overwritten or deleted by any user whatsoever.
+Whereas governance mode basically prevents most users
+but you can have some users who are able
+to either alter an object or delete it.
+Finally, moving on to S3 Glacier Vault Lock.
+If you see a scenario-based question
+where it's talking about WORM models with Glacier,
+I want you to think immediately of S3 Glacier Vault Lock.
+This allows you to easily deploy
+and enforce compliance controls
+for individual S3 Glacier vaults with a vault lock policy.
+And you can specify controls, such as WORM,
+in a vault lock policy
+and lock the policy from future edits.
+And once locked, the policy can no longer be changed.
+So again, to summarize,
+if you see a scenario-based question, and
+they're talking about S3 and you want to use a WORM model,
+I want you to think of S3 Object Lock.
+That comes in 2 different modes,
+compliance mode and governance mode.
+If they're talking about a WORM model with Glacier,
+I want you to immediately think of S3 Glacier Vault Lock.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

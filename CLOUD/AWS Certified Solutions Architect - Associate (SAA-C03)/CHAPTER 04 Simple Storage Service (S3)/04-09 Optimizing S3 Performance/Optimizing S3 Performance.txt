@@ -1,0 +1,181 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can optimize S3 performance.
+So the first thing we're going to look at is S3 prefixes,
+what they are. We'll then look at how we can use prefixes
+to optimize S3 performance.
+We'll then look at limitations with KMS--
+so limitations when we're using Amazon's encryption service.
+We'll then look at S3 performance in terms of our uploads,
+then in terms of our downloads,
+and then we'll go on to my exam tips.
+So let's start with S3 prefixes.
+So when we create a bucket,
+we have our bucket name and then after our bucket name,
+we can have folders, so we can have folder1
+and then let's say subfolder1
+and then we have our object name,
+so it could be myfile.jpeg.
+So the S3 prefix is just the folders inside our buckets.
+Okay, that's all it is.
+So I want you to think of folders
+or directory inside your S3 buckets.
+That is what an S3 prefix is.
+So in this example, we've got another S3 prefix,
+so we've got folder2. It also has subfolder1.
+And so the prefix here would just be folder2
+and then subfolder1.
+And this is a completely separate prefix
+because we've got folder1 and then folder2,
+if you follow.
+We then could have folder3
+and have nothing inside it,
+no other sub-directories,
+but that would then be its own prefix,
+and then we could have folder4 with subfolder4
+and that would be the prefix.
+So the prefix is just the folders.
+It doesn't include the object name and the file type--
+it's literally just the folders within the bucket.
+So how can we use S3 prefixes to get better performance?
+Well, S3 has extremely low latency
+and you can get the first byte out of S3
+within about 100 to 200 milliseconds
+and you can also achieve a high number of requests.
+So let's say 3,500 requests for put, copy, post, delete
+and 5,500 get requests
+or head requests per second per prefix.
+So in other words, the more prefixes
+that you have inside your S3 buckets,
+the higher performance you're going to be able to get,
+and the key number is to look at the 5,500 get requests.
+So say I'm trying to access an object in my bucket,
+I'm doing a get request,
+I get 5,500 requests per second per prefix.
+So if we wanted to get better performance out of S3
+in terms of reads, what we would do is we'd spread our reads
+across different prefixes or across different directories.
+So, for example, if you're using 2 prefixes,
+you'd be able to achieve 11,000 requests per second.
+And in our last example,
+we looked at 4 different types of prefixes.
+So subfolder1--or, sorry, folder1, folder2,
+folder3, folder4.
+If we were to use 4 different prefixes,
+then we're going to get 5,500 requests times 4,
+which would give us 22,000 requests per second.
+So the key thing to take away from this is the more folders
+and subfolders you have in your bucket,
+the better performance you can get from S3
+for your applications.
+Moving on to some limitations with S3.
+So when you're using Key Management Service,
+which is Amazon's encryption service,
+if you're using SSE-KMS
+to encrypt and decrypt your objects,
+you have to keep in mind
+that there's actually built-in limits within KMS.
+So when you upload a file, you're going to call this thing
+called a generate data key in the KMS API
+and when you download a file,
+you call the decrypt in the KMS API.
+And the key thing, like I said, to remember
+is that KMS comes with built-in limits.
+Now the built-in limits are region specific.
+However, it's going to be roughly 5,500,
+10,000, or 30,000 requests per second
+and uploading and downloading is going to count
+towards your KMS quota.
+And currently, you can't even request
+a quota increase for KMS.
+If you're getting an encryption question inside your exam,
+you might want to consider just using the native S3
+encryption that's built-in rather than using KMS.
+If you're asked to troubleshoot a KMS question,
+it could just be that you're hitting this KMS limit
+and that could be what's causing your downloads
+or your requests to be much, much slower.
+So moving on to uploads,
+and we're going to look at multipart uploads
+and this is recommended for files
+that are over 100 meg and it's actually required
+for any files over 5 gigabytes in size.
+And what multipart uploads does is basically
+it allows you to parallelize your uploads--
+I hate saying that word--parallelize your uploads.
+And this basically allows you to increase your efficiency.
+So you're basically taking a big file,
+you're cutting it into chunks,
+and then you're uploading those chunks all at the same time,
+you're doing parallel uploads,
+and this increases your efficiency.
+So again, if you see something
+about a scenario-based question where it's talking
+about how you can get a better performance doing uploads,
+I just want you to think of multipart uploads.
+Then we have a very similar scenario for downloads.
+So we've got S3 byte-range fetches
+and this basically parallelizes your downloads
+by specifying a byte range.
+So you can say, "Hey, I want the first 128 bytes
+"and then I want the next 128 to 256 bytes, etc."
+And if there's a failure in the download,
+it's only for that specific byte range.
+So we've got our S3 bucket, we've got our users,
+we've got a big file that's sitting inside our S3 buckets.
+And of course you wouldn't do 128 bytes.
+You might say, "Okay, I want to download 1 gig at a time
+"or 1-gig chunks."
+And let's say the file is a 5-gig file,
+you could split that into 5 different 1-gig chunks
+and download them all at the same time.
+So that's all it is, it's parallel downloads,
+and it's just called S3 byte-range fetches.
+When you do uploads, it's called S3 multipart uploads.
+So that's all S3 byte-range fetches are,
+they can be used to speed up your downloads
+and they can be used
+to download partial amounts of the file.
+And this could just be the header information, for example.
+So on to my exam tips, just remember what a prefix is.
+It's simply the folders and subfolders
+within your S3 bucket.
+The more prefixes that you use
+with your applications using S3,
+the better performance you're going to get.
+So you can always achieve a high number of requests.
+You can do 3,500 puts, copies, posts, and deletes
+and 5,500 get and head requests per second per prefix.
+So the more prefixes you have, the faster performance.
+So you spread your data and your reads
+across different prefixes.
+I gave the example 5,500, so if you're using 2 prefixes,
+you could then achieve 11,000 requests per second.
+If you're doing it with 4 prefixes, you could achieve
+22,000 requests per second.
+Moving on to KMS, just remember if you are using SSE-KMS
+to encrypt your objects in S3,
+you must keep in mind that there are built-in limits.
+So uploading and downloading data will count
+towards the KMS quota.
+It is region specific, but it's either going to be 5,500,
+10,000, or 30,000 requests per second.
+And currently you can't request a quota increase for KMS.
+And just remember when you're uploading files
+to use multipart uploads to increase your performance
+when uploading your files to S3.
+If there's any file that's over 100 meg,
+then you should be using it.
+And if you're doing it for any file over 5 gigs,
+you're forced to use it.
+And then when you're downloading files,
+remember to use S3 byte-range fetches
+to increase your performance
+and it's basically doing the opposite.
+You're splitting up the files into different byte ranges
+and you're downloading them all at the same time.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know. If not,
+feel free to move on to the next lecture.
+Thank you.

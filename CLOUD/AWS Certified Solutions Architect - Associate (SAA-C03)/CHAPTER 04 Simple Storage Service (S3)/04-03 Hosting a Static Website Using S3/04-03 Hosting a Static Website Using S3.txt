@@ -1,0 +1,225 @@
+Okay, hello cloud gurus
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can host a static website using S3.
+So we're gonna explore what static websites on S3 are,
+then we're going to talk about automated scaling,
+then I'll show you how to actually go in and do this
+and then we'll move on to my exam tips.
+So you can use S3 to host static websites.
+And statics just means they're not dynamic,
+so they basically don't change.
+So things like HTML websites, for example.
+Dynamic websites are those that require database connection
+and they can't be hosted on S3.
+But S3 is great for static webpages.
+And prior to me working at A Cloud Guru,
+one of my jobs as a solutions architect
+was to help the film industry basically release trailers.
+And we would always put these trailers on S3
+and the websites themselves on S3.
+That way it could basically handle the load.
+We didn't have to worry about load balances
+and you know, capacity planning, et cetera, et cetera.
+S3 did it all for us.
+And that's because S3 scales automatically to meet demand.
+And many enterprises will put their static websites on S3
+when they think there's going to be
+a large number of requests.
+And like I said, for a movie preview.
+So that's where I've used it in real life.
+So let's go ahead and have a look at
+how we can host our websites on S3.
+Okay, so in the resources section of this course,
+you'll find a zip file
+and inside that zip file are three files.
+So we've got our bucket permissions, our index.html,
+and our error.html.
+So this is JavaScript object notation
+and this is our bucket permissions.
+And basically, we're going to use this
+to make our bucket public
+and we will need to change this line of code here on line 12
+so that it points to our bucket.
+So we'll need to put in our bucket name in there.
+In terms of our index.html,
+it's just a very straightforward html page.
+It basically just says hello cloud gurus.
+And then it has a picture of the A Cloud Guru logo.
+And then if we were to go to our website
+and type in a address that doesn't exist,
+we want it to come up with an error page.
+And this will be the error page,
+just says, sorry cloud gurus, there has been an error.
+So really, really basic website.
+So go ahead and download this in the resources section,
+unzip it, and then let's head over to the AWS console.
+Okay, so here I am in the AWS console.
+Now to find S3, I can just type in S3 up here
+and I can go ahead and click on that.
+And this is a new AWS account,
+so I don't have any buckets in here just yet,
+but we'll go ahead and create a bucket.
+Now, in here, I'm gonna give my bucket a name.
+This name does need to be unique
+so I'm gonna call it a cloud guru website.
+And then I'm just gonna do a whole bunch of
+random letters and numbers.
+And in here, I'm gonna put it into US East North Virginia.
+And then if I scroll down, we can see our object ownership.
+And we're just gonna go with the recommended setting.
+So all objects,
+which basically files are owned by this account.
+And we'll scroll down and we want to uncheck this.
+So right now, by default,
+block all public access is checked.
+Now, of course this is gonna be a website
+so we want the public to be able to access it.
+So we'll uncheck that.
+And then we have to go in and say,
+hey, I acknowledge that the current settings
+might result in the buckets,
+in this bucket, and the objects within it becoming public.
+Gonna leave everything else as default.
+And I'm gonna go ahead and create my bucket.
+That is now creating my bucket.
+We can see it in here.
+It says that the access the objects can be public.
+I'm gonna go ahead and click into the bucket
+that I just created.
+So in here, we can see my bucket.
+We've got our objects
+and objects are simply files
+and there's no files in this bucket just yet.
+We've got properties, permissions, metrics,
+managements, and access points.
+If we go over to properties
+and we scroll all the way to the very bottom,
+we can see that static website hosting down here
+and it's been disabled.
+So all we need to do is go ahead and hit edit
+and we're going to enable static website hosting.
+And we're going to in here, specify our index.
+So this is the homepage of our website.
+So if someone,
+it's the page that's going to load by default
+if someone visits the URL
+so that's just going to be index.html.
+And our error document, which is optional,
+we're going to do as error.html.
+And so I'm gonna scroll down and hit save changes.
+That has now saved the changes.
+If we scroll all the way down to the bottom,
+we can now see that it's enabled.
+And in here, we've got our website endpoint.
+So if I was to click on that or load our bucket,
+the problem is is that we don't have any files in it yet.
+So let's go ahead and go back to our objects
+and we're gonna upload some files in here.
+And all I'm gonna do is hit add files.
+I'm gonna add my files in here.
+So I just need my index.html and my error.html.
+These are available in the resources sections of the course.
+So if you just click on resources and download the zip file,
+you have a zip file with these three files in it.
+I'm gonna go ahead and hit open
+and then I'm gonna go ahead and hit upload.
+And that is now uploading the two files to my bucket.
+You can see that it is successful.
+And so if I just go ahead and hit close,
+I'll be able to see my two objects in here.
+So I've got my two files in here.
+What I now need to do is make this bucket public.
+So any files or objects that I put into the bucket,
+I need to be able to make them public.
+And to do that, the quickest way is to go to permissions
+and to go down to our bucket policy and hit edit.
+And in here, we've got our JSON policy editor
+and we basically just need to put our policy in here
+and apply that to the entire bucket.
+So you did download that
+in the resources section of the course
+called bucket policies permissions.
+I'm just open that up
+and then I'm going to paste it in here.
+And so it should look exactly like this.
+And essentially, it's a statement
+and it's allowing basically everyone to get on S3,
+get objects, so they're able to get the objects.
+And the resource we have to specify in here.
+So it's the Amazon resource name.
+And then we just need to enter in the bucket name in here.
+Now if you look up here,
+we've actually got the entire field that we need.
+So we've just copy this in and then paste it over here
+so that we still have this forward slash,
+and then a wild card.
+Then that will basically give us a bucket policy
+that will make everything public.
+So all we need to do is paste that in,
+go ahead and hit save changes.
+And that has now made this bucket public.
+And so what we can do is we can go over to our properties.
+If we scroll all the way down,
+we have our bucket website endpoint.
+If we click on that, there we go.
+We can see that it's loaded the index.html.
+You can mess with the address bar if you want
+and type something in wrong and you will get an error page.
+So I've just done that.
+And here we go,
+sorry, cloud gurus, there has been an error.
+So that's our error.html.
+And so if you go back to Amazon S3 and click on buckets
+and if you do a force refresh,
+so a Control F5 or a Command R on a Mac,
+you'll be able to see that the access setting
+has been changed to public.
+So it is now telling us
+that this is a public bucket.
+And that is it really.
+That's how we create basically.
+And that's it really,
+that's how we create websites using S3.
+Now, these are static websites,
+they're not dynamic websites
+so it is not connecting into a database on the backend,
+it's just gonna be HTML files.
+But it can be great for things like movie launches
+or anything where you get very unpredictable traffic
+and you just need a static webpage.
+S3 will scale automatically to deal with your load.
+So you don't need to worry about things like
+load balances and all of that.
+If you can have a static website
+and you're doing a big launch, for example
+then this is a great way of doing it.
+It scales automatically
+and it saves you lots and lots of money.
+So let's move on to my exam tips.
+So going into the exam,
+if you see any scenario based questions
+about static websites, I want you to instantly associate
+the word static website with S3.
+So just remember going into the exam bucket policies
+are used to make entire buckets public.
+So you don't need to keep making individual objects public
+and that will save you a lot of time
+when you're dealing with websites
+that have thousands of different HTML pages.
+Also, remember that it's static content only.
+So you can only use S3 to host static content, not dynamic.
+And dynamic is essentially
+where it's got a database connection.
+And then finally, automated scaling.
+Just remember that S3 scales automatically with demand.
+So it can be great tool in a scenario based question
+where you're not sure of the demand.
+It's a static website, you may as well put it up on S3
+because then you don't have to deal with things like
+load balances and EC2 instances, and provisioning,
+et cetera, et cetera.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

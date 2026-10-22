@@ -1,0 +1,208 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at
+how we can secure our buckets with S3
+using the block public access setting.
+So what we're going to learn about in this lesson,
+we're just going to recap what we learned in the last
+lesson, object ACLs versus bucket policies.
+We're then going to go into the console
+and we're going to create our very first S3 bucket.
+We're going to upload some files to it
+and try and make those files public.
+We're going to see how we can do that,
+and then we'll go on to my exam tips.
+So in the last lecture, we looked at object ACLs,
+or access control lists, versus bucket policies.
+So access control lists work on an individual object level.
+So you can basically make an individual file
+public or readable.
+You can adjust the permissions,
+so that certain AWS users could access
+and read that file, or download it,
+or write to that file, or delete it,
+and then deny other AWS users the right to do that.
+And you can do that on an individual object or file level.
+However, if you want to make everything public
+in your bucket, for example,
+you would do that using a bucket policy,
+and we are going to do that
+in a couple of lectures coming up.
+So bucket policies are bucket wide.
+They apply on an entire bucket, whereas object ACLs
+go down to the individual object level.
+And it's really important
+you remember that going into your exam.
+So now that you know that,
+let's go ahead and log in to the AWS console.
+Okay, so here I am in the AWS console.
+If I click on Services and go all the way to the bottom,
+I just need to click on Storage,
+and that will open up our storage.
+And then we can go ahead and click on S3.
+Now, if you've never created an S3 bucket before,
+you're going to go and get this landing page.
+So all I'm going to do is go ahead and hit Create Bucket.
+And then we're going to put our bucket name in here.
+Now, the first thing I want you to notice is up here,
+we have a global name space.
+So this is all across AWS globally.
+Now, we looked at identity access management
+in the last section, which is also operates
+across a global space.
+S3 operates across a global space as well,
+but those are basically some of the only few services
+that do operate globally.
+Every other service will operate regionally,
+and with S3, we can actually deploy our buckets
+into a specific region,
+but the entire S3 console is a global name space.
+And that's important to know
+when you're choosing your bucket name.
+So let's have a look at my bucket.
+It has to be a unique name.
+Now, I could try my AWS bucket, as it suggests,
+and go ahead and try and hit Create Bucket.
+But of course, straight away, it says,
+the bucket with the same name already exists.
+So what you need to do is come up with a unique name.
+So I'm just going to do Ryan, and then 3141,
+and then Kroonenburg, so my surname,
+and then I'm going to go ahead and click,
+and that should then be available.
+In here, I've got my AWS region.
+So this is where we're going to deploy
+the bucket regionally.
+I'm just going to use that as US East Northern Virginia.
+Object ownership, we're
+going to cover this off a little bit later in this video.
+So just leave it as default.
+Same with block public access settings for this bucket.
+We're just going to leave everything as default.
+Versioning, we're going to cover off later on
+in this section of the course, same with encryption.
+So all you need to do
+is just enter a unique name in there
+and go ahead and create your bucket.
+That is now creating my bucket.
+And we can see, my bucket is in here,
+Ryan Kroonenburg 3141.
+And this is a bucket I had a little while ago deleted,
+and it just hasn't cleared out of the S3 screen.
+So just ignore that, but we can see my bucket is in here.
+So what I'm going to do now is just go ahead and click in
+here. And what we're going to do
+is upload a couple of objects to our bucket.
+So what we're going to do is go in here and click Add Files.
+And I'm just going to select these 2 files.
+So picture of me and my colleague Faye at New York Summit,
+and this is our office dog, Ralphie.
+So I'm going to go ahead and click in there.
+And then I'm just going to go ahead and click Upload.
+That will now start uploading my files.
+You can see it up here,
+and it should be done in a couple of seconds.
+And once that's done, it's going to give us a success code.
+So it says, few details below.
+It's been updated,
+and it's actually a 200, HTTP 200 success code,
+and that could sometimes come up in your exams,
+but probably not anymore.
+So now that has uploaded,
+we're going to go ahead and hit Close,
+and we can see our 2 files in here.
+Our files are basically called objects,
+and we can click on the object themselves.
+If we scroll up to the top, you can see here, object URL.
+And we can try and click in here,
+but we're going to get an access denied setting.
+So even though our object exists within S3,
+currently, it's denied access for public read.
+So what we want to do is learn how we can make
+each individual object publicly accessible,
+and it used to be super easy,
+but the problem was everyone kept
+making objects publicly accessible
+that maybe shouldn't have been publicly accessible,
+and they were considered security breaches.
+So now it is actually pretty hard
+to make an object publicly accessible
+using the default bucket settings.
+You really need to know what you're doing.
+So we can see here that we are in our bucket.
+The first thing we need to do is go ahead
+and click on Permissions,
+and then you can see we had block public access.
+So in here, what we want to do is go ahead and hit Edit,
+and we want to uncheck that box.
+And then we're going to go ahead and hit Save.
+And then we're going to type in confirm.
+So this is the first step
+to making our objects public within S3.
+So we then go back to our objects.
+We can click in here,
+and we can try and go to Actions,
+and then go all the way to the bottom and say,
+Make public using ACLs.
+But you can see that is grayed out.
+So we still can't make this object public.
+So what we need to then do
+is we need to go over to permissions again,
+and then we need to scroll all the way down
+to our object ownership.
+We need to click in here and go, Edit.
+So we had ACLs disabled, which is recommended.
+So when you are making your buckets public or not,
+they basically suggest doing it on a bucket level,
+not on an individual file or object level,
+but for this purposes of this lecture, we
+want to see how we can do it on an individual object level.
+We'll learn how to do it
+on a bucket level later on in this section of the course.
+So what we're going to do is just going to click in here
+and say, ACLs enabled.
+So in here, we can see a warning message,
+enabling ACL turns off the bucket owner
+enforced settings for object ownership.
+You just need to click in here,
+I acknowledge ACLs will be restored.
+Go ahead and hit Save Changes.
+Okay, so now, if we go back to the objects in our bucket,
+we can see in New York Summit and Ralphie.
+So if we just click in here,
+and then go to our actions,
+and then click Make Public Using Object ACL,
+then you can go ahead and click Make Public,
+and there you can see that has successfully been done.
+And then we can do the same for our office dog.
+So we go over to actions,
+click Make Public Using Object ACL,
+and go ahead and hit Make Public.
+So that has now been done as well.
+So now, let's test this.
+So let's click on Ralphie.
+We'll click on this URL.
+And now, we can see there's Ralphie, our office dog.
+Keep being awesome, Cloud Gurus.
+And we can share that URL to anyone on the internet,
+and they'll be able to access that picture.
+So let's go over to my exam tips.
+Okay, so going into the exam,
+just remember that buckets are private by default.
+So when you create an S3 bucket, it is private by default,
+and that includes any objects within it.
+And you have to allow public access
+on both the bucket and its objects
+in order to make the bucket
+and those objects public.
+Object access control lists, or ACLs:
+You can make individual objects public
+using object ACLs.
+Bucket policies, you can make entire buckets public
+using bucket policies.
+And every time you upload an object to S3
+and it's successful, you'll receive an HTTP 200 code.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to next lecture.
+Thank you.

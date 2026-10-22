@@ -1,0 +1,195 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+In this lecture we're going to look at how we can use
+encryption to secure our S3 buckets.
+So, look at the different types of encryption available.
+We'll look at how we can enforce
+server-side encryption using bucket policies.
+Then we'll go in and actually use the console
+to encrypt our objects.
+And then we'll move on to my exam tips.
+So it's really important that you understand the different
+types of encryption going into your exam.
+It is tested all the time.
+So first of all, we have encryption in transit.
+So this is when you're sending objects
+to and from your bucket.
+And we do this using SSL certificates, TLS.
+And typically you'll see this whenever you access,
+you know, S3 using HTTPS.
+The HTTPS just means that it's encrypted.
+So the S at the end means it's encrypted
+using SSL, goes over port 443, and that means
+that if there was anyone in between your computer
+and, let's say, your S3 bucket who is trying to eavesdrop,
+well they wouldn't be able to unlock the contents of your
+information that you're sending because it's encrypted.
+Next we have encryption at rest.
+So as opposed to in transit this is when
+the object is actually inside S3
+or sitting on your computer, for example.
+That's all it means.
+It's at rest, you're not sending it.
+So we have encryption at rest,
+which is known as server-side encryption.
+And there's three different types.
+So we have SSE, which is server-side encryption, S3.
+So S3 is where S3 manages the keys.
+So AWS manage all the encryption and decryption for you.
+You don't need to worry about keys or anything like that.
+And it uses AES 256-bit encryption.
+And this is the most common type of encryption.
+It is the easiest to use.
+Next we have SSE-KMS, and we're gonna cover off KMS
+in the security section of the course.
+But KMS just stands for key management service.
+And this is essentially where you work with Amazon
+on your own key management using the key management service.
+So you can use KMS keys to encrypt your objects as well.
+And then we have server-side encryption C or SSE-C,
+which is where you provide the keys.
+So that's the three different types.
+So we've got S3, which is where
+it's just done by the S3 service.
+KMS, This is where you use your keys
+and that's provided by the KMS service.
+And then there's customer-provided keys
+and this is where you provide the keys.
+And then finally we also have
+encryption at rest client-side encryption.
+So this will be where you encrypt it,
+your objects on your desktop, for example,
+and then you upload it to S3.
+So you control the encryption and the decryption
+and all your objects sitting inside S3 are encrypted.
+Now it used to be that you could upload your objects
+to S3 without them being encrypted
+and that you would turn encryption on.
+So it'd be something that you would opt into.
+However, that is no longer the case.
+Service-side encryption is now enabled by default.
+So anything you put up into S3 will be encrypted by default.
+So all Amazon S3 buckets have encryption configured
+by default, all objects are automatically encrypted
+by using server-side encryption with Amazon S3 managed keys.
+And a key thing to remember is that this encryption settings
+applies to all objects in your Amazon S3 bucket.
+So encryption is enabled by default when you create a bucket
+and it applies to all objects within that bucket by default.
+So if we were to upload a file to S3
+we're essentially sending this, it's a PUT request.
+So we're going to put a PUT request into S3.
+And every time a file is uploaded to S3
+a PUT request is initiated by our browser.
+And a browser is essentially
+just sending this information here.
+So, as I said earlier, encryption is turned
+on by default when you create a bucket.
+And that's a relatively new change.
+However, sometimes it does take a while
+for Amazon to update the exam questions.
+And a very popular exam topic
+was how you can enforce server-side encryption.
+So how can you make someone encrypt an object
+when uploading it to S3?
+Now as I explained earlier, encryption's
+turned on by default, so you're forcing them anyway.
+But you just need to understand the legacy
+in case it does come up in the exam.
+So, how do we enforce service side encryption?
+So, in order to enforce service side encryption
+we've got two different options.
+You can see up here we've got our
+x-amz-server-side-encryption.
+So if the file's to be encrypted at upload time
+then the x-amz-server-side-encryption parameter
+will be included in the request header.
+And you've actually got two options.
+You've got x-amz-server-side-encryption AES256,
+which is basically just saying use S3-managed keys.
+And then we have x-amz-server-side-encryption KMS,
+and this is where you're using KMS-managed keys.
+And so this PUT request is put into the header.
+So when this parameter is included in the header
+of the PUT request it tells S3 to encrypt
+the objects at the time of the upload
+using the specified encryption methods.
+So this is basically your browser is creating
+this PUT request with those parameters.
+Now what you can do is you can
+basically use a bucket policy.
+And you can see the parameter down here in the orange.
+So we've got our x-amz-server-side-encryption.
+This is using AES256.
+You can see it in there.
+And so this request header tells S3 to encrypt the file
+using server-side encryption S3 at the time of the upload.
+Now what you can do is you can create a bucket policy
+that denies any S3 PUT request
+that doesn't include the x-amz-server-side-encryption
+parameter in the request header.
+So that's how you can do it using bucket policies.
+So don't worry if this is a bit technical.
+The actual parameters they might test you
+on in the developer associate certification.
+In the solutions architect associate you probably won't see
+the specific parameters in the question.
+At a high level all you really need to know
+and to remember going into your exam is that you can create
+bucket policies that deny any S3 PUT requests
+that doesn't include encrypted objects.
+It doesn't include the encryption parameter
+in the request header.
+So you can enforce encryption using bucket policies.
+So let's go over to the AWS console and look at how we can
+create buckets that are automatically encrypted.
+Okay, so here I am in the AWS console.
+And if I just click on S3, you can see my buckets
+that I've created in the last couple of lectures.
+I can go ahead and create a new bucket
+and I can enter in some random name and number in here.
+And if I scroll down to Encryption, we'll be able
+to see that encryption is turned on by default.
+So service-side encryption is automatically applied
+to new objects stored in this bucket.
+And then I can choose my difference encryption types.
+So the default one is server-side encryption
+with Amazon S3-managed keys.
+So Amazon are managing the keys for us.
+We can also use key management service,
+which we'll learn a bit later on in the course.
+And then we can have dual-layer server-side encryption
+with AWS key management service keys.
+And that is a bit out of the scope of this course,
+but essentially we have three different encryption types.
+So encryption is turned on by default.
+I'm not gonna create this bucket, but if we go back
+to the bucket that I created a little bit earlier
+in the lifecycle rules one, we can actually click
+on one of the objects, and you can click in here.
+And if you scroll down, you'll be able to see
+down here, Server-side encryption settings.
+So server-side encryption with Amazon S3 managed keys.
+So it's all ready encrypted.
+That object is encrypted within AWS.
+So just remember when you create a bucket,
+it's going to have a encryption turned on by default,
+and that may come up in your exam.
+So let's go over to my exam tips.
+Server-side encryption S3.
+You've got server site encryption KMS.
+And we've also got it where you manage your own keys
+which is server-side encryption, customer managed.
+And then we have client-side encryption.
+And this is where you encrypt the files yourself
+before you upload them to S3.
+And then finally, just remember going into your exam,
+that you can enforce encryption using a bucket policy.
+And you can do this encryption using a bucket policy
+which basically denies all PUT requests
+that don't include the x-amz-server-side-encryption
+parameter in the request header.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

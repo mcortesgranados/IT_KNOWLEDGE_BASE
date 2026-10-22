@@ -1,0 +1,306 @@
+Okay.
+Hello, Cloud Gurus.
+And welcome to this section of the course.
+In this lecture, we're going to do an overview of S3.
+S3 is 1 of the oldest services with AWS.
+And for that reason,
+it features very heavily in a lot of exams actually.
+But certainly in the Certified Solutions
+Architect Associate exam.
+This is 1 of the bread-and-butter services
+you need to know inside out in order to pass your exam.
+So what are we going to learn in this lesson?
+Well, we're going to learn what S3 is.
+We're going to learn the basics around S3.
+We're going to learn how we can work with S3 buckets.
+We'll look at key-value stores.
+We'll look at availability and durability.
+We'll look at characteristics of S3,
+and then we will look at how we can secure our data.
+We'll look at the consistency model
+when we upload data to S3,
+and then we'll go on to our exam tips.
+And then in the next lecture, we're going to have a look
+at how we can create an S3 bucket.
+So what is S3?
+S3 stands for Simple Storage Service
+and essentially it's object storage in the cloud.
+It provides secure, durable,
+and highly scalable object storage.
+And S3 allows you to store and retrieve any amount
+of data from anywhere on the web at a very low cost.
+So it's extremely scalable.
+And the other cool thing about S3
+is it's really, really simple to use.
+It comes with this really easy-to-use web interface,
+which we will look at in the next lecture.
+So S3 is object-based storage, and basically it manages data
+as objects rather than in file systems or data blocks.
+And all that means is S3 is basically a place
+where you can store your files.
+So you can upload any file type that you can think of to S3.
+So you can upload things like image files, text files,
+videos, web pages--you name it.
+And that's what you can store in S3.
+What you don't want to do with S3
+is install an operating system.
+So you can't run or install Windows or Linux on S3.
+You can't run databases off S3.
+Basically S3 is just a place to store your static files.
+So your files that don't change,
+and that's all S3 is: object-based storage.
+So in terms of the basics,
+you get unlimited storage with S3.
+The total volume of data
+and the number of objects you can store is unlimited.
+And objects can be up to 5 terabytes in size.
+So you can start with 0 bytes
+and go all the way up to 5 terabytes.
+So you can store some pretty big files in S3.
+So where do we store our files?
+Well, we store our files in a thing called a bucket.
+An S3 bucket is basically a folder inside S3.
+So you might have a bucket for your test and dev.
+You might have a bucket for your finance department.
+You might have a bucket for your vacation photos from 2015.
+Basically everywhere you store your files
+is in these things called buckets.
+Now working with S3 buckets,
+what you need to understand is it's a universal namespace.
+So if you try and register the name test-bucket,
+I guarantee you that was taken, you know, over a decade ago.
+Somebody owns the bucket test-bucket.
+So all AWS accounts share the S3 namespace.
+And for that reason,
+your S3 bucket name has to be globally unique.
+You won't be able to register acloudguru, for example,
+because we already own that.
+You won't be able to register test-bucket.
+But you might be able to register a bucket in your name
+with your date of birth or something like that.
+And you'll need to understand how the S3 URLs work
+because this can come up in the exam.
+So when you create a bucket--
+let's say it's called acloudguru--
+the URL that will be generated will always
+be https:// then the name of the bucket, then .s3,
+and then . the region that it's going to be in.
+So in here we've got acloudguru.s3.us-east-1
+and then it's always .amazonaws.com,
+and then / and then essentially the key name,
+so this is your file name,
+so it could be Ralphie.jpg.
+Ralphie is the A Cloud Guru office dog.
+So when you upload a file to S3,
+if that upload is successful,
+your browser will receive a HTTP 200 code
+and that can be a very popular exam topic.
+So just remember that going into your exam as well.
+So I mentioned before that S3 basically works
+off a key-value store.
+So the key is simply the name of the object.
+So if we were to upload a photo of the A Cloud Guru
+office dog, Ralphie, the key would be Ralphie.jpg.
+We then have the value, which is the data itself.
+And this is just made up of a sequence of bytes.
+We also can have the version ID.
+This is when we have versioning enabled on the bucket
+and we're going to have a look at that later on
+in this section of the course.
+But this is important for storing
+multiple versions of the same object.
+So you can have multiple versions of the file within S3.
+And then we have our metadata.
+And throughout this course,
+you're always going to hear the word metadata.
+It relates to various things within AWS.
+Just remember metadata is simply data about data.
+So in this case with S3,
+the data about the data that we're storing.
+So this could be the content type,
+this could be the last time that the file was modified,
+etc., etc.
+So that's what we have at a high level
+when we upload our objects to S3.
+We have the key, we have the value, the version ID,
+and then the metadata as well.
+So just remember S3 is a safe place to store your files.
+The data is always spread across multiple devices
+and facilities in order to ensure
+availability and durability.
+So it's not just in a single data center in a single server.
+It's always spread across multiple devices
+and multiple facilities.
+It can be across multiple Availability Zones,
+but we'll come to that in a second.
+But just remember it's done this way to ensure availability
+and durability as well.
+So S3 is highly available and highly durable
+and it's built for availability.
+It's built for 99.95% to 99.99%
+service availability depending on the S3 tier.
+We're going to cover off the tiers in a second.
+And then it's also designed for durability.
+And durability just means
+is your files going to be lost at some point?
+And it's designed for what's called 11 9's durability.
+So this is 99.999999999.
+I'm not going to read it all out,
+but it goes to 9 decimal places.
+So there's 11 9's in that number.
+So 11 9's durability for data stored in S3.
+So you should not lose any objects
+stored on standard S3.
+So what is standard S3?
+Well, that's just normal S3.
+Again, it's designed for high availability and durability.
+Standard S3 is essentially the default version
+of S3 when you store your objects.
+So data's stored redundantly
+across multiple devices in multiple facilities.
+So at least 3 Availability Zones.
+It's designed for 99.99% availability
+and 11 9's durability.
+It's designed for frequently accessed data.
+So if you're frequently accessing it,
+maybe you're reading and writing
+to it every second or even every hour or every day.
+That's what S3 is built for,
+and it's suitable for most workloads.
+So like I said, it's the default storage class,
+and it's use cases include things like websites,
+content distribution, mobile and gaming applications,
+big data analytics, etc., etc.
+So that's S3 Standard.
+We do have tiered storage within S3.
+So S3 offers a range of storage classes
+designed for different use cases.
+So S3 Standard fits most use cases,
+but it doesn't fit all use cases.
+And we'll cover off the different tiers in a second.
+One thing you do need to know is you get a thing
+called lifecycle management,
+and this is where you define rules
+to automatically transition your objects
+or files to a cheaper storage tier
+or to delete objects that are no longer required
+after a set period of time.
+We're going to have a whole lecture on that coming up.
+And then, like I said earlier, we also have versioning.
+And with versioning,
+all versions of an object are stored in S3
+and they can be retrieved, including deleted objects.
+So we'll have a look at that in further detail later on
+in this section of the course.
+In terms of securing our data,
+we can secure our data in a number of different ways.
+So we can have server-side encryption.
+And this is where we can set default encryption
+on a bucket to encrypt all new objects
+when they're stored in the bucket.
+So as soon as you upload an object to your bucket
+that object will be encrypted.
+So if somebody breaks into the AWS data center
+and starts stealing hard drives--which is highly unlikely,
+but you never know--
+that means that they would not be able to access
+your objects because it would be encrypted.
+We then also have access control lists,
+and this defines which AWS accounts or groups
+are granted access and the type of access
+that they're granted.
+And you can attach S3 access control lists
+to individual objects, to individual files within a bucket.
+It gives you that much of a fine-grained approach.
+And then we have bucket policies.
+And these are policies that are specific
+to what actions are allowed or denied
+for that particular bucket.
+So you could allow Alice to put
+but not delete objects into a bucket.
+And bucket policies are bucket wide.
+It's very similar to what we looked at with IAM policies.
+Bucket policies are simply JSON policies,
+and you attach them to buckets
+and they will apply across the bucket as a whole.
+Whereas with access control lists,
+you can actually drill down your permissions
+to individual objects and individual files
+within your bucket.
+In terms of the data consistency model with S3.
+Right now it's strong read-after-write consistency.
+So as soon as you upload a new object
+or put a new object or overwrite an existing object in S3,
+any subsequent read request immediately
+receives the latest version of the object.
+So if I was to create a new text file and I upload it to S3
+and I was trying to read that text file, like, you know,
+a couple of milliseconds
+after it had finished writing to S3,
+I'm going to get a successful read of that object.
+Likewise, if I went in and updated a file
+and then I immediately went to read that object
+after I've done the update,
+I'm going to get the newest version of the file.
+And you get strong consistency for list operations.
+So after you write objects to your S3 bucket,
+you can immediately perform a listing object
+or a listing command, which basically just lists
+all the objects in your bucket.
+And you'll be able to see that new file
+being created immediately.
+So just remember going into your exam,
+the consistency model for S3 is strong read after write.
+As soon as you've written something to S3,
+it should be immediately available.
+So in terms of what you need to know for your exam.
+Just remember that S3 is object-based storage.
+So objects are simply files.
+You can't install an operating system or a database on S3.
+It's not suitable for that.
+It's simply for flat or static files.
+Your files can be 5 terabytes in size,
+up to 5 terabytes in size.
+Starting from 0 bytes and you get unlimited storage.
+So the total volume of data
+and the number of objects you can store
+within S3 is unlimited.
+And just remember that your files are stored in buckets
+and that S3 is a universal namespace.
+So when you create a bucket, it has to be a unique name.
+And the web address that's created will always
+be https:// the bucket name, then .s3, and then . the
+region. So it could be us-east-1, for example,
+and then .amazonaws.com,
+and then it will be / and then the key value pair
+or any folders that you create within the bucket.
+And remember that when you do a successful command line
+or API upload, you're always going to get back
+a HTTP page 200 status code
+saying that your upload has been successful.
+And then finally some 4 S3 object tips.
+Just remember that S3 consists of a key.
+So the key is simply the object name.
+So in our example, we used Ralphie,
+the A Cloud Guru office dog.
+So Ralphie.jpg.
+The value is the data itself,
+which is made up of a sequence of bytes.
+We then have our version ID, which allows you
+to store multiple versions of the same object.
+And then we have our metadata,
+which is simply data about data.
+So this could be data about the data that you are storing--
+for example, the content type
+or the last time it was modified, etc.
+So that is it for this lecture, everyone.
+It's very high level and theoretical right now.
+In the next lecture,
+we're going to go ahead and create our very first S3 bucket.
+And we're going to go ahead and upload some objects to it
+and try and make them public.
+We're going to look at the security implications
+behind that as well.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

@@ -1,0 +1,256 @@
+Okay, hello, cloud gurus
+and welcome to this lecture.
+In this lecture we're going to look at the different storage
+classes for S3.
+So we're going to look at S3 standard,
+S3 infrequently accessed, S3 one zone, infrequently
+accessed, S3 intelligent tiering.
+Then we're going to look at archiving using Glaciers.
+There's three different options.
+We'll then have a quick look at our performance levels
+across S3, what our different storage costs are
+and then what our exam tips are.
+Now, one thing I will tell you going
+into the exam is you will be tested
+on the different types of
+S3 storage classes
+and you will be given scenario-based questions
+basically saying, where's the best one?
+What's the best class to store your files on?
+So just bear that in mind.
+You do need to know this inside out going into the exam.
+So let's start with S3 standard.
+This is basically provides you with high availability
+and durability and data is stored redundantly
+across multiple devices in multiple facilities.
+So we're talking equal to or greater than three availability
+zones, comes with 99.99% availability, and it comes
+with 11 nines durability.
+So it's basically designed for frequent access
+and it's perfect for frequently accessed data
+and it's suitable for most workloads.
+And this is
+basically the default storage class,
+so when people are talking about S3
+they're talking about S3 standard,
+and its use cases include things like websites,
+content distribution,
+mobile and gaming apps, big data analytics, et cetera,
+et cetera.
+So where you see this in the exam is if you've
+got a media company for example, and you need a place
+to host video files or you know pictures
+or any kind of static object
+I want you to think of S3 standard.
+Another popular exam question is around static websites.
+And we've already had a look at how we can do that
+on S3, but if you're ever talking about
+static websites or a website that does not require
+a backend database connection
+or is not dynamic using things like PHP for example
+then I want you to think of S3 standard.
+Next up we have S3 standard
+infrequently accessed, and it's basically
+just S3 Standard-IA is what it's referred to.
+So it's designed for infrequently access
+data, what it does give you though is rapid access.
+So it's used for data that is access less
+frequently, but requires rapid
+access when you need it, and you basically
+pay to access the data, so there is
+a low per gigabyte storage price
+And a per gigabyte retrieval
+fee, and your use cases
+Is where basically
+you need long-term storage for things
+like backups, for example, and data stores
+for disaster recovery files, et cetera.
+But you wanna minimize your cost
+but you still need instant access
+to that data.
+That's where you'd use S3 Standard Infrequently Accessed.
+Now it comes with 99.9% availability, and again
+11 nines durability.
+Now there is another one
+which is S3 infrequently accessed
+but this is basically only using one zone.
+So it's like S3 infrequently accessed
+but the data is stored redundantly
+within a single availability zone.
+So it's only using one availability zone that actually
+costs 20% less than regular S3 Standard-IA.
+And this is great
+for long-lived infrequently accessed non-critical data.
+So don't store data that you can't afford to lose access
+to on S3 one zone infrequently accessed.
+You'd only use this where you can afford to lose the data
+but you need to minimize costs
+and its non-critical data essentially,
+comes with 99.5% availability and 11 nines durability.
+Now you might be wondering, I don't know whether
+I'll be accessing my data frequently or infrequently
+or sometimes I actually need to access my data frequently
+and then other times I don't need to access it at all.
+So what would you use?
+Would you use S3 standard?
+Would you use S3 Standard Infrequently Accessed?
+Well, if you've got frequent and infrequently
+accessed data, you can actually use a storage
+class called S3 Intelligent Tiering
+and this automatically moves your data
+to the most cost effective tier based
+on how frequently you access each object.
+And it has 99.9% availability and 11 nines durability.
+So it's basically using AI and machine learning to figure
+out how frequently you access your data
+and then it will store it
+on the storage class that's going to save you
+the most money based off your access patterns.
+So it's really, really good for optimizing costs.
+It's a monthly fee of 0.0025 cents per 1,000 objects.
+So now that we've covered
+off all the different S3 storage tiers
+we're going to move to Glacier.
+And Glacier is basically almost what it sounds like.
+It's a way of archiving your data long-term.
+So storing your data for long terms
+and basically you pay for each time you access your data.
+And it's used only for archiving data.
+So Glacier is really cheap storage and it's optimized
+for data that is very infrequently accessed.
+So we've got option one
+which is called Glacier Instant Retrieval.
+Now this provides long-term data archiving
+but you still have instance retrieval time for your data.
+So if you've got critical data that you probably
+might not need to use, maybe only once a year
+but you need to access it instantly
+then you want Glacier Instant Retrieval.
+Next up, we have Glacier Flexible Retrieval
+and this is the ideal storage class
+for archive data that does not require immediate access
+but needs the flexibility to retrieve large sets of data
+at no cost, such as backup or disaster recovery use cases.
+And it can be minutes in terms
+of retrieval time or up to 12 hours.
+So you'd only use this if you can afford to wait
+for 12 hours to access this data.
+So if it's backups for things that are not key
+so not your production web servers, for example
+you could then store it with Glacier Flexible Retrieval.
+So if you can afford to wait for 12 hours
+that would be a good option.
+But if it's a backup for something that is key
+like production database for example
+then you probably want Glacier Instant Retrieval.
+And then finally we have option three
+which is Glacier Deep Archive
+and this is the cheapest storage class on AWS
+and it's designed for customers that retain data sets
+for seven to 10 years or longer to meet customer needs
+and regulatory requirements.
+And the standard retrieval time is around 12 hours
+but for bulk retrievals it's around 48 hours.
+So you'd use this where essentially you need to store data
+for long periods of time.
+Maybe you work in the financial services industry
+and you have a regulatory requirement that you have to
+you know, store all your records for seven or 10 years
+and you need it with the cheapest option possible
+but you can afford to wait
+up to 48 hours to retrieve your data.
+And in terms of the availability and durability
+for Glaciers it's the same across all three options.
+So it's 99.99% availability and 11 nines durability.
+So let's have a look
+at the performance across the S3 storage classes.
+So we have S3 standard, S3 Intelligent Tiering,
+S3 Standard Infrequently Accessed
+S3 One Zone Infrequently Accessed.
+And then we've got our three different versions of Glacier.
+Take a note of the availability zones.
+Essentially you've always got, your data's always stored
+in three or more availability zones apart
+from S3 One Zone availability.
+And then really what you need to just get
+to grips with is where you would use this storage class
+in what scenarios for the exam.
+So if you're doing any kind of archival
+then obviously you want to look at Glacier
+and then all you really need to figure
+out is how fast you want to be able to restore your files
+or it could also be what's the cheapest option?
+And the same applies for S3.
+It's all about how fast you can access your files
+and whether or not price is driving the cost of the storage.
+This is where it's going to come up in the exam.
+So don't worry
+you don't need to memorize this table, really
+you just need to know the different storage classes
+and their use cases.
+In terms of costs
+you just need to understand how it is priced
+both for S3 and for Glacier.
+So for S3
+the most expensive one is just S3 standard.
+If you want to intelligently basically control your costs
+and optimize your costs
+for known or unknown access patterns, then you
+want S3 Intelligent Tiering that's going
+to move it around between infrequently accessed
+and then just standard S3.
+And then if you need to access your data and it sits
+on S3 standard infrequently accessed as well
+as one zone infrequently accessed
+then a retrieval fee is going to apply.
+In terms of Glacier
+the most expensive one is S3 Glacier.
+So that's just your standard Glacier.
+Flexible retrieval is slightly cheaper
+and then the cheapest is going to be Glacier Deep Archive.
+And again, just remember your retrieval time
+for deep archive is between 12 to 48 hours.
+Glacier flexible retrieval can be minutes
+but it could be up to 12 hours, whereas with normal Glacier
+then it's going to be instant access.
+And a retrieval fee applies for all three storage classes.
+So that's basically it.
+Let's go onto my exam tips.
+So like I keep saying
+basically you just need to know the different types
+of S3 storage classes and the three different types
+of Glacier and where you would use them.
+So S3 standard suitable for most workloads
+these are things like websites, content distribution
+and mobile and gaming apps, et cetera, et cetera.
+S3 infrequently accessed is where
+you access critical data, things like backup
+and data stores for disaster recovery files, et cetera.
+And you need instant access to it
+but you wanna keep your cost down.
+Then you'd use S3 infrequently accessed,
+One Zone Infrequently Accessed is basically
+for your long term, infrequently access non-critical data
+so data that you can afford to lose.
+And then you've got S3 Intelligent Tiering
+and this is best
+for unknown or unpredictable access patterns.
+Moving on to Glacier.
+So Glacier Instant Retrieval is going to
+give you long-term data archiving
+with instant retrieval for your data.
+Then we've got flexible retrieval
+and this is basically the ideal storage class
+for archive data that does not require immediate access
+but needs the flexibility to retrieve large data sets
+at no cost, such as backup and disaster recovery use cases.
+And this is basically can be minutes
+or it could be up to 12 hours.
+And then deep archive is basically where you just
+need the cheapest storage possible
+and you can afford to wait
+up to 48 hours to retrieve your files.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

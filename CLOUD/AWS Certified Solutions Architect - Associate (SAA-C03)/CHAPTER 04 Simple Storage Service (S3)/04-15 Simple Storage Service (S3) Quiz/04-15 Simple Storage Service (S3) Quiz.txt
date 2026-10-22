@@ -1,0 +1,332 @@
+QUESTION 1
+
+Which of the following is NOT true?
+
+CORRECT
+You can create an S3 lifecycle policy to migrate objects from Glacier to Standard-IA.
+
+
+Lifecycle policies can define transition actions, which specify when objects transition to another storage class.
+
+
+S3 lifecycle policies help automate the handling of objects in S3 buckets throughout their entire existence.
+
+
+Lifecycle policies can define expiration actions, which specify when objects expire.
+
+Good work!
+Lifecycle policies can't work backwards. You can use a lifecycle policy to migrate objects from the more frequently accessed storage classes to the longer-term options, but not the other way around. Reference Documentation: Transitioning Objects Using Amazon S3 Lifecycle
+
+________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which of the following statements is true?
+
+
+Amazon S3 does not encrypt data uploads.
+
+
+The bucket owner is the owner of an S3 object, regardless of the identity of the person who uploaded it.
+
+
+Amazon S3 allows cross-account access by default.
+
+CORRECT
+You can increase your Amazon S3 read or write performance by creating more prefixes in a bucket and parallelizing reads/writes.
+
+Sorry!
+Amazon S3 encrypts all new data uploads to any bucket.
+
+Correct Answer
+Your applications can easily achieve thousands of transactions per second in request performance when uploading and retrieving storage from Amazon S3. Amazon S3 automatically scales to high request rates. For example, your application can achieve at least 3,500 PUT/COPY/POST/DELETE or 5,500 GET/HEAD requests per second per prefix in a bucket. There are no limits to the number of prefixes in a bucket. You can increase your read or write performance by parallelizing reads. For example, if you create 10 prefixes in an Amazon S3 bucket to parallelize reads, you could scale your read performance to 55,000 read requests per second. Similarly, you can scale write operations by writing to multiple prefixes. Reference Documentation: Best practices design patterns: optimizing Amazon S3 performance.
+
+
+________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Versioning on your bucket was recently suspended and, after this, your boss deleted an object whose version ID is null and wants to restore it. What do you do?
+
+
+Re-enable versioning and remove the deletion marker to restore the object.
+
+
+Suspended or not, versioning doesn't protect against deletions. The object is gone forever.
+
+CORRECT
+It's not possible since versioning was suspended. The object is gone.
+
+
+Look in the bucket named "s3-backups". The object will be in there and can be restored to the original bucket.
+
+Sorry!
+Unfortunately, if versioning is suspended and the object is deleted, it's gone forever. Reference Documentation: Deleting Objects From Versioning-Suspended Buckets
+
+Correct Answer
+If versioning is suspended and the object is deleted, it's gone forever. Reference Documentation: Deleting Objects From Versioning-Suspended Buckets
+
+________________________________________________________________________________________________________________________
+
+
+QUESTION 4
+
+Since S3 is an object-based storage solution, which type of file should never be stored in it?
+
+CORRECT
+Operating system's boot files
+
+
+HTML documents
+
+
+Application logs
+
+
+Cat photos
+
+Sorry!
+HTML documents don't change very often and therefore would work well in object-based storage. Reference Documentation: Amazon S3
+
+Correct Answer
+Amazon Elastic Block Store (EBS) is a suitable block-level storage service for use with EC2 and boot volumes/files. Amazon S3 makes data available through an internet API that can be accessed anywhere, but it is not the correct solution for storing operating system's boot files. Reference Documentation: Amazon S3
+
+________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which of the following statements is true?
+
+
+Bucket ownership is transferable to another account.
+
+
+You can create an unlimited number of buckets in your AWS account.
+
+CORRECT
+Bucket names must be unique across all AWS accounts in all the AWS Regions within the scope of each of AWS's partitions.
+
+
+Bucket names must be unique only within the same AWS Region.
+
+Sorry!
+An AWS account that creates an Amazon S3 bucket is the rightful owner, and it is not possible to transfer bucket ownership to another account.
+
+Correct Answer
+Bucket names must be unique across all AWS accounts in all the AWS Regions within the scope of each of AWS's partitions: aws (Standard Regions), aws-cn (China Regions), and aws-us-gov (AWS GovCloud (US)). Reference Documentation: Bucket naming rules
+
+________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+What is the largest object you can store in S3?
+
+CORRECT
+5 TB
+
+
+1 TB
+
+
+Unlimited
+
+
+50 GB
+
+Sorry!
+Individual objects that can be stored in S3 can range from a minimum of 0 bytes to a maximum of 5 terabytes. Reference Documentation: Amazon S3 FAQs
+
+Correct Answer
+5 terabytes is the largest individual object you can store in S3. Reference Documentation: Amazon S3 FAQs
+
+________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+What is the smallest object you can store in S3?
+
+CORRECT
+0 bytes
+
+
+1 MB
+
+
+1 KB
+
+
+1 GB
+
+Sorry!
+Individual objects that can be stored in S3 can range from 0 bytes to 5 terabytes in size. Reference Documentation: Amazon S3 FAQs
+
+Correct Answer
+0 bytes is the smallest individual object you can store in S3. Reference Documentation: Amazon S3 FAQs
+
+________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Your boss instructs you to make your company's S3 buckets public so employees can download content when they are at home. What do you do?
+
+
+Open them up! They said it was ok, right?
+
+CORRECT
+Explain to your boss that this is a terrible idea and opens up huge security risks for your company.
+
+
+Tell your boss to bring a floppy disk to transport the files to and from the office, instead.
+
+
+S3 buckets are public by default, so you don't need to do anything to allow this.
+
+Sorry!
+Opening up S3 buckets to the public like this is a bad idea from a security perspective. Reference Documentation: Security Best Practices for Amazon S3
+
+Correct Answer
+Opening up S3 buckets to the public in this manner is not a best practice. Reference Documentation: Security Best Practices for Amazon S3
+
+________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+S3 allows you to host ____ websites directly from the bucket with no other tools needed.
+
+
+Hyperdynamic
+
+
+Server-side rendered
+
+
+Dynamic
+
+CORRECT
+Static
+
+Sorry!
+Hyperdynamic is not commonly used or recognized in web development.
+
+Correct Answer
+S3 is only able to host static websites. Reference Documentation: Hosting a Static Website Using Amazon S3
+
+________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+If you have data that needs to be instantly retrievable and needs to be accessed only once per month, which S3 storage class would you select?
+
+
+S3 Standard
+
+
+S3 Glacier Flexible Retrieval (formerly known as S3 Glacier)
+
+CORRECT
+S3 Standard-IA
+
+
+S3 Glacier Deep Archive
+
+Sorry!
+S3 Standard is meant for data that is both accessed frequently and requires rapid retrieval. Reference: Amazon S3 Storage Classes
+
+Correct Answer
+S3 Standard-IA is meant for data that is not accessed frequently but, when it is accessed, requires rapid retrieval. Therefore, Standard-IA would be best suited for this situation. Reference: Amazon S3 Storage Classes
+
+________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+Which S3 Glacier storage class features a standard object retrieval time of 3-5 hours with expedited retrievals typically in 1-5 minutes?
+
+
+S3 Glacier Instant Retrieval
+
+
+Amazon S3 Glacier Deep Archive
+
+
+S3 Intelligent-Tiering
+
+CORRECT
+S3 Glacier Flexible Retrieval
+
+Sorry!
+S3 Glacier Instant Retrieval offers a retrieval time of milliseconds for objects that need immediate access.
+
+Correct Answer
+S3 Glacier Flexible Retrieval (formerly known as S3 Glacier) offers a standard retrieval time of 3-5 hours, but also supports expedited retrievals in as little as 1-5 minutes.
+
+________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which of the following is NOT true?
+
+
+Amazon S3 serves as a key-based object store.
+
+CORRECT
+S3 buckets are public by default.
+
+
+There's no maximum size for an S3 bucket.
+
+
+In S3, your objects are automatically stored across multiple devices spanning a minimum of three Availability Zones (AZs).
+
+Sorry!
+Amazon S3 is a key-based object store.
+
+Correct Answer
+S3 buckets are private by default, not public. Reference Documentation: Amazon S3 FAQs (https://aws.amazon.com/s3/faqs/)
+
+________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What kind of data should be stored in S3 Standard?
+
+CORRECT
+Data that is frequently used
+
+
+Data that is infrequently used
+
+
+Data that is a secondary copy of a primary source
+
+
+Data that is rarely used
+
+Good work!
+Data that is frequently used should be stored in S3 Standard. Reference Documentation: Amazon S3 Storage Classes
+
+________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+How does availability and durability differ in S3?
+
+
+Availability is how much data you can download, while durability is how much local storage space your computer has available to receive those files.
+
+
+Availability and durability are the same thing; they both define how long AWS will store your data.
+
+CORRECT
+Availability is the ability to access your data, while durability is the ability of AWS to ensure your data is properly stored in S3.
+
+
+Durability refers to how many times your data can be overwritten, while availability is the ability to download the data after one of these overwrites.
+
+Sorry!
+Availability is the ability to access your data, while durability is the ability of AWS to ensure your data is properly stored Reference Documentation: Amazon S3 FAQs
+
+Correct Answer
+The distinction between availability and durability lies in your ability to access your data versus AWS's ability to store your data. Reference Documentation: Amazon S3 FAQs
+
+________________________________________________________________________________________________________________________
+
