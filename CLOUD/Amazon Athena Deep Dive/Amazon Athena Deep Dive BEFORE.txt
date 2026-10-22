@@ -1,0 +1,80 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+01:22
+
+Course Introduction
+01:22
+CHAPTER 2
+
+Getting to Know Athena
+55:04
+
+What Is Athena?
+07:33
+File Formats and What They Mean
+04:29
+Pros and Cons of Athena
+01:49
+How to Access Athena
+02:15
+What Are Workgroups?
+01:43
+Creating Data Sources
+02:52
+Working with Workflows
+04:23
+
+
+
+HANDS-ON LAB
+Creating a Workgroup in Athena
+15:00
+QUIZ
+Getting to Know Athena
+15:00
+CHAPTER 3
+
+Querying Athena
+1:57:22
+
+What Is a Schema?
+01:45
+Building Queries for Athena
+02:22
+Creating Tables in Athena
+02:29
+Creating and Querying Data in Athena
+05:46
+HANDS-ON LAB
+Querying Real Estate Data in S3 Using Amazon Athena
+1:30:00
+QUIZ
+Querying Athena
+15:00
+CHAPTER 4
+
+Other AWS Services That Work with Athena
+45:13
+
+Amazon S3
+02:26
+AWS Glue
+05:57
+Amazon Kinesis
+06:50
+HANDS-ON LAB
+Creating a Glue Crawler for Athena and S3
+15:00
+QUIZ
+Other AWS Services That Work with Athena
+15:00
+CHAPTER 5
+
+Conclusion
+02:45
+
+Course Summary
+01:40
+Conclusion and What’s Next
