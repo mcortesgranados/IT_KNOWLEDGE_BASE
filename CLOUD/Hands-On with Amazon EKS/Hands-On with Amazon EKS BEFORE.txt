@@ -1,0 +1,194 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+30:57
+
+Welcome to the Course
+01:59
+Chapter Scripts
+06:46
+
+What You Will Learn
+04:05
+The Bookstore Project
+06:48
+The Bookstore Project: Infrastructure
+03:46
+Creating Our EKS Cluster
+05:33
+Summary: Introduction
+02:00
+CHAPTER 2
+
+Networking and EKS
+1:29:51
+
+Networking and EKS
+03:59
+Private Access Recommendation
+03:00
+
+Load Balancing Best Practices
+09:44
+
+Secure Load Balancing for EKS
+10:49
+Automating DNS Management
+07:09
+Demo: Installing the Bookstore Application - Part 1
+06:32
+Demo: Installing the Bookstore Application - Part 2
+11:00
+EKS Integration with VPC Using the CNI Add-On
+05:50
+
+Demo: EKS and the CNI Add-On
+14:11
+Summary: Networking and EKS
+02:37
+
+QUIZ
+Networking and EKS
+15:00
+CHAPTER 3
+
+Achieve the Principle of Least Privilege
+54:59
+
+Achieve the Principle of Least Privilege
+05:39
+IAM Roles for Service Accounts (IRSA)
+03:33
+Demo: IRSA
+04:17
+Demo: Update All Applications to IRSA - Part 1
+12:31
+Demo: Update All Applications to IRSA - Part 2
+11:46
+Summary: Achieve the Principle of Least Privilege
+02:13
+QUIZ
+Achieve the Principle of Least Privilege
+15:00
+CHAPTER 4
+
+More Power for Less Money
+1:01:06
+
+More Power for Less Money
+04:43
+Spot Instances
+08:08
+Spot Instances and Node Termination Handler
+05:26
+EKS Managed Node Groups
+06:31
+EKS and Fargate
+07:26
+Demo: EKS and Fargate
+07:12
+Summary: More Power for Less Money
+06:40
+
+QUIZ
+More Power for Less Money
+15:00
+CHAPTER 5
+
+Continuous Integration and Continuous Deployment
+1:23:34
+
+Continuous Integration and Continuous Deployment (CI/CD)
+03:33
+Workflow Definition
+05:41
+Demo: Source Code and Building - Part 1
+14:43
+Demo: Source Code and Building - Part 2
+07:25
+Demo: Automatic Build and Deploy
+12:40
+Demo: Creation of the Production Environment - Part 1
+06:51
+Demo: Creation of the Production Environment - Part 2
+06:28
+Demo: Extending CI/CD for the Production Environment
+07:53
+Summary: Continuous Integration and Continuous Deployment (CI/CD)
+03:20
+QUIZ
+Continuous Integration and Continuous Deployment
+15:00
+CHAPTER 6
+
+Service Mesh with App Mesh
+1:03:59
+
+Service Mesh with App Mesh
+08:17
+Demo: Installing the App Mesh Controller
+04:47
+Demo: Creating the Mesh through Kubernetes
+05:30
+Demo: Creating App Mesh Components for Each App
+12:42
+Enabling Visibility with X-Ray
+10:16
+Demo: Retry Policies, Retry Policies, Retry... OK!
+05:10
+Summary: Service Mesh with App Mesh
+02:17
+QUIZ
+Service Mesh with App Mesh
+15:00
+CHAPTER 7
+
+Wrap-Up
+06:58
+
+Review
+03:52
+Next Steps
+02:26
+
+
+
+
+
+
+Thanks for Watching!
+00:40
+Your Progress
+0%
+
+COMPLETE
+
+Lesson Completion
+
+0%
+
+Quiz Completion
+
+0 of 5
+
+NEW
+
+Learning Scheduler
+Tell us how many hours per week you can study.
+
+4
+30 Nov.
+HRS PER WEEKCOMPLETION DATE
+MEMBERS ONLY
+
+Cloud Playground
+Cloud along in real time. This course supports Cloud Playground sandbox environments, so you can learn by doing in a real cloud environment.
+
+Certificate of Completion
+Complete at least 80% of the course before you can request a certificate of completion.
+
+Rate this course
+Loved it? Room for improvement? Let us know!
+
+©
