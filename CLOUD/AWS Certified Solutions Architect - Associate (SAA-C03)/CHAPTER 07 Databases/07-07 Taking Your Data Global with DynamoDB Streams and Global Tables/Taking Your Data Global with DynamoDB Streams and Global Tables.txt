@@ -1,0 +1,246 @@
+Okay.
+Hello Cloud Gurus and welcome to this lecture.
+In this lecture we're going to look at
+how you can take your data global using DynamoDB Streams
+and global tables.
+So we'll start by exploring what DynamoDB Streams are.
+We'll then look at global tables.
+I'll then go in and set this up in the console.
+So we will set up a DynamoDB table in one region,
+turn on global tables
+and stream that DynamoDB table to another region.
+And then we'll move on to my exam tips.
+So let's start with streams.
+What are DynamoDB Streams?
+Well, they're basically time-ordered sequence
+of item level changes in a table.
+So you can think of it as basically
+first in first out streams of your data.
+So every time your data changes,
+it comes with a sequence number
+and it's completely sequenced.
+And these sequences are stored
+in what we call DynamoDB Streams.
+And they're actually stored for 24 hours.
+Now your data or the sequences are broken up into shards.
+So shard is just a bunch of data
+that has sequential sequence numbers.
+So every time you make a change to a DynamoDB table,
+that data is going
+to be stored sequentially in a stream record,
+which is broken up into shards.
+And changes are just things
+like inserts, updates and deletes.
+Every time you insert a record or update a record
+or delete a record,
+that's going to give you a FIFO time sequence.
+Those changes are stored in a DynamoDB Stream.
+And to make it manageable,
+we just basically split those sequences up into shards.
+And you can actually combine it with Lambda functions
+for functionality like stored procedures
+in traditional databases.
+And we will cover off what Lambda is later on in the course.
+But essentially, if you've ever done anything like
+with SQL Server or MySQL,
+where you've got stored procedures in your database engine,
+you can add that kind of functionality to DynamoDB.
+You do that using Lambda,
+but don't worry, that's not an exam topic.
+It's just something really cool
+that you can do with DynamoDB.
+And we will cover off what Lambda is later on in the course.
+So now that you know what stream records are,
+we'll move on to what global tables are.
+And these are basically manage multi-master,
+multi-region replications.
+So it's a way of replicating your DynamoDB tables
+from one region to another.
+And this is great for globally distributed applications.
+So if you've got an application
+that's spread all across the world,
+and you want to have consistent DynamoDB tables
+in each region, then you can have global tables.
+And the technology that drives
+this is just basically DynamoDB Streams.
+So it's based on DynamoDB Streams
+and you will need DynamoDB Streams turned on
+in order to enable this.
+Basically it gives you multi-region redundancy
+for disaster recovery or high availability.
+And the cool thing about this is it's built
+into DynamoDB natively.
+You don't have to rewrite your applications.
+You can just go into the console and turn it on.
+And the replication latency is under one second
+in most cases,
+which is just crazy if you think about it.
+So you can have your DynamoDB
+table updating on the East Coast
+and then have that replication go across
+to the west coast of the US, let's say.
+And that latency can be under one second.
+Sometimes it could be longer if you're doing something
+like let's say Australia to London,
+but it is really, really fast in terms of latency.
+So the best way to learn this is to go in
+and have a look at how this works in the AWS console.
+Okay, so here I am in the AWS console.
+We can get to DynamoDB by going to databases
+and clicking on DynamoDB.
+Now, I've not used DynamoDB in this account
+before, so just get this splash screen.
+I'm gonna go ahead and create a table.
+I'm just gonna call it MyDynamoDB table,
+something like that.
+The partition key, this is basically the unique ID
+or the table's primary key.
+So this could be things like your,
+a unique identifier
+or a customer number or a student number.
+It's totally up to you.
+I'm just gonna do, customer_id.
+And then I'm going to leave everything else
+as default table settings, default settings.
+And you can see here the different default table settings.
+So it's a DynamoDB standard table class.
+We've got five read capacity units
+and five right capacity units.
+We've got auto scaling turned on.
+We've got no local or global secondary indexes,
+and we've just left everything as default.
+So let's go ahead and create this table.
+Now creating tables as relatively quick with DynamoDB.
+So if you just hit refresh,
+you can see now that that is active.
+I didn't even need to pause the video.
+So we can click in here and go into my DynamoDB.
+We can actually go over here to explore table items,
+and we can see that currently if we hit run,
+there's no items within our table.
+And then what I can do is just start putting some data in.
+So I can go to actions
+and I can go ahead and hit create item.
+So in here we've got our customer ID.
+Let's do one, two, three, four, five.
+And then I can go ahead and add a new attribute.
+This could be a string,
+and this could be let's say first name.
+So put in first, then name,
+and this could be John.
+And then we go ahead and hit create item.
+So that has now created an item.
+We can see the items returned in here,
+and I can actually go in
+and I can see that the first name is there.
+We can create additional items.
+The great thing about it being a NoSQL database
+is you don't need the same columns.
+So you could have here one, two, three, four, five, six,
+I don't know, unique customer ID.
+And then add a new attribute.
+And instead of a name, we could have,
+let's say height, something like that.
+And then we could put five foot 10
+and go ahead and create our item.
+So now you can see that this customer ID
+just has the height, but no name.
+And this customer ID has the name and no height.
+So that's a NoSQL database.
+So let's go back over to our DynamoDB dashboard
+and have a look at our tables.
+So click on tables here.
+So one of the most common exam questions
+is how can you basically spread
+your DynamoDB tables across multiple regions?
+So let's click on DynamoDB.
+And the trick to doing it is
+we need to enable global tables.
+So we click on global tables,
+we can go ahead and create a replica.
+And basically by creating a replica,
+we need DynamoDB Streams to be turned on.
+Now it will be turned on automatically
+for new and old images.
+Some legacy questions will be like, hey, you're trying
+to create a global table, but it's not working.
+Something's wrong.
+What should you look for?
+Well, it's DynamoDB Streams not being turned on.
+So that's something really important
+to remember going into your exam
+is you need DynamoDB Streams turned on.
+Then we can just go and select our region.
+So I'm gonna say, hey, let's set this up in Canada,
+hit create replica, and then we will just wait a little bit
+and then it should create a replica in Canada.
+So what I'm gonna do now is
+I didn't even need to pause the video, hopefully.
+Let's have a look.
+Hit refresh.
+And hit refresh,
+and we can see that my replica is being created in Canada.
+If I go over to the Canadian region, Canada Central
+and click in here, I'll be able to see my tables.
+So if I click on tables here,
+you can see that it's creating my table in here.
+I'm just gonna wait and pause the video
+and wait for this table to come up online.
+Hey, and I've refreshed it
+and we can now see that it is active.
+If I click in here
+and if I go explore table items,
+I'll be able to see in here that I've got my two items.
+If I go back over from Canada Central
+to Northern Virginia,
+I can go in here and I can go and create a new item.
+Let's enter in another random number as my partition key,
+and then I'm gonna add some new attributes.
+So I'm just going to add in a number
+and we'll just say new value equals three.
+And we're gonna go ahead and create that item.
+So we can see it here in Northern Virginia.
+We switch back over to Canada, that has now been replicated
+and we can see the data in here.
+So it happens pretty much automatically.
+So that is DynamoDB in a nutshell.
+Where you're going to get tested on it is essentially asking
+you for a NoSQL database that's native to AWS
+that has really high performance.
+Always think of DynamoDB.
+And then if you want to turn,
+if you wanna make it go global,
+you need to enable global tables.
+And for that, you need DynamoDB Streams to be turned on.
+And then that will enable you to deploy
+your different DynamoDB tables around the world.
+So let's go onto my exam tips.
+So onto my exam tips.
+So just remember going into your exam
+that DynamoDB global tables gives
+you multi-master, multi-region replication.
+This is great if your applications are all over the world
+because they can connect into other DynamoDB tables.
+It's based on DynamoDB Streams.
+So this is gonna be a very popular exam topic.
+You might need to be turning
+on global tables and it won't work.
+What could be causing this where you need
+to enable to DynamoDB Streams.
+DynamoDB global tables gives you multi-region redundancy
+for disaster recovery or higher availability,
+and you don't have to rewrite your application.
+It's all built into DynamoDB natively, as we saw.
+And the replication latency is under one second.
+That replication we saw when we created our new item.
+By the time we went over to Northern California,
+it was already there.
+So that is it for this lecture everyone.
+You've done really, really well.
+We're ready to move on
+and review everything we've learned
+in the databases section of our course.
+And then we're ready to move on to our next section.
+So if you've got the time,
+please join me in the next lecture.
+Thank you.

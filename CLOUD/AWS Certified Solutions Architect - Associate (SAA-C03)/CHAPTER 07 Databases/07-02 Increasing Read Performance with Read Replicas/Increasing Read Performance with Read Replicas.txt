@@ -1,0 +1,208 @@
+Okay, hello, Cloud Gurus
+and welcome to this lecture.
+In this lecture, we're going to look
+at how we can increase our read performance
+using read replicas.
+So the first thing we'll look at is what is a read replica?
+We'll look at some key facts around read replica
+and then I'll show you how to make a read replica
+in the AWS console.
+And then we'll go onto my exam tips.
+So what can you use to improve performance with RDS?
+Well, you can use these things called read replicas.
+So what is a read replica?
+Well, basically, it's a read-only copy
+of your primary database.
+So it's a way of designing your applications
+so that when you go and do a query,
+you aren't querying your main database,
+you're not putting any more load on your main database.
+What you're querying is an exact copy of your main database.
+So that's all a read replica is.
+And this is great for read-heavy workloads
+and it takes the load off your primary database.
+Now, going into your exam, you're always going
+to get scenario questions where they try and confuse you
+between multiple availability zones and read replicas.
+So just remember, multi-AZ is for disaster recovery only,
+read replica is for boosting performance.
+So read replica can also be
+across different availability zones.
+So it can be in a separate availability zone
+but it can also be in the same availability zone
+as your primary.
+And read replicas can also be cross region,
+so you can put them in a completely different region,
+in a completely different part
+of the US or part of the world
+and it will replicate across to that region automatically.
+But again, it's not used for disaster recovery.
+It is only used for performance.
+So each read replica has its own DNS endpoint
+and that's what we looked at
+in the last lecture when we were looking
+at our endpoint addresses.
+It's basically the unique web address to your database.
+So with multi-AZ, you have a unique DNS endpoint
+and if you lose your primary and it fails over
+to the secondary, Amazon basically just update
+that DNS endpoint to point to another IP address.
+You don't need to worry about failure.
+With read replicas,
+you actually get your own unique DNS endpoint.
+So you have two.
+So you have one for your primary
+and then one for your read replica.
+And read replicas can also be promoted
+to become their own databases.
+So you can have a read replica and you can go in
+and promote it and make it its own independent database.
+And this basically will break the replication,
+so it will no longer have replication between it
+but then you could connect up a business intelligence server
+to that database and you can run all kinds of queries.
+So typically, you might do this
+when you're doing online analytics processing
+and you're about to do a massive query
+towards your database and you don't want, you know,
+you basically want to take it and make it its own database.
+So that's where you would promote a read replica
+to become its own database.
+But when you do that, it breaks the replication.
+So some key facts, just remember
+that read replicas are all about scaling read performance.
+It's not used for disaster recovery.
+It requires automatic backups.
+You must have automatic backups enabled
+in order to deploy a read replica
+and multiple read replicas are supported.
+So you can have multiple read replicas using MySQL,
+MariaDB, PostgreSQL, Oracle, and SQL Server.
+And you can actually have up to five read replicas
+to each database instance.
+So let's go over to the AWS console
+and we'll look at how we can provision this.
+Okay, so I'm in the AWS console.
+I'm gonna go over to RDSs.
+And then what I'm gonna do is have a look
+at the database that I just created in the last lecture.
+So go to my DB instances.
+We can see here database-1.
+If I select here and I go to actions,
+I should be able to create a read replica.
+So I'm gonna click on that.
+And then it's really basically the same splash screen
+as you saw in the last lecture.
+It's very, very similar.
+Here we've got our replica source.
+So database-1, our DB instance identifier.
+So this is the name of our database,
+so I'm just gonna call it DB-replica.
+And down here, we've got our instance configurations.
+So do we want standard class,
+memory optimized class or burstable?
+I'm just going to leave it as burstable
+'cause it includes our T classes, which is our t3.micro.
+In here, we can pick
+which region we want our read replica to be in.
+There's a lot of designs considerations, depending,
+you know, if you've got web servers
+over in Japan and they're querying a database.
+You might want your read replica to be based next
+to those web servers in Japan.
+I'm just gonna leave it as US East Northern Virginia.
+Gonna use the standard storage,
+gonna enable storage auto scaling.
+Maximum threshold is 1,000.
+Just gonna leave it as all the default.
+In here, we can actually have multi-AZs
+for our read replicas.
+It doesn't make a lot of sense
+to have my primary database being a single DB instance
+and then my read replicas being multi-AZ.
+So I'm just gonna hit single.
+And here we've got our connectivity.
+So what VPC do you want it to go into?
+Do you want it publicly accessible, et cetera?
+I'm going to put it into the same VPC security group
+as my primary.
+Availability zone, you could pick
+your availability zone in there.
+Gonna do password authentication.
+In here, we can copy our tags to snapshots, et cetera.
+I'm just gonna leave everything as default,
+scroll all the way down and go ahead
+and create my read replica.
+So it's pretty simple to create a read replica.
+You can see the way the UI designs it
+is that you can see what dependencies there are.
+So you can see that this db-replica
+is dependent on database-1.
+I'm just gonna pause the video and wait for this
+to come up online.
+Okay, and we can now see
+that this database db-replica is available.
+If we go back to RDS and click on databases,
+we can see here we've got database-1, database Replica
+and you can see by the UI
+that this is dependent on that one.
+So if we go over here, we can go to our actions
+and we can actually go and promote this
+to be its own primary database.
+So essentially, it's kind of basically,
+you can promote replicas
+to be their own independence databases.
+Where you might want to do something like that
+is if let's say you need to run a query
+that's gonna really hammer a database
+and you wanna promote,
+let's say you've got multiple read replicas,
+you might just wanna promote one read replica
+to be its own primary.
+So you can then go ahead and run that query
+against that database
+and it won't affect your production databases.
+That's one option.
+Also, you can convert to multi-AZ deployment.
+You can turn on backups.
+You can pretty much do a lot of different things
+but the main thing to remember is what read replicas are
+and where you would use them.
+And essentially, where you'd use them is if you've got a lot
+of database traffic and you need to spread out the reads
+across multiple databases,
+then you would create read replicas.
+So let's go onto my exam tips.
+So in the exam,
+you're gonna come across different scenario questions
+and essentially, you just need to know
+where you'd use multi-AZ
+and where you would use read replica.
+So multi-AZ is an exact copy of your production database
+in another availability zone.
+It's used for disaster recovery.
+So that's key to remembering.
+And in the event of a failure,
+RDS will automatically fail over to the standby instance
+whereas read replica is a read-only copy
+of your primary database
+and it's in the same availability zone
+or across different availability zones
+or even in a different region in the world.
+And it's used to increase or scale read performance.
+And it's great for read-heavy workloads
+and takes the load off your primary database
+for read-only workloads.
+So this could be for things
+like business intelligence reporting, et cetera.
+So essentially going into your exam, if you have any kind
+of scaling issues, you're not getting good read performance,
+how can you increase this?
+Or you want to add a read replica to your environment.
+If however, you're just looking for disaster recovery,
+then you wanna make sure you have multi-AZ enabled
+on your production database.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

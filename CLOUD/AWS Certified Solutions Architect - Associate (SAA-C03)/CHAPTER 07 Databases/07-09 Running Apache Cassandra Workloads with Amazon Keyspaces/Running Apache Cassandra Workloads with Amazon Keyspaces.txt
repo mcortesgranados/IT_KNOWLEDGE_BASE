@@ -1,0 +1,47 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at running
+Apache Cassandra workloads with Amazon Keyspaces,
+and this does actually come up in the exam.
+Often Keyspaces can be used as a distractor,
+but you just need to know what it is and what it's used for.
+So what is Cassandra?
+That's what we're going to cover off.
+Then we're going to look at what is Keyspaces.
+Going to look at why you should use Amazon Keyspaces,
+and we'll go onto my exam tips.
+So what is Cassandra?
+Well, basically it's a distributed database.
+That means it just runs on many, many machines that uses
+NoSQL and it's primarily used for big data solutions.
+So enterprises, such as Netflix use Cassandra
+on their backend.
+So just think of big database workloads that's distributed
+across many different servers.
+So what is Amazon's Keyspaces?
+Well, you'd be very surprised to learn that it's basically
+Amazon's Cassandra database service that's fully managed.
+So it allows you to run your Cassandra workloads
+on the AWS cloud.
+That's all it is.
+So why should you use it?
+Well, it's a fully managed database service.
+You don't need to worry about managing servers,
+software, patching, et cetera.
+And Keyspaces is serverless, which means you only pay
+for the resources that you use and the service can
+automatically scale tables up and down in response
+to your applications.
+So onto my exam tips.
+Now if you see a scenario question about migrating
+a big data Cassandra cluster to AWS,
+I want you to think of Amazon Keyspaces.
+Amazon Keyspaces can also be used as a distractor.
+So if you see the word Keyspaces,
+I want you to think immediately is this scenario question
+talking about Cassandra workloads?
+If not, then that is not the correct answer.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

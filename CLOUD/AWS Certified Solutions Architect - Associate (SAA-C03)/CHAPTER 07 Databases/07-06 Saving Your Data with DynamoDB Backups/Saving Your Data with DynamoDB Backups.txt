@@ -1,0 +1,45 @@
+Okay, hello Cloud Gurus
+and welcome to this lecture.
+This is a really quick lecture,
+and we're going to look at backups
+and saving your data with DynamoDB backups.
+So we're going to look at our on-demand backup
+and restore capabilities with DynamoDB
+and then we're going to look at our point-in-time recovery
+capabilities with DynamoDB.
+So DynamoDB has on-demand backup and restore
+so you can do full backups at any time.
+And the cool thing about it is there's zero impact
+on table performance or availability.
+And you get consistency within seconds
+and it's basically retained until deleted.
+And it operates within the same region as the source tables.
+So if you are creating an on-demand backup,
+that backup is always going to be in the same region
+as your source table.
+So that's all you need to know about on-demand backups
+going into your exam.
+The next thing you should know about
+is point-in-time recovery.
+So this protects against accidental writes or deletes.
+You can restore to any point in the last 35 days
+and it's done using incremental backups.
+Now, the thing to remember about point-in-time recovery
+is it's not enabled by default.
+You have to go in and turn it on.
+So do remember that going into your exam.
+And the latest restorable time is 5 minutes in the past.
+So for some reason you have an accidental write or delete,
+you will have to go back 5 minutes in the past
+from that point-in-time.
+So bear that in mind as well.
+So like I said, this is a really quick lecture.
+It just lets you know that you can go in
+and do manual backups of DynamoDB
+as well as turn on point-in-time recovery
+and it will allow you to store your data
+for any point in the last 35 days
+and the latest restorable time is five minutes in the past.
+So that is it for this lecture everyone,
+if you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.

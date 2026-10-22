@@ -1,0 +1,89 @@
+Okay, hello, Cloud Gurus,
+and welcome to this lecture.
+This is going to be a quick lecture,
+and we're going to look at DynamoDB Transactions.
+So when do we use DynamoDB Transactions?
+So the first thing we're going to look, is what ACID is.
+It's not the type of acid that you're thinking of,
+this is ACID for databases, we're going to look at
+how we can use ACID with DynamoDB,
+and essentially it's all or nothing transactions.
+We'll look at the different use cases,
+and then the transactions themselves,
+and we'll go on to our exam tips.
+So ACID basically stands for
+atomic, consistent, isolated, and durable,
+and it's a methodology for using databases.
+So we'll start with atomic, and this is where
+all changes to the data must be performed
+successfully or not at all.
+So it's either all or nothing.
+Consistent, so the data must be in a consistent state
+before and after the transaction.
+Isolated, so no other process can change the data
+while the transaction is running.
+And then durable, and the changes
+made by a transaction must persist.
+So going into the exam, you will get scenario questions
+where they talk about the ACID methodology for databases,
+and essentially it's basically all or nothing.
+You're inserting a transaction into a database,
+or you're not.
+So you can use ACID with DynamoDB,
+but you need to use DynamoDB Transactions.
+And DynamoDB Transactions provides your developers
+with atomicity, consistency, isolation, and durability,
+or ACID, across one or more tables
+within a single AWS account and region.
+So you can use transactions when building applications
+that require coordinated inserts, or deletes,
+or updates to multiple items
+as a part of a single, logical, business operation.
+So essentially, if you get a scenario-based question,
+where they're talking about using assets
+or having atomicity, consistency, isolation, and durability,
+and you want to do this with DynamoDB,
+you need to enable DynamoDB Transactions.
+And ACID basically just means all or nothing.
+So if you were doing a transaction,
+it either the succeeds across one or more tables.
+But if that transaction, for some reason,
+one of the tables doesn't respond or something,
+then it fails, and the whole transaction fails.
+So it stops you from updating just one table here
+and not another table there, that's all ACID means.
+So your use cases for DynamoDB Transactions
+is doing things like processing financial transactions,
+fulfilling and managing orders,
+building multiplayer game engines,
+or coordinating actions across
+distributed components and services.
+So in terms of transactions themselves,
+like I said, it's multiple "all or nothing" operations.
+You can use these for financial transactions,
+or fulfilling orders, for example.
+And you actually get three options for reads.
+So you get eventual consistency,
+strong consistency, and transactional.
+And then you get 2 options for your writes,
+which is standard and transactional.
+And you're allowed up to 25 items per go,
+as well as 4 MB of data per transaction.
+So, onto my exam tips.
+DynamoDB Transactions, if you see
+any scenario question that mentions ACID requirements,
+I want you to think of DynamoDB Transactions.
+DynamoDB Transactions provides developers
+with atomicity, consistency, isolation,
+and durability, or ACID, across one or more tables
+within a single AWS account and region.
+And just remember the transactions are all or nothing.
+So if you are designing an application,
+and you want to make sure that every single table is updated
+in one transaction and nothing fails,
+then you want to use ACID,
+and you need to use DynamoDB Transactions.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

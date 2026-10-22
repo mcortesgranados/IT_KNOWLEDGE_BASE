@@ -1,0 +1,60 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture we're going to look at
+analyzing time-series data
+with Amazon Timestream.
+So first thing we're going to look at
+is what is time-series data?
+Then we're going to look at some examples of it.
+Then we're going to look at Amazon Timestream,
+and then we will move on to my exam tips.
+So what is time-series data?
+Well, it's basically just data points that are logged
+over a series of time,
+allowing you to track your data.
+So examples could be things like temperature readings
+from weather stations around the world.
+And this could be on the hour, every hour for years.
+So time-series data is exactly what it sounds like.
+It's just data taken over a series of points in time.
+So, some examples of this are things like IoT.
+So IoT sensors relay thousands, millions,
+and billions of points of information
+depending on the setup.
+One use case for this is agriculture.
+So you could have IoT sensors all around a farm,
+checking for moisture in the soil,
+and that is all time-series data that's being relayed
+back to you to collect.
+So you know that if you're having a particular dry patch,
+you might need to go over to a particular part of your farm
+and water it.
+I don't know much about agriculture,
+but that could be a good use case scenario.
+The other example is analytics.
+So large websites such as Netflix
+serve of millions of users per second
+and you might need to analyze incoming
+and outgoing web traffic.
+Or it could be for your DevOps applications.
+So applications that change in response to users needs
+may need to be monitored continuously,
+so they can scale correctly.
+So enter Amazon Timestream,
+and basically Timestream is just a database service,
+a fully managed database service,
+that's used for time-series data.
+And you can actually analyze trillions of events per day.
+And up to a thousand times faster and as little as
+one 10th the cost of traditional relational databases.
+So Timestream databases are purposed built database
+for time-series data.
+So that is all you really need to know
+going into your exam.
+If you see a scenario based question about where
+to store a large amount of time-series data for analysis,
+I want you to think of Amazon Timestream.
+So that's it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.

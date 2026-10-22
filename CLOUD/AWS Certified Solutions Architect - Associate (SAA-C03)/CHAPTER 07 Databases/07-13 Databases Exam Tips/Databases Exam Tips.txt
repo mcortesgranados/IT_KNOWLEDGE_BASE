@@ -1,0 +1,238 @@
+Okay.
+Hello, cloud gurus, and welcome to this lecture.
+In this lecture, we're going to review
+everything that we've just learned
+about databases in this section of the course.
+So let's start with RDS.
+So RDS database types come in SQL Server,
+Oracle, MySQL, PostgreSQL, MariaDB, and Amazon Aurora.
+RDS is for online transaction processing workloads.
+So this is where you are basically
+processing lots of small transactions like customer orders,
+banking transactions, payments, and booking systems.
+It's not really suitable for online analytics processing.
+So for that, you would use something
+like Redshift for data warehousing
+and OLAP tasks like analyzing large amounts of data,
+reporting, and sales forecasting.
+And we're gonna cover off Redshift later on in the course.
+Now, you'll always be quizzed
+on where you should use read replicas
+versus where you should use multi-AZ.
+So read replicas,
+this is where you are scaling your read performance.
+So it's primarily used for scaling,
+not for disaster recovery.
+It requires automatic backups to be turned on.
+So if you can't, for some reason,
+create a read replica of your primary database,
+it just means you haven't turned on automatic backups.
+And then multiple read replicas are supported.
+So you can have up to five read replicas
+for MySQL, MariaDB, PostgreSQL, Oracle, and SQL Server.
+In terms of multi-AZ versus read replica,
+like I said earlier,
+so an exact copy of your production database
+is in another availability zone for multi-AZ.
+It's used only for disaster recovery.
+And in the event of a failure,
+RDS will automatically fail over to the standby instance.
+Whereas with read replicas,
+read only copy of your primary database
+in the same availability zone,
+cross availability zones, or cross regions is available.
+And of course, you use this to increase
+or scale your greed performance.
+So if you get a scenario question
+about your database bottlenecking
+and how you can get around it,
+think automatically of read replicas.
+So it's great for read heavy workloads
+and it takes the load off your primary database
+for read only workloads.
+So this could be things
+like business intelligence reporting jobs, et cetera.
+So moving on to Aurora, just remember going into your exam
+that Aurora is Amazon's proprietary database.
+It's something that they have created themselves.
+It's compatible with MySQL, as well as PostgreSQL.
+It always has two copies
+of your data in each availability zone
+with a minimum of three availability zones.
+So you always have six copies of your data.
+So it's very, very redundant.
+You can also share Aurora snapshots with other AWS accounts,
+and you have three types of replicas available with Aurora.
+So you've got Aurora replicas themselves,
+but then you can also create MySQL replicas
+and PostgreSQL replicas.
+And automated failover is actually only available
+when you have Aurora replicas.
+And Aurora has automated backups turned on by default.
+And you can also take snapshots with Aurora
+and you can share these snapshots with other AWS accounts.
+Now don't forget about Aurora Serverless
+and what the use cases are for it.
+So it provides a relatively simple cost-effective option
+for infrequent, intermittent, or unpredictable workloads.
+If you see any scenario-based question
+where it's talking about setting up a serverless database,
+I want you to automatically think of Aurora
+and we will cover off what serverless is
+later on in the course as well.
+So moving on to DynamoDB, four facts about DynamoDB.
+It's stored on SSD storage.
+It's spread across
+three geographically distinct data centers,
+and you can have eventually consistent reads,
+which is what you get by default.
+But then you can also have strongly consistent reads.
+And just in case you need a reminder
+of the difference between eventually consistent reads
+and strongly consistent reads,
+eventually consistent means that consistency
+across all copies of data
+is usually reached within about a second.
+And repeating a read after a short time
+should return the updated data.
+And this gives you the best read performance.
+However, if your application needs to automatically
+get any changes to the data,
+you wanna turn on strongly consistent reads.
+And this will return a result that reflects all rights
+that have received a successful response prior to the read.
+Moving on to DynamoDB transactions,
+this is where you have multiple all-or-nothing operations.
+So it's good for things like financial transactions
+or fulfilling orders.
+And you have three options for your reads.
+You have eventual consistency, strong consistency,
+and then transactional.
+And you can have 25 items using DynamoDB transactions
+or four megs of data.
+And if you see any scenario question
+that mentions ACID requirements,
+I want you to think of DynamoDB transactions.
+So DynamoDB transactions provides developers
+with atomicity, consistency, isolation, and durability
+across one or more tables within AWS account
+or AWS region.
+So again, if you see something about ACID requirements
+with DynamoDB, you need to use DynamoDB transactions.
+And this just basically means
+you've got all-or-nothing transactions.
+So you either need to add an item
+to all the tables in one transaction,
+but if one of those tables fails for whatever reason,
+you don't want one item going into one table
+or not into another table
+because that wouldn't have ACID consistency.
+So you need to make sure
+you've got DynamoDB transactions turned on,
+and that way either the right will happen or it won't.
+Moving on to DynamoDB on-demand backups and restore,
+so this is where you can back up your DynamoDB database
+with full backups at any time.
+It has zero impact on your table performance
+or availability, and you have consistent within seconds
+and your backups are retained until deleted.
+And it operates within the same region as the source table.
+So when you're creating a DynamoDB backup,
+it will be in the same region as the source table.
+And then we have DynamoDB point-in-time recovery.
+This is really cool technology.
+It protects against accidental rights or deletes,
+and you can restore your DynamoDB database
+to any point in the last 35 days.
+The backups are incremental, it's not enabled by default,
+however, you will have to go and turn it on.
+And the last restorable rate
+is gonna be five minutes in the past.
+We then learn about DynamoDB streams,
+and this is where you can maintain
+first in first out records of your data.
+So as you go and add transactions,
+basically it's given a sequence number.
+These sequences are stored in a stream
+and the data's broken up into shards.
+So it's just time ordered sequences
+of item level changes in a table.
+Every shard is stored for 24 hours
+and your stream records are gonna consist
+of things like inserts, updates, and deletes.
+And you can combine this with a Lambda function
+to add functionality like stored procedures.
+So if you're a SQL DBA
+or a MySQL DBA and you've used stored procedures before,
+essentially you can have the same tech kind of concept
+with DynamoDB.
+You can do that using a Lambda function,
+and we will explore what Lambda is later on in the course.
+So with global tables,
+this is where you have managed multi-master,
+multi-region replication.
+It's designed where you've got applications
+that are globally distributed.
+You need to have DynamoDB streams turned on.
+So it's based off DynamoDB streams.
+And this is basically allows you
+to have multi-region redundancy for disaster recovery
+or higher availability.
+And you don't have to rewrite your application.
+As we saw, this is all built-in functionality
+within DynamoDB.
+And your application latency
+typically will be under one second.
+And the key thing here is to remember,
+if they're talking about if you wanna add redundancy
+to DynamoDB, you'll need to turn on global tables.
+If global tables isn't turning on
+you need to make sure that you've enabled DynamoDB streams.
+So moving on to running Mongo compatible databases
+in the cloud, do you remember the name
+of the database technology you should use?
+Well, it is Amazon DocumentDB.
+So a typical question might be around
+moving your MongoDB database to AWS.
+So you've got on-premise, you might wanna use something
+like AWS database migration service,
+which we're gonna cover off later on
+in the migration section of the course.
+And then where are you going to deploy it?
+Well, you use Amazon DocumentDB for MongoDB workloads.
+So if you see a scenario question
+where they're talking about migrating MongoDB
+from on-premise to AWS,
+I want you to think of Amazon DocumentDB.
+If you see a scenario question about Cassandra,
+so this would be about migrating
+a big data Cassandra cluster to AWS.
+I want you to think of AWS key spaces.
+Moving on to Neptune, this is often used as a distractor.
+So if the scenario is not talking about graph databases,
+do not select Neptune as an answer.
+Neptune definitely comes up a lot in the exam,
+but it is almost nine times out of 10 a distractor.
+So just remember, if it's not talking about graph databases,
+don't select Neptune.
+You only need to know what Neptune is
+at a very high level.
+Onto QLDB, this is also often used as a distractor.
+So this is quantum ledger database technology.
+So if the scenario's not talking about
+an immutable database, do not select QLDB.
+Again, you only need to know what this is
+at a very high level.
+If you see a scenario question about time series data,
+then I want you to think of time stream.
+So this might be where you've got temperature sensors
+from all around the world at weather stations
+and it's collecting the temperature every second
+across thousands of locations.
+You need to store it in a database.
+Then I want you to think of Time stream.
+So that is it for this section of the course.
+You've done very, very well.
+If you have any questions, please let me know.
+If not, feel free to move on to the next section.
+Thank you.

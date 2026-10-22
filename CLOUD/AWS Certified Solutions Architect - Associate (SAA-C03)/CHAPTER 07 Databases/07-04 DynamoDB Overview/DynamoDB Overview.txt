@@ -1,0 +1,148 @@
+Okay, hello club gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at DynamoDB.
+So we're gonna start with what DynamoDB is.
+We're gonna look at it at a very high level,
+then talk about the read consistency models,
+and then look at DynamoDB Accelerator,
+which is otherwise known as DAX.
+We'll look it out on-demand capacity,
+we'll then look at DynamoDB security,
+and then we'll move on to my exam tips.
+So what is DynamoDB?
+Well, like I said,
+Aurora is a proprietary database technology for Amazon.
+DynamoDB is exactly the same,
+except it's not a relational database technology,
+it's a non-relational database technology.
+So Amazon DynamoDB is a fast
+and flexible NoSQL database service
+for all applications that need consistent
+and single digit millisecond latency at any scale.
+It's fully managed database and it supports both document
+and key value data models and it's flexible data model
+and reliable performance make it a great fit
+for things like mobile, for web, gaming,
+ad-tech, IoT and many other applications.
+So some facts about DynamoDB,
+it's all stored on SSD storage.
+It's spread across three
+geographically distinct data centers,
+and you get eventual consistent reads by default,
+and you can also opt in for strongly consistent reads.
+So what does that actually mean?
+What's the difference between eventually consistent reads
+and strongly consistent reads?
+Well, eventually consistent reads means
+that consistency across all copies of data
+is usually reached within one second or within a second.
+Repeating a rate after a short time
+should return the updated data.
+And this gives you the best read performance.
+However, a strongly consistent read returns
+a result that reflects all writes
+that received a successful response prior to that read.
+So you don't have to wait a second
+with strongly consistent reads.
+So let's look at DynamoDB Accelerator or DAX.
+It's fully managed,
+it's highly available
+and it's an in-memory caching service for DynamoDB.
+And it actually gives you up to 10 times
+the performance improvement
+than just using DynamoDB on its own.
+And it reduces request times for milliseconds
+to microseconds even under load.
+And there's no need for developers
+to manage your caching logic.
+It's all done by DynamoDB DAX,
+it's all built-in
+and it's compatible with DynamoDB API calls.
+Let's have a look at how it works.
+So if you've got a traditional cache,
+so you've got your application
+and essentially what your application
+will do is it will query the cache
+and see if that information is there.
+If it's not there,
+then it will go and query your database.
+So in this case,
+it'd be DynamoDB.
+DynamoDB will then return that information back
+to your application,
+and then it will store it in the cache
+for whatever the time to live is.
+So that's the way a traditional cache works.
+Now, caching with DAX is a little bit different.
+Basically, your application doesn't
+have to juggle between the two,
+your application speaks directly
+to DynamoDB DAX Accelerator,
+and then it looks as to whether
+or not that information is inside and cached inside DAX.
+If that information isn't cached inside DAX,
+what DAX will do is then go interrogate DynamoDB,
+bring the data out and then it will cache it in DAX itself.
+So your application only has to worry
+about connecting to DAX.
+It doesn't have to worry about connecting to a cache,
+then connecting to DynamoDB,
+and then passing that information back to a cache.
+So it's much more streamlined process.
+In terms of on-demand capacity,
+so with DynamoDB it's pay-per-request pricing.
+This is a good balance of cost and performance.
+You don't have to worry about a minimum capacity.
+There is none,
+and you pay more per request than with provisioned capacity.
+And it's great for things
+like new product launches, et cetera.
+Moving on to security,
+so we've got our encryption at rest using KMS.
+We also can connect to DynamoDB using a site-to-site VPN.
+We can also use Direct Connect,
+which we're gonna cover off later on
+in the VPC section of the course.
+DynamoDB works with IAM policies and roles.
+So it allows you to put fine-grain access
+as to who can actually access your data
+and make changes, et cetera.
+And it integrates with CloudWatch and CloudTrail.
+Again, we're going to look at
+these services later on in the course,
+but essentially it's a way of monitoring both performance
+and watch changes people are making to DynamoDB.
+So it integrates with all of them as well as VPC endpoints.
+And again, we're gonna cover that off
+in the VPC section of the course,
+but essentially a VPC endpoint just allows you
+to directly communicate with something
+like DynamoDB without leaving the Amazon backbone networks.
+So you don't have to traverse the internet
+in order to speak to DynamoDB.
+Your applications can do it all over the backbone network
+of AWS using VPC endpoints.
+So onto my exam tips,
+just going into the exam,
+remember these facts about DynamoDB.
+First of all, it's stored on SSD storage.
+It spread across three geographically distinct data centers.
+By default, you're gonna get eventually consistent reads,
+but you can also have strongly consistent reads.
+Now, if you remember we covered it off,
+but what's the difference
+between eventually consistent reads
+and strongly consistent reads?
+Well, eventually consistent means you get consistency
+across all copies of your data within one second.
+So repeating a read after a short period of time,
+so one second should return the updated data.
+This gives you the best read performance,
+whereas strongly consistent reads is where it returns
+a result that reflects all writes that received
+a successful response prior to the read.
+So that's it as an introduction to DynamoDB,
+we are gonna deep dive quite a bit on DynamoDB
+in the rest of this section of the course.
+So if you've got the time,
+please join me in the next lecture, thank you.

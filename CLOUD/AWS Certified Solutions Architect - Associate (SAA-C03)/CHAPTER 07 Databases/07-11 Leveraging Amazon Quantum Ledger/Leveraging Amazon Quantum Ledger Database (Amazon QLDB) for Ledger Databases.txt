@@ -1,0 +1,78 @@
+Hello, Cloud Gurus, and welcome to this lecture.
+In this lecture we're going to look
+at leveraging Amazon Quantum Ledger Database
+or QLDB for ledger databases.
+So that is a mouthful I know.
+So basically we're going to start
+off with what is a ledger database?
+Then we're going to look at QLDB.
+We're going to look at the use cases
+and then we are going to go on and discuss our exam tips.
+Now, just like in Neptune, QLDB is essentially mostly
+just a distractor
+and you just need to know what it is.
+So let's start with what is a ledger database,
+and essentially it's a NoSQL database that's immutable,
+transparent, and has cryptographically
+verifiable transaction logs that is owned by one authority
+and basically you can't update a record,
+and by that I mean you can't replace old content
+in a ledger database.
+Instead, an update adds a new record to the database.
+And so that's what we mean by it's immutable.
+You can't go back in and change a transaction.
+You basically just go in
+and add a new transaction that updates that record set.
+So ledger databases are the most common use case for them is
+for cryptocurrencies such as Bitcoin, Ethereum, etc.
+And that's what we're always talking
+about when people are talking
+about the blockchain and transactions on the blockchain.
+Basically, you can't go in
+and change a transaction historically.
+You basically go in and create a new transaction
+that updates that wallet for example.
+It's also used in shipping companies.
+They use it to track items, boxes,
+shipping containers, deliveries, etc.
+And then pharmaceutical companies use it to track creation
+and distributions of drugs to ensure no counterfeits
+are produced.
+So what is Amazon QLDB Quantum Ledger database?
+Well, basically it's a fully managed ledger database that
+provides a transparent and immutable and cryptographically
+verifiable transaction log.
+So basically it's Amazon's way of doing ledger databases.
+So in terms of the use cases for QLDB
+we can store financial transactions.
+So we can create a complete and accurate record
+of all financial transactions such as credit
+and debit transactions.
+We can reconcile supply chain systems, so we can basically
+record the history of each transaction and provide details
+of every batch manufactured, shipped, stored,
+and sold from facility to store.
+So we can also maintain a claims history.
+This is where you can track a claim over its lifetime
+and cryptographically verify data integrity to
+make the application resilient against any data entry errors
+and manipulations and then we can also just
+centralize our digital records
+so we can implement a system of record application to
+create complete centralized records of employee details
+such as payroll, bonuses and benefits, etc.
+So like I said at the beginning, in terms of my exam tips
+QLDB is often used as a distractor, especially if they're
+talking about some kind of quantum computing
+they might throw in QLDB cause it sounds similar.
+Don't worry about it all you need to do is
+if the scenario is not talking about immutable databases
+do not select Amazon QLDB as an answer.
+Basically going into the exam
+you just need to know what QLDB does at a very high level.
+So it's just Amazon's immutable database QLDB.
+If you don't need an immutable database
+then don't select it as an answer.
+So that's it for this lecture everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture, thank you.

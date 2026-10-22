@@ -1,0 +1,69 @@
+Hello, Cloud Gurus,
+and welcome to this lecture.
+In this lecture, we're going to look at operating
+MongoDB-compatible databases in Amazon DocumentDB.
+So first thing we're going to learn is what is MongoDB,
+then we're going to look at an example,
+then we're going to talk about what Amazon DocumentDB is
+and why you should use it,
+and then we will go onto my exam tips.
+So what is MongoDB?
+Well, basically it's a document database
+that allows for scalability and flexibility
+with your data, as well as robust querying
+and indexing features.
+So this is an example of a MongoDB database.
+You can see it's just using NoSQL
+and this example is a document database for 2 restaurants.
+So we've got our Sun Bakery
+and then we've got Blue Bagels Grill in here.
+So this is our name.
+You can see it's just key-value pairs.
+We've got the number of stars, we've got the categories,
+and you can add as many categories in as you want
+because it is a NoSQL database.
+So that's all that MongoDB looks like.
+Well, what is Amazon DocumentDB?
+Well, basically, it allows you
+to run MongoDB on the AWS cloud.
+So it's a managed database service
+that scales with your workloads
+and safely and durably stores your database information.
+So basically, Amazon DocumentDB is just a way
+of running MongoDB workloads on the AWS cloud.
+Now, of course, if you've got a NoSQL environment,
+you might just want to use DynamoDB.
+Where you're going to see this coming up in the exam
+is where you've got specific use cases.
+You basically want to take your MongoDB
+and you don't want to have to refactor anything.
+You just want to move it to AWS cloud.
+So that's when you're going to select Amazon DocumentDB.
+So why use it?
+Well, you no longer have to worry about all the manual tasks
+when running MongoDB workloads.
+This is things such as cluster management software,
+configuring backups or monitoring production workloads.
+Basically, you can get rid of your operational overheads.
+So onto my exam tips, a typical question might be
+about moving your MongoDB database to AWS
+and the best way to do this.
+So you've got MongoDB running on-premises.
+You might want to use AWS' database migration service.
+We do cover this in a lot more detail
+in the migration section of the course,
+but it's basically what it sounds like.
+It's a way of automating database migration
+from on-premise to AWS and then you have to select
+the database engine that you would do it
+and a detractor might be DynamoDB
+'cause it's a NoSQL database.
+You can't run MongoDB workloads on DynamoDB.
+If you're going to run a MongoDB workload,
+you need Amazon DocumentDB.
+So if you see any scenario questions where they talk
+about migrating MongoDB from on-premise to AWS,
+I just want you to think of Amazon DocumentDB.
+So that is it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture. Thank you.

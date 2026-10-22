@@ -1,0 +1,434 @@
+QUESTION 1
+
+Which of the following statements about Amazon RDS DB Instances is true?
+
+CORRECT
+Amazon VPC enables you to launch Amazon RDS DB instances into a virtual private cloud (VPC).
+
+
+There is no limit to the number of RDS DB Instances you can run.
+
+
+Amazon will not perform maintenance on your RDS DB Instances unless you specify a maintenance window.
+
+
+You are limited to 100 databases in RDS for MySQL Instances.
+
+Good work!
+Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources, such as Amazon RDS DB instances, into a virtual private cloud (VPC). Amazon Virtual Private Cloud VPCs and Amazon RDS (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.html).
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+You have an on-premises MongoDB database that you need to migrate to the AWS cloud. Which AWS service will help you achieve this?
+
+
+Amazon Aurora
+
+
+Amazon Neptune
+
+CORRECT
+Amazon DocumentDB
+
+
+Amazon Route 53
+
+Sorry!
+Aurora is Amazon's proprietary relational database service and is not compatible with MongoDB.
+
+Correct Answer
+DocumentDB allows you to run MongoDB in the AWS cloud. It’s a managed database service that scales with your workloads and safely and durably stores your database information.
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+What would you use Amazon Neptune for?
+
+
+To manage cloud infrastructure
+
+CORRECT
+As a graph database service
+
+
+As a DNS service
+
+
+As a monitoring service
+
+Sorry!
+CloudFormation is Amazon’s cloud infrastructure management service.
+
+Correct Answer
+Neptune is Amazon’s graph database service.
+
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+What should you do to scale out an RDS database that has a read-heavy workload?
+
+
+Scale RDS vertically.
+
+CORRECT
+Add additional read replicas.
+
+
+Enable Multi-AZ.
+
+
+Set up RDS automatic backups.
+
+Sorry!
+While this could help, adding read replicas would be a better idea. Reference Documentation: Read Replicas (https://aws.amazon.com/rds/features/read-replicas/)
+
+Correct Answer
+Read replicas are perfect for read-heavy workloads. Reference Documentation: Read Replicas (https://aws.amazon.com/rds/features/read-replicas/)
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which of the following is the correct description of Amazon Timestream?
+
+
+A fully managed database service that allows you to run MongoDB in the AWS cloud.
+
+
+A fully managed ledger database that provides a transparent, immutable, and cryptographically verifiable transaction log.
+
+CORRECT
+A serverless, fully managed database service for time series data.
+
+
+A fully managed Apache Cassandra database service that allows you to run Cassandra workloads on AWS.
+
+Sorry!
+DocumentDB is Amazon's fully managed database service that allows you to run MongoDB in the AWS cloud.
+
+Correct Answer
+Timestream is Amazon's serverless, fully managed time series database.
+
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+You need a fully managed ledger database that provides a transparent, immutable, and cryptographically verifiable transaction log. Which AWS service should you use?
+
+CORRECT	QUESTION 2
+
+Fill in the blank: DynamoDB is a ________ database.
+
+
+Relational
+
+
+Relationship
+
+
+Graph
+
+
+Non-Relational
+
+Good work!
+DynamoDB is a non-relational database. Reference Documentation: Dynamo DB (https://aws.amazon.com/dynamodb/)
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Fill in the blank: DynamoDB is a ________ database.
+
+
+Relational
+
+
+Relationship
+
+
+Graph
+
+CORRECT
+Non-Relational
+
+Good work!
+DynamoDB is a non-relational database. Reference Documentation: Dynamo DB (https://aws.amazon.com/dynamodb/)
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which of the following is NOT a supported RDS database engine?
+
+
+SQL Server
+
+
+Oracle
+
+
+MariaDB
+
+CORRECT
+MongoDB
+
+Sorry!
+SQL Server is a supported database engine. Reference Documentation: RDS (https://aws.amazon.com/rds/)
+
+Correct Answer
+MongoDB is not a supported database engine. Reference Documentation: RDS (https://aws.amazon.com/rds/)
+
+
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+You need a serverless, fully managed database service for time series data. Which AWS service should you use?
+
+
+Amazon Neptune
+
+
+Amazon Quantum Ledger Database
+
+CORRECT
+Amazon Timestream
+
+
+Amazon Keyspaces
+
+Sorry!
+Neptune is Amazon’s graph database service.
+
+Correct Answer
+Timestream is a serverless, fully managed database service for time series data.
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Which is not a benefit of using RDS Multi-AZ?
+
+
+If your primary database fails, you'll automatically fail over to the secondary copy.
+
+
+All updates or maintenance changes are applied to a secondary database. Multi-AZ rollovers are typically automatic but can be manually initiated.
+
+
+Backups are taken from a secondary copy of your data.
+
+CORRECT
+For an RDS Multi-AZ deployment with two readable standbys, in the event of a failure, both standbys take over and serve the workload from the primary at the same time.
+
+Sorry!
+This automatic failover is a supported feature.
+
+Correct Answer
+In the event of a failure, only one of the two remaining standbys takes over the write operations.
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 2
+
+Which feature is not supported by Amazon Aurora?
+
+
+Aurora Serverless
+
+CORRECT
+Up to 20 Read Replicas
+
+
+Automatic Backups
+
+
+Multiple AZ data storage copies
+
+Sorry!
+Aurora Serverless is a supported feature of Aurora. Reference Documentation: Aurora (https://aws.amazon.com/rds/aurora/)
+
+Correct Answer
+Aurora supported up to 15 read replicas, not 20. Reference Documentation: Aurora (https://aws.amazon.com/rds/aurora/)
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Which of the following is a use case for Amazon Keyspaces?
+
+CORRECT
+To run Cassandra workloads on AWS
+
+
+To run immutable databases in the cloud
+
+
+To run MongoDB workloads in the AWS cloud
+
+
+To route DNS queries
+
+Good work!
+Keyspaces is Amazon's fully managed Apache Cassandra database service that allows you to run Cassandra workloads on AWS.
+
+
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+Amazon Aurora is compatible with which of the following database engines?
+
+
+Microsoft SQL Server
+
+
+MariaDB
+
+
+Oracle
+
+
+MySQL
+
+Sorry!
+Microsoft SQL Server is not a compatible Aurora database engine. Reference Documentation: Aurora (https://aws.amazon.com/rds/aurora)
+
+Correct Answer
+MySQL is a compatible engine. Reference Documentation: Aurora (https://aws.amazon.com/rds/aurora)
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 1
+
+What type of read would you use with DynamoDB if you can't have stale data in your application?
+
+
+Strongly Consistent
+
+
+Sometimes Consistent
+
+
+Weakly Consistent
+
+
+Eventually Consistent
+
+Good work!
+Strongly consistent reads would ensure you don't have stale data. Reference Documentation: Read Consistency (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html)
+
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+Which of the following statements about DynamoDB is false?
+
+
+Scaling tables up or down in DynamoDB will not degrade performance.
+
+
+DynamoDB allows you to define Time to Live (TTL) timestamps per item.
+
+
+DynamoDB supports the ability to back up your data on-demand.
+
+CORRECT
+DynamoDB is a fully managed SQL database service.
+
+Sorry!
+With DynamoDB, you can create database tables that can store and retrieve any amount of data and serve any level of request traffic. You can scale up or scale down your tables' throughput capacity without downtime or performance degradation. Reference Documentation: What is Amazon DynamoDB? (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
+
+Correct Answer
+Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. Reference Documentation: What is Amazon DynamoDB? (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 4
+
+Which of the following statements about RDS read replicas is true?
+
+
+Read replicas can be deployed without automatic backup.
+
+
+If a read replica is promoted, you cannot create a new read replica of the newly formed instance.
+
+CORRECT
+RDS read replicas have their own endpoints.
+
+
+You cannot use an RDS read replica for disaster recovery.
+
+Sorry!
+When creating a read replica, there are a few things to consider. First, you must enable automatic backups on the source DB instance by setting the backup retention period to a value other than 0. This requirement also applies to a read replica that is the source DB instance for another read replica. To enable automatic backups on an RDS for MySQL read replica, first create the read replica, then modify the read replica to enable automatic backups. Reference Documentation: Working with DB instance read replicas (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html).
+
+Correct Answer
+Read replicas have their own endpoints. Reference Documentation: User Read Replicas (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html)
+
+
+
+_________________________________________________________________________________________________________________________
+
+QUESTION 5
+
+What is the longest you can store an automatic RDS backup?
+
+
+Forever
+
+
+7 Days
+
+CORRECT
+35 Days
+
+
+14 Days
+
+Sorry!
+RDS can be configured to store automatic backups for 35 days at most. Reference Documentation: RDS FAQs (https://aws.amazon.com/rds/faqs/)
+
+Correct Answer
+RDS can be configured to store automatic backups for 35 days at most. Reference Documentation: RDS FAQs (https://aws.amazon.com/rds/faqs/)
+
+
+
+_________________________________________________________________________________________________________________________
+
+
+
+QUESTION 3
+
+Which of the following statements about Amazon RDS automation is true?
+
+
+Any modifications made to your RDS DB Instance class are made during a specific maintenance window scheduled by AWS.
+
+CORRECT
+Amazon RDS automates patching the software that powers your database.
+
+
+Amazon RDS automatically scales storage by default.
+
+
+Amazon RDS does not allow you to automate backups.
+
+Sorry!
+Memory and CPU resources are modified by changing your DB Instance class, and storage available is changed when you modify your storage allocation. Please note that when you modify your DB Instance class or allocated storage, your requested changes will be applied during your specified maintenance window. Alternately, you can use the “apply-immediately” flag to apply your scaling requests immediately. Bear in mind that any other pending system changes will be applied as well. Reference Documentation: Amazon RDS FAQs (https://aws.amazon.com/rds/faqs/)
+
+Correct Answer
+Amazon RDS manages the work involved in setting up a relational database, from provisioning the infrastructure capacity you request to installing the database software. Once your database is up and running, Amazon RDS automates common administrative tasks, such as performing backups and patching the software that powers your database. Reference: Amazon RDS FAQs (https://aws.amazon.com/rds/faqs/)
+
+_________________________________________________________________________________________________________________________
+

@@ -1,0 +1,67 @@
+Okay.
+Hello, Cloud Gurus, and welcome to this lecture.
+This lecture we're going to talk
+about Implementing graph databases using Amazon Neptune.
+So the first thing we're going to cover off
+is what is a graph database?
+Then we're going to look at Neptune itself
+and then we'll look at different use cases.
+And then we'll go on to my exam tips.
+So let's start with what a graph database is,
+and if you have a look at this image,
+this is a basically great example of a graph database.
+So graph database is where data is stored
+just like you might sketch ideas on a whiteboard.
+So if we have a look at the top left-hand corner
+we've got John. John is friends with Sally.
+And then if we look at Jennifer,
+she is also friends with Sally,
+and Jennifer's also friends with John.
+So you can see that relationship there
+and then you can see where they work for
+what they like, etc., etc.
+So graph databases are basically that.
+It's just relationship graphs
+so a graph database stores nodes
+and relationships instead of tables or documents.
+That's all it is.
+So what is Neptune?
+Well, Neptune is Amazon's graph database service.
+So it's fast, reliable,
+fully managed graph database service
+that makes it easy to build and run applications.
+And in terms of use cases for Neptune,
+we can build connections between identities.
+So you can easily build identity graphs
+for identity resolution solutions,
+such as social graphs and accelerate updates
+for ad targeting, personalization, and analytics.
+You can also build out knowledge graph applications.
+You can add topical data to product catalogs,
+model general information,
+and help users quickly navigate highly connected data sets.
+You can also start detecting fraud patterns.
+You can build graph queries
+for near real-time identity fraud pattern detection
+in financial and purchase transactions.
+And then you can also use security graphs
+to improve IT security.
+So you can proactively detect and investigate
+IT infrastructure using a layered security approach.
+And you can basically visualize all your infrastructure
+to plan, predict, and mitigate risk.
+So in terms of my exam tips
+Neptune really doesn't come up that much.
+If it does come up, it comes up as a distractor.
+So it's basically in there to distract you
+from the correct answer.
+So if the scenario is not talking about graph databases,
+do not select Neptune as an answer.
+Basically, in CSA 03 exam,
+you only need to know what Neptune
+does at a very high level.
+So it's just Amazon's graph database.
+So that's it for this lecture, everyone.
+If you have any questions, please let me know.
+If not, feel free to move on to the next lecture.
+Thank you.
