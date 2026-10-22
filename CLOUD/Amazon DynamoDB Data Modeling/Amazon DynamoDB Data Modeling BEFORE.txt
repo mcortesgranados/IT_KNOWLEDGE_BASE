@@ -1,0 +1,134 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+10:42
+
+Course Introduction
+03:11
+
+About the Training Architect
+00:58
+NoSQL Concepts
+06:33
+CHAPTER 2
+
+Understanding DynamoDB Data Structures
+37:19
+
+DynamoDB and Tables
+11:33
+Items and Attributes
+02:51
+Partition and Sort Keys
+03:23
+Data Types
+02:59
+Indexes
+09:32
+Demo: Creating a Table
+07:01
+CHAPTER 3
+
+Partition Keys
+06:49
+
+Partition Keys
+06:49
+CHAPTER 4
+
+Common Patterns
+3:39:59
+
+NoSQL Data Modeling Concepts
+04:11
+One-to-Many Relationships
+08:47
+
+Adjacency Lists and Many-to-Many Relationships
+11:00
+Hierarchical Data
+14:52
+GSI Overloading
+08:31
+Write Sharding
+12:48
+Item Versioning
+10:54
+Sparse Indexes
+04:42
+Materialized Aggregations
+09:14
+HANDS-ON LAB
+Managing Data Relationships in DynamoDB
+45:00
+HANDS-ON LAB
+Utilizing Write Sharding to Optimize Data Ingestion
+45:00
+HANDS-ON LAB
+Tracking CodeCommit Metadata with DynamoDB
+45:00
+CHAPTER 5
+
+Qualifying Your Workload’s Requirements
+18:51
+
+Simple Case Study
+02:04
+Defining an Entity–Relationship Model
+05:10
+Documenting Access Patterns
+04:16
+Data Lifecycle
+07:21
+CHAPTER 6
+
+Interpreting Access Patterns
+22:15
+
+Optimizing for Read/Write Workloads
+04:05
+Volume, Velocity, and Variety
+18:10
+CHAPTER 7
+
+Scenario 1 - User Profile Microservice
+2:27:22
+
+Scenario
+04:01
+Entities and Access Patterns
+02:04
+Data Model
+21:17
+HANDS-ON LAB
+Building a Microservice Application and DynamoDB Data Model
+2:00:00
+CHAPTER 8
+
+Scenario 2 - Relational to DynamoDB Migration
+1:55:40
+
+Scenario
+02:44
+Planning Phase
+05:05
+Data Analysis Phase
+05:36
+Data Modeling Phase
+13:11
+Testing Phase
+03:01
+Data Migration Phase
+18:09
+Evolving a Data Model
+07:54
+HANDS-ON LAB
+Migrating from a Relational Database to DynamoDB
+1:00:00
+CHAPTER 9
+
+What's Next?
+01:53
+
+What's Next?
