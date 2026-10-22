@@ -1,0 +1,154 @@
+Course Outline
+CHAPTER 1
+
+1. Introduction
+09:49
+
+About the Author
+02:10
+Course Tools
+03:43
+
+
+
+
+
+AWS Free Tier: Usage Tracking and Billing Widget
+03:56
+CHAPTER 2
+
+2. Secure Global Infrastructure and Compliance
+21:08
+
+Regions, Availability Zones, and Endpoints
+08:45
+VPC Endpoints
+08:33
+IAM and Compliance
+03:50
+CHAPTER 3
+
+3. Shared Responsibility and Trusted Advisor
+10:41
+
+Shared Responsibility Model
+05:41
+Trusted Advisor
+05:00
+CHAPTER 4
+
+4. Identity and Access Management (IAM)
+48:08
+
+Root User
+08:13
+Users and Groups
+10:34
+Roles
+13:24
+Policies
+10:01
+Visual Editor for Policy Creation
+02:02
+Access Advisor
+03:54
+CHAPTER 5
+
+5. Encryption Essentials
+1:18:35
+
+Symmetric and Asymmetric Encryption
+08:20
+HSM and KMS
+10:15
+HANDS-ON LAB
+AWS Security Essentials - KMS Integration with S3
+1:00:00
+CHAPTER 6
+
+6. OS-Level Access
+1:47:30
+
+Overview and SSH
+09:56
+Bastion Host
+02:07
+Linux Example
+16:05
+Windows Remote Desktop Example
+07:17
+Windows Bash Example
+07:23
+Windows PuTTY Example
+04:42
+HANDS-ON LAB
+AWS Security Essentials - Securing Connections with a Bastion Host
+1:00:00
+CHAPTER 7
+
+7. Data Security
+28:03
+
+Securing Data at Rest: S3 and Glacier
+10:04
+Securing Data at Rest: EBS and RDS
+05:43
+Securing Data at Rest: DynamoDB and EMR
+04:38
+Decommissioning Data and Media
+02:42
+Securing Data in Transit
+04:56
+CHAPTER 8
+
+8. OS Security
+1:30:53
+
+Custom AMIs and Bootstrapping
+12:27
+AWS Systems Manager- Patching/Automation
+14:36
+Mitigating Malware and Abuse
+03:50
+HANDS-ON LAB
+Preparing an Instance for a Custom AMI
+1:00:00
+CHAPTER 9
+
+9. Infrastructure Security
+2:10:47
+
+VPC Security
+08:43
+Network Segmentation
+13:31
+Strengthening and Threat Protection Layer
+07:51
+Testing and Measurement
+02:39
+AWS Web Application Firewall and Shield
+08:03
+HANDS-ON LAB
+AWS Security Essentials - Network Segmentation Lab
+1:30:00
+CHAPTER 10
+
+10. Monitoring, Alerting , and Auditing
+23:49
+
+Monitoring Basics
+03:40
+AWS Config
+05:56
+AWS Systems Manager- Inventory and Insights
+04:17
+AWS Inspector
+05:52
+AWS GuardDuty
+04:04
+CHAPTER 11
+
+Conclusion
+00:43
+
+Thank You and Next Steps
