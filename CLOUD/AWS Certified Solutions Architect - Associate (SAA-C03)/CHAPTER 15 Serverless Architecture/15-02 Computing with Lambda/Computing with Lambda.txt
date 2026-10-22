@@ -1,0 +1,257 @@
+Welcome back, gurus.
+In this lesson
+we're gonna talk about computing with AWS Lambda.
+In this lesson, we're gonna cover several different topics,
+including what AWS Lambda is.
+We'll talk about Lambda features more in depth.
+We'll discuss the configurations required
+for building a function.
+We're gonna look at some popular architecture examples
+you should be familiar with,
+and then we'll have some exam tips.
+Alright, what is AWS Lambda?
+AWS Lambda is a serverless compute service
+that frees you from the hassles of having to provision
+and manage servers to run your application code.
+You can say goodbye to server related overhead
+and instead concentrate on the code itself.
+Lambda actually allows you to run your code on demand
+with the added benefit of automated scaling,
+ensuring your applications can easily adapt
+to changes in workloads.
+You instead host and run your code
+in what are known as Lambda functions.
+These are meant to be isolated pieces of code
+that complete very specific tasks.
+Now that we know what Lambda is,
+let's go ahead and cover some of the important features
+that you need to be aware of for the exam.
+And, honestly,
+these are good to know for any real world application
+of the service as well.
+AWS Lambda offers a free tier
+that currently includes 1 million invocation requests
+per month,
+as well as 400,000 gigabytes of compute memory per month.
+Beyond the free tier, you start to pay per request,
+and this helps ensure cost efficiency
+for your varying workloads.
+You're only paying for what you use.
+Now, Lambda seamlessly integrates
+with a wide array of different services.
+This includes things like Amazon S3, DynamoDB,
+EventBridge, SQS and SNS, and even Kinesis streams,
+and these are just to name a few.
+This is actually what makes it so extremely versatile.
+For effective logging and monitoring,
+Amazon CloudWatch provides a user-friendly solution
+to host and analyze your functions logs.
+As far as configurations go, you have the flexibility
+to set memory requirements as needed.
+You specify a maximum capacity,
+which could go up to 10,240 megabytes,
+and it's also important to call out
+that CPU scales proportionally with your memory allocation.
+In other words, as you scale your memory,
+Lambda automatically scales the virtual CPUs
+that are offered to your function.
+Now, Lambda functions are ideal for short-term executions.
+This is because there's a time limit of 900 seconds,
+which is also known as 15 minutes.
+For tasks that exceed this duration, services like ECS,
+Batch, or even EC2 are likely better candidates
+for your workload.
+Lastly, it supports a variety
+of industry dominant programming languages.
+This includes Python, Golan, Java, Node.jss,
+and even many others.
+This makes it easily usable
+for a wide range of developers and applications.
+Now, let's go ahead and talk about
+building a Lambda function within the service.
+We're gonna start with some of the configurations
+that you are responsible for when creating and updating.
+The first I want to cover is the runtime.
+You need to select a runtime environment
+for your code to run in.
+This is essentially the underlying environment
+that's going to host the different required libraries
+for your applications code.
+For example, a Python environment is not going to host
+the necessary libraries or executables
+that you would need for a Node.js application.
+There's also permissions.
+For permissions, if your Lambda function requires access
+to AWS services and resources, you attach an IAM role to it.
+This role, of course,
+defines what the function is allowed to do within AWS.
+Next up is networking.
+This is where you can optionally configure your function
+to operate within a VPC.
+This allows you to control its network settings,
+including the choice of subnets and security groups,
+which enhance security and connectivity.
+If you don't specify networking configurations,
+then your Lambda functions run in an AWS owned VPC
+with internet access in place.
+You have no control over that VPC.
+The next section is resources.
+This is where you define the amount of memory allocated
+to your function as well as the timeout.
+This is an important consideration
+as it affects the function's performance
+as well as the cost.
+Remember, Lambda automatically allocates CPU power
+proportional to the amount of memory you configured.
+Now, the last thing here is triggers, and this is a big one.
+Lambda functions are meant to be triggered.
+This is their primary purpose in event driven architecture.
+This is where you can specify what event or condition
+will trigger your function to actually run its code.
+This trigger can be various things,
+including changes in an S3 bucket, messages in an SQSQ,
+or even a scheduled event using EventBridge.
+There are tons of ways to invoke at Lambda function.
+Now, let's go ahead and talk about quotas
+or otherwise known as limitations.
+The first portion I want to talk about is regarding
+the compute and storage aspect of a function.
+AWS Lambda provides the ability to run up
+to 1000 concurrent executions of a function.
+This means that 1000 instances
+of your function can run at the same time.
+Your Lambda function can use between 512 megabytes
+and 10 gigabytes of disc storage
+attached to the slash /tmp directory.
+This is meant to be temporary storage during an execution.
+Your Lambda functions can integrate with EFS
+to grow that storage, and this enables multiple functions
+to access the same file system.
+However, this does require VPC configuration.
+Environment variables for your functions
+have a size limit of four kilobytes in total,
+and you can allocate between 128 megabytes
+and 10 gigabytes of memory for your function.
+Remember, the CPU power scales with memory.
+The last thing here is regarding timeouts.
+A lambda function can run for a maximum of 900 seconds,
+or 15 minutes.
+Any tasks that need something longer than that
+need to consider other services.
+Moving on, let's talk about deployments and config.
+A compressed deployment package,
+which is a zip file containing code independencies,
+must be equal to or less than 50 megabytes in size.
+The uncompressed deployment package size,
+which is after unzipping,
+must be equal to or less than 250 megabytes.
+For indication requests and responses,
+the payload size, including any data sent or received,
+should not exceed six megabytes.
+When you're streaming responses, the size of the response
+should not be bigger than 20 megabytes.
+This last thing is relevant
+whenever your function returns data
+through a streaming approach.
+Now, these are the limitations that you should be aware of
+and you should know them for the exam, and actually,
+any real use cases.
+Another big thing to call out
+is if you have a large deployment package,
+you should upload that to an Amazon S3 bucket,
+and configure your function to reference that for its code.
+Now moving on,
+let's quickly look at some popular architecture examples
+that leverage Lambda.
+In this first example, we have a simple user,
+or an application, that's going to upload a data file.
+The file is uploaded to an Amazon S3 bucket
+that we've granted access to.
+Using an S3 event trigger,
+we can go ahead and create a new trigger
+based on a PutObject call for this file.
+The neat thing about Lambda functions
+is that they can easily integrate with S3 events
+to trigger this code.
+So, we've triggered our Lambda function by the S3 event
+based on that uploaded data file,
+and we can use this function
+to perform specific data processing and manipulation.
+Afterwards, we can go ahead
+and have multiple downstream resources
+that we want to send the data to.
+Now, in theory, you might use different functions
+for different requirements and aspects of this processing,
+and that's usually a best practice.
+However, for the sake of clarity in this diagram,
+we're going to assume we use the same function
+to perform two different actions.
+Now, these actions could be things like
+outputting a simple process file into a different bucket,
+or storing object metadata in a DynamoDB table.
+Remember, however, you have to leverage an IAM role
+for your function to be able to interact
+with these services and resources.
+Okay, let's move on to one more popular example.
+In this case, we're leveraging Amazon EventBridge
+and creating an EventBridge rule
+to trigger our Lambda function.
+Remember, you can easily configure triggers via EventBridge,
+and we can create either a rate-based,
+or a CRON-based scheduled rule,
+and we can set our Lambda functions
+to be the target of that rule.
+An example of something like this
+could be using EventBridge to trigger a function
+at the end of the workday
+to check for certain development EC2 instances,
+and then shutting them down if they are running.
+We could also check for production instances
+and leave those running so that they are up.
+This is a common cost saving scenario
+that could appear on the exam,
+so please be familiar with it.
+Okay, let's go ahead and wrap things up with some takeaways.
+Remember, Lambda is a powerful tool
+for automating operational tasks
+within your AWS environment.
+It can be used to trigger actions in responses
+to various events or conditions.
+Understanding Lambda's limitations and general use cases
+is critical.
+Please know the limitations, especially the time limits.
+Lambda functions get invoked by triggers.
+These can include things like changes in S3 buckets,
+messages in SQQS, HTTP requests via API gateway
+or even scheduled events using Amazon EventBridge.
+Be familiar with various triggers that can be used
+for designing these serverless applications.
+Also, know that Lambda excels in running small, short
+and lightweight functions.
+It's ideal for tasks like simple data processing,
+quick file manipulation,
+or even some real-time data analysis.
+Lambda is a central component of the AWS ecosystem
+and it can be seamlessly integrated
+with many other services.
+This is what makes it versatile
+for building complex and automated serverless workflows.
+And, lastly, you need to know that functions can run
+in or outside of a custom virtual private cloud.
+The default is running outside of the VPC,
+but you need to understand when and how
+to use VPC integrations for this exam.
+If you need to access a private resource
+like an RDS instance,
+you'll likely need to implement VPC configuration settings
+for your function.
+Okay, that's gonna do it for this lesson
+on computing with AWS Lambda.
+Please be sure to check out some of the hands-on labs
+that are within this course, as well,
+so you can get some hands-on experience building lambdas
+and then triggering them.
+This is ideal and key to fully understand the service.
+For now, let's go ahead and end here,
+and then whenever you're ready,
+we can move on to the next lesson.

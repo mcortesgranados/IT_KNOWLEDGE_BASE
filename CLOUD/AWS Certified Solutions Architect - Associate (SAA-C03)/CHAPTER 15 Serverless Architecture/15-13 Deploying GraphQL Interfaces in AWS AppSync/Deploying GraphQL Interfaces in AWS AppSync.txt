@@ -1,0 +1,42 @@
+Welcome back Cloud Gurus.
+This lesson is titled
+Deploying GraphQL Interfaces in AWS AppSync.
+Now, this is going to be a very short lesson.
+We're just going to talk about what is AWS AppSync,
+and then we're going have some exam tips,
+and important takeaways.
+So, what is it?
+Well, it's a robust and scalable
+GraphQL interface used for application developers.
+It allows them to easily combine data
+from multiple data sources,
+like Amazon DynamoDB and AWS Lambda.
+It enables developers to easily interact
+with their data via GraphQL.
+Now, GraphQL is a data language
+that enables applications to fetch data from servers.
+If you're a front end developer,
+you're likely at least familiar
+with this term and technology.
+However, if you're not familiar with it,
+it does offer many different benefits
+over traditional gateways and languages
+as it encourages declarative coding,
+and it works seamlessly
+with a lot of modern tools and frameworks.
+This includes things like React, React Native,
+iOS, and Android development.
+And that's pretty much it for the lesson.
+So, let's just have a few exam tips
+that you should be aware of in case this pops up.
+The first is that you just need to know,
+this is a scalable GraphQL interface.
+Its target audience is for application developers,
+especially frontend development.
+So, look for keywords like GraphQL,
+fetching of app data, declarative coding,
+or even frontend app data fetching.
+These are scenarios that might be a great fit
+for AWS AppSync and like I promised, short and sweet.
+Let's go ahead and we'll end here,
+and then I'll see you in the next lesson.

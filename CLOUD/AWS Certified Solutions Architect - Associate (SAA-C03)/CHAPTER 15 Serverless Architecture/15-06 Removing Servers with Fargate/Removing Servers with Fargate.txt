@@ -1,0 +1,330 @@
+Hello gurus.
+In this lesson we're gonna talk about
+removing servers with Fargate.
+In this lesson, we're gonna cover a few different topics.
+We're gonna talk about what Fargate is.
+We'll compare ECS launch types, EC2 compared to Fargate.
+We're gonna talk about using Lambda compared to Fargate.
+We'll have an in-console simple demonstration,
+and then we'll have some exam tips.
+Okay, what is AWS Fargate?
+AWS Fargate is a serverless compute engine
+that is tailored for running Docker containers.
+It offers a convenient platform
+for running your containerized applications in ECS.
+AWS fully owns and then manages
+the underlying infrastructure.
+This makes it easier for developers
+to focus on their application development
+rather than infrastructure management.
+To utilize Fargate, you must use either ECS
+or Amazon EKS in order to orchestrate
+and deploy your containers.
+It's simply a deployment type for the services.
+An important feature to note
+is that there is support for both Linux
+and Windows containers.
+This provides flexibility for various application needs.
+Now, Amazon ECS offers two distinct launch types,
+EC2 and Fargate,
+and they each have their own characteristics
+that you need to know about.
+For EC2, you are responsible
+for the underlying operating system
+and you must manage the instances.
+The pricing follows the basic EC2 pricing model,
+so it's based on instance type and usage.
+The EC2 launch type is well-suited
+for very long running containers
+and applications where you need more control
+of operating system settings.
+A neat feature with EC2 launch types
+is that multiple containers can share the same host,
+so it makes it suitable for multi-container scenarios.
+And lastly, this mode is capable
+of mounting Amazon Elastic File System
+for persistent in shared storage.
+Now for Fargate, there is no access to the underlying OS.
+AEWS manages the infrastructure entirely,
+including the operating system and the host.
+Your pricing is based on the resources
+that are allocated to your tasks,
+otherwise known as containers,
+and then you're billed for the time they run.
+So this follows a serverless pricing model.
+These are going to be ideal for shorter running tasks,
+and it provides an isolated
+and disposable environment per container.
+Now each container runs in their own environment,
+so it does make it suitable for highly secure
+or multi-tenant applications.
+Now, similar to the EC2 launch type,
+these can also mount Amazon EFS file systems
+for that shared storage.
+The choice between these two launch types
+is going to be dependent on your specific use case.
+So check the workload requirements
+and look at the level of control you need
+over the underlying infrastructure.
+"But Andru, what about Lambda?"
+Well, when would you wanna choose Fargate over Lambda?
+Let's go ahead and talk about it.
+AWS Fargate and Lambda offer
+different serverless compute options,
+each suited for their own particular use case.
+You'll want to choose Fargate
+when you have a more consistent
+and predictable set of workloads.
+This is a suitable choice for your applications
+that require greater control by the developers,
+and it allows for the use
+of Docker containers easily across the org.
+Fargate is going to be ideal for applications
+with relatively stable resource needs.
+Lambda, on the other hand,
+is an excellent choice for workloads
+that are unpredictable or inconsistent.
+For example, when you need to run code in response
+to many different specific events.
+It's designed for event-driven, serverless computing,
+and it's perfect for applications
+that can be expressed as single stateless functions.
+Another big thing is Lambda will automatically scale
+to handle changes in demand,
+making it well-suited for a wide range of use cases.
+The big thing to remember is that Lambda
+is going to be limited to a 15-minute execution time,
+as well as have limited runtime choices.
+The choice between these two needs to align
+with the specific requirements within the scenarios.
+Okay, let's go ahead and take a break.
+We're going to jump into the console,
+and I'm going to deploy spinning up a brand new
+simple web server using ECS Fargate.
+Okay, gurus, I'm in my Sandbox environment.
+Let's go ahead and navigate to Elastic Container Service
+so we can start launching a Fargate task.
+Now, once this loads, the first thing I need to do here
+is I need to create a task definition.
+A task definition is where you define
+your container specifications and information.
+So I'll go to task definitions.
+I'm gonna create a new one.
+and let's fill this out.
+I'm gonna call this httpd,
+because I'm gonna spin up
+a super simple web server to demonstrate this.
+Now, under Infrastructure, we see our launch type.
+Now we covered EC2 instance launch types
+in a different lesson,
+but for this we're gonna choose Frgate.
+So serverless compute for containers.
+We're gonna leave the OS the same,
+but you could change this to Windows server, et cetera.
+Now you'll notice the networking mode
+for this task definition,
+which is different from when you're doing
+an EC2 launch type, is that it's AWS VPC by default,
+and you can't change it.
+Now AWS VPC is a networking mode
+that essentially spins up your container
+on an underlying host that you don't don't get to manage,
+and it's going to spin up an ENI
+in the different VPC subnet configurations that you choose.
+So it must be this networking mode type for Fargate.
+Please remember that.
+Now, task size wise,
+we're gonna make this pretty small,
+so I'm gonna give it one CPU and two gig of memory,
+because remember, you pay for what you use.
+And as long as this task is running,
+we will be getting billed for this CPU and amount of memory.
+Now the next is the Task role.
+So the Task role is going to allow the tasks themselves
+the proper IAM permissions to make AWS API calls.
+I don't have one and I don't need one,
+but you do need to know that a Task role
+allows the containers to make AWS API calls.
+The Task execution role, on the other hand,
+is used by the container agent to make API calls.
+So we'll let the service create one for us.
+And this is essentially what the service uses
+in order to make the different calls
+that are required to spin up containers, et cetera.
+So we'll use the default of Create new one.
+Let's go down to Container,
+and this is where we define our container specifications.
+So this is similar to the EC2 launch type
+and the fact that we fill out similar details.
+So I'm gonna give this a name.
+I'm gonna go ahead and use the public Docker hub repo tag.
+So this is gonna be httpdlatest,
+and this is a cool thing to call out.
+If it's a public repository like Docker Hub,
+you can just reference it like this,
+or you can use a private internal URI
+for your own repositories.
+So if you're using Amazon ECR to store your images,
+you would paste that URI here.
+Another cool feature is private registry configuration.
+So you can set up authentication
+for your private registry if you have that in place.
+Now the next thing I'm gonna do is look at port mappings.
+So this is where it's a little different.
+You don't get to specify the host port that's being used.
+You only specify the container port.
+So we do want 80 because this is a web server.
+We want our TCP protocol, and we'll accept the default.
+So the Port name and then the App protocol,
+which is perfect.
+Now I'm gonna leave the other stuff the same,
+because we don't really need to cover that
+too in depth here,
+but I am gonna skip down to Environment variables.
+So be familiar with this capability.
+You can add Environment variables by key value pairs
+or from an EMV file,
+and you can reference those
+within your Docker container environment.
+So this is popular for adding secrets from Secrets Manager
+or pulling config from Parameter Store.
+You can do that via these Environment variables.
+The next section is Logging.
+So we're gonna use Log collection,
+and when we do generate logs, which really won't be a lot,
+it's gonna go ahead and send it to a log group
+in this region with this log stream prefix, et cetera.
+So this is where you can set log group specifications
+for your containers.
+Now the next thing we have
+that I do wanna cover is our HealthCheck.
+I'm not going to do this 'cause I don't need it,
+but you could easily supply a HealthCheck command
+to keep your container up whenever possible.
+So if we want to look into this in the documentation,
+for this, we're gonna leave it default.
+I'm going to leave this storage as default.
+And let's click on Create.
+Okay, so I have my task definition, perfect.
+So what I'm gonna do now is I'm going to go to Clusters.
+I'm gonna create a new cluster.
+We'll call it DevWebServer.
+It's going to be a Fargate cluster,
+so we're paying as you go.
+I'm gonna click on Create,
+and while this is creating I'm going to pause,
+and then once it's done creating, I will resume.
+Okay, so that took about a minute or so,
+and what happened is it created
+a Cloud Formation template for us,
+and it went ahead and deployed this DevWebServer cluster
+with nothing in it.
+Now, under infrastructure,
+you're gonna notice we have FARGATE and FARGATE_SPOT
+for the providers.
+So this is different from the EC2 type,
+because this is an AWS-managed capacity provider.
+So what I wanna do is I'm gonna create a new service.
+We're gonna leave the defaults here.
+We're gonna scroll down to Deployment configuration.
+And I'm gonna leave it at Service,
+because we have a long running application,
+like a web app, which this says;
+however, a standalone task is good
+for immediate small running jobs like a batch job.
+The next thing we specify is the Task definition.
+So, remember we created this earlier.
+so I'm gonna select httpd,
+we'll use the LATEST, and I'll give this a name.
+I'm gonna call it frontend-service.
+We'll leave it as a replica.
+And what this does is it maintains
+this one desired task as much as possible.
+Now, Daemon is only selected for other types,
+but you'll see that it places and maintains one copy
+of your task on each container instance.
+Now we don't do that because of our launch type,
+so we're using replica.
+So I'm gonna say 1 task.
+I'm gonna skip through Deployment options
+and Failure detection,
+and let's go to networking.
+So we're gonna use the default VPC and the default Subnets.
+We'll Create a new security group,
+and I'm gonna call it AllowHTTP,
+and I'm gonna give it a description,
+and then let's give it a rule.
+I'm gonna say we allow HTTP from Anywhere.
+And typically you would obviously wanna lock this down
+to either a load balancer that's fronting it,
+or specific IP addresses.
+For this demo I'm exposing this publicly,
+so I'm allowing all connections from the internet.
+Be very careful if you do this.
+Now I'm gonna skip through the rest.
+I'm gonna click on Create.
+And while this is deploying,
+I'm gonna go ahead and pause this again,
+and then once a task is running,
+we'll go ahead and check it out.
+Okay, so our service is created.
+It's still finishing a few things up,
+but you'll notice now it's listed frontend-service.
+We have one out of one task running.
+So now if I look at tasks, you'll see our task ID here,
+which is a container,
+and this will host that httpd latest image
+that's pulled from the public repository.
+So in theory now,
+I should be able to click on this open address,
+hit the public IP, and there we go, it's working.
+So we're using that public Apache image
+from the Docker Repo.
+We stood up a container with a public IP address
+using the Fargate launch type.
+The beautiful thing is we don't have to manage
+any of the underlying infrastructure.
+You only worry about the container and the task.
+Now, that's gonna do it for this demonstration.
+Let's wrap things up here
+and jump back into the presentation for some exam tips.
+Okay, welcome back, gurus.
+Hopefully that demonstration helped reinforce
+some of that knowledge we learned.
+Let's go ahead and have some exam tips before we move on.
+First, choose the right compute option.
+You need to understand the factors
+that influence you when you should choose Fargate
+compared to other compute options like Lambda or EC2.
+Consider things like workload consistency,
+the different requirements of control, and the use cases.
+Recognize that Fargate is a serverless compute option
+available through EKS or ECS.
+It makes it easier to deploy and run containers
+because it abstracts the infrastructure.
+Also, remember that Fargate
+requires the use of ECS and EKS.
+It does not function as a standalone service.
+This can appear on the exam as a very tricky distractor.
+Be aware that Fargate can be more user-friendly,
+because of the abstraction,
+but it can also be more expensive
+compared to the other launch types.
+Understanding the trade-offs is going to be important.
+Fifthly, Fargate is well-suited for containerized apps
+that run for longer durations compared to short-lived tasks.
+More specifically, you need to be able to tell
+when to use Lambda or Fargate.
+Now the last point here is that
+remember that IAM permissions for your containers
+or your tasks can be assigned using Task Roles.
+This is what allow the containers
+to access resources and services in AWS.
+Remember the difference between those
+and task execution roles.
+Task execution roles are for the agent to perform actions.
+Task Roles are for your container.
+And okay, that's gonna do it for this lesson on Fargate.
+It's go ahead and take a break,
+and whenever you are ready,
+we will see you in the next lesson.

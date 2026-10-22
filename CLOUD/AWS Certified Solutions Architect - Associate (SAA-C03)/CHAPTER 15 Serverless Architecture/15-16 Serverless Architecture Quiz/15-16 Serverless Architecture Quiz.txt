@@ -1,0 +1,423 @@
+QUESTION 1
+
+Which service is an AWS-managed repository for custom Docker images?
+
+
+AWS Docker Hub
+
+
+AWS Lambda Layers
+
+
+Amazon Elastic Container Service (Amazon ECS)
+
+CORRECT
+Amazon Elastic Container Registry (Amazon ECR)
+
+Sorry!
+AWS Docker Hub is not a real service.
+
+Correct Answer
+Amazon Elastic Container Registry (Amazon ECR) is an AWS-managed container image registry service that is secure, scalable, and reliable. You can store Docker images, Open Container Initiative (OCI) images, and OCI-compatible artifacts.
+
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 2
+
+How can you easily collect insights regarding requests and responses for your AWS Lambda application?
+
+CORRECT
+AWS X-Ray
+
+
+Amazon CloudWatch
+
+
+AWS CloudTrail
+
+
+Amazon OpenSearch
+
+Good work!
+AWS X-Ray is a service that collects data about requests that your application serves. It provides tools that you can use to view, filter, and gain insights into that data to identify issues and opportunities for optimization.
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 3
+
+Which of the following is a common trigger for Lambda?
+
+
+EC2
+
+
+QuickSight
+
+
+IAM
+
+CORRECT
+CloudWatch Events (EventBridge)
+
+Sorry!
+EC2 would not be able to directly trigger Lambda. You'd need to use something like CloudWatch Events in between the two services. Reference Documentation: Invoking AWS Lambda functions (https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html)
+
+Correct Answer
+CloudWatch Events (EventBridge) is a common trigger for Lambda. Reference Documentation: Invoking AWS Lambda functions (https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html)
+
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 4
+
+You need an AWS-managed GraphQL interface for development. Which AWS service would meet this requirement?
+
+
+Amazon Managed Grafana
+
+CORRECT
+AWS AppSync
+
+
+AWS Lambda
+
+
+Amazon Amplify
+
+Sorry!
+Amazon Managed Grafana is not a GraphQL interface.
+
+Correct Answer
+AWS AppSync provides a robust, scalable GraphQL interface for application developers to combine data from multiple sources, including Amazon DynamoDB, AWS Lambda, and HTTP APIs.
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 5
+
+What type of file is used to build a container image?
+
+CORRECT
+Dockerfile
+
+
+Container definition
+
+
+Image file
+
+
+build_info.txt
+
+Good work!
+You'd use a Dockerfile to create the container image. Reference Documentation: Docker basics for Amazon ECS (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html)
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 6
+
+What is the maximum amount of RAM you can allocate to a single Lambda function?
+
+
+1GB
+
+CORRECT
+10GB
+
+
+5GB
+
+
+512MB
+
+Good work!
+Lambda supports up to 10GB of RAM. Reference Documentation: AWS Lambda now supports up to 10 GB of memory (https://aws.amazon.com/about-aws/whats-new/2020/12/aws-lambda-supports-10gb-memory-6-vcpu-cores-lambda-functions/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 7
+
+How can you run your Kubernetes clusters on-premises while easily maintaining AWS best practices?
+
+
+VMware on AWS
+
+
+Reference the AWS Well-Architected Framework
+
+CORRECT
+Amazon EKS Anywhere
+
+
+Amazon ECS Anywhere
+
+Sorry!
+VMware on AWS does not meet the requirements.
+
+Correct Answer
+Amazon EKS Anywhere provides a means of managing Kubernetes clusters using the same operational excellence and best practices that AWS uses for its Amazon Elastic Kubernetes Service (Amazon EKS). It leverages the EKS Distro (EKS-D) for deploying, using, and managing Kubernetes clusters that run in your data centers.
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 8
+
+What is the maximum length of time Lambda can run?
+
+
+30 minutes
+
+
+1 minute
+
+CORRECT
+15 minutes
+
+
+1 hour
+
+Sorry!
+Lambda can run for up to 15 minutes. Reference Documentation: AWS Lambda enables functions that can run up to 15 minutes (https://aws.amazon.com/about-aws/whats-new/2018/10/aws-lambda-supports-functions-that-can-run-up-to-15-minutes/)
+
+Correct Answer
+Lambda can run for up to 15 minutes. Reference Documentation: AWS Lambda enables functions that can run up to 15 minutes (https://aws.amazon.com/about-aws/whats-new/2018/10/aws-lambda-supports-functions-that-can-run-up-to-15-minutes/)
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 9
+
+What feature of ECS and EKS allows you to run containers without having to manage the underlying hosts?
+
+
+EC2
+
+
+Lambda
+
+CORRECT
+Fargate
+
+
+S3
+
+Sorry!
+Fargate allows you to avoid using those pesky EC2 instances. Reference Documentation: AWS Fargate (https://aws.amazon.com/fargate/)
+
+Correct Answer
+Fargate allows you to run containers without using EC2 instances. Reference Documentation: AWS Fargate (https://aws.amazon.com/fargate/)
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 10
+
+You expect your new application to have variable reads and writes to the relational database. Which service allows you to test the optimal sizing of your instances while also keeping your budget in mind?
+
+
+MySQL on EC2
+
+
+Amazon RDS
+
+
+DynamoDB
+
+CORRECT
+Amazon Aurora Serverless
+
+Sorry!
+While you could use MySQL on EC2, it is not the most cost-effective solution, nor the most efficient option for planning capacity.
+
+Correct Answer
+Amazon Aurora Serverless is an on-demand, autoscaling configuration for Amazon Aurora. It is perfect for when you are running workloads that have sudden and unpredictable increases in activity, but you need to plan capacity. Since it is serverless, you also only pay for what you consume.
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 1
+
+Which is an option available for applications in the AWS Serverless Application Repository?
+
+
+Set Pricing
+
+
+Duplicating
+
+
+Removing
+
+CORRECT
+Deploying
+
+Sorry!
+This is not a valid option.
+
+Correct Answer
+You can search for and deploy serverless applications that have been published to the AWS Serverless Application Repository.
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 3
+
+You have decided to deploy an Amazon Aurora Serverless database. What do you specify to set the scaling limits?
+
+
+Aurora scaling units
+
+
+Amazon Aurora Reserved Instances
+
+
+DAX
+
+CORRECT
+Aurora capacity units
+
+Good work!
+These are how the clusters scale. They are based on a certain amount of compute and memory. You can set a minimum and maximum for automatically scaling between the units.
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 6
+
+Which IAM entity is assigned to a Lambda function to provide it with permissions to access other AWS APIs?
+
+
+Secret Key and Access Key
+
+
+Group
+
+
+Username and password
+
+CORRECT
+Role
+
+Sorry!
+While you could do this, it's not best practice. Reference Documentation: AWS Lambda execution role (https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html)
+
+Correct Answer
+Roles should be used for Lambda to talk to other AWS APIs. Reference Documentation: AWS Lambda execution role (https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 7
+
+Which distribution allows you to leverage Amazon EKS Anywhere?
+
+
+Amazon EKS Anywhere is not a real option
+
+
+Amazon EKS Library
+
+CORRECT
+Amazon EKS Distro (EKS-D)
+
+
+Amazon EKS Open-Source
+
+Sorry!
+Amazon EKS Library is not a real option.
+
+Correct Answer
+Amazon EKS Distro (EKS-D) is a Kubernetes distribution based on and used by Amazon Elastic Kubernetes Service (EKS) to create reliable and secure Kubernetes clusters.
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 8
+
+Where are container images stored?
+
+
+On a floppy disk
+
+
+In a user's home directory
+
+CORRECT
+In a container registry
+
+
+In GitHub
+
+Good work!
+You'd store the image in a registry, such as ECR. Reference Documentation: Amazon Elastic Container Registry (https://aws.amazon.com/ecr/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 10
+
+Which AWS service allows you to use Fargate without needing ECS or EKS?
+
+
+ECR
+
+CORRECT
+None — it's not possible
+
+
+EMR
+
+
+EC2
+
+Sorry!
+Fargate requires either ECS or EKS. It cannot run by itself. Reference Documentation: AWS Fargate (https://aws.amazon.com/fargate/)
+
+Correct Answer
+Fargate requires either ECS or EKS. It cannot run by itself. Reference Documentation: AWS Fargate (https://aws.amazon.com/fargate/)
+
+_______________________________________________________________________________________________________________________________________________
+
+QUESTION 9
+
+What is NOT a supported Lambda runtime?
+
+
+Java
+
+CORRECT
+COBOL
+
+
+Python
+
+
+Node.js
+
+Good work!
+COBOL is not a supported runtime for Lambda. Reference Documentation: Lambda runtimes (https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+
+
+_______________________________________________________________________________________________________________________________________________
+
+
+QUESTION 10
+
+Which open-source container management engine powers EKS?
+
+
+Amazon Container Server Placement Tool (ACSPT)
+
+
+Docker Swarm
+
+CORRECT
+Kubernetes
+
+
+ECS
+
+Good work!
+EKS is a managed version of Kubernetes. Reference Documentation: Amazon Elastic Kubernetes Service (https://aws.amazon.com/eks/)
+
+_______________________________________________________________________________________________________________________________________________
+

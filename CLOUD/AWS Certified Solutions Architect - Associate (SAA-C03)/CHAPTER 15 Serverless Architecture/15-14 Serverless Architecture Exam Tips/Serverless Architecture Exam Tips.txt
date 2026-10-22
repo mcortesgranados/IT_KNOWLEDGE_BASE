@@ -1,0 +1,112 @@
+All right, way to go, Cloud Gurus.
+You've made it through this section.
+So let's just take some time
+and have some Serverless Architecture Exam Tips
+that you can take with you into the exam.
+Firstly, 4 questions to ask yourself
+when you're taking the exam.
+The first is, is the application a right fit for containers?
+Or should it be hosted on something like EC2?
+Ask yourself do you actually need those servers
+that are running your application?
+Or can you shift to something more serverless?
+Also, is the application AWS specific?
+And if it is, you might be able
+to leverage services like ECS or Lambda.
+And then lastly, how long does your code need to run?
+That's a very big tell on what AWS service you can use.
+So let's talk about AWS Lambda.
+What should you know?
+Well, the first thing is that Lambda loves roles.
+Whenever we're talking about credentials and AWS Lambda,
+you have to make sure you're attaching an IAM role
+to the function so it can perform whatever actions it needs.
+You need to be familiar with Lambda triggers.
+You're going to see questions regarding
+what can kick off a Lambda function.
+Some very popular ones are things like Amazon S3 events,
+Kinesis, and even EventBridge,
+which was formerly CloudWatch Events.
+You also need to know Lambda's limitations.
+Your functions should be short and very specific.
+You can allocate up to 10 gigabytes of RAM,
+but you're limited to a 15-minute runtime window.
+So anything more than 15 minutes of execution
+is likely not a good fit for AWS Lambda.
+And then lastly, any AWS API call can be made.
+You can use any API call to kick off an EventBridge rule
+to perform your AWS Lambda,
+which can even itself trigger an EventBridge rule.
+It's faster than trying to look through CloudTrail
+and dig through whatever scenario you're trying to solve.
+Now we can move on to containers and images.
+If it's open source, think Kubernetes.
+If the question asks for a container management solution
+that can run in AWS and on-premises,
+you can maybe consider things like Amazon EKS
+or EKS Anywhere.
+You also need to know that Fargate cannot work alone.
+In order to leverage Fargate,
+you have to use things like Amazon ECS,
+and Amazon EKS.
+However, not all scenarios specify these services,
+but they'll try and make it sound
+as if Fargate is a service by itself.
+Containers offer flexibility.
+They can encompass pretty much any workload
+that you need to accomplish.
+Generally, it's preferred to use containers
+rather than EC2 instances on exams.
+You need to know the basics,
+so the exam might not cover containers themselves
+in too much depth, but it's good to know
+that you start with things like a Dockerfile,
+you build an image, you upload it to a repo or push it,
+and then you can run it on a host.
+And the last thing thing here
+is we have an AWS-managed image registry.
+If there's any mention of an AWS service needed
+for image storage or image vulnerability scanning,
+think Amazon ECR.
+So that wraps up containers and images.
+Let's look at Amazon Aurora Serverless.
+Remember that this is an on-demand
+and auto scaling database.
+So questions regarding auto scaling databases
+should likely involve this service.
+Remember, it's a perfect scenario or use
+for variable traffic and workloads.
+If you're creating a new application
+and you don't know the workloads or the traffic spikes
+for the database,
+this is probably a good service to include.
+It's also very good for capacity planning,
+so when questions mention things like capacity planning
+for a new application, or even an existing one,
+or even a development environment,
+then you're likely going to use this service as well.
+Okay, on to AWS X-Ray.
+Remember, this service is used to gain application insights
+using requests and responses of the many different services
+and functions at different points in your app flow.
+It offers you the ability
+to have traces and look at downstream response times.
+So if these terms are brought up in questions,
+you want to look for something involving AWS X-Ray.
+The service itself integrates very tightly
+with AWS Lambda and Amazon API Gateway.
+The native integration makes it easy
+to gain deeper insights
+and understandings of your workloads' requests
+and responses using these services.
+AWS AppSync.
+This is a short and sweet one.
+Just remember, this is a managed GraphQL interface
+so any questions about architectures
+for managed GraphQL interfaces
+for front end applications
+or developers will likely include this service.
+Now, that'll do it.
+That's going to end
+this overall Serverless Architecture Exam Tips lesson.
+When you're ready, let's go ahead and end this and move on.

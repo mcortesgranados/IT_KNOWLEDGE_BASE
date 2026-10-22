@@ -1,0 +1,133 @@
+All right, welcome back Cloud Gurus.
+In this lesson
+we're going to talk about using AWS X-Ray
+for application insights.
+During this lesson, we're going to have a service overview.
+We'll look at some important exam concepts
+that you should be familiar with.
+We'll talk about the X-Ray Daemon.
+We'll look at different AWS integrations
+that go along with the service,
+and then we'll wrap things up with some exam tips
+and important takeaways.
+So, what is AWS X-Ray?
+Well, it's a service that collects data
+within your application about your requests
+that your application actually serves.
+And it collects this data for you to view,
+filter, and then gain insights
+about the different requests and responses.
+Now, in addition to the normal request response aspect,
+any calls that your application makes
+to downstream resources in AWS or other microservices,
+APIs, or databases is also viewable, filterable,
+and you can use it to gain insights as well.
+Now, how this service works is it receives
+what are known as traces,
+and it receives the traces from your applications
+and that's what allows you to gain your insights.
+And the beautiful thing about this
+is that a lot of AWS services actually can automatically
+or very easily provide traces to this service.
+Now, for the different integrated services,
+you can add things like tracing headers.
+You can send it trace data,
+or you can run the X-Ray Daemon
+on something like an EC2 server, for example.
+So for instance, AWS Lambda,
+which is tightly integrated,
+can send a trace data
+about requests for your Lambda functions.
+Or you can run this Daemon we just mentioned
+on your workers running your apps
+to make it easier to use the SDK.
+So let's move on to some exam concepts you should know.
+The first is a segment,
+and this is essentially data containing resource names,
+the request details,
+and other information that you would use
+to gain your insights.
+Within segments, we have subsegments,
+and these are simply segments providing even more
+granular timing information
+and details about your application calls.
+We also have a service graph.
+So this is a graphical representation
+of the services that interact within your requests.
+So, each AWS resource that sends data to X-Ray
+in that request will appear as a service in a graph
+for you to see.
+It's a neat way to see how your services all interact
+with each other within the cloud.
+We then have traces,
+which we just touched on slightly right before this,
+but traces provide a trace ID that can help you track paths
+of your requests.
+And these traces collect all segments within a request.
+So you can track everything back down to a single trace ID
+that started everything off.
+Now, we also have a tracing header
+and this is an extra HTTP header
+that contains sampling decisions and the original trace ID.
+And the reason for this header is your traces
+are configured for a certain minimum.
+After that minimum is reached,
+a percentage of your requests are then traced
+to avoid any unnecessary cost to your application.
+This tracing header that's added is named X-Amzn-Trace-Id,
+as you can see here.
+Now, be sure to know this HTTP header
+and how it's formatted.
+It's very important.
+Now, before we talk about integrations
+I want to talk to you about the X-Ray Daemon.
+This is a software application
+that listens on UDP port 2000,
+and it's used to collect raw segment data,
+which we just talked about
+and then send it to the AWS X-Ray API.
+When this service is running,
+it works alongside the X-Ray SDKs.
+It just makes collecting your trace data
+and all your insights far easier
+when you're running this Daemon on your workers.
+So where would we see this at?
+Well, the first big integration is Amazon EC2.
+You would install and run this agent
+on your application's server
+so you can gather your insights.
+You can also install this Daemon on Amazon ECS tasks.
+It is very tightly integrated with AWS Lambda
+and it's literally a simple on/off toggle
+for your functions.
+You can also use AWS Elastic Beanstalk with it
+and it's a configuration option that you set
+when you're creating your environment.
+And then I would say Amazon API Gateway
+is probably just as tightly integrated as Lambda is.
+You can add X-Ray insights to each stage as desired.
+And then lastly, you can integrate it with services
+like even SNS and SQS to view times that are taken
+for messages within queues and within topics.
+All right, let's go ahead and have a quick exam tip,
+an important takeaway slide, and then we can go ahead
+and move on.
+Application insights. Anytime you see this, think AWS X-Ray.
+It's meant for collecting data and gaining insights
+to application requests and responses.
+You should be familiar with the terms
+traces, tracing headers, and segments.
+Remember, it integrates with many different AWS services.
+You can run it as a Daemon on EC2 instances,
+toggle it on or off within AWS Lambda,
+or you can add it to your API Gateway stages
+to get a better view of your response times.
+Some exam keywords
+and scenarios to look for
+would be things involving application request insights,
+viewing response times of downstream resources in AWS calls,
+and even HTTP response analysis.
+AWS X-Ray allows for all of these to be completed.
+So let's go ahead.
+That'll do it for this lesson.
+We'll end things here, and when you're ready, we'll move on.

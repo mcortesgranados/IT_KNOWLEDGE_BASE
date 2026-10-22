@@ -1,0 +1,350 @@
+Welcome back Cloud Gurus.
+In this lesson we're going to look at Amazon EventBridge,
+and this is formally known as CloudWatch Events.
+We're going to cover several topics throughout this lesson.
+We're gonna have an overview of what the service is,
+we'll look at some important concepts that you need to know.
+We'll discuss rule triggers.
+We're gonna go over some architectures you should be
+familiar with for the exam.
+We'll have an in consul demo so we can
+see what it looks like to leverage this.
+And then we'll wrap things up with some exam tips.
+Amazon EventBridge.
+This is formally known as CloudWatch Events,
+and it is a fully managed serverless event bus service
+provided to us by AWS.
+The service acts as a central nervous system
+for your serverless applications
+and it helps you build event-driven architectures.
+It does this by enabling you
+to pass events from various sources to different endpoints
+and then connect different parts
+of your serverless apps together.
+With EventBridge, you can easily route
+and then respond to different events,
+and you can trigger actions or even functions
+and remediations in a scalable and efficient manner.
+Understanding the core concepts of EventBridge is essential
+for effectively working with the service
+and for understanding event-driven workflows on this exam.
+Events within EventBridge are simply recorded changes
+or occurrences within an AWS environment, a SaaS partner,
+or really even your own applications
+and services that you've configured.
+These include both real-time events
+and even scheduled events.
+Rules are criteria that
+define how the incoming events get processed.
+These rules match events based on either event patterns
+or schedules, and they allow you to filter
+and route the events to appropriate targets.
+Rules determine the conditions for event processing
+and they can trigger actions or workflows.
+The Event Bus serves as a sort of a router for your events.
+It receives events from the various sources
+and then it delivers them to the intended targets.
+These are also called destinations.
+Every AWS account has a default event bus,
+but you can also create your own Custom Event buses in order
+to organize and manage events
+within your architectures.
+Event Buses are used to logically separate different types
+of events and the event processing
+that goes along with those.
+These concepts provide the foundation
+for creating event-driven architectures and workflows
+using this service.
+In EventBridge, you can set up rules to trigger actions
+or workflows based on two primary types of rule triggers.
+Event patterns allow you to define specific conditions
+that trigger your rules based on real-time events.
+You specify the event source and then an event pattern,
+and that defines the criteria for triggering the rule.
+An example that is very common
+is a trigger via an EC2 instance termination event.
+When the specified event pattern matches incoming events,
+the rule gets triggered.
+And then with that, any associated actions get executed.
+Scheduled rules allow you to set up recurring schedules
+for triggering your rule at specified intervals.
+There are two types of scheduled rules.
+You have rate-based rules,
+which are triggered at a fixed rate like every hour
+or every day, and you define the rate
+using a rate expression, and you can see that here
+on the top of those two examples.
+The next is a Cron-expression,
+and these offer fine-grained control over the schedule.
+You can specify precise dates, times,
+and intervals for your rule triggers.
+Cron-expressions use a format like
+what you see here on the bottom of the two examples
+that I have for you on the right.
+If you're familiar with Linux Cron tabs,
+they are extremely similar to that.
+Now moving on, let's look at an example architecture
+that leverages EventBridge.
+To start things off, we have our user
+and then we have a simple EC2 hosting some type
+of application or service.
+Now let's assume our user accidentally terminates
+or stops this instance running in our account.
+Well, us being good solutions architects,
+we've configured an EventBridge rule that looks for events
+matching this termination event.
+You can see here on the bottom left an example of what
+that JSON event pattern would look like.
+So this is the event that comes into EventBridge
+that we can actually look for.
+Now, EventBridge is very flexible and
+because of this we can set it up
+to do many different things
+based on one single rule that we create.
+For instance, we can set up this rule
+to trigger a Lambda function as well as send a message
+to an SNS topic containing specific information
+from this event.
+What we could do is we can leverage that function
+to go ahead and get invoked by our rule
+and maybe either restart the instance
+or create a brand new one using this same AMI.
+And then for SNS, we can go ahead
+and send our operations team an alert via an email
+that contains the details necessary for them
+to go ahead and investigate.
+This is a real world example
+and EventBridge is very useful
+for things exactly like this, automation and alerting.
+Another common one you might see is root Login events.
+You can leverage EventBridge to watch for root
+or console login events and then alert teams based on those.
+Okay, that's enough talking for now.
+Let's go ahead and do this.
+We're gonna jump into our sandbox environment.
+We're going to create a new EventBridge rule,
+and we're going to trigger it via a specific event pattern.
+Okay, welcome back gurus. I'm in my AWS sandbox environment.
+Let's go ahead and get started with this demonstration.
+A few prerequisites that I wanna cover
+before we actually get going.
+I've already created a few resources that are required
+for this demonstration, so let's cover that really quickly.
+In EC2, I've created a simple server
+called Super Important Server.
+This is the one we're going to look for
+when we're creating our EventBridge rule.
+Now what we're going to do is I'm going
+to do three different things,
+or really I'm going to do one thing,
+but I'm going to allow EventBridge
+to complete two other things in addition to that.
+We're going to use our EventBridge rule
+to look for a shutdown event,
+and we're going to send a notification to an SNS topic here
+that I've created called OpsTeamAlerts,
+and this has a subscription to my temporary email here.
+In addition to that, we're also gonna
+trigger a Lambda function that actually goes ahead
+and restarts that instance that comes in in the event.
+So here's the code for this
+and this will be in the GitHub repository.
+This is super simple, so if you wanna play around with it
+and do some other stuff, feel free.
+But for now, all it's doing is printing the event,
+grabbing the instance ID, and then restarting it.
+Now let's go ahead and get started.
+What I'm gonna do is actually navigate to EventBridge.
+I'm going to open that in a new tab
+and let's create a brand new rule.
+So I'm gonna click on Create Rule, we'll give it a rule name
+of "shutdown", we can give it a description,
+and then we can select the event bus.
+So if we had a Custom Event Bus, which we can't create,
+we can choose that here,
+but for this we're just gonna use the default.
+Now, all events in accounts always go
+to the default event bus, that is unavoidable,
+so please be sure you understand that.
+If you want to filter
+for specific events, for specific processing,
+you would create a different event bus
+and you would only send specific events to it.
+But for this, we're going to use the default
+and we're going to enable the rule
+because we want it to run.
+Next up is the rule type we talked about.
+We have a schedule where we can define a rate
+or a cron schedule, or we can do an event pattern.
+So I'm gonna do an event pattern, I'm gonna click on next,
+and this brings us to our event pattern, building.
+The first thing we can do is select the event source.
+So notice the options.
+We have AWS Events or partner events, we have other,
+and we have all, now all is going to be a ton of events.
+So really if you have to use this, be sure you really do
+because this is going to trigger your rule,
+pretty much anytime anything happens in your account.
+Now for us, we just wanna look for one event.
+So I'm gonna select AWS events
+and a nifty feature here is they
+provide a sample events pane.
+So what we could do is look for EC2 events
+or any other thing that goes along with our testing.
+And you can notice we can
+do Terminate successful, et cetera.
+So this is an example event that would come in
+through EventBridge and get passed to our destinations.
+Now what I'm going to do is actually use a pattern form here
+to create this, and we're going
+to use the built-in event pattern selection.
+Now, one thing to call out here are the other options.
+You can use a schema,
+which is a little bit more in depth than you need to know
+for this exam, or you can build a custom pattern,
+which is using JSON.
+Now for this we're gonna use the pattern form
+and this will actually create the JSON for us.
+So I'm gonna select AWS services.
+The service is going to be EC2.
+And now you see we have event types.
+So notice all of the different API calls that are possible.
+So what I wanna do is I'm looking
+for an instance state change notification
+because I wanna look for the state
+to change to shutting down.
+So I select that and then we get further filtering.
+So we can choose any state.
+So anytime any instance state goes,
+and we can also do any instance ID
+or we could choose a specific one.
+Now I want all instances
+and I'm gonna choose a specific state.
+So lemme choose this, and we wanna go ahead and alert
+whenever the instance is shut down.
+So shutting down is different than stopped.
+So I'm gonna click on stopped.
+And now you can see the event pattern here
+in the JSON builder on the right.
+Our source is the EC2 service.
+We're looking for an EC2 state change notification
+and the state needs to be stopped.
+So terminated, shutting down, started running, all
+that other stuff will not trigger this event.
+Now with this being in here, let's click on next.
+And now we select our targets or our destinations.
+So for this we're gonna choose our two different services.
+I'm going to choose SNS.
+So our topic here, I'm gonna select ops team.
+And under additional settings,
+this is a neat feature here.
+You can configure the target input
+that goes along with this.
+So this will pass the entire event that's matched.
+You can do part of the event,
+you can send a constant JSON text, so a constant string
+that's always going to be the same
+or you can transform it using a template.
+Now again, these are more in depth than you need to know.
+You just need to know that you can use these.
+So we're gonna do matched event,
+so it passes the entire thing in,
+and you'll notice there's other things like a retry policy,
+and we can pass these events
+to SQS queues if they're unprocessed.
+So it's essentially a dead letter queue
+for our EventBridge events.
+Now I'm going to use the defaults here
+and I'm gonna add one more target.
+So we're gonna go ahead and select our Lambda function.
+I'm going to go down here,
+select my restart instances function,
+and I'm gonna click on next.
+I'm not going to tag this. And now we get a review.
+So it's triggered anytime an EC2 is shut down,
+it is enabled on the default bus.
+Here's our event pattern we're looking for,
+and we're having two targets,
+SNS topics and Lambda functions.
+So let's go ahead and test this out.
+I create my rule, it's now enabled, which is awesome,
+and we can start testing.
+So what I'll do is I'm gonna go to instances.
+Now while this is stopping, we're gonna go ahead
+and see that it's never really gonna reach a stop state
+because our Lambda function's going to restart it for us.
+What I should see here though in a moment
+after this comes back up is I'm going
+to get an email here in my temporary email inbox saying
+that this instance stopped
+and then we should see it back in the EC2 console running
+again once our function restarts it.
+So what I'll do here is I'll speed this up so we don't have
+to wait for the minute or so that it might take,
+and we're gonna notice that this is
+going to be running here in a minute.
+So let me just keep refreshing.
+I'll speed this up and then we'll pick back up
+after it's running again.
+Okay, so it stopped.
+It's pending now because it's got
+restarted and it's running.
+So if I go to my email, there we go. We have a notification.
+You can see the event that it was received, state stopped
+for our account, for our instance ID.
+And if I go to my Lambda function
+and I look at monitor, I'm going to go to logs, I'm going
+to view these, and under log streams here,
+we will have one extra event because I did test this,
+but at the bottom here is our latest,
+and you can see it started the request.
+It received the event. So it printed the event.
+And if I expand this,
+you can see the event JSON, which is expected.
+Our instance ID, the state is stopped,
+the region, et cetera.
+We pulled that data,
+we started this instance and then we were done.
+So now our instance is running again.
+So even though we try to stop it,
+now it's working and it's running.
+Okay, that's gonna do it
+for this demonstration on how to use EventBridge.
+Let's go ahead and jump back into the presentation
+with some exam tips.
+Okay, hopefully that demo was useful.
+Here are some valuable exam tips for EventBridge,
+formerly known as CloudWatch Events.
+Think of EventBridge when you need to trigger actions
+or workflows in response to events
+that occur in your AWS environments.
+It's an essential tool
+for building event-driven architectures.
+A common use case
+for EventBridge is triggering Lambda functions
+whenever a specific API call or other event is made.
+This can be a powerful way to automate actions in response
+to changes in your resources.
+Be familiar with the different rule configurations
+at a high level.
+Understand how you can create rules based on event patterns
+and schedules and how you can customize that criteria.
+Keep in mind that EventBridge is the successor
+to CloudWatch events.
+While you may still encounter references to the old name,
+it's important to recognize that they refer
+to the same service.
+EventBridge is one of the fastest ways to respond
+to events happening in your environments.
+It allows you to trigger actions
+in basically near real time fashion.
+And understand you can use the default event bus
+provided by AWS, which captures all events,
+or you can create your own custom event bus
+to further organize and manage your own events.
+Custom event buses are perfect for cross account access
+for more complex architectures.
+And with that being said,
+let's go ahead and wrap things up here.
+We'll end this lesson and then when you're ready,
+I will see you in the next one.

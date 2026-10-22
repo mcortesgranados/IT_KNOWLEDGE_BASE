@@ -1,0 +1,133 @@
+Hello again, Gurus.
+In this lesson, we're gonna look at running containers
+in Amazon ECS or Amazon EKS.
+Okay, in this lesson,
+we're gonna cover several different topics
+at a high level for these services.
+We're gonna start off with talking about problems
+with containers, especially at scale.
+We'll discuss Amazon ECS,
+we'll talk about why you might use it.
+We'll dive into some
+other container orchestration possibilities.
+We're going to look at choosing either ECS or EKS,
+and then we'll have some exam tips.
+So let's go ahead and dive in.
+Let's talk about problems with containers.
+A big issue with containers comes down
+to the orchestration of the containers.
+If you're running a simple one container application,
+or maybe even just a couple of containers,
+then it's really not a major deal
+on how you're orchestrating things.
+However, once you start to scale your application needs
+and growth starts occurring rapidly,
+it can get very tricky very quickly on how to easily
+and efficiently manage the different containers
+running the different microservices of your application.
+It is very easy to start getting container sprawl
+and mismanagement of the different containers,
+and this can cause a lot of administrative overhead
+and potentially, a lot of cost.
+Well, that's where Amazon ECS comes in handy.
+Amazon Elastic Container Service is a managed service
+that allows you to easily launch
+and then manage your Docker containers,
+and these containers run on AWS Compute
+that you can choose whether you want to manage or not.
+So why would you want to use ECS?
+Well, the big thing is that ECS can manage anywhere from one
+to thousands of containers in a centralized manner.
+The service will automatically handle appropriately placing
+your containers on the correct host, on the correct compute,
+and then it even works to keep them online.
+In addition to that,
+your containers can be easily registered
+with chosen load balancers as they come online,
+and then they can be de-registered as they go offline,
+and this is all managed for you, which is extremely nice.
+Your containers can also have individual roles attached
+to them, which really makes security a breeze
+and very easy
+for managing specific IAM permissions and requirements.
+And lastly, it's pretty much effortless to set up,
+and it's very easy to scale
+to handle any of your workload needs.
+Now, it's important to also call out
+some other container orchestration methods
+that could come up on the exam,
+and you'll need to be able to compare these
+and select the correct option.
+The first major one here, of course, is Kubernetes.
+This is perfect for extremely large-scale complex operations
+with hundreds of thousands of containers.
+However, a lot of the time,
+Kubernetes will likely be overkill
+for a majority of users' needs.
+It's essentially an open source alternative
+to things like ECS.
+That way you're not locked into the vendor.
+With Kubernetes, since it's open sourced,
+you can actually use it on premise and in the cloud.
+In fact, AWS offers us a managed version
+called Elastic Kubernetes Service.
+This is also known as EKS.
+Now, that's going to be covered more in depth
+in a different lesson, but I wanted to cover the differences
+between the two and some alternatives.
+Okay, let's go ahead and move into comparing
+whether you should choose ECS or EKS.
+Amazon ECS is a proprietary AWS-specific
+container management solution.
+What that means is it's not open sourced.
+This is best used when you're going to go ahead
+and be all in on AWS.
+It's also perfect if you're looking for something
+that's very simple to orchestrate your container needs.
+Amazon EKS, on the other hand, is AWS's managed version
+of the open source
+Kubernetes container orchestration platform.
+This is usable whenever you are not 100% sure
+you're going all in on AWS.
+It's also perfect for significantly larger workloads.
+However, it does take a lot more work to configure properly
+and to integrate with AWS.
+Again, remember, Kubernetes can typically be overkill
+for a majority of workloads, so only keep an eye out
+for specifics requiring Kubernetes
+or open source platforms on your scenarios.
+All right, let's go ahead
+and jump into some exam tips before we move on.
+Remember, Amazon ECS allows
+for simple container orchestration within AWS,
+and it makes it easier to deploy
+and then manage your Docker containers.
+If you see containers,
+you should immediately consider Amazon ECS.
+Now, the one exception there
+would be if they mention Kubernetes, and in that case,
+you might either look at running on-prem
+or your own custom solution or using Amazon EKS.
+Generally, you're going
+to favor using AWS services over third-party ones.
+Amazon loves to leverage their own internal stuff,
+and you should know that and consider that
+during your scenarios.
+And again, as a reminder, any time you see open source
+or Kubernetes-related container orchestration,
+think Amazon EKS instead of ECS.
+The exam itself shouldn't really ask too many specifics
+of either service, but you need to know that they're used
+for container orchestration.
+And lastly, ECS and EKS are both great
+for long-running applications.
+So a perfect example would be a thing like a web application
+that you have to always have running.
+These are perfect solutions for hosting
+that type of application.
+All right, that's gonna do it for this lesson
+on ECS and EKS.
+We cover them at a higher level.
+Let's go ahead and end things here,
+and then when you're ready, we'll pick back up
+with the next lesson.

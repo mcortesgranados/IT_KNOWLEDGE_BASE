@@ -1,0 +1,137 @@
+Welcome back, Cloud Gurus.
+This lesson is titled
+Auto Scaling Databases On Demand
+with Amazon Aurora Serverless.
+Let's go ahead and dive into a quick lesson breakdown.
+The first thing we'll do is have a service overview.
+So, what is Amazon Aurora Serverless?
+We'll move into Aurora Serverless concepts.
+We will build on those concepts
+and look at popular use cases.
+And then we'll wrap things up with some exam tips
+for you to take with you.
+So, what is Amazon Aurora Serverless?
+Well, the first thing I want to point out
+is that you need to be able to differentiate
+between 2 terms.
+There's Aurora Provisioned,
+which is the typical Aurora service.
+And then we have Aurora Serverless,
+which is what we're talking about here.
+Now, this service is an on-demand,
+auto scaling configuration
+for Amazon Aurora database services.
+It's main objective is
+to help you automate monitoring your workloads
+and adjusting capacity for your databases.
+So, the beauty of the service is that it's based on demand,
+so your capacity will be adjusted
+based on your application needs as they are coming in.
+Another positive or benefit of the service
+is the billing aspect.
+You're charged only for the resources that are consumed
+by your clusters and it's per second billing,
+which is perfect for an auto scaling feature.
+So, due to how it is billed,
+this is a budget-friendly service.
+It can help you stay well within the budgets that you set
+because of this auto scaling
+and per second billing combination.
+So, now that we know what the service is at a higher level,
+let's talk about some concepts you should know.
+The first is Aurora Capacity Units or ACUs.
+And these are measurements
+on how your clusters actually scale.
+So, using these, you set a minimum and then a maximum
+for your scaling requirements.
+And it can actually be as little as 0,
+so it can completely shut down if you want it to.
+Now, this service works so well because your ACUs
+are actually allocated very quickly
+by AWS-managed warm pools.
+These pools are stateless, they're shared between customers
+and they're always warm.
+So, they're able to pretty much be allocated immediately
+when you need them.
+Now, it's good to know that
+when I say shared between customers, I don't mean the data,
+it's just the compute that's used for the scaling aspects.
+Now, each ACU is a combination of about 2 gibibytes
+of memory with matching CPU and networking capabilities,
+based on that memory amount.
+The other awesome thing about it is that,
+it's the same data resiliency as Aurora provisioned.
+You get 6 copies split across 3 availability zones,
+so that you don't lose your data.
+Now, you can also achieve high availability
+with your clusters in a similar fashion
+as the provisioned service.
+You just deploy multi-AZ and there you go,
+you're now highly available.
+So, what are some popular use cases for this service?
+Well, a solid one is for when you have variable workloads.
+So, if you have unpredictable or sudden activity
+for your application
+that you just really can't measure accurately.
+Another use case is multi-tenant apps.
+So, with this service,
+you don't have to manage each individual database
+or capacity for each application.
+You can let it do it for you.
+It's also great for new applications.
+So, if you're deploying a new application
+and you're not really sure what size database you need,
+this might be a good use for you.
+Another major one that I recommend a lot
+to a lot of people is for development
+and testing of new features.
+So, because of the features of this service,
+you can create your instances
+with a very low minimum capacity,
+instead of having to try
+and guess what size database instance you want to deploy
+in another service.
+It's also great for mixed-use applications.
+So, you might have an app that serves more than one purpose
+and receives different traffic spikes.
+An example might be
+an online transaction processing application
+where you periodically experience spikes
+in different traffic.
+And then lastly, we have capacity planning.
+So, this service is actually very great
+for helping you verify the optimal database capacity
+for your workloads.
+And Amazon made it a great feature where you can easily swap
+from provisioned to serverless, do some capacity planning,
+and then switch back to provision if you want to.
+Okay, let's have some exam tips now for you to take with you
+into your exam.
+Amazon Aurora Serverless is on-demand.
+It's auto-scaling and it's a serverless version
+of the Aurora service.
+Remember, the capacity is adjusted for you.
+Remember the term ACU: Aurora Capacity Unit.
+You set a minimum and a maximum for your scaling needs
+and it can be as little as 0.
+Also remember, you're billed per second
+for your used resources only.
+Some popular exam scenarios will be based
+around variable workloads,
+new applications where you're not sure of sizing,
+capacity planning, where you're also not sure of sizing
+and even development or testing needs.
+An example for development and testing needs
+might be an application where you want
+to actually scale down to 0 completely
+for your dev or test environments.
+Remember that it is the same data resiliency
+as the provisioned service.
+You get 6 copies of your data
+across 3 availability zones.
+And just like the provisioned service,
+you can implement multi AZ deployments
+for highly available workloads.
+Okay, that's going to wrap this lesson up.
+We'll go ahead and end here,
+and then I'll see you in the next one.

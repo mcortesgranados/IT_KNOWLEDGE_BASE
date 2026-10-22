@@ -1,0 +1,81 @@
+Hello, Cloud Gurus.
+Welcome to this lesson,
+Leveraging the AWS Serverless Application Repository.
+Let's walk through a quick lesson breakdown,
+so we can see what we're expected
+to take away from this lesson.
+The first thing we'll cover is:
+what is the AWS Serverless Application Repository?
+We'll talk about publishing and deploying applications.
+And then we'll go ahead and wrap things up
+with some exam tips.
+So let's get started.
+What is the Serverless Application Repository?
+Well, this is a service that makes it easy for developers
+and organizations to find, deploy,
+and even publish serverless applications
+within their own AWS accounts.
+You're able to easily publish applications,
+and then you can even share them publicly
+with the community at large,
+or you can share them privately
+within your own organization.
+Along with the application code,
+you upload what is called a manifest file.
+And this is known as a SAM template,
+so AWS Serverless Application Model template.
+And a great feature of this service is that
+it is deeply integrated within the AWS Lambda service.
+It actually appears within the console itself.
+Now, currently within the service,
+there are 2 options to choose from.
+You can publish, or you can deploy.
+So let's talk about the differences of each.
+When you publish, you're actually publishing apps
+to make them available for others to find and then deploy.
+Again, these are defined with AWS SAM templates,
+which are essentially CloudFormation templates,
+in addition to your application code.
+When you first publish your app,
+it's actually set to private by default.
+So only the AWS account that created it,
+can actually see it.
+If you wish to share it,
+you must explicitly share that application.
+And you can share it with specific accounts
+or publicly with everyone.
+There's some flexibility there.
+Now, let's go ahead and take a look at deploy.
+With deploy, you find and deploy published applications
+within the console and the public catalog.
+The cool thing about this is
+you can browse these public applications
+without even needing an AWS account.
+But if you do have an account,
+you can browse it within the AWS Lambda console.
+So with the click of a few buttons,
+you can deploy a full, serverless application
+from this one console view.
+It's very, very nifty.
+Now, of course, a disclaimer,
+you need to be careful of trusting
+all applications that are posted publicly.
+Don't just go ahead and deploy everything you see.
+Some obviously could have issues or vulnerabilities.
+And that's going to do it.
+So let's have some quick exam tips for you to take away.
+One of the big takeaways here are templates.
+Remember, you define entire application stacks
+via these SAM templates.
+And these are private by default when you publish them.
+You have 2 choices: you can publish or you can deploy.
+So you can choose to publish your own app,
+or deploy one that's publicly available
+or shared with your account.
+And then lastly, it's heavily integrated with AWS Lambda.
+Again, you can see it within the console
+and deploy entire stacks with a few clicks
+of a couple buttons.
+That'll do it.
+Let's go ahead end here.
+When you're ready, I'll see you in the next one.

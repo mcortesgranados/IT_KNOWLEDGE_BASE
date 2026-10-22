@@ -1,0 +1,239 @@
+Hello Cloud Gurus, and welcome back.
+In this lesson we're going to be diving into Containers.
+Now of course, the first question that we have to answer
+is what exactly is a container
+and why would I want to use one of these
+inside of my environment?
+And then we'll go through some general terminology
+that we need to be familiar with
+before we open up my terminal,
+and we actually build our very first container together.
+And then of course, we're going to look back together
+to have some of those fun exam tips at the end.
+So let's go ahead and dive right on in.
+So our first question is what is a container?
+Now a container in the IT world is kind of
+like a normal container that you would have dealt with
+in day to day life.
+It just holds things.
+In fact, I've got a lot of containers
+in my refrigerator now holding my leftovers.
+The same idea applies, a container is just something
+that I can put everything into.
+What I can do is I can bundle up my code,
+my application, my packages,
+my dependencies, my configuration files into a container.
+And then I can pick this container up
+and I can move it anywhere I want.
+I can run it in dev, I can run it in production,
+I can run it in staging,
+and I get the exact same environment every single time.
+And that's because this container, well,
+the contents don't change between environments.
+So it's really kind of a portability device.
+So really, a container is just an easy way
+to standardize everything that I need to run my application.
+Now, when I first learned about containers,
+I heard a definition pretty similar to that
+and I thought great, that just sounds exactly
+like a virtual machine, right.
+I've got my hardware, I've got my hypervisor,
+I install my Linux on my Windows,
+my application, the configurations and I'm good to go.
+Why do I need to containerize everything?
+Well the reason why we want to consider containers
+really comes down to that guest operating system
+that duplication of resources between every single VM.
+Because with the container,
+I don't have to duplicate everything.
+So instead of having to create multiple operating systems
+over and over and over,
+and duplicating all of the stuff that doesn't really matter
+to my application, because let's face it,
+we never use everything in that operating system
+for every single deployment, right
+there's a lot of extra fluff.
+With this container, I can cut that down.
+I'm only including that application
+and the needed libraries, packages, configuration files.
+Effectively, it's like I'm creating
+my own little micro environment
+that only has everything that I need to have.
+So I can stuff more containers,
+more copies of my application into that underlying hardware
+rather than putting things in there that don't matter.
+So effectively I'm just getting a better bang for my buck.
+Now look, I get it.
+Just talking about containers
+in this abstract form,
+it's really difficult to understand.
+But before we actually build our very first container,
+there are a few terms that we have to understand.
+The very first one is a Docker file.
+We can consider our Docker file
+kind of like our set of instructions.
+Okay, I want to build one of these quote containers,
+what goes into that?
+Well, using a Docker file we're going to use
+a Linux like commands to define
+what does our container include.
+Where do the files go, what applications need to run,
+all that good stuff.
+Now technically the Docker file builds
+what is called an image.
+We can kind of think of an image
+like it's my source of truth.
+That image it's immutable,
+it contains everything that I need to have.
+And I'm going to take this image,
+this kind of template if you will,
+and I'm going to store it in a registry.
+Now registries can be both public or private.
+You can think of it like GitHub but for your images.
+Now technically up until this point
+we don't have a container yet,
+we just have that template when we download that image,
+and run it inside of our EC2 instances
+or on my laptop or on-premise in my data center
+then I actually have the container.
+So it's easy to call everything a container
+and people understand what you're talking about.
+But the general flow is I write a Docker file
+from that Docker file I build an image,
+from that image I upload it to a registry
+and then from that registry I download the image
+and then run it as a container.
+Now I know that was a lot, but let's go ahead
+and hop into my terminal
+and walk through actually putting one of these together.
+Alright, now I've got my terminal open
+instead of my AWS account.
+I've already SSHed in into one of my EC2 instances
+that I have inside of my AWS environment.
+So let's see what I've got going on in here.
+Well, I've got my code that I've written
+and we'll take a look at that in a minute.
+And then that important Docker file,
+that set of instructions.
+Let's go ahead and open up my Docker file.
+Now in this file, if you've ever worked with Linux before,
+these commands should be pretty familiar.
+Here I'm going to go in and just say from centos:7.
+That's just my base image that I'm pulling in.
+And then every step that I do
+on top of that base image,
+well those are all going to be custom
+for this particular application.
+I'm going to go ahead and run my updates, install Apache
+and then remove the default Apache installation website,
+add my code for my local directory up here right,
+where I've written that website,
+and I'm going to expand that into /var/www/html
+inside of this new container.
+Then I'm just setting up some logging
+so I can troubleshoot in the future if something goes wrong.
+I'm exposing port 80 from inside of my container,
+and then I'm just running Apache.
+So the end goal is I will have a website
+when this container starts up.
+Apache listens on port 80,
+traffic will be sent into the container,
+and it's going to serve out my code.
+So let's go ahead and put this all together,
+because this text file by itself,
+doesn't really get me a whole lot.
+I'm going to run my sudo docker build
+and now I'm actually using a cached copy
+of each one of these steps because I've done this before.
+The cache just allows it to speed up.
+If you're doing this as a fresh run
+it would take an extra few minutes or two,
+but for the sake of brevity here
+we're going to go ahead and just use that cache.
+So lets run through each one of these steps
+and now I have a successfully built image.
+Now remember that image doesn't do much by itself.
+In fact, it just sits there.
+I need to run this image as a container
+on my host to see my website.
+Now before I do that,
+I just want to show you something real fast.
+I'm going to hit my localhost.
+Basically I'm just trying to connect
+from my instance to my own instance.
+And it just shows that nope
+I have no website currently running.
+Just want to show you
+there is no funny business going on here.
+Now I'm going to go ahead and run that Docker image
+as a container.
+So here I've got my sudo docker run
+and I'm going to bind port 80 on my host
+to port 80 on that container.
+So let's go ahead and kick this off
+and well it's running.
+How do I check that it's running though?
+Let's run that curl again.
+Oh, I get a website this time.
+Now apparently it's showing out
+some fun dog photos, alright.
+Now this is where we're going to leave it for this lesson.
+I promise these dog pictures are a little bit more exciting
+in the actual browser.
+But we're going to hold off on that for right now.
+So this was a pretty basic walkthrough
+of creating that image and running
+as a container on my host.
+So let's go ahead and hop back into our slides
+and take a look at some of those exam tips.
+Now my first exam tip, is that containers are generally seen
+as more flexible on the exam.
+We have full control over what's running inside of them
+via that Docker file.
+Now it's really easy to create your container
+and then move it around to different environments
+and you get that same container everywhere.
+It means it's really easy to standardize
+what you're about to push out.
+You don't have to run into that issue of
+but it worked on my machine, it worked in dev.
+So if you're looking at a situation that talks about
+oh, I need flexibility, I need an immutable environment
+that I can move anywhere.
+You want to generally favor answers
+that include containers.
+Now a few more tips here for us. The
+very first one is, look, you've got to keep it high-level.
+This is not a Docker container image registry exam,
+you just generally need to know the use case
+of why do I containerize applications?
+It's for portability, it's for ease of use,
+it's for flexibility, it can run on-premise
+it can run inside of AWS.
+Those are all things that you're going to have to know.
+The exam is not going to grill you on what is line 12
+of this Docker file do?
+Because that's not really the point of this AWS test.
+Now you need to know that it's easy.
+It's easy to pick up and move your environments
+from on-premise to AWS and back.
+That's going to to be an important concept
+that you want to keep in mind.
+It's also important to know that dev is prod
+and prod is dev, but not of the usual panic incense.
+Usually if somebody tells me that I freak out
+because that's a terrible position to be in.
+But in this case, it's actually a good thing
+because it means that all of the testing that
+I'm doing in dev, is going to carry through to production.
+I'm not in that situation where I'm missing dependencies
+where things disappear between those different environments.
+Now my last tip here for you,
+before you go shopping at that grocery store,
+take a picture inside of your refrigerator.
+That way when you get there you won't forget
+what you already have.
+I know that saved me a whole lot of time.
+Alright folks, thanks for joining me in this dive
+into the world of containerization.
+I can't wait to see you in the next video.

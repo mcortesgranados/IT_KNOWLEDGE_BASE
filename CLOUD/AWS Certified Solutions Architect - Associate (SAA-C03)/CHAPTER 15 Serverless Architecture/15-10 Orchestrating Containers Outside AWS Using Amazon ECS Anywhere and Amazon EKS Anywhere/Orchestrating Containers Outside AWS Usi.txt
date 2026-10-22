@@ -1,0 +1,162 @@
+Welcome back, Cloud Gurus.
+This lesson is titled,
+Orchestrating Containers Outside AWS
+Using Amazon EKS Anywhere and Amazon ECS Anywhere.
+Throughout this lesson, we'll cover a variety of topics.
+We'll have an overview of what EKS Anywhere is.
+We'll look at some of the concepts that go along with it.
+Then we'll move on to ECS Anywhere,
+and we'll look at the requirements
+for that particular service.
+Now, to simplify things, we'll have an example diagram,
+just so you can visualize how this actually works.
+And then we'll wrap things up with some exam tips
+for you to bring into your exam.
+Okay, so what is Amazon EKS Anywhere?
+This is a service that provides you a way
+of running on-premises EKS.
+So, you can run and manage Kubernetes clusters,
+using the same operational excellence and best practices
+that AWS uses for its Amazon EKS service. But
+the key difference is you run these clusters on-premises.
+Now, it's based on what is known as the EKS Distro.
+And what this does is it allows for deployments,
+usage, and management methods for your clusters
+within your data centers.
+And again, these are all based on Amazon EKS standards.
+Now, the whole goal of this particular service
+is based around lifecycle management.
+So, it offers full lifecycle management
+of your multiple on-premises Kubernetes clusters.
+And these operate independently of AWS services.
+So, that's a key factor to keep in mind.
+Well, what are some concepts of this service?
+Well, the first thing is control plane.
+Kubernetes control plane management
+is operated completely by the customer.
+So, that's a key difference because with Amazon EKS,
+you can leverage AWS for some of those management tasks.
+The second thing is the location.
+And the big difference here is that
+this control plane location is entirely
+within a customer data center or operations center.
+It's not in AWS.
+And, since it is entirely managed by the customer,
+all cluster updates are done entirely via manual CLI
+or what is known as Flux.
+And don't worry, you don't need to know Flux
+at any sort of level for this exam,
+it's just a good thing to know.
+Another cool feature of EKS Anywhere
+is it offers curated packages.
+So, these are offered to extend core functionalities
+of your Kubernetes clusters on-premises.
+And then lastly, these curated packages
+are unfortunately only able to be used
+via an enterprise subscription, which does cost some money.
+All right, so now that we have a general understanding
+of what this service does, let's move on to ECS Anywhere.
+Now, this service is slightly different.
+The big thing here is that this offers you a feature
+of Amazon ECS, which is going to enable you to run
+and manage your container applications on-premises,
+including your own VMs and even bare-metal servers.
+With this service, you don't have to take the time to
+install or operate local container orchestration software,
+which means you're going to have
+much more operational efficiency
+because there's less operational overhead.
+Now, ECS Anywhere does offer a completely managed solution,
+which is going to enable standardization
+of your container management
+across all of your environments.
+So, you're leveraging ECS standards and practices
+and protocols on-premises.
+Now, one thing to keep in mind with this service
+is since it's on-premises, you need to keep in mind
+that there is no elastic load balancing support
+for inbound traffic,
+so that has to be handled separately.
+And the last tidbit here
+is this Amazon ECS service added what is known
+as the EXTERNAL launch type for creating your services
+or running tasks on your external instances.
+So, what are some requirements for this service?
+Well, there are several.
+First, you must have the SSM Agent,
+ECS Agent, and Docker installed on that local server.
+You also must first register your external instances
+as Systems Manager-managed instances,
+otherwise it won't work.
+However, you can do this by easily creating
+an installation script within the ECS console
+and then running that
+on your external instances and servers.
+Now, this installation script contains what is known
+as a Systems Manager activation key
+and then the different commands for the required software.
+So, think of all the agents and the Docker software itself.
+Now, the cool thing about these scripts
+is you can literally execute them anywhere.
+So, on your on-premises VMs or even your bare-metal servers,
+it doesn't really matter.
+And then, once you do that,
+you just leverage the EXTERNAL launch type
+and you can now manage your ECS cluster within the console,
+but all of the hardware is running on-premises.
+It's actually really cool.
+So, let's have a quick diagram walkthrough,
+so we can get a better understanding
+or visualization of how this works.
+We have our on-premises data center with our VM,
+and this is where we want to run our ECS cluster.
+Well, the first thing we need to do is we need to install
+all of the agents.
+So we need to install the ECS Agent,
+we need to install the SSM Agent,
+we need to install Docker,
+and then using all of those,
+we can start running containers.
+Now, obviously there are some steps in between,
+but this is just a high-level diagram representation
+of what it takes to run.
+And once we have all of those 3 agents
+and softwares installed, we can configure them
+to communicate with our AWS accounts.
+So, the ECS agent is going to talk to Amazon ECS
+in our account, so it's going to keep track
+of what version you're on, your cluster status, etc.,
+and then the SSM Agent is communicating
+with Systems Manager, which allows you to run your scripts
+and see them as managed instances within the console.
+Okay, with that out of the way, let's go over some exam tips
+for you to take with you.
+EKS Anywhere. Understand,
+this is not a commonly used service,
+and it's not commonly featured on the exams,
+thus, the reason we covered it at a higher level.
+Know that it is based on the EKS Distro, which allows you
+to run EKS Kubernetes clusters on-premises--pretty simple.
+The neat thing about this is you leverage AWS efficiency.
+So, it allows customers
+to maintain similar operational efficiencies
+to the actual Amazon EKS service.
+However, it is all managed by you, literally everything,
+including control plane management and location.
+So, really remember that as well.
+Now, let's move on to ECS Anywhere.
+The first thing to know is this is actually a feature
+within Amazon ECS itself.
+It's not separate like EKS Anywhere.
+It allows for AWS-managed container orchestration
+anywhere on-premises or outside of AWS.
+There are a few requirements.
+You must have your SSM Agent installed and configured,
+your ECS Agent installed and configured,
+and you must also have Docker installed.
+Now to use it, you register and deploy.
+So, you execute scripts that contain the required steps,
+and then you leverage the external launch type
+within Amazon ECS.
+Now, that's going to do it for this lesson.
+When you're ready, I'll see you in the next one.

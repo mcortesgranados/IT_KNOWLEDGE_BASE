@@ -1,0 +1,140 @@
+Hello, Cloud Gurus and welcome back.
+In this lesson, we're going to be answering the question
+what is serverless computing?
+Now in order to answer this question,
+I'm going to need everybody to hop into my time machine
+and we're going to take a trip back to the past
+and explore the history of computing.
+So I hope you have your snacks, your change of clothes,
+your sleeping bags, because we're going to be here
+for a while.
+Okay, I'm just kidding.
+It'll be a really quick trip.
+But we have to understand what are all the building
+blocks that have gotten us to this point
+where now we can consider computing
+without having to manage those underlying servers.
+We'll see the benefits of why do I want to go serverless?
+Why would I choose this
+over my traditional compute environment?
+Then we'll take a look at what's coming up.
+What are the really big tools that we're going to be
+covering in this section before we wrap it all up
+with that exam tip.
+Let's go ahead and jump right on it.
+Now I know what you're thinking, you're saying, Alex,
+how do we run code without computers?
+What does it mean to go serverless?
+Well, we haven't magically figured out how
+to get our applications running without computers.
+I will just crush that dream right there.
+But let's go through our different layers
+of compute to understand how serverless builds
+on all of the things that we're already familiar with.
+Now, a long, long time ago, we built giant warehouses
+and we filled them up with computers
+and we called them a data center.
+And if you worked at a business, they would buy space
+in a data center or open up a data center themselves,
+and put all their computing needs in there.
+Now that worked, and it worked for a while
+until virtualization came into play.
+Now I can buy a physical computer
+and have it run more than one computer inside of it.
+We can start virtualizing those operating systems.
+And that was a big advancement,
+but we'll all probably agree that we don't want to be
+in a physical data centers.
+I don't want to be dealing with hardware problems.
+So along comes the cloud.
+The cloud just offloads all of that physical management
+onto AWS and we just get to work
+with those operating systems.
+Those databases deploying our application
+in a way where I don't care about the physical hardware.
+So serverless is really just the natural extension
+of the cloud.
+What I'm really doing is I'm just offloading my
+operating system onto AWS,
+just like I offloaded that physical hardware.
+We simply write the code, we bring the code, and that's it.
+Everything else is handled by AWS.
+So AWS still has physical data centers.
+They still have computers.
+They still virtualize that, they manage all of this for us.
+Serverless is really just about eliminating all
+of the things that we don't care about,
+namely, the things that aren't the code,
+that aren't the application that I've just written.
+Now, why do we want to go serverless?
+What's the big point to all of this?
+Well, it's easy.
+As we're going to see in some upcoming lessons,
+it is very simple to do.
+Now unfortunately, I'm not going to be able
+to help you write all of your code.
+That's still something that you have to do.
+But outside of writing that code,
+there is very little work that you actually have to do.
+And we'll get to see this in action,
+here in just a little bit.
+It's event based.
+That just means that that serverless compute
+does not come online, it doesn't get kicked off
+until something happens.
+So it's not stuck there running 24/7.
+What we can have happen is, oh, somebody made an API call,
+somebody clicked a button, somebody interacted
+with my application, and now that code comes online,
+it runs for that short period of time
+and then it disappears.
+Now not wasting compute power also brings us
+to that billing model.
+It is really pay as you go in the purest form.
+Rather than having to pay to provision EC2 instances
+to keep them online, to deal with scaling,
+to deal with management, to pay your admin
+to keep everything up and running,
+we've offloaded that to AWS.
+If my code runs for 5 minutes and 32 seconds,
+that's exactly what I pay for,
+is just that time that the code was running,
+that I was getting value out of that code.
+Now, these all sound great,
+but how do I embrace this concept of serverless compute?
+Well, that's really where our upcoming services
+come into play.
+So over the next couple of lessons,
+we're going to explore various concepts related
+to the 2 biggest serverless compute options in AWS:
+Lambda and Fargate.
+And we'll go through and talk about the differences,
+and pros and cons and when to use one versus the other,
+but at a really high-level,
+Lambda allows us to write our code,
+set what's going to trigger that code, and that's it.
+And Fargate allows us to take our containers,
+bring them to AWS, and forget about that traditional,
+underlying operating system.
+If you're not familiar with Lambda, Fargate, or containers,
+not a problem. We'll be going through all of this content
+in the next upcoming sections.
+Just wanted to get those terms
+wiggling around in your brain for now.
+So my exam tip from this:
+it's embrace serverless architecture.
+On the test, we want to focus on using more managed tools.
+We want to get away from that EC2 architecture
+whenever possible.
+The more that we can offload to AWS,
+the better it's going to be.
+So generally you want to favor applications,
+favor answers that use Lambda, that use containers,
+that use Fargate over the traditional EC2 architecture.
+And like I said, we'll be exploring all of that
+in just a bit.
+For now though, I think this is a great stopping point.
+So thanks for going through this overview.
+Hopefully I've provided a little bit more clarity
+on what does that word serverless mean?
+And I can't wait to see you in our next lecture.

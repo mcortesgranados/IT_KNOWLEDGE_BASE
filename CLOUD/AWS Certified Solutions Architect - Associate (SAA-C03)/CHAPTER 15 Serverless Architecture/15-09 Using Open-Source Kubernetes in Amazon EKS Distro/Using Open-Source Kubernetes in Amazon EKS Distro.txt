@@ -1,0 +1,46 @@
+Hello, Cloud Gurus.
+In this lesson,
+we'll begin looking at Using Open-Source Kubernetes
+in Amazon EKS Distro.
+Now this lesson is pretty short and sweet.
+We're going to look at an overview
+of what Amazon EKS Distro is.
+And then we'll finish things up
+pretty quickly with exam tips and some takeaways.
+So, what is Amazon EKS Distro?
+So EKS-D, which is the short form,
+is a Kubernetes distribution based on and used by
+Amazon EKS.
+It has the same versions and dependencies
+that are deployed by Amazon EKS itself.
+But the big difference is
+that EKS-D is fully managed by you,
+which is unlike Amazon EKS,
+which is managed by AWS.
+You can run this anywhere,
+literally anywhere.
+On-premises, in the cloud, or even somewhere else.
+You just have to realize,
+it's your responsibility.
+So you're fully responsible for upgrading
+and managing your platforms,
+as opposed to being able to lean on Amazon EKS
+to do that for you.
+And that's it.
+Like I said, it's pretty short and sweet.
+So let's have some really brief exam tips
+and takeaways, for you to take with you.
+Some keywords to look out for
+are questions related to self-managed
+Kubernetes deployments that could be similar
+to Amazon EKS.
+You always want to use this Distro when you need to
+run versioned deployments of clusters outside
+of AWS-managed services
+while still maintaining the same type
+of dependencies and requirements.
+Now, this is not commonly appearing on exams,
+and it essentially functions like EKS Anywhere.
+Now that's going to do it.
+Again, like I said, this is a very short and sweet lesson.
+Let's end things here and then I'll see you in the next one.
