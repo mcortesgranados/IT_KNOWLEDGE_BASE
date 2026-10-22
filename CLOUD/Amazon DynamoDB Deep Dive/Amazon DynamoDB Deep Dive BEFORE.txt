@@ -1,0 +1,245 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+06:12
+
+Course Introduction
+01:44
+
+
+About the Training Architect
+00:58
+Course Features and Tools
+03:30
+CHAPTER 2
+
+Databases 101
+34:43
+
+Database Management Systems
+11:04
+Relational DBs and SQL
+11:44
+NoSQL Database Models
+11:55
+CHAPTER 3
+
+DynamoDB and Scenario Introduction
+21:30
+
+DynamoDB 10,000 FT
+06:50
+Introducing Pinehead Records
+05:26
+Scenario Discussion and Architecture Thoughts
+09:14
+CHAPTER 4
+
+Tables and Item Architecture
+11:34
+
+DynamoDB Architecture
+07:34
+DynamoDB Items
+04:00
+CHAPTER 5
+
+Accessing DynamoDB
+1:23:59
+
+Using the AWS Management Console
+13:32
+Using the AWS CLI
+10:09
+SDK Options
+07:36
+DynamoDB Local
+07:42
+HANDS-ON LAB
+Creating a DynamoDB Table
+45:00
+CHAPTER 6
+
+Monitoring and Metrics
+17:29
+
+Console Metrics and CloudWatch
+05:30
+Alerts and Alarms
+05:03
+Errors and Codes
+06:56
+CHAPTER 7
+
+Working with Items
+27:58
+
+Partitions, Partition and Sort Keys
+05:47
+Performance Units: RCU/WCU
+05:45
+Consistency Model (Strongly vs. Eventual)
+02:24
+Scans and Queries
+07:37
+PutItem
+02:33
+Batch Operations
+03:52
+CHAPTER 8
+
+Table Performance
+12:40
+
+Provisioned vs. On-Demand Capacity Modes
+05:22
+Auto Scaling
+07:18
+CHAPTER 9
+
+Data Model - Version 1
+1:07:14
+
+Version 1 Data Model Overview
+07:14
+HANDS-ON LAB
+Implementing a Simple DynamoDB Application
+1:00:00
+CHAPTER 10
+
+Table Indexes
+53:35
+
+Indexes: Part 1
+04:23
+Indexes: Part 2
+08:49
+Importing Tables Using AWS Database Migration Service
+10:23
+HANDS-ON LAB
+Working with DynamoDB Local and Global Indexes
+30:00
+CHAPTER 11
+
+Backup and Recovery
+03:12
+
+On-Demand vs. Continuous (PITR) Backup
+03:12
+CHAPTER 12
+
+Advanced Performance and Scaling Considerations
+07:27
+
+Offloading Large Attribute Values to S3
+03:27
+Hot and Cold Partition Imbalance
+04:00
+CHAPTER 13
+
+Data Consistency and Management
+15:55
+
+Conditional and Update Expressions
+05:29
+Transactions
+06:18
+Time to Live (TTL)
+04:08
+CHAPTER 14
+
+Data Resilience, Security, and Encryption
+19:52
+
+Global Tables
+05:46
+Encryption
+10:39
+DynamoDB VPC Endpoints
+03:27
+CHAPTER 15
+
+Database Model v2
+1:06:01
+
+Data Model v2 Review
+06:01
+HANDS-ON LAB
+Managing DynamoDB Data Migration with DMS
+1:00:00
+CHAPTER 16
+
+Streams and Triggers
+1:19:36
+
+Streams
+05:51
+Triggers (Lambda Invoke)
+13:45
+HANDS-ON LAB
+Processing DynamoDB Streams Using Lambda
+1:00:00
+CHAPTER 17
+
+Advanced Index Usage
+16:57
+
+Selective Write Sharding
+09:32
+Aggregation with Streams
+07:25
+CHAPTER 18
+
+Implementing High-Performance Architectures
+1:51:05
+
+Static Data Dumps (Streams to Static File)
+11:15
+DynamoDB Accelerator (DAX) Architecture
+11:42
+SQS Write Buffer
+13:08
+HANDS-ON LAB
+Using ElastiCache to Improve DynamoDB Performance
+45:00
+HANDS-ON LAB
+Implementing DAX on an Existing DynamoDB Solution
+30:00
+CHAPTER 19
+
+Advanced Security
+1:22:15
+
+Federated and Fine-Grained Access
+11:12
+Auditing Admin Access Using CloudTrail
+11:03
+HANDS-ON LAB
+Recovering and Auditing Access to DynamoDB
+1:00:00
+CHAPTER 20
+
+Database Model v3
+34:29
+
+Database Model v3 Review
+04:29
+HANDS-ON LAB
+Implementing Fine-Grained Access Control for DynamoDB
+30:00
+CHAPTER 21
+
+Integration
+24:26
+
+Amazon EMR
+08:35
+Amazon Elasticsearch Service
+15:51
+CHAPTER 22
+
+What's Next?
+01:59
+
+What's Next?
