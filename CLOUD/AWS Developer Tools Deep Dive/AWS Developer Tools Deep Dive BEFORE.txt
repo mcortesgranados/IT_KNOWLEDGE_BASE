@@ -1,0 +1,219 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+45:17
+
+About the Course
+07:29
+Environment Configuration
+09:57
+DevOps Basics
+07:38
+CI/CD Concepts
+07:51
+GitHub/Git Concepts
+08:43
+Git Installation
+03:39
+CHAPTER 2
+
+CodeCommit Setup and Config
+23:17
+
+Configuration Options
+07:32
+IAM Configuration
+06:11
+Configuring Credential Helper HTTP
+04:01
+Configuring SSH for Individual Users
+05:33
+CHAPTER 3
+
+CodeCommit Basics
+2:07:34
+
+Introduction to CodeCommit
+11:06
+Creating, Viewing, Editing, and Deleting a Repository
+06:50
+Cloning Repositories, Commits, Pushes, and Pulls
+13:25
+Merging Basic Conflicts
+10:28
+Branches (Local)
+08:46
+Tags
+09:20
+Migrating a Repository into CodeCommit
+07:39
+HANDS-ON LAB
+Configure and Work with CodeCommit from the CLI
+1:00:00
+CHAPTER 4
+
+CodeCommit with Other Services
+1:09:43
+
+Introduction to Triggers
+05:54
+Triggers for SNS
+06:27
+Triggers for Lambda Functions
+08:10
+CodeCommit Encryption
+04:12
+HANDS-ON LAB
+Creating an AWS CodeCommit Repository That Triggers Email Notifications
+45:00
+CHAPTER 5
+
+CodeBuild Essentials
+37:53
+
+What Is CodeBuild?
+08:45
+Getting Started with CodeBuild
+13:55
+
+Working with Build Projects
+09:48
+Working with Builds
+05:25
+CHAPTER 6
+
+CodeDeploy In-Depth
+2:49:21
+
+Introduction to CodeDeploy
+04:25
+CodeDeploy Setup and Config
+07:28
+Configuring an EC2 Instance for Use with CodeDeploy
+06:37
+Creating an Application, Deployment Group, and Deployment Configuration
+12:06
+Editing and Deleting an Application
+03:30
+Adding, Editing, and Deleting Application Elements (Deployment Groups and Configurations)
+06:07
+Creating, Viewing, and Deleting a Custom Deployment Configuration
+07:17
+Creating and Configuring the AppSpec File
+09:07
+Creating and Uploading a Revision to S3
+05:54
+Deploying a Revision from S3
+07:11
+Monitoring Deployments via SNS Triggers
+07:19
+Viewing Deployment Details and Error Logs
+14:07
+Stopping Deployments, Rollbacks, and Redeployments
+07:18
+Automating Deployments from S3 Using Lambda
+10:55
+HANDS-ON LAB
+Rolling Updates to a Highly Distributed Web Application with AWS CodeDeploy
+1:00:00
+CHAPTER 7
+
+CodePipeline In-Depth
+4:38:29
+
+What Is CodePipeline?
+05:30
+CodePipeline Concepts and Terminology
+10:46
+CodePipeline Setup and Configuration
+03:58
+CodePipeline with CodeBuild
+08:56
+Creating a Simple Pipeline
+14:03
+
+Managing a Pipeline with AWS Console
+09:12
+Managing a Pipeline from the CLI
+07:48
+Continuous Delivery with CloudFormation Templates
+15:35
+Creating Approval Actions
+07:41
+HANDS-ON LAB
+Continuous Compliance and Automated Incident Response with AWS CodePipeline and AWS Config
+30:00
+HANDS-ON LAB
+Monitoring AWS CodePipeline Changes through AWS CloudWatch Events Rules
+45:00
+HANDS-ON LAB
+Setting Up a Pipeline with a Manual Approval in AWS CodePipeline
+30:00
+HANDS-ON LAB
+CodePipeline for Continuous Deployment to Elastic Beanstalk
+45:00
+HANDS-ON LAB
+Building a CI/CD Pipeline with AWS CodePipeline to Deploy a Static Website on S3
+45:00
+CHAPTER 8
+
+AWS X-Ray In-Depth
+27:23
+
+What Is X-Ray?
+04:41
+X-Ray Sample App and Demo
+11:12
+
+X-Ray Concepts
+05:39
+X-Ray Security
+05:51
+CHAPTER 9
+
+Cloud9 In-Depth
+1:05:59
+
+What Is Cloud9?
+06:02
+Cloud9 Configuration
+07:41
+IDE Walkthrough
+08:29
+
+IDE Walkthrough - CLI
+04:17
+Working with CodePipeline
+09:30
+HANDS-ON LAB
+Pair Programming with AWS Cloud9
+30:00
+CHAPTER 10
+
+CodeStar In-Depth
+2:38:09
+
+What Is CodeStar?
+07:37
+Setting Up CodeStar
+04:21
+Getting Started with CodeStar
+12:03
+CodeStar with AWS Alexa
+09:33
+
+CodeStar with the CLI
+04:35
+HANDS-ON LAB
+Deploying and Updating a Web Application with a CI/CD Pipeline Using AWS CodeStar
+1:00:00
+HANDS-ON LAB
+Deploying Custom Code with a CI/CD Pipeline Using AWS CodeStar
+1:00:00
+CHAPTER 11
+
+Conclusion
+02:08
+
+What's Next?
