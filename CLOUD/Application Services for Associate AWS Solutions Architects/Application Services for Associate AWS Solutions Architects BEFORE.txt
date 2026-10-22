@@ -1,0 +1,115 @@
+Course Outline
+CHAPTER 1
+
+Getting Started
+07:04
+
+Course Introduction and Course Scenario
+04:28
+
+The Exam Blueprint
+02:36
+
+CHAPTER 2
+
+Application, Analytics, and Operations
+3:56:28
+
+Simple Queue Service (SQS) Overview
+07:45
+Simple Notification Service (SNS) Overview
+08:24
+
+Step Functions Overview
+06:43
+Elastic Transcoder Overview
+03:13
+Athena vs. Redshift
+02:47
+Elastic MapReduce (EMR) Overview
+03:10
+Kinesis Overview
+04:50
+Amazon MQ Overview
+01:56
+
+
+Securing Your Application Tiers
+02:40
+HANDS-ON LAB
+Scaling EC2 Using SQS
+45:00
+HANDS-ON LAB
+Building a Video Transcoding Pipeline Using Elastic Transcoder
+30:00
+HANDS-ON LAB
+Triggering AWS Lambda from Amazon SQS
+45:00
+HANDS-ON LAB
+Querying Data in Amazon S3 with Amazon Athena
+1:00:00
+QUIZ
+Application Services Quiz
+15:00
+CHAPTER 3
+
+AWS Deployment
+1:34:28
+
+CloudFormation Overview
+08:08
+
+Elastic Beanstalk Overview
+06:32
+OpsWorks Overview
+04:48
+HANDS-ON LAB
+Getting Started with CloudFormation
+1:00:00
+QUIZ
+Deployment Quiz
+15:00
+CHAPTER 4
+
+Serverless
+3:10:22
+
+Lambda Overview
+07:49
+API Gateway Overview
+02:33
+HANDS-ON LAB
+Setting Up Lambda Functions with S3 Event Triggers
+1:00:00
+HANDS-ON LAB
+Building a Serverless Application Using Step Functions, API Gateway, Lambda, and S3 in AWS
+1:45:00
+QUIZ
+Serverless Quiz
+15:00
+CHAPTER 5
+
+Hybrid Environments
+1:41:19
+
+Web Identity Federation and Cognito Overview
+12:50
+AWS VPC VPN Designs and Overview
+08:11
+
+
+Direct Connect Overview
+05:18
+
+HANDS-ON LAB
+Working with Web Identity Federation to Authenticate AWS Account Access for a Remote User
+1:00:00
+QUIZ
+Hybrid Environments Quiz
+15:00
+CHAPTER 6
+
+Conclusion
+03:00
+
+How to Prepare for the Exam
