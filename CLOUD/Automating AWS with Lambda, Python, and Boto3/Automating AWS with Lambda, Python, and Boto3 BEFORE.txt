@@ -1,0 +1,168 @@
+Course Outline
+CHAPTER 1
+
+Introduction
+05:31
+
+Course Overview
+01:01
+About the Training Architect
+00:58
+Course Prerequisites
+01:17
+
+
+
+Working with the Interactive Diagrams
+02:15
+
+CHAPTER 2
+
+Getting Started
+57:34
+
+Overview of AWS Lambda
+14:32
+Introduction to Boto3
+13:02
+HANDS-ON LAB
+Creating an EC2 Instance with Lambda in AWS
+30:00
+CHAPTER 3
+
+Elastic Compute Cloud (EC2)
+1:30:49
+
+Stopping EC2 Instances Nightly
+08:15
+
+Backing Up EC2 Instances
+11:36
+Removing Unattached EBS Volumes
+08:07
+Deregistering Old AMIs
+06:15
+AWS Instance Scheduler
+11:36
+HANDS-ON LAB
+Enabling AWS VPC Flow Logs with Automation
+45:00
+CHAPTER 4
+
+DynamoDB
+17:19
+
+Working with DynamoDB Tables
+17:19
+CHAPTER 5
+
+Simple Storage Service (S3)
+1:46:39
+
+Resizing Images
+13:01
+Importing CSV Files into DynamoDB
+11:35
+
+Transcribing Audio
+13:56
+
+Detecting Faces with Rekognition
+08:07
+HANDS-ON LAB
+Transcoding Video with S3 and Elastic Transcoder
+1:00:00
+CHAPTER 6
+
+Simple Queue Service (SQS)
+1:06:00
+
+Triggering Lambda from SQS
+12:29
+Creating a Queue Using Cross-Account Permissions
+08:31
+HANDS-ON LAB
+Triggering AWS Lambda from Amazon SQS
+45:00
+CHAPTER 7
+
+Automating Security
+1:53:09
+
+Enabling VPC Flow Logs
+11:02
+Responding to Invalid SSH Logins
+18:21
+Remediating Inspector Findings
+18:09
+
+Making Public S3 Objects Private
+10:24
+Automating Resource Tagging
+13:07
+Rotating IAM Access Keys
+12:06
+HANDS-ON LAB
+Troubleshooting CloudTrail and S3 Logging Issues in AWS
+30:00
+CHAPTER 8
+
+AWS Config
+1:41:35
+
+Finding Outdated Instance Types
+11:35
+HANDS-ON LAB
+Automatic Resource Remediation with AWS Config
+1:30:00
+CHAPTER 9
+
+Building Serverless Web Applications
+14:06
+
+Building a Contact Form with API Gateway and SES
+14:06
+
+
+CHAPTER 10
+
+CloudFormation
+19:34
+
+Creating Lambda-Backed Custom Resources
+08:53
+Using Custom Resources to Deploy an S3-Hosted Website
+10:41
+CHAPTER 11
+
+Lambda
+20:50
+
+Working with Lambda Layers
+05:58
+Automating CodeCommit Change Notifications
+14:52
+CHAPTER 12
+
+Third-Party Integrations
+21:04
+
+Creating Slack Notifications for CloudWatch Alarms
+11:34
+Creating a Twitter App
+09:30
+CHAPTER 13
+
+Monitoring and Debugging
+21:39
+
+Publishing Custom Metrics from Lambda
+10:50
+Tracing with X-Ray
+10:49
+CHAPTER 14
+
+Conclusion
+01:35
+
+What's Next?
