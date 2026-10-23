@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Angular - All Questions (997) | IT Knowledge Base</title>
+<title>Angular - All Questions (1011) | IT Knowledge Base</title>
 <style>
 :root { --ink:#23272f; --line:#d8e1ea; --blue:#1565c0; --green:#2e7d32; --purple:#7b1fa2; }
 * { box-sizing:border-box; }
@@ -54,6 +54,7 @@ h2.part { margin:30px 0 10px; padding-top:12px; border-top:2px solid #e2e8f0; co
 #beginner .question, #beginner .question1, #beginner .question2 { border-left-color:#2e7d32; }
 #intermediate .question, #intermediate .question1, #intermediate .question2 { border-left-color:#1565c0; }
 #advanced .question, #advanced .question1, #advanced .question2 { border-left-color:#7b1fa2; }
+#reuse .question { border-left-color:#00695c; }
 .question > h2, .question1 > h2, .question2 > h2 { margin:0 0 8px; color:#17386d; font-size:1rem; line-height:1.38; }
 h2[id] { scroll-margin-top:132px; }
 .lvl > h2.lvlhead { scroll-margin-top:112px; }
@@ -84,17 +85,19 @@ h2.q-hit, .question.q-hit, .question1.q-hit, .question2.q-hit { background:#fff8
     <a href="#beginner">Beginner &middot; 280</a>
     <a href="#intermediate">Intermediate &middot; 340</a>
     <a href="#advanced">Advanced &middot; 377</a>
+    <a href="#reuse">Reusable building blocks &middot; 14</a>
   </nav>
 </header>
 <main class="container">
 <section class="hero">
   <h1>Angular &mdash; all questions in one page</h1>
-  <p>The three Angular pages (Beginner, Intermediate and Advanced) merged into a single document: 997 questions and answers, numbered continuously, searchable, with the original wording and code samples unchanged. Search jumps straight to a question; the level buttons filter the list.</p>
+  <p>The three Angular pages (Beginner, Intermediate and Advanced) merged into a single document, plus a set written for the reusable building blocks of the framework: components, modules, services, directives and pipes. 1011 questions and answers, numbered continuously, searchable, with the original wording and code samples unchanged. Search jumps straight to a question; the buttons filter by level or by topic.</p>
   <div class="chips">
-    <span>997 questions</span>
+    <span>1011 questions</span>
     <span>Beginner &middot; 280</span>
     <span>Intermediate &middot; 340</span>
     <span>Advanced &middot; 377</span>
+    <span>Reusable building blocks &middot; 14</span>
     <span>English</span>
     <span>Angular 13+</span>
   </div>
@@ -110,10 +113,11 @@ h2.q-hit, .question.q-hit, .question1.q-hit, .question2.q-hit { background:#fff8
   <p class="qsearch-more" id="search-more" hidden="hidden"></p>
 </div>
 <div class="filterbar" role="group" aria-label="Filter by level">
-  <button type="button" data-level="all" aria-pressed="true">All &middot; 997</button>
+  <button type="button" data-level="all" aria-pressed="true">All &middot; 1011</button>
   <button type="button" data-level="beginner" aria-pressed="false">Beginner &middot; 280</button>
   <button type="button" data-level="intermediate" aria-pressed="false">Intermediate &middot; 340</button>
   <button type="button" data-level="advanced" aria-pressed="false">Advanced &middot; 377</button>
+  <button type="button" data-level="reuse" aria-pressed="false">Reusability &middot; 14</button>
 </div>
 <section class="lvl" id="beginner" data-level="beginner">
   <h2 class="lvlhead">Beginner <span>280 questions</span></h2>
@@ -21852,6 +21856,156 @@ export class DynamicLoaderComponent implements OnInit {
     <p>&nbsp;</p>
     <p>&nbsp;</p>
 
+</section>
+<section class="lvl" id="reuse" data-level="reuse">
+  <h2 class="lvlhead">Reusable building blocks <span>14 questions</span></h2>
+  <p class="lead">Components, modules, services, directives and pipes: how to design each one so it survives more than one screen &mdash; scope, public API, content projection, change detection cost and the point at which a shared piece stops paying for itself.</p>
+  <div class="question">
+    <h2 id="q998" data-num="998">What makes an Angular component genuinely reusable?</h2>
+    <div class="answer"><p>A component is reusable when it depends on its <strong>inputs and outputs</strong>, not on a route, a global store or a service it fetches data from. The rules I apply:</p>
+      <ul>
+        <li>Data in through <code>@Input</code> (or the newer <code>input()</code> signal), events out through <code>@Output</code>.</li>
+        <li>No <code>HttpClient</code> inside a presentational component; a container component or the caller supplies the data.</li>
+        <li>No assumptions about the parent layout, the route or the CSS around it.</li>
+        <li>Styles that do not leak: default emulated encapsulation plus <code>:host</code> for the boundaries.</li>
+        <li><code>ChangeDetectionStrategy.OnPush</code>, so the host decides when it renders and the component stays cheap.</li>
+        <li>Variable regions through <code>&lt;ng-content&gt;</code> instead of boolean inputs.</li>
+      </ul>
+      <p>If a component ends up with five inputs and three outputs, it is usually two components or a service pretending to be one.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q999" data-num="999">Standalone components or NgModules for reusable building blocks?</h2>
+    <div class="answer"><p>Standalone is the modern default: a component, directive or pipe declares exactly what it imports, so the consumer adds only what it uses and tree-shaking works. NgModules still have a place in an existing codebase and in libraries that need to group providers or expose a secondary entry point.</p>
+      <p>The practical rule: one public API per folder, exported through an <code>index.ts</code> barrel. If the project keeps NgModules, the shared module contains declarations and exports only — never providers, because a provider imported twice by two lazy features silently creates two instances.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1000" data-num="1000">How do you stop a shared module from becoming a dumping ground?</h2>
+    <div class="answer"><p>Three conditions before something enters the shared bucket: it is stateless, it is used by at least two features, and it depends on no feature. If it fails any of them, it stays in its feature folder.</p>
+      <ul>
+        <li><strong>No business vocabulary.</strong> A <code>ShipmentStatusBadge</code> is not shared; it is a cargo component. A <code>StatusBadge</code> with a colour input is shared.</li>
+        <li><strong>No providers.</strong> Singletons belong to <code>core</code> or to <code>providedIn: 'root'</code>.</li>
+        <li><strong>No data fetching.</strong> The moment it needs an API call it becomes a container, and containers are feature code.</li>
+      </ul>
+      <p>A shared module that grows every sprint is usually a symptom of features importing each other's pieces instead of owning them.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1001" data-num="1001">Component, directive or pipe: how do you choose?</h2>
+    <div class="answer"><p>Each exists to solve a different problem, and the choice is about what the output is:</p>
+      <ul>
+        <li><strong>Component</strong> — produces a template. Use it when there is markup to render.</li>
+        <li><strong>Attribute directive</strong> — changes the behaviour or appearance of an element that already exists (focus, highlight, permission, tooltip). No template of its own.</li>
+        <li><strong>Structural directive</strong> — decides whether a template is instantiated at all (<code>*appIfLoaded</code>, <code>*appHasRole</code>).</li>
+        <li><strong>Pipe</strong> — transforms a value for display, with no side effects and no state.</li>
+      </ul>
+      <p>Rule of thumb: if you need markup, a component; if you need existing markup to behave differently, a directive; if you need an existing value to display differently, a pipe.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1002" data-num="1002">How do you write a reusable attribute directive?</h2>
+    <div class="answer"><p>A directive is reusable when it works on any element and takes its configuration as an input:</p>
+      <pre><code>@Directive({ selector: '[appHighlightOnHover]', standalone: true })
+export class HighlightOnHoverDirective {
+  @Input('appHighlightOnHover') color = '#fff59d';
+
+  constructor(private el: ElementRef&lt;HTMLElement&gt;, private r: Renderer2) {}
+
+  @HostListener('mouseenter') onEnter() {
+    this.r.setStyle(this.el.nativeElement, 'background', this.color);
+  }
+  @HostListener('mouseleave') onLeave() {
+    this.r.removeStyle(this.el.nativeElement, 'background');
+  }
+}</code></pre>
+      <p>Three details that matter: use <code>Renderer2</code> instead of writing to <code>nativeElement.style</code> directly (it keeps the directive safe under server-side rendering and in web workers); alias the input with the selector name so <code>[appHighlightOnHover]="'#ffe082'"</code> works; and clean up anything you subscribe to in <code>ngOnDestroy</code>.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1003" data-num="1003">How do you build a structural directive?</h2>
+    <div class="answer"><p>A structural directive receives a <code>TemplateRef</code> and decides whether to instantiate it inside a <code>ViewContainerRef</code>:</p>
+      <pre><code>@Directive({ selector: '[appIfLoaded]', standalone: true })
+export class IfLoadedDirective {
+  constructor(private tpl: TemplateRef&lt;unknown&gt;, private vcr: ViewContainerRef) {}
+
+  @Input() set appIfLoaded(loaded: boolean) {
+    this.vcr.clear();
+    if (loaded) { this.vcr.createEmbeddedView(this.tpl); }
+  }
+}</code></pre>
+      <p>The microsyntax <code>*appIfLoaded="flag"</code> is sugar over an <code>&lt;ng-template&gt;</code> binding, which is why the input has to be named after the selector. Clearing before creating avoids duplicated views when the value flips, and the same pattern scales to permission checks or feature flags.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1004" data-num="1004">What makes a service reusable, and root versus component scope?</h2>
+    <div class="answer"><p>A reusable service has one responsibility, no knowledge of the UI, and every dependency injected rather than imported directly. The scope is a lifecycle decision, not a style preference:</p>
+      <ul>
+        <li><code>providedIn: 'root'</code> — one instance for the application, tree-shaken away if nobody injects it. Correct for gateways, configuration and stateless helpers.</li>
+        <li><code>providers: [...]</code> on a component — a fresh instance per component instance. Correct for wizard state, an editable form model, anything that must not leak between two open screens.</li>
+        <li>Providers declared in a lazy-loaded feature are scoped to that feature; loading it twice would create two copies.</li>
+      </ul>
+      <p>A root service that holds per-screen data is the classic leak: the second screen reads the first screen's leftovers.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1005" data-num="1005">How do you make a service substitutable in tests and across implementations?</h2>
+    <div class="answer"><p>Depend on an injection token typed to an interface instead of a concrete class:</p>
+      <pre><code>export interface PricingGateway {
+  quote(command: QuoteCommand): Observable&lt;Quote&gt;;
+}
+
+export const PRICING_GATEWAY =
+  new InjectionToken&lt;PricingGateway&gt;('PRICING_GATEWAY');</code></pre>
+      <p>The module decides whether the application receives the HTTP implementation, a mock or a caching decorator. The reusable library no longer imports <code>HttpClient</code>, consumers can swap REST for GraphQL without touching call sites, and tests provide a three-line fake instead of an HTTP harness.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1006" data-num="1006">Pure versus impure pipes: what is the difference and when does it matter?</h2>
+    <div class="answer"><p>A <strong>pure</strong> pipe is called only when the input reference changes; Angular caches the result per input. An <strong>impure</strong> pipe (<code>pure: false</code>) runs on every change-detection cycle.</p>
+      <p>That difference is a performance decision: an impure sort or filter over a long list inside <code>*ngFor</code> re-runs dozens of times per second, and it also defeats memoisation, because every run produces a new array reference. Sorting, filtering and mapping belong in the component or a computed signal; pipes are for formatting — dates, currency, weights, translation — where the transformation is cheap and deterministic.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1007" data-num="1007">How do you write a custom pipe, and how do you keep it reusable?</h2>
+    <div class="answer"><pre><code>@Pipe({ name: 'weight', standalone: true })
+export class WeightPipe implements PipeTransform {
+  transform(value: number | null, unit: 'kg' | 'lb' = 'kg'): string {
+    if (value === null || value === undefined) { return '—'; }
+    return unit === 'kg'
+      ? value.toFixed(1) + ' kg'
+      : (value * 2.20462).toFixed(1) + ' lb';
+  }
+}</code></pre>
+      <p>Keep it pure, keep it free of injected singletons (a pipe with a dependency is hard to test and hard to reuse), make it null-safe, and take configuration as arguments so one pipe covers several cases instead of five near-duplicates. Mark it standalone and export it from the folder barrel so consumers import it without a module.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1008" data-num="1008">How does content projection make a component reusable?</h2>
+    <div class="answer"><p><code>&lt;ng-content&gt;</code> moves the decision about the inner markup to the caller, which removes flags like <code>[showFooter]</code>:</p>
+      <pre><code>&lt;app-card&gt;
+  &lt;h3 card-title&gt;AWB 020-12345678&lt;/h3&gt;
+  &lt;p&gt;Booked, awaiting cut-off&lt;/p&gt;
+  &lt;button card-actions&gt;Rebook&lt;/button&gt;
+&lt;/app-card&gt;</code></pre>
+      <p>Inside the card: <code>&lt;ng-content select="[card-title]"&gt;</code>, <code>&lt;ng-content select="[card-actions]"&gt;</code> and a plain <code>&lt;ng-content&gt;</code> as the fallback slot. When the parent has to supply a template that the child renders in its own context — a table cell, a list item — use <code>&lt;ng-template&gt;</code> plus <code>ngTemplateOutlet</code> with a context object instead of projecting markup.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1009" data-num="1009">How do you keep the public API of a reusable component stable?</h2>
+    <div class="answer"><p>Treat inputs and outputs as a contract with consumers:</p>
+      <ul>
+        <li>Required inputs stay required (<code>input.required</code> or a validation in <code>ngOnInit</code>), optional ones have a documented default.</li>
+        <li>Never mutate an object received through an input; emit a new one. Combined with <code>OnPush</code>, this is what makes the component predictable.</li>
+        <li>Do not rename or remove an input without a deprecation period, and do not leak internal types in the signature.</li>
+        <li>Expose behaviour through outputs and methods, never by letting the parent reach into internal state.</li>
+        <li>If other teams consume it, publish it as a library (ng-packagr, secondary entry points, semver) and keep a demo route or Storybook as living documentation.</li>
+      </ul></div>
+  </div>
+  <div class="question">
+    <h2 id="q1010" data-num="1010">How do you test reusable components, directives and pipes?</h2>
+    <div class="answer"><ul>
+        <li><strong>Pipe</strong> — a pure function: instantiate it and assert input/output, including the null and edge cases.</li>
+        <li><strong>Directive</strong> — a host component in <code>TestBed</code> that uses the directive on a real element; assert the DOM change and the cleanup.</li>
+        <li><strong>Component</strong> — a host component that supplies inputs and records outputs, plus DOM assertions on what the user sees; one test per branch of the public API, not per internal method.</li>
+        <li><strong>Contract</strong> — a compile-time test that imports only from the public barrel, so a refactor that breaks consumers fails the build instead of a screen.</li>
+      </ul>
+      <p>If a reusable component needs <code>HttpTestingController</code> to be tested, it is not reusable yet: the data dependency belongs one level up.</p></div>
+  </div>
+  <div class="question">
+    <h2 id="q1011" data-num="1011">When is a component not worth making reusable?</h2>
+    <div class="answer"><p>When it has a single caller and no second use case in sight. Premature abstraction costs more than duplication: a component with a <code>mode</code> enum switching three templates, or five inputs where two are always passed together, is a sign that two screens were merged.</p>
+      <p>The rule I use is duplicate once, extract the third time — when the shape is proven by real callers. Code extracted after three real uses tends to survive; code extracted in advance usually gets a fourth boolean input and a comment explaining it.</p></div>
+  </div>
 </section>
 </main>
 <button type="button" class="totop" id="totop">&uarr; Top</button>
