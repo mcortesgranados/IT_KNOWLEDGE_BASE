@@ -1,0 +1,825 @@
+<div class="question">
+  <h2>Walk me through how MongoDB actually commits a multi-document transaction: who decides, and where is that decision written?</h2>
+  <div class="answer">
+    <p>There is no monolithic BEGIN on the server. <code>startTransaction()</code> is client-side bookkeeping; the first statement assigns a <code>txnNumber</code> and registers the transaction. From then on one node is the <strong>coordinator</strong>: the <code>mongos</code> the session is pinned to in a sharded cluster, or the primary in a plain replica set.</p>
+    <p>Commit is two-phase. Phase one, <code>prepareTransaction</code> goes to every participant: each shard takes its locks, persists a <em>prepared</em> record and refuses to rewind. Phase two, the coordinator durably writes the decision &mdash; commit or abort &mdash; into <code>config.transactions</code>, and only then tells participants to commit. That ordering is the guarantee: once the decision exists, the outcome is fixed, and a crash mid-broadcast is recoverable by replaying it. Participants hold their own record until the decision reaches them.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What exactly is stored in config.transactions, and why is the record kept after the commit?</h2>
+  <div class="answer">
+    <p><code>config.transactions</code> is an ordinary replicated collection, and that is the design: the decision must survive failover like any other data. Each document is keyed by <code>lsid</code> plus <code>txnNumber</code> and carries the state (<code>prepared</code>, <code>committed</code>, <code>aborted</code>), <code>lastWriteDate</code>, and for prepared entries the oplog slot and write concern the coordinator committed with.</p>
+    <p>Records are not deleted at commit. A cleanup thread removes one only when no further message about that transaction can plausibly arrive &mdash; anchored to the majority commit point plus a grace period, tunable through <code>transactionRecordMinimumLifetimeMinutes</code> (30 minutes by default). That retention window is what makes a retried commit safe: the second <code>commitTransaction</code> finds the record, returns the stored outcome, and applies nothing twice. On a sharded cluster the coordinator's record lives with the config server, and each participant shard keeps its own.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Snapshot isolation: what anomalies does it actually eliminate, and which one does it leave open?</h2>
+  <div class="answer">
+    <p>Every transaction reads from one WiredTiger snapshot taken at its first read, and its writes become visible only at commit. That eliminates dirty reads, non-repeatable reads and phantoms <em>inside</em> the transaction &mdash; re-running the same query returns the same rows &mdash; and it eliminates lost updates on documents you actually write, because a concurrent modification of a document you hold produces a <code>WriteConflict</code> and aborts you.</p>
+    <p>What survives is write skew. Two transactions can read overlapping sets, each check an invariant, and write <strong>disjoint</strong> documents. Nothing conflicts, both commit, the invariant is broken. MongoDB never takes predicate or range locks, so it cannot notice that the two read sets intersected. Serializability is not offered, and no isolation level setting buys it. The engineering consequence: invariants must be materialized onto a document that both transactions must write.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Show me write skew in a schema you have actually seen. How do you make it impossible?</h2>
+  <div class="answer">
+    <p>Constraint: at least one engineer per team stays on call.</p>
+    <pre><code>// T1 and T2 run concurrently, both read onCall: 2
+const n = await coll.countDocuments({ team: "pay", onCall: true });
+if (n &gt; 1) {
+  await coll.updateOne({ _id: myId }, { $set: { onCall: false } });
+}</code></pre>
+    <p>T1 takes Alice off, T2 takes Bob off. Different documents, so no conflict, both commit, nobody is on call.</p>
+    <p>Three honest fixes. Move the invariant onto a document both must write: a <code>{ team, onCallCount }</code> row they <code>$inc</code> with <code>$expr</code> guarding the floor, so the second one gets <code>WriteConflict</code> and retries. Or hold an explicit lock document per team for the critical section. Or restate the rule so a unique index can enforce it. Retrying harder does nothing &mdash; the anomaly is logical, not a race the engine can see.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What happens at the 60-second transaction limit, and what does the client actually receive?</h2>
+  <div class="answer">
+    <p><code>transactionLifetimeLimitSeconds</code> defaults to 60. A background cleanup task, running on a fixed interval, finds transactions past their lifetime, aborts them and releases their locks and snapshot. In a sharded cluster the parameter must be set on every shard replica set member, not just on <code>mongos</code>, or shards disagree about who is still alive.</p>
+    <p>The client does not get a clean "timeout". The next statement on that session fails with <code>NoSuchTransaction</code> (code 251), which carries the <code>TransientTransactionError</code> label. A driver running the standard retry loop will therefore silently start the whole transaction over. That is correct for a transaction that was simply too big, and pathological when the transaction was slow because it was queueing behind a lock: the retry has the same footprint and will hit the same wall at t+60s, forever. Alert on repeated retries of the same <code>txnNumber</code> chain.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Your retry block failed again, this time inside commit. How do you tell whether the data actually landed?</h2>
+  <div class="answer">
+    <p>You cannot tell from the error, and that is precisely what <code>UnknownTransactionCommitResult</code> means: the commit may have been applied and the reply lost. Three defences, in order of value:</p>
+    <ol>
+      <li>Retry the commit only &mdash; never the body &mdash; while the label is <code>UnknownTransactionCommitResult</code>, with <code>w: "majority"</code> and a bounded <code>maxTimeMS</code>. When the budget is exhausted you are in genuinely unknown territory.</li>
+      <li>Make the body idempotent through a natural key, so a blind replay cannot double-apply.</li>
+      <li>Read back with <code>readConcern: majority</code> on the key you wrote. That is the only authoritative answer.</li>
+    </ol>
+    <p>Note the asymmetry: a <code>TransientTransactionError</code> arriving after a commit that already returned <code>ok: 1</code> is noise &mdash; the commit reply is final.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Does a transaction have a 16 MB limit? Explain where the limit really sits.</h2>
+  <div class="answer">
+    <p>The aggregate cap is gone. The server writes <strong>as many oplog entries as necessary</strong> to describe a transaction, so a 40 MB transaction is not rejected for total size the way pre-4.2 folklore claims. What remains is the per-entry BSON limit: each <code>applyOps</code> entry must stay under 16 MB, and the server splits the write set across entries to respect that.</p>
+    <p>Size still bites in three places. A single statement whose write set cannot fit one entry &mdash; a giant <code>$push</code> or a huge bulk update inside the transaction. The WiredTiger cache ceiling: a transaction too large to ever fit aborts with <code>TransactionTooLargeForCache</code>, which is a cache error wearing a size costume. And replication: secondaries replay those entries one at a time, so one enormous transaction becomes a catch-up burst on every member rather than a single atomic step.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Can you create a collection or an index inside a transaction? Explain the restriction precisely.</h2>
+  <div class="answer">
+    <p>The premise is stale. Since 4.4 you <em>can</em> create collections and indexes in a transaction, with hard conditions: the transaction must not be a cross-shard write transaction, and the collection must not be capped. So on a replica set it works; in a sharded cluster it works only while the transaction stays on one shard.</p>
+    <p>Cross-shard DDL is forbidden for good reasons. A metadata change has no document identity to conflict on, so there is nothing for the two-phase machinery to lock per participant; the catalog write would have to be visible to other sessions watching that namespace, which breaks the snapshot the transaction is built on; and a failing build would have to be rolled back on shards that already published the namespace. The practical rule stands: create the namespace first, with <code>w: "majority"</code>, before you open the transaction that uses it, or the transaction can fail to acquire its lock.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does readConcern snapshot cost memory, and who pays for it?</h2>
+  <div class="answer">
+    <p>WiredTiger is MVCC: it keeps old versions of changed documents so a reader holding an older snapshot can still find them. The transaction's snapshot pins that point in time. Any document the transaction may still read cannot have its obsolete versions discarded, and the pages holding them cannot be evicted freely.</p>
+    <p>So the cost is indirect but real. Updates made by other sessions accumulate in the history store for as long as your snapshot lives, and cache that would hold hot working-set pages is spent holding versions nobody will read again. Long transactions therefore degrade the whole node, not just themselves &mdash; you see rising cache pressure, more eviction, friendlier-looking latency for everyone else. That is why the docs tell you to <code>abortTransaction()</code> rather than simply abandon a session, and why the 60-second lifetime limit exists at all: it is a cache-protection mechanism before it is a fairness mechanism.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>In a sharded cluster, what does the mongos coordinator own that a replica set primary does not?</h2>
+  <div class="answer">
+    <p>A replica set commit is one-voter: the primary writes the decision into its own <code>config.transactions</code> and the oplog does the rest. A distributed commit has independent failure domains, so <code>mongos</code> becomes an actor in its own right.</p>
+    <p>The coordinator &mdash; chosen at the first statement, and sticky for that transaction &mdash; drives <code>prepareTransaction</code> to each participating shard, so each holds its locks in a prepared state; persists the decision on the config server; then broadcasts commit and cleans up. It also owns recovery: if the <code>mongos</code> dies mid-commit, the decision already on the config server lets another <code>mongos</code> finish the job after the client retries commit. Two practical consequences follow. Every statement in a sharded transaction costs extra round trips, and losing the <code>mongos</code> between prepare and commit is a real latency spike, not a theoretical one. Also, all participating shards must be up in the same window &mdash; a shard down means the transaction cannot prepare.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does maxTransactionLockRequestTimeoutMillis control, and when do you touch it?</h2>
+  <div class="answer">
+    <p>It bounds how long an <em>operation inside a transaction</em> waits for a lock before giving up. Default is 5 milliseconds, and the failure surfaces as a write conflict carrying <code>TransientTransactionError</code>. Setting it to <code>-1</code> means wait indefinitely, which is almost always wrong.</p>
+    <p>You raise it for one recognizable pattern: a fast metadata operation, a short index build or a <code>create</code> that momentarily holds a collection lock, aborts every in-flight transaction that touches the same namespace. Bumping the value to a few tens of milliseconds lets those transactions ride out the blip instead of retrying.</p>
+    <p>But be honest about the trade. This parameter only delays the abort; it does not resolve deadlock, and a large value turns a fast failure into a slow one, which is worse under load because lock queues grow. It also has to be at least as long as the in-progress transaction plus the pending DDL needs, otherwise transactions waiting behind the DDL abort anyway.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Can a transaction read a value another transaction wrote but has not committed? Be exact about what it can read.</h2>
+  <div class="answer">
+    <p>No. Uncommitted writes are private to their transaction: they are not in any snapshot another session can acquire, so a dirty read is structurally impossible rather than merely discouraged. Snapshot visibility is taken at commit.</p>
+    <p>What a transaction <em>can</em> do is read stale data, and this trips people up because it looks like the opposite failure. Because the snapshot is fixed at the first read, a write that commits outside your transaction after that point is invisible to you for the rest of the transaction. The documented version of this is stark: another session deletes a document, and your transaction still reads it happily. If a read must see the latest committed state, take a write lock with a <code>findOneAndUpdate</code> that touches the document &mdash; that both refreshes visibility and makes the conflict explicit.</p>
+    <p>Separately, <code>readConcern: local</code> outside a transaction can return data that is later rolled back. That is not a dirty read either; it is uncommitted-by-majority data.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does one long-running transaction hurt sessions that have nothing to do with it?</h2>
+  <div class="answer">
+    <p>Because MVCC cleanup is global. WiredTiger cannot discard an old document version while any active snapshot might still need it. One transaction holding a snapshot from ten minutes ago forces the engine to retain every version of every document touched since then, in the history store, on disk and in cache.</p>
+    <p>The symptoms look unrelated to transactions: cache fill ratio climbing, eviction pressure, reads that suddenly need disk, write latency creeping up as updates must chase older versions. Teams spend hours tuning indexes for a problem caused by an abandoned session in a debugger.</p>
+    <p>Operationally: always <code>abortTransaction()</code> in a <code>finally</code> block, keep <code>transactionLifetimeLimitSeconds</code> at a value you can defend, and treat "open transactions older than N seconds" as a first-class alert rather than a curiosity. The limit exists to cap this blast radius.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Someone proposes transactionLifetimeLimitSeconds: 600 to stop retries. Argue both sides.</h2>
+  <div class="answer">
+    <p>The case for it: if legitimate transactions genuinely need 90 seconds &mdash; a batch reconciliation, a report that aggregates then writes &mdash; then a 60-second abort is a coin flip that produces retry storms and duplicate work.</p>
+    <p>The case against, which usually wins: the limit is a proxy for cache protection, and raising it multiplies the history-retention cost described above across every concurrent transaction. Ten-minute transactions on a busy primary will show up as cache pressure and secondary lag, not as clean errors. Worse, a longer limit converts fast failures into slow ones: a transaction stuck behind a lock now occupies a session slot for ten minutes instead of one.</p>
+    <p>My answer in a design review: keep 60, and move the long work out of the transaction &mdash; precompute in a staging collection, then commit a small delta. If the parameter must move, change it on shards and coordinator together and re-measure cache pressure afterwards.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Inside WiredTiger, what has to be true for an update to fail with WriteConflict?</h2>
+  <div class="answer">
+    <p>Three conditions converge. The updater holds a snapshot, and the target document's current version was committed <em>after</em> that snapshot. The engine walks the update chain for the key, finds a version newer than the reader's snapshot, and cannot legitimately apply the change without violating isolation. It returns <code>WT_ROLLBACK</code>, which <code>mongod</code> translates into code 112, <code>WriteConflict</code>.</p>
+    <p>Two nuances separate seniors from people who have read one blog post. First, the storage engine retries certain conflicts internally before surfacing one &mdash; so the error the application sees means repeated attempts already failed. Second, behaviour differs by context: inside a transaction the conflict aborts the transaction and is labelled <code>TransientTransactionError</code>; outside a transaction the server retries the operation itself a bounded number of times, which is why a non-transactional <code>$inc</code> rarely reports one. The document lock itself is short &mdash; conflicts come from snapshots, not from lock hold time.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are concurrency tickets, and how do they turn into latency you can measure?</h2>
+  <div class="answer">
+    <p>WiredTiger admits only a fixed number of concurrent operations into the storage engine &mdash; the classic defaults are 128 read tickets and 128 write tickets, and the server exposes them under <code>serverStatus().wiredTiger.concurrentTransactions</code> with <code>available</code>, <code>out</code> and <code>totalTickets</code>.</p>
+    <p>Tickets are a throttle, not a lock: an operation that cannot get one queues in the server, invisible to the query plan. That is why a node can show low CPU, no lock waits worth mentioning, healthy disk, and still serve 200 ms reads &mdash; the time is spent waiting for admission. The signature is <code>available</code> pinned at zero with <code>out</code> at the ceiling during the slow window.</p>
+    <p>Do not "fix" this by raising the ticket count casually. More concurrency into a saturated cache or disk usually lowers throughput. Read it as evidence that you have more concurrent work than the node can service, then attack the real cause: too many connections, unindexed scans holding tickets longer, or hot documents serializing writes.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does yielding mean in MongoDB's concurrency model, and why does it make updates less predictable?</h2>
+  <div class="answer">
+    <p>An operation that would otherwise hold a lock for a long time periodically releases it so others can make progress &mdash; the classic triggers are a page fault that forces a disk read, or a large number of documents modified in one statement. The engine must then verify nothing changed underneath before resuming; if it did, the operation can be rolled back and retried.</p>
+    <p>The observable cost: <code>numYields</code> in the profiler and in slow-query logs. A high yield count means the statement kept surrendering its position &mdash; typically a scan without a supporting index, or a mass update racing other writers.</p>
+    <p>The correctness lesson matters more than the metric. Because an update can yield mid-flight and be retried, an operation is atomic per document, but two operations on the same document are not ordered the way wall-clock logs suggest. Never infer ordering from application timestamps; use a monotonic counter or the server's own ordering to reason about "which write won".</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Two updates hit the same document at the same instant. Walk me through what the server does.</h2>
+  <div class="answer">
+    <p>They serialize, necessarily. WiredTiger takes an exclusive lock on the document (internally, on the update chain for that key) for the duration of the modification. The second updater blocks on that lock &mdash; but only briefly, because the critical section is short: append a new version, release.</p>
+    <p>The interesting part is what happens next. Once it acquires the lock, the second updater re-examines the document against its own snapshot. If the first write is now newer than that snapshot, the second cannot apply blindly, and it either retries with a fresh snapshot (non-transactional path, server-side) or aborts with <code>WriteConflict</code> (transactional path).</p>
+    <p>So "serialized" does not mean "both applied in order". One of them may fail and be retried, and an operation that read the document earlier in the same transaction will be aborted rather than allowed to write over newer data. That is the mechanism behind lost-update protection on a single document.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Show me the retry loop you put around a transaction in production, and justify every line.</h2>
+  <div class="answer">
+    <pre><code>async function runTxn(fn, { attempts = 5 } = {}) {
+  for (let i = 0; i &lt; attempts; i++) {
+    const session = client.startSession();
+    try {
+      let out;
+      await session.withTransaction(async () =&gt; {
+        out = await fn(session);
+      }, {
+        readConcern: { level: "snapshot" },
+        writeConcern: { w: "majority" },
+        maxCommitTimeMS: 5000
+      });
+      return out;
+    } catch (e) {
+      if (!e.hasErrorLabel("TransientTransactionError")) throw e;
+      const base = Math.min(2 ** i * 50, 1000);
+      await sleep(base / 2 + Math.random() * base); // jitter
+    } finally {
+      await session.endSession();
+    }
+  }
+  throw new Error("transaction retry budget exhausted");
+}</code></pre>
+    <p>Why each piece: <code>withTransaction</code> retries the commit on <code>UnknownTransactionCommitResult</code> for you, so your loop only handles the body. Jitter prevents every replica of your service retrying in lockstep and re-creating the same conflict storm. A bounded attempt count stops the pathological case where the transaction is simply too contended. A fresh session per attempt avoids inheriting a poisoned transaction state.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you separate an error worth retrying from a bug you should page someone about?</h2>
+  <div class="answer">
+    <p>Trust the labels, not the message. <code>TransientTransactionError</code> means "the world moved, the same transaction could work now": write conflicts, lock timeouts, <code>NoSuchTransaction</code>, a stepdown during the transaction, <code>TransactionTooLargeForCache</code> when contention inflated the working set. <code>UnknownTransactionCommitResult</code> means "commit outcome indeterminate" and only the commit is retried. <code>RetryableWriteError</code> is the non-transactional sibling.</p>
+    <p>Everything else is logic: <code>DuplicateKey</code> from a real duplicate, schema validation failures, <code>NamespaceNotFound</code>, <code>BSONObjectTooLarge</code>, "cannot use <code>$expr</code> here", anything you can reproduce deterministically. Retrying those is a latency amplifier that hides the defect.</p>
+    <p>The trap is a transaction that always conflicts under some traffic shape: it is labelled transient, so the loop spins, and you get 500s only after the budget drains. Log the attempt count. A transaction that needs three retries is a design smell, not bad luck.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you make a retried write idempotent when you have no _id to key on?</h2>
+  <div class="answer">
+    <p>You invent a natural key from the request, and you let a unique index enforce it. The idempotency key should be stable across retries and distinctive per logical operation &mdash; derived from something the caller supplies, not from a timestamp or a random UUID generated inside the retry block, which would defeat the whole exercise.</p>
+    <pre><code>// unique index: { accountId: 1, requestId: 1 }
+try {
+  const r = await coll.insertOne({ accountId, requestId, amount, status: "posted" });
+  return { created: true, id: r.insertedId };
+} catch (e) {
+  if (e.code !== 11000) throw e;
+  return { created: false, doc: await coll.findOne({ accountId, requestId }) };
+}</code></pre>
+    <p>The duplicate key error becomes the success path for a replay. Two details: the index is the mechanism, not a hint &mdash; without it you get two documents; and the document must be written in the same statement as the state it describes, otherwise a crash between operations leaves the key recorded and the work undone. For multi-document effects, the key belongs inside the transaction.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Concurrent upserts: where exactly is the race, and what does a unique index change about it?</h2>
+  <div class="answer">
+    <p>The race is that upsert is not omniscient. The server matches the filter, finds nothing, and inserts. Two concurrent upserts on the same filter can both observe "no match" before either insert lands. Without a constraint on the filter fields, you get two documents and no error &mdash; the worst outcome, because it looks like success.</p>
+    <p>With a unique index on the fields the filter matches, one insert wins and the loser gets <code>DuplicateKey</code> (11000). That error is not a bug, it is the coordination primitive: catch it and retry the same upsert, which now takes the update path. That is the documented, safe pattern, and it is why "use upsert" without an index is bad advice.</p>
+    <p>Note the subtlety inside transactions: a duplicate key error inside a multi-document transaction kills the transaction, so you must retry the whole transaction, not just the statement. And the filter must match the index exactly, or the constraint does not apply.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Use findOneAndUpdate as a lock primitive. What must the filter contain to be safe?</h2>
+  <div class="answer">
+    <pre><code>const now = new Date();
+const lease = new Date(now.getTime() + 30_000);
+
+const doc = await locks.findOneAndUpdate(
+  { _id: "invoice:42", $or: [ { owner: null }, { expiresAt: { $lt: now } } ] },
+  { $set: { owner: workerId, expiresAt: lease, fence: { $add: ["$fence", 1] } } },
+  { returnDocument: "after", upsert: false }
+);
+if (!doc) throw new Error("lock held by someone else");</code></pre>
+    <p>The filter must express ownership <em>and</em> expiry in the same predicate &mdash; that single atomic compare-and-set is the entire lock. <code>returnDocument: "after"</code> gives you the lease you actually hold rather than the one you hoped for. The <code>fence</code> increment is what makes the lock usable: downstream writes must carry the fence value they were granted, so a worker that lost its lease cannot overwrite the new owner's work.</p>
+    <p>Keep <code>upsert: false</code>. An upsert here would happily create a second lock document under a different filter shape, or resurrect a deleted one. Provision the lock rows in a migration instead.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why is a MongoDB-based distributed lock fragile enough that you should not build correctness on it?</h2>
+  <div class="answer">
+    <p>Because it inherits every failure mode of a lease, and adds a few of its own. Three killers:</p>
+    <ul>
+      <li><strong>Process pause.</strong> A GC pause, a VM freeze, a SIGSTOP. The worker wakes up believing it holds a lease that expired two seconds ago and writes over the new owner's work.</li>
+      <li><strong>Clocks.</strong> Lease expiry compares timestamps. Skewed client clocks make a holder expire early or never. Never send <code>new Date()</code> from the app for expiry arithmetic; use <code>$$NOW</code> or <code>$currentDate</code> so the server's clock is authoritative.</li>
+      <li><strong>TTL is not immediate.</strong> A TTL index deletes on a background sweep, roughly every 60 seconds, so "the lock expires at T" is really "somewhere after T".</li>
+    </ul>
+    <p>The mitigation is fencing, not tighter timing: monotonically increasing tokens that the resource itself validates, rejecting stale writers. If the destination cannot validate a fence, MongoDB is the wrong lock. Use a system that offers consensus semantics, or redesign so the operation is idempotent and the lock is only an optimization.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Show me a lost update caused by $set, and the two ways to fix it.</h2>
+  <div class="answer">
+    <p>The application reads, computes, writes back:</p>
+    <pre><code>const acc = await coll.findOne({ _id: "A" });   // balance 100
+// ... 40 ms of business logic, another writer deposits 50 meanwhile
+await coll.updateOne({ _id: "A" }, { $set: { balance: acc.balance - 30 } });
+// balance becomes 70, the +50 is gone</code></pre>
+    <p>The <code>$set</code> carries a value computed from a stale read, so it overwrites whatever happened in between. The document was never concurrently written <em>while</em> the update ran &mdash; there was no conflict to detect. That is why this bug survives load testing.</p>
+    <p>Fix one, express the delta: <code>{ $inc: { balance: -30 } }</code> &mdash; server-side arithmetic on the current value, atomic, no stale input.</p>
+    <p>Fix two, guard the write with <code>$expr</code> so it only applies when the precondition still holds: <code>{ $expr: { $gte: ["$balance", 30] } }</code> with <code>$inc</code>. Check <code>matchedCount</code> to learn whether the guard held. Both keep the decision on the server, which is the actual fix.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Implement compare-and-set with a version field so the API distinguishes "wrong version" from "not found".</h2>
+  <div class="answer">
+    <pre><code>const res = await coll.updateOne(
+  { _id: id, version: expected },
+  { $set: { status: next }, $inc: { version: 1 } },
+  { writeConcern: { w: "majority" } }
+);
+
+if (res.matchedCount === 0) {
+  const exists = await coll.countDocuments({ _id: id }, { limit: 1 });
+  return exists ? 409 : 404;          // conflict vs missing
+}</code></pre>
+    <p>The version lives in the same document as the state it protects, so the check and the write are one atomic operation. Increment always, never set the version to a literal &mdash; that reintroduces the race you are removing.</p>
+    <p>The follow-up read is honest only because "not found" is stable: a document that exists cannot spontaneously become the wrong version for long, though it can be deleted between the two calls. If that distinction matters, wrap both in a transaction with <code>readConcern: snapshot</code>. Also note <code>matchedCount</code> vs <code>modifiedCount</code>: a no-op update can match without modifying, so branch on matched.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why must the outbox insert share the transaction with the business write? What breaks otherwise?</h2>
+  <div class="answer">
+    <p>Because you are trying to make a database commit and a message publication agree, and they are different systems with independent failure modes. Write the order, then insert the outbox row, and a crash between them loses the event. Insert the outbox row first and a rolled-back order emits a phantom event.</p>
+    <pre><code>await session.withTransaction(async () =&gt; {
+  await orders.insertOne({ _id: orderId, ... }, { session });
+  await outbox.insertOne({
+    _id: new ObjectId(), topic: "order.created", payload: { orderId },
+    createdAt: new Date(), status: "pending"
+  }, { session });
+}, { writeConcern: { w: "majority" } });</code></pre>
+    <p>One transaction, one commit point: either both documents exist or neither does, and the relay can never publish something that did not happen. This is the one place where a transaction buys you something a change stream cannot &mdash; a change stream on <code>orders</code> has no way to know a second write was supposed to accompany it.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When is a saga the right answer instead of a transaction, and what do you owe the design?</h2>
+  <div class="answer">
+    <p>A saga is right when the work spans services or genuinely cannot fit in one transaction's time and cache budget: charging a card at a third party, provisioning in another system, migrating ten thousand documents. Holding a MongoDB transaction open across a network call to a payment provider is the anti-pattern that produces 60-second aborts and locks held for no reason.</p>
+    <p>The price is that you no longer have atomicity, you have compensations, and every one of them must be designed, tested and idempotent. Concretely you owe: a persisted saga log with a state per step, forward recovery that resumes from the log after a crash, compensating actions for each completed step (a refund, not a "delete the charge"), and a monotonic guard so a compensation cannot fire after the saga already succeeded.</p>
+    <p>Also decide the semantics out loud. Between steps the system is visibly inconsistent; someone will query it. Either hide that state from readers or make it legitimate in the model.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does a logical session actually guarantee, before any of the consistency features on top of it?</h2>
+  <div class="answer">
+    <p>Very little on its own, which is why the name misleads people. A session is a server-side identity &mdash; the <code>lsid</code> UUID &mdash; that lets the server correlate operations from one client over time, across connections and across failover. That correlation is the substrate for everything else: retryable writes, causal consistency, transactions.</p>
+    <p>Without opting into causal consistency, a session guarantees no ordering across members. It does not pin you to a server, it does not hold a snapshot, and it does not create a transaction. What it does give you is a stable handle the driver can re-send operations under so the server can recognise a retry.</p>
+    <p>The lifetime is worth memorising: sessions expire server-side after <code>logicalSessionTimeoutMinutes</code>, 30 minutes by default, and the driver refreshes activity on use. A session idle for longer is silently forgotten &mdash; this is why a long-parked session's <code>txnNumber</code> history no longer protects you.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does afterClusterTime actually deliver read-your-own-writes?</h2>
+  <div class="answer">
+    <p>The mechanism is a timestamp, not a routing trick. Every write returns an <code>operationTime</code>. In a causally consistent session the driver remembers the highest one seen and attaches it to subsequent reads as <code>readConcern: { level: "majority", afterClusterTime: &lt;ts&gt; }</code>.</p>
+    <p>The receiving member then refuses to answer until its applied oplog timestamp reaches that value. A secondary that is 300 ms behind will wait 300 ms, not return stale data. That is the whole guarantee, and it is a floor, not a snapshot: you get "at least as new as what I wrote", not "a consistent point in time across all my reads" &mdash; that needs <code>snapshot</code>.</p>
+    <pre><code>const s = client.startSession({ causalConsistency: true });
+await coll.insertOne({ _id: 1 }, { session: s });
+await coll.findOne({ _id: 1 }, { session: s }); // waits for the write</code></pre>
+    <p>Cost: you have traded a stale read for a blocking wait, so a lagging secondary converts into tail latency. Alert on it.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does the timestamp travel between operations in a causal session?</h2>
+  <div class="answer">
+    <p>Two channels, and conflating them causes real bugs. First, <code>operationTime</code>: a per-operation value in the reply that the driver advances its session watermark with. Second, <code>$clusterTime</code>: a cluster-wide gossip value that members exchange in every reply and every heartbeat, so time-like knowledge propagates even without client traffic.</p>
+    <p>The driver's rule is simple &mdash; take the max it has seen and send it on the next read as <code>afterClusterTime</code>. It never needs to reason about which node served what.</p>
+    <p>What breaks causality in practice: doing part of the work outside the session. If one statement runs on a session-less implicit session, its timestamp never enters the watermark, and the following read can legally return a state that predates it. The same applies when you hand a write's result to a different session or a different client instance. Causal consistency is a chain, and every un-sessioned call is a broken link.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Implicit sessions: what is the driver doing behind your back, and when does it bite?</h2>
+  <div class="answer">
+    <p>Every operation you issue without a session still gets one &mdash; the driver creates an implicit session, uses it for that single operation (or that cursor's lifetime), and returns it to a pool. That is what makes retryable writes work by default: without an <code>lsid</code> and <code>txnNumber</code>, the server could not recognise a duplicate.</p>
+    <p>It bites in three places. Cursors: an implicit session is attached to the cursor, and if the cursor lives long, the session is held, which matters on servers with a low session pool. Read-your-own-writes: implicit sessions are independent, so operation two has no idea what operation one wrote &mdash; you need one explicit session spanning both. And transactions: a transaction requires an explicit session, full stop.</p>
+    <p>Explicit sessions are cheap, so the senior habit is to pass one session through a request's unit of work rather than sprinkling session-less calls and hoping causality sorts itself out.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What happens on endSession, and what happens if you never call it?</h2>
+  <div class="answer">
+    <p><code>endSession()</code> returns the session to the client-side pool and, on client close, the driver sends <code>endSessions</code> to the server so records can be reclaimed promptly. It does not abort an open transaction; if you end a session with a live transaction, the server eventually expires it, but until then it holds locks and a snapshot.</p>
+    <p>If you never call it: nothing dramatic at small scale, because sessions expire after <code>logicalSessionTimeoutMinutes</code> (30 by default) and the server reclaims them. At scale, the failure is a session-pool squeeze &mdash; leaked sessions per request exhaust the pool, and new operations block waiting for one, which presents as unexplained latency under concurrency.</p>
+    <p>Two habits: always <code>endSession()</code> in a <code>finally</code> block, and prefer <code>withSession</code>/<code>withTransaction</code> helpers that do it for you. If you ever lower <code>logicalSessionTimeoutMinutes</code>, remember the driver caches session state for that window &mdash; a mismatch between driver and server values causes retryable writes to silently stop being retried.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Which operations and which errors make a write retryable &mdash; and which look retryable but are not?</h2>
+  <div class="answer">
+    <p>Retryable by the driver: single-document writes &mdash; <code>insertOne</code>, <code>updateOne</code>, <code>replaceOne</code>, <code>deleteOne</code>, <code>findOneAndUpdate</code> and friends, plus <code>insertMany</code> and bulk writes with <code>ordered: false</code>. Not retryable: multi-document updates and deletes, and <code>ordered: true</code> bulk inserts, because the driver cannot prove partial application is safe.</p>
+    <p>Errors: anything the server labels <code>RetryableWriteError</code> &mdash; primary stepdown, <code>NotWritablePrimary</code>, <code>InterruptedDueToReplStateChange</code>, shutdown in progress &mdash; plus network errors where the write may or may not have arrived. A <code>WriteConcernError</code> is <em>not</em> a reason to re-send the write; the write landed, only the acknowledgement is short.</p>
+    <p>The trap: a retry can turn a timeout into a duplicate if the operation was not idempotent. Retries protect you from transport, not from design. And a retryable write still needs <code>w: &gt; 0</code>, a replica set, and a server that has not expired the session record.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does w:0 switch retryable writes off entirely?</h2>
+  <div class="answer">
+    <p>Retry safety needs an acknowledgement. With <code>w: 0</code> the driver fires and forgets: there is no reply carrying the <code>lsid</code>/<code>txnNumber</code> outcome, so nothing distinguishes "the server applied it and the reply was lost" from "the socket died before it arrived". Re-sending would risk a duplicate, so the driver refuses to retry at all &mdash; and the server cannot help, because the whole dedup mechanism is keyed on a statement it already recorded.</p>
+    <p>Consequences people miss: <code>w: 0</code> also silently disables transaction support (a transaction needs an acknowledged commit), and it gives you no <code>operationTime</code>, which breaks causal consistency on that session.</p>
+    <p>Where it is legitimate: high-volume telemetry or metrics where losing a sample is acceptable and latency dominates. Even then, ask whether <code>w: 1</code> with retries is not simply the better trade &mdash; the failure mode of <code>w: 0</code> is silent data loss, which nobody ever alerts on.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>If a write with $inc is retried, is it applied twice?</h2>
+  <div class="answer">
+    <p>Not if the driver retried it as a retryable write. The server records the <code>lsid</code> plus <code>txnNumber</code> of the last applied statement, and a repeat of the same pair returns the cached result without re-executing. So <code>$inc: { count: 1 }</code> stays at one increment even though the command went over the wire twice. This is a genuinely non-idempotent operation made safe by bookkeeping.</p>
+    <p>It breaks in exactly these cases: the driver has retryable writes disabled (<code>retryWrites=false</code> in the URI), the deployment is a standalone, <code>w: 0</code> was used, the operation is a multi-document update, or <em>your</em> code retried &mdash; an application-level <code>catch</code> that re-issues the <code>updateOne</code> gets a fresh <code>txnNumber</code> and does double-count.</p>
+    <p>So: <code>$inc</code> plus driver retries is safe; <code>$inc</code> plus your own retry loop is a double-count waiting for a slow network. Wrap app-level retries in a documented key or a transaction.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Transaction commits and retries: what exactly is the driver retrying, and with what settings?</h2>
+  <div class="answer">
+    <p><code>withTransaction</code> maintains one commit attempt loop. If <code>commitTransaction</code> fails with <code>UnknownTransactionCommitResult</code>, it re-sends <em>only</em> the commit &mdash; the body is never re-run, because the body may already have been applied. It retries until the error stops carrying that label.</p>
+    <p>Practical settings worth setting explicitly: <code>writeConcern: { w: "majority" }</code> on the transaction so a commit that returns really is durable on a majority, and <code>maxCommitTimeMS</code> so a commit that is stuck behind replication lag cannot hang the request thread indefinitely. A commit that times out is not a failure &mdash; it is an unknown, which is a third state your code must handle.</p>
+    <p>The senior point: the retry is safe because the server remembers the decision in <code>config.transactions</code>. If you "helpfully" add your own commit retry around the driver's, you can interleave commits from two code paths on one session, which is the kind of bug that only appears during a failover test.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>lsid and txnNumber: what does the server actually remember, and for how long?</h2>
+  <div class="answer">
+    <p><code>lsid</code> identifies the session; <code>txnNumber</code> is a monotonically increasing counter per session, allocated by the driver, distinguishing one logical retryable unit from the next. For retryable writes the server also tracks a statement id inside the transaction number, so a multi-statement retryable sequence is deduplicated statement by statement.</p>
+    <p>For single writes, the memory is the last applied <code>txnNumber</code> per session &mdash; cheap. For transactions, it is the record in <code>config.transactions</code> described earlier, which is why a transaction can be recovered after a stepdown and a plain write cannot be resumed mid-flight.</p>
+    <p>Retention is bounded by session lifetime (30 minutes idle) and by transaction-record cleanup. Both matter to you: a client that pauses longer than the session timeout and then replays a write is issuing a <em>new</em> write as far as the server is concerned. Any idempotency guarantee beyond that window has to come from your own unique key, not from the driver.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does causal consistency cost you across regions, and when is that cost unacceptable?</h2>
+  <div class="answer">
+    <p>It converts replication lag into client latency. A read carrying <code>afterClusterTime</code> must wait until the serving member has applied through that timestamp. Write in Frankfurt, read in Singapore, and the read blocks for one inter-region round trip plus whatever the primary needs to replicate &mdash; not because the data is unavailable, but because causality says "not yet".</p>
+    <p>It is unacceptable on user-facing paths where the reading region is far from the writing region and the value written is the only thing that matters. The alternative is not "stale reads"; it is scoping the dependency: keep writes and their immediate reads in the same region, use a local cache keyed to the write, or move the read to the primary for the short window after a write.</p>
+    <p>What you should never do is enable causal consistency globally because it sounds safer. It is a per-session contract, so enable it on the sessions that own a read-after-write dependency, and leave analytics and listings on plain secondary reads with a bounded <code>maxStalenessSeconds</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>You write to the primary and immediately read from a secondary. What can go wrong, and what fixes it?</h2>
+  <div class="answer">
+    <p>The secondary may not have applied the write yet, so you read the old value. With a 200 ms replication lag and an immediate read, this is not a rare edge &mdash; it is the normal case during any write burst.</p>
+    <p>Four fixes, in increasing cost. Use <code>readPreference: primary</code> for the read-after-write path &mdash; correct and boring, and the right default for anything user-facing that immediately confirms an action. Use a causally consistent session so the read waits for the required timestamp &mdash; correct but turns lag into latency. Use <code>readConcern: majority</code> without causality &mdash; helps only if the write itself was majority-committed and you are willing to read from a member that has reached the commit point. Or restructure so the client already has the value it wrote and does not need to read at all.</p>
+    <p>The wrong answer is hoping. Catching the user's "I saved it and it's gone" ticket after launch is far more expensive than routing one query to the primary.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>readConcern majority: what is it really promising, and what does the majority commit point have to do with it?</h2>
+  <div class="answer">
+    <p><code>majority</code> promises you only see data that has been acknowledged by a majority of voting members, so it cannot be rolled back later. The mechanism is the <strong>majority commit point</strong>: the highest oplog timestamp that a majority has durably written. A read with this concern waits for the serving member's applied timestamp to reach that point before answering.</p>
+    <p>Consequences worth stating in an interview. It prevents dirty reads from the durability side &mdash; a write that could still be rolled back by an election is invisible. It costs latency equal to however far the commit point trails the primary, which is usually small and occasionally not. It does not give you a consistent snapshot across several reads; each read may see a different commit point unless you use <code>snapshot</code> or a transaction.</p>
+    <p>Also note <code>majority</code> and <code>w: "majority"</code> are opposite sides of one coin: a read threshold and a write acknowledgement. Mixing <code>w: 1</code> writes with <code>majority</code> reads is fine, and buys less than you think.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Can you use readConcern snapshot outside a transaction, and what is the catch?</h2>
+  <div class="answer">
+    <p>Yes, on <code>find</code>, <code>aggregate</code> and <code>distinct</code>, since 5.0. The point is repeatability across a <em>single</em> operation, and the ability to pin a read to a specific point in time with <code>atClusterTime</code> &mdash; which is how you take a coherent multi-collection read without opening a transaction: read once, capture <code>atClusterTime</code> from the cursor, then read the second collection at that same timestamp.</p>
+    <pre><code>const c1 = db.orders.find({}, { readConcern: { level: "snapshot" } });
+// capture the timestamp, then reuse it
+db.orderLines.find({}, { readConcern: { level: "snapshot", atClusterTime: ts } })</code></pre>
+    <p>The catch: it is <em>not</em> a transaction. Each statement sees its own snapshot unless you pass <code>atClusterTime</code>, there is no isolation from concurrent writes appearing between them in a way you can lock against, and you cannot write. And the same MVCC cost applies &mdash; a long-lived snapshot for a big aggregation pins history just as a transaction would. Use <code>atClusterTime</code> deliberately, and keep the window short.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does $inc scale under high concurrency where read-then-$set collapses?</h2>
+  <div class="answer">
+    <p>Because <code>$inc</code> removes the round trip that creates the race. The application never carries a value into the write; the server applies an arithmetic delta to the current version of the document under the document lock. Nothing can be lost, because no stale number ever leaves the server.</p>
+    <p>Two further effects explain the throughput difference. First, the update is in place in the storage engine &mdash; WiredTiger appends a new version of one small document rather than rewriting a large one, so the critical section is short and the write path stays compact. Second, a single-document update is atomic and retryable, so the driver can absorb a stepdown without the application re-reading.</p>
+    <p>What <code>$inc</code> does not fix is <strong>contention</strong>: every increment to the same document still serializes on that document. Throughput plateaus at whatever one hot document can absorb, and past that you see <code>WriteConflict</code> under transactions or a lock queue without them. That is a schema problem, not an operator problem &mdash; which is why hot counters get sharded.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you shard a single logical counter, and still read a correct total?</h2>
+  <div class="answer">
+    <p>Split the counter into N documents and add them up when you read. Writes pick a bucket pseudo-randomly, so contention is divided by N and the hot document disappears.</p>
+    <pre><code>// N bucket docs: { _id: { c: "page:42", b: 0..N-1 }, n: NumberLong(0) }
+await buckets.updateOne(
+  { _id: { c: "page:42", b: Math.floor(Math.random() * N) } },
+  { $inc: { n: 1 } }
+);
+
+const [ { total } ] = await buckets.aggregate([
+  { $match: { "_id.c": "page:42" } },
+  { $group: { _id: null, total: { $sum: "$n" } } }
+]);</code></pre>
+    <p>The trade-offs are real: a read now costs an index range scan plus a group instead of one lookup, the read is only eventually consistent unless you wrap it in a snapshot read, and you pay N times the storage for many counters. Choose N by measuring per-document write throughput, not by taste &mdash; and never delete a bucket, or the total silently drops.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why is $currentDate the right way to stamp a lease, and what breaks if the application supplies the timestamp?</h2>
+  <div class="answer">
+    <p>Because the comparison that decides expiry must use one clock. If the app writes <code>expiresAt: new Date(Date.now() + 30000)</code>, that value came from the application host, and the next claim compares it against another host's clock. Two machines 400 ms apart is enough for workers to disagree about who holds a lease &mdash; and container clocks drift after suspend far more than that.</p>
+    <pre><code>const job = await jobs.findOneAndUpdate(
+  { _id: jobId, status: "pending" },
+  { $currentDate: { startedAt: true }, $set: { status: "running", worker: id, leaseUntil: { $add: ["$$NOW", 30000] } } },
+  { returnDocument: "after" }
+);</code></pre>
+    <p><code>$currentDate</code> and <code>$$NOW</code> are evaluated server-side at execution, so every writer and every comparison shares the primary's clock. It also removes a subtle bug: with a client-supplied timestamp, a retried operation rewrites "now" as the old now, and the document records a start time that never happened.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Two workers poll the same jobs collection at the same instant. Show me exactly what stops both from taking the job.</h2>
+  <div class="answer">
+    <p>One atomic find-and-modify on a predicate that encodes the precondition. The second worker's filter no longer matches, so it gets <code>null</code> and moves on.</p>
+    <pre><code>const job = await jobs.findOneAndUpdate(
+  { status: "pending", runAt: { $lte: "$$NOW" } },
+  { $set: { status: "running", worker: workerId },
+    $currentDate: { startedAt: true },
+    $inc: { attempts: 1 } },
+  { sort: { priority: -1, runAt: 1 }, returnDocument: "after" }
+);
+if (!job) return; // nothing to do</code></pre>
+    <p>The critical property is that match-and-modify is a single document-level atomic operation. A <code>find</code> followed by an <code>updateOne</code> has a window in which both workers read the same pending job &mdash; that pattern is the bug, not a detail.</p>
+    <p>Two supporting pieces: the worker must be idempotent, because a crash after claiming means the job runs again on lease expiry; and the claim predicate must include every condition the handler depends on, or you will dispatch work whose dependencies changed.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Design a reservation that can never oversell. Where does the atomicity live?</h2>
+  <div class="answer">
+    <p>In one document, one statement. Keep per-SKU availability in a single document and make the decrement conditional on the condition that must hold:</p>
+    <pre><code>const res = await stock.updateOne(
+  { sku: "A-1", available: { $gte: 3 } },
+  { $inc: { available: -3, reserved: 3 } },
+  { writeConcern: { w: "majority" } }
+);
+if (res.matchedCount === 0) throw new Error("insufficient stock");</code></pre>
+    <p>The filter carries the invariant, so the check and the decrement cannot be separated by another writer. No transaction is needed for the reservation itself &mdash; and that matters, because a transaction here would just add the same document lock with more overhead.</p>
+    <p>Where you do need a transaction: reserving several SKUs at once, where partial success would strand inventory. Then all the decrements go in one transaction with <code>w: "majority"</code>, and a conflict on any document aborts the whole set cleanly.</p>
+    <p>Also model release explicitly: <code>reserved</code> plus <code>available</code> sums to a constant you can assert on, so a leaked reservation is detectable instead of invisible.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Use $expr to update only when there is stock. What does it buy you over a filter, and what does it cost?</h2>
+  <div class="answer">
+    <p><code>$expr</code> lets the update predicate compare two fields <em>within</em> the document, which a normal filter cannot do:</p>
+    <pre><code>await items.updateOne(
+  { sku, $expr: { $gte: ["$stock", "$requested"] } },
+  { $inc: { stock: -1 } }
+);</code></pre>
+    <p>The obvious filter form, <code>{ stock: { $gte: requested } }</code>, requires the app to read <code>requested</code> first &mdash; and that read is the race. <code>$expr</code> evaluates server-side against the current version, so the decision is atomic with the write.</p>
+    <p>The cost is index support. An <code>$expr</code> comparing two fields is generally not indexable, so the predicate is evaluated per candidate document after the index narrows what it can. Always pair it with an indexed equality on the same filter (<code>sku</code> above) so you scan one document, not a collection. If you check <code>explain</code> and see a broad scan, the fix is a different filter, not a different expression. And verify <code>matchedCount</code>, since zero matches here is a business outcome, not an error.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Map optimistic versioning onto HTTP with ETag and If-Match. Where do teams get it wrong?</h2>
+  <div class="answer">
+    <p>The resource exposes an ETag derived from the document's version &mdash; a strong ETag built from <code>_id</code> and <code>version</code>, not a hash of the representation, which changes for cosmetic reasons. <code>GET</code> returns it; the client sends <code>If-Match: "&lt;etag&gt;"</code> on <code>PUT</code> or <code>PATCH</code>.</p>
+    <pre><code>const r = await doc.updateOne(
+  { _id: id, version: etagVersion },
+  { $set: patch, $inc: { version: 1 } }
+);
+if (r.matchedCount === 0) return res.sendStatus(412);  // Precondition Failed</code></pre>
+    <p>Common mistakes. Returning <code>200</code> on a lost race instead of <code>412</code>, so the client believes it won. Accepting a missing <code>If-Match</code> and silently doing a blind write &mdash; that is the lost update coming back through the front door. Computing the ETag from a timestamp with second granularity, so two edits in the same second share a version. And forgetting that the response must carry the <em>new</em> ETag, otherwise every client retries with a stale one. Return <code>428</code> if you want to require the header explicitly.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Deduplicate events by eventId with a unique index, without turning duplicates into 500s.</h2>
+  <div class="answer">
+    <p>The unique index is the deduplication &mdash; not a <code>findOne</code> first, which reintroduces the race you are trying to close.</p>
+    <pre><code>// unique index on { eventId: 1 }
+try {
+  await inbox.insertOne({ eventId, type, payload, receivedAt: new Date(), state: "new" });
+} catch (e) {
+  if (e.code === 11000) return { duplicate: true };  // already handled or in flight
+  throw e;
+}
+// then apply the effect, then mark state: "applied"</code></pre>
+    <p>Now the honest part: the insert only reserves the id. If you crash between reserving and applying, a redelivery hits the duplicate path and the effect never happens. So the row needs a state, and redelivery of a <code>"new"</code> row must attempt the effect rather than return success &mdash; the transition <code>new &rarr; applied</code> must itself be a conditional update so only one worker performs it.</p>
+    <p>For multi-collection effects, put the inbox insert and the effect in one transaction. Then duplicate detection and application commit together.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Moving money: Decimal128, transactions, and what the transaction does not protect you from.</h2>
+  <div class="answer">
+    <p>Store amounts as <code>Decimal128</code>, not double &mdash; binary floating point cannot represent 0.10. Integers in minor units are also fine; pick one and enforce it with schema validation, because mixed representations are worse than either.</p>
+    <pre><code>await session.withTransaction(async () =&gt; {
+  await accounts.updateOne({ _id: from, balance: { $gte: amt } },
+    { $inc: { balance: NumberDecimal(amt).negate() } }, { session });
+  await accounts.updateOne({ _id: to },
+    { $inc: { balance: NumberDecimal(amt) } }, { session });
+  await ledger.insertOne({ from, to, amt: NumberDecimal(amt), at: new Date() }, { session });
+}, { writeConcern: { w: "majority" } });</code></pre>
+    <p>The transaction gives you all-or-nothing across the two accounts and the ledger. It does not give you idempotency: a retried transfer that bypasses the driver's dedup moves the money twice. Add a unique <code>transferId</code> written inside the same transaction. And it does not give you overdraft protection unless the <code>$gte</code> guard is inside the transaction &mdash; a check done before the transaction is a check against stale data.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Order plus order lines in separate collections: how do you keep them consistent without paying for a transaction on every read?</h2>
+  <div class="answer">
+    <p>Write path: one transaction, so the header and its lines commit together. Read path: never require a transaction. That asymmetry is the whole design.</p>
+    <p>You can go further and make the invariant structural. If lines always sum to a total stored on the header, the transaction can assert it, and any reader that trusts the header is consistent by construction. Writes that append a line must then update the header in the same transaction &mdash; which is fine, because they are rare compared to reads.</p>
+    <p>Where people hurt themselves: putting the lines in an unbounded array so the header document grows toward 16 MB and every line write rewrites a large document, converting a cheap append into a contended write. Keep lines as their own collection with <code>orderId</code> indexed, and accept that a reader needing both sides does two queries with a bounded window of inconsistency &mdash; or one <code>$lookup</code> if the access pattern demands it, never one transaction per page view.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Soft delete inside a transaction: what has to be atomic, and what does it not solve?</h2>
+  <div class="answer">
+    <p>Atomic: the tombstone on the document and every side effect that must agree with it &mdash; revoking a shared grant, removing the item from a saved list, releasing a reserved SKU. If any of those can happen without the others, you get an object that is deleted for its owner and live for everyone else.</p>
+    <pre><code>await session.withTransaction(async () =&gt; {
+  await docs.updateOne({ _id, deletedAt: null },
+    { $set: { deletedAt: new Date(), deletedBy: actor } }, { session });
+  await shares.deleteMany({ docId: _id }, { session });
+  await reservations.updateMany({ docId: _id, state: "held" },
+    { $set: { state: "released" } }, { session });
+});</code></pre>
+    <p>Two things it does not solve. Queries: every read path must filter <code>deletedAt: null</code>, and a transaction cannot enforce that &mdash; use a partial index and a validator or a repository layer that refuses unfiltered access. Growth: soft-deleted documents still occupy indexes and the working set, so a tombstone without an archival job is a slow-motion capacity problem, not a delete.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Explain precisely how "read, modify, write" in application code loses writes even on a healthy cluster.</h2>
+  <div class="answer">
+    <p>Because atomicity in MongoDB is per document per operation. The unit of isolation is one update statement, and your business logic spans three statements separated by network time.</p>
+    <pre><code>const d = await c.findOne({ _id });          // t0
+const next = compute(d);                      // t1  -- CPU, GC, HTTP call
+await c.updateOne({ _id }, { $set: { v: next } }); // t2  -- overwrites t0..t2</code></pre>
+    <p>Anything committed between t0 and t2 is erased by the <code>$set</code>, and no error is raised, because at t2 there was no concurrent writer holding the document &mdash; the conflict window closed long before. Replica sets do not help; there is nothing to detect.</p>
+    <p>The three cures, in order of preference: express the change as a delta the server can apply (<code>$inc</code>, <code>$push</code>, <code>$addToSet</code>, <code>$max</code>); express the precondition in the filter (<code>$expr</code>, version field) and treat zero matches as a conflict; or, when the logic genuinely needs a read, wrap it in a transaction so the snapshot aborts you on conflict.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>bulkWrite is not a transaction. How do you order it, and what do you do with a partial failure?</h2>
+  <div class="answer">
+    <p>A bulk write is a batching convenience, not an atomic unit: each operation applies independently, and a failure leaves everything before it applied.</p>
+    <p><code>ordered: true</code> stops at the first error; <code>ordered: false</code> continues and reports every failure in <code>writeErrors</code>. Choose by what the batch means. Independent upserts from a sync job: unordered maximises throughput, reconcile errors afterwards. A sequence where later operations depend on earlier ones &mdash; parent then children &mdash; needs ordered, and even then you own the cleanup.</p>
+    <p>Ordering rules that keep failures recoverable: put the operations that establish identity first, destructive deletes last, and never mix a delete of a document with an insert that reuses its unique key in the same batch, because order then decides whether you get a duplicate key error.</p>
+    <p>Always inspect <code>result.writeErrors</code> and the difference between <code>insertedCount</code> and what you sent. A bulk write that "succeeded" with three errors is the classic silent data gap. If the batch must be all-or-nothing, it belongs inside a transaction &mdash; and then it must be small.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When is eventual consistency the right answer, and how do you make it safe rather than merely convenient?</h2>
+  <div class="answer">
+    <p>When the cost of strong consistency exceeds its value to the reader. Feeds, counts, dashboards, search indexes, recommendations, audit trails consumed by humans hours later &mdash; all fine. Money movement, inventory, uniqueness, and anything a user is about to act on &mdash; not fine.</p>
+    <p>Making it safe is mostly about honesty in the product and the schema, not the database. Three practices that matter:</p>
+    <ul>
+      <li><strong>Bound it.</strong> A lag figure you can state and alert on, not "eventually". <code>maxStalenessSeconds</code> turns an unbounded window into a contract.</li>
+      <li><strong>Make the read model self-describing.</strong> Return the as-of timestamp or version so a UI can say "as of 3 minutes ago" instead of implying real time.</li>
+      <li><strong>Never let a stale read feed a decision.</strong> Every write path re-reads authoritative data inside its own atomic operation; only display paths get the replica.</li>
+    </ul>
+    <p>The failure mode to avoid is accidental eventual consistency: nobody chose it, one query just happened to hit a secondary, and the bug shows up as an intermittent "my change disappeared" report.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you build a resumable two-phase state machine so a crashed process can pick up where it stopped?</h2>
+  <div class="answer">
+    <p>Persist the intent before the effect, and make every transition a conditional update on the state you expect. The document is the state machine; the process is disposable.</p>
+    <pre><code>// 1. claim the transition atomically
+const claimed = await ops.findOneAndUpdate(
+  { _id: opId, state: "pending" },
+  { $set: { state: "applying", worker: id }, $currentDate: { claimedAt: true } },
+  { returnDocument: "after" }
+);
+if (!claimed) return;               // taken, or already done
+
+// 2. do the external effect with an idempotency key = opId
+await gateway.charge(opId, claimed.amount);
+
+// 3. record completion
+await ops.updateOne({ _id: opId, state: "applying" }, { $set: { state: "applied" } });</code></pre>
+    <p>The invariant is that the external call is idempotent under <code>opId</code>, so a crash between 2 and 3 is recoverable: a recovery sweep finds <code>applying</code> rows with a stale <code>claimedAt</code>, re-issues the call, and the gateway deduplicates. Without that key, step 2 becomes the money-losing step.</p>
+    <p>Note what is absent: no long transaction held across the network call. That is the point of the pattern.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Which currentOp fields tell you a transaction is stuck rather than just long-running?</h2>
+  <div class="answer">
+    <p>Do not read <code>secs_running</code> alone; a healthy batch transaction can legitimately be 20 seconds old. Read the shape:</p>
+    <ul>
+      <li><code>transaction.parameters.txnNumber</code> and <code>lsid</code> &mdash; the identity you will need to kill it.</li>
+      <li><code>transaction.timeOpenMicros</code> &mdash; age of the transaction, distinct from the age of the current statement.</li>
+      <li><code>transaction.timeInactiveMicros</code> &mdash; the discriminator. High and growing means the session is idle with an open transaction: nobody is doing work, the locks and snapshot are just held.</li>
+      <li><code>locks</code> and <code>waitingForLock</code> &mdash; whether it is a victim or a blocker.</li>
+      <li><code>numYields</code>, <code>planSummary</code> &mdash; whether the current statement is scanning.</li>
+    </ul>
+    <p>A transaction with <code>timeInactiveMicros</code> climbing past tens of seconds is almost always an application bug: a session leaked, or an exception path with no <code>abortTransaction</code>. Correlate with <code>clientMetadata</code> and <code>appName</code> to find the offender, and check <code>prepareReadConflicts</code> before concluding it is harmless.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Write the aggregation that finds every open transaction, including idle ones, and explain the flags.</h2>
+  <div class="answer">
+    <pre><code>db.getSiblingDB("admin").aggregate([
+  { $currentOp: { allUsers: true, idleSessions: true } },
+  { $match: { transaction: { $exists: true } } },
+  { $project: {
+      opid: 1, appName: 1, client: 1, lsid: 1,
+      secs: { $divide: ["$transaction.timeOpenMicros", 1000000] },
+      idle: { $divide: ["$transaction.timeInactiveMicros", 1000000] },
+      state: "$transaction.parameters.state", txnNumber: "$transaction.parameters.txnNumber"
+  } },
+  { $match: { secs: { $gt: 30 } } },
+  { $sort: { secs: -1 } }
+])</code></pre>
+    <p><code>idleSessions: true</code> is the essential flag &mdash; without it, sessions that are idle but holding an open transaction are omitted, which is exactly the population you are hunting. <code>allUsers: true</code> is required to see other users' operations, which means the admin privilege to run it.</p>
+    <p><code>transaction.parameters.state</code> distinguishes <code>inactive</code> from <code>prepared</code>; a lingering <code>prepared</code> state usually points at a coordinator that died between phases. Sort by age, then look at <code>appName</code> &mdash; the same offender repeating is a code defect, not a one-off.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you kill a stuck transaction, and what will the client see when you do?</h2>
+  <div class="answer">
+    <p>Two levers, and they are not interchangeable. <code>db.killOp(opid)</code> kills the current operation; for a transaction you also want the session gone, so prefer killing the session:</p>
+    <pre><code>db.adminCommand({ killSessions: [ { id: UUID("..."), txnNumber: NumberLong(7) } ] })
+db.adminCommand({ killAllSessionsByPattern: [ { "lsid.id": UUID("...") } ] })</code></pre>
+    <p>Killing the session aborts any open transaction and releases its locks and snapshot &mdash; which is what you actually needed. Killing just the opid can leave the transaction open, and the next statement re-establishes it.</p>
+    <p>Client-side: the in-flight statement fails, and subsequent work on that session gets <code>NoSuchTransaction</code> with <code>TransientTransactionError</code>, so a well-behaved driver retries from the top. That is fine. What is not fine is killing sessions as routine operations &mdash; you have just converted your problem into the client's retry storm. Kill, then fix the leak. Log the <code>lsid</code> before killing so you can prove which code path it was.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Which serverStatus counters do you watch for conflict pressure, and how do you read them together?</h2>
+  <div class="answer">
+    <p>Three families, and they only mean something in combination.</p>
+    <ul>
+      <li><code>serverStatus().transactions</code> &mdash; <code>totalStarted</code>, <code>totalCommitted</code>, <code>totalAborted</code>, plus the gauges <code>currentOpen</code>, <code>currentActive</code>, <code>currentInactive</code>, <code>currentPrepared</code>.</li>
+      <li>WiredTiger transaction statistics, including the write-conflict counter, which is the direct measure of two writers colliding on the same document.</li>
+      <li>Lock and queueing signals &mdash; <code>globalLock.currentQueue</code>, and the ticket gauges from <code>wiredTiger.concurrentTransactions</code>.</li>
+    </ul>
+    <p>Read them as a ratio, not absolutes. <code>totalAborted / totalStarted</code> climbing is the number that predicts an outage: it means work is being done and thrown away. Rising <code>currentInactive</code> alongside a flat commit rate points at leaked sessions rather than contention. And a high conflict counter with low abort count usually means lock waits are being absorbed by the server's internal retry &mdash; latency is rising before errors appear. Use a derivative over a window; a single sample tells you nothing.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you detect transactions that are growing, before they hit the cache ceiling?</h2>
+  <div class="answer">
+    <p>You cannot see the byte size of an individual in-flight transaction as a first-class metric, so you infer it. The leading indicators are the per-transaction gauges plus cache behaviour: <code>currentOpen</code> and <code>currentActive</code> rising while <code>totalCommitted</code> stays flat means transactions are accumulating, not flowing. On the WiredTiger side, watch cache fill and the bytes-dirty track &mdash; a growing transaction pins versions and dirties pages, so the store climbs without a matching increase in application write volume.</p>
+    <p>The hard ceiling is <code>transactionSizeLimitBytes</code>, derived from the cache size, and the error when you exceed it is <code>TransactionTooLargeForCache</code>. Two readings of that error matter. If it fires on a transaction whose size is intrinsic &mdash; a bulk migration &mdash; it is a design signal: chunk the work. If it fires only under load, contention has inflated the working set and the fix is retry with backoff plus a smaller write set.</p>
+    <p>The cheap preventative: log the document count and payload size each transaction touches, and alert when p99 crosses your own budget.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Read serverStatus().transactions for me like an operator. Which number would worry you first?</h2>
+  <div class="answer">
+    <p>The gauges describe a population of live transactions; the counters describe throughput. <code>currentInactive</code> is the one I look at first, because it is the pathological state: a session that opened a transaction and walked away. It holds locks and a snapshot while doing nothing, so it costs you cache and blocks writers without contributing throughput.</p>
+    <p>Then the ratio: <code>totalAborted</code> against <code>totalStarted</code>. Some aborts are normal &mdash; optimistic patterns abort and retry by design. A ratio that climbs from 2% to 30% over an hour is contention that your retry loop is hiding from the error rate but not from the latency graph.</p>
+    <p>Finally <code>currentPrepared</code> sitting above zero for more than a moment. Prepared transactions are a transient state between the two phases; a stable non-zero value means coordinators died mid-flight or a shard is unreachable, and those transactions are holding locks indefinitely. That is a page-someone condition, not a dashboard curiosity.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does the slow-query log show for a transactional operation that a normal slow query does not?</h2>
+  <div class="answer">
+    <p>The log line for a transaction carries the session identity and the transaction context: <code>lsid</code>, <code>txnNumber</code>, and statement-level fields, plus the usual <code>planSummary</code>, <code>keysExamined</code>, <code>docsExamined</code>, <code>numYields</code> and <code>durationMillis</code>. That identity is the difference between guessing and knowing, because you can join the log line to the application log line that emitted the same request id.</p>
+    <p><code>slowms</code> still governs what gets written, so the trap is thresholding by statement duration: each statement in the transaction can be 5 ms while the transaction takes 400 ms, and nothing is logged. For transactions, log by <em>transaction</em> duration in the application, not by statement duration in the server.</p>
+    <p>Also watch <code>slowms</code> being lowered during an incident: on a busy primary it is self-defeating, because the log volume itself becomes the bottleneck. Sample instead &mdash; log a fraction of the slow path, or use the profiler at level 2 into a dedicated collection for a bounded window.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What do transaction entries look like in system.profile, and what can the profiler not tell you?</h2>
+  <div class="answer">
+    <p>Each profiled entry has the usual <code>op</code>, <code>ns</code>, <code>command</code>, <code>planSummary</code>, <code>keysExamined</code>, <code>docsExamined</code>, <code>nreturned</code>, <code>millis</code> &mdash; plus <code>lsid</code> and <code>txnNumber</code> for anything inside a transaction, which is how you filter:</p>
+    <pre><code>db.system.profile.find({ lsid: { $exists: true }, millis: { $gt: 50 } })
+  .sort({ ts: -1 }).limit(20)</code></pre>
+    <p>You can then group by <code>lsid</code> and sum <code>millis</code> to reconstruct a transaction's real cost, which is the analysis the per-statement view hides.</p>
+    <p>What it cannot tell you: whether the transaction committed or aborted. There is no single entry representing the transaction as a unit, and aborted work is profiled like any other. That has two consequences &mdash; wasted work looks identical to useful work, so you cannot measure your conflict rate from the profiler, and the audit trail cannot prove an outcome. For those, use <code>serverStatus().transactions</code> and application-side instrumentation. Also remember the profiler writes into a capped collection, so a hot window evicts its own evidence.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Can you run explain inside a transaction? If not, how do you get a trustworthy plan for it?</h2>
+  <div class="answer">
+    <p>Not in the general case. <code>explain()</code> is not part of the command set you can interleave into an open multi-document transaction; the driver will run it as its own operation, so what you get is a plan for the query shape, not for the transaction.</p>
+    <p>So you get the plan three ways and cross-check. Run <code>explain("executionStats")</code> outside the transaction with the identical filter, projection and sort, and read <code>totalKeysExamined</code> against <code>nReturned</code>. Reproduce the transaction on a staging copy with the same documents and the same <code>readConcern</code>, where you can also inspect the plan cache entry that will be selected. Then confirm on the real system from the profiler: <code>planSummary</code> on the actual transactional entries is the ground truth for what the server really ran.</p>
+    <p>The senior habit is the second step, because a plan that is fine on an empty collection is often a COLLSCAN ten million documents later, and the staging reproduction is the only place you will see that before production does.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why can the plan chosen for the same query differ between a normal execution and one inside a transaction?</h2>
+  <div class="answer">
+    <p>Four reasons, and only the first is obvious.</p>
+    <ol>
+      <li><strong>Different cache state.</strong> The plan cache is keyed on query shape, and shapes are shared across sessions. A plan cached by a non-transactional read can be selected for the transactional one, or rejected because a competing plan won more trials.</li>
+      <li><strong>Different read concern.</strong> A snapshot read executes against a fixed point in time; the planner's selectivity estimate comes from a snapshot that may not match the current distribution, and a plan that was optimal five minutes ago is not necessarily optimal now.</li>
+      <li><strong>Different data volume.</strong> Inside a transaction you usually touch fewer documents with more selective filters, so plan choice rarely matters &mdash; but when it does, one bad COLLSCAN holds locks for the whole transaction.</li>
+      <li><strong>Sharding.</strong> Each shard plans independently, and the <code>mongos</code>-level plan is a merge of those, so a sharded transactional query can degrade on one shard while the other three are fine.</li>
+    </ol>
+    <p>Practical rule: pin the access path with a supporting index, not with a hint, and verify with <code>$indexStats</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Rapid fire: which documented limits actually break transactions in production, and which are folklore?</h2>
+  <div class="answer">
+    <p><strong>Real.</strong> One minute default lifetime (<code>transactionLifetimeLimitSeconds</code>), enforced by a cleanup process, with <code>NoSuchTransaction</code> as the client-visible symptom. Five milliseconds default lock-request wait (<code>maxTransactionLockRequestTimeoutMillis</code>). 16 MB per document and per oplog <em>entry</em> &mdash; not per transaction; the server splits a transaction across as many entries as needed. The WiredTiger cache ceiling behind <code>TransactionTooLargeForCache</code>. No cross-shard DDL. No capped collections. A shard with an arbiter cannot take part in multi-shard transactions.</p>
+    <p><strong>Folklore.</strong> "16 MB total per transaction" &mdash; obsolete since 4.2. "1000 documents per statement" &mdash; that number circulates from a 4.0-era guidance note about keeping transactions small; it is a design heuristic, not an enforced limit, and conflating the two leads people to build batching logic for a constraint that does not exist while ignoring the cache ceiling that does. Verify against the production-considerations page for your exact version before you quote any number in a design review.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Three error codes keep appearing in your transaction telemetry. Diagnose each.</h2>
+  <div class="answer">
+    <p><strong>NoSuchTransaction (251).</strong> The transaction is gone: aborted by the lifetime cleanup, killed, aborted on a previous statement, or a shard stepped down. Carries <code>TransientTransactionError</code>, so the standard loop restarts from the beginning &mdash; which is only correct if your body is idempotent and cheap. Recurring 251s mean either a too-long transaction or an exception path that aborts and then keeps issuing statements.</p>
+    <p><strong>TransactionTooLargeForCache.</strong> The write set cannot fit the storage cache budget, or contention inflated it. Chunk the work; retrying the same transaction unchanged is a loop with a 100% failure rate.</p>
+    <p><strong>LockTimeout (24) / lock request timeout.</strong> The transaction waited longer than <code>maxTransactionLockRequestTimeoutMillis</code> for a lock &mdash; usually DDL pending behind another transaction, or a hot document. Raising the parameter is legitimate only when the blocker is transient metadata; if the blocker is an application write, raising it converts an error into latency and then into a queue.</p>
+    <p>In all three, the useful telemetry is the retry count per logical request, not the error count.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Reproduce a write conflict on your laptop in under two minutes. Then explain what the reproduction proves.</h2>
+  <div class="answer">
+    <p>Two sessions, interleaved by hand:</p>
+    <pre><code>// session A
+const sA = db.getMongo().startSession();
+sA.startTransaction();
+sA.getDatabase("t").c.updateOne({ _id: 1 }, { $set: { x: 1 } });
+
+// session B -- outside a transaction
+db.c.updateOne({ _id: 1 }, { $set: { y: 2 } });   // waits for A's lock
+
+// back in A
+sA.getDatabase("t").c.updateOne({ _id: 1 }, { $set: { x: 2 } });  // WriteConflict
+sA.abortTransaction();</code></pre>
+    <p>What it proves, and why it is worth doing once by hand: the conflict is not about timing but about <em>snapshot versus write</em>. B's write committed after A's snapshot, so A can no longer modify that document. It also shows the asymmetry in the docs &mdash; B, outside a transaction, blocks waiting for the lock, while A, inside one, fails fast rather than waiting.</p>
+    <p>Run it with <code>retryWrites</code> off and a transaction, then again as two plain updates, and you will see why the same contended workload behaves completely differently depending on whether you wrapped it in a transaction.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>You are about to put transactions on a hot endpoint. Give me the checklist you would not skip.</h2>
+  <div class="answer">
+    <p><strong>Necessity.</strong> Can the invariant live in one document instead? A transaction is the expensive answer; a conditional single-document update is usually the correct one.</p>
+    <p><strong>Footprint.</strong> How many documents, how many shards, how many bytes at p99? Budget it explicitly, because the cache ceiling and the 60-second lifetime are the two things that will bite.</p>
+    <p><strong>Duration.</strong> Any network call inside the body is a defect. So is any unbounded query. Measure the p99 body time under load, not in staging.</p>
+    <p><strong>Contention.</strong> Do all requests touch the same few documents? If yes, the design converts throughput into aborts. Shard the hot document or change the model before shipping.</p>
+    <p><strong>Failure semantics.</strong> Idempotency key written inside the transaction, retry loop with jitter and a bounded budget, <code>UnknownTransactionCommitResult</code> handled, <code>abortTransaction</code> in <code>finally</code>, <code>w: "majority"</code>.</p>
+    <p><strong>Observability.</strong> Retry counts, abort ratio, <code>timeInactiveMicros</code> alert, and a load test that pushes past the conflict knee. Then re-check whether the endpoint needed a transaction at all.</p>
+  </div>
+</div>

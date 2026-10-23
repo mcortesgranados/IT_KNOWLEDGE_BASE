@@ -1,0 +1,1129 @@
+<div class="question">
+<h2>How does a MongoDB driver manage connection pooling, and why should an application reuse one client instance?</h2>
+<div class="answer">
+<p>Each driver maintains an internal pool of sockets per server in the topology, opening connections on demand up to a configurable maximum and closing idle ones after a timeout. Creating a new client per request forces TCP, TLS, and authentication handshakes each time, which adds latency and exhausts server-side connection limits. Applications should create a single long-lived client at startup and share it across requests, threads, or worker processes. Pool size should be tuned so total connections across all application instances stay below the server's connection budget.</p>
+<pre><code>const client = new MongoClient(uri, { maxPoolSize: 50, minPoolSize: 5 });
+await client.connect();</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens to in-flight operations when a driver's connection pool reaches maxPoolSize?</h2>
+<div class="answer">
+<p>New checkout requests wait in a queue until a connection becomes available or maxWaitTimeMS expires. If the wait expires, the driver raises a pool-cleared or timeout error rather than blocking indefinitely. Persistent saturation usually indicates slow queries holding connections or a pool sized too small for the workload concurrency. Monitoring pool wait time is the quickest way to distinguish a sizing problem from a database performance problem.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which factors should drive the choice between the Node.js, Java, Python, .NET, and Go MongoDB drivers?</h2>
+<div class="answer">
+<p>Choose the driver that matches the application runtime and its concurrency model, because all official drivers implement the same specification and wire protocol. Node.js suits event-driven services, Java and .NET suit managed enterprise stacks with mature connection and thread pools, Python favors scripting and data workloads, and Go suits low-latency services with static binaries. Evaluate team familiarity, ecosystem library support, and observability hooks rather than raw benchmark differences. Feature parity is high, so driver choice rarely limits access to server capabilities.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the practical difference between the synchronous and asynchronous MongoDB drivers?</h2>
+<div class="answer">
+<p>Asynchronous drivers return promises or futures and never block the calling thread, which fits event loops and high-concurrency services. Synchronous drivers block until the operation completes, which is simpler to read but ties up a thread per in-flight operation. Python offers both PyMongo and Motor/AsyncIOMotor, and the Java driver offers sync, async, and reactive variants. Mixing blocking calls inside an event loop is a common cause of severe latency spikes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which MongoDB errors are safe for a driver to retry automatically?</h2>
+<div class="answer">
+<p>Retryable writes cover a defined set of single-document write operations that fail with retryable error codes such as network errors or a primary stepping down. Drivers retry once by default when retryWrites is enabled, using a session identifier so the server can detect duplicates. Retryable reads handle a similar narrow set of read failures. Application-level errors like duplicate key violations or validation failures are never retried automatically because the outcome is deterministic.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you handle a transient network error in application code without duplicating writes?</h2>
+<div class="answer">
+<p>Enable retryWrites so the server deduplicates the retried attempt using the session and transaction number. Beyond that, make the operation idempotent by using a natural or client-generated unique key so a manual retry cannot insert twice. Retry only errors classified as transient, and use bounded exponential backoff with jitter. Log the retry attempt with a correlation identifier so incident analysis can reconstruct what happened.</p>
+<pre><code>await orders.updateOne(
+  { _id: clientGeneratedId },
+  { $setOnInsert: { status: "new", createdAt: new Date() } },
+  { upsert: true }
+);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What makes an application write idempotent in MongoDB terms?</h2>
+<div class="answer">
+<p>A write is idempotent when repeating it leaves the database in the same state as a single execution. This is usually achieved with upserts keyed on a deterministic identifier, or with conditional updates that include the expected current state. Using $setOnInsert rather than $set inside an upsert prevents overwriting data on a repeat attempt. Idempotency is essential whenever message consumers, retries, or at-least-once delivery are involved.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you implement optimistic concurrency control with a version field?</h2>
+<div class="answer">
+<p>Include the current version in the query filter and increment it in the update, so the write only matches if nobody changed the document in between. If modifiedCount is zero, another writer won the race and the caller should re-read and decide whether to retry. This avoids long-lived locks and works well for low-contention documents. Keep the retry loop bounded and surface a conflict error to the caller after a few attempts.</p>
+<pre><code>const r = await docs.updateOne(
+  { _id: id, version: 7 },
+  { $set: { title: "new" }, $inc: { version: 1 } }
+);
+if (r.modifiedCount === 0) throw new Error("conflict");</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is skip/limit pagination problematic for deep pages, and what should replace it?</h2>
+<div class="answer">
+<p>skip forces the server to scan and discard all preceding documents, so cost grows linearly with page depth and late pages become slow. Concurrent inserts or deletes also shift the offset, producing duplicated or missing rows across pages. Range or cursor pagination anchors on the last seen sort key instead of counting documents. This keeps every page cost roughly constant and gives stable results.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does _id cursor pagination work and what index does it require?</h2>
+<div class="answer">
+<p>Sort by _id, return a page, then filter the next query with _id greater than the last returned value. Because _id is unique and indexed by default, each page is an index range scan with predictable cost. The client passes the last _id as an opaque cursor token. This pattern is simple and stable but only supports ordering by _id.</p>
+<pre><code>db.events.find({ _id: { $gt: lastId } }).sort({ _id: 1 }).limit(50);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you paginate on a non-unique field such as createdAt without duplicates?</h2>
+<div class="answer">
+<p>Use a compound cursor of the sort field plus a tiebreaker, typically createdAt and _id, and filter with a compound range predicate. The index must match the sort order exactly for the plan to avoid an in-memory sort. Encode both values in the cursor token so the next request can resume precisely. This yields stable ordering even when many documents share the same timestamp.</p>
+<pre><code>db.posts.find({
+  $or: [
+    { createdAt: { $lt: lastTs } },
+    { createdAt: lastTs, _id: { $lt: lastId } }
+  ]
+}).sort({ createdAt: -1, _id: -1 }).limit(20);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can sorting appear unstable across pages even with a valid index?</h2>
+<div class="answer">
+<p>If the sort key is not unique, documents with equal values have no defined relative order, and the server may return them differently between executions. Adding a unique tiebreaker such as _id to the sort and index makes the order deterministic. This matters most for cursor pagination, exports, and any diff-based comparison. Sorting stability is a property of the query and index, not of the storage engine.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When should you use bulkWrite instead of many individual update calls?</h2>
+<div class="answer">
+<p>bulkWrite groups many operations into fewer round trips, which cuts network latency overhead dramatically for batch jobs. It reports per-operation results, including which entries failed and why. Group operations by type and keep batch sizes moderate, for example 500 to 1000 operations, to bound memory and lock time. For very large imports, an unordered bulk write with modest concurrency usually gives the best throughput.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between ordered and unordered bulk operations?</h2>
+<div class="answer">
+<p>Ordered bulk operations stop at the first error, leaving subsequent operations unexecuted. Unordered bulk operations attempt every operation and collect all errors, which is faster because the server can parallelize internally. Use ordered when later operations depend on earlier ones, such as insert then update of the same key. Use unordered for independent document loads where partial success is acceptable.</p>
+<pre><code>await coll.bulkWrite(ops, { ordered: false });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How should an HTTP API choose a write concern for its endpoints?</h2>
+<div class="answer">
+<p>Write concern trades latency against durability guarantees, so it should be chosen per endpoint based on business risk. Acknowledged writes with majority journaling suit financial or irreversible changes, while best-effort writes may suit telemetry or counters. Writes with w:1 are fast but can be rolled back if the primary fails before replication. Expose the trade-off in API documentation rather than silently varying it.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does w:majority with j:true actually guarantee?</h2>
+<div class="answer">
+<p>The write is acknowledged only after it has been applied to a majority of voting replica set members and persisted to the on-disk journal on those members. This protects against rollback when a primary fails, provided the majority is still reachable. It increases latency because the primary waits for replication and fsync. It does not protect against application-level mistakes such as writing wrong data.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you use read preference for reporting workloads?</h2>
+<div class="answer">
+<p>Reporting queries can be routed to secondaryPreferred so they do not compete with primary write throughput. However, secondaries can lag, so reports may read stale data, and long-running reads hold resources on those nodes. Use a dedicated analytics secondary or a separate cluster for heavy aggregation. Always pair the choice with an explicit staleness tolerance agreed with the business.</p>
+<pre><code>db.reports.find({}).readPref("secondaryPreferred");</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>When does read preference secondary actually help, and when is it misleading?</h2>
+<div class="answer">
+<p>It helps when read volume is high and the application tolerates slightly stale data, since it spreads load away from the primary. It is misleading when the read path immediately depends on a prior write, because replication lag can make the read miss the write. Causal consistency sessions solve that specific case by guaranteeing read-your-own-writes. Without sessions, secondary reads are eventually consistent by design.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the correct lifecycle for a session in application code?</h2>
+<div class="answer">
+<p>Start a session per logical unit of work, pass it explicitly to every operation that must participate, and end it in a finally block. Sessions are cheap but not free, so avoid creating one per individual query outside transactions. Sessions also carry causal consistency and retryable write state. Leaked sessions accumulate server-side until the logical session timeout cleans them up.</p>
+<pre><code>const session = client.startSession();
+try {
+  await coll.insertOne(doc, { session });
+} finally {
+  await session.endSession();
+}</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the rules for operations inside a multi-document transaction?</h2>
+<div class="answer">
+<p>Every operation must be passed the session explicitly; otherwise it runs outside the transaction and is not rolled back. The transaction must be committed or aborted on every code path, including exceptions. Transactions have a default lifetime limit, so they must not wrap user think time or external calls. Reads inside a transaction use the transaction snapshot and do not see writes committed after it started.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How should application code retry a transaction that fails with a transient error?</h2>
+<div class="answer">
+<p>Wrap the whole transaction body in a loop that retries only transient transaction errors, such as write conflicts or a primary stepping down. Each retry must start a new transaction with a fresh snapshot, because the previous one is aborted. Use bounded exponential backoff with jitter to avoid synchronized retry storms. Retrying non-transient errors, like a duplicate key violation, will simply fail again.</p>
+<pre><code>for (let attempt = 0; ; attempt++) {
+  try {
+    return await runTxn(session);
+  } catch (e) {
+    if (!e.hasErrorLabel("TransientTransactionError") || attempt &gt;= 3) throw e;
+    await sleep(50 * 2 ** attempt);
+  }
+}</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why must the commit itself sometimes be retried separately?</h2>
+<div class="answer">
+<p>A commit can fail with an UnknownTransactionCommitResult label, meaning the outcome is not known to the driver. Retrying commit with the same session and transaction number is safe because the server deduplicates it. This is distinct from retrying the whole transaction, which should happen only for TransientTransactionError. Handling both labels correctly is what makes transaction code robust.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are common anti-patterns that make transactions large and dangerous?</h2>
+<div class="answer">
+<p>Batching thousands of updates into one transaction holds locks and snapshot history longer, increasing conflict rates and memory pressure. Calling external services inside a transaction extends its lifetime and risks exceeding the transaction timeout. Reading huge result sets inside a transaction wastes cache and can exhaust the 16 MB transaction oplog entry limit. Keep transactions short, touching a small number of documents with no external calls.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is a transaction that touches many documents likely to fail rather than just run slowly?</h2>
+<div class="answer">
+<p>MongoDB stores the transaction's changes as a single oplog entry when it commits, and that entry is capped at 16 MB. A transaction that modifies enough data exceeds this limit and aborts. Transactions also hold locks and snapshot history, so long ones amplify write conflicts. This is why the documented guidance is to design schemas so most writes are single-document and atomic without transactions.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does a change stream consumer resume after a restart?</h2>
+<div class="answer">
+<p>Each change stream event carries a resume token, and the consumer persists the last processed token durably alongside its side effects. On restart it reopens the stream with resumeAfter or startAfter using that token, so it continues from the exact point. Tokens are valid only while the corresponding oplog history is retained. If the token is too old, the stream cannot resume and a full resync is required.</p>
+<pre><code>const cs = coll.watch([], { resumeAfter: savedToken });
+for await (const ev of cs) { await handle(ev); await saveToken(ev._id); }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens when a change stream's resume token has aged out of the oplog?</h2>
+<div class="answer">
+<p>Opening the stream fails because the required history no longer exists on the server. The consumer cannot silently skip ahead without risking lost events, so it must fall back to a reconciliation process. Typical remedies are a full re-read of the collection, a snapshot comparison, or reprocessing from an archive. This is why oplog sizing and consumer downtime tolerance must be planned together.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you batch change stream events without losing the resume token?</h2>
+<div class="answer">
+<p>Buffer events in memory with <code>batchSize</code> and a time window, then flush the batch and only afterwards persist the token of the last event in it. The order matters: save the token first and a crash before the write loses events; write first and a crash replays them. Replays are unavoidable, so the consumer has to be idempotent, and the buffer must flush on a timer instead of waiting for a full batch.</p>
+<pre><code>const batch = [];
+for await (const ev of coll.watch([], { batchSize: 200 })) {
+  batch.push(ev);
+  if (batch.length &gt;= 200) {
+    await flush(batch);
+    await saveToken(batch[batch.length - 1]._id);
+    batch.length = 0;
+  }
+}</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the outbox pattern work with change streams?</h2>
+<div class="answer">
+<p>The application writes the business document and an outbox record in the same transaction, so both succeed or both fail. A separate relay watches the outbox collection with a change stream and publishes events to the message broker. After successful publication it marks or deletes the outbox entry. This avoids dual-write inconsistency between the database and the broker.</p>
+<pre><code>await db.collection("orders").insertOne(order, { session });
+await db.collection("outbox").insertOne(
+  { type: "OrderCreated", payload: order, sent: false }, { session }
+);
+await session.commitTransaction();</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is dual writing to MongoDB and a message broker without an outbox risky?</h2>
+<div class="answer">
+<p>Two independent systems cannot be updated atomically, so one can succeed while the other fails. A crash between the two writes leaves the systems permanently inconsistent with no record of the missing message. Retrying can also produce duplicates if the first attempt actually succeeded. The outbox pattern converts this into a single atomic local write plus a reliable relay.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the trade-offs of soft deletes versus hard deletes?</h2>
+<div class="answer">
+<p>Soft deletes set a flag or timestamp instead of removing the document, preserving referential history and enabling restore. The cost is that every query must filter deleted records, and indexes must include the flag to stay efficient. Collections grow without bound unless a purge job eventually removes old soft-deleted rows. Hard deletes keep data volume and query complexity low but lose recoverability.</p>
+<pre><code>db.users.updateOne({ _id: id }, { $set: { deletedAt: new Date() } });
+db.users.createIndex({ deletedAt: 1, email: 1 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How should a soft-delete filter be enforced so developers do not forget it?</h2>
+<div class="answer">
+<p>Centralize access behind a repository layer that always injects the deletedAt: null predicate, or expose a filtered view. Avoid scattering the condition across hundreds of call sites where one omission leaks deleted data. Add an index that leads with the filter field so queries remain selective. Automated tests and query review should confirm no endpoint bypasses the filter.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which audit fields should every document carry, and who should set them?</h2>
+<div class="answer">
+<p>Typical fields are createdAt, updatedAt, createdBy, and updatedBy, sometimes plus a schema version. Set timestamps server-side with $currentDate so clock skew and client tampering do not corrupt them. Application code should write actor identity from the authenticated context, never from client-supplied input. Consistent field names across collections make downstream analytics and audits far easier.</p>
+<pre><code>{ $set: { updatedBy: actorId }, $currentDate: { updatedAt: true } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why prefer server-side timestamps over application-generated ones?</h2>
+<div class="answer">
+<p>Application servers can have skewed or misconfigured clocks, which produces timestamps that are out of order or wrong. $currentDate uses the server's clock consistently across all writers. It also removes the risk of a client sending an arbitrary or malicious timestamp. The trade-off is that the value reflects when the server applied the write, not when the request originated.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Compare database-per-tenant, collection-per-tenant, and shared collections with tenantId.</h2>
+<div class="answer">
+<p>Database-per-tenant gives the strongest isolation and per-tenant backup or restore, but multiplies metadata, connections, and operational overhead. Collection-per-tenant is a middle ground but still strains namespace and catalog limits at high tenant counts. A shared collection with tenantId scales to many tenants cheaply but requires disciplined query filters and index design. Most large SaaS systems choose shared collections and reserve dedicated clusters for premium tenants.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you make a shared-collection multitenant schema safe?</h2>
+<div class="answer">
+<p>Prefix every compound index with tenantId so queries stay selective and cannot scan across tenants. Enforce the tenant filter in a repository layer rather than trusting individual call sites. Consider a schema validator that requires tenantId on every document. For strict isolation needs, combine this with collection-level or cluster-level separation for sensitive tenants.</p>
+<pre><code>db.orders.createIndex({ tenantId: 1, createdAt: -1 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What problem does client-side field-level encryption solve?</h2>
+<div class="answer">
+<p>CSFLE encrypts specific fields in the driver before they reach the server, so the server stores and can compare ciphertext without seeing plaintext. It protects sensitive values such as tax identifiers or medical data from database operators and backups. Encryption keys are managed externally in a KMS, and the driver needs a key vault collection. The trade-off is that encrypted fields cannot be arbitrarily queried or aggregated.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does Queryable Encryption differ from classic CSFLE?</h2>
+<div class="answer">
+<p>Queryable Encryption stores encrypted fields with a structured encrypted index so equality queries can run server-side without decrypting. Classic CSFLE with deterministic encryption supports equality only, and only when the field is encrypted deterministically, which leaks frequency patterns. Queryable Encryption provides stronger leakage guarantees and supports a defined set of query types. It requires newer drivers and explicit encrypted field metadata at collection creation.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which authentication mechanisms does MongoDB support, and when do you pick each?</h2>
+<div class="answer">
+<p>SCRAM-SHA-256 is the default username and password mechanism and suits most application deployments. x.509 certificate authentication fits service-to-service identity with an internal CA and avoids shared secrets. LDAP and Kerberos integrate with enterprise directories for centralized identity, typically in on-premises environments. Atlas additionally supports federated identity through an identity provider.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is SCRAM-SHA-1 still present, and should new deployments use it?</h2>
+<div class="answer">
+<p>SCRAM-SHA-1 remains for compatibility with old drivers and existing user credentials. New deployments should use SCRAM-SHA-256, which relies on a stronger hash and is the default in modern servers. User credentials created for one mechanism must be recreated to use another. Leaving legacy mechanisms enabled unnecessarily widens the authentication surface.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do built-in roles differ from custom roles in practice?</h2>
+<div class="answer">
+<p>Built-in roles such as readWrite or dbAdmin cover common job functions and are maintained by the server. Custom roles let you grant a precise set of privileges on specific collections, which supports least privilege. The cost is more upfront design and maintenance as schemas evolve. Many teams start with a narrow built-in role and move to a custom role when the built-in is too broad.</p>
+<pre><code>db.createRole({
+  role: "ordersApp",
+  privileges: [{ resource: { db: "shop", collection: "orders" },
+                 actions: ["find", "insert", "update"] }],
+  roles: []
+});</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does least privilege look like for a typical application user?</h2>
+<div class="answer">
+<p>The application user should have only the actions it actually performs, on only the collections it touches, in only its own database. It should not have cluster-wide administration, user management, or the ability to create and drop collections unless the application truly needs it. Separate credentials should exist for migrations and for operational tooling. Rotating and scoping credentials per service limits blast radius after a compromise.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which settings harden MongoDB network exposure?</h2>
+<div class="answer">
+<p>Bind to specific private interfaces rather than all interfaces, and never expose the port to the public internet. Enable TLS with a trusted CA and require client certificates where appropriate. Use private endpoints or VPC peering plus IP access lists so only known networks can connect. On Atlas, restrict access list entries to specific CIDR ranges and service accounts.</p>
+<pre><code>net:
+  bindIp: 10.0.4.12
+  tls:
+    mode: requireTLS
+    certificateKeyFile: /etc/ssl/mongodb.pem</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What should a MongoDB audit log capture, and what does it cost?</h2>
+<div class="answer">
+<p>Audit logging records administrative and authentication events such as user changes, role grants, and connection attempts, plus optionally CRUD operations. It is essential for compliance investigations and detecting unauthorized access. The cost is storage volume and write overhead, which grows sharply if CRUD auditing is enabled. Most organizations audit administrative events always and CRUD only for sensitive collections.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How should secrets such as connection strings be managed?</h2>
+<div class="answer">
+<p>Store credentials in a dedicated secrets manager and inject them at runtime, never in source control or container images. Rotate database users on a schedule and support overlapping validity during rotation. Scope each secret to a single service and environment so leakage is contained. Avoid logging connection strings, since they often embed passwords.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you handle PII masking for non-production environments?</h2>
+<div class="answer">
+<p>Do not copy production data verbatim into test environments; instead generate synthetic data or apply irreversible masking during export. Masking must preserve referential relationships so joins and tests remain meaningful. Encryption at rest does not satisfy this requirement because the data is still recoverable with keys. Track which fields are classified as PII so masking rules are maintained as schemas evolve.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you implement a GDPR erasure request across related collections?</h2>
+<div class="answer">
+<p>Identify every collection and embedded document that holds the subject's personal data, then delete or anonymize them in a tracked job. Keep a minimal record of the erasure itself for compliance evidence, without retaining the erased personal data. Cover derived stores such as analytics exports, search indexes, and caches, not just the primary database. Document retention exceptions, such as legal hold, before deleting.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is deleting a document not sufficient for GDPR compliance in MongoDB?</h2>
+<div class="answer">
+<p>Deleted documents can persist in backups, oplog history, and derived copies for the retention period. Point-in-time restore could reintroduce the data, so backup retention policy must be part of the compliance design. WiredTiger may also retain deleted data in free space until overwritten. Compliance therefore requires a documented lifecycle across primary storage, backups, and downstream systems.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does mongodump differ from a filesystem snapshot for backups?</h2>
+<div class="answer">
+<p>mongodump produces a logical BSON export and works across storage engines but is slower and heavier on a live system. Filesystem or volume snapshots are block-level and fast, and can be restored quickly, but require coordination with the storage layer. Snapshots are only crash-consistent unless the journal is included and the snapshot is taken correctly. Many organizations use snapshots for fast recovery and logical dumps for portability and long-term retention.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does point-in-time recovery work with the oplog?</h2>
+<div class="answer">
+<p>A base backup is restored, then oplog entries from that backup's timestamp forward are replayed to reach a target moment. This lets you recover to just before a bad deployment or accidental deletion. The achievable window depends on how much oplog history is retained. Atlas continuous backups automate this process and present a selectable restore time.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is an untested restore almost as bad as no backup?</h2>
+<div class="answer">
+<p>A backup that cannot be restored within the required recovery time provides no real protection. Restore testing validates the procedure, credentials, tooling versions, and the actual recovery time objective. It also exposes gaps such as missing indexes, users, or dependent collections excluded from the backup. Schedule regular drills, including one full restore into an isolated environment.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the feature compatibility version and why must it be managed during upgrades?</h2>
+<div class="answer">
+<p>Feature compatibility version, or FCV, tells the server which feature set to enable, allowing a binary upgrade and a feature upgrade to be separated. After upgrading binaries you set the FCV to the new version only when you are confident rollback is no longer needed. Lowering FCV is possible but limited, which is what enables a downgrade window. Managing FCV explicitly turns a risky jump into two controlled steps.</p>
+<pre><code>db.adminCommand({ getParameter: 1, featureCompatibilityVersion: 1 });
+db.adminCommand({ setFeatureCompatibilityVersion: "8.0" });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you perform a rolling upgrade of a replica set?</h2>
+<div class="answer">
+<p>Upgrade secondaries one at a time, waiting for each to rejoin and catch up before moving to the next. Then step down the primary so an upgraded secondary takes over, and finally upgrade the former primary. Keep the FCV at the old version until the whole set runs the new binaries. Client drivers must already support the target server version before the upgrade starts.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What should be checked before starting a major version upgrade?</h2>
+<div class="answer">
+<p>Confirm every driver and library in use supports the target server version, and review removed or deprecated server features. Verify the backup is restorable and that a downgrade path exists. Check that all replica set members can run the new binaries with the same configuration and storage engine. Read the official upgrade notes for the exact version to catch behavior changes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why should FCV not be raised immediately after the binaries are upgraded?</h2>
+<div class="answer">
+<p>Raising FCV enables new behaviors and removes some backwards compatibility, which makes rolling back the binaries unsafe. Keeping the old FCV for a soak period lets you observe the new version in production while retaining a downgrade option. Raise the FCV only after the upgrade is proven stable. This separation is the core reason the FCV mechanism exists.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does FTDC collect, and why is it valuable during an incident?</h2>
+<div class="answer">
+<p>Full Time Diagnostic Data Capture samples server statistics every second and writes them to compressed diagnostic files. It captures metrics such as operation counters, queue depths, cache usage, and replication state, plus some server status detail. After an incident, these files reconstruct what the server was doing before and during the failure. Support engineers routinely ask for them first when diagnosing performance problems.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When would you use mongostat versus mongotop?</h2>
+<div class="answer">
+<p>mongostat shows a per-second snapshot of server-level activity such as inserts, queries, updates, connections, and page faults. mongotop shows how much time is spent reading and writing each collection and database. Use mongostat to see whether the instance as a whole is saturated, and mongotop to identify which namespace is responsible. Both are quick triage tools, not long-term monitoring.</p>
+<pre><code>mongostat --uri "$URI" 1
+mongotop --uri "$URI" 5</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the profiler levels and when should each be used?</h2>
+<div class="answer">
+<p>Level 0 disables profiling, level 1 logs only operations slower than slowms, and level 2 logs every operation. Level 2 is extremely expensive and should be used only briefly for targeted diagnosis. Level 1 with a well-chosen slowms threshold is the normal production setting. Profiling output lands in the system.profile collection, which should be capped and monitored.</p>
+<pre><code>db.setProfilingLevel(1, { slowms: 100 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you investigate a slow query end to end?</h2>
+<div class="answer">
+<p>Find the slow operation in the profiler or logs, then run explain with executionStats to inspect the winning plan, documents examined, and keys examined. Compare examined documents to returned documents to detect a missing or unselective index. Check whether the plan used a collection scan, an in-memory sort, or an inefficient index. Confirm the fix with a repeat explain and monitor after deployment.</p>
+<pre><code>db.orders.find({ status: "open" }).explain("executionStats");</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between keys examined and documents examined in explain output?</h2>
+<div class="answer">
+<p>Keys examined counts index entries scanned, while documents examined counts full documents fetched to satisfy the query. A large gap between the two often means the index is not covered and the server fetches many documents. Both numbers should be close to the number of documents returned for an efficient query. High values indicate the index is not selective enough for the predicate.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When is a covered query possible in MongoDB?</h2>
+<div class="answer">
+<p>A query is covered when the index alone satisfies the filter, the sort, and the projection, so no document fetch is needed. This requires every referenced field, including any excluded _id, to be part of the index. Covered queries can be dramatically faster because they avoid random document reads. The trade-off is wider indexes, which cost memory and write throughput.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which signals should trigger an alert on replication lag?</h2>
+<div class="answer">
+<p>Alert on sustained lag above a threshold that matters to the business, not on a single spike, because brief lag is normal during bursts. Correlate lag with secondary CPU, disk, and network saturation to distinguish load from a failing member. Also alert when a secondary's optime stops advancing at all, which indicates a stalled or disconnected member. Lag alerting must be tuned to the application's staleness tolerance.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why alert on connection counts rather than only on CPU?</h2>
+<div class="answer">
+<p>Connection exhaustion causes hard failures that CPU graphs may not predict, especially with connection storms from restarted services. Tracking current connections against the configured limit gives early warning of pool leaks or per-request client creation. Alert on both total connections and connection churn rate. A spike in churn often reveals an application-level anti-pattern.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you alert on disk space without being noisy?</h2>
+<div class="answer">
+<p>Alert on projected time to full based on growth rate, not just on a static percentage threshold. Separate warnings for data volume growth, journal volume, and log volume, since they fail differently. Include the disk containing the oplog and the temp directory used by index builds. A static ninety percent alert often fires long after action is needed or constantly on stable systems.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the working set and how does it relate to RAM sizing?</h2>
+<div class="answer">
+<p>The working set is the portion of data and indexes actively accessed during normal operation, and ideally it fits in RAM. When it does not, reads hit disk and latency rises sharply. WiredTiger uses the cache for recently used pages, so total data size can far exceed RAM as long as the hot set fits. Capacity planning should measure actual access patterns rather than total collection size.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you estimate whether a server needs more RAM or more IOPS?</h2>
+<div class="answer">
+<p>If cache eviction rates and disk reads rise while CPU stays moderate, the working set no longer fits and either RAM or a hotter data model is needed. If latency correlates with disk queue depth and IOPS saturation at steady cache hit ratios, storage throughput is the limit. Measure cache dirty percentage and eviction pressure, plus disk utilization during peak hours. Choose based on which resource saturates first under representative load.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between snappy and zstd compression in WiredTiger?</h2>
+<div class="answer">
+<p>Snappy is the default collection compression and offers fast compression with moderate space savings. zstd compresses better, especially for structured or repetitive data, at some CPU cost during reads and writes. Choose zstd when storage or IO bandwidth is the constraint and CPU headroom exists. Compression is configured per collection at creation time, so changing it requires a rebuild.</p>
+<pre><code>db.createCollection("logs", {
+  storageEngine: { wiredTiger: { configString: "collection.blocks_compressor=zstd" } }
+});</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What role does the journal play in durability?</h2>
+<div class="answer">
+<p>The journal is a write-ahead log that WiredTiger uses to recover committed writes after a crash. With journaling enabled and j:true, an acknowledged write is recoverable even if the data files were not yet updated. Journal commits are grouped, so batching writes improves throughput without sacrificing durability. Disabling journaling trades crash recovery guarantees for write speed and is rarely appropriate.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does write concern j:true interact with journal commit intervals?</h2>
+<div class="answer">
+<p>The server groups writes and fsyncs the journal on a short interval, so j:true waits for the next group commit rather than forcing an immediate flush. This means concurrent writers share the fsync cost, which is why throughput stays reasonable. Latency per write is still bounded by that interval. Understanding grouping explains why j:true is far cheaper than it appears in isolation.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does an index build affect a production replica set?</h2>
+<div class="answer">
+<p>Index builds consume CPU, memory, and disk IO, and on secondaries they are triggered by replicated index creation commands. Builds can slow replication and increase lag, and they hold resources for their duration. Modern versions support building on rolling members and resuming interrupted builds, which reduces risk. Plan large builds for low-traffic windows and monitor lag throughout.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What options reduce the impact of a large index build?</h2>
+<div class="answer">
+<p>Use a rolling approach where possible, building on secondaries before the primary, and avoid building many indexes at once. Ensure sufficient memory and disk headroom, since builds spill to disk when they exceed limits. Monitor replication lag and be ready to pause or abort. Index builds are resumable, so an interrupted build does not always restart from zero.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why does an unused index still cost you?</h2>
+<div class="answer">
+<p>Every index must be updated on each relevant write, consuming CPU, cache, and IO even if no query uses it. Unused indexes also inflate storage and slow down backups and restores. The $indexStats aggregation stage reveals usage counts per index. Review index usage periodically and drop indexes that are clearly redundant.</p>
+<pre><code>db.orders.aggregate([{ $indexStats: {} }]);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What belongs in a maintenance window plan?</h2>
+<div class="answer">
+<p>List the exact operations, their expected duration, rollback steps, and the owner for each. Confirm backups are current and that monitoring and alerting will remain active during the window. Communicate expected degradation or downtime to dependent teams in advance. Keep a live log during execution so the postmortem can reconstruct timing.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the most common causes of MongoDB outages in production?</h2>
+<div class="answer">
+<p>Connection exhaustion from clients creating new connections per request is a frequent cause, as are unindexed queries saturating IO. Disk full conditions, often from logs or the oplog, cause abrupt failures. Network partition or misconfigured election settings can leave a replica set without a primary. Many incidents trace back to a change, such as a deployment that altered query patterns or index coverage.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What makes a postmortem useful rather than ceremonial?</h2>
+<div class="answer">
+<p>A good postmortem reconstructs a precise timeline from logs and metrics, identifies contributing causes rather than a single scapegoat, and produces concrete follow-up actions with owners and dates. It distinguishes detection time from resolution time so monitoring gaps become visible. It is blameless, which is what allows people to report what really happened. Follow-up actions must be tracked to completion or the same incident recurs.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you chaos test a replica set safely?</h2>
+<div class="answer">
+<p>Start in a non-production environment and inject one fault at a time, such as killing a secondary, pausing a member, or adding network latency. Verify that the application's retry logic and driver behavior handle the fault without data loss or duplicate writes. Measure failover time and confirm alerts fire as expected. Only then run controlled experiments in production with a rollback plan and a defined blast radius.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What should happen to client traffic during a primary election?</h2>
+<div class="answer">
+<p>The driver detects the topology change, marks the old primary unavailable, and retries operations against the new primary after the election completes. With retryable writes enabled, brief elections are usually invisible to the application. Without retries, operations fail and the application must handle the error. Election duration depends on election timeout settings and member health.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you simulate a network partition without breaking the cluster permanently?</h2>
+<div class="answer">
+<p>Use firewall rules or a proxy to block traffic between specific members for a bounded period, then remove the rule. Verify that the majority side elects a primary and the minority side steps down. Confirm the application observes the expected errors and recovers after healing. Always have out-of-band access so you can restore connectivity if the test goes wrong.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you control cost in Atlas without harming reliability?</h2>
+<div class="answer">
+<p>Right-size cluster tiers based on measured working set and IOPS rather than peak guesses, and scale during known traffic patterns. Use lower-tier nodes for non-production environments and pause them when idle. Review storage growth, backup retention, and data transfer costs, which are often overlooked. Reserved capacity or committed contracts reduce cost for stable, long-running workloads.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which Atlas features most affect the monthly bill?</h2>
+<div class="answer">
+<p>Cluster tier and node count dominate, followed by storage, backup retention, and cross-region data transfer. Continuous backups with long retention and many restore points add measurable cost. Read-only analytics nodes and multi-region deployments multiply infrastructure spend. Cost reviews should map each line item to a business requirement.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you reduce cost when a collection has grown far beyond its active data?</h2>
+<div class="answer">
+<p>Archive cold documents to cheaper storage and keep only the hot window in the primary collection. Apply a TTL index to automatically expire time-series or log data that has no long-term value. Consider time-series collections for high-volume timestamped data, since they compress better. Deleting data alone does not immediately shrink files, so compaction or a resync may be needed to reclaim disk.</p>
+<pre><code>db.events.createIndex({ createdAt: 1 }, { expireAfterSeconds: 2592000 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why does deleting documents not reduce disk usage right away?</h2>
+<div class="answer">
+<p>WiredTiger marks space as free within its files but does not return it to the operating system immediately. New writes reuse that free space, so steady-state size may stabilize. To actually shrink files you need compaction, or an initial sync into a fresh member. This distinction matters when planning storage capacity after a large purge.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you design a retry policy for database calls in a service?</h2>
+<div class="answer">
+<p>Retry only errors known to be transient, such as network failures, primary stepdowns, and transient transaction errors. Use exponential backoff with jitter and a hard attempt cap, and respect the overall request deadline. Never retry non-idempotent operations without a deduplication key. Emit metrics for retry counts so rising retries surface as an early warning.</p>
+<pre><code>const delay = Math.min(cap, base * 2 ** attempt) * (0.5 + Math.random() / 2);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is jitter important in a retry policy?</h2>
+<div class="answer">
+<p>Without jitter, many clients that failed at the same moment retry at the same moment, producing synchronized waves that keep the system overloaded. Randomizing the delay spreads retries over time and lets the system recover. Jitter matters most when a large fleet shares a dependency, such as a single primary. Combine jitter with a cap so delays do not grow unbounded.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you correlate application logs with database operations?</h2>
+<div class="answer">
+<p>Propagate a request or trace identifier into the operation comment so it appears in the profiler and logs. This lets you connect a slow user request to the exact database command that caused it. Pair comments with structured application logging that includes the same identifier. Keep comments short, since they are transmitted with every command.</p>
+<pre><code>await coll.find(filter, { comment: "req-8f21c" });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the purpose of the maxTimeMS option on a query?</h2>
+<div class="answer">
+<p>maxTimeMS bounds how long the server spends on an operation, after which it aborts with a MaxTimeMSExpired error. This protects the database from runaway queries that would otherwise consume resources indefinitely. API endpoints should set a timeout aligned with their own request deadline. Catch the resulting error and return a controlled response rather than a generic failure.</p>
+<pre><code>db.reports.find(query).maxTimeMS(2000);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you prevent an unbounded query from returning millions of documents?</h2>
+<div class="answer">
+<p>Always apply a limit and a projection so the query returns only needed fields, and paginate at the API layer. Enforce a maximum page size in the service rather than trusting client-supplied limits. Stream results with a cursor when bulk processing is genuinely required instead of materializing everything. Unbounded result sets are a leading cause of memory pressure in both driver and server.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between a cursor timeout and a socket timeout?</h2>
+<div class="answer">
+<p>A cursor timeout means the server closed an idle cursor after its inactivity period, so continuing to iterate fails. A socket timeout means the driver gave up waiting on the network for a response. The first is a server-side resource policy, the second is a client-side network condition. Confusing them leads to the wrong fix, such as raising timeouts when the real issue is a slow query.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you express "either this field or that field" without breaking index usage?</h2>
+<div class="answer">
+<p>An $or query can use indexes per branch only if every branch is indexed; otherwise the server falls back to a collection scan. $in on a single indexed field handles the common case more efficiently than $or across different fields. For multi-field alternatives, consider a normalized schema or separate queries merged in the application. Always verify with explain which branches used indexes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is $ne and $not generally bad for index usage?</h2>
+<div class="answer">
+<p>Negation predicates match a large, unbounded portion of the collection, so an index scan offers little benefit over a collection scan. The optimizer often chooses a collection scan because most documents qualify. Rewriting the query as a positive predicate on an indexed field is usually the fix. If negation is truly required, ensure another selective predicate drives the index.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you model a one-to-many relationship when the many side grows without bound?</h2>
+<div class="answer">
+<p>Embedding works while the array stays small and is read together with the parent. When the many side can grow large, store references and query the child collection with an indexed parent identifier. A hybrid approach keeps a bounded summary array on the parent and full detail in children. The decision hinges on access patterns, document size limits, and update contention.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the practical document size limit and how does it influence schema design?</h2>
+<div class="answer">
+<p>A single BSON document is limited to 16 MB, which caps how much can be embedded. Arrays that grow continuously risk hitting the limit and cause document rewrites that hurt write performance. Large binary content belongs in GridFS or object storage with a reference in the document. Designing around the limit avoids painful migrations later.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you keep counters accurate under high concurrency?</h2>
+<div class="answer">
+<p>Use $inc, which is atomic at the document level, rather than read-modify-write in application code. A single hot counter document can become a write bottleneck, so shard the counter across several documents and sum on read. Pre-aggregated counters can also be updated asynchronously from an event stream when slight lag is acceptable. Always verify the accuracy requirement before choosing approximate approaches.</p>
+<pre><code>db.stats.updateOne({ _id: "orders" }, { $inc: { count: 1 } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between findAndModify and a separate read then write?</h2>
+<div class="answer">
+<p>findAndModify, exposed as findOneAndUpdate in drivers, atomically updates a document and returns either the old or new version. A separate read followed by a write has a race window where another writer can change the document. The atomic variant is essential for queues, leases, and state transitions. Choose the returnDocument option deliberately based on whether the caller needs pre- or post-update state.</p>
+<pre><code>db.jobs.findOneAndUpdate(
+  { status: "queued" },
+  { $set: { status: "running", leasedUntil: future } },
+  { sort: { priority: -1 }, returnDocument: "after" }
+);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you implement a work queue with lease semantics in MongoDB?</h2>
+<div class="answer">
+<p>Use findOneAndUpdate with a status filter and a lease expiry timestamp so a worker atomically claims one job. Workers that crash leave an expired lease, which another worker can reclaim by matching on an expired timestamp. Include an attempt counter to avoid infinite retries of poison messages. Consider a TTL index or a reaper job for abandoned jobs.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why should unique indexes back business invariants?</h2>
+<div class="answer">
+<p>A unique index enforces the constraint at the storage level, so concurrent requests cannot both succeed. Application-level existence checks have a race window under concurrency. Handle the duplicate key error explicitly and translate it into a meaningful API response. Relying only on validation logic leaves the invariant unprotected against concurrent writers.</p>
+<pre><code>db.users.createIndex({ email: 1 }, { unique: true });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you handle a duplicate key error gracefully in an API?</h2>
+<div class="answer">
+<p>Catch the specific duplicate key error code rather than any write error, then return a conflict response such as HTTP 409. For idempotent creates, treat a duplicate on the same client key as success. Avoid retrying blindly, since the same conflict will recur. Log the index name from the error detail to make diagnosis quick.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the danger of catch-all error handling around database calls?</h2>
+<div class="answer">
+<p>Swallowing all exceptions hides data corruption, validation failures, and permission problems as generic errors. It also prevents the driver's retry logic from seeing errors it could handle correctly. Handle specific error categories and let unknown errors propagate with context. Structured error mapping at the service boundary keeps behavior predictable.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you test that retry and idempotency logic actually works?</h2>
+<div class="answer">
+<p>Inject failures deterministically, for example by stubbing the collection to throw a transient error on the first call. Assert that the operation produced exactly one document and one side effect after retries. Test concurrent duplicate submissions, not just sequential retries. Include a test where the process crashes between the write and the acknowledgement.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the correct way to close a driver client on shutdown?</h2>
+<div class="answer">
+<p>Stop accepting new requests, allow in-flight operations to complete within a grace period, then call close on the client to release sockets and background monitors. Skipping this leaves the server holding connections until timeouts expire and can complicate rolling restarts. Coordinate shutdown with the orchestrator's termination grace period. Log shutdown completion so deployment timing is verifiable.</p>
+<pre><code>process.on("SIGTERM", async () =&gt; { await client.close(); process.exit(0); });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can a containerized application exhaust server connections after a deploy?</h2>
+<div class="answer">
+<p>Each new instance creates its own pool, and during a rolling deploy both old and new instances hold connections simultaneously. If maxPoolSize is generous and replicas are many, the total can exceed the server limit. Size the pool with total instance count in mind, and ensure old instances close clients promptly. Autoscaling makes this worse because pool count becomes dynamic.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between read concern local and majority?</h2>
+<div class="answer">
+<p>Local returns data as the queried node has it, which may later be rolled back if that node was not majority-acknowledged. Majority returns only data that has been acknowledged by a majority of members and therefore cannot be rolled back. Majority costs more because it may wait for replication progress. Use it when reading data whose durability matters, and local for tolerant workloads.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When is read concern snapshot appropriate?</h2>
+<div class="answer">
+<p>Snapshot reads present a consistent point-in-time view across multiple documents and collections outside a transaction. This is useful for reports that must not mix pre- and post-update states. It is available on replica sets and sharded clusters and has performance implications, so it is not a default. Inside transactions, snapshot semantics apply automatically.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does causal consistency guarantee read-your-own-writes?</h2>
+<div class="answer">
+<p>A session tracks an operation time and cluster time, and subsequent reads in that session wait until the target member has caught up to that point. This makes reads after writes consistent even when routed to a secondary. The guarantee applies only within the session, not across different clients. It is the correct tool when combining secondary reads with immediate reads of just-written data.</p>
+<pre><code>const s = client.startSession({ causalConsistency: true });
+await coll.insertOne(doc, { session: s });
+await coll.findOne({ _id: doc._id }, { session: s });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>When are retryable writes not available?</h2>
+<div class="answer">
+<p>Retryable writes require a replica set or sharded cluster and a supported storage engine; standalone servers do not provide them. They also do not cover multi-document transactions as a whole, which need their own retry logic. Bulk writes with unordered semantics have per-operation retry behavior that must be understood. Some write concern configurations also affect retry support.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you decide between one change stream per collection and a single cluster-wide stream?</h2>
+<div class="answer">
+<p>A cluster-wide stream is simpler to operate and gives a single ordered resume point, but it processes events from all collections. Per-collection streams isolate consumers and allow independent scaling, at the cost of more cursors and more resume tokens to manage. Filtering early with a pipeline reduces network and processing overhead. Choose based on how many consumers need independent progress tracking.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you keep an outbox collection from growing forever?</h2>
+<div class="answer">
+<p>Delete or archive outbox entries after successful publication, ideally in bounded batches so deletion does not create large spikes. A TTL index on a sentAt field works when a grace period is acceptable. Monitor backlog size and consumer lag as a health signal. Never delete entries that have not been confirmed as published downstream.</p>
+<pre><code>db.outbox.createIndex({ sentAt: 1 }, { expireAfterSeconds: 86400 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does a schema validator help an application that already validates input?</h2>
+<div class="answer">
+<p>Validators enforce structure at the database level, so any writer, including scripts and migrations, obeys the same rules. They catch regressions when a code path bypasses application validation. Validation is applied on insert and update and can be set to warn or error. The cost is a small write overhead and the need to migrate existing documents to comply.</p>
+<pre><code>db.createCollection("users", { validator: { $jsonSchema: {
+  bsonType: "object", required: ["email", "tenantId"],
+  properties: { email: { bsonType: "string" } }
+} }, validationLevel: "moderate" });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between strict and moderate validation levels?</h2>
+<div class="answer">
+<p>Strict applies the validator to all inserts and updates, including updates to documents that already violate it. Moderate skips validation for documents that were already invalid before the update, easing migration of legacy data. Setting the level to off disables validation without removing the rules. Most teams start moderate during migration and move to strict once data is clean.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does a TTL index actually delete documents?</h2>
+<div class="answer">
+<p>A background thread scans the TTL index roughly every minute and removes documents whose indexed date is older than the expiry. Deletion is not immediate or exact, so expiry may lag by minutes and longer under load. TTL indexes must be single-field date or array-of-date indexes. They are for lifecycle cleanup, not for precise scheduling.</p>
+<pre><code>db.sessions.createIndex({ lastSeen: 1 }, { expireAfterSeconds: 3600 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>When would you use a partial index instead of a full index?</h2>
+<div class="answer">
+<p>A partial index includes only documents matching a filter expression, so it stays smaller and cheaper to maintain. This suits queries that always target a small subset, such as active orders or unprocessed jobs. The query predicate must imply the index filter for the planner to use it. Partial indexes also reduce the storage footprint of large collections with skewed access.</p>
+<pre><code>db.jobs.createIndex({ createdAt: 1 }, { partialFilterExpression: { status: "queued" } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a sparse index and how does it differ from a partial index?</h2>
+<div class="answer">
+<p>A sparse index simply omits documents where the indexed field is missing, without a filter expression. A partial index is more expressive because it can filter on any predicate, including field values. Sparse indexes can produce surprising query plans because the planner must know the field exists. Prefer partial indexes for new designs.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does collation affect index usability?</h2>
+<div class="answer">
+<p>String comparisons follow the collation of the operation, and an index only supports queries whose collation matches. A case-insensitive query needs an index created with the same case-insensitive collation. Using a different collation forces a collection scan or an in-memory sort. Define collation deliberately per collection or per index for user-facing text fields.</p>
+<pre><code>db.users.createIndex({ name: 1 }, { collation: { locale: "en", strength: 2 } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does it mean when explain shows a plan was rejected during planning?</h2>
+<div class="answer">
+<p>The planner evaluated candidate plans in a trial period and discarded the slower ones before executing the winner. Rejected plans appear in the allPlansExecution output with their trial statistics. This shows the optimizer considered alternatives, which helps confirm whether an index was even a candidate. If no index plan appears, the index likely does not match the predicate or sort.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do index intersection plans work and why are they often slower?</h2>
+<div class="answer">
+<p>The server can combine results from two indexes when no single index covers the predicate fully. This requires scanning both indexes and intersecting document identifiers, which adds overhead. A well-designed compound index usually outperforms intersection. Intersection plans often indicate a missing compound index for the query pattern.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When is it appropriate to use a query hint?</h2>
+<div class="answer">
+<p>A hint forces the planner to use a specific index, useful when the optimizer chooses a plan you know is wrong for a particular data distribution. It is a sharp tool: data changes can make the hinted index a bad choice later. Prefer fixing the index design or statistics first. If you hint, document why and revisit it periodically.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can $lookup be expensive, and how do you make it cheaper?</h2>
+<div class="answer">
+<p>$lookup performs a join per input document, so cost scales with the number of outer documents and the indexed lookup efficiency. Ensure the foreign field in the joined collection has an index, and filter the outer pipeline before the lookup. Denormalizing frequently joined data is often better than repeated joins. Use explain to confirm the index is used inside the lookup.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you return both a page of results and a total count efficiently?</h2>
+<div class="answer">
+<p>Run the count and the page query separately, and cache or approximate the count when it changes slowly. $facet can compute both in one round trip, but it processes the full pipeline and can be costly on large collections. For UI purposes an estimated count is often sufficient. Avoid recomputing an exact count on every keystroke or page change.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does batchSize control on a cursor?</h2>
+<div class="answer">
+<p>batchSize sets how many documents the server returns per network round trip, not how many total documents the query returns. Larger batches reduce round trips but increase memory per fetch on both sides. Tuning it helps for large scans and streaming exports. The default is usually reasonable for interactive queries.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does projection affect query performance beyond payload size?</h2>
+<div class="answer">
+<p>A projection that excludes large fields reduces network transfer and can enable a covered index scan when the remaining fields are all indexed. Excluding fields still requires reading the full document from storage unless the query is covered. Thoughtful projections also reduce driver memory pressure. Avoid projecting nothing and filtering in application code.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why should you set appName in the connection string?</h2>
+<div class="answer">
+<p>appName identifies the client in server logs, currentOp output, and monitoring tools, which makes it possible to attribute load and connections to a service. Without it, operators can only guess which application holds a connection or ran a query. It is also used by Atlas to group activity by application. Use a stable, meaningful name per service and environment.</p>
+<pre><code>mongodb://host/?appName=orders-api-prod</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does serverSelectionTimeoutMS control?</h2>
+<div class="answer">
+<p>It bounds how long the driver waits to find a suitable server matching the read preference and topology requirements before failing. A short timeout fails fast but may error during brief elections or network blips. A long timeout hides problems by making requests hang. Choose it to align with the caller's deadline and the expected election duration.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How should a driver's command monitoring be used in production?</h2>
+<div class="answer">
+<p>Command monitoring events expose each command's duration, success, and failure, which feeds metrics and tracing. Enable it selectively with sampling or filters, because full logging of every command is expensive. Never log full command payloads in production, since they may contain personal data. Aggregate metrics rather than emitting one log line per operation.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you rotate TLS certificates for a MongoDB deployment without downtime?</h2>
+<div class="answer">
+<p>Add the new CA certificate to the trust stores of all members and clients before issuing new leaf certificates. Then rotate member certificates one at a time, allowing each to rejoin and serve traffic. Rotate client certificates after the server trusts the new CA. Remove the old CA only once nothing still presents certificates signed by it.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When would you choose Kerberos rather than LDAP for MongoDB authentication?</h2>
+<div class="answer">
+<p>Kerberos provides ticket-based single sign-on with mutual authentication, which suits environments already standardized on it. LDAP is simpler to integrate for directory-based username and password checks. Kerberos has stricter operational requirements, including time synchronization and service principal management. The choice usually follows the organization's existing identity infrastructure.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is required for x.509 client authentication to work?</h2>
+<div class="answer">
+<p>Each client presents a certificate signed by a CA the server trusts, with a subject matching the MongoDB user's name. Server certificates must have the correct subject alternative names for the hostnames clients use. Certificate expiry and revocation handling must be part of operations. x.509 is well suited to service identity because no shared secret is transmitted.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why should application logs avoid echoing raw query filters?</h2>
+<div class="answer">
+<p>Filters often contain personal data, tokens, or identifiers that should not appear in log aggregation systems. Log shapes and durations instead of full payloads, and redact sensitive fields explicitly. Log retention and access controls should match the sensitivity of what is logged. A leak through logs is as serious as a leak through the API.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you ensure backups are encrypted and access-controlled?</h2>
+<div class="answer">
+<p>Enable encryption at rest for backup storage and restrict restore permissions to a small operational group. Encrypt backups with keys managed separately from the database credentials so a single compromise does not expose both. Test that restores work with the documented key access procedure. Audit who restores data and where restored copies land.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a hidden replica set member used for?</h2>
+<div class="answer">
+<p>A hidden member replicates data but is invisible to client read preferences, so it can serve dedicated workloads such as backups or analytics. It still votes in elections unless configured otherwise. Hidden members can be configured with a delayed priority to provide protection against operator error. They consume the same resources as any other member.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does a delayed secondary protect against mistakes?</h2>
+<div class="answer">
+<p>A delayed member applies oplog entries behind the primary by a configured number of seconds, so an accidental deletion is not immediately replicated there. You can recover data from it before the delay window elapses. The window must exceed the time it takes to detect the mistake. Delayed members cannot be used for timely reads.</p>
+<pre><code>cfg.members[2].priority = 0;
+cfg.members[2].hidden = true;
+cfg.members[2].secondaryDelaySecs = 3600;</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the oplog and how does its size affect operations?</h2>
+<div class="answer">
+<p>The oplog is a capped collection recording every write, and secondaries replay it to stay in sync. Its size determines how long a member can be offline before it needs a full resync, and how far back point-in-time recovery can go. Too small an oplog causes frequent resyncs after maintenance. Size it for the longest expected outage plus peak write volume.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When does a secondary require a full resync rather than catching up?</h2>
+<div class="answer">
+<p>If the secondary's last applied oplog entry has already been overwritten in the primary's oplog, it cannot continue incrementally. The member then performs an initial sync, copying all data and rebuilding indexes. Large datasets make this slow and IO-heavy, which can affect the whole set. Adequate oplog sizing and prompt recovery prevent most resyncs.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you safely kill a long-running operation?</h2>
+<div class="answer">
+<p>Identify the operation with currentOp, verify it is safe to terminate, then call killOp with its operation identifier. Killing a write can leave partial work, so confirm the operation's semantics first. Prefer maxTimeMS-based limits so runaway operations self-terminate. Record what was killed for the postmortem.</p>
+<pre><code>db.adminCommand({ currentOp: true, secs_running: { $gt: 30 } });
+db.adminCommand({ killOp: 1, op: 12345 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does the compact command do and when is it needed?</h2>
+<div class="answer">
+<p>compact rewrites a collection's data files, reclaiming space freed by deletions and defragmenting storage. It requires resources and blocks some operations on the collection while running. Rolling maintenance across replica set members limits the impact. Modern WiredTiger releases also reclaim space during normal operation, so compaction is not always necessary.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you validate the integrity of a collection's indexes?</h2>
+<div class="answer">
+<p>The validate command checks collection data and index consistency and reports errors. It can be expensive on large collections, so run it during a maintenance window or on a secondary. Use it after suspected corruption, storage failures, or unexpected server crashes. A clean validate is a prerequisite before declaring an incident resolved.</p>
+<pre><code>db.orders.validate({ full: true });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are pre- and post-images in change streams used for?</h2>
+<div class="answer">
+<p>Pre-images contain the document before an update or delete, and post-images contain it after. They are disabled by default because they add storage and write overhead. Consumers that need to compute diffs or audit previous values must enable them on the collection. Enable only when a consumer genuinely requires them.</p>
+<pre><code>db.createCollection("orders", { changeStreamPreAndPostImages: { enabled: true } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do transactions interact with read preference?</h2>
+<div class="answer">
+<p>Transactions must run against the primary, so read preference is effectively primary within a transaction. Reads inside the transaction see the transaction's snapshot, not the latest committed state. This isolation is why transactions are unsuitable for long-running reporting. Design read-heavy analytics to run outside transactions.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What write concern should a transaction use in a critical workflow?</h2>
+<div class="answer">
+<p>Use majority write concern with journaling so the commit is durable across a majority before the application proceeds. The write concern is set at transaction start and applies to the commit. Weaker concerns risk acknowledging a commit that could be rolled back. Align the choice with the same durability standard used for non-transactional critical writes.</p>
+<pre><code>session.startTransaction({
+  readConcern: { level: "snapshot" },
+  writeConcern: { w: "majority", j: true }
+});</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens if an application holds a session open indefinitely?</h2>
+<div class="answer">
+<p>Sessions consume server-side resources and are tracked until the logical session timeout expires. Long-lived idle sessions accumulate and can contribute to resource pressure, especially if transactions remain open. Always end sessions in a finally block and avoid caching them across requests. Monitor for open transactions that never commit or abort.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you detect abandoned open transactions in production?</h2>
+<div class="answer">
+<p>Inspect currentOp for operations with a transaction marker and a long running time. These hold snapshot history and locks, and can prevent oplog truncation. Alert when transaction age exceeds a threshold well below the configured limit. The usual root cause is a missing commit or abort on an error path.</p>
+<pre><code>db.adminCommand({ currentOp: true, "transaction.timeInactiveMicros": { $gt: 60000000 } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is it risky to use transactions as a substitute for schema design?</h2>
+<div class="answer">
+<p>Transactions add coordination overhead and have hard limits, so using them to compensate for a poorly modeled schema scales badly. Embedding related data so a single document update is atomic is usually faster and simpler. Transactions remain valuable for genuinely multi-document invariants such as ledger transfers. Choose the model first, then apply transactions where atomicity truly spans documents.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you migrate a field's type without downtime?</h2>
+<div class="answer">
+<p>Write new documents in the new shape while reading code tolerates both shapes, then backfill existing documents in batches. Use a background job with bounded batches to avoid saturating IO, and track progress idempotently. Once the backfill completes and old-shape reads are gone, enforce the new shape with a validator. This expand-migrate-contract sequence avoids a hard cutover.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why should backfill jobs be idempotent and resumable?</h2>
+<div class="answer">
+<p>Backfills run for hours and may be interrupted by deploys, failovers, or rate limits. A resumable job records its position so it can continue without reprocessing everything. Idempotent updates make reruns safe when the position is uncertain. Together they turn a fragile one-shot script into an operable migration.</p>
+<pre><code>db.users.updateMany(
+  { schemaVersion: { $lt: 2 } },
+  { $set: { schemaVersion: 2 } },
+  { hint: { schemaVersion: 1 } }
+);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you limit the impact of a large backfill on production traffic?</h2>
+<div class="answer">
+<p>Process in small batches with a deliberate pause, and run during lower-traffic periods. Target a specific index and predicate so each batch is efficient. Monitor replication lag, cache pressure, and application latency, and pause automatically when thresholds are breached. Never run an unbounded updateMany across an entire large collection during peak hours.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What considerations apply when restoring a backup into an existing cluster?</h2>
+<div class="answer">
+<p>Restoring into a live database can conflict with existing documents and indexes, producing duplicate key errors or partial state. Prefer restoring into a separate database or cluster, then migrating or swapping deliberately. Verify index definitions, users, and roles are restored as expected. Confirm that the restore does not silently overwrite newer data.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you verify that a backup contains everything you need?</h2>
+<div class="answer">
+<p>Compare collection counts and document counts between source and restored copy, and check that all expected indexes exist. Verify users, roles, and any auxiliary collections such as configuration data. Run application-level smoke tests against the restored instance. Document the verification steps so restores are repeatable under pressure.</p>
+</div>
+</div>

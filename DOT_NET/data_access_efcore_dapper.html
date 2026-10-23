@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Data access in .NET — EF Core, Dapper and other ORM frameworks</title>
+<style>
+ body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+ .container { max-width: 980px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+ h1 { color: #1565c0; margin: 0 0 8px; font-size: 1.8rem; }
+ .lead { color: #475569; margin: 0 0 18px; }
+ h2 { color: #2e7d32; border-bottom: 2px solid #d8e1ea; padding-bottom: 4px; margin-top: 34px; font-size: 1.25rem; }
+ h3 { color: #0d47a1; margin: 18px 0 4px; font-size: 1.02rem; }
+ p, li { line-height: 1.6; }
+ ul, ol { padding-left: 22px; }
+ table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .9rem; }
+ th, td { border: 1px solid #d8e1ea; padding: 7px 10px; text-align: left; vertical-align: top; }
+ th { background: #eef4f9; }
+ pre { background: #0f172a; color: #e2e8f0; padding: 12px 14px; border-radius: 8px; overflow-x: auto; font-size: .83rem; line-height: 1.45; }
+ code { font-family: Consolas, 'Courier New', monospace; }
+ p code, li code, td code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-size: .88em; color: #0f172a; }
+ .note { background: #eef6ff; border-left: 4px solid #1565c0; padding: 10px 14px; border-radius: 6px; margin: 14px 0; }
+ .warn { background: #fff6e5; border-left: 4px solid #ef6c00; padding: 10px 14px; border-radius: 6px; margin: 14px 0; }
+ .good { background: #eefaf0; border-left: 4px solid #2e7d32; padding: 10px 14px; border-radius: 6px; margin: 14px 0; }
+ .tag { display: inline-block; padding: 1px 8px; border-radius: 999px; background: #e8eef5; border: 1px solid #cbd5e1; font-size: .75rem; font-weight: 700; color: #334155; margin-right: 4px; }
+ .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px; }
+ .toc ol { margin: 4px 0; }
+ .footer { margin-top: 34px; border-top: 1px solid #e2e8f0; padding-top: 12px; color: #64748b; font-size: .88rem; }
+ .formula { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7b1fa2; padding: 10px 14px; border-radius: 6px; font-family: Consolas, monospace; font-size: .86rem; margin: 12px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Data access in .NET: EF Core, Dapper and the rest</h1>
+<p class="lead">One page for the decision behind the requirement <em>“EF Core, Dapper, or another ORM/data-access framework”</em>: what each option actually does, where its cost sits, and how to combine them without turning the data layer into two competing truths.</p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ol>
+  <li><a href="#overview">The four families of data access</a></li>
+  <li><a href="#efcore">EF Core — a full O/RM</a></li>
+  <li><a href="#efcore10">What EF Core 10 changed</a></li>
+  <li><a href="#dapper">Dapper — a micro-ORM</a></li>
+  <li><a href="#others">Other frameworks: NHibernate, linq2db, Marten, RepoDB, ADO.NET</a></li>
+  <li><a href="#compare">Side-by-side comparison</a></li>
+  <li><a href="#patterns">Patterns: repository, unit of work, CQRS split</a></li>
+  <li><a href="#performance">Performance: where each one hurts</a></li>
+  <li><a href="#transactions">Transactions, concurrency and migrations</a></li>
+  <li><a href="#testing">Testing the data layer</a></li>
+  <li><a href="#decide">Decision guide and review checklist</a></li>
+  <li><a href="#sources">Sources</a></li>
+</ol>
+</div>
+
+<h2 id="overview">1. The four families of data access</h2>
+<p>“ORM or Dapper” is really a choice between four levels of abstraction. Each one trades control for convenience, and the trade is not symmetrical: what you give up is not the same thing at every level.</p>
+<table>
+<tr><th>Family</th><th>What it does for you</th><th>What you still own</th><th>Typical cost</th></tr>
+<tr><td><strong>Raw ADO.NET</strong> (<code>DbConnection</code>, <code>DbCommand</code>, <code>DbDataReader</code>)</td><td>Nothing beyond the provider</td><td>SQL, parameters, mapping, lifetime, transactions</td><td>Most code, least magic, no surprises</td></tr>
+<tr><td><strong>Micro-ORM</strong> (Dapper, RepoDB, SqlMapper)</td><td>Parameter binding and result mapping into objects</td><td>SQL text, query shape, and the schema contract</td><td>Tiny runtime overhead; SQL is hand-written</td></tr>
+<tr><td><strong>LINQ-based O/RM</strong> (EF Core, linq2db, NHibernate)</td><td>Query translation, change tracking, migrations, relationship fix-up</td><td>Model design, query shaping, and the decision of when to drop to SQL</td><td>Translation cost, tracking cost, plan-cache effects</td></tr>
+<tr><td><strong>Document / event mapper</strong> (Marten, EF Core Cosmos provider)</td><td>Serialization, identity, and querying over non-tabular stores</td><td>Document shape, versioning of stored payloads</td><td>Serializer coupling; weaker ad-hoc querying</td></tr>
+</table>
+<p>The decision is not “which is faster”. Dapper wins raw microbenchmarks almost always, because it does almost nothing: no expression tree to parse, no change tracker, no identity map. EF Core wins on the work it removes — migrations, relationship management, and the ability to express a query once in typed code. Both statements are true at the same time, which is why mature systems mix them.</p>
+
+<h2 id="efcore">2. EF Core — a full O/RM</h2>
+<p>EF Core maps a .NET object model to a relational schema and translates LINQ expression trees into SQL. Its value is not the SELECT it writes; it is the lifecycle around that SELECT.</p>
+
+<h3>2.1 The model and the mapping</h3>
+<ul>
+  <li><strong>Entities</strong> have identity and are tracked; <strong>owned types</strong> and (since EF 8) <strong>complex types</strong> do not.</li>
+  <li><strong>Conventions first</strong>: <code>Id</code>/<code>&lt;Type&gt;Id</code> is the key, navigation properties become relationships, and <code>IEntityTypeConfiguration&lt;T&gt;</code> classes hold the rest.</li>
+  <li><strong>Migrations</strong> are generated C# that alter the schema; they are code, reviewed like code, and applied in a controlled order.</li>
+</ul>
+<pre><code>public sealed class OrderConfiguration : IEntityTypeConfiguration&lt;Order&gt;
+{
+    public void Configure(EntityTypeBuilder&lt;Order&gt; b)
+    {
+        b.ToTable("Orders");
+        b.HasKey(o =&gt; o.Id);
+        b.Property(o =&gt; o.Number).HasMaxLength(32).IsRequired();
+        b.HasIndex(o =&gt; new { o.CustomerId, o.CreatedAt });
+
+        // Complex type: value semantics, no identity, one JSON column
+        b.ComplexProperty(o =&gt; o.Shipping, c =&gt; c.ToJson());
+    }
+}</code></pre>
+
+<h3>2.2 The change tracker</h3>
+<p>Reads that go through the tracker pay for identity resolution and snapshotting. That is what makes <code>SaveChanges</code> able to compute a diff — and what makes a 50 000-row read in a request expensive for no reason.</p>
+<pre><code>// read-only API path: no tracking, no identity map
+var list = await db.Orders
+    .AsNoTracking()
+    .Where(o =&gt; o.CustomerId == id)
+    .OrderByDescending(o =&gt; o.CreatedAt)
+    .Select(o =&gt; new OrderDto(o.Id, o.Number, o.Total))
+    .Take(50)
+    .ToListAsync(ct);
+
+// write path: tracked, one unit of work
+var order = await db.Orders.Include(o =&gt; o.Lines).SingleAsync(o =&gt; o.Id == id, ct);
+order.AddLine(sku, qty);
+await db.SaveChangesAsync(ct);</code></pre>
+<div class="note"><strong>Rule of thumb.</strong> Project to DTOs for reads; load tracked entities only when you intend to mutate them in the same unit of work. <code>AsNoTracking()</code> plus <code>Select</code> removes most of the “EF is slow” anecdotes before they happen.</div>
+
+<h3>2.3 What EF Core does well</h3>
+<table>
+<tr><th>Capability</th><th>Why it matters in a real API</th></tr>
+<tr><td>Migrations</td><td>Schema changes are versioned, reviewable and repeatable across environments</td></tr>
+<tr><td>Relationship fix-up</td><td>Loading an aggregate graph does not require hand-written joins</td></tr>
+<tr><td>Optimistic concurrency</td><td><code>[Timestamp]</code>/<code>rowversion</code> plus <code>DbUpdateConcurrencyException</code> out of the box</td></tr>
+<tr><td>Batching</td><td>Multiple inserts/updates are grouped into fewer round-trips</td></tr>
+<tr><td>Provider portability</td><td>SQL Server, PostgreSQL, SQLite, Cosmos and others behind one model</td></tr>
+<tr><td>Global query filters</td><td>Soft delete and multi-tenancy applied consistently by default</td></tr>
+</table>
+
+<h3>2.4 Where it costs you</h3>
+<ul>
+  <li><strong>Translation surprises</strong>: a LINQ expression that cannot translate either throws or silently evaluates on the client. Always inspect the SQL for hot queries.</li>
+  <li><strong>Cartesian explosion</strong>: several <code>Include</code>s over collections multiply rows; <code>AsSplitQuery()</code> fixes it at the cost of more round-trips.</li>
+  <li><strong>N+1 by lazy loading</strong>: convenient, invisible, and expensive in loops.</li>
+  <li><strong>Startup</strong>: model building is not free; the first query in a process pays for it (consider compiled models).</li>
+</ul>
+
+<h2 id="efcore10">3. What EF Core 10 changed</h2>
+<p>EF Core 10 shipped in November 2025 as an LTS release supported until November 2028, and requires the .NET 10 runtime. The items below change day-to-day design decisions, not just micro-performance.</p>
+<table>
+<tr><th>Change</th><th>Practical consequence</th></tr>
+<tr><td><strong>Named query filters</strong></td><td>Several filters per entity, disabled selectively: <code>IgnoreQueryFilters(["SoftDeletionFilter"])</code> instead of turning everything off</td></tr>
+<tr><td><strong>Complex types (incl. optional, structs, JSON mapping)</strong></td><td>Value-semantics replacement for owned types; assigning one to another copies instead of failing, and <code>ExecuteUpdateAsync</code> works on them</td></tr>
+<tr><td><strong>Parameterized collections: one parameter per value, padded</strong></td><td>Solves the plan-cache bloat of inlined <code>IN (...)</code> while keeping cardinality visible to the planner; switchable per query with <code>EF.Constant()</code></td></tr>
+<tr><td><strong><code>LeftJoin</code>/<code>RightJoin</code></strong></td><td>First-class LINQ operators from .NET 10, no more <code>GroupJoin</code>+<code>DefaultIfEmpty</code> gymnastics</td></tr>
+<tr><td><strong><code>ExecuteUpdateAsync</code> with a normal lambda</strong></td><td>Conditional setters without hand-built expression trees</td></tr>
+<tr><td><strong>JSON column support (SQL Server 2025)</strong></td><td>Native <code>json</code> type, <code>JSON_VALUE</code> translation, <code>ExecuteUpdate</code> against properties inside the document</td></tr>
+<tr><td><strong>Vector type and <code>VectorDistance</code></strong></td><td>Similarity search in LINQ for Azure SQL / SQL Server 2025 embeddings</td></tr>
+<tr><td><strong>Redaction of inlined constants</strong></td><td>Inlined values are logged as <code>?</code> by default — PII stops leaking into logs</td></tr>
+<tr><td><strong>Split-query ordering fix</strong></td><td>Related data loaded by split queries is deterministic under <code>OrderBy</code> + <code>Take</code></td></tr>
+</table>
+<div class="warn"><strong>Migration warning.</strong> With SQL Server 2025 compatibility level 170 or <code>UseAzureSql</code>, existing <code>nvarchar</code> JSON columns are converted to the new <code>json</code> type on the first migration. If that is not what you want, pin the column type or lower the compatibility level before generating it.</div>
+
+<h2 id="dapper">4. Dapper — a micro-ORM</h2>
+<p>Dapper adds three things on top of <code>DbConnection</code>: parameter binding from an object, mapping of the result set into objects, and a set of helpers for multi-mapping and multi-result queries. Everything else — SQL, schema coupling, transaction scope — stays yours.</p>
+
+<h3>4.1 The core API</h3>
+<pre><code>const string sql = @"
+SELECT o.Id, o.Number, o.Total, c.Name AS CustomerName
+FROM Orders o
+JOIN Customers c ON c.Id = o.CustomerId
+WHERE o.CustomerId = @customerId AND o.CreatedAt &gt;= @from
+ORDER BY o.CreatedAt DESC
+OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY;";
+
+var rows = await connection.QueryAsync&lt;OrderRow&gt;(sql, new
+{
+    customerId,
+    from,
+    skip = (page - 1) * size,
+    take = size
+});</code></pre>
+
+<h3>4.2 Multi-mapping and multiple result sets</h3>
+<pre><code>var sql = @"
+SELECT o.Id, o.Number, l.Sku, l.Quantity
+FROM Orders o
+LEFT JOIN OrderLines l ON l.OrderId = o.Id
+WHERE o.Id = @id;";
+
+var order = (await connection.QueryAsync&lt;Order, Line, Order&gt;(
+    sql,
+    (o, l) =&gt; { o.Lines.Add(l); return o; },
+    new { id },
+    splitOn: "Sku")).First();
+
+// two result sets, one round-trip
+using var multi = await connection.QueryMultipleAsync(
+    "SELECT * FROM Orders WHERE Id = @id; SELECT * FROM OrderLines WHERE OrderId = @id;",
+    new { id });
+var head = await multi.ReadSingleAsync&lt;Order&gt;();
+var lines = (await multi.ReadAsync&lt;Line&gt;()).ToList();</code></pre>
+
+<h3>4.3 What you must remember</h3>
+<ul>
+  <li><strong>Buffering</strong>: <code>Query</code> buffers the whole result by default. For large reads use <code>QueryUnbufferedAsync</code> and stream.</li>
+  <li><strong>No tracking</strong>: if you load the same row twice you get two objects. That is a feature, and a source of bugs when people assume identity.</li>
+  <li><strong>Schema coupling</strong>: rename a column in SQL and the C# property silently stops being filled — unless you test with a real database.</li>
+  <li><strong>No migrations</strong>: schema changes are your responsibility (DbUp, Flyway, EF migrations used only for DDL, or hand-written scripts).</li>
+  <li><strong>SQL injection</strong>: always parameters; never string concatenation. Dapper passes parameters, it does not sanitize your SQL.</li>
+</ul>
+
+<h3>4.4 When Dapper is the right answer</h3>
+<ul>
+  <li>Reporting and read models with hand-tuned SQL, window functions, CTEs, or <code>MERGE</code>.</li>
+  <li>Bulk operations and set-based updates where you want one statement, not N tracked entities.</li>
+  <li>Legacy schemas that do not follow ORM conventions and cannot be remodelled.</li>
+  <li>Hot paths measured to be dominated by EF Core translation or tracking.</li>
+</ul>
+
+<h2 id="others">5. Other frameworks</h2>
+<table>
+<tr><th>Framework</th><th>Model</th><th>Strengths</th><th>Watch out for</th></tr>
+<tr><td><strong>ADO.NET</strong></td><td>Raw commands and readers</td><td>Total control, zero abstraction, useful for DDL and provider-specific features</td><td>Boilerplate, manual mapping, easy to leak connections</td></tr>
+<tr><td><strong>NHibernate</strong></td><td>Full O/RM, session-based, HQL/Criteria</td><td>Mature second-level cache, rich mapping, strong in legacy .NET Framework estates</td><td>Steeper learning curve; less common in new .NET Core work</td></tr>
+<tr><td><strong>linq2db</strong></td><td>LINQ over SQL with explicit query building</td><td>Very predictable SQL, fast, supports CTEs and temp tables well</td><td>Smaller ecosystem than EF Core; manual schema mapping</td></tr>
+<tr><td><strong>Marten</strong></td><td>Document DB and event store on PostgreSQL</td><td>Aggregates as documents, built-in event sourcing, LINQ querying</td><td>Ties the model to PostgreSQL; document versioning is on you</td></tr>
+<tr><td><strong>RepoDB</strong></td><td>Hybrid micro-ORM</td><td>Fluent and raw operations, bulk merge, caching layer</td><td>Less community material; conventions must be learned</td></tr>
+<tr><td><strong>SqlKata / query builders</strong></td><td>Composable SQL builder</td><td>Dynamic filters without string concatenation, multi-dialect</td><td>Still hand-mapped results; not an O/RM</td></tr>
+</table>
+<div class="good"><strong>Default for a new .NET 8+ API:</strong> EF Core for the write model and the aggregate lifecycle, Dapper (or raw SQL through <code>FromSql</code>) for reporting reads. Two tools, one schema, clear boundary.</div>
+
+<h2 id="compare">6. Side-by-side comparison</h2>
+<table>
+<tr><th>Criterion</th><th>EF Core</th><th>Dapper</th><th>Raw ADO.NET</th></tr>
+<tr><td>Query language</td><td>LINQ translated to SQL</td><td>Hand-written SQL</td><td>Hand-written SQL</td></tr>
+<tr><td>Change tracking</td><td>Yes, opt-out</td><td>No</td><td>No</td></tr>
+<tr><td>Migrations</td><td>Built in</td><td>External tool</td><td>External tool</td></tr>
+<tr><td>Mapping</td><td>Automatic, conventions + config</td><td>Automatic by column name</td><td>Manual reader loop</td></tr>
+<tr><td>Overhead per row</td><td>Materialization + tracking (if enabled)</td><td>Reflection-emitted mapper, very low</td><td>Lowest</td></tr>
+<tr><td>Complex SQL</td><td>Possible but fights the translator</td><td>Native</td><td>Native</td></tr>
+<tr><td>Learning curve</td><td>High (model + translation rules)</td><td>Low</td><td>Low, but verbose</td></tr>
+<tr><td>Testability</td><td>In-memory/SQLite providers, but behavior differs from production</td><td>Needs a real database</td><td>Needs a real database</td></tr>
+<tr><td>Best fit</td><td>Domain writes, CRUD, aggregates</td><td>Reads, reports, bulk, legacy schema</td><td>DDL, maintenance jobs, provider-specific features</td></tr>
+</table>
+
+<h2 id="patterns">7. Patterns</h2>
+<h3>7.1 Repository and unit of work</h3>
+<p><code>DbContext</code> is already a unit of work and a repository over its <code>DbSet</code>s. Wrapping it in <code>IRepository&lt;T&gt;</code> usually produces a leaky abstraction: <code>IQueryable</code> escapes anyway, or you lose <code>Include</code>, projections and filters. Prefer a <strong>use-case-oriented interface</strong> over a generic one.</p>
+<pre><code>// Prefer this
+public interface IOrderStore
+{
+    Task&lt;Order?&gt; FindAsync(OrderId id, CancellationToken ct);
+    Task AddAsync(Order order, CancellationToken ct);
+    Task&lt;IReadOnlyList&lt;OrderSummary&gt;&gt; ListRecentAsync(Guid customerId, int take, CancellationToken ct);
+}
+
+// Over this: it re-exposes the ORM with extra steps
+public interface IRepository&lt;T&gt; where T : class
+{
+    IQueryable&lt;T&gt; Query();
+    Task&lt;T?&gt; GetByIdAsync(object id);
+    // ...
+}</code></pre>
+
+<h3>7.2 The read/write split</h3>
+<p>Keep the write model expressive (EF Core, aggregates, invariants) and let reads go straight to SQL (Dapper) with DTOs shaped for the screen or the API contract. The boundary is a namespace, not a distributed system:</p>
+<pre><code>Orders/            // EF Core: aggregates, invariants, SaveChanges
+Orders/Queries/    // Dapper: SELECTs returning DTOs
+Infrastructure/    // DbContext, connection factory, migrations</code></pre>
+
+<h3>7.3 Specifications</h3>
+<p>Useful when the same filtering rule is reused across use cases; harmful when it becomes a second query language. If a specification needs three <code>Include</code>s and a projection, it is a query, not a specification.</p>
+
+<h2 id="performance">8. Performance: where each one hurts</h2>
+<h3>8.1 Round-trip arithmetic</h3>
+<p>Data-access cost is dominated by round-trips, not by mapping. If a request performs <code>n</code> queries at latency <code>L</code>, the floor is:</p>
+<div class="formula">T_response ≥ n × L_db + T_cpu(mapping + serialization)</div>
+<p>A 2 ms local query becomes 40 ms across an availability zone. This is why N+1 hurts more in production than on a laptop, and why batching beats micro-optimizing the mapper.</p>
+
+<h3>8.2 Frequent EF Core fixes</h3>
+<ul>
+  <li><code>AsNoTracking()</code> + <code>Select</code> into a DTO for read endpoints.</li>
+  <li><code>AsSplitQuery()</code> when two or more collection <code>Include</code>s multiply rows.</li>
+  <li>Keyset pagination instead of growing <code>OFFSET</code>; <code>OFFSET 100000</code> reads and discards 100 000 rows.</li>
+  <li><code>EF.CompileAsyncQuery</code> for a hot query built in a loop.</li>
+  <li>Projection pushdown: filter and page before materializing, not after <code>ToList()</code>.</li>
+  <li>Check the generated SQL and the actual plan — <code>ToQueryString()</code> and <code>EXPLAIN</code>.</li>
+</ul>
+
+<h3>8.3 Frequent Dapper fixes</h3>
+<ul>
+  <li><code>QueryUnbufferedAsync</code> for large result sets; buffering 500 000 rows is a memory incident.</li>
+  <li>Reuse a <code>DbConnection</code> from a pool; do not open per call without <code>using</code> discipline.</li>
+  <li>Parameterize <code>IN</code> lists properly; Dapper expands <code>@ids</code> into many parameters, which is good, but very large lists need a table-valued parameter or a temp table.</li>
+  <li>Select only the columns the DTO needs; <code>SELECT *</code> plus a join is how read models become slow.</li>
+</ul>
+
+<div class="warn"><strong>Measurement discipline.</strong> Benchmark with BenchmarkDotNet for micro-costs and load-test the endpoint for the real number. A mapper that is 3× faster changes nothing if 95% of the time is the database.</div>
+
+<h2 id="transactions">9. Transactions, concurrency and migrations</h2>
+<h3>9.1 One transaction, two tools</h3>
+<p>EF Core and Dapper can share a transaction: open it on the <code>DbContext</code> connection and pass the same connection and transaction to Dapper.</p>
+<pre><code>await using var tx = await db.Database.BeginTransactionAsync(ct);
+
+var order = await db.Orders.SingleAsync(o =&gt; o.Id == id, ct);
+order.MarkPaid();
+await db.SaveChangesAsync(ct);              // EF Core
+
+await db.Database.GetDbConnection().ExecuteAsync(
+    "INSERT INTO AuditLog (EntityId, Action, At) VALUES (@id, 'paid', SYSUTCDATETIME())",
+    new { id }, tx);                         // Dapper, same transaction
+
+await tx.CommitAsync(ct);</code></pre>
+
+<h3>9.2 Concurrency</h3>
+<ul>
+  <li><strong>Optimistic</strong>: <code>rowversion</code>/<code>xmin</code> plus a retry loop on <code>DbUpdateConcurrencyException</code>. Default for APIs.</li>
+  <li><strong>Pessimistic</strong>: <code>SELECT ... FOR UPDATE</code> or <code>UPDLOCK</code>, only inside short transactions; long locks turn into timeouts under load.</li>
+  <li><strong>Idempotency</strong>: a unique key on the command id makes retries safe regardless of the data-access tool.</li>
+</ul>
+
+<h3>9.3 Migrations in delivery</h3>
+<ul>
+  <li>Generate scripts in CI (<code>dotnet ef migrations script --idempotent</code>) and review them; do not run <code>Database.Migrate()</code> from application startup in production.</li>
+  <li>Expand → migrate → contract: add nullable column, backfill in batches, switch reads, drop the old column in a later release.</li>
+  <li>Never mix a breaking DDL change with a code deploy that depends on it in the same step.</li>
+</ul>
+
+<h2 id="testing">10. Testing the data layer</h2>
+<table>
+<tr><th>Approach</th><th>Good for</th><th>Not good for</th></tr>
+<tr><td>EF Core InMemory provider</td><td>Fast unit tests of business logic</td><td>Anything about SQL, constraints, transactions — it is not a relational database</td></tr>
+<tr><td>SQLite in-memory</td><td>Relational behavior in fast tests</td><td>Provider-specific SQL, concurrency, case sensitivity</td></tr>
+<tr><td>Testcontainers (SQL Server/PostgreSQL)</td><td>Real plans, real constraints, migrations, Dapper queries</td><td>Speed — use it for integration suites, not for every test</td></tr>
+<tr><td>WebApplicationFactory + Testcontainers</td><td>End-to-end API tests with the real data layer</td><td>Sub-second feedback loops</td></tr>
+</table>
+<div class="note"><strong>Rule.</strong> Test the SQL you ship. In-memory providers hide exactly the bugs that reach production: missing indexes, constraint violations, translation differences and transaction semantics.</div>
+
+<h2 id="decide">11. Decision guide</h2>
+<ol>
+  <li><strong>Is the domain non-trivial and mutated through invariants?</strong> EF Core for the write model. If not, a micro-ORM or raw SQL is enough.</li>
+  <li><strong>Does the read need SQL that LINQ expresses badly</strong> (window functions, CTEs, pivots, <code>MERGE</code>)? Dapper for that query, in the same project.</li>
+  <li><strong>Is the schema owned by the team?</strong> If yes, EF migrations. If not, external migration tooling that matches the DBA process.</li>
+  <li><strong>Is the hot path measured?</strong> Optimize the round-trips and the plan first; swap the mapper only if it is provably the bottleneck.</li>
+  <li><strong>Can two mappers drift?</strong> Keep one schema, one migration source, and tests that exercise both paths against a real database.</li>
+</ol>
+
+<h3>Review checklist</h3>
+<ul>
+  <li>Read endpoints use <code>AsNoTracking</code> and projections, not full entities.</li>
+  <li>No lazy loading in request paths; <code>Include</code>s were checked for cartesian growth.</li>
+  <li>Every list endpoint is paginated, and pagination is keyset where the table is large.</li>
+  <li>All SQL is parameterized; raw SQL concatenation is justified and reviewed.</li>
+  <li>Transactions are short, and external calls are outside them.</li>
+  <li>Migrations are generated as scripts and reviewed; no automatic migrate on startup in production.</li>
+  <li>Integration tests run against the same engine as production.</li>
+  <li>Sensitive values do not appear in logs (EF Core 10 redacts inlined constants by default, but check the rest).</li>
+</ul>
+
+<h2 id="sources">12. Sources</h2>
+<ul>
+  <li><a href="https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew" target="_blank" rel="noopener">What's New in EF Core 10</a> — LTS release notes: named query filters, complex types, parameterized collections, <code>LeftJoin</code>, JSON and vector support.</li>
+  <li><a href="https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries" target="_blank" rel="noopener">Single vs. split queries</a> — cartesian explosion and when to split.</li>
+  <li><a href="https://learn.microsoft.com/en-us/ef/core/querying/filters" target="_blank" rel="noopener">Global query filters</a> — soft delete and multi-tenancy.</li>
+  <li><a href="https://github.com/DapperLib/Dapper" target="_blank" rel="noopener">Dapper</a> — repository and API surface.</li>
+  <li><a href="https://github.com/linq2db/linq2db" target="_blank" rel="noopener">linq2db</a> — LINQ over SQL with explicit control.</li>
+  <li><a href="https://martendb.io/" target="_blank" rel="noopener">Marten</a> — document database and event store on PostgreSQL.</li>
+  <li><a href="https://github.com/mgravell/Pomelo.EntityFrameworkCore.MySql" target="_blank" rel="noopener">Provider ecosystem</a> — an example of an EF Core provider outside Microsoft.</li>
+</ul>
+
+<div class="footer">
+Part of the <a href="../IT.html">IT Knowledge Base</a> · .NET section · prepared October 2026.
+</div>
+
+</div>
+</body>
+</html>

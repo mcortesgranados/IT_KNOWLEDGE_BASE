@@ -1,0 +1,1301 @@
+<div class="question">
+<h2>How does WiredTiger implement B-tree indexes, and what makes them different from a simple in-memory map?</h2>
+<div class="answer">
+<p>WiredTiger stores each index as a B-tree of pages, with internal pages holding separator keys and leaf pages holding the actual key and record-id pairs. Pages are cached uncompressed in memory and compressed on disk, and they are written as immutable blocks so readers never block writers. The B-tree is updated in place within the cache but persisted through checkpointing, which makes index lookups logarithmic in page count rather than linear scans. This structure is why index depth and page size matter for read latency.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does index selectivity mean and why is it more useful than raw cardinality?</h2>
+<div class="answer">
+<p>Cardinality is the number of distinct values in a field, while selectivity describes how well a predicate filters the collection. A field can have high cardinality but still be a poor index if most queries match a large fraction of documents. Good indexes typically match a small percentage of the collection, so the planner prefers them over collection scans. Measure real selectivity from explain output, not from the number of distinct values alone.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Explain the ESR rule for designing compound indexes.</h2>
+<div class="answer">
+<p>ESR stands for Equality, Sort, Range: fields used in equality predicates should come first, then fields used for sorting, then fields used in range predicates. Following this order lets the index satisfy equality filters, deliver results already sorted, and still bound the range scan efficiently. Placing a range field before a sort field forces an in-memory sort because the index order is broken after the range. The rule is a guideline, and the planner's actual choice should be confirmed with explain.</p>
+<pre><code>// Query: status = "active", sort by createdAt, amount &gt; 100
+db.orders.createIndex({ status: 1, createdAt: 1, amount: 1 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a multikey index and which operations does it not support well?</h2>
+<div class="answer">
+<p>A multikey index is created automatically when an indexed field holds an array, and MongoDB writes one index entry per array element. It accelerates queries that match array elements, but a single compound index cannot have more than one array field, because that would create a Cartesian product of entries. Multikey indexes also cannot provide a covered query when the array field itself is returned, since the full array is not stored in the index. Sorting on a multikey field can require a blocking sort because the same document appears under several keys.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the index prefix rule and how does it affect compound index usability?</h2>
+<div class="answer">
+<p>A compound index can serve queries that use any contiguous prefix of its fields, starting from the first field. An index on <code>{a: 1, b: 1, c: 1}</code> supports queries on <code>a</code>, on <code>a</code> plus <code>b</code>, and on all three, but not on <code>b</code> alone. This is why field order in a compound index is a design decision, not a formality. An index on the reverse order is a separate index and is not covered by the prefix rule.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a covered query and what conditions must hold for one?</h2>
+<div class="answer">
+<p>A covered query is answered entirely from the index, with no document fetch. Every field in the filter and in the projection must be present in the index, and the query must not return the full document. The plan shows <code>IXSCAN</code> with no <code>FETCH</code> stage. Index-only plans reduce I/O but can be slower than expected if the index entries are large.</p>
+<pre><code>db.users.createIndex({ email: 1, name: 1 })
+db.users.find({ email: "a@b.co" }, { _id: 0, email: 1, name: 1 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do unique, sparse, and partial indexes differ?</h2>
+<div class="answer">
+<p>A unique index rejects duplicate values, but by default only one document may have the field missing, because missing counts as null. A sparse index skips documents where the field is absent, which removes that null collision but also makes the index unusable for queries that need those documents. A partial index uses a filter expression to index only matching documents, giving finer control plus a smaller index. Partial indexes are usually the better choice for selective uniqueness.</p>
+<pre><code>db.users.createIndex(
+  { email: 1 },
+  { unique: true, partialFilterExpression: { email: { $exists: true } } }
+)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do TTL indexes work and what are their limitations?</h2>
+<div class="answer">
+<p>A TTL index is a single-field index on a date or array-of-dates field with an <code>expireAfterSeconds</code> option. A background thread removes expired documents, typically within about a minute of expiry, so deletion is not exact. TTL indexes cannot be compound, and the field must be a date or an array of dates. Expiry is based on the indexed value, not on document insertion time, so clock skew in application writes matters.</p>
+<pre><code>db.sessions.createIndex({ lastSeen: 1 }, { expireAfterSeconds: 3600 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do text indexes work and what do field weights control?</h2>
+<div class="answer">
+<p>A text index tokenizes string fields, stems words, and stores term postings so that <code>$text</code> queries can search and rank matches. Weights set the relative importance of indexed fields in the computed text score, so a title match can outrank a body match. A collection may have at most one text index, though it can span many fields. Text indexes are case-insensitive and ignore stop words by default, and they do not support language-specific analysis beyond the specified default language.</p>
+<pre><code>db.articles.createIndex(
+  { title: "text", body: "text" },
+  { weights: { title: 10, body: 1 } }
+)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>When would you use a wildcard index, and what is the cost?</h2>
+<div class="answer">
+<p>A wildcard index indexes all fields, or all fields under a given path, which suits schemas with unpredictable or highly polymorphic field names. It removes the need to pre-declare an index per attribute, but it writes one index entry per field per document, so it grows faster and consumes more memory than a targeted index. Wildcard indexes do not support shard keys and have restrictions on compound use. They should be a fallback when the schema genuinely cannot be enumerated.</p>
+<pre><code>db.products.createIndex({ "attributes.$**": 1 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a hidden index and why would you hide one?</h2>
+<div class="answer">
+<p>A hidden index is maintained by the storage engine but ignored by the query planner. It lets you test the impact of dropping an index without paying the cost of a rebuild if the removal turns out to be harmful. You can unhide it instantly to restore planner visibility. Hiding is useful during index audits when you want to confirm an index is genuinely unused.</p>
+<pre><code>db.orders.hideIndex("status_1")
+db.orders.unhideIndex("status_1")</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a rolling index build and when does it matter?</h2>
+<div class="answer">
+<p>A rolling build creates the index on one replica set member at a time, typically starting with a secondary, so the set never loses all redundant capacity at once. Modern MongoDB builds indexes concurrently on secondaries by default, so the classic background-build flag is no longer the mechanism to rely on. Rolling builds still matter for large collections where an index build could saturate I/O or stall replication. Plan them during low-traffic windows and watch replication lag between steps.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does index size affect memory and overall performance?</h2>
+<div class="answer">
+<p>WiredTiger keeps hot index pages in its cache, so a large index competes with document data for the same memory budget. When index pages are evicted, lookups require disk reads, which raises latency even if the plan is otherwise optimal. Wide compound indexes and multikey indexes on large arrays amplify this effect. Auditing rarely used indexes is as important as adding missing ones.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Does MongoDB use index intersection, and how reliable is it?</h2>
+<div class="answer">
+<p>MongoDB can intersect results from multiple indexes for a single query, but it rarely does so and the planner usually prefers one well-chosen compound index. Intersection costs extra work per index and per matching document, so it is often slower than a single selective index. You should not design a schema expecting intersection to substitute for a compound index. If explain shows an intersection plan, consider whether a compound index would be simpler and faster.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the query planner choose a plan, and what role does the plan cache play?</h2>
+<div class="answer">
+<p>The planner generates candidate plans, runs them in a trial period against a sample of the work, and keeps the plan that returns results with the least work. The chosen plan is cached by query shape, letting later executions skip the trial phase. The cache is invalidated by index changes, collection drops, and explicit clears. A cached plan can become stale when data distribution shifts, which is why plan cache inspection is part of performance work.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What do the explain() verbosity levels show?</h2>
+<div class="answer">
+<p><code>queryPlanner</code> shows the winning plan and rejected candidates without executing the query. <code>executionStats</code> runs the query and reports actual keys and documents examined, timing, and rows returned. <code>allPlansExecution</code> adds execution statistics for the rejected candidate plans, which is useful when you want to know why a plan lost. Use <code>executionStats</code> for routine tuning and <code>allPlansExecution</code> when the winning plan looks wrong.</p>
+<pre><code>db.orders.find({ status: "paid" }).explain("executionStats")</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Which executionStats fields matter most when diagnosing a slow query?</h2>
+<div class="answer">
+<p><code>totalKeysExamined</code>, <code>totalDocsExamined</code>, and <code>nReturned</code> together reveal how efficiently the plan filters. An ideal selective query has these three numbers close to each other, while a large gap between keys examined and documents returned suggests a weak index or a filter applied after the scan. Also check <code>executionTimeMillis</code> and whether the plan contains a blocking <code>SORT</code>. Comparing ratios is more informative than looking at absolute timings alone.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between COLLSCAN, IXSCAN, and FETCH in a query plan?</h2>
+<div class="answer">
+<p><code>COLLSCAN</code> reads every document in the collection and evaluates the filter, which is linear in collection size. <code>IXSCAN</code> walks an index to find matching keys, then <code>FETCH</code> retrieves the full documents for those keys. A plan with <code>IXSCAN</code> and no <code>FETCH</code> is covered. Seeing <code>COLLSCAN</code> on a hot query is the clearest signal that an index is missing or unusable.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What causes a blocking SORT stage and how do you remove it?</h2>
+<div class="answer">
+<p>A blocking sort appears when no index can supply the requested order, so the server must buffer and sort documents in memory. It is especially costly when the sort exceeds the memory limit, which produces an error rather than a silent spill. To remove it, create an index whose key order matches the sort and whose leading fields satisfy the query's equality predicates. Verify success by confirming the plan has no <code>SORT</code> stage and <code>hasSortStage</code> is false.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you find and clear rejected plans in the plan cache, and why would you?</h2>
+<div class="answer">
+<p>You can list cached plans with <code>$planCache.list</code> and inspect their scores and whether they are marked inactive. Clearing a single shape with <code>$planCache.clearPlansByQuery</code> or the whole cache with <code>$planCache.clear</code> forces replanning. This helps when a plan was cached under an unrepresentative data distribution, for example right after a bulk load. Clearing the whole cache is a blunt instrument that briefly increases planning cost.</p>
+<pre><code>db.orders.getPlanCache().clear()
+db.orders.getPlanCache().list()</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How and when should you use hint()?</h2>
+<div class="answer">
+<p><code>hint()</code> forces the planner to use a named index or key pattern, bypassing plan selection. It is appropriate when you have proven that the planner consistently picks a worse index, or when you need a predictable plan for a latency-sensitive path. Hints are brittle: dropping or renaming the index breaks the query, and a hint can become suboptimal as data changes. Reassess hints after major data or index changes instead of leaving them indefinitely.</p>
+<pre><code>db.orders.find({ status: "paid" }).hint({ status: 1, createdAt: -1 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you use $indexStats to find unused indexes?</h2>
+<div class="answer">
+<p><code>$indexStats</code> reports per-index access counters, including the number of operations that used each index since the last restart or index creation. Indexes with zero accesses over a representative period, including a full business cycle, are candidates for removal. The counters reset on restart, so a short observation window can be misleading. Combine the stats with knowledge of ad-hoc or rare queries before dropping anything.</p>
+<pre><code>db.orders.aggregate([{ $indexStats: {} }])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Describe the architecture of a replica set and the role of each member type.</h2>
+<div class="answer">
+<p>A replica set has one primary that accepts writes and any number of secondaries that replicate the oplog and can serve reads. An arbiter participates in elections but holds no data, so it can tip a vote without adding storage or read capacity. Deployments usually use three voting data-bearing members to tolerate one failure. Clients discover topology through the driver, which routes writes to the primary and reads according to the read preference.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the oplog and how does replication actually apply writes?</h2>
+<div class="answer">
+<p>The oplog is a capped collection on every member that records idempotent write operations in a total order. Secondaries tail the primary's oplog, fetch the referenced documents when needed, and apply the operations to their own data. Because entries are idempotent, a secondary can re-apply an operation safely after a restart. The oplog is the mechanism for both replication and change stream history.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What causes replication lag and how do you monitor it?</h2>
+<div class="answer">
+<p>Lag grows when a secondary cannot apply oplog entries as fast as the primary produces them, often due to slow disk, insufficient CPU, long-running index builds, or network saturation. <code>rs.printSecondaryReplicationInfo()</code> and the replication lag fields in <code>serverStatus</code> show the gap in seconds. Persistent lag risks the secondary falling off the oplog, which requires a full resync. Alert on lag trends rather than single spikes, since brief spikes are normal under bursty writes.</p>
+<pre><code>rs.printSecondaryReplicationInfo()</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Explain write concern levels and the role of journaling.</h2>
+<div class="answer">
+<p>Write concern describes how many members must acknowledge a write before the client considers it successful. <code>w: 1</code> acknowledges on the primary's memory, <code>w: "majority"</code> waits for most voting data-bearing members, and <code>j: true</code> additionally requires the write to be journaled. Higher acknowledgement reduces the chance of rollback on failover at the cost of latency. Durable critical writes should combine majority acknowledgement with journaling.</p>
+<pre><code>db.orders.insertOne(doc, { writeConcern: { w: "majority", j: true } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Compare read concern levels local, majority, and snapshot.</h2>
+<div class="answer">
+<p><code>local</code> returns data as the queried member currently has it, with no guarantee it will not be rolled back. <code>majority</code> returns data that has been acknowledged by a majority and is therefore durable against failover. <code>snapshot</code> provides a consistent point-in-time view, and outside transactions it is tied to majority-committed data. Use <code>snapshot</code> inside multi-document transactions when you need a stable view across reads.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the read preference modes and when do you use each?</h2>
+<div class="answer">
+<p><code>primary</code> sends all reads to the primary, guaranteeing the freshest data. <code>primaryPreferred</code> falls back to a secondary only when no primary is available. <code>secondary</code> sends reads to secondaries, and <code>secondaryPreferred</code> falls back to the primary when no secondary is reachable. <code>nearest</code> picks the lowest-latency eligible member, which may be the primary. Secondary reads can return stale data, so they suit analytics and reporting rather than read-your-writes flows.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does causal consistency work with afterClusterTime?</h2>
+<div class="answer">
+<p>A session tracks an operation time as it performs reads and writes, and subsequent operations in the same session send that time as <code>afterClusterTime</code>. The server then waits until the member has applied at least that oplog timestamp before answering. This guarantees read-your-writes and monotonic reads across members without requiring primary reads. Causal consistency requires majority read concern and is available in sessions on replica sets and sharded clusters.</p>
+<pre><code>const session = db.getMongo().startSession();
+session.startTransaction({ readConcern: { level: "majority" } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do elections work and what determines which member becomes primary?</h2>
+<div class="answer">
+<p>Members hold elections when they detect that the primary is unreachable, and a candidate needs votes from a majority of voting members to win. Higher <code>priority</code> members are more likely to be elected, and equal priorities are broken by the most recent oplog entry. Elections take seconds but cause a brief window with no primary. Setting priorities deliberately keeps preferred hardware in the primary role.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens during a stepdown and how do drivers handle failover?</h2>
+<div class="answer">
+<p>A stepdown makes the primary relinquish its role, usually triggered by <code>replSetStepDown</code> or by another member with higher priority becoming eligible. In-progress writes can fail with a retryable error while a new primary is elected. Modern drivers automatically retry retryable writes and certain reads once, hiding most of the disruption. Applications should still handle the case where a retry is refused because the operation is not idempotent by design.</p>
+<pre><code>rs.stepDown(60)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are hidden and delayed replica set members used for?</h2>
+<div class="answer">
+<p>A hidden member replicates data but is invisible to client read preferences, so it takes no application traffic. A delayed member applies oplog entries after a fixed delay, providing a window to recover from accidental deletes or bad deployments. Both must have priority zero so they never become primary. Delayed members are a safety net, not a backup replacement.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the majority commit point and why does it matter?</h2>
+<div class="answer">
+<p>The majority commit point is the most recent oplog timestamp that a majority of data-bearing members have acknowledged. Reads at <code>majority</code> read concern and <code>w: "majority"</code> writes are defined relative to this point. Data beyond it can be rolled back if the primary fails before replication completes. Monitoring the commit point relative to the primary's latest entry reveals replication health.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Describe the components of a sharded cluster.</h2>
+<div class="answer">
+<p>A sharded cluster consists of shards that hold subsets of the data, <code>mongos</code> routers that direct client operations, and config servers that store cluster metadata such as chunk ranges and shard membership. Applications connect to <code>mongos</code> and are unaware of which shard holds a document. The config servers form their own replica set, and each shard is itself a replica set. Metadata consistency across config servers is essential for correct routing.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a chunk and how does it relate to sharding?</h2>
+<div class="answer">
+<p>A chunk is a contiguous range of shard key values assigned to a shard, and it is the unit of data movement during balancing. MongoDB splits chunks that exceed the configured maximum size and migrates them to even out distribution. Chunk count is metadata, not physical storage granularity, so many small chunks increase metadata overhead. The balancer moves chunks, not individual documents.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you choose a good shard key?</h2>
+<div class="answer">
+<p>A good shard key has high cardinality, low frequency for common values, and a distribution that grows without hotspots. It should also appear in most queries so that operations can be targeted rather than broadcast. Monotonically increasing keys such as timestamps concentrate writes on the last chunk, creating a hot shard. Shard keys are difficult to change, so the decision deserves up-front modelling of query and write patterns.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Compare hashed and ranged shard keys.</h2>
+<div class="answer">
+<p>A hashed shard key distributes documents pseudo-randomly, which spreads writes evenly and avoids monotonic hotspots, but it cannot serve range queries efficiently because ordering is lost. A ranged shard key preserves order, enabling targeted range scans and better locality, at the risk of uneven distribution. Hashed keys are a good default for high-volume insert workloads with point lookups. Choose ranged keys when range queries on the key are common and you can design a compound prefix to avoid hotspots.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between a targeted query and a scatter-gather query?</h2>
+<div class="answer">
+<p>A targeted query includes the shard key, so <code>mongos</code> can route it to a single shard or a small set of shards. A scatter-gather query omits the shard key and must be broadcast to every shard, then merged, which scales with shard count. Scatter-gather is acceptable for rare admin queries but damaging on hot paths as the cluster grows. Query shapes, not just index design, determine sharding performance.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the balancer work and when can it hurt performance?</h2>
+<div class="answer">
+<p>The balancer runs on the primary config server and migrates chunks between shards when distribution crosses configured thresholds. Migrations consume network and disk I/O on both source and target shards, which can affect latency. You can schedule balancing windows or temporarily stop the balancer during bulk loads. A cluster with a poorly chosen shard key may balance constantly without ever achieving even distribution.</p>
+<pre><code>sh.stopBalancer()
+sh.startBalancer()</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are sharding zones and what problems do they solve?</h2>
+<div class="answer">
+<p>Zones associate ranges of shard key values with specific shards, letting you pin data to geographic regions or to dedicated hardware tiers. They support data residency requirements and workload isolation, for example keeping EU customer data on EU shards. Each shard can belong to multiple zones and each zone can cover multiple ranges. Every range covered by a zone must have at least one shard in that zone, otherwise writes fail.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do change streams work and what is a resume token?</h2>
+<div class="answer">
+<p>Change streams expose a real-time, resumable cursor over oplog-derived events for a collection, database, or deployment. Each event carries a resume token, and passing the last token in <code>resumeAfter</code> lets a consumer continue exactly where it stopped after a disconnect. Tokens remain valid as long as the corresponding oplog history exists, so consumers must persist them durably. Change streams require a replica set or sharded cluster and a read concern that supports majority-committed history.</p>
+<pre><code>const cs = db.orders.watch([{ $match: { "operationType": "insert" } }]);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do multi-document transactions work with sessions and retries?</h2>
+<div class="answer">
+<p>Transactions are scoped to a session, started with <code>startTransaction</code>, and committed or aborted explicitly. They provide snapshot isolation, and conflicting writes cause a <code>TransientTransactionError</code> that should be retried as a whole. Commit itself can fail with an unknown result, which requires retrying <code>commitTransaction</code> with the same transaction number. Transactions have a default lifetime limit and should be short and limited in scope.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the bucket schema pattern and when does it help?</h2>
+<div class="answer">
+<p>The bucket pattern groups many small related documents into a single document, often with a count and a bounded array, reducing document count and index size. It suits high-volume time series or event data where reads fetch a window rather than a single item. Buckets must be bounded so they do not approach the 16 MB document limit. Time series collections apply a similar internal bucketing strategy automatically.</p>
+<pre><code>{ sensorId: "s1", start: ISODate("2026-01-01"), count: 3,
+  readings: [ { t: 1, v: 20 }, { t: 2, v: 21 }, { t: 3, v: 22 } ] }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the computed pattern and what problem does it solve?</h2>
+<div class="answer">
+<p>The computed pattern precalculates expensive values at write time and stores them on the document, so reads avoid aggregation or joins. Typical examples are running totals, average ratings, or denormalized counts. The trade-off is that every write path must maintain the computed value consistently, which makes atomic updates and transactions important. Use it when reads vastly outnumber writes and the computation is expensive.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When would you use the extended reference pattern?</h2>
+<div class="answer">
+<p>The extended reference pattern embeds a small, frequently accessed subset of a referenced document into the referring document to avoid a lookup. For example, an order might store the customer's name alongside the customer id. It reduces read latency at the cost of duplicating data that may drift when the source changes. Keep the duplicated fields few, stable, and non-authoritative.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the subset pattern and how does it control document growth?</h2>
+<div class="answer">
+<p>The subset pattern keeps a bounded, most-relevant portion of a large array in the main document and moves the rest to another collection. A product might embed its fifty newest reviews while older reviews live in a separate collection. This keeps documents small and hot reads fast without losing data. The application must manage the promotion and archival logic explicitly.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the attribute pattern and when is it appropriate?</h2>
+<div class="answer">
+<p>The attribute pattern converts a set of sparse, unpredictable fields into an array of key-value subdocuments, often paired with a wildcard or compound index on the key and value. It suits product catalogs where each category has different attributes. Queries then target array elements rather than many optional top-level fields. The cost is slightly more complex query syntax and larger index entries.</p>
+<pre><code>{ sku: "A1", attrs: [ { k: "color", v: "red" }, { k: "size", v: "M" } ] }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the polymorphic pattern and what does it cost?</h2>
+<div class="answer">
+<p>The polymorphic pattern stores documents of different shapes in one collection, using a shared discriminator field such as <code>type</code> to distinguish them. It keeps related entities together and avoids a proliferation of collections, which simplifies cross-type queries. The cost is that application code and indexes must handle divergent fields, and validation must be written per type. It works best when the variants share most of their structure.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you decide between one-to-few, one-to-many, and one-to-squillions modelling?</h2>
+<div class="answer">
+<p>For one-to-few, embed the children because the array stays small and reads become a single document fetch. For one-to-many with a bounded but larger count, embed identifiers or use the subset pattern and reference the rest. For one-to-squillions, always reference from the child side, because an unbounded array risks the 16 MB limit and unbounded index growth. The decisive question is whether the array is bounded and whether it is read together with the parent.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the real trade-offs between embedding and referencing?</h2>
+<div class="answer">
+<p>Embedding gives atomic single-document reads and writes, fewer round trips, and no application-level join, but it duplicates data and can grow without bound. Referencing keeps data normalized and avoids duplication, but requires <code>$lookup</code> or extra queries and cannot update related data atomically in one write. Access patterns should drive the decision: model for the queries you actually run, not for abstract purity. Hybrid approaches with small extended references are common in production schemas.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When is denormalization justified for read performance?</h2>
+<div class="answer">
+<p>Denormalization is justified when a read path is hot, the duplicated data changes rarely, and the cost of a join or second query dominates latency. It trades write complexity and storage for read speed, so the write paths must be audited to keep copies consistent. Document the authoritative source of each duplicated field to avoid divergent updates. If the duplicated value changes often, denormalization usually causes more bugs than it saves milliseconds.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you handle schema versioning and migrations in MongoDB?</h2>
+<div class="answer">
+<p>Add a <code>schemaVersion</code> field to documents and let the application read multiple versions, upgrading lazily on write or through a background job. This avoids a stop-the-world migration and keeps rolling deployments safe. For bulk changes, use batched updates with a filter on the old version and monitor progress. Keep both readers and writers compatible during the transition window.</p>
+<pre><code>db.users.updateMany(
+  { schemaVersion: 1 },
+  { $set: { schemaVersion: 2, "prefs.theme": "light" } }
+)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are time series collections and what do they optimize?</h2>
+<div class="answer">
+<p>Time series collections store measurements in internal buckets grouped by series and time window, which compresses data and reduces index overhead. They provide specialized indexes and support window functions and downsampling through aggregation. Writes go through a bucketing layer, so updating or deleting individual measurements is more restricted than in a normal collection. They are the recommended choice for metrics, sensor data, and event streams with a time dimension.</p>
+<pre><code>db.createCollection("metrics", {
+  timeseries: { timeField: "ts", metaField: "sensor", granularity: "minutes" }
+})</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does Atlas Search provide and how is it different from a text index?</h2>
+<div class="answer">
+<p>Atlas Search is a full-text search engine built on Apache Lucene, exposed through the <code>$search</code> aggregation stage. It supports analyzers, fuzzy matching, autocomplete, phrase and compound queries, and relevance scoring that the native text index cannot match. It maintains its own search index separate from MongoDB indexes, defined by a JSON index specification. Native text indexes remain simpler for basic keyword matching inside a self-managed deployment.</p>
+<pre><code>db.products.aggregate([
+  { $search: { text: { query: "wireless", path: "name" } } }
+])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is Atlas Vector Search and what is it used for?</h2>
+<div class="answer">
+<p>Atlas Vector Search indexes high-dimensional embeddings and supports approximate nearest-neighbour queries through the <code>$vectorSearch</code> stage. It enables semantic search and retrieval-augmented generation by comparing query embeddings with stored document embeddings. You must generate embeddings outside the database and store them in an array field with a matching index definition. Results are ranked by vector similarity and can be combined with filters or a search stage.</p>
+<pre><code>{ $vectorSearch: { index: "vec", path: "embedding",
+  queryVector: q, numCandidates: 100, limit: 10 } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does connection pooling work and how do you size maxPoolSize?</h2>
+<div class="answer">
+<p>Drivers maintain a pool of connections per server in the topology and check out a connection per operation, returning it when the operation completes. <code>maxPoolSize</code> caps concurrent connections, and a value too low causes checkout queueing under load while too high exhausts server file descriptors and memory. Size it from concurrent request volume and average operation duration, then validate with server-side connection counts. In serverless or autoscaling environments, keep pools small per instance and account for total instance count.</p>
+<pre><code>mongodb://host/?maxPoolSize=50&amp;minPoolSize=5</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a write conflict in WiredTiger and how is it resolved?</h2>
+<div class="answer">
+<p>WiredTiger uses optimistic concurrency: a write conflict occurs when two operations try to modify the same document concurrently. One operation succeeds and the other receives a <code>WriteConflict</code> error, which is a transient error that the server or driver retries. Long-running transactions and hot documents increase conflict rates. Reducing transaction scope and avoiding read-modify-write patterns on the same document lowers contention.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can concurrent upserts create duplicate documents and how do you prevent it?</h2>
+<div class="answer">
+<p>An upsert is a read followed by a conditional insert, so two concurrent upserts with no matching document can both attempt an insert. A unique index on the filter fields makes one of them fail with a duplicate key error, which the application should treat as a signal to retry as an update. Without a unique index there is no server-side protection. Always pair upsert logic with a unique constraint on the identity fields.</p>
+<pre><code>db.users.createIndex({ email: 1 }, { unique: true })
+db.users.updateOne({ email: e }, { $setOnInsert: { createdAt: new Date() } }, { upsert: true })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What makes an operation idempotent and why does it matter for retries?</h2>
+<div class="answer">
+<p>An operation is idempotent if repeating it produces the same final state as running it once. Setting an absolute value with <code>$set</code> is idempotent, while <code>$inc</code> and array <code>$push</code> are not, so a retried increment double-counts. Because drivers retry retryable writes automatically, non-idempotent operations need a deduplication key or an update that guards on current state. Designing for idempotency is the cleanest way to survive failover and network timeouts.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you decide which fields deserve an index?</h2>
+<div class="answer">
+<p>Start from the actual query workload: fields in equality filters, frequent sorts, and join keys on the foreign side are the primary candidates. Weigh each candidate by how selective it is and how often the query runs, since every index adds write cost and memory pressure. Avoid indexing fields that are rarely queried or that match most of the collection. Revisit the set periodically with usage statistics rather than adding indexes reactively.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What changed about foreground versus background index builds?</h2>
+<div class="answer">
+<p>Older versions offered a <code>background: true</code> option for building indexes without blocking all reads and writes on the collection. Modern versions perform index builds with an optimized process that allows reads and writes during most of the build, making the option largely obsolete. Builds still consume substantial I/O and CPU, and they take a lock briefly at the start and end. On replica sets the build happens on all members, so plan for the aggregate resource impact.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does sort direction in a compound index affect usability?</h2>
+<div class="answer">
+<p>An index can serve a sort if the sort uses the same key pattern or its exact inverse. An index on <code>{a: 1, b: 1}</code> supports sorting by <code>a</code> ascending and <code>b</code> ascending, and also both descending, but not <code>a</code> ascending with <code>b</code> descending. Mixed directions require an index with matching mixed directions. This is a frequent cause of unexpected blocking sorts.</p>
+<pre><code>db.events.createIndex({ user: 1, ts: -1 })   // supports sort { user: 1, ts: -1 }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you index fields inside arrays of subdocuments?</h2>
+<div class="answer">
+<p>Use dot notation to index a nested field, for example <code>{"items.sku": 1}</code>, and the resulting multikey index stores one entry per array element. A query on <code>items.sku</code> can use it, but a query that requires several fields to match the same array element may need <code>$elemMatch</code> to be correct semantically. Compound indexes with more than one array path are rejected. Consider whether the array is bounded before indexing it.</p>
+<pre><code>db.orders.createIndex({ "items.sku": 1, "items.qty": 1 })  // error if both are arrays</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can $expr prevent index usage and what can you do about it?</h2>
+<div class="answer">
+<p><code>$expr</code> compares fields or uses aggregation expressions, and many such predicates cannot be converted into index bounds. Queries that mix <code>$expr</code> with regular predicates may still use an index for the regular part and filter the rest. Where possible, rewrite the condition as a plain field predicate so the planner can bound the scan. Check explain output for keys examined relative to documents returned.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do regular expressions interact with indexes?</h2>
+<div class="answer">
+<p>Only prefix-anchored, case-sensitive regular expressions can use an index efficiently, because they define a bounded range of keys. Unanchored patterns such as <code>/foo/</code> force a scan of every index key or a collection scan. Case-insensitive patterns with the <code>i</code> flag also usually defeat index bounds unless a case-insensitive collation index exists. For flexible search, use a text index or Atlas Search instead.</p>
+<pre><code>db.users.find({ name: /^Ann/ })   // index-friendly
+db.users.find({ name: /nn/ })     // not index-friendly</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you create a case-insensitive index with collation?</h2>
+<div class="answer">
+<p>Create the index with a collation whose strength ignores case, then run queries with the identical collation so the planner considers the index. The collation must match exactly, including locale, or the index will not be used. This is the standard way to support case-insensitive uniqueness or search on a field. Remember that collation also affects sort order and comparison semantics.</p>
+<pre><code>db.users.createIndex({ email: 1 }, { collation: { locale: "en", strength: 2 }, unique: true })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Can distinct() and count operations use indexes?</h2>
+<div class="answer">
+<p><code>distinct</code> on an indexed field can scan the index directly, avoiding document fetches. <code>countDocuments</code> with a filter can use an index to count matching keys, while <code>estimatedDocumentCount</code> reads collection metadata and ignores filters entirely. An unindexed distinct or filtered count degrades to a collection scan. Verify with explain, since the planner may not always choose the index you expect.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you make $lookup joins efficient?</h2>
+<div class="answer">
+<p><code>$lookup</code> performs an index-backed lookup on the foreign collection only if the foreign field used in the <code>localField</code>/<code>foreignField</code> pair is indexed. Without that index, each input document triggers a collection scan of the foreign collection, which is catastrophic at scale. Put the <code>$lookup</code> as late as possible and reduce the input set with an early <code>$match</code>. For sharded clusters, the join may require data movement between shards.</p>
+<pre><code>db.orders.aggregate([
+  { $match: { status: "paid" } },
+  { $lookup: { from: "customers", localField: "customerId",
+               foreignField: "_id", as: "customer" } }
+])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why does the position of $match matter in an aggregation pipeline?</h2>
+<div class="answer">
+<p>The optimizer can push a leading <code>$match</code> ahead of other stages so it uses indexes, but a <code>$match</code> after <code>$project</code> or <code>$group</code> cannot. Placing filtering stages early reduces the number of documents flowing through later stages and cuts memory use. Use <code>$match</code> plus <code>$sort</code> at the front whenever they correspond to an index. Confirm with explain that the pipeline reports an <code>IXSCAN</code> rather than a collection scan.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you use the database profiler and slowms to find slow operations?</h2>
+<div class="answer">
+<p>Setting <code>slowms</code> makes the server log operations exceeding that threshold, and enabling the profiler records them in <code>system.profile</code>. Level one captures slow operations only, while level two captures everything and adds noticeable overhead. Start with logging rather than full profiling in production. Query the profile collection by duration and examined-to-returned ratio to prioritize fixes.</p>
+<pre><code>db.setProfilingLevel(1, { slowms: 100 })
+db.system.profile.find().sort({ millis: -1 }).limit(5)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do currentOp and killOp help during an incident?</h2>
+<div class="answer">
+<p><code>currentOp</code> shows in-progress operations with their namespace, duration, plan summary, and whether they are waiting on a lock. It is the fastest way to identify a runaway aggregation or an unindexed query saturating the server. <code>killOp</code> terminates a specific operation by its opid. Killing operations is disruptive, so confirm the target and understand downstream effects first.</p>
+<pre><code>db.currentOp({ secs_running: { $gt: 30 }, active: true })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Which dbStats and collStats fields are worth monitoring?</h2>
+<div class="answer">
+<p><code>dbStats</code> reports data size, storage size, index size, and document counts per database. <code>collStats</code> adds per-collection detail including index sizes, average object size, and wiredTiger block-manager statistics. The ratio of storage size to data size indicates compression effectiveness, and a fast-growing index size hints at an unintended multikey index. Watch these over time to catch growth that outpaces data volume.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How is the WiredTiger cache sized and what happens when it fills?</h2>
+<div class="answer">
+<p>By default the cache is sized at roughly half of available RAM minus one gigabyte, and it holds both document and index pages. When dirty pages exceed the eviction threshold, WiredTiger background threads write them to disk, and if pressure continues, application threads perform eviction themselves, raising latency. Persistent cache pressure usually means the working set does not fit in memory. Adding RAM or reducing the working set through better indexes and projections is more effective than raising the cache size blindly.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a checkpoint and how does journaling provide durability?</h2>
+<div class="answer">
+<p>WiredTiger writes a consistent snapshot of data files every checkpoint interval, typically sixty seconds, and records changes in a journal between checkpoints. With journaling enabled, a write acknowledged with <code>j: true</code> can be recovered even if the process crashes before the next checkpoint. Checkpoints bound recovery time, while the journal bounds data loss. Both are separate from replication durability, which depends on write concern.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Can you guarantee read-your-writes when reading from a secondary?</h2>
+<div class="answer">
+<p>Not with read preference alone, because a secondary may not have applied the write yet. Causal consistency solves this by passing the client's operation time as <code>afterClusterTime</code>, causing the secondary to wait until it has caught up. Without a session and causal consistency, secondary reads can return stale data even seconds after a write. This is why read-your-writes flows should either read the primary or use causal sessions.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the implications of write concern w: 0?</h2>
+<div class="answer">
+<p>With <code>w: 0</code> the client does not wait for any acknowledgement, so errors such as duplicate key violations are not reported at all. Writes are fire-and-forget, with no durability guarantee and no ordering feedback. It is only appropriate for loss-tolerant telemetry or logging pipelines. Most applications should use at least <code>w: 1</code> plus journaling where durability matters.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What do retryable writes require to work?</h2>
+<div class="answer">
+<p>Retryable writes require a replica set or sharded cluster, a driver that supports them, and a write concern that acknowledges the write. They also require that the operation can be associated with a session and transaction number so the server can detect duplicates. Multi-document operations are retried as a unit only if they are supported retryable write types. Operations like <code>insertMany</code> with unordered writes have specific retry semantics that should be checked.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the majority commit point protect against rollback?</h2>
+<div class="answer">
+<p>Writes acknowledged by a majority are past the majority commit point and cannot be rolled back by a subsequent election. Writes acknowledged only by the old primary but not replicated can be truncated during rollback when a new primary takes over. Applications that require durability must therefore combine majority write concern with majority read concern. Rollback files on the demoted member preserve the truncated writes for inspection.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens during initial sync of a new replica set member?</h2>
+<div class="answer">
+<p>A new member performs an initial sync: it clones existing databases, then applies oplog entries generated during the clone, and finally moves to steady-state replication. During the sync it is in <code>STARTUP2</code> and cannot serve reads. Cloning is I/O intensive on both the source and the new member, so add members during quiet periods. If the oplog rolls over before the clone completes, the sync restarts.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you size the oplog?</h2>
+<div class="answer">
+<p>The oplog must hold enough write history to cover the longest plausible outage of a secondary, so size it from peak write throughput times the acceptable downtime window. Undersized oplogs cause secondaries to fall off and require a full resync. You can resize with <code>replSetResizeOplog</code> in modern versions, which avoids a full resync. Monitor oplog window in hours rather than gigabytes.</p>
+<pre><code>db.adminCommand({ replSetResizeOplog: 1, size: 51200 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What consistency guarantees do secondary reads provide?</h2>
+<div class="answer">
+<p>Secondary reads reflect whatever the member has applied at the moment of the read, which may lag the primary by milliseconds or much more. There is no ordering guarantee across multiple secondaries, so two reads can see different states. Data on a secondary can also be rolled back if it was never majority-committed. Use secondary reads for analytics and reporting where slight staleness is acceptable.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is failover testing important and how do you do it safely?</h2>
+<div class="answer">
+<p>Failover behaviour depends on election timing, driver retry logic, and application error handling, none of which are exercised in normal operation. Test by stepping down the primary or stopping a member in a staging environment that mirrors production topology. Assert that writes retry successfully and that latency stays within the service level objective. Record the observed failover window so the team knows the real recovery time.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When should a deployment move from a replica set to a sharded cluster?</h2>
+<div class="answer">
+<p>Shard when a single replica set can no longer absorb write throughput, when the working set exceeds what one server's memory and disk can serve at acceptable latency, or when data residency requires regional placement. Sharding adds operational complexity, so vertical scaling and query optimization should be exhausted first. The decision should be driven by measured bottlenecks, not by data volume alone. Plan the shard key before migrating, since it constrains future query patterns.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does mongos route an operation to shards?</h2>
+<div class="answer">
+<p><code>mongos</code> caches the cluster's chunk-to-shard mapping from the config servers and uses the shard key in the query to compute the target range. If the query includes the shard key, it sends the operation to the owning shard or shards. Otherwise it broadcasts to all shards and merges the results, potentially with a sort or limit applied at the router. Stale routing metadata is refreshed automatically when a shard reports an error.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Can you change a shard key after sharding a collection?</h2>
+<div class="answer">
+<p>You can refine a shard key by adding a suffix field with <code>refineCollectionShardKey</code>, which changes the key pattern without a full rewrite. Fully changing the shard key historically required rewriting the collection, and modern versions support resharding as an online operation with significant resource cost. Both options require careful planning and a maintenance window. Choosing well at creation time remains far cheaper than changing later.</p>
+<pre><code>db.adminCommand({ refineCollectionShardKey: "shop.orders", key: { customerId: 1, _id: 1 } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the limits on unique indexes in a sharded cluster?</h2>
+<div class="answer">
+<p>A unique index on a sharded collection must include the shard key as a prefix of the index key, because uniqueness can only be enforced within a shard. The default <code>_id</code> index is the exception, since MongoDB assumes ids are unique. Enforcing global uniqueness on another field requires routing that field into the shard key or handling it in the application. This constraint frequently influences shard key selection.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What should you know about $lookup on a sharded collection?</h2>
+<div class="answer">
+<p>A <code>$lookup</code> whose foreign collection is sharded and not joined on the shard key requires the router to broadcast the lookup or move data, which is expensive. Joins where the foreign field equals the shard key can be targeted to a single shard. On large clusters, consider embedding the needed fields or pre-joining into a read-optimized collection. Measure with explain before assuming a join is cheap.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you move a chunk manually and when is that appropriate?</h2>
+<div class="answer">
+<p><code>moveChunk</code> migrates a chunk from one shard to another and is normally the balancer's job. Manual moves are useful for pre-splitting and pre-placing data before a bulk load, or for evacuating a shard during maintenance. Misuse can create imbalance that the balancer immediately tries to undo. Coordinate with the balancer state to avoid conflicting migrations.</p>
+<pre><code>sh.moveChunk("shop.orders", { customerId: "c123" }, "shard02")</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a jumbo chunk and why is it a problem?</h2>
+<div class="answer">
+<p>A jumbo chunk exceeds the maximum chunk size and cannot be split, usually because too many documents share the same shard key value. The balancer cannot move jumbo chunks, so data can become permanently imbalanced. The underlying cause is a low-cardinality or high-frequency shard key. Fixing it typically requires refining the shard key or resharding the collection.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you back up a sharded cluster consistently?</h2>
+<div class="answer">
+<p>Consistent cluster backups require coordinating all shards and the config servers, typically by stopping the balancer and using a filesystem or coordinated snapshot approach across components. <code>mongodump</code> against <code>mongos</code> works for logical backups but does not produce a point-in-time consistent snapshot of the whole cluster. Atlas and Ops Manager orchestrate this coordination for you. Always test restores, since partial cluster restores are error-prone.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a compound shard key and when does it help?</h2>
+<div class="answer">
+<p>A compound shard key combines multiple fields, for example a tenant id plus a creation timestamp. It can add cardinality and let the leading field provide locality while the trailing field orders data within it. It also supports more query shapes because the shard key prefix can be targeted. The trade-off is a larger key in every index and more complex routing analysis.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the limitations of hashed indexes?</h2>
+<div class="answer">
+<p>Hashed indexes support only equality matches, because the hash destroys ordering, so range queries cannot use them. They also cannot enforce uniqueness except on the hashed field as a whole and cannot be multikey. Floating-point values are truncated before hashing, which can cause collisions for values differing only in low-order bits. Use hashed indexes for even write distribution and point lookups, not for range access.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does schema validation with $jsonSchema work?</h2>
+<div class="answer">
+<p><code>$jsonSchema</code> validators enforce field types, required properties, and value constraints on inserts and updates. They can run in strict mode, rejecting invalid documents, or moderate mode, which only warns. Validators apply to new writes, so existing documents must be cleaned up separately. They add a small write cost but prevent a class of data quality bugs.</p>
+<pre><code>db.createCollection("users", {
+  validator: { $jsonSchema: {
+    required: ["email"],
+    properties: { email: { bsonType: "string" } }
+  } },
+  validationLevel: "strict"
+})</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does a compound index let one IXSCAN both filter and sort?</h2>
+<div class="answer">
+<p>If the index key order matches the equality predicates followed by the sort keys, the scan produces documents in the requested order while applying bounds on the leading fields. The server then does not need a separate sort stage. The plan shows a single <code>IXSCAN</code> with no <code>SORT</code>. If the sort keys are not a suffix of the key pattern after the equality fields, the sort becomes blocking.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens when a low-cardinality field leads a compound index?</h2>
+<div class="answer">
+<p>A leading field with few distinct values gives the scan little to discard, so the index may examine far more keys than the query returns. It can still be useful if the query always filters on that field and sorts on the next, since the order is what matters. Otherwise, put the more selective field first if the sort allows it. Judge the outcome from <code>totalKeysExamined</code> relative to <code>nReturned</code>.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can adding an index make writes slower?</h2>
+<div class="answer">
+<p>Every insert, update, and delete must maintain all affected index entries, which costs CPU, cache space, and journal traffic. Updates to indexed fields also require deleting old keys and inserting new ones, doubling that work. An over-indexed collection can spend more time on index maintenance than on the write itself. This is why unused index audits are a routine maintenance task.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does an index build interact with replication?</h2>
+<div class="answer">
+<p>On a replica set, an index build started on the primary is also started on secondaries so that the index exists everywhere. Secondaries build concurrently with replication, and the extra I/O can increase replication lag. In older versions a secondary would restart the build if it received a conflicting write, which made lag dangerous. Watch lag during large builds and consider a rolling approach.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What should you consider before indexing a frequently updated field?</h2>
+<div class="answer">
+<p>Each update moves the index entry, which adds write amplification and can create contention on hot keys. If the field changes often but is rarely queried, the index is a net cost. For monotonic fields, index churn also concentrates on the rightmost pages. Prefer indexing stable fields that appear in query predicates.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the _id index differ from other indexes?</h2>
+<div class="answer">
+<p>Every collection has a unique <code>_id</code> index created automatically, and it cannot be dropped. The <code>_id</code> value is immutable, so an update attempting to change it fails. It is also the only unique index that does not need to include the shard key in a sharded collection. ObjectId values are roughly time-ordered, which gives mostly ascending inserts.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you safely remove redundant indexes?</h2>
+<div class="answer">
+<p>Identify candidates where one index is a strict prefix of another or where usage statistics show no accesses. Hide the candidate first and observe performance for a full business cycle before dropping it. Confirm no hinted queries reference it, since those would fail immediately. Drop during low-traffic periods and keep the index definition recorded so it can be recreated.</p>
+<pre><code>db.orders.hideIndex({ status: 1 })
+// after observation window
+db.orders.dropIndex({ status: 1 })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a clustered collection and how does it differ from a normal one?</h2>
+<div class="answer">
+<p>A clustered collection stores documents physically ordered by the <code>_id</code> key rather than by a separate index, so range scans on <code>_id</code> read contiguous storage. This removes the need for a separate <code>_id</code> index and improves locality for ordered access. Inserts must respect the clustering order to benefit, and some features behave differently than in standard collections. It suits workloads with naturally ordered keys such as time-based identifiers.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does $natural order relate to a collection scan?</h2>
+<div class="answer">
+<p><code>sort({ $natural: 1 })</code> returns documents in physical storage order and can be served by a collection scan without a sort stage. <code>$natural: -1</code> returns them in reverse. This is useful for capped collections or for peeking at recently inserted documents, but it does not reflect logical ordering guarantees. Relying on natural order for business logic is fragile because storage order can change after moves or rebuilds.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a pitfall of sparse indexes with negation queries?</h2>
+<div class="answer">
+<p>A sparse index omits documents where the field is missing, so a query for <code>{field: null}</code> or <code>{field: {$exists: false}}</code> cannot be answered from it and will not use the index. The planner must scan documents to find those cases. A partial index with an explicit filter, or a non-sparse index, handles negation correctly. Confirm with explain before assuming a sparse index covers all filter shapes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the planner handle $or queries across indexed fields?</h2>
+<div class="answer">
+<p>MongoDB can execute each <code>$or</code> branch as a separate index scan and union the results, which is a form of index union rather than intersection. Each branch must be independently indexable for this to work. If any branch cannot use an index, the whole query may fall back to a collection scan. Duplicate elimination adds overhead, so <code>$in</code> is often better when the branches target the same field.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does $in affect index bounds compared with a single equality?</h2>
+<div class="answer">
+<p><code>$in</code> generates one bound per value, so the scan becomes several point lookups within a single index scan. It is efficient when the list is small and selective, but a large list of values can approach a full index scan. Values are deduplicated and sorted to make the bounds contiguous where possible. Very long <code>$in</code> lists are often a sign that the query should be restructured.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do null equality and $exists behave differently for index usage?</h2>
+<div class="answer">
+<p><code>{field: null}</code> matches both documents where the field is null and where it is missing, so a non-sparse index can serve it. <code>{field: {$exists: false}}</code> is a separate predicate that a sparse index cannot serve, because missing values were not indexed. The two look similar but have different index implications and different results on arrays. Always test with real data shapes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Does index direction matter for a single-field index?</h2>
+<div class="answer">
+<p>For a single-field index, ascending and descending are equivalent for lookups and for sorting, since the engine can walk the index in either direction. Direction only becomes meaningful in compound indexes, where the relative order of fields determines which sorts are supported. This is why <code>{a: 1}</code> and <code>{a: -1}</code> are redundant with each other. Do not create both.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens if an index build fails partway through?</h2>
+<div class="answer">
+<p>The build aborts and the partially built index is removed, leaving the collection unchanged. Common causes are duplicate key violations on a unique index, out-of-memory conditions, or a primary stepping down. The error message identifies the failing cause, which should be fixed before retrying. On a replica set, secondaries also abort the build and replication continues without the index.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What memory limits apply to sorts and aggregations?</h2>
+<div class="answer">
+<p>Blocking sorts and some aggregation stages have an internal memory limit, historically 100 MB, and exceeding it causes an error rather than silent disk spilling. Aggregations can opt into disk use with <code>allowDiskUse: true</code>, while find sorts cannot and must be fixed with an index. A common production error is a sort exceeding the limit after a data growth spurt. The durable fix is an index that provides the order.</p>
+<pre><code>db.orders.aggregate(pipeline, { allowDiskUse: true })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you make an aggregation pipeline more memory-efficient?</h2>
+<div class="answer">
+<p>Filter and project early so fewer fields and documents flow through the pipeline, and place <code>$match</code> and <code>$sort</code> where an index can serve them. Use <code>$limit</code> before expensive stages when semantics allow, and avoid unbounded <code>$group</code> over the whole collection. Enable <code>allowDiskUse</code> only as a safety valve, not as the primary strategy. Review the explain output for the number of documents entering each stage.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the role of the config server primary?</h2>
+<div class="answer">
+<p>The config server replica set stores cluster metadata and elects its own primary, which is the only member that accepts metadata writes. The balancer runs on that primary and updates chunk placement through it. If the config server set has no primary, metadata changes stall and the cluster can become read-only for routing changes. This is why config servers must be deployed as a properly sized replica set.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do replica set heartbeats and election timeouts work?</h2>
+<div class="answer">
+<p>Members exchange heartbeats every two seconds by default, and a member that misses heartbeats for the election timeout considers the primary unavailable. The default election timeout is ten seconds, after which an eligible member calls for an election. Lower timeouts detect failures faster but risk unnecessary elections during transient network blips. Tuning them requires care, especially across regions.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between a rollback and a resync?</h2>
+<div class="answer">
+<p>A rollback reverts a small number of oplog entries that the demoted primary had applied but that never reached a majority, and the member then rejoins as a secondary. A resync discards the member's data entirely and re-copies it from another member, which happens when the member has fallen off the oplog. Rollbacks are usually fast and expected; resyncs are slow and disruptive. Both indicate that replication durability was not sufficient for that write path.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you add a replica set member under production load?</h2>
+<div class="answer">
+<p>Add the member with priority zero so it cannot become primary before it is caught up, and let initial sync complete during a low-traffic window. Monitor the sync progress and the source member's I/O, since cloning competes with normal traffic. Once the member is in <code>SECONDARY</code> state and lag is near zero, raise its priority if it should be electable. Verify that the oplog window comfortably covers the sync duration.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you take a consistent backup of a replica set?</h2>
+<div class="answer">
+<p>The safest logical approach is a filesystem or volume snapshot taken at the same instant across members, or <code>mongodump</code> with <code>--oplog</code> to capture a point-in-time window. Atlas and Ops Manager coordinate consistent snapshots automatically. Restores must replay the oplog to reach a consistent point. Always validate by restoring into a test environment and running application checks.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does point-in-time restore require?</h2>
+<div class="answer">
+<p>Point-in-time restore needs a full backup plus a continuous record of oplog entries covering the target time. The restore process applies the base backup and then replays oplog entries up to the chosen timestamp. This is why oplog retention directly determines how far back you can restore precisely. Without sufficient oplog, only full-backup granularity is possible.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does majority read concern affect performance?</h2>
+<div class="answer">
+<p>Reads at <code>majority</code> may wait for the queried member to catch up to the majority commit point, which adds latency under replication lag. The guarantee is durability rather than freshness, but the wait can be noticeable on a lagging secondary. On a healthy set with low lag the overhead is small. Measure before switching all reads to majority, and reserve it for paths that need the guarantee.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do j: true and w: "majority" relate to each other?</h2>
+<div class="answer">
+<p><code>w: "majority"</code> controls how many members must acknowledge the write, while <code>j: true</code> controls whether the primary's on-disk journal must record it before acknowledging. They address different failure modes: member loss versus process crash. Combining them covers both, at the cost of additional latency. Neither protects against application-level errors or bad data.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a writeConcernError and how should an application handle it?</h2>
+<div class="answer">
+<p>A <code>writeConcernError</code> means the write was applied on the primary but the requested acknowledgement level was not reached, for example because a secondary was unavailable. The data may still become durable later, so the correct response is usually to retry the write concern check rather than to re-issue the write blindly. Drivers expose this as a distinct error type from duplicate key or validation errors. Treating it as a hard failure can produce duplicate writes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do drivers discover topology changes?</h2>
+<div class="answer">
+<p>Drivers implement server discovery and monitoring: they poll each known server with <code>hello</code> commands and react to state changes such as a new primary. When the topology changes, the driver updates its view and reroutes operations. This is why failover is mostly transparent to application code. Stale topology views during a fast election are the usual cause of brief write errors.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is maxStalenessSeconds used for?</h2>
+<div class="answer">
+<p><code>maxStalenessSeconds</code> excludes secondaries whose estimated replication lag exceeds a threshold, so reads do not hit badly lagging members. It works with secondary and nearest read preferences and is ignored for primary reads. This is a simple way to bound staleness without implementing causal consistency. Set it generously enough that normal lag spikes do not shrink the eligible member set to nothing.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do read preference tag sets route reads to specific members?</h2>
+<div class="answer">
+<p>Members can be tagged, for example by region or tier, and a read preference tag set restricts eligible members to those matching the tags. Tags are tried in order, so the first set with an available member wins. This supports routing analytics to dedicated hardware or reads to a local region. Tags also affect elections when used with <code>replSetTagConfig</code>.</p>
+<pre><code>db.orders.find().readPref("secondary", [{ region: "eu" }, {}])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you direct analytics traffic away from the primary?</h2>
+<div class="answer">
+<p>Use a dedicated secondary with tags and a read preference that targets it, or route analytics through a separate connection with <code>secondaryPreferred</code>. Keep long-running aggregations off the primary so they do not hold cache and CPU needed by writes. Consider a delayed or hidden member for heavy reporting. Also cap aggregation memory and runtime so a single report cannot starve the member.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens to a sort on a non-shard-key field in a sharded cluster?</h2>
+<div class="answer">
+<p>Each shard must produce its sorted stream, and <code>mongos</code> performs a merge sort across shards, which is efficient for small limits. Without a limit, the router may need to buffer large result sets, increasing memory use and latency. Sorts on the shard key can sometimes be satisfied with less coordination. Design shard keys with your dominant sort patterns in mind.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the primary shard of a database in a sharded cluster?</h2>
+<div class="answer">
+<p>Each database has a primary shard that stores any collections not yet sharded in that database. It is chosen at database creation and can be changed with <code>movePrimary</code>. Unsharded collections in a sharded cluster therefore live entirely on one shard, which can create imbalance. This is a common reason a cluster looks uneven despite a good shard key.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the balancer decide that chunks need to move?</h2>
+<div class="answer">
+<p>The balancer compares per-shard chunk counts against configured thresholds and migrates chunks from over-loaded to under-loaded shards within a balancing window. It respects zone constraints and skips jumbo chunks. Migration throughput is throttled to limit impact. Persistent imbalance usually points to a low-cardinality shard key or to zone configuration that forbids the needed move.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is pre-splitting and why would you do it?</h2>
+<div class="answer">
+<p>Pre-splitting creates empty chunk ranges across shards before a bulk load so that writes are distributed from the start. Without it, all initial writes target the single chunk covering the key range, creating a hotspot until the balancer catches up. Pre-splitting is most useful for monotonic keys and large imports. Modern versions reduce the need for manual splitting, but the concept still applies to bulk ingestion planning.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you monitor chunk distribution across shards?</h2>
+<div class="answer">
+<p><code>sh.status()</code> shows chunk counts per shard along with balancer state and any jumbo chunks. Aggregating <code>config.chunks</code> gives the same data programmatically for dashboards. Watch for a large skew in chunk counts and for chunks that never move. Imbalance with even chunk counts can still mean uneven data size, since chunks are not equal in bytes.</p>
+<pre><code>db.getSiblingDB("config").chunks.aggregate([
+  { $group: { _id: "$shard", n: { $sum: 1 } } }
+])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens to queries when a shard is unavailable?</h2>
+<div class="answer">
+<p>Targeted queries to the unavailable shard fail, while scatter-gather queries fail if any shard in the broadcast is unreachable, unless the read preference allows partial results. Writes that need the unavailable shard also fail. A shard is itself a replica set, so a single member loss should not cause this; a full shard outage is a serious event. Design critical paths to be targeted so a single shard failure has limited blast radius.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do transactions work across shards?</h2>
+<div class="answer">
+<p>Cross-shard transactions use two-phase commit coordinated by <code>mongos</code>, with each participating shard running a local transaction. They provide snapshot isolation but incur higher latency and more contention than single-shard transactions. Keep cross-shard transactions short and rare, and prefer shard keys that keep related data together. There are limits on transaction duration and on the number of documents involved in practice.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you implement a distributed lock with findOneAndUpdate?</h2>
+<div class="answer">
+<p>Use a unique key document holding an owner and an expiry, and acquire it with an atomic <code>findOneAndUpdate</code> that matches either an expired lock or the same owner. The atomic single-document update guarantees only one caller wins. Always include a lease expiry so a crashed holder cannot block forever. Verify ownership before releasing, so a slow worker does not delete someone else's lock.</p>
+<pre><code>db.locks.findOneAndUpdate(
+  { _id: "job:42", $or: [ { expiresAt: { $lt: new Date() } }, { owner: me } ] },
+  { $set: { owner: me, expiresAt: new Date(Date.now() + 30000) } },
+  { upsert: true, returnDocument: "after" }
+)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you build an atomic counter or sequence generator?</h2>
+<div class="answer">
+<p><code>findOneAndUpdate</code> with <code>$inc</code> on a counters document returns the new value atomically, giving gap-free-enough sequences per document. A single counter document becomes a hot spot under very high concurrency, so shard the counter by prefix or allocate ranges per process. For high throughput, allocate blocks of ids and hand them out in memory. Never read then write the counter in two operations.</p>
+<pre><code>db.counters.findOneAndUpdate(
+  { _id: "invoice" }, { $inc: { seq: 1 } },
+  { upsert: true, returnDocument: "after" }
+)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>When is upsert preferable to insert with duplicate-key retry?</h2>
+<div class="answer">
+<p>Upsert is preferable when you want a single idempotent write that both creates and updates, for example recording a user's last login. Insert with duplicate retry is preferable when the operation must fail loudly on conflict, such as claiming a unique username. Upsert still needs a unique index to be safe under concurrency. Choose based on whether an existing document should be updated or treated as an error.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you model a many-to-many relationship?</h2>
+<div class="answer">
+<p>Store arrays of ids on one or both sides when the cardinality is bounded and reads usually start from one side. When the relationship has its own attributes or grows unbounded, use a join collection with one document per pair and a compound unique index. Index both directions you query, for example <code>{a: 1, b: 1}</code> and <code>{b: 1, a: 1}</code>. Avoid bidirectional arrays that must be kept in sync across two documents.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the outlier pattern?</h2>
+<div class="answer">
+<p>The outlier pattern handles the rare documents that do not fit the dominant schema by moving them to a separate collection or flagging them for special handling. For example, a celebrity user with millions of followers is stored differently from ordinary users. This keeps the common case fast and prevents a few documents from dominating index and document size. Application code must know to check both places for those cases.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the archive pattern?</h2>
+<div class="answer">
+<p>The archive pattern moves cold documents to a separate collection, or to cheaper storage, while keeping hot data small and fast. Typically a background job moves documents older than a threshold, either on the same cluster or to object storage. This shrinks the working set and index size and speeds up queries on current data. Queries that need history then target the archive collection explicitly.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you roll out a schema change with dual writes?</h2>
+<div class="answer">
+<p>Write both the old and new field shapes for a transition period, read preferring the new field with a fallback to the old one, then backfill and finally remove the old field. This keeps every deployable version of the application working during a rolling release. Each phase must be independently reversible. Remove the compatibility code only after the backfill is verified complete.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is skip-based pagination slow on large collections?</h2>
+<div class="answer">
+<p><code>skip(n)</code> requires the server to walk and discard <code>n</code> documents before returning results, so cost grows linearly with page depth. Range pagination on an indexed, ordered field avoids that by starting after the last seen value. Keyset pagination also stays stable when documents are inserted, unlike offsets. Use <code>skip</code> only for shallow pages or small result sets.</p>
+<pre><code>db.events.find({ ts: { $lt: lastSeen } }).sort({ ts: -1 }).limit(20)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you model hierarchical data in MongoDB?</h2>
+<div class="answer">
+<p>Options include a parent reference for simple trees, an array of ancestor ids for fast subtree queries, and a materialized path string for prefix matching. Each has different write costs: ancestor arrays require updating descendants on moves, while parent references move cheaply but query subtrees recursively. Choose based on whether reads or reorganizations dominate. <code>$graphLookup</code> can traverse parent references when the depth is modest.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do soft deletes affect index design and query performance?</h2>
+<div class="answer">
+<p>Soft deletes keep documents with a flag such as <code>deletedAt</code>, so every query must filter them out and indexes must include the flag to stay selective. A partial index with <code>{deletedAt: {$exists: false}}</code> keeps deleted rows out of the hot index entirely. Over time the deleted population can dominate storage and scans. Plan an archival or purge process rather than letting deleted data accumulate indefinitely.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you avoid a hot document when tracking counters?</h2>
+<div class="answer">
+<p>Split the counter into sharded sub-counters, for example per shard of a hash or per time bucket, and sum them on read. This spreads increments across many documents instead of serializing on one. Alternatively, pre-aggregate in memory and flush periodically when exact real-time values are not required. Any single-document counter will eventually become a write bottleneck at high concurrency.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you model tags and faceted filtering?</h2>
+<div class="answer">
+<p>Store tags as an array of strings and index it as a multikey index, which supports equality and <code>$all</code> queries efficiently. For facet counts, a separate aggregation over the same field or a precomputed facet document avoids repeated full scans. The classic attribute pattern is better when tags carry values rather than being plain labels. Watch index entry count when arrays are large.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When should you use GridFS instead of storing binary data in a document?</h2>
+<div class="answer">
+<p>GridFS splits files larger than the 16 MB document limit into chunks stored in two collections, with metadata in the files collection. Use it when files must live in the same database and be replicated and backed up with it. For most web applications, object storage plus a URL in the document is cheaper and faster to serve. GridFS adds chunk management overhead and is not a content delivery mechanism.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you enforce uniqueness over only a subset of documents?</h2>
+<div class="answer">
+<p>Use a unique partial index whose filter defines the subset, for example only active records or only non-null emails. Uniqueness is then enforced only among documents matching the filter. This avoids the null collision problem of a plain unique index and keeps the index small. Ensure the filter expression matches exactly how the application marks the subset.</p>
+<pre><code>db.members.createIndex(
+  { groupId: 1, email: 1 },
+  { unique: true, partialFilterExpression: { active: true } }
+)</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do change streams compare with tailing the oplog for auditing?</h2>
+<div class="answer">
+<p>Change streams provide a stable, documented event format with resume tokens, filtering, and support for update lookups, and they survive replica set changes. Tailing the oplog directly is unsupported, tied to internal formats, and breaks on version changes. Change streams are the right tool for audit pipelines and downstream integration. Retention is still bounded by oplog size, so consumers must keep up or persist their own history.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you implement basic full-text search without Atlas Search?</h2>
+<div class="answer">
+<p>Use a text index with <code>$text</code> and <code>$meta: "textScore"</code> for ranking, optionally combined with field weights. For prefix or fuzzy behaviour, a normalized token array plus a multikey index can approximate it. Neither matches Lucene analyzers, so expectations should be set accordingly. If search quality is a product requirement, Atlas Search or an external engine is the better answer.</p>
+<pre><code>db.articles.find(
+  { $text: { $search: "replica set" } },
+  { score: { $meta: "textScore" } }
+).sort({ score: { $meta: "textScore" } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you design indexes for a multi-tenant SaaS application?</h2>
+<div class="answer">
+<p>Put the tenant id first in every compound index so each tenant's queries scan only its own key range. This also makes tenant-scoped uniqueness enforceable with a compound unique index. Keep queries always tenant-scoped to avoid cross-tenant scans and accidental data leaks. Index bloat from many small tenants is usually acceptable compared with the isolation benefit.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does tenant isolation influence shard key selection?</h2>
+<div class="answer">
+<p>Including the tenant id in the shard key keeps a tenant's data on few shards, which makes most queries targeted. A pure tenant key can create hotspots for very large tenants, so a compound key such as tenant id plus time or a hashed suffix helps. Very large tenants may need their own shard or zone. The goal is to balance targeting against even distribution.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you estimate the working set size?</h2>
+<div class="answer">
+<p>The working set is the portion of data and indexes actively accessed, approximated by combining hot collection size with index size and the access pattern over a representative period. <code>collStats</code> plus query analysis gives the raw sizes, while cache eviction metrics reveal whether the working set fits. A high page-fault rate with low cache utilization suggests it does not. Provision RAM for the working set, not the whole dataset.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you diagnose sustained high CPU on a primary?</h2>
+<div class="answer">
+<p>Start with <code>currentOp</code> and the profiler to find the operations consuming CPU, then check whether their plans are collection scans or in-memory sorts. High CPU from many small queries usually points to missing indexes or excessive round trips; from a few operations, to unindexed aggregations. Also rule out compression, checkpointing, and replication apply overhead. Fix the top query shapes rather than adding hardware first.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you identify a disk I/O bottleneck?</h2>
+<div class="answer">
+<p>Look at WiredTiger block-manager statistics for pages read versus cached, along with eviction pressure and checkpoint durations. Rising disk read latency with a stable query mix indicates the working set no longer fits in cache. Bulk index builds and compaction also cause I/O spikes. Confirm with operating system metrics before concluding the database is at fault.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which metrics should you alert on for a replica set?</h2>
+<div class="answer">
+<p>Alert on replication lag, oplog window, member state changes, election count, connections versus limit, cache dirty percentage, and slow query counts. Also track disk space and queue depths, since exhaustion causes outages rather than slowdowns. Alert on trends and sustained breaches, not single samples. Include a check that exactly one primary exists.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you avoid a hot time bucket in time series data?</h2>
+<div class="answer">
+<p>All writes for the current interval land in the newest bucket for each series, so bucket count and per-bucket write rate determine contention. Increasing series cardinality through the metaField spreads writes, as does choosing an appropriate granularity. Very high-frequency single-series ingestion is the worst case. Consider bucketing by device and time window rather than one series per metric.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the trade-offs of the time series granularity setting?</h2>
+<div class="answer">
+<p>Granularity sets the expected time span per bucket, which controls how many measurements are packed together. Coarser granularity means fewer, larger buckets with better compression but slower per-measurement access and updates. Finer granularity increases bucket count and metadata overhead. Choose based on ingestion rate and typical query window, or set a custom bucketing parameter instead.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you downsample time series data?</h2>
+<div class="answer">
+<p>Aggregate raw measurements into coarser intervals with <code>$densify</code>, <code>$group</code>, and <code>$merge</code> into a summary collection, then expire the raw data with a TTL index. This keeps long-range dashboards fast while preserving recent detail. Run downsampling on a schedule and make it idempotent by merging on the interval and series key. Store the aggregate definitions so the rollups can be recomputed.</p>
+<pre><code>db.readings.aggregate([
+  { $group: { _id: { s: "$sensor", h: { $dateTrunc: { date: "$ts", unit: "hour" } } },
+              avg: { $avg: "$v" } } },
+  { $merge: { into: "readings_hourly", whenMatched: "replace" } }
+])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the role of metaField in a time series collection?</h2>
+<div class="answer">
+<p>The <code>metaField</code> identifies the series, for example a sensor id or device, and MongoDB groups buckets by that value. It also enables efficient filtering and sorting per series and is the field most worth indexing. Fields in the metaField are stored once per bucket rather than per measurement, which improves compression. Changing it after creation requires creating a new collection.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you query a time series collection efficiently?</h2>
+<div class="answer">
+<p>Filter on the time field and the metaField so the engine can prune buckets, and avoid unbounded time ranges on large collections. Index the metaField and use <code>$group</code> with time-based accumulators for rollups. Project only needed fields, since measurements are nested inside buckets. Avoid per-document updates on time series data, which are restricted and expensive.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do $search and $vectorSearch differ in query semantics?</h2>
+<div class="answer">
+<p><code>$search</code> performs lexical matching with analyzers and returns relevance scores based on term frequency and field weights. <code>$vectorSearch</code> compares embeddings and returns results by semantic similarity, so it can match paraphrases with no shared words. Both must be the first stage in a pipeline and both support filtering and scoring metadata. Hybrid pipelines combine them to balance precision and recall.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you combine vector search with structured filters?</h2>
+<div class="answer">
+<p>Use the <code>filter</code> option inside <code>$vectorSearch</code> so filtering happens during the search rather than after it, which keeps the requested result count filled. Filtering afterwards can silently return fewer results than <code>limit</code>. Pre-filtering on highly selective fields also reduces the candidate set substantially. Verify that the filtered fields are declared in the vector index definition where required.</p>
+<pre><code>{ $vectorSearch: { index: "vec", path: "embedding", queryVector: q,
+  filter: { tenantId: "t1", status: "active" }, limit: 10, numCandidates: 150 } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you keep an Atlas Search index in sync with writes?</h2>
+<div class="answer">
+<p>Atlas Search indexes are managed by the service and replicate changes from the collection automatically, so no application code is needed. There is a small replication delay, so searches may briefly lag writes. Index definitions changes trigger a rebuild, which can take time on large collections. Applications should tolerate eventual consistency in search results.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does maxPoolSize interact with failover reconnection?</h2>
+<div class="answer">
+<p>During failover, checked-out connections to the old primary fail and the pool re-establishes connections to the new primary. If <code>maxPoolSize</code> is large and many application instances reconnect at once, the new primary can be overwhelmed. Smaller pools per instance and a sane connection timeout reduce the spike. Monitor connection counts immediately after a failover to confirm the pool behaves as expected.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a connection storm after failover and how do you prevent it?</h2>
+<div class="answer">
+<p>A connection storm happens when many clients reconnect simultaneously, exhausting file descriptors or overwhelming the newly elected primary. Drivers mitigate this with pool limits and reconnect backoff, but aggressive retry logic in application code can defeat it. Add jitter to retries and cap concurrency at the application layer. Pre-warming and connection limits per host keep recovery predictable.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between a TransientTransactionError and an UnknownTransactionCommitResult?</h2>
+<div class="answer">
+<p><code>TransientTransactionError</code> means the transaction did not commit and can be retried from the start, typically due to a write conflict or a network issue. <code>UnknownTransactionCommitResult</code> means the commit may or may not have been applied, so only <code>commitTransaction</code> should be retried, not the whole body. Confusing the two can duplicate work. The standard retry loop handles each label separately.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you implement optimistic concurrency with a version field?</h2>
+<div class="answer">
+<p>Include a <code>version</code> field in the update filter and increment it in the same operation, then treat a zero matched count as a conflict. This makes the read-modify-write cycle detect concurrent modification without locking. The application must decide whether to retry, merge, or fail the request. This pattern works well for edit forms and state machines.</p>
+<pre><code>const r = await db.docs.updateOne(
+  { _id: id, version: expected },
+  { $set: { body: next }, $inc: { version: 1 } }
+);
+if (r.matchedCount === 0) throw new Error("conflict");</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you reduce write conflicts on a hot document?</h2>
+<div class="answer">
+<p>Shorten the time a document is held in a transaction, avoid long-running transactions that touch hot documents, and reduce the number of concurrent writers per document by sharding the value. Using $inc in a single atomic update rather than a transaction also avoids conflicts entirely. Retry transient conflicts with backoff as a safety net. If conflicts are constant, the data model needs to change.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What role do lsid and transaction numbers play in retryable writes?</h2>
+<div class="answer">
+<p>The driver attaches a logical session id (<code>lsid</code>) and a monotonically increasing transaction number to each retryable write. The server records the pair, so a retried write with the same identifiers is recognized as a duplicate and not applied twice. This is what makes automatic retry safe for inserts and single-document updates. Sessions expire, so retries must occur within the session timeout window.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you make a change stream consumer idempotent?</h2>
+<div class="answer">
+<p>Persist the resume token together with the effect of the event in the same transaction, or key the downstream write on a stable identifier from the event so reapplying it is harmless. On restart the consumer resumes from the stored token, which may replay the last event. If the effect is keyed idempotently, replay causes no duplication. Never store the token in memory only, or a crash will replay or skip events.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How should monetary amounts be stored?</h2>
+<div class="answer">
+<p>Store amounts as integers in the smallest currency unit, or as <code>Decimal128</code> when fractional precision is required, and keep the currency code alongside. Binary floating point introduces rounding errors that are unacceptable for money. Doing arithmetic in aggregation with Decimal128 is supported, but application-level rounding rules should still be explicit. Never store amounts as plain doubles if exactness matters.</p>
+<pre><code>{ amount: Decimal128("19.99"), currency: "USD" }
+{ amountMinor: 1999, currency: "USD" }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you decide between a collection per tenant and a shared collection?</h2>
+<div class="answer">
+<p>A collection per tenant gives strong isolation and easy per-tenant deletion, but thousands of collections increase metadata, memory, and backup overhead. A shared collection with a tenant id scales better and simplifies operations at the cost of requiring disciplined query scoping. Most SaaS systems use a shared collection plus compound indexes and optional per-tenant sharding for large customers. Revisit the choice when tenant count or size crosses a threshold.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you model an order with a price snapshot?</h2>
+<div class="answer">
+<p>Store the order with embedded line items that capture the product id, name, and unit price at purchase time, so later catalog changes do not alter historical orders. Keep a reference to the product for lookups but treat the embedded values as authoritative for the order. This is deliberate denormalization for immutability and read speed. Totals can be computed at write time and stored for reporting.</p>
+<pre><code>{ _id: 1, items: [{ productId: 7, name: "Desk", unitPrice: 199.00, qty: 2 }],
+  total: 398.00, currency: "USD", placedAt: ISODate() }</code></pre>
+</div>
+</div>

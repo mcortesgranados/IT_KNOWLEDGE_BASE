@@ -1,0 +1,650 @@
+<div class="question">
+  <h2>Cardinality, frequency, and monotonicity are usually recited as a checklist. Can you make them concrete with numbers, and explain why a key with millions of distinct values can still be a bad choice?</h2>
+  <div class="answer">
+    <p>Take a 12 million document <code>orders</code> collection. A shard key of <code>{country: 1}</code> has roughly 200 distinct values, so at least 60,000 documents per value on average, and if 55 percent of orders sit in one country, that single value is a range the balancer can never split below its concentration. A key of <code>{customerId: 1}</code> looks far better with two million distinct values, but if your largest customer owns 400,000 documents, that one value is an unsplittable 400,000 document range and becomes a permanent hot chunk. A key of <code>{createdAt: 1}</code> has excellent cardinality and even distribution over time, yet every insert lands on the trailing chunk because the values increase monotonically.</p>
+    <p>The three properties answer different questions: cardinality bounds how finely you can split, frequency bounds how evenly chunks fill, and monotonicity decides whether inserts spread across chunks at all. High cardinality alone guarantees neither of the other two.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>A monotonically increasing _id sends every insert to the last chunk. Describe three mitigations and the trade-off of each.</h2>
+  <div class="answer">
+    <p><strong>Hash the key.</strong> <code>sh.shardCollection("app.events", {_id: "hashed"})</code> spreads writes uniformly, but range targeting is gone, so every range query on <code>_id</code> becomes scatter-gather and insertion order no longer matches key order.</p>
+    <p><strong>Compound the key with a high-distribution prefix</strong>, for example <code>{tenantId: 1, _id: 1}</code> or <code>{deviceId: 1, createdAt: 1}</code>. Inserts spread across as many chunks as there are active prefix values and equality queries on the prefix stay targeted; the trade-off is that queries without the prefix fan out, and one huge prefix value recreates the hotspot.</p>
+    <p><strong>Generate the identifier in the application</strong> instead of relying on the timestamp prefix inside ObjectId: UUIDv4, or the random component of a ULID. Range targeting is preserved, but you lose natural time ordering and any locality that came with it.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>A compound shard key with a high-cardinality prefix is often preferred over hashing the _id. What does it actually change about write distribution?</h2>
+  <div class="answer">
+    <p>Take <code>{tenantId: 1, createdAt: 1}</code> across 5,000 tenants. Each insert is routed by tenant, so writes spread over as many chunks as there are tenants with data in the active range instead of all landing on the highest chunk. Within a single tenant the key is still monotonic, so you get a per-tenant hotspot rather than a global one, which is acceptable while no tenant dominates.</p>
+    <p>Unlike a hashed key, range targeting survives: <code>{tenantId: "acme", createdAt: {$gte: from}}</code> resolves to one shard and one bounded chunk range, and per-tenant time scans stay efficient on that shard. The price is that any query without <code>tenantId</code> fans out to every shard, and a tenant large enough to fill more than one chunk reintroduces the original concentration.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does reshardCollection actually do to the data, and what does it cost?</h2>
+  <div class="answer">
+    <p>Resharding does not rewrite the collection in place. The cluster creates a new collection under a temporary UUID, runs a donor-to-recipient pipeline that clones documents under the new key, and applies concurrent changes so writes continue while the clone proceeds. When the copy catches up, a short blocking phase performs the swap, rename, and cleanup.</p>
+    <p>The cost is roughly one full extra copy of the collection on the receiving shards, the network traffic to move it, sustained read load on donors, and oplog pressure on every shard. For a 2 TB collection on a busy cluster, plan hours of degraded but not stopped service. You also need free disk on the recipients of about the collection size, and the operation is metadata-heavy on the CSRS because it tracks resharding progress and index builds for the new collection.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does the cluster behave for reads and writes while a resharding operation is in progress?</h2>
+  <div class="answer">
+    <p>Clients keep reading and writing the original collection throughout the clone and the oplog application phases; mongos routes on the old shard key, so all existing queries behave normally. The resharding machinery captures those writes and replays them into the new collection. What changes is the background load: donors serve extra reads, recipients absorb a large write stream, and the oplog on both sides grows faster than usual.</p>
+    <p>Certain operations are blocked for the duration, notably some DDL on that namespace and creation of conflicting indexes, and the final commit takes a brief cluster-wide lock on the collection. If the clone cannot keep up with the write rate, resharding never commits, which is exactly when you call <code>abortReshardCollection</code>. Watch <code>$currentOp</code> for the resharding entry and the oplog window, which shrinks under the extra traffic.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you abort a resharding operation, and what state is the collection left in?</h2>
+  <div class="answer">
+    <p>Run <code>db.adminCommand({abortReshardCollection: "app.orders"})</code> from a mongos. Abort is accepted during the clone and oplog application phases; once the operation enters the commit phase it can no longer be aborted and must run to completion or be recovered by the cluster.</p>
+    <p>After a successful abort the original collection is untouched and still sharded on the old key, clients see no change, and the temporary collection and its indexes are cleaned up asynchronously. That cleanup is the part people forget: the temporary data occupies disk until the range deleter finishes, so free space does not return instantly. If you aborted because the copy could not keep pace, the honest conclusion is usually that the target key or the timing was wrong, not that you should retry identically during peak hours.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why was the shard key immutable before 5.0, and what does resharding actually relax?</h2>
+  <div class="answer">
+    <p>The shard key is the routing identity of a document. Chunk ranges are defined over it, every index on a sharded collection is prefixed with it, and mongos decides where a document lives purely from those values. Changing a field that participates in chunk boundaries would mean a document could belong to a different chunk than the one holding it, so the cluster would have to physically relocate it and rewrite every index entry that encodes the key.</p>
+    <p>No in-place update can do that atomically across shards, which is why the key was immutable: the only paths were dump and restore into a new collection. MongoDB 5.0 did not make the field mutable. It added <code>reshardCollection</code>, which builds a new collection with the new key and swaps it in, so the observable effect is a changed key while the underlying documents are still copied, not mutated.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why can a shard key field not be an array, and what do you do when your natural key is genuinely multi-valued?</h2>
+  <div class="answer">
+    <p>The shard key index must not be a multikey index. Routing assumes one document maps to exactly one point in the key space, which is what lets mongos translate a predicate into a single chunk range. An array produces several index entries per document, so a document could legitimately belong to several ranges on different shards, and the invariant that a chunk owns its documents exclusively collapses.</p>
+    <p>When the natural key really is multi-valued, model around it rather than forcing it. Promote the array element to an entity of its own, for example one document per <code>(tag, entityId)</code> pair in a linking collection whose key is <code>{tag: 1, entityId: 1}</code>. Alternatively pick a scalar field that is functionally determined by the same access pattern, such as the owning account, and index the array separately as a normal multikey index for filtering.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the consequences of a shard key that has no relationship to _id, and when is that acceptable?</h2>
+  <div class="answer">
+    <p>Two consequences matter. First, routing: a lookup by <code>_id</code> alone can no longer be resolved to a shard, so <code>findOne({_id: x})</code> fans out to every shard, which is painful for the most common access pattern in many applications. Second, uniqueness: when <code>_id</code> is not the shard key, the <code>_id</code> index is only unique per shard, so the cluster can technically hold two documents with the same <code>_id</code> on different shards.</p>
+    <p>It is acceptable when the dominant access pattern is a tenant or account predicate and <code>_id</code> lookups are rare or always accompanied by that predicate, which is typical of multi-tenant SaaS. If point lookups by <code>_id</code> dominate, put <code>_id</code> in the key, for example <code>{_id: "hashed"}</code> or <code>{tenantId: 1, _id: 1}</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you prove that a query is actually targeted, rather than assuming it?</h2>
+  <div class="answer">
+    <p>Use <code>explain</code> at the mongos, not at a shard, and read the mongos-level stage. <code>SINGLE_SHARD</code> means routing resolved to one shard; <code>SHARD_MERGE</code> means it fanned out. The <code>shards</code> object lists exactly which shards were contacted, and each entry carries its own winning plan and execution stats.</p>
+    <pre><code>db.orders.find({tenantId: "acme", status: "open"})
+  .explain("executionStats").queryPlanner.winningPlan.stage
+// "SINGLE_SHARD"  -&gt; targeted
+// "SHARD_MERGE"   -&gt; scatter-gather</code></pre>
+    <p>Confirm with <code>executionStats.totalDocsExamined</code> per shard and with the <code>nShards</code> counter, and cross-check against the shard key pattern from <code>db.getSiblingDB("config").collections.findOne({_id: "app.orders"}).key</code>. Targeting is a property of the predicate versus that key, so if the key is <code>{tenantId: 1, createdAt: 1}</code>, a query filtering only on <code>createdAt</code> can never be targeted.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When is refineCollectionShardKey the right move instead of a full reshard, and what are its constraints?</h2>
+  <div class="answer">
+    <p>Refining only appends fields to the existing key, turning <code>{tenantId: 1}</code> into <code>{tenantId: 1, createdAt: 1}</code>. It is metadata-only: no documents are copied, no chunk data moves, and the operation completes in seconds because the old key is a strict prefix of the new one, so existing chunk boundaries remain valid.</p>
+    <pre><code>db.adminCommand({
+  refineCollectionShardKey: "app.orders",
+  key: {tenantId: 1, createdAt: 1}
+})</code></pre>
+    <p>Constraints: you need an index that supports the new key before you run it, you cannot reorder or remove existing fields, and you cannot convert a hashed component into a ranged one. Refining is the right answer when the current key already routes correctly but chunks are too coarse, for example one tenant whose data never splits. If the leading field itself is wrong, refinement cannot help and you need <code>reshardCollection</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>A shard key looks healthy today but its frequency will drift over the next two years. How do you design headroom, and what signal tells you it is failing?</h2>
+  <div class="answer">
+    <p>Design for the growth you expect, not the data you have. If one tenant is 2 percent of documents now and is growing at three times the average, that tenant will eventually own a whole chunk, so include a discriminator that subdivides large tenants, such as <code>{tenantId: 1, bucket: 1}</code> or <code>{tenantId: 1, createdAt: 1}</code>, where the suffix is high cardinality and present in the main query.</p>
+    <p>The signal to watch is per-range concentration, not the global average. <code>db.printShardingStatus()</code> shows chunk counts per shard, and <code>$shardedDataDistribution</code> shows the size of each shard's holdings for a namespace, so a single value approaching the chunk size shows up as a chunk that never splits while its neighbours move. Alert when the largest single shard-key value exceeds a meaningful fraction of the chunk size, and treat a repeating jumbo chunk for one value as the concrete warning that refinement or resharding is due.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is the default chunk size in current versions, and what actually changes if you lower or raise it?</h2>
+  <div class="answer">
+    <p>The default maximum chunk size is 128 MB in modern releases; older deployments used 64 MB. It is a ceiling on how large a chunk may grow before a split is attempted, not a fixed size, so most chunks sit below it.</p>
+    <pre><code>use config
+db.settings.updateOne(
+  {_id: "chunksize"},
+  {$set: {value: 64}},
+  {upsert: true}
+)</code></pre>
+    <p>Lowering it gives finer granularity, which helps a cluster that cannot balance because it has only a few oversized chunks, but it multiplies the number of chunks, the routing table each mongos must hold, split activity, and metadata churn on the config servers. Raising it reduces metadata and migration overhead but makes balancing coarse: with 20 chunks on 5 shards, one chunk of imbalance means 5 percent skew. Change it only with a specific reason, and remember existing chunks are not re-split immediately; only future growth follows the new ceiling.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What exactly is a jumbo chunk, how does the cluster mark it, and what is the correct remediation path?</h2>
+  <div class="answer">
+    <p>A chunk is flagged jumbo when it exceeds the maximum chunk size and cannot be split, because too many documents share the same shard key value, or because it holds a single document that is itself larger than the chunk size. <code>sh.status()</code> displays such chunks with a <code>jumbo</code> marker on the range, and the balancer treats them as immovable in most versions, which is why one hot value can pin hundreds of gigabytes to one shard.</p>
+    <p>Remediation, in order of preference: change or refine the shard key so the offending values can be subdivided, which is the only real fix; split the range manually at hand-chosen points with <code>sh.splitAt</code> if the data actually has splittable boundaries; or clear the flag with <code>clearJumboFlag</code> only after you have genuinely reduced the chunk below the ceiling, because clearing it on an oversized chunk moves the problem rather than solving it.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do auto-split and auto-merge interact, and why did automatic merging matter?</h2>
+  <div class="answer">
+    <p>Auto-split is driven by mongos: on writes and updates it tracks chunk growth and asks the shard to split a chunk once it crosses the maximum size, using key boundaries derived from the actual data. Auto-merge, introduced in 7.0, is the inverse operation run by the balancer, which merges adjacent chunks that live on the same shard when their combined size stays well below the threshold.</p>
+    <p>Merging matters because deletes and archival shrink data without ever shrinking the routing table. A collection that once held a billion rows and now holds ten million can still be spread over thousands of tiny chunks, each costing metadata on the CSRS, memory in every mongos, and a unit of work for the balancer. Auto-merge reclaims that. It is also why heavy bulk deletes are no longer followed by a permanent excess of chunks, though merges are deliberately conservative and will not chase every small chunk immediately.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you configure the balancer window, and what does that window cost you in latency terms?</h2>
+  <div class="answer">
+    <p>The window is a config database setting, evaluated in the cluster's timezone:</p>
+    <pre><code>use config
+db.settings.updateOne(
+  {_id: "balancer"},
+  {$set: {activeWindow: {start: "23:00", stop: "06:00"}, mode: "full"}},
+  {upsert: true}
+)</code></pre>
+    <p>Inside the window the balancer migrates chunks; outside it, imbalance simply persists. The latency cost is not only inside the window. A migration holds a brief critical section on the donor chunk where writes to that range are blocked, and during the catch-up phase the recipient applies the remaining change stream, so clients touching a migrating range can see elevated latency and occasional write conflicts. Migrations also consume network and IO that your daytime workload needs. That is the trade: a predictable nightly disturbance in exchange for steady daytime latency, at the price of accepting skew for up to eighteen hours.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When is a manual moveChunk justified, and what are the real risks?</h2>
+  <div class="answer">
+    <p>Justified cases are narrow: draining a shard ahead of decommissioning, evacuating a specific hot range off a struggling node, restoring a layout after a zone range change, or seeding distribution before a launch. It is an operator override of a decision the balancer normally makes.</p>
+    <pre><code>sh.moveChunk("app.orders", {tenantId: "acme"}, "shard02")
+sh.moveChunk("app.orders", {tenantId: "acme"}, "shard02", {_waitForDelete: true})</code></pre>
+    <p>Risks: the command blocks until the migration finishes, so a 90 GB chunk can hang your shell for a long time; interrupting it can leave orphaned documents on the donor until the range deleter runs; moving a chunk whose range is pinned by a zone violates the zone layout and the balancer will simply move it back; and jumbo chunks will refuse to move. Always check zone coverage and available disk on the recipient first.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are orphaned documents, how do they appear, and how does cleanupOrphaned deal with them?</h2>
+  <div class="answer">
+    <p>An orphan is a document that physically sits on a shard which no longer owns the chunk range containing it. They appear when a migration is interrupted after the recipient has taken ownership but before the donor has deleted its copy, or after a failed moveChunk, a crashed mongos, or a botched restore of a single shard.</p>
+    <p>Normal queries do not see them, because mongos routes by range metadata, but a direct connection to the shard does, and they consume disk and distort counts on that shard. <code>cleanupOrphaned</code> runs on the shard's mongod and deletes documents outside every range the shard owns; in 8.0 it can be scoped to a single collection and to a starting key, and it can run on a secondary, which makes it far less disruptive than the older whole-shard sweep.</p>
+    <pre><code>db.adminCommand({
+  cleanupOrphaned: "app.orders",
+  startingFromKey: {tenantId: "m"}
+})</code></pre>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you measure imbalance properly, and what does printShardingStatus tell you that $shardedDataDistribution does not?</h2>
+  <div class="answer">
+    <p><code>db.printShardingStatus()</code> describes the layout: databases with their primary shard, collections with their shard key, chunk counts per shard, whether the balancer is enabled, and a truncated list of ranges. It answers "where do chunks point" and is the fastest way to see whether a collection is evenly divided in count and whether zones are configured.</p>
+    <p><code>$shardedDataDistribution</code> answers "how much data does each shard actually hold", per namespace and per shard, including owned document count, owned logical size, and orphaned documents. That distinction is decisive, because chunk counts can look balanced while sizes are wildly unequal when chunks have very different document counts.</p>
+    <pre><code>db.getSiblingDB("admin").aggregate([{$shardedDataDistribution: {}}])</code></pre>
+    <p>Use the first for structure and zones, the second for capacity and disk planning. A cluster is balanced only when the second says so.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>You stop the balancer for a maintenance window. What still moves data, and what can still change the layout?</h2>
+  <div class="answer">
+    <p>Stopping the balancer prevents it from initiating new migrations. It does not freeze the cluster. Auto-split continues, because splits are triggered by mongos on writes, so a growing chunk can still divide while the balancer is off; the range deleter continues cleaning up after completed migrations; and a migration already in flight when you stop the balancer is allowed to finish rather than being killed.</p>
+    <p>Explicit <code>moveChunk</code> calls still work, since they bypass the balancer's scheduling, which is exactly why teams that "stopped the balancer" during an incident are surprised to find chunks moving. Also remember that <code>balancerStop</code> does not persist across a config server failover in the way people assume; verify state with <code>sh.getBalancerState()</code> and <code>sh.isBalancerRunning()</code> rather than trusting that your earlier command is still in effect.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does chunkMigrationConcurrency control, and when is raising it a mistake?</h2>
+  <div class="answer">
+    <p>It is a per-shard server parameter, defaulting to 1, that sets how many chunk migrations a shard will run in parallel as a donor or recipient. Raising it drains a large imbalance faster, which matters when you have just added a shard and need to move terabytes before peak hours.</p>
+    <pre><code>db.adminCommand({setParameter: 1, chunkMigrationConcurrency: 4})</code></pre>
+    <p>It is a mistake when the shard is already saturated. Each concurrent migration adds a read stream on the donor, a write stream on the recipient, oplog generation on both, and a critical section that briefly blocks writes to the affected range. Raising it on a cluster whose disks are near their IOPS ceiling converts a slow rebalance into a latency incident, and on a link with limited bandwidth it just splits the same throughput across more partially finished migrations. Change it deliberately, watch disk latency and replication lag, and put it back.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>A collection holds 400 GB but has a single chunk on one shard. How is that possible, and what do you do about it?</h2>
+  <div class="answer">
+    <p>In almost every case the data was loaded without going through mongos. Splits are initiated by mongos when it observes a chunk growing during routed writes; if you restore with a direct connection to one shard, or bulk load into a shard's replica set before sharding the collection, the shard happily writes 400 GB into one range and nothing ever asks it to split. The same symptom appears when zones map the entire key space to a single shard, or when the collection was sharded with a key whose only values all fall at one end.</p>
+    <p>Fix it by splitting before or after the load: <code>sh.splitAt</code> at chosen boundaries, or a controlled reshard. For future loads, pre-split the empty collection and always write through mongos. Confirm the diagnosis in <code>config.chunks</code>, which will show one document for that namespace.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>The balancer logs "no chunk to migrate" while the data is visibly unbalanced. How do you diagnose that?</h2>
+  <div class="answer">
+    <p>That message means the balancer compared chunk counts and found the difference within its threshold, not that sizes are equal. The usual causes are chunks of wildly different sizes, jumbo chunks that cannot be moved, ranges pinned by zone definitions, or a collection whose chunks are all on one shard while the balancer considers other namespaces more urgent.</p>
+    <p>Start with the size view rather than the count view:</p>
+    <pre><code>db.getSiblingDB("admin").aggregate([{$shardedDataDistribution: {}}])
+db.getSiblingDB("config").chunks.aggregate([
+  {$match: {ns: "app.orders"}},
+  {$group: {_id: "$shard", chunks: {$sum: 1}}}
+])</code></pre>
+    <p>If counts are equal but owned size differs by an order of magnitude, you have a granularity problem: the chunks are too large to balance meaningfully, so lower the chunk size or refine the key. If some chunks are jumbo, no balancing will move them until the key is fixed.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does a chunk migration show up in the oplog and on the network, and why can it saturate a link?</h2>
+  <div class="answer">
+    <p>On the recipient, every migrated document is inserted and indexed, so it generates oplog entries just like application writes; the donor later deletes its copies, generating more. A migration of 50 GB therefore produces tens of gigabytes of oplog traffic on both sides, and because migrations run in batches with majority write concern for the metadata steps, they can grow the oplog faster than steady-state traffic. If the migration rate outpaces replication, secondaries fall behind and the oplog window shrinks exactly when you need it most.</p>
+    <p>On the network, the cost is roughly the collection's compressed data plus index rebuild traffic, which is why moving a large range over a cross-region link takes far longer than the byte count suggests. Throttle with <code>chunkMigrationConcurrency</code>, schedule migrations off-peak, and never let a rebalance compete with replication on a bandwidth-constrained link.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Walk me through how mongos decides which shards to contact for a given operation.</h2>
+  <div class="answer">
+    <p>mongos keeps an in-memory routing table per sharded namespace, loaded from the config servers and refreshed on change. For each query it extracts bounds on the shard key from the predicate, intersects those bounds with the chunk ranges it knows, and contacts only the shards owning the resulting ranges. A full shard key equality resolves to one chunk and therefore one shard; a prefix or range resolves to a contiguous set of ranges and possibly several shards; anything without the shard key covers every chunk in the namespace.</p>
+    <p>Requests carry a shard version. If the mongos's view is stale, the shard replies with a stale-config error, mongos refreshes from the CSRS, and retries, which is why a metadata change does not require manually flushing every router. Operations on unsharded collections simply go to the database's primary shard.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does explain add on a sharded cluster that a replica set explain cannot show you?</h2>
+  <div class="answer">
+    <p>Two things: the router's decision, and the per-shard execution. The mongos-level winning plan uses stages that only exist in a sharded cluster, such as <code>SINGLE_SHARD</code>, <code>SHARD_MERGE</code>, <code>SHARD_MERGE_SORT</code>, and <code>SHARD_WRITE</code>. Those stages tell you whether routing collapsed to one shard or fanned out, which is usually the first question in a sharding investigation.</p>
+    <p>The <code>shards</code> object then contains an independent plan and execution stats per contacted shard. That is where sharding-specific problems appear: one shard doing a COLLSCAN while another does an IXSCAN, one shard examining 40 million keys while the rest examine thousands, or one shard returning in two seconds while another takes forty. A replica set explain can never expose that skew, and it is often the actual cause of a slow sharded query.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does sort with limit work when the sort key is not the shard key, and what does the merge cost?</h2>
+  <div class="answer">
+    <p>mongos pushes the sort and an extended limit down to every shard, then merges the sorted streams at the router, keeping only the first <code>skip + limit</code> documents overall. Each shard must therefore produce a locally sorted stream: cheap if a local index supplies the order, expensive if it does not, because each shard then runs a blocking sort over its entire matching set. With ten shards you pay ten sorts, ten sets of memory pressure, and the merge waits for the slowest one.</p>
+    <pre><code>// pushdown per shard: sort + limit(skip + limit)
+// mongos: SHARD_MERGE_SORT with a blocking SORT stage</code></pre>
+    <p>The practical rule: give each shard an index matching filter plus sort, and if the query is latency-critical, include the sort key in the shard key so the query targets a single shard and no merge is needed at all.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does $lookup behave between two co-sharded collections, and how does that differ when they are not co-sharded?</h2>
+  <div class="answer">
+    <p>Co-sharded means the same shard key pattern and, in practice, that the join predicate includes the shard key. Then each shard can execute the lookup locally against its own portion of the foreign collection, because the matching foreign documents are guaranteed to live there. The plan stays shard-local, no documents cross the network, and the cost is proportional to a normal indexed join.</p>
+    <p>Otherwise the join cannot be satisfied locally. If the foreign collection is unsharded it lives entirely on one shard, so every other shard must fetch from that shard to complete its part of the join, which turns a local operation into a remote one. If it is sharded on a different key, the work fans out further and results must be merged at mongos. This is why denormalizing the join into the document, or co-locating both collections on a tenant key, is often the right architecture rather than tuning the lookup.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What restrictions apply to $out and $merge when the source or target is a sharded collection?</h2>
+  <div class="answer">
+    <p><code>$out</code> cannot write to a sharded collection, since it replaces the target wholesale and would have to destroy and rebuild the shard layout; the target must be an unsharded collection. Both stages also must be the final stage of the pipeline and cannot run inside a transaction.</p>
+    <p><code>$merge</code> can write into a sharded collection, but the <code>on</code> field must contain the collection's shard key, otherwise there is no way to route each output document deterministically. The other structural cost is that the write-side stage runs on a single shard rather than distributed: for sharded input, mongos gathers the pipeline's output and sends it to one shard to perform the merge, so throughput is bounded by one node and one connection path. For large analytical rebuilds, write to an unsharded staging collection with <code>$out</code> and swap, or use <code>$merge</code> keyed by the shard key to keep document updates routed.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does an $or so often destroy targeting, and how do you write it so it does not?</h2>
+  <div class="answer">
+    <p>mongos routes each branch of an <code>$or</code> independently and contacts the union of the resulting ranges. If both branches constrain the shard key to the same shard, the query stays targeted. If they resolve to different shards, the union is broader, and if any single branch has no shard key predicate, that branch alone expands the union to every shard, which drags the whole operation into scatter-gather.</p>
+    <pre><code>// targeted: both branches carry tenantId
+{$or: [{tenantId: "acme", status: "open"},
+       {tenantId: "acme", status: "closed"}]}
+
+// scatter: second branch has no shard key
+{$or: [{tenantId: "acme"}, {priority: "urgent"}]}</code></pre>
+    <p>Rewrite as <code>$in</code> on the shard key when possible, or split the query into two targeted requests in the application and merge the results yourself, which is usually faster than one fan-out.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>A perfect local index exists on the filter field, yet the query still fans out to every shard. Why?</h2>
+  <div class="answer">
+    <p>Because routing happens before any index is consulted. mongos does not maintain a global index catalogue and has no idea that <code>email</code> is indexed on all ten shards; it only knows chunk ranges over the shard key. Without a shard key predicate there is no range to compute, so every shard must be asked, and only then does each shard's local index make its share of the work fast.</p>
+    <p>So the index reduces work per shard but cannot reduce the number of shards involved. The fix is not another index; it is a predicate on the shard key, a different shard key chosen around that access pattern, or an application-level routing table that maps an entity such as a user to the tenant that owns it. Understanding this distinction is what separates tuning a shard from tuning a replica set.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Does a shard key comparison inside $expr still target a shard, or does it change the plan?</h2>
+  <div class="answer">
+    <p>In practice it degrades targeting. The router extracts bounds from ordinary match expressions such as <code>{tenantId: "acme"}</code>, where the value is a literal it can place on the key space. Inside <code>$expr</code> the comparison is an expression tree, and the shard-key bounds the router can derive are far more limited, so a query that looks equivalent fans out to all shards even though every constant is known at parse time.</p>
+    <pre><code>// fan-out
+{$expr: {$eq: ["$tenantId", "acme"]}}
+
+// targeted
+{tenantId: "acme"}</code></pre>
+    <p>The same reasoning explains the general advice about <code>$expr</code> and indexes: it is a tool for genuinely dynamic comparisons between fields, not for values you could have written as literals. On a sharded collection that mistake costs you a factor of the shard count rather than just an index scan.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Can you apply a different read preference per shard within one query, and what are the legitimate alternatives?</h2>
+  <div class="answer">
+    <p>No. The read preference is a property of the operation, and mongos forwards it to each shard's replica set, where it is evaluated against that set's members and tag sets. There is no per-shard override in a single query; the routing target set is computed from the shard key, not from where you would prefer to read.</p>
+    <p>The legitimate alternatives are architectural. Use zones to pin a key range to a region, so a targeted read naturally lands on the shards in that region, and let read preference choose a nearby secondary within each set. For offline analytics, connecting directly to a specific shard's secondary is possible and sometimes done, but it is outside the cluster's consistency model: you will see orphaned documents, no cluster-wide snapshot, and no protection from migrations. That is a reporting pipeline decision, never an application read path.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the limits of $graphLookup on a sharded collection, and how do you design around them?</h2>
+  <div class="answer">
+    <p>The <code>from</code> collection in <code>$graphLookup</code> cannot be sharded, and the stage cannot run inside a multi-document transaction. It is also memory-bounded, returning an error above its internal limit unless <code>allowDiskUse</code> is enabled, which turns a fast graph traversal into a spill-to-disk operation.</p>
+    <p>Design around it rather than fighting it. If the graph is small and read-heavy, keep it in an unsharded collection on a dedicated shard and accept the fan-in, since the stage already funnels results through one place. For hierarchies that are traversed constantly, precompute the closure: store ancestor paths or a materialized <code>ancestors</code> array, index it, and answer with a targeted equality query instead of a recursive traversal. Recursive lookups are one of the few places where sharding forces a modelling decision rather than a tuning decision.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How are duplicate results handled in scatter-gather, and which stages can break that guarantee?</h2>
+  <div class="answer">
+    <p>The merge performed by mongos discards documents with an <code>_id</code> already seen from another shard. That is deliberate and historically existed to hide orphaned documents: if a stale copy exists on a donor, the client sees one document rather than two. It also means the merge is not a pure concatenation and that duplicates caused by migration artifacts are silently swallowed.</p>
+    <p>It breaks down when the pipeline changes what identity means. A <code>$group</code> or <code>$bucket</code> runs at mongos on the merged stream, so it sees deduplicated input, which is usually what you want but can mask data problems. A <code>$project</code> that removes <code>_id</code> before the merge, or a <code>$unionWith</code> that combines two logically distinct sets, can produce duplicates the router has no reason to collapse. If logical uniqueness matters, enforce it explicitly with <code>$group</code> on your own key rather than relying on merge semantics.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What actually happens with a very large skip at mongos, and why is it worse than on a replica set?</h2>
+  <div class="answer">
+    <p>mongos rewrites the request so each shard returns <code>skip + limit</code> documents after sorting, then discards the first <code>skip</code> documents of the merged stream. Nothing is skipped at the shard. With <code>skip: 100000</code> and <code>limit: 20</code>, every shard must produce and transmit 100,020 documents, so both network traffic and per-shard work scale with the skip value multiplied by the number of shards.</p>
+    <pre><code>// shard-local: sort + limit(100020)
+// mongos: merge, discard 100000, return 20</code></pre>
+    <p>On a single replica set the cost is one bounded scan; here it is one per shard plus a merge that cannot return until the slowest shard finishes. Replace it with keyset pagination on a stable, indexed sort key, and if that key includes the shard key the page can even be targeted to a single shard.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What exactly do the config servers store, and why are they a replica set rather than a set of standalones?</h2>
+  <div class="answer">
+    <p>They store every piece of cluster metadata and no user data: the shard list, each database's primary shard, each collection's shard key and options, the full set of chunk ranges with their owning shards, index definitions for sharded collections, and cluster-wide settings such as the chunk size and balancer window. Authentication data for the cluster also lives there.</p>
+    <p>The replica set form matters for two reasons. Availability: metadata must survive the loss of a node, and a majority write concern on metadata is the only way to guarantee that a migration or split is durably recorded before clients are told it happened. Atomicity: a single chunk migration updates several metadata documents at once, and those changes must commit together, which requires multi-document transactions, available only on a replica set. A standalone config server could do neither, which is why the CSRS replaced them.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>The CSRS loses majority. What happens to the cluster, precisely, and how do you recover?</h2>
+  <div class="answer">
+    <p>With no primary, cluster metadata becomes read-only. Running mongos instances keep serving from their cached routing tables, so queries and writes to shard data continue as long as the shards themselves are healthy. What stops is everything that needs to write metadata: splits, chunk migrations, so the balancer idles, DDL such as creating or sharding collections, index builds on sharded collections, and zone changes.</p>
+    <p>Two operational traps. First, do not restart the mongos fleet during this state, because a fresh mongos cannot load a routing table and will fail to start. Second, do not assume the cluster is fine because traffic flows; if the outage outlives your patience you may drift into a state where a shard's data no longer matches metadata. Recovery is restoring a majority of config servers, then verifying with <code>sh.status()</code> and a targeted query before re-enabling the balancer.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How many mongos routers should a production cluster run, and why is one not automatically a single point of failure?</h2>
+  <div class="answer">
+    <p>Two is the minimum defensible number, and three is common so that maintenance does not reduce you to one. A single mongos is a hard dependency for every client that points at it, even though the data remains safe in the shards.</p>
+    <p>mongos holds no persistent state; its routing table is a cache that can be rebuilt from the CSRS at any time. That is why it is not a single point of failure for the cluster: you can lose one, add one, or replace one without touching the data, and clients that use a multi-host connection string or a DNS seed list simply reconnect to a surviving router. The true single points of failure are the CSRS majority and the shards themselves. The practical caution is that adding routers does not add routing throughput for a single query; it adds concurrency and failure tolerance.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Describe the connection chain from application to mongos to shard, and where connection counts actually multiply.</h2>
+  <div class="answer">
+    <p>Each application instance opens its own pool to each mongos in the seed list, so application-side connections are roughly instances times routers times <code>maxPoolSize</code>. That multiplication is the one teams underestimate, because a rolling deploy doubles it temporarily.</p>
+    <p>The mongos-to-shard hop is different and is the reason mongos exists as a multiplexer: mongos maintains its own pool per shard replica set, shared across all clients, so shard connection counts scale with the number of routers and shards, not with the number of application clients. Inbound connections at a shard are therefore approximately routers times per-host pool size, plus internal replication and migration connections. When a shard reports connection exhaustion, the cause is usually too many routers, a pool sized too large, or an application that bypassed mongos and connected directly.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What drives mongos sizing and placement, and what goes wrong if you treat routers as an afterthought?</h2>
+  <div class="answer">
+    <p>mongos is CPU-bound on query parsing and result merging, memory-bound on the routing table, which grows with the number of chunks, and network-bound on scatter-gather results. A router that must merge millions of documents from ten shards is doing real work, and an undersized one becomes the bottleneck in front of a healthy cluster.</p>
+    <p>Placement matters as much as size. Routers should sit close to the shards on a low-latency link, because every query pays that round trip, and they should not share hosts with shards that need memory for the WiredTiger cache. For multi-region applications, put routers in each region so the application's first hop is local and only the shard hop crosses the WAN. Since routers are stateless, scale them horizontally when scatter-gather concurrency, not throughput per query, is the limit.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>You add a shard to a live cluster. What happens immediately, and what must you watch?</h2>
+  <div class="answer">
+    <p><code>sh.addShard("rs3/host:27017,host:27017")</code> registers the shard and the balancer begins moving chunks to it, because a new empty shard is maximally imbalanced. Expect sustained migration traffic for hours or days depending on data volume, plus a burst of metadata writes on the CSRS as each migration commits.</p>
+    <p>Watch four things: free disk on the new shard, since it will receive roughly an equal share and needs headroom beyond that; replication lag on both donor and recipient, because migrations generate oplog; network saturation if the shard is in another rack or region; and client latency on the ranges being migrated, where the critical section briefly blocks writes. If zones are configured, only ranges belonging to the new shard's zone will move, so verify the zone tags before assuming it will fill.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Walk through removeShard. What does the drain actually do, and what blocks completion?</h2>
+  <div class="answer">
+    <p><code>db.adminCommand({removeShard: "shard03"})</code> starts a drain: the balancer moves every chunk off the shard. The command is asynchronous and must be re-issued to observe progress; the response reports a state of started, ongoing, or completed and lists remaining chunk and database counts.</p>
+    <p>Two things block completion. First, databases whose primary shard is the one being removed appear under <code>dbsToMove</code> and require an explicit <code>movePrimary</code> for each, which relocates their unsharded collections. Second, chunks that cannot move: jumbo chunks, or ranges pinned by a zone whose only member is this shard, will keep the drain at ongoing forever. Draining terabytes also takes real time, so schedule it. Only when the response reports zero remaining chunks and no databases does the shard get removed from the metadata.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you take a consistent backup of a sharded cluster, and what makes it inconsistent?</h2>
+  <div class="answer">
+    <p>Consistency here means the config metadata describes exactly the data that exists on the shards at the captured instant. So the sequence is: stop the balancer, confirm no migration is in flight, then capture the config server replica set and all shard replica sets at the same logical point. In practice that means parallel mongodump with <code>--oplog</code> per shard plus a dump of the config database, or filesystem snapshots taken within the same window on every node.</p>
+    <p>What breaks it is a migration that commits between capturing two shards: metadata then says one shard owns a range whose documents are still on another, and a restore produces missing or duplicated data. Backing up each shard at leisure with the balancer running is the classic mistake. Also remember to restore config and shards together; a config restore from a different point in time is worse than no restore.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When do you need flushRouterConfig, and how does it relate to balancerStart and balancerStop?</h2>
+  <div class="answer">
+    <p><code>flushRouterConfig</code> forces a mongos to discard its cached routing table and reload metadata from the CSRS. Since 4.4 routers refresh automatically when a shard returns a stale-config error, so it is rarely needed in normal operation. It remains a recovery tool: after manual metadata repair, after restoring a config server, or when a router is demonstrably serving a layout that no longer exists.</p>
+    <pre><code>db.adminCommand({flushRouterConfig: 1})                    // this mongos
+db.adminCommand({flushRouterConfig: "app.orders"})         // one namespace</code></pre>
+    <p><code>balancerStop</code> and <code>balancerStart</code> control migration scheduling only; they change nothing about routing. Confusing the two leads to the classic incident where someone stops the balancer, still sees wrong routing, and concludes the command failed. Verify state with <code>sh.getBalancerState()</code> and <code>sh.isBalancerRunning()</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the symptoms of corrupt or stale config metadata, and how do you recover without making it worse?</h2>
+  <div class="answer">
+    <p>Symptoms include repeated stale-config errors that refresh does not fix, queries that fail to target any shard, <code>sh.status()</code> listing a chunk on a shard that no longer exists, mongos refusing to start because it cannot load a routing table, and documents appearing or disappearing depending on which router you hit.</p>
+    <p>Recovery is conservative. First stop the balancer to prevent further metadata writes, then compare <code>config.chunks</code> against <code>config.shards</code> and against what each shard actually reports owning. If the divergence came from a bad restore, restore the CSRS as a set from a backup known to be consistent with the shards, then flush routing on every router. Do not hand-edit <code>config.chunks</code> unless you fully understand the range invariants; a wrong edit turns a routing bug into data loss, and vendor support should be involved before that step.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Is there a hard limit on the number of shards, and what actually constrains how far you can scale out?</h2>
+  <div class="answer">
+    <p>There is no small documented ceiling, but several practical constraints converge. Every mongos holds the full routing table in memory, so chunk count, not shard count, drives router memory; more shards usually means more chunks. Every query that is not targeted multiplies its work by the shard count, so a fan-out pattern gets slower as you add shards, not faster. Metadata writes on the CSRS grow with migration activity, and each shard adds its own replica set to operate, monitor, and back up.</p>
+    <p>The cost model is the real limit: sharding scales writes and storage on the axis of the shard key, and scales nothing else. If your workload is mostly scatter-gather reads, adding shards adds cost and latency. Teams that reach twenty or thirty shards usually discover their growth is in one collection and a better key or a data lifecycle policy would have been cheaper.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Which sharding-specific metrics do you actually put on a dashboard?</h2>
+  <div class="answer">
+    <p><code>serverStatus().shardingStatistics</code> is the sharding-native source: chunk migration counters for donor and recipient roles, split activity, and catalog cache statistics that reveal how often routers are invalidating and reloading metadata. Rising catalog cache refreshes mean frequent metadata churn, which is usually migration or DDL storms rather than a query problem.</p>
+    <pre><code>db.adminCommand({serverStatus: 1}).shardingStatistics</code></pre>
+    <p>Pair that with the distribution view, refreshed on a schedule, so you can see skew in bytes rather than chunk counts. Add balancer state and window, per-shard disk and replication lag, migration concurrency, and the count of jumbo chunks per namespace. Finally track <code>SINGLE_SHARD</code> versus <code>SHARD_MERGE</code> proportions from sampled explains: a rising scatter-gather share is the earliest signal that a new access pattern has outgrown the shard key.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What exactly is a zone, and what does assigning a key range to a zone actually constrain?</h2>
+  <div class="answer">
+    <p>A zone is a label attached to a subset of shards, plus a set of shard-key ranges assigned to that label. You tag shards with <code>sh.addShardToZone</code> and assign ranges with <code>sh.updateZoneKeyRange</code>. A shard may belong to several zones, but any given range belongs to at most one, and chunks whose range is in a zone may only be placed on shards tagged with that zone.</p>
+    <p>What it constrains is placement, nothing else. It does not change routing logic, does not affect how a query is planned, and does not isolate traffic. It simply tells the balancer "chunks in this range are only allowed on these shards", which is how residency and locality are enforced. If your predicate does not include the key the zone ranges are defined on, queries still fan out across every zone, so a zone layout is a storage guarantee rather than a performance guarantee.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Show me how you would pin countries to regional zones, and what ordering mistakes break it.</h2>
+  <div class="answer">
+    <p>Tag the shards first, then define ranges over the shard key, then shard the collection:</p>
+    <pre><code>sh.addShardToZone("shard-eu", "EU")
+sh.addShardToZone("shard-us", "US")
+sh.updateZoneKeyRange("app.orders",
+  {region: "EU", _id: MinKey},
+  {region: "EU", _id: MaxKey}, "EU")
+sh.updateZoneKeyRange("app.orders",
+  {region: "US", _id: MinKey},
+  {region: "US", _id: MaxKey}, "US")
+sh.shardCollection("app.orders", {region: 1, _id: 1})</code></pre>
+    <p>Mistakes that quietly break it: bounds written in the wrong order relative to the shard key's sort order, overlapping ranges, lower bound treated as exclusive when it is inclusive and upper as inclusive when it is exclusive, and values not covered by any range at all, which then have no zone and can land anywhere. Also verify that the strings written by the application match the range exactly, because <code>"eu"</code> and <code>"EU"</code> are different key space.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why do zones fail to give you isolation when the shard key does not match the zone field?</h2>
+  <div class="answer">
+    <p>Because routing and placement use different inputs. Placement uses the zone ranges defined over the shard key. Routing uses bounds on the shard key extracted from the predicate. If you zone by <code>country</code> but shard on <code>_id</code>, residency can still be correct as long as <code>country</code> is part of the key, but the moment it is not, there is no way to express "routes to the EU zone" at all.</p>
+    <p>The concrete consequence is a transatlantic query: a European user's request fans out to shards in every region, and the merging mongos waits for the slowest one. Writes are worse, since they must travel to whatever shard owns the key. The test is simple: run <code>explain</code> for the real application predicate and check whether the stage is <code>SINGLE_SHARD</code> and whether that shard is the one in the expected zone. If not, the zone layout is decorative.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does a compound shard key of region plus date give you in a multi-region design, and what does it cost?</h2>
+  <div class="answer">
+    <p>It gives residency and locality in one key. Zone ranges over <code>{region: 1, createdAt: 1}</code> pin each region's data to that region's shards, while the date suffix makes time-range queries targeted and keeps chunk sizes bounded as data grows, since a busy region splits along time rather than by luck.</p>
+    <pre><code>sh.shardCollection("app.events", {region: 1, createdAt: 1})</code></pre>
+    <p>The cost is a per-region hotspot: within each region the key is monotonic in time, so inserts concentrate on that region's trailing chunk, which is fine for a handful of regions but not for thousands of tenants. Queries without <code>region</code>, such as a global admin report, fan out to every region and pay cross-region latency. And if you later need to subdivide a single busy region, you cannot reorder the key, so you refine it with a further suffix or reshard.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do Atlas global clusters relate to zones, and what do they do to write latency?</h2>
+  <div class="answer">
+    <p>They are zone sharding with the operational work managed: each region gets its own shards tagged into a zone, and zone ranges are defined over a location field in your documents. Reads that include the location field resolve to the local zone, which is where the latency win comes from.</p>
+    <p>Writes do not become globally fast. A write is routed to the shard that owns its key, so it must reach that zone's primary. If a user in Singapore writes a document whose location is <code>EU</code>, the write crosses the WAN twice, once to the EU primary and once for the acknowledgement. What global clusters give you is local latency for local data, plus residency, not universal low latency for arbitrary writes. If your access pattern writes across regions, the honest design decision is either to keep writes regional, or to accept the round trip and measure it rather than assume.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you prove to an auditor that regulated data never leaves a region?</h2>
+  <div class="answer">
+    <p>You prove it structurally, not by assertion. Show the shard-to-region mapping, the zone tags, and the zone ranges covering exactly the regulated key values, then show that the collection is sharded on the field those ranges are defined over. Then show the data distribution per shard to confirm the bytes really are only on in-region shards.</p>
+    <pre><code>sh.status()
+db.getSiblingDB("admin").aggregate([{$shardedDataDistribution: {}}])</code></pre>
+    <p>Then close the gaps auditors find: unsharded collections live on a database's primary shard, which may be in another region, so verify every regulated collection is sharded or its primary shard is in-region. Backups, oplog copies, and monitoring snapshots also travel, and a multi-region CSRS replicates metadata everywhere. Finally, ranges not covered by any zone range are the silent hole: verify coverage is total for the regulated key space, not just for the values you tested.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you move a set of key ranges from one zone to another without downtime?</h2>
+  <div class="answer">
+    <p>Zones are metadata, so the switch itself is instant and online; the data movement that follows is not. The safe sequence is: ensure the destination zone's shards have capacity and are tagged, add the new range assignment, then let the balancer migrate the chunks, and only then remove the old assignment.</p>
+    <pre><code>sh.updateZoneKeyRange("app.orders",
+  {region: "LATAM", _id: MinKey},
+  {region: "LATAM", _id: MaxKey}, "US-EAST")</code></pre>
+    <p>Downtime risk comes from three places: removing the old assignment before data has moved leaves a window where no zone covers those chunks, so they may be balanced anywhere; a migration storm saturating the link to the new zone; and jumbo chunks that refuse to migrate and pin the range to the old zone indefinitely. Move ranges in slices, during a low-traffic window, watching replication lag on both sides.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does a scatter-gather across zones actually cost, and how do you avoid paying it repeatedly?</h2>
+  <div class="answer">
+    <p>It costs a wide-area round trip to every zone plus the transfer of every matching document to a single router, because the merge must happen in one place. If three zones are 80 ms apart and each returns 20,000 documents, the query pays at least the slowest zone's latency and moves all 60,000 documents across the WAN, then returns perhaps twenty to the client. Egress charges and jitter usually hurt more than the average latency suggests.</p>
+    <p>Avoidance is design, not tuning: include the location field in the predicate so the query targets one zone; keep a regional read model that a regional service queries; or run a mongos per region and merge in the application when a genuinely global answer is needed. Alerting on the ratio of <code>SHARD_MERGE</code> to <code>SINGLE_SHARD</code> plans for each critical query keeps this from creeping back in as new features ship.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>An entire region fails. What happens to the ranges zoned to it, and how do you design for that?</h2>
+  <div class="answer">
+    <p>Zones provide placement, not disaster recovery. If every shard tagged into the EU zone is unavailable, the chunks in that zone have no owner: the data is not automatically relocated to another region, and queries for those ranges fail even though the rest of the cluster is healthy. A zone is not a failover unit, and no balancer action can create capacity where there is none.</p>
+    <p>Design for it deliberately. For ranges that must survive a regional loss, tag shards from two regions into the same zone, so the zone spans regions and each shard's replica set can elect a primary in the surviving region, accepting cross-region replication lag as the price. For genuinely region-local data, accept the outage and make the application fail cleanly rather than hang. Test both paths, because the failure mode people discover in production is a query that waits on a dead region until timeout.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do read preference and zones compose to give local reads, and what do they still not guarantee?</h2>
+  <div class="answer">
+    <p>They compose in two independent layers. Zones decide which shards hold the data, so a targeted query on the location key lands on in-region shards. Read preference then decides which member of each of those shards' replica sets serves the read, so <code>nearest</code> or a tag set picks a local secondary. Together they give a read that never leaves the region.</p>
+    <pre><code>db.orders.find({region: "EU", _id: id})
+  .readPref("nearest", [{region: "eu"}])</code></pre>
+    <p>What they do not guarantee: they do not target the query for you, so a predicate without the location field still fans out to every region and then applies read preference per shard. They do not provide cross-shard snapshot consistency. And <code>nearest</code> is evaluated per replica set, not globally, so it cannot compensate for a badly chosen shard key. Zones plus read preference reduce latency only when the predicate already routes correctly.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How can a zone end up empty, and why is that more dangerous than an unbalanced cluster?</h2>
+  <div class="answer">
+    <p>An empty zone means its shards hold no chunks. Common causes: the range was defined but no documents have values inside it yet; the application writes <code>"eu-west"</code> while the range covers <code>"EU"</code>, so nothing ever matches; the range bounds are in the wrong order and therefore cover nothing; chunks in the range are jumbo and cannot migrate in; or the shards lost their zone tag during a topology change.</p>
+    <p>An unbalanced cluster is merely slow. An empty zone is a silent correctness problem: writes for the intended region may be landing on shards in another jurisdiction, which is a residency violation nobody notices because everything succeeds. Detect it by comparing each zone's assigned ranges against actual chunk ownership in <code>sh.status()</code> and by watching per-zone document counts. Coverage gaps in the zone map, not just emptiness, deserve the same alert.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>A service is slow and someone proposes sharding. How do you determine whether this is an indexing problem or a volume problem?</h2>
+  <div class="answer">
+    <p>Look at the ratio of work to results, not at the data size. If <code>totalDocsExamined</code> is thousands of times <code>nReturned</code>, if plans contain COLLSCAN, or if one query shape accounts for most of the latency, you have an index problem and sharding will multiply it across shards rather than fix it.</p>
+    <pre><code>db.orders.find({...}).explain("executionStats")
+// ratio totalDocsExamined : nReturned, and winningPlan.stage</code></pre>
+    <p>A volume problem looks different: every hot query already uses a tight IXSCAN, examined-to-returned is close to one, CPU is moderate but disk reads and cache eviction are high, and latency degrades as the working set outgrows RAM. Writes may be capped by a single primary. That is when more machines, not more indexes, is the answer, and only then does sharding become a legitimate conversation.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the practical limits of a single replica set, and where does the working set fit into that?</h2>
+  <div class="answer">
+    <p>Storage is rarely the first limit. The binding constraint is usually memory: the working set, meaning the indexes plus the hot portion of documents that queries actually touch, must stay resident in RAM, or reads turn into random disk I/O. A node holding 4 TB of data is fine if the active month is 60 GB; a node holding 300 GB with a 300 GB working set will struggle regardless of CPU.</p>
+    <p>The second limit is write throughput, because a replica set has exactly one primary accepting writes; adding secondaries scales reads and resilience, not writes. Watch <code>wiredTiger.cache</code> bytes in cache against the configured maximum, cache eviction pressure, and disk utilization on reads. When both the working set and write rate are near the ceiling of the largest sensible node, you have a real sharding case with evidence behind it.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does sharding cost operationally, beyond the hardware bill?</h2>
+  <div class="answer">
+    <p>You add a config server replica set, at least two routers, and every shard as its own replica set, each needing monitoring, backups, upgrades, and a restore test. Upgrades become an orchestrated sequence across components rather than a rolling restart. Backups require quiescing the balancer so metadata and data are consistent.</p>
+    <p>Then there are the costs that show up as engineering time: a shard key that is expensive to change and constrains every future access pattern; queries that were fine on one node now fanning out; migration incidents during rebalances; and debugging that requires reasoning about routing as well as execution. You also lose some simplicity in unique constraints and transactions. A team should be able to name who owns that operational surface before the first shard is added, because it never gets cheaper to add later.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does premature sharding cost a team in its first year?</h2>
+  <div class="answer">
+    <p>It front-loads complexity against a workload that did not need it. With a few million documents the whole dataset fits in RAM on one node, so sharding cannot help, and the small per-shard caches may even reduce the hit ratio compared with a single large cache. Meanwhile every query without the shard key is now slower than it was on a replica set.</p>
+    <p>The subtler cost is that the shard key gets chosen with almost no data to inform it. You pick on intuition, discover the real access pattern a year later when there is 50 times more data, and now the correction is a reshard with a full copy and a maintenance plan. The disciplined alternative is to design the schema so the future key is available and indexed, keep the option open, and shard when a measured limit is actually reached.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When are read replicas plus a cache the right answer instead of sharding?</h2>
+  <div class="answer">
+    <p>When the workload is read-dominant, reads can tolerate slight staleness, and writes comfortably fit on one primary. Add secondaries and route reporting or geographically distant reads with read preference, then put a cache in front of the hottest documents or aggregate responses so the database sees a fraction of the requests.</p>
+    <p>This scales read throughput and read latency without touching routing, and it keeps unique constraints, transactions, and backups simple. It does not scale write throughput, storage beyond a single node's practical limit, or a working set that cannot fit in memory, so those are the conditions that force sharding instead. Be honest about the cache's own costs: invalidation bugs and stampedes after expiry can make a cache look like a database problem, and hiding a bad query behind a cache just delays the fix.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does a hot and cold data architecture avoid sharding?</h2>
+  <div class="answer">
+    <p>Separate the data that must be fast from the data that must merely exist. Keep the last 60 to 90 days in an operational collection sized so its indexes and documents stay in RAM, and move older documents to an archive collection, object storage, or a managed archival tier. The operational working set stays small and predictable, so one replica set keeps serving with low latency while total storage grows without bound.</p>
+    <p>The application routes by date: recent queries hit the hot collection, historical queries hit the archive with a different, slower service-level objective. What you must design is the seam, since a query spanning the boundary needs two reads and a merge, and that is usually acceptable for reports but not for interactive screens. This is often the cheapest capacity fix available, and it is routinely skipped in favour of sharding.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why would you deliberately $out into an unsharded collection for reporting, and what are the trade-offs?</h2>
+  <div class="answer">
+    <p>Because report queries are usually the worst possible fit for sharding: broad date ranges, aggregations without the shard key, and heavy sorts. Building a materialized result into a single unsharded collection means the expensive scatter-gather runs once on a schedule, and every dashboard read afterwards is a targeted read of a small precomputed set on one shard.</p>
+    <pre><code>db.orders.aggregate([
+  {$match: {createdAt: {$gte: startOfMonth}}},
+  {$group: {_id: "$region", revenue: {$sum: "$total"}}},
+  {$out: "reporting.monthly_revenue"}
+])</code></pre>
+    <p>Trade-offs: the data is stale by the refresh interval, it costs extra storage, and the rebuild itself is a heavy job that must run off-peak or incrementally with <code>$merge</code>. It also concentrates reporting load on one shard, which is fine for a few gigabytes and wrong for a hundred.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do large documents and the 16 MB limit interfere with sharding well?</h2>
+  <div class="answer">
+    <p>A chunk is split at key boundaries, not document boundaries, so if one shard-key value maps to documents that are each several megabytes, the chunk fills quickly and cannot be split without breaking that value apart, which is impossible. You get jumbo chunks, and with them a range that the balancer can never move. A single document larger than the chunk size guarantees a permanently unsplittable chunk.</p>
+    <p>Large documents also slow every migration, inflate oplog entries, and make the shard key value itself costly if it is a long string included in every index prefix. The remedies are schema-level: keep documents well below the limit, use the bucket pattern or GridFS for blobs, and avoid storing megabytes of arrays that also block multikey indexing. Sharding rewards small, uniform documents far more than it rewards tuning.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What do you measure before deciding to shard, and which specific fields drive the decision?</h2>
+  <div class="answer">
+    <p>Growth rate, working set, and workload shape.</p>
+    <pre><code>db.stats(1024)                       // dataSize, indexSize, per-collection growth
+db.orders.stats(1024)                // count, avgObjSize, totalIndexSize, wiredTiger
+db.serverStatus().metrics.document   // inserted, updated, deleted, returned</code></pre>
+    <p><code>dbStats</code> and <code>collStats</code> give you total data and index size in kilobytes, average document size, and per-collection index overhead, which lets you project when a node's RAM stops covering the hot subset. <code>serverStatus().metrics</code> gives inserted, updated, deleted, and returned counts, so you can see whether the pressure is read volume or write volume, and <code>metrics.queryExecutor.scanned</code> shows how much work those reads cost. Add disk utilization and cache eviction rate. If the projection says you are eighteen months from a wall, you have time to design the key properly instead of guessing.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When is collection-per-tenant a better partition than sharding?</h2>
+  <div class="answer">
+    <p>When tenants are few and individually large, with contractual isolation, per-tenant retention, and the ability to drop or restore one tenant's data independently. A collection per tenant gives you that directly: dropping a tenant is a drop, restoring is a restore, indexes can be tailored, and one tenant's runaway query is easier to attribute.</p>
+    <p>It is not a scaling strategy on its own, since all those collections still live on the same replica set and compete for the same cache and IO. Its limits appear as namespace and file-handle overhead, memory per collection, and the impossibility of cross-tenant aggregation. The strongest pattern for a large multi-tenant system is often both: collection-per-tenant for the few large customers, and a shared collection sharded on <code>{tenantId: 1, ...}</code> for the long tail, which keeps the key simple because tenant identity is already the boundary.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Walk me through converting a running replica set into a sharded cluster. What are the traps?</h2>
+  <div class="answer">
+    <p>The migration path is deliberate: deploy the config server replica set and mongos routers, then add the existing replica set as the first shard, so no data moves. Sharding a collection at that point is instant because all chunks already live on that one shard. Only when you add a second shard does the balancer begin distributing, which is the expensive part and belongs in a planned window.</p>
+    <pre><code>sh.addShard("rsMain/host1:27017,host2:27017,host3:27017")
+sh.shardCollection("app.orders", {tenantId: 1, createdAt: 1})</code></pre>
+    <p>Traps: connection strings and DNS must change to point at mongos, and any client that keeps a direct shard connection bypasses routing. Users and roles live in the CSRS, so authentication must be set up there. Unsharded collections stay on the primary shard, so residency assumptions may break. And unique indexes must be prefixed by the shard key, which can invalidate an existing constraint you relied on.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What signals tell you it is finally time to reshard, rather than tune?</h2>
+  <div class="answer">
+    <p>Strong signals: a single shard-key value produces a chunk that cannot split and keeps reappearing as jumbo; the balancer reports balance in chunk counts while <code>$shardedDataDistribution</code> shows one shard holding most of the bytes; a growing share of critical queries plans as <code>SHARD_MERGE</code> because the dominant access pattern no longer includes the key; and write concentration on one chunk shows up as sustained latency for one tenant while the cluster looks idle.</p>
+    <p>Weaker but relevant: the key field is being deprecated in the schema, or a new product line groups data by a dimension that did not exist when the key was chosen. Before committing, quantify what the new key would fix and what it would break, since resharding moves the hotspot rather than eliminating it. If the new key would still be monotonic, or still route the main query badly, the work buys nothing.</p>
+  </div>
+</div>

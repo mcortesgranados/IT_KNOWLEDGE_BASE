@@ -1,0 +1,425 @@
+<div class="question">
+  <h2>How do I ship a $jsonSchema validator to a live collection with no downtime?</h2>
+  <div class="answer">
+    <p>Keep the schema in a <code>$jsonSchema</code> validator on the collection, not only in application code. Build the rule set, attach it with <code>collMod</code> using <code>validationLevel: "moderate"</code> and <code>validationAction: "warn"</code>, watch the log for a day, then flip only <code>validationAction</code> to <code>"error"</code> with a second <code>collMod</code>. Warn mode lets every write through and logs a validation warning, so you learn which writers break the schema before you enforce it. <code>moderate</code> still validates inserts and valid documents on update, but tolerates already-invalid documents.</p>
+    <pre><code>// mongosh
+const validator = {
+  $jsonSchema: {
+    bsonType: "object",
+    required: ["sku", "price", "status"],
+    additionalProperties: false,
+    properties: {
+      _id:     { bsonType: "objectId" },
+      sku:     { bsonType: "string", minLength: 3 },
+      price:   { bsonType: "decimal", minimum: 0 },
+      status:  { bsonType: "string", enum: ["draft", "active", "retired"] },
+      tags:    { bsonType: "array", items: { bsonType: "string" } }
+    }
+  }
+};
+
+// 1) deploy in warn mode - writes still succeed, violations are logged
+db.runCommand({
+  collMod: "products",
+  validator: validator,
+  validationLevel: "moderate",
+  validationAction: "warn"
+});
+
+// 2) after the log is clean, enforce without rewriting anything
+db.runCommand({ collMod: "products", validationAction: "error" });
+
+// rollback is one command away
+db.runCommand({ collMod: "products", validator: {}, validationLevel: "off" });</code></pre>
+    <p><strong>Trap:</strong> <code>collMod</code> never re-validates existing documents, so old garbage survives until it is touched; and <code>additionalProperties: false</code> instantly rejects any writer that adds a field, which is the single most common cause of a "validator broke production" incident.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I build an ESR index for an equality + sort + range query, and prove it with explain?</h2>
+  <div class="answer">
+    <p>Order the keys by <strong>E</strong>quality, then <strong>S</strong>ort, then <strong>R</strong>ange. Given a filter on <code>status</code>, a range on <code>total</code> and a sort on <code>createdAt</code> descending, the index is <code>{ status: 1, createdAt: -1, total: 1 }</code>. Equality first pins the scan to one prefix, the sort key next lets the index deliver rows already ordered (no blocking <code>SORT</code> stage, so <code>limit</code> can stop early), and the range field last filters inside that prefix. Run <code>explain("executionStats")</code> before and after and compare the same three numbers instead of eyeballing the plan.</p>
+    <pre><code>// mongosh
+const q = { status: "shipped", total: { $gte: 100 } };
+const s = { createdAt: -1 };
+
+// BEFORE: no index - every document is read, then sorted in memory
+db.orders.find(q).sort(s).limit(20).explain("executionStats");
+// winningPlan: COLLSCAN + SORT | totalDocsExamined: 1240881 | nReturned: 20
+
+db.orders.createIndex({ status: 1, createdAt: -1, total: 1 }, { name: "esr_status_created_total" });
+
+// AFTER: IXSCAN - bounded keys, no SORT, early exit at 20
+const e = db.orders.find(q).sort(s).limit(20).explain("executionStats");
+printjson({
+  keys: e.executionStats.totalKeysExamined,   // ~20
+  docs: e.executionStats.totalDocsExamined,   // ~20
+  returned: e.executionStats.nReturned,       // 20
+  ms: e.executionStats.executionTimeMillis,
+  plan: e.queryPlanner.winningPlan.stage
+});</code></pre>
+    <p><strong>Trap:</strong> swapping sort and range (<code>{ status: 1, total: 1, createdAt: -1 }</code>) forces an in-memory sort of every matching document, so <code>limit: 20</code> no longer bounds the work - <code>totalKeysExamined</code> explodes while <code>nReturned</code> stays at 20.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I use $lookup with pipeline and let to join only matching foreign documents?</h2>
+  <div class="answer">
+    <p>The short <code>localField</code>/<code>foreignField</code> form always returns every match and then you filter. The pipeline form gives you a sub-query per outer document: pass outer values in through <code>let</code>, read them inside as <code>$$</code> variables, and filter before anything is attached. Put the join equality alone in an <code>$expr</code> <code>$eq</code> so the planner can use the foreign index, then apply constant predicates in a normal <code>$match</code>, and finish with <code>$project</code> and <code>$limit</code>. That makes it a conditional join plus a top-N, at the cost of one indexed lookup per input document.</p>
+    <pre><code>// mongosh - customers join on a business key, not _id
+db.customers.createIndex({ externalId: 1, tier: 1 }, { name: "lk_external_tier" });
+
+db.orders.aggregate([
+  { $match: { status: "paid" } },
+  { $lookup: {
+      from: "customers",
+      let: { cid: "$customerRef", wantedTier: "gold" },
+      pipeline: [
+        { $match: { $expr: { $eq: ["$externalId", "$$cid"] } } },  // indexable
+        { $match: { tier: "$$wantedTier" } },                      // literal is fine
+        { $project: { _id: 0, name: 1, tier: 1 } },
+        { $limit: 1 }
+      ],
+      as: "customer"
+  } },
+  { $match: { "customer.0": { $exists: true } } }   // INNER JOIN semantics
+]);</code></pre>
+    <p><strong>Trap:</strong> a <code>$$</code> variable inside a plain <code>$match</code> is illegal unless wrapped in <code>$expr</code>, and any extra <code>$expr</code> predicate on a computed expression kills the index pushdown - the sub-pipeline then degrades to a collection scan repeated once per order.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I paginate by _id cursor and return a nextCursor from an API?</h2>
+  <div class="answer">
+    <p>Never use <code>skip</code> for deep pages: it walks and discards every preceding document, and it drifts when rows are inserted. A keyset cursor asks for "everything after the last key I saw", which is an index seek of exactly <code>limit</code> documents. Request one extra row to know whether a next page exists, then hand back the cursor of the last row you actually return. Encode the cursor opaquely so clients cannot forge or reorder it, and validate its shape before casting, otherwise a malformed value becomes a server error.</p>
+    <pre><code>// Node driver 6.x
+async function page(cursorStr, limit = 20) {
+  const filter = {};
+  if (cursorStr) {
+    const raw = Buffer.from(cursorStr, "base64url").toString("utf8");
+    if (!/^[0-9a-f]{24}$/.test(raw)) throw new Error("bad cursor");
+    filter._id = { $gt: new ObjectId(raw) };
+  }
+  const rows = await coll.find(filter).sort({ _id: 1 }).limit(limit + 1).toArray();
+  const hasMore = rows.length > limit;
+  const items = hasMore ? rows.slice(0, limit) : rows;
+  const last = items[items.length - 1];
+  return {
+    items,
+    nextCursor: hasMore ? Buffer.from(last._id.toHexString()).toString("base64url") : null
+  };
+}</code></pre>
+    <p><strong>Trap:</strong> this cursor is bound to the sort key - if you sort by <code>{ createdAt: -1 }</code> you must paginate on the compound tuple <code>{ createdAt, _id }</code> with a matching compound index, or documents that share a timestamp get silently skipped or repeated at page boundaries.</p>
+  </div>
+</div>
+<div class="question">
+  <h2>How do I run a multi-document transaction with retries on TransientTransactionError?</h2>
+  <div class="answer">
+    <p>Take a session, wrap the unit of work in <code>session.withTransaction()</code> and set <code>readConcern: snapshot</code> plus <code>writeConcern: w: "majority"</code>. MongoDB generates the transaction number for you and the driver already wraps the callback in the two retry loops that matter: the whole callback is re-run when the error carries the <code>TransientTransactionError</code> label (a write conflict, a primary stepdown), and <code>commitTransaction</code> alone is retried when the error carries <code>UnknownTransactionCommitResult</code> - because a commit that timed out may still have succeeded. Every operation inside the callback must receive the session, and the callback must be safe to run twice.</p>
+    <pre><code>// Node driver 6.x
+const session = client.startSession();
+try {
+  await session.withTransaction(async function () {
+    await accounts.updateOne(
+      { _id: "acct-1", balance: { $gte: 100 } },
+      { $inc: { balance: -100 } },
+      { session }
+    );
+    await accounts.updateOne(
+      { _id: "acct-2" },
+      { $inc: { balance: 100 } },
+      { session }
+    );
+    await ledger.insertOne(
+      { from: "acct-1", to: "acct-2", amount: 100, at: new Date() },
+      { session }
+    );   // aborts the txn when the debit matched 0 documents
+  }, {
+    readConcern: { level: "snapshot" },
+    writeConcern: { w: "majority" },
+    maxCommitTimeMS: 5000
+  });
+} finally {
+  await session.endSession();
+}
+
+// if you drive the session by hand, keep this commit loop
+async function commitWithRetry(session) {
+  for (;;) {
+    try { await session.commitTransaction(); return; }
+    catch (e) {
+      if (e.hasErrorLabel("UnknownTransactionCommitResult")) continue;
+      if (e.hasErrorLabel("TransientTransactionError")) throw e; // re-run callback
+      throw e;
+    }
+  }
+}</code></pre>
+    <p><strong>Trap:</strong> transactions need a replica set or sharded cluster, die at 60 seconds by default, and cannot contain <code>$out</code> or <code>$merge</code>; side effects such as sending mail must happen after the commit, never inside the retried callback.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I resume a change stream from the last persisted token after a restart?</h2>
+  <div class="answer">
+    <p>Each change event carries a resume token in <code>_id</code>. Persist that token after you process the event, then open the stream with <code>resumeAfter</code> on the stored token: MongoDB replays from the next event. Persisting after processing gives at-least-once delivery, so make the handler idempotent with an upsert keyed by the event's document key plus the token. Use <code>startAfter</code> instead when the previous stream ended with an <code>invalidate</code> event, since <code>resumeAfter</code> refuses a token from a stream that was invalidated. Keep the token write in the same transaction or the same idempotent step as the effect whenever the action is not naturally repeatable.</p>
+    <pre><code>// Node driver 6.x
+const ops = client.db("ops").collection("streamState");
+const saved = await ops.findOne({ _id: "orders-watch" });
+
+const stream = orders.watch(
+  [{ $match: { operationType: { $in: ["insert", "update", "replace", "delete"] } } }],
+  saved
+    ? { resumeAfter: saved.token, fullDocument: "updateLookup" }
+    : { fullDocument: "updateLookup" }
+);
+
+for await (const change of stream) {
+  await applyIdempotently(change);                    // effect first
+  await ops.updateOne(
+    { _id: "orders-watch" },
+    { $set: { token: change._id, seenAt: new Date() } },
+    { upsert: true }
+  );                                                  // then the checkpoint
+}
+
+// on startup again: the stream opens one event after the stored token</code></pre>
+    <p><strong>Trap:</strong> the token is only valid inside the oplog window of the same deployment - after a long outage the resume fails with <code>ChangeStreamHistoryLost</code> and you must fall back to a snapshot plus a timestamp, so monitor the oplog window against your maximum downtime.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I expire documents after N days and change the TTL later without rebuilding the index?</h2>
+  <div class="answer">
+    <p>A TTL index on a date field makes <code>mongod</code>'s background TTL monitor delete documents once <code>expireAfterSeconds</code> has elapsed since that date. Use a fixed window (<code>604800</code> for seven days) on a <code>createdAt</code> field, or <code>expireAfterSeconds: 0</code> on a per-document <code>expiresAt</code> field, which lets each document carry its own deadline. Since MongoDB 7.0 you can change the window in place with <code>collMod</code> and <code>index.keyPattern</code> - the index keeps its name and build, no drop and recreate, no downtime - and you can park the index entirely by setting <code>expireAfterSeconds: "off"</code>.</p>
+    <pre><code>// mongosh
+// fixed 7-day window
+db.sessions.createIndex(
+  { createdAt: 1 },
+  { name: "ttl_createdAt", expireAfterSeconds: 604800 }
+);
+
+// per-document deadline, set by the writer
+db.tokens.createIndex(
+  { expiresAt: 1 },
+  { name: "ttl_expiresAt", expireAfterSeconds: 0 }
+);
+
+// change the window in place - no rebuild, no downtime
+db.runCommand({
+  collMod: "sessions",
+  index: { keyPattern: { createdAt: 1 }, expireAfterSeconds: 2592000 }
+});
+
+// pause / resume deletion without touching data
+db.runCommand({
+  collMod: "sessions",
+  index: { keyPattern: { createdAt: 1 }, expireAfterSeconds: "off" }
+});
+
+db.sessions.getIndexes().find(function (i) { return i.name === "ttl_createdAt"; });</code></pre>
+    <p><strong>Trap:</strong> the monitor wakes about every 60 seconds and deletes in the background, so expiry is eventual and never a scheduler; a TTL index must be single-field on a date (or an array of dates) and cannot be compound or on <code>_id</code>, so a compound "expire by tenant" index silently does nothing.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I run a mixed bulkWrite and read the per-operation errors?</h2>
+  <div class="answer">
+    <p><code>bulkWrite</code> sends many operations in one round trip and accepts <code>insertOne</code>, <code>updateOne</code>, <code>updateMany</code>, <code>replaceOne</code> and <code>deleteOne</code>/<code>deleteMany</code> in the same array. With <code>ordered: false</code> the server executes all operations and reports failures per index instead of aborting at the first one. The driver still throws <code>MongoBulkWriteError</code>, and the useful data lives in <code>err.writeErrors</code> (each with <code>index</code>, <code>code</code>, <code>errmsg</code>) alongside the partial result counts, so a duplicate key on operation 2 does not hide the successful upserts on operations 1 and 3.</p>
+    <pre><code>// Node driver 6.x
+try {
+  const res = await items.bulkWrite([
+    { insertOne:  { document: { _id: 1, sku: "A-1", qty: 5 } } },
+    { updateOne:  { filter: { _id: 2 }, update: { $set: { qty: 7 } } } },
+    { updateOne:  { filter: { sku: "A-3" },
+                    update: { $set: { qty: 0 }, $setOnInsert: { createdAt: new Date() } },
+                    upsert: true } },
+    { replaceOne: { filter: { _id: 4 }, replacement: { sku: "A-4", qty: 1 } } },
+    { deleteOne:  { filter: { _id: 5 } } }
+  ], { ordered: false });
+
+  console.log(res.insertedCount, res.matchedCount, res.modifiedCount,
+              res.upsertedCount, res.upsertedIds);
+} catch (e) {
+  if (!e.writeErrors) throw e;              // real connection / auth failure
+  for (const we of e.writeErrors) {
+    console.error(we.index, we.code, we.errmsg);   // index = position in the array
+  }
+  console.log("applied before failure:", e.result);
+}</code></pre>
+    <p><strong>Trap:</strong> <code>writeErrors[].index</code> is the position in <em>your</em> operation array, not a document identifier, so keep an id array alongside the ops to map failures back; and <code>ordered: false</code> means a retried batch can re-apply operations that already succeeded, so the ops themselves must be idempotent.</p>
+  </div>
+</div>
+<div class="question">
+  <h2>How do I turn explain("executionStats") into a repeatable diagnosis routine?</h2>
+  <div class="answer">
+    <p>Read four numbers, not the pretty tree: <code>totalKeysExamined</code>, <code>totalDocsExamined</code>, <code>nReturned</code> and <code>executionTimeMillis</code>, plus whether the winning plan contains a <code>COLLSCAN</code> or a blocking <code>SORT</code> stage. For a selective query all three counts should be close to each other. Alert when <code>docsExamined / nReturned</code> is above roughly 1.2 (the index is not filtering), when <code>keysExamined / nReturned</code> is above 10 (poor prefix or a range that scans), when a <code>SORT</code> stage appears with a small <code>limit</code>, or when latency crosses the endpoint's p95 budget. Wrap it in one function so every slow endpoint is measured the same way.</p>
+    <pre><code>// mongosh
+function diagnose(coll, filter, sort, limit) {
+  const e = coll.find(filter).sort(sort).limit(limit).explain("executionStats");
+  const st = e.executionStats;
+  const plan = JSON.stringify(e.queryPlanner.winningPlan);
+  const r = function (a, b) { return b === 0 ? null : Number((a / b).toFixed(2)); };
+  const out = {
+    plan: plan.includes("COLLSCAN") ? "COLLSCAN"
+        : plan.includes("IXSCAN")   ? "IXSCAN" : "OTHER",
+    blockingSort: plan.includes('"SORT"'),
+    nReturned: st.nReturned,
+    keysExamined: st.totalKeysExamined,
+    docsExamined: st.totalDocsExamined,
+    docsPerRow: r(st.totalDocsExamined, st.nReturned),   // alert if &gt; 1.2
+    keysPerRow: r(st.totalKeysExamined, st.nReturned),   // alert if &gt; 10
+    ms: st.executionTimeMillis,
+    rejected: e.queryPlanner.rejectedPlans.length
+  };
+  out.verdict = out.plan === "COLLSCAN" ? "missing index"
+              : out.blockingSort &amp;&amp; limit &lt; 1000 ? "sort not covered by index"
+              : out.docsPerRow &gt; 1.2 ? "index not selective enough"
+              : "ok";
+  return out;
+}
+diagnose(db.orders, { status: "shipped", total: { $gte: 100 } }, { createdAt: -1 }, 20);</code></pre>
+    <p><strong>Trap:</strong> explain is a plan inspection, not a benchmark - it runs on the current plan cache, excludes network and cursor batching, and truncates stats at <code>limit</code>, so a "20 keys examined" plan can still be a bad plan for a 20k-row scan.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I write an idempotent upsert that cannot duplicate under concurrency?</h2>
+  <div class="answer">
+    <p>An upsert is read-then-write, so two concurrent callers can both miss and both insert. The only real guarantee is a <strong>unique index</strong> on the natural key: then the loser of the race gets a duplicate-key error <code>E11000</code> instead of a second document, and you retry as a plain update. Keep the filter as an equality on that unique key, put mutable fields in <code>$set</code> and creation-only fields in <code>$setOnInsert</code>, and treat code 11000 on an upsert as "someone else won, apply the update". This makes the operation idempotent: running it once or five times leaves the same single document.</p>
+    <pre><code>// Node driver 6.x
+await users.createIndex({ externalId: 1 }, { unique: true, name: "uniq_externalId" });
+
+async function upsertUser(doc) {
+  const key = { externalId: doc.externalId };
+  const patch = { $set: { email: doc.email, name: doc.name },
+                  $setOnInsert: { createdAt: new Date(), logins: 0 } };
+  try {
+    await users.updateOne(key, patch, { upsert: true });
+  } catch (e) {
+    if (e.code !== 11000) throw e;             // lost the insert race
+    await users.updateOne(key, { $set: { email: doc.email, name: doc.name } });
+  }
+}</code></pre>
+    <p><strong>Trap:</strong> the filter must be equality-only and must cover the unique key - an upsert whose filter uses <code>$gt</code> or a missing key builds a document from the query and can insert a row that violates the index; and a field in both <code>$set</code> and <code>$setOnInsert</code> is a hard error, not a merge.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I return page, total and filter facets in a single $facet aggregation?</h2>
+  <div class="answer">
+    <p><code>$facet</code> takes one input stream and runs several sub-pipelines over it, returning one document with a field per sub-pipeline. That collapses four round trips (rows, count, brand facets, price buckets) into one request, and every facet sees exactly the same snapshot. Put the shared filters in a single <code>$match</code> before <code>$facet</code>, then add the sort, skip and limit only inside the <code>items</code> branch: the total and the facets must count the whole filtered set, not the returned page.</p>
+    <pre><code>// mongosh
+db.products.aggregate([
+  { $match: { status: "active", category: { $in: ["shoes", "bags"] } } },
+  { $facet: {
+      items: [
+        { $sort: { createdAt: -1, _id: -1 } },
+        { $skip: 40 },
+        { $limit: 20 },
+        { $project: { name: 1, price: 1, brand: 1 } }
+      ],
+      total: [ { $count: "value" } ],
+      byBrand: [
+        { $group: { _id: "$brand", n: { $sum: 1 } } },
+        { $sort: { n: -1 } },
+        { $limit: 10 }
+      ],
+      priceBuckets: [
+        { $bucket: { groupBy: "$price", boundaries: [0, 50, 100, 500],
+                     default: "500+", output: { n: { $sum: 1 } } } }
+      ]
+  } }
+]);
+// total[0].value is the filtered count; 0 when the branch returns nothing</code></pre>
+    <p><strong>Trap:</strong> all facet output is assembled into a <em>single</em> BSON document, so the combined result must stay under 16 MB and a facet returning thousands of buckets fails the whole query; <code>$out</code>, <code>$merge</code> and <code>$geoNear</code> are not allowed inside a facet, and each branch re-reads the input, so cost is the sum of the branches.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I create a weighted text index and sort by $meta textScore?</h2>
+  <div class="answer">
+    <p>A text index tokenizes the listed string fields, applies stemming and stop words, and lets <code>$text</code> match whole terms with phrase, negation and OR syntax. Weights bias the score per field, so a hit in <code>title</code> outranks the same hit in <code>body</code>. Project the score with <code>{ $meta: "textScore" }</code> and sort by that same expression - MongoDB can sort on the computed score without a blocking stage. Use it for relevance ranking on modest corpora; reach for Atlas Search when you need fuzzy matching, autocomplete or per-field analyzers.</p>
+    <pre><code>// mongosh
+db.articles.createIndex(
+  { title: "text", tags: "text", body: "text" },
+  { name: "article_text",
+    weights: { title: 10, tags: 5, body: 1 },
+    default_language: "english" }
+);
+
+db.articles.find(
+  { $text: { $search: "\"connection pool\" -timeout" } },
+  { title: 1, score: { $meta: "textScore" } }
+).sort({ score: { $meta: "textScore" } }).limit(10);
+
+// relevance inside an aggregation
+db.articles.aggregate([
+  { $match: { $text: { $search: "replica set election" } } },
+  { $addFields: { score: { $meta: "textScore" } } },
+  { $sort: { score: -1 } },
+  { $limit: 5 }
+]);</code></pre>
+    <p><strong>Trap:</strong> a collection allows exactly <strong>one</strong> text index, and the field list and weights are fixed at creation, so adding a searchable field means dropping and rebuilding the index - plan the field set up front, and remember <code>$text</code> does no prefix or fuzzy matching ("pool" does not match "pooling" unless stemming aligns).</p>
+  </div>
+</div>
+<div class="question">
+  <h2>How do I run a resumable batch backfill of a new field?</h2>
+  <div class="answer">
+    <p>Walk the collection in <code>_id</code> order with a range cursor, write each batch with <code>bulkWrite</code>, and checkpoint the last <code>_id</code> to a small state collection <em>after</em> the batch is acknowledged. Restarting reads the checkpoint and continues, so a crash costs one batch, never the whole migration. Make the operation itself idempotent - filter on "field still missing" - because a batch that was applied but not checkpointed will run again. Keep batches in the low thousands, throttle between them, and never run this as one unbounded <code>updateMany</code> that holds a lock storm and floods the oplog.</p>
+    <pre><code>// mongosh
+const mig = db.getSiblingDB("ops").migrations;
+const key = "backfill-currency-2026-10";
+const BATCH = 1000;
+const saved = mig.findOne({ _id: key }) || { lastId: null };
+let lastId = saved.lastId;
+
+for (;;) {
+  const filter = lastId ? { _id: { $gt: lastId } } : {};
+  const docs = db.orders.find(filter, { _id: 1 }).sort({ _id: 1 }).limit(BATCH).toArray();
+  if (docs.length === 0) {
+    mig.updateOne({ _id: key }, { $set: { done: true, finishedAt: new Date() } }, { upsert: true });
+    break;
+  }
+  const ops = docs.map(function (d) {
+    return { updateOne: {
+      filter: { _id: d._id, currency: { $exists: false } },   // idempotent
+      update: { $set: { currency: "USD", currencySource: "backfill" } }
+    } };
+  });
+  const r = db.orders.bulkWrite(ops, { ordered: false });
+  lastId = docs[docs.length - 1]._id;
+  mig.updateOne({ _id: key },
+    { $set: { lastId: lastId, at: new Date() }, $inc: { batches: 1 } },
+    { upsert: true });                                        // checkpoint last
+  printjson({ batch: r.modifiedCount, lastId: lastId });
+}</code></pre>
+    <p><strong>Trap:</strong> an <code>_id</code> cursor misses documents inserted <em>behind</em> the cursor during the run and documents whose <code>_id</code> is not monotonic, so finish with one verification pass that counts remaining matches, and inspect <code>writeErrors</code> - a validator rejection shows up there, not as an exception.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do I run a mongodump/mongorestore with --oplog and verify the restore?</h2>
+  <div class="answer">
+    <p><code>mongodump</code> alone is not a consistent snapshot: it reads collection by collection while writes continue. Adding <code>--oplog</code> records every write that happened during the dump into <code>oplog.bson</code>, and <code>mongorestore --oplogReplay</code> re-applies them, giving a point-in-time consistent copy. Then verify four things before you call it done: per-collection counts against the source, the index definitions, the collection options (validator, collation, time-series), and a data checksum plus a known document. Finally confirm the last replayed oplog entry.</p>
+    <pre><code># 1) consistent dump - full instance, --oplog forbids --db / --collection
+mongodump --uri="mongodb://backup@h1:27017,h2:27017/?replicaSet=rs0&amp;authSource=admin" \
+  --gzip --archive=/backup/shop-2026-10-23.archive --oplog
+
+# 2) restore + replay writes that landed during the dump
+mongorestore --uri="mongodb://restore@h3:27017/?replicaSet=rs1" \
+  --gzip --archive=/backup/shop-2026-10-23.archive \
+  --oplogReplay --drop --numInsertionWorkersPerCollection=4
+
+# 3) the four checks (mongosh, against the restored deployment)
+["orders", "customers", "ledger"].forEach(function (c) {
+  print(c, db.getCollection(c).countDocuments({}));      // 1. counts vs source
+});
+printjson(db.orders.getIndexes());                        // 2. keys, unique, TTL
+printjson(db.getCollectionInfos({ name: "orders" })[0].options);  // 3. validator, collation
+printjson(db.orders.aggregate([                           // 4. checksum + spot check
+  { $group: { _id: null, n: { $sum: 1 }, amount: { $sum: "$total" } } }
+]).toArray());
+printjson(db.getSiblingDB("local").oplog.rs.find().sort({ $natural: -1 }).limit(1).toArray());</code></pre>
+    <p><strong>Trap:</strong> <code>--oplogReplay</code> re-applies entries under their original namespaces, so it cannot be combined with <code>--nsFrom</code>/<code>--nsTo</code> remapping; and it only covers writes during the dump - anything after the dump still needs the oplog or a change stream, so record the dump's end timestamp.</p>
+  </div>
+</div>

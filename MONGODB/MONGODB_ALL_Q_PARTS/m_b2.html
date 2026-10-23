@@ -1,0 +1,1096 @@
+<div class="question">
+<h2>What is the MongoDB aggregation pipeline and how does data flow through it?</h2>
+<div class="answer">
+<p>The aggregation pipeline is a server-side framework that passes documents through an ordered sequence of stages, similar to a Unix pipe. Each stage receives the document stream produced by the previous stage, transforms it, and emits zero or more documents to the next stage. Stages can filter, reshape, group, join and compute new values, so the final output is whatever the last stage emits.</p>
+<pre><code>db.orders.aggregate([
+  { $match: { status: "paid" } },
+  { $group: { _id: "$customerId", total: { $sum: "$amount" } } }
+])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>In what order do the stages of an aggregation pipeline execute?</h2>
+<div class="answer">
+<p>Stages execute in the exact order they appear in the array; the optimizer may merge or move some stages internally, but the visible semantics follow array order. A few stages have positional rules: <code>$out</code> and <code>$merge</code> must be the last stage, and <code>$geoNear</code> must be the first. <code>$text</code> is only allowed inside a <code>$match</code> that is the first stage of the pipeline.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why does stage order matter so much for pipeline performance?</h2>
+<div class="answer">
+<p>Each stage processes whatever volume the previous stage produced, so filtering and projecting early keeps later stages cheap. Putting <code>$match</code> and a selective <code>$sort</code> first also lets MongoDB use indexes and avoid a blocking in-memory sort. A pipeline that groups or unwinds before filtering can do far more work than necessary.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does the $match stage do and where should you place it?</h2>
+<div class="answer">
+<p><code>$match</code> filters documents using the same query syntax as <code>find()</code>, so operators such as <code>$gt</code>, <code>$in</code> and <code>$elemMatch</code> all work. It should normally be the first stage so that the query planner can use indexes and the smallest possible document set flows downstream. It can also appear later to filter intermediate results after a <code>$group</code> or <code>$unwind</code>.</p>
+<pre><code>{ $match: { status: "shipped", amount: { $gte: 100 } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How is $match in an aggregation different from a find() filter?</h2>
+<div class="answer">
+<p>Both use the same query operators, but <code>$match</code> cannot use projection options, hints or <code>$where</code> style JavaScript, and it must be a plain query document. <code>$match</code> also cannot contain aggregation expressions such as <code>$expr</code> comparisons directly unless they are wrapped in <code>$expr</code>. Unlike <code>find()</code>, the output of <code>$match</code> continues into further stages rather than being returned to the client.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $project do and how do you include or exclude fields?</h2>
+<div class="answer">
+<p><code>$project</code> reshapes each document by keeping, dropping or adding fields. Use <code>field: 1</code> to include and <code>field: 0</code> to exclude; <code>_id</code> is included by default and must be explicitly excluded with <code>_id: 0</code>. You cannot mix inclusions and exclusions in one specification, except for the <code>_id</code> field.</p>
+<pre><code>{ $project: { name: 1, "address.city": 1, _id: 0 } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you create a computed field with $project?</h2>
+<div class="answer">
+<p>Assign an expression instead of 0 or 1, and the field is replaced by the expression result. Expressions can combine operators, literals, field paths and variables, which makes <code>$project</code> useful for unit conversion, string formatting and null handling. In MongoDB 8.x you may also use the shorter <code>{ field: "$other" }</code> style aliasing on its own.</p>
+<pre><code>{ $project: { total: { $multiply: ["$price", "$qty"] }, label: { $toUpper: "$sku" } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between $project and $addFields?</h2>
+<div class="answer">
+<p><code>$addFields</code> adds or overwrites fields while keeping every other field in the document, whereas <code>$project</code> requires you to list what you keep. <code>$addFields</code> is therefore safer when the document shape should stay mostly intact. <code>$set</code> is an exact alias of <code>$addFields</code>.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $group do and what is the _id field used for?</h2>
+<div class="answer">
+<p><code>$group</code> collapses documents that share the same grouping key into one document per key. The <code>_id</code> field of the output holds the grouping expression, such as a field path, a document of several fields or <code>null</code> for a single global group. All other output fields must be produced by accumulators.</p>
+<pre><code>{ $group: { _id: { country: "$country", year: { $year: "$createdAt" } }, n: { $sum: 1 } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do $sum and $avg behave when values are missing or non-numeric?</h2>
+<div class="answer">
+<p>Both accumulators ignore missing values and values that are not numeric, such as strings or arrays. <code>$sum</code> returns 0 when no numeric value is available, while <code>$avg</code> returns <code>null</code> because it has nothing to divide by. Wrap values in <code>$ifNull</code> or <code>$toDouble</code> if you need a specific fallback behaviour.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When should you use $push instead of $addToSet inside $group?</h2>
+<div class="answer">
+<p><code>$push</code> appends every value in encounter order and keeps duplicates, so it preserves the original sequence. <code>$addToSet</code> keeps only distinct values, which removes duplicates but gives no ordering guarantee and costs more memory on large groups. Use <code>$addToSet</code> for tag-like data and <code>$push</code> when order or repetition matters.</p>
+<pre><code>{ $group: { _id: "$sku", tags: { $addToSet: "$tag" } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do the $min and $max accumulators work?</h2>
+<div class="answer">
+<p><code>$min</code> and <code>$max</code> compare values across the documents in each group and keep the smallest or largest one. Comparison follows BSON type ordering, so numbers are compared with numbers and strings with strings. They can also be applied to expressions or documents, and <code>$min</code> is frequently used to find the earliest date in a group.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you count documents per group in an aggregation?</h2>
+<div class="answer">
+<p>Add a field accumulated with <code>{ $sum: 1 }</code>, which increments by one for every document in the group. Using <code>{ $sum: "$field" }</code> would add the field values instead of counting documents, and would return 0 if the field is missing. The resulting field is a normal output field that can be renamed or sorted on.</p>
+<pre><code>{ $group: { _id: "$status", count: { $sum: 1 } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $sort do and how do you sort on several fields?</h2>
+<div class="answer">
+<p><code>$sort</code> orders the stream by one or more fields using <code>1</code> for ascending and <code>-1</code> for descending. Multiple keys are evaluated left to right, so the first field is the primary order and later fields break ties. Sorting is a blocking operation unless an index can supply the requested order.</p>
+<pre><code>{ $sort: { country: 1, revenue: -1 } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $limit do and why is it usually paired with $sort?</h2>
+<div class="answer">
+<p><code>$limit</code> passes only the first N documents of the stream and discards the rest. After a <code>$sort</code> it returns a top-N result, which the engine can compute with a bounded in-memory sort instead of sorting the whole set. Placing <code>$limit</code> before <code>$sort</code> returns arbitrary documents and then sorts only those, which is rarely what you want.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does the $unwind stage do?</h2>
+<div class="answer">
+<p><code>$unwind</code> takes an array field and emits one output document per array element, copying all other fields into each copy. The element itself can be exposed through <code>includeArrayIndex</code> or referenced with <code>$field</code> afterwards. It is the standard way to flatten arrays before grouping on element values.</p>
+<pre><code>{ $unwind: { path: "$items", includeArrayIndex: "idx", preserveNullAndEmptyArrays: true } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens to a document when $unwind encounters an empty array?</h2>
+<div class="answer">
+<p>By default the document is dropped, because an empty array produces zero output documents. Missing or <code>null</code> array fields are also dropped by default. Set <code>preserveNullAndEmptyArrays: true</code> to keep the document once with the array field missing.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What do preserveNullAndEmptyArrays and includeArrayIndex control in $unwind?</h2>
+<div class="answer">
+<p><code>preserveNullAndEmptyArrays</code> keeps documents whose array is missing, <code>null</code> or empty, so counts are not silently reduced. <code>includeArrayIndex</code> adds a field holding the zero-based position of each element, which is useful for ordering or reconstructing the array. It is a common source of inflated document counts when forgotten.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $lookup and which parameters does it require?</h2>
+<div class="answer">
+<p><code>$lookup</code> performs a left outer join with another collection in the same database, matching each input document to foreign documents. The shorthand form needs <code>from</code>, <code>localField</code>, <code>foreignField</code> and <code>as</code>, where <code>as</code> names the array of matched documents. Documents with no match still appear, with an empty array.</p>
+<pre><code>{ $lookup: { from: "customers", localField: "customerId", foreignField: "_id", as: "customer" } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why does $lookup need an index and how expensive is it?</h2>
+<div class="answer">
+<p>The join runs one query per input document against the foreign collection, so an index on the <code>foreignField</code> is essential; without it each lookup becomes a collection scan. Cost therefore scales with the number of input documents times the per-lookup cost. Filtering the input with an early <code>$match</code> is the most effective optimization.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $addFields do to the existing document?</h2>
+<div class="answer">
+<p>It returns each input document with new fields added or existing fields overwritten, leaving all other fields untouched. Expressions may reference existing fields, and dotted paths create nested fields. It is usually preferred over <code>$project</code> when only a couple of derived values are needed.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you remove fields in an aggregation pipeline with $unset?</h2>
+<div class="answer">
+<p><code>$unset</code> takes a field, a list of fields or an array of field names and removes them from every document. It is shorthand for a <code>$project</code> that excludes those fields. Removing sensitive fields such as password hashes early keeps them from reaching later stages and the client.</p>
+<pre><code>{ $unset: ["passwordHash", "internalNotes"] }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does the $count stage return?</h2>
+<div class="answer">
+<p><code>$count</code> replaces the stream with a single document of the form <code>{ count: n }</code>, where the field name is the argument you supply. It is equivalent to a <code>$group</code> with <code>$sum: 1</code> plus a <code>$project</code>. An empty input produces no document at all, so clients must handle a missing result.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $facet and when would you use it?</h2>
+<div class="answer">
+<p><code>$facet</code> runs several independent sub-pipelines over the same input documents and returns one document with an array per facet. It lets a single pass produce, for example, paginated results plus total counts plus category breakdowns. Sub-pipelines cannot use <code>$out</code>, <code>$merge</code> or <code>$facet</code> themselves, and the input set is buffered in memory.</p>
+<pre><code>{ $facet: { data: [{ $skip: 0 }, { $limit: 10 }], total: [{ $count: "n" }] } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the $bucket stage and which options does it need?</h2>
+<div class="answer">
+<p><code>$bucket</code> groups documents into ranges defined by <code>boundaries</code>, which must be an ascending list of at least two values. It requires <code>groupBy</code> and optionally accepts <code>default</code> for values outside all ranges plus an <code>output</code> document of accumulators. Without a <code>default</code>, documents outside the boundaries raise an error.</p>
+<pre><code>{ $bucket: { groupBy: "$amount", boundaries: [0, 50, 100, 500], default: "other", output: { n: { $sum: 1 } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $sortByCount do and what is it shorthand for?</h2>
+<div class="answer">
+<p><code>$sortByCount</code> groups by an expression, counts documents per value and sorts the result by count descending. It is shorthand for <code>$group</code> on the expression with <code>$sum: 1</code> followed by <code>$sort: { count: -1 }</code>. It is handy for quick value distributions during exploration.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $replaceRoot and how does $replaceWith differ?</h2>
+<div class="answer">
+<p><code>$replaceRoot</code> promotes a document-valued expression to be the new top-level document via the <code>newRoot</code> option. <code>$replaceWith</code> is the newer, shorter syntax that takes the expression directly, so <code>$replaceRoot: { newRoot: X }</code> equals <code>$replaceWith: X</code>. The expression must evaluate to a document or the stage fails.</p>
+<pre><code>{ $replaceWith: { $mergeObjects: ["$customer", "$$ROOT"] } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does $ifNull work in an expression?</h2>
+<div class="answer">
+<p><code>$ifNull</code> returns the first argument unless it is <code>null</code> or missing, in which case it returns the second. In MongoDB 8.x it accepts multiple input expressions and returns the first non-null one. It is the standard way to give defaults to optional fields.</p>
+<pre><code>{ $project: { phone: { $ifNull: ["$mobile", "$landline", "unknown"] } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the $cond operator work?</h2>
+<div class="answer">
+<p><code>$cond</code> evaluates a boolean expression and returns one of two values, either in array form <code>[if, then, else]</code> or with named fields <code>if</code>, <code>then</code>, <code>else</code>. It is the basic if/else of aggregation and can be nested. The condition must evaluate to a boolean, so wrap comparisons explicitly.</p>
+<pre><code>{ $project: { tier: { $cond: [{ $gte: ["$total", 100] }, "gold", "standard"] } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does $switch differ from nested $cond?</h2>
+<div class="answer">
+<p><code>$switch</code> evaluates a list of <code>branches</code> and returns the value of the first branch whose <code>case</code> is true, falling back to <code>default</code>. It reads more clearly than deeply nested <code>$cond</code> expressions for multi-way logic. If no branch matches and no <code>default</code> is given, the stage raises an error.</p>
+<pre><code>{ $switch: { branches: [
+  { case: { $lt: ["$n", 10] }, then: "small" },
+  { case: { $lt: ["$n", 100] }, then: "medium" } ],
+  default: "large" } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you concatenate strings in an aggregation?</h2>
+<div class="answer">
+<p><code>$concat</code> joins any number of string expressions and returns <code>null</code> if any argument is <code>null</code> or missing. Use <code>$ifNull</code> or <code>$toString</code> first when fields are optional or numeric. For joining array elements with a separator, use <code>$reduce</code> combined with <code>$concat</code>.</p>
+<pre><code>{ $project: { full: { $concat: ["$firstName", " ", "$lastName"] } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do $substrCP and $substrBytes differ?</h2>
+<div class="answer">
+<p><code>$substrCP</code> counts characters, meaning Unicode code points, while <code>$substrBytes</code> counts raw UTF-8 bytes. For text containing accents, emoji or CJK characters, byte indexing can split a character and produce invalid output, so <code>$substrCP</code> is the safer choice. Negative lengths are treated as an error, and out-of-range offsets return an empty string.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What do $toUpper and $toLower do, and can they give case-insensitive matching?</h2>
+<div class="answer">
+<p><code>$toUpper</code> and <code>$toLower</code> change the case of a string expression, but they only handle ASCII characters reliably. They cannot use an index, so applying them to a field forces per-document evaluation. For real case-insensitive queries, a collation with strength 1 or 2 on the index and the query is the correct tool.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you extract the year or month from a date field?</h2>
+<div class="answer">
+<p>Date part operators such as <code>$year</code>, <code>$month</code>, <code>$dayOfMonth</code> and <code>$hour</code> take a date expression and return an integer. They accept a timezone document so results respect a local calendar rather than UTC. For very large datasets, <code>$dateTrunc</code> on a pre-grouped bucket is more efficient than extracting parts.</p>
+<pre><code>{ $project: { y: { $year: { date: "$createdAt", timezone: "America/Bogota" } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $dateToString do and which format specifiers are common?</h2>
+<div class="answer">
+<p><code>$dateToString</code> formats a date into a string using a pattern, with optional <code>timezone</code> and <code>onNull</code> settings. Common specifiers include <code>%Y</code> for the four-digit year, <code>%m</code> for the month, <code>%d</code> for the day and <code>%H:%M:%S</code> for time. It is typically used to build daily or monthly report keys.</p>
+<pre><code>{ $project: { day: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt", timezone: "UTC" } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $dateTrunc do and why is it useful for reporting?</h2>
+<div class="answer">
+<p><code>$dateTrunc</code> truncates a date to a given unit such as <code>hour</code>, <code>day</code> or <code>month</code>, returning a date value rather than a string. Because the output is still a date, results can be sorted, compared and indexed normally. It is the recommended way to build time buckets for charts and rollups.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which arithmetic operators are available in aggregation expressions?</h2>
+<div class="answer">
+<p>Basic operators include <code>$add</code>, <code>$subtract</code>, <code>$multiply</code>, <code>$divide</code>, <code>$mod</code>, <code>$abs</code>, <code>$ceil</code>, <code>$floor</code> and <code>$round</code>, plus <code>$pow</code> and <code>$sqrt</code>. <code>$add</code> also concatenates when one operand is a date, which makes it useful for date arithmetic. Division by zero raises an error, so guard the divisor.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does the $filter operator do?</h2>
+<div class="answer">
+<p><code>$filter</code> returns a new array containing only the elements that satisfy a condition, using <code>input</code>, <code>cond</code> and an optional <code>as</code> variable name. The default element variable is <code>$$this</code>. It is the array equivalent of a <code>$match</code> and is often used to trim embedded arrays before returning documents.</p>
+<pre><code>{ $project: { active: { $filter: { input: "$items", as: "i", cond: { $eq: ["$$i.active", true] } } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does the $map operator do?</h2>
+<div class="answer">
+<p><code>$map</code> applies an expression to every element of an array and returns an array of the results, preserving order and length. It accepts <code>input</code>, <code>as</code> and <code>in</code>. Use it to transform a field inside each array element, for example extracting only product codes.</p>
+<pre><code>{ $project: { codes: { $map: { input: "$items", as: "i", in: "$$i.sku" } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $reduce do and when is it needed?</h2>
+<div class="answer">
+<p><code>$reduce</code> folds an array into a single value by iterating with an accumulator, exposing <code>$$value</code> and <code>$$this</code> in the <code>in</code> expression. It is required for operations like summing array elements, flattening nested arrays or concatenating strings with separators. <code>initialValue</code> defines the starting accumulator.</p>
+<pre><code>{ $project: { total: { $reduce: { input: "$items", initialValue: 0,
+  in: { $add: ["$$value", "$$this.price"] } } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you get the number of elements in an array during aggregation?</h2>
+<div class="answer">
+<p><code>$size</code> returns the length of an array expression. It raises an error if the value is missing or not an array, so guard it with <code>$isArray</code> and <code>$ifNull</code> on optional fields. In a plain query, <code>$size</code> can only match an exact length inside <code>$expr</code>.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does $slice behave in aggregation compared with projection?</h2>
+<div class="answer">
+<p>In a <code>find()</code> projection, <code>$slice</code> trims the returned array to the first or last N elements without changing anything else. In aggregation, <code>$slice</code> is an expression that takes an array, a start position and an optional count, and can return a middle subrange using a negative count. The aggregation form can be combined with other expressions, while the projection form cannot.</p>
+<pre><code>{ $project: { top3: { $slice: ["$scores", 3] }, last2: { $slice: ["$scores", -2] } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $expr and when do you need it in a query?</h2>
+<div class="answer">
+<p><code>$expr</code> lets a query filter compare fields of the same document or use aggregation operators inside <code>find()</code>, <code>$match</code> or <code>deleteMany()</code>. Without it, the query language can only compare a field to a constant. <code>$expr</code> cannot use indexes as efficiently in all cases, so keep it simple and test with <code>explain()</code>.</p>
+<pre><code>db.orders.find({ $expr: { $gt: ["$shippedQty", "$orderedQty"] } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $$ROOT and when do you use it?</h2>
+<div class="answer">
+<p><code>$$ROOT</code> references the current top-level document as it enters the stage, which is useful for preserving the original document while reshaping. It is commonly used with <code>$mergeObjects</code> to flatten a subdocument into the root, or with <code>$push</code> to collect whole documents per group. Be aware it holds the full document, so pushing it into an array for many documents can hit memory limits.</p>
+<pre><code>{ $group: { _id: "$status", docs: { $push: "$$ROOT" } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do let variables work inside an aggregation stage?</h2>
+<div class="answer">
+<p>A <code>let</code> option defines variables that are evaluated once in the stage context and referenced with the double-dollar prefix, for example <code>$$minTotal</code>. Inside <code>$lookup</code> pipelines this is how a local field is passed into the sub-pipeline. Referencing an undefined variable is an error, and variables are scoped to the stage that declares them.</p>
+<pre><code>{ $lookup: { from: "orders", let: { cid: "$_id" },
+  pipeline: [{ $match: { $expr: { $eq: ["$customerId", "$$cid"] } } }],
+  as: "orders" } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $out do and how does it differ from $merge?</h2>
+<div class="answer">
+<p><code>$out</code> writes the pipeline result to a collection, atomically replacing the target collection as a whole. <code>$merge</code> instead inserts, updates or leaves existing documents, so it can incrementally refresh a target. <code>$out</code> is simpler but rebuilds everything, while <code>$merge</code> supports incremental materialized views and can keep existing documents.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which restrictions apply to the $out stage?</h2>
+<div class="answer">
+<p><code>$out</code> must be the last stage of the pipeline and writes only to a collection in the same database. It replaces the target collection, so any indexes previously defined on the target are lost and must be recreated. It cannot write to a view, and it does not create a new database.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $merge require to work correctly?</h2>
+<div class="answer">
+<p><code>$merge</code> needs a target collection and an <code>on</code> field that identifies matching documents; the default is <code>_id</code>, and that field must have a unique index. You also choose behaviour with <code>whenMatched</code> and <code>whenNotMatched</code>, and can target a different database. If more than one target document matches, the stage fails, which is exactly what the unique index prevents.</p>
+<pre><code>{ $merge: { into: "daily_sales", on: "_id",
+  whenMatched: "merge", whenNotMatched: "insert" } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you build an on-demand materialized view with $merge?</h2>
+<div class="answer">
+<p>Run the aggregation that computes the summary and finish it with <code>$merge</code> into a dedicated collection, using <code>whenMatched: "merge"</code> so reruns update the rows. The target collection can then be indexed and queried cheaply, unlike a normal view which recomputes on every read. Applications or a scheduled job decide when to refresh the summary.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What happens when an aggregation pipeline exceeds its memory limit?</h2>
+<div class="answer">
+<p>Blocking stages that must buffer data are limited to 100 MB per stage by default. Exceeding that limit fails the operation with a memory limit error instead of degrading silently. You either make the pipeline more selective or enable disk use explicitly.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does allowDiskUse do and where can you enable it?</h2>
+<div class="answer">
+<p><code>allowDiskUse: true</code> lets blocking stages spill temporary files to disk when they exceed 100 MB of memory. You can pass it as an option to <code>aggregate()</code>, and in MongoDB 8.x <code>find()</code> also accepts it for large sort operations. Spilling prevents failures but is much slower, so it is a safety valve rather than a design goal.</p>
+<pre><code>db.orders.aggregate(pipeline, { allowDiskUse: true })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Which stages are most likely to hit the memory limit?</h2>
+<div class="answer">
+<p><code>$group</code> and <code>$sort</code> are the classic blockers because they must see many documents before emitting results. <code>$bucket</code>, <code>$facet</code> and <code>$unwind</code> followed by <code>$group</code> can also consume a lot of memory. Reducing input with an early <code>$match</code> and avoiding <code>$push: "$$ROOT"</code> are the usual fixes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does the aggregation optimizer use indexes?</h2>
+<div class="answer">
+<p>The planner can push a leading <code>$match</code> and a following <code>$sort</code> into a single indexed query plan, so the index both filters and orders documents. It can also cover a pipeline when all needed fields are in the index. Once a stage changes document shape, such as <code>$project</code> or <code>$group</code>, later stages generally cannot use collection indexes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you check whether an aggregation used an index?</h2>
+<div class="answer">
+<p>Run the pipeline with <code>explain("executionStats")</code> and inspect the winning plan, looking for <code>IXSCAN</code> versus <code>COLLSCAN</code> and the number of documents examined. <code>totalKeysExamined</code> close to <code>nReturned</code> indicates a selective index. Metrics such as <code>hasSortStage</code> tell you whether an in-memory sort was needed.</p>
+<pre><code>db.orders.explain("executionStats").aggregate([
+  { $match: { status: "paid" } },
+  { $sort: { createdAt: -1 } },
+  { $limit: 20 }
+])</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you create a text index and search with $text?</h2>
+<div class="answer">
+<p>Create a text index on one or more string fields with the <code>"text"</code> type, then query with the <code>$text</code> operator and a <code>$search</code> string. <code>$text</code> performs tokenized, stemmed word matching rather than exact substring matching. You can sort by <code>textScore</code> to rank results by relevance.</p>
+<pre><code>db.articles.createIndex({ title: "text", body: "text" });
+db.articles.find({ $text: { $search: "mongodb index" } },
+  { score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the main limitations of a text index?</h2>
+<div class="answer">
+<p>A collection can have only one text index, though that index may cover several fields. <code>$text</code> must appear inside a <code>$match</code> that is the first stage of a pipeline, and it cannot be combined with hint. Text indexes ignore stop words and stem terms, so exact substring or partial-word searches are not supported.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you search for an exact phrase or exclude a term with $text?</h2>
+<div class="answer">
+<p>Wrap the words in double quotes inside the search string to require them as a phrase, and prefix a term with a minus sign to exclude it. Terms separated by spaces are OR-ed by default unless you quote them. This is why <code>"data modeling" -mysql</code> behaves as a phrase match with an exclusion.</p>
+<pre><code>db.articles.find({ $text: { $search: "\"data modeling\" -mysql" } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a 2dsphere index used for?</h2>
+<div class="answer">
+<p>A <code>2dsphere</code> index supports queries on GeoJSON geometries and legacy coordinate pairs on a spherical model of the Earth. It enables proximity, intersection and containment queries on points, lines and polygons. The indexed field must contain valid GeoJSON, for example a Point with a coordinates array of longitude then latitude.</p>
+<pre><code>db.stores.createIndex({ location: "2dsphere" });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $near do and what does it require?</h2>
+<div class="answer">
+<p><code>$near</code> returns documents ordered by distance from a point, nearest first, optionally limited by <code>$minDistance</code> and <code>$maxDistance</code> in meters. It requires a geospatial index on the queried field and cannot be used inside an aggregation <code>$match</code>; use <code>$geoNear</code> there. Because results are already sorted by distance, adding your own sort is unnecessary.</p>
+<pre><code>db.stores.find({ location: { $near: { $geometry: { type: "Point", coordinates: [-74.07, 4.65] },
+  $maxDistance: 2000 } } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does $geoWithin differ from $near?</h2>
+<div class="answer">
+<p><code>$geoWithin</code> selects documents whose location lies inside a given shape such as a polygon, circle or box, and returns them in unspecified order. <code>$near</code> selects by distance and returns documents sorted nearest first. <code>$geoWithin</code> does not require sorting, which makes it cheaper when you only need membership in an area.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a TTL index and how does expiration work?</h2>
+<div class="answer">
+<p>A TTL index is a single-field index on a date or array of dates created with <code>expireAfterSeconds</code>. A background task runs roughly every 60 seconds and deletes documents whose indexed date is older than the configured age. Expiration is therefore not exact and deletions are not guaranteed immediately.</p>
+<pre><code>db.sessions.createIndex({ lastSeen: 1 }, { expireAfterSeconds: 3600 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Which restrictions apply to TTL indexes?</h2>
+<div class="answer">
+<p>The indexed field must be a date or an array of dates, and the index must be single-field, so it cannot be part of a compound index. The TTL monitor only removes whole documents, so expiring embedded array elements requires application logic or a capped or time series design. Changing the retention period means using <code>collMod</code> rather than rebuilding the index.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a capped collection?</h2>
+<div class="answer">
+<p>A capped collection is a fixed-size collection that keeps documents in insertion order and overwrites the oldest documents when full. Inserts are very fast and reads in natural order are sequential, which suits logs and queues. The size is declared at creation and cannot be changed without recreating the collection.</p>
+<pre><code>db.createCollection("logs", { capped: true, size: 10485760, max: 100000 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the limitations of capped collections?</h2>
+<div class="answer">
+<p>Documents cannot be deleted individually and updates may not increase document size, so they are unsuitable for mutable data. Only the natural order is guaranteed, and you cannot shard a capped collection. MongoDB itself uses one internally for the replica set oplog, which is the classic example of their append-only use case.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a time series collection?</h2>
+<div class="answer">
+<p>A time series collection is a specialized collection type that stores measurements with a timestamp and optional metadata, and internally groups them into buckets. This bucket structure reduces storage and index overhead compared with one document per measurement. It is intended for metrics, sensor data and event streams that are written once and queried by time range.</p>
+<pre><code>db.createCollection("weather", { timeseries: { timeField: "ts",
+  metaField: "sensor", granularity: "minutes" } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are timeField, metaField and granularity in a time series collection?</h2>
+<div class="answer">
+<p><code>timeField</code> names the field holding the date of each measurement and is required. <code>metaField</code> optionally names a field that identifies the series source, such as a sensor id, and is used for grouping and bucketing. <code>granularity</code> tells the server the expected interval between measurements so buckets can be sized efficiently.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What should you know about modifying data in a time series collection?</h2>
+<div class="answer">
+<p>Updates and deletes are supported but restricted: a delete must match on the metaField and time range, and updates cannot change the time field. Inserting documents with mixed shape in the same series can create many small buckets. Plan retention with TTL on the time field rather than manual deletes where possible.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is GridFS and when should you use it?</h2>
+<div class="answer">
+<p>GridFS is a specification, implemented by drivers, for storing files larger than the 16 MB document limit. It splits a file into chunks and stores metadata separately, so the file can be read in parts. Use it for large binaries such as videos or backups; small files are usually better stored in a normal document or an external object store.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which collections does GridFS use and how large are the chunks?</h2>
+<div class="answer">
+<p>GridFS stores metadata in <code>fs.files</code> and binary chunks in <code>fs.chunks</code>, with an index on the files id and chunk number. The default chunk size is 255 KB, and it can be configured per bucket. Reads reassemble chunks in order, so range requests still fetch whole chunks.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a MongoDB view and how do you create one?</h2>
+<div class="answer">
+<p>A view is a read-only, named query defined by an aggregation pipeline, stored as metadata in the database. Creating one uses <code>db.createCollection(name, { viewOn: ..., pipeline: [...] })</code> or <code>db.createView()</code>. Clients query it like a collection, which lets you expose a filtered or reshaped projection without duplicating data.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Are views materialized, and how do you create an on-demand materialized view?</h2>
+<div class="answer">
+<p>Standard views are computed on every read and consume no storage, so they are only as fast as their underlying pipeline. To materialize results, end a pipeline with <code>$out</code> or <code>$merge</code> into a real collection and query that collection instead. The trade-off is that the data is only as fresh as the last refresh, which you schedule yourself.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is collation and how do you run a case-insensitive query?</h2>
+<div class="answer">
+<p>Collation defines language-aware comparison rules for strings, including case and accent handling. To make a query case-insensitive, specify a collation such as <code>{ locale: "en", strength: 2 }</code> on the query, and create the index with the same collation so it can be used. The collation must match between index and query or the index is ignored.</p>
+<pre><code>db.users.find({ email: "ANA@EXAMPLE.COM" }).collation({ locale: "en", strength: 2 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does collation strength control?</h2>
+<div class="answer">
+<p>Strength sets how many differences are considered significant: 1 ignores case and accents, 2 ignores case but considers accents, and 3, the default, is case and accent sensitive. Higher strengths also consider case variants and, at 4 or 5, punctuation or code point differences. Choose the lowest strength that satisfies the requirement, since it affects index usability.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is read concern and which levels are commonly used?</h2>
+<div class="answer">
+<p>Read concern controls the durability and isolation guarantees of data returned by a read. <code>"local"</code> is the default and may return data that could still be rolled back, <code>"majority"</code> returns data acknowledged by most replica set members, and <code>"snapshot"</code> provides a consistent point-in-time view, mainly for transactions. <code>"linearizable"</code> exists for reads that must see all prior majority-acknowledged writes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What does write concern specify?</h2>
+<div class="answer">
+<p>Write concern states how many members must acknowledge a write before the driver reports success, using <code>w</code>, plus <code>j</code> for journaling and <code>wtimeout</code> for a bound. <code>w: 1</code> acknowledges from the primary only and is fast, while <code>w: "majority"</code> survives a failover. Stronger write concern costs latency but reduces the chance of rolled-back writes.</p>
+<pre><code>db.orders.insertOne(doc, { writeConcern: { w: "majority", j: true } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a replica set and which roles do its members play?</h2>
+<div class="answer">
+<p>A replica set is a group of mongod instances that maintain the same data set for redundancy and high availability. Exactly one member is primary and accepts writes, while secondaries replicate the oplog and can serve reads if configured. Elections promote a secondary automatically when the primary becomes unavailable.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is read preference and which modes exist?</h2>
+<div class="answer">
+<p>Read preference decides which replica set members a client sends reads to. Modes include <code>primary</code>, <code>primaryPreferred</code>, <code>secondary</code>, <code>secondaryPreferred</code> and <code>nearest</code>. Secondary reads may return slightly stale data, so use <code>primary</code> for read-after-write guarantees.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are retryable writes?</h2>
+<div class="answer">
+<p>Retryable writes let the driver automatically retry certain single-document write operations once if a transient network error or failover occurs. MongoDB tracks a session id and transaction number per write so a retried write is applied at most once. They require a replica set or sharded cluster and a supporting write concern, and multi-document operations need a transaction instead.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is a session and what does causal consistency mean?</h2>
+<div class="answer">
+<p>A session groups related operations so they share causal ordering metadata, which drivers manage automatically. With causal consistency enabled, a read in the same session is guaranteed to see writes performed earlier in that session, even when reading from a secondary. This is achieved by tracking the operation time and cluster time on the session.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What are change streams?</h2>
+<div class="answer">
+<p>Change streams let an application subscribe to a real-time stream of data changes on a collection, database or deployment. They emit resume-token-bearing events such as insert, update, replace, delete and invalidate, without tailing the oplog manually. Because they use the oplog, they require a replica set or sharded cluster and <code>majority</code> read concern.</p>
+<pre><code>const cs = db.orders.watch([{ $match: { "operationType": "insert" } }]);
+while (!cs.isClosed()) { const next = await cs.next(); printjson(next.fullDocument); }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you resume a change stream after a disconnect?</h2>
+<div class="answer">
+<p>Each event includes a <code>_id</code> resume token, which you persist after processing and pass back through <code>resumeAfter</code> when reopening the stream. For an event that was not fully processed, <code>startAfter</code> is the correct option. The oplog window limits how far back a resume can succeed, so long outages can make a token unusable.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $jsonSchema validation used for?</h2>
+<div class="answer">
+<p><code>$jsonSchema</code> lets you attach a JSON Schema validator to a collection so inserts and updates must match declared field types and required properties. You can add it at creation with <code>validator</code> or later with <code>collMod</code>. Validation happens on write, which protects data quality close to the database rather than only in the application.</p>
+<pre><code>db.createCollection("users", { validator: { $jsonSchema: {
+  bsonType: "object", required: ["email"],
+  properties: { email: { bsonType: "string" } } } } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What do validationLevel and validationAction control?</h2>
+<div class="answer">
+<p><code>validationLevel</code> decides which documents are checked: <code>strict</code> validates all inserts and updates, <code>moderate</code> only validates documents that are already valid, and <code>off</code> disables validation. <code>validationAction</code> decides whether a violation is rejected with <code>error</code> or merely logged with <code>warn</code>. Starting with <code>warn</code> is a safe way to roll out a new schema.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you run a multi-document transaction in MongoDB?</h2>
+<div class="answer">
+<p>Start a session, call <code>startTransaction()</code>, run the operations with that session, then <code>commitTransaction()</code> and end the session. Any error should be followed by <code>abortTransaction()</code>. Transactions require a replica set or sharded cluster and explicit session passing on every operation.</p>
+<pre><code>const s = db.getMongo().startSession();
+s.startTransaction();
+s.getDatabase("shop").orders.insertOne({ _id: 1, total: 10 });
+s.commitTransaction();</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What are the main limitations of transactions?</h2>
+<div class="answer">
+<p>A transaction has a default lifetime limit of 60 seconds, controlled by <code>transactionLifetimeLimitSeconds</code>, and each operation must fit within the 16 MB oplog entry limit. Transactions block on conflicting writes, so long-running ones increase lock contention. They are also not a substitute for a good schema; cross-document atomicity is expensive compared with single-document atomic writes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the database profiler and which levels does it support?</h2>
+<div class="answer">
+<p>The profiler records slow or all operations in the <code>system.profile</code> capped collection for later analysis. Level 0 is off, level 1 records operations slower than <code>slowms</code>, and level 2 records every operation. Level 2 is heavy, so enable it briefly in production and inspect the results with queries on <code>system.profile</code>.</p>
+<pre><code>db.setProfilingLevel(1, { slowms: 100 });
+db.system.profile.find().sort({ ts: -1 }).limit(5);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is db.currentOp used for?</h2>
+<div class="answer">
+<p><code>db.currentOp()</code> shows operations currently running on the server, including their namespace, duration, plan summary and waiting state. It is the first tool for diagnosing a slow query or a stuck operation in progress. Filter by <code>secs_running</code> or namespace, and use <code>db.killOp()</code> only for operations you are certain are safe to terminate.</p>
+<pre><code>db.currentOp({ secs_running: { $gt: 5 }, active: true });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between mongostat and mongotop?</h2>
+<div class="answer">
+<p><code>mongostat</code> prints a per-second snapshot of server counters such as inserts, queries, updates, deletes, connections and page faults. <code>mongotop</code> reports how much time each collection spends on reads and writes, which points to hot collections. Together they separate overall load from per-collection hotspots.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which Atlas UI capabilities matter most for day-to-day operations?</h2>
+<div class="answer">
+<p>The cluster view shows topology, region, tier and connection string, and supports scaling and pausing the cluster. The backup section manages snapshots and point-in-time restores, while alerts can notify on replication lag, slow queries and disk usage. The built-in Performance Advisor and Query Profiler surface slow operations and index suggestions without shell access.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you model a one-to-few relationship?</h2>
+<div class="answer">
+<p>For a small, bounded number of related items, embed them as an array of subdocuments inside the parent, for example a few addresses on a user. This keeps related data in one document, so a single read returns everything and updates stay atomic. The approach works while the array stays small and is not updated concurrently by many writers.</p>
+<pre><code>{ _id: 1, name: "Ana", addresses: [ { city: "Bogota" }, { city: "Medellin" } ] }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you model a one-to-many relationship?</h2>
+<div class="answer">
+<p>When the number of children can grow into the hundreds, store the parent id on each child document and index that field, rather than keeping an unbounded array on the parent. Application code queries children by parent id, optionally with pagination. This keeps documents small and avoids rewriting a growing array on every insert.</p>
+<pre><code>db.orders.createIndex({ customerId: 1 });
+db.orders.find({ customerId: 42 }).sort({ createdAt: -1 }).limit(20);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How would you model a one-to-squillions relationship?</h2>
+<div class="answer">
+<p>For very high cardinality, such as log lines or sensor readings per device, never embed the children; put the parent reference on the child and index it. The parent document then stays small regardless of volume. Time series collections or bucketing are often a better fit than one document per child for this shape.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you decide between embedding and referencing?</h2>
+<div class="answer">
+<p>Embed when the data is read together, the child count is bounded, and the child has little independent life. Reference when the data is large or unbounded, updated independently, accessed separately, or shared by many parents. Always check the 16 MB document limit and the write pattern, since embedding makes every write rewrite the whole document.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the bucket pattern and what problem does it solve?</h2>
+<div class="answer">
+<p>The bucket pattern groups many small events into one document, typically by time window, storing an array of measurements plus precomputed counts and totals. It dramatically reduces the number of documents and index entries for high-volume time-ordered data. Reads then fetch one bucket instead of hundreds of documents.</p>
+<pre><code>{ sensor: "s1", bucketStart: ISODate("2026-01-01T00:00:00Z"),
+  count: 60, total: 1432, samples: [ { t: 1, v: 24 }, { t: 2, v: 25 } ] }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the computed pattern?</h2>
+<div class="answer">
+<p>The computed pattern stores a derived value, such as a total, average or count, directly in the document so reads avoid recomputing it. It pays off when reads greatly outnumber writes and the computation is expensive, for example a movie rating average. The trade-off is that the application must update the computed field whenever the underlying data changes.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When does an extended reference go stale, and how do you keep it current?</h2>
+<div class="answer">
+<p>An extended reference is stale from the moment the source document changes: the copy inside the child keeps the old value until something updates it. The cheap fields to copy are the ones that never change after creation, such as a customer's signup country or a product's SKU prefix. The expensive ones are any field the business can edit, like a name or a price.</p>
+<p>Keeping it current needs an explicit writer: either the update path that touches the source also fans out to the copies, or a change stream listener patches them asynchronously. Either way, accept that reads can see a copy a few milliseconds behind, and stamp the embedded block with <code>updatedAt</code> so a background job can find and repair the drift.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why add a schema version field to documents?</h2>
+<div class="answer">
+<p>A <code>schemaVersion</code> field records which shape a document follows, so application code can handle several versions during a rolling migration. It makes migrations explicit and lets you find documents that still need upgrading. Without it, distinguishing old and new shapes relies on guessing from missing or present fields.</p>
+<pre><code>{ _id: 1, schemaVersion: 2, name: "Ana", fullName: { first: "Ana", last: "Diaz" } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you handle a schema migration in MongoDB?</h2>
+<div class="answer">
+<p>Either migrate lazily, converting documents as they are read or written, or backfill in batches with a script. Lazy migration spreads the work but requires dual-read code paths; batch migration gives a clean end state but must be throttled. Whichever you choose, deploy application code that understands both shapes before and after the change.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you migrate a large collection without downtime?</h2>
+<div class="answer">
+<p>Process documents in small batches filtered by an indexed field such as <code>_id</code>, update each batch with <code>bulkWrite</code>, and pause between batches to limit load. Track the last processed key so the job can resume after a failure. Run it during low traffic and monitor replication lag and slow queries while it runs.</p>
+<pre><code>db.users.find({ _id: { $gt: lastId }, schemaVersion: { $exists: false } })
+  .sort({ _id: 1 }).limit(1000);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the 16 MB document size limit?</h2>
+<div class="answer">
+<p>A single BSON document cannot exceed 16 MB, which is a hard limit enforced by the server on insert and update. The limit applies to the encoded BSON, including field names and array elements. Exceeding it fails the write, and no index or option can raise the limit.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What do you do when data no longer fits in one document?</h2>
+<div class="answer">
+<p>Split the data using the bucket or subset pattern, move large binaries into GridFS, or promote the embedded array into its own collection with a parent reference. Each option trades a single read for smaller documents and more queries. The important step is recognizing the growth trend before writes start failing.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Which compression options does WiredTiger support?</h2>
+<div class="answer">
+<p>WiredTiger supports <code>snappy</code>, which is the default and favours speed, <code>zlib</code> for better compression at higher CPU cost, and <code>zstd</code> as a balanced option available in current versions. Indexes use prefix compression by default and can also be compressed. The choice affects CPU versus disk usage, not query semantics.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you enable or change collection compression?</h2>
+<div class="answer">
+<p>Pass a WiredTiger storage engine configuration when creating the collection, for example a <code>blockCompressor</code> of <code>zstd</code>. Changing compression on an existing collection requires rewriting its data, typically with an initial sync or a rebuild such as <code>compact</code> or a resync. Verify the effect by comparing storage size and CPU after the change.</p>
+<pre><code>db.createCollection("events", { storageEngine: { wiredTiger: {
+  configString: "block_compressor=zstd" } } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How does a multikey index work?</h2>
+<div class="answer">
+<p>When you index a field that holds an array, MongoDB creates one index entry per array element, and the index is marked multikey. A query on an element value can then use the index without scanning the array. Multikey indexes are larger than scalar indexes and have restrictions on how bounds can be combined.</p>
+<pre><code>db.articles.createIndex({ tags: 1 });
+db.articles.find({ tags: "mongodb" });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why can you not create a compound index on two array fields?</h2>
+<div class="answer">
+<p>Indexing two array fields in the same compound index would produce a cartesian product of index entries for every document, so MongoDB rejects it with a "cannot index parallel arrays" error. The workaround is to index one array field and filter the other in the query, or to restructure the data. A compound index may include at most one array field.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is $elemMatch important when querying arrays?</h2>
+<div class="answer">
+<p>Without <code>$elemMatch</code>, separate conditions on array elements can be satisfied by different elements of the same document. <code>$elemMatch</code> requires a single element to match all conditions, which is usually the intended semantics. It also helps the planner use a multikey index more precisely.</p>
+<pre><code>db.orders.find({ items: { $elemMatch: { sku: "A1", qty: { $gte: 2 } } } })</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why is skip and limit pagination slow on large collections?</h2>
+<div class="answer">
+<p><code>skip(n)</code> makes the server walk and discard the first n documents, so the cost grows with the page number even when an index is used. Deep pages therefore become progressively slower and put load on the server. It is acceptable for small offsets or admin screens, but not for infinite scrolling.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is keyset pagination and how does it work?</h2>
+<div class="answer">
+<p>Keyset pagination remembers the last seen sort value and queries for documents after it, for example <code>{ _id: { $gt: lastId } }</code> sorted ascending. Each page costs roughly the same because the index seeks directly to the starting point. Include a unique tiebreaker field so pages cannot skip or repeat documents.</p>
+<pre><code>db.orders.find({ createdAt: { $lt: lastDate } }).sort({ createdAt: -1 }).limit(20);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the ESR rule for compound indexes?</h2>
+<div class="answer">
+<p>ESR stands for Equality, Sort, Range: put fields used in equality filters first, then fields used for sorting, then range-filtered fields. This ordering lets the index satisfy the filter and the sort while scanning a contiguous range. Following ESR usually removes the need for an in-memory sort.</p>
+<pre><code>db.orders.createIndex({ status: 1, createdAt: -1, total: 1 });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How can an index satisfy a sort?</h2>
+<div class="answer">
+<p>An index can return documents already ordered if the sort fields form a prefix of the index key pattern and the directions match, either exactly or fully reversed. Equality-constrained leading fields do not break the ordering of the remaining fields. If the sort direction or prefix does not match, the server must perform a blocking sort.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When can a sort not use an index, and what happens then?</h2>
+<div class="answer">
+<p>A sort cannot use an index when the requested order does not match an index prefix and direction, when the sort is on a computed or unwound field, or when the pipeline has already reshaped documents. The server then performs an in-memory sort, limited to 100 MB per stage unless disk use is allowed. Large blocking sorts are a frequent cause of slow queries and memory errors.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When does a covered query stop being covered?</h2>
+<div class="answer">
+<p>It stops the moment the planner needs anything the index does not contain. Adding a field to the projection that is not in the index is the usual cause, and so is leaving <code>_id</code> in the results when the index was not built with it. A filter on a field outside the index has the same effect, because the server must fetch the document to test it.</p>
+<p>Other quiet breakers: a multikey index where the query has to inspect individual array elements, an <code>$or</code> whose branches use different indexes, and a collation the index was not created with. Check with <code>explain()</code>; if a <code>FETCH</code> stage appears where there was none before, coverage was lost.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you confirm that a query is covered?</h2>
+<div class="answer">
+<p>Run <code>explain("executionStats")</code> and check that the plan has no <code>FETCH</code> stage and that <code>totalDocsExamined</code> is 0. A plan showing only <code>IXSCAN</code> with <code>PROJECTION_COVERED</code> confirms the index answered everything. If <code>totalDocsExamined</code> is greater than zero, the query is not covered.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How does an $or query use indexes?</h2>
+<div class="answer">
+<p>Each branch of an <code>$or</code> is planned independently and can use its own index, with the results merged and de-duplicated. If any branch cannot use an index, the whole query degrades to a collection scan. That is why an unindexed clause inside <code>$or</code> can make an otherwise fast query slow.</p>
+<pre><code>db.users.find({ $or: [ { email: "a@b.com" }, { phone: "+57300" } ] });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>When should you use $in instead of $or?</h2>
+<div class="answer">
+<p>When all values apply to the same field, <code>$in</code> is simpler and lets the planner build a single index scan with multiple bounds. <code>$or</code> is needed when the conditions apply to different fields or contain separate operators. <code>$in</code> also reads more clearly and is easier for the optimizer to handle.</p>
+<pre><code>db.orders.find({ status: { $in: ["paid", "shipped"] } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why are $ne and $nin often slow?</h2>
+<div class="answer">
+<p>Negation operators must examine every candidate value to prove that it is not excluded, so they cannot use tight index bounds. With no other selective condition, the server ends up scanning the collection or the whole index. Rewriting the query around positive, selective predicates is usually the fix.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Does $or inside an aggregation $match use indexes?</h2>
+<div class="answer">
+<p>Yes, a leading <code>$match</code> with <code>$or</code> is planned like the same predicate in <code>find()</code>, so each branch can use an index. The same rule applies: an unindexed branch forces a collection scan. Placing the <code>$or</code> after a stage that reshapes documents removes any chance of index use.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>What is the difference between $count in aggregation and countDocuments()?</h2>
+<div class="answer">
+<p><code>countDocuments()</code> runs an aggregation with a <code>$match</code> and <code>$group</code> internally, so it returns an accurate count for a filter but scans matching index entries. The <code>$count</code> stage does the same work inside a pipeline. Neither can rely on collection metadata, which is why both can be slow on very large collections with broad filters.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>When is estimatedDocumentCount() appropriate?</h2>
+<div class="answer">
+<p><code>estimatedDocumentCount()</code> reads collection metadata instead of scanning documents, so it is fast but cannot take a filter. The value can be slightly inaccurate after an unclean shutdown. Use it for dashboards and approximate totals, and use <code>countDocuments()</code> when the number must be exact.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you return a page of results together with the total count in one round trip?</h2>
+<div class="answer">
+<p>Use <code>$facet</code> with one sub-pipeline for the page using <code>$sort</code>, <code>$skip</code> and <code>$limit</code>, and another for the total using <code>$count</code>. Both run over the same filtered input, which saves a second query and guarantees a consistent snapshot. The facet buffers the input, so keep the pre-facet <code>$match</code> selective.</p>
+<pre><code>{ $facet: {
+  data: [ { $sort: { createdAt: -1 } }, { $skip: 20 }, { $limit: 20 } ],
+  meta: [ { $count: "total" } ] } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you produce a value distribution report with counts?</h2>
+<div class="answer">
+<p>Group by the field and count documents per value, then sort descending by the count; <code>$sortByCount</code> does exactly this in one stage. This gives a quick top-N view of categories, browsers or statuses. Add a <code>$limit</code> afterwards to keep only the most common values.</p>
+<pre><code>db.events.aggregate([ { $sortByCount: "$browser" }, { $limit: 10 } ]);</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you flatten an embedded subdocument into the root?</h2>
+<div class="answer">
+<p>Use <code>$replaceWith</code> with <code>$mergeObjects</code> combining the subdocument and <code>$$ROOT</code>, so the subdocument fields become top-level fields. The nested copy can then be removed with <code>$unset</code>. This is common before exporting data or feeding a downstream system that expects a flat shape.</p>
+<pre><code>{ $replaceWith: { $mergeObjects: ["$address", "$$ROOT"] } },
+{ $unset: "address" }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you group numeric values into labelled ranges in a pipeline?</h2>
+<div class="answer">
+<p>Use <code>$switch</code> or nested <code>$cond</code> in a <code>$addFields</code> stage to derive a label, then group by that label. This keeps the range logic explicit and readable compared with deeply nested conditions. For evenly spaced ranges, <code>$bucket</code> is a better fit.</p>
+<pre><code>{ $addFields: { band: { $switch: { branches: [
+  { case: { $lt: ["$total", 50] }, then: "low" },
+  { case: { $lt: ["$total", 200] }, then: "mid" } ], default: "high" } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What is $$NOW and when is it useful?</h2>
+<div class="answer">
+<p><code>$$NOW</code> returns the current date and time as a single consistent value for the whole pipeline execution. It is useful for computing ages, retention windows or report periods without sending the timestamp from the client. Because it is evaluated once per operation, all documents are compared against the same instant.</p>
+<pre><code>{ $project: { ageDays: { $dateDiff: { startDate: "$createdAt", endDate: "$$NOW", unit: "day" } } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>What does $$REMOVE do?</h2>
+<div class="answer">
+<p><code>$$REMOVE</code> evaluates to a missing value, so assigning it in <code>$addFields</code> or <code>$project</code> removes the field from the output document. It is ideal for conditional exclusion, where a field should disappear only for some documents. It cannot be used to remove fields in a <code>find()</code> projection.</p>
+<pre><code>{ $addFields: { internalNote: { $cond: ["$isAdmin", "$note", "$$REMOVE"] } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you get the latest document per group?</h2>
+<div class="answer">
+<p>Sort by the timestamp descending before grouping, then take <code>{ $first: "$$ROOT" }</code> in the group. The sort must happen before the group, since <code>$first</code> only reflects the incoming order. Sorting ascending and using <code>$last</code> is equivalent but usually less intuitive.</p>
+<pre><code>[ { $sort: { createdAt: -1 } },
+  { $group: { _id: "$customerId", latest: { $first: "$$ROOT" } } } ]</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you count distinct values per group?</h2>
+<div class="answer">
+<p>Collect values with <code>$addToSet</code> and then take <code>$size</code> of the resulting array in a following <code>$project</code> or <code>$addFields</code>. This is a common analytics question because no distinct accumulator exists. The array is held in memory, so for very high cardinality the group can hit the memory limit.</p>
+<pre><code>{ $group: { _id: "$country", cities: { $addToSet: "$city" } } },
+{ $project: { distinctCities: { $size: "$cities" } } }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you rebuild an array after unwinding it?</h2>
+<div class="answer">
+<p>After <code>$unwind</code>, group by the parent document id and use <code>$push</code> to collect the elements again, ideally after sorting them into the desired order. This is the standard technique for filtering an array and keeping the result as an array. Remember that <code>$push</code> preserves the incoming order, so sort before grouping if order matters.</p>
+<pre><code>[ { $unwind: "$items" }, { $match: { "items.qty": { $gt: 0 } } },
+  { $group: { _id: "$_id", items: { $push: "$items" } } } ]</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you avoid running $lookup on every read?</h2>
+<div class="answer">
+<p>Denormalize the few fields needed at read time using the extended reference or computed pattern, so the common query becomes a single-document read. Keep <code>$lookup</code> for admin views, reports and rare paths where freshness matters more than latency. The cost of denormalization is that changes must be propagated to the copies.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you approach reading MongoDB log lines when debugging?</h2>
+<div class="answer">
+<p>MongoDB writes structured JSON log entries containing a timestamp, severity, component, message id and attributes. Slow operations appear with fields such as <code>planSummary</code>, <code>docsExamined</code>, <code>keysExamined</code> and <code>durationMillis</code>. Filtering on the message id for slow queries and on <code>planSummary: "COLLSCAN"</code> quickly reveals missing indexes.</p>
+<pre><code>Select-String -Path mongod.log -Pattern '"planSummary":"COLLSCAN"'</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you find missing indexes from slow query output?</h2>
+<div class="answer">
+<p>Look for operations with a high ratio of documents examined to documents returned, and for <code>COLLSCAN</code> in the plan summary. Then inspect the filter and sort fields and design a compound index following the ESR rule. Confirm the improvement with <code>explain("executionStats")</code> rather than assuming.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>Can you force an index in an aggregation pipeline?</h2>
+<div class="answer">
+<p>Yes, <code>aggregate()</code> accepts a <code>hint</code> option naming an index, and the pipeline's leading <code>$match</code> and <code>$sort</code> can then use it. Hints are useful for testing or pinning a stable plan, but they become brittle when data distribution changes. Prefer fixing the index design over hard-coding a hint in production.</p>
+<pre><code>db.orders.aggregate(pipeline, { hint: { status: 1, createdAt: -1 } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>Why should a query return only the fields it needs?</h2>
+<div class="answer">
+<p>Projecting only required fields reduces network payload and memory use on both server and client. It also enables covered queries when the projection matches an index. Returning whole documents by default is convenient in development but costly on wide documents with large arrays.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you handle time zones in date aggregation?</h2>
+<div class="answer">
+<p>Date operators accept a <code>timezone</code> option using an Olson identifier such as <code>America/Bogota</code>, which shifts the calendar calculations to that zone. Without it, grouping by day happens in UTC and produces off-by-hours buckets for local reports. Store dates in UTC and apply the timezone only when grouping or formatting.</p>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you match documents whose array contains all specified values?</h2>
+<div class="answer">
+<p>Use <code>$all</code> with an array of values; it matches only documents containing every listed element. A plain array in the query is treated as an exact match of the whole array, which is usually not what you want. <code>$all</code> can use a multikey index for the elements.</p>
+<pre><code>db.articles.find({ tags: { $all: ["mongodb", "indexes"] } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you update a specific element inside an array?</h2>
+<div class="answer">
+<p>Use <code>$set</code> with the positional <code>$</code> operator, or <code>arrayFilters</code> with <code>$[elem]</code> when the element is identified by a condition rather than a position. <code>arrayFilters</code> is the reliable choice when several elements could match. Each update rewrites the whole document, so very large arrays are expensive to modify.</p>
+<pre><code>db.orders.updateOne({ _id: 1 },
+  { $set: { "items.$[i].qty": 5 } },
+  { arrayFilters: [ { "i.sku": "A1" } ] });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you return only the first matching array element in a find query?</h2>
+<div class="answer">
+<p>Use a projection with <code>$elemMatch</code> on the array field, which returns just the first element matching the condition. A plain field projection would return the entire array. This keeps responses small for documents with large arrays.</p>
+<pre><code>db.orders.find({ _id: 1 }, { items: { $elemMatch: { sku: "A1" } } });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How should monetary values be stored in MongoDB?</h2>
+<div class="answer">
+<p>Store them as <code>Decimal128</code> when exact decimal arithmetic is required, or as integer minor units when the application can handle scaling. Binary floating point can introduce rounding errors that are unacceptable for money. Aggregation arithmetic on <code>Decimal128</code> preserves decimal precision.</p>
+<pre><code>{ price: NumberDecimal("19.99"), currency: "COP" }</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you make a read-modify-write operation atomic?</h2>
+<div class="answer">
+<p>Use a single-document atomic operator such as <code>findOneAndUpdate</code> with <code>$inc</code>, <code>$set</code> or an update pipeline, instead of reading, modifying in the application and writing back. MongoDB guarantees atomicity per document, so concurrent updates cannot interleave inside that operation. Multi-document atomicity requires a transaction.</p>
+<pre><code>db.counters.findOneAndUpdate({ _id: "orders" }, { $inc: { seq: 1 } },
+  { returnDocument: "after", upsert: true });</code></pre>
+</div>
+</div>
+
+<div class="question">
+<h2>How do you keep only the most recent N items in an array?</h2>
+<div class="answer">
+<p>Use <code>$push</code> with <code>$each</code> and <code>$slice</code> in an update so the array is trimmed to the newest N elements after insertion. The negative slice count keeps elements from the end of the array. This is a practical way to store a bounded recent-history list without a separate collection.</p>
+<pre><code>db.users.updateOne({ _id: 1 },
+  { $push: { recentViews: { $each: [ { sku: "A1" } ], $slice: -10 } } });</code></pre>
+</div>
+</div>

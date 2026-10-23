@@ -1,0 +1,976 @@
+<div class="question">
+<h2>What is MongoDB and what kind of database is it?</h2>
+<div class="answer">
+<p>MongoDB is a document-oriented NoSQL database that stores data as flexible JSON-like documents in BSON format. It is schema-flexible, horizontally scalable through sharding, and supports high availability with replica sets. It is commonly used for application backends where data shapes evolve quickly.</p>
+</div>
+</div>
+<div class="question">
+<h2>How does the document model differ from relational tables?</h2>
+<div class="answer">
+<p>In a relational database, data is normalized into tables of rows and columns with a fixed schema, and relationships are expressed with foreign keys and joins. In MongoDB, related data can be embedded inside a single document as nested objects or arrays, so one read often returns a full object graph. Collections do not enforce a fixed schema, so each document can have a different shape.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is BSON and how does it relate to JSON?</h2>
+<div class="answer">
+<p>BSON is Binary JSON, the serialization format MongoDB uses to store and transfer documents. It extends JSON with additional types such as ObjectId, Date, Decimal128, Binary, and 64-bit integers. Drivers convert your language objects to BSON, and mongosh displays them in a readable extended-JSON form.</p>
+<pre><code>{ "_id": ObjectId("65f1a2b3c4d5e6f708091234"), "when": ISODate("2026-01-15T10:00:00Z"), "price": NumberDecimal("19.99") }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Which BSON types should a developer know?</h2>
+<div class="answer">
+<p>The most common types are String, Int32, Int64, Double, Decimal128, Boolean, Date, ObjectId, Array, and embedded Document. Specialized types include Binary, Timestamp, Null, Regex, and MinKey/MaxKey. Choosing the right type matters because comparisons and indexes are type-sensitive.</p>
+</div>
+</div>
+<div class="question">
+<h2>What are databases, collections and documents in MongoDB?</h2>
+<div class="answer">
+<p>A database is a container for collections, a collection is a group of documents, and a document is a set of field-value pairs. This maps roughly to database, table, and row in relational terms, but without a rigid column definition. Collections are created implicitly on first insert.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the _id field and why does every document have one?</h2>
+<div class="answer">
+<p>The _id field is the mandatory primary key of a document and must be unique within its collection. MongoDB creates a unique index on _id automatically, so lookups by _id are fast. If you omit it on insert, the driver generates an ObjectId.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is an ObjectId composed of?</h2>
+<div class="answer">
+<p>An ObjectId is a 12-byte value: a 4-byte timestamp in seconds, a 5-byte random value per process, and a 3-byte incrementing counter. This makes it roughly time-ordered and unique without central coordination. The timestamp can be read back with getTimestamp().</p>
+<pre><code>ObjectId("65f1a2b3c4d5e6f708091234").getTimestamp()</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What are mongod, mongos and Atlas?</h2>
+<div class="answer">
+<p>mongod is the core database server process that stores data and serves queries. mongos is the routing process used in sharded clusters that directs queries to the correct shard. Atlas is MongoDB's fully managed cloud service, which runs these components for you.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you install MongoDB locally or with Docker?</h2>
+<div class="answer">
+<p>Locally you install the official packages or the community server and run mongod with a dbPath. With Docker, you pull the official mongo image and map a volume plus the default port. Both approaches give you a standalone server that mongosh can connect to.</p>
+<pre><code>docker run -d --name mongo -p 27017:27017 -v mongo_data:/data/db mongo:8</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is mongosh and how do you connect with it?</h2>
+<div class="answer">
+<p>mongosh is the modern MongoDB shell, a Node.js-based interactive client with syntax highlighting and autocompletion. You connect by passing a connection string. Once connected, you can run JavaScript against the current database.</p>
+<pre><code>mongosh "mongodb://localhost:27017/myapp"</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What are some useful mongosh commands for orientation?</h2>
+<div class="answer">
+<p>Use show dbs to list databases, use &lt;db&gt; to switch, show collections to list collections, and db.stats() for size information. db.help() and db.collection.help() list available methods. These commands help you explore a server quickly.</p>
+<pre><code>show dbs
+use shop
+show collections
+db.orders.countDocuments()</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is MongoDB Compass used for?</h2>
+<div class="answer">
+<p>Compass is the official graphical client for MongoDB. It lets you browse documents, build queries visually, inspect indexes and schema patterns, and analyze performance. It is useful for exploration and debugging without writing shell commands.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you create and drop a database in MongoDB?</h2>
+<div class="answer">
+<p>You create a database implicitly by switching to it and writing data; an empty database is not persisted. To drop it, call dropDatabase() while it is the current database. Dropping is irreversible, so confirm the name twice.</p>
+<pre><code>use shop
+db.dropDatabase()</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you create and drop a collection?</h2>
+<div class="answer">
+<p>createCollection() creates a collection explicitly, optionally with options such as a validator or capped size. drop() removes the collection and all its documents and indexes. Inserting into a non-existent collection also creates it automatically.</p>
+<pre><code>db.createCollection("audit", { capped: true, size: 1048576 })
+db.audit.drop()</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between insertOne and insertMany?</h2>
+<div class="answer">
+<p>insertOne adds a single document and returns its insertedId. insertMany adds an array of documents in one round trip and returns the ids of all inserted documents. insertMany is faster for bulk loading but is not transactional by default.</p>
+<pre><code>db.users.insertOne({ name: "Ana", age: 28 })
+db.tags.insertMany([{ t: "a" }, { t: "b" }], { ordered: false })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does the ordered option do in insertMany?</h2>
+<div class="answer">
+<p>With ordered: true, the default, inserts stop at the first error. With ordered: false, MongoDB continues processing the remaining documents and reports all errors. Unordered is usually better for bulk loads where individual duplicates are tolerable.</p>
+</div>
+</div>
+<div class="question">
+<h2>How does a basic find query work?</h2>
+<div class="answer">
+<p>find(filter, projection) returns a cursor over documents matching the filter. An empty filter matches everything. The filter is a document where fields are matched by equality or by operators.</p>
+<pre><code>db.users.find({ status: "active" }, { name: 1, email: 1, _id: 0 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a projection and how is it written?</h2>
+<div class="answer">
+<p>A projection limits which fields are returned to reduce network and memory cost. You include fields with 1 or exclude them with 0. You cannot mix inclusion and exclusion except for _id, which can be suppressed in an inclusion projection.</p>
+<pre><code>db.users.find({}, { password: 0 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Which comparison operators does MongoDB support?</h2>
+<div class="answer">
+<p>The comparison operators are $eq, $ne, $gt, $gte, $lt, and $lte. They compare values with BSON type ordering in mind. Multiple operators can be combined on the same field in one condition object.</p>
+<pre><code>db.orders.find({ total: { $gte: 100, $lt: 500 } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do the logical operators $and, $or, $not and $nor behave?</h2>
+<div class="answer">
+<p>$and requires all conditions to match, $or requires at least one, and $nor requires none. $not negates an operator expression on a single field and cannot be used with a plain equality value. Implicit AND already applies when you list several fields in one filter.</p>
+<pre><code>db.items.find({ $or: [ { qty: { $lt: 5 } }, { discontinued: true } ] })
+db.items.find({ price: { $not: { $gt: 100 } } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between $in and $nin?</h2>
+<div class="answer">
+<p>$in matches documents where the field equals any value in a given array. $nin is the negation, matching documents whose value is in none of the listed values or where the field is missing. Both accept regular expressions as members.</p>
+<pre><code>db.users.find({ role: { $in: ["admin", "editor"] } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you query a nested field with dot notation?</h2>
+<div class="answer">
+<p>Use a quoted dotted path that follows the embedded document structure. The path must match the nesting order exactly. Dot notation also works in projections and update operators.</p>
+<pre><code>db.users.find({ "address.city": "Bogota" }, { "address.zip": 1 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How does querying an array field work by default?</h2>
+<div class="answer">
+<p>When a field holds an array, an equality or operator match succeeds if any element matches. This is implicit any-element semantics. To require several conditions on the same element, you need $elemMatch.</p>
+<pre><code>db.posts.find({ tags: "mongodb" })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>When do you need $elemMatch?</h2>
+<div class="answer">
+<p>$elemMatch requires that a single array element satisfies all the given conditions, rather than different elements satisfying different conditions. It is essential for arrays of objects with correlated criteria. It can also cap the projected element with $elemMatch in a projection.</p>
+<pre><code>db.orders.find({ lines: { $elemMatch: { sku: "A1", qty: { $gt: 2 } } } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between null and a missing field in queries?</h2>
+<div class="answer">
+<p>A query for { field: null } matches documents where the field is explicitly null and documents where the field does not exist. To match only explicit nulls, combine null with $exists: true. To match only missing fields, use $exists: false.</p>
+<pre><code>db.users.find({ phone: null, }).count()
+db.users.find({ phone: { $type: "null" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do sort, limit and skip work together?</h2>
+<div class="answer">
+<p>sort() orders results, skip() discards a number of documents, and limit() caps the result count. MongoDB applies sort first, then skip, then limit regardless of chained call order. Deep skip values are slow because the server still walks the skipped documents.</p>
+<pre><code>db.posts.find({}).sort({ createdAt: -1 }).skip(20).limit(10)</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a cursor and what does batchSize control?</h2>
+<div class="answer">
+<p>find() returns a cursor that lazily fetches results in batches rather than materializing everything at once. batchSize sets how many documents the server returns per round trip. Iterating the cursor pulls subsequent batches until it is exhausted.</p>
+<pre><code>const c = db.users.find({}).batchSize(500)
+while (c.hasNext()) { const d = c.next() }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between countDocuments and estimatedDocumentCount?</h2>
+<div class="answer">
+<p>countDocuments(filter) runs an aggregation that respects the filter and is accurate but can be slower on large collections. estimatedDocumentCount() reads collection metadata and is very fast but ignores filters and may be approximate after unclean shutdowns. Use the estimate for whole-collection totals in dashboards.</p>
+</div>
+</div>
+<div class="question">
+<h2>What does distinct() return?</h2>
+<div class="answer">
+<p>distinct(field) returns an array of the unique values for that field across matching documents. It can take a query filter as its second argument. For array fields, it flattens the elements before deduplicating.</p>
+<pre><code>db.orders.distinct("status", { region: "LATAM" })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between updateOne and updateMany?</h2>
+<div class="answer">
+<p>updateOne modifies the first document that matches the filter; updateMany modifies every matching document. Both return matchedCount and modifiedCount. Always include a filter that is as selective as possible to avoid unintended mass updates.</p>
+<pre><code>db.users.updateOne({ _id: id }, { $set: { active: true } })
+db.users.updateMany({ country: "CO" }, { $set: { currency: "COP" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does the $set operator do?</h2>
+<div class="answer">
+<p>$set assigns the given value to each listed field, creating the field if it does not exist. It leaves all other fields untouched. It also works with dotted paths to update nested fields.</p>
+<pre><code>db.users.updateOne({ _id: id }, { $set: { "address.city": "Medellin" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does $unset do?</h2>
+<div class="answer">
+<p>$unset removes the specified fields from a document. The value in the operator document is ignored, so convention is to pass an empty string. Removing a field is different from setting it to null.</p>
+<pre><code>db.users.updateOne({ _id: id }, { $unset: { tempToken: "" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does $inc do and what are its limits?</h2>
+<div class="answer">
+<p>$inc adds a numeric amount to a field atomically, creating the field with that value if it is missing. It only works on numeric fields and errors if the existing value is not a number. Negative values decrement.</p>
+<pre><code>db.counters.updateOne({ _id: "visits" }, { $inc: { count: 1 } }, { upsert: true })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Compare $push, $pull and $addToSet.</h2>
+<div class="answer">
+<p>$push appends a value to an array, allowing duplicates. $pull removes all elements matching a condition or value. $addToSet appends only if the value is not already present, which effectively deduplicates.</p>
+<pre><code>db.users.updateOne({ _id: id }, { $addToSet: { tags: "vip" } })
+db.users.updateOne({ _id: id }, { $pull: { tags: "trial" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does $currentDate do?</h2>
+<div class="answer">
+<p>$currentDate sets a field to the current date, either as a Date or as a Timestamp. You pass true for a Date or a type document for explicit control. It is server-side, so it avoids client clock skew.</p>
+<pre><code>db.docs.updateOne({ _id: id }, { $currentDate: { updatedAt: true } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>When would you use replaceOne instead of updateOne?</h2>
+<div class="answer">
+<p>replaceOne swaps the entire document for the supplied one, keeping only the _id. updateOne with operators changes only the targeted fields. Use replaceOne when the whole record is regenerated by the application, and be aware it drops fields you did not include.</p>
+<pre><code>db.users.replaceOne({ _id: id }, { name: "Ana", age: 29 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is an upsert?</h2>
+<div class="answer">
+<p>An upsert inserts a new document when no document matches the filter, instead of doing nothing. It is enabled with { upsert: true } on update and replace operations. On insert, MongoDB builds the new document from the filter's equality conditions plus the update operators.</p>
+<pre><code>db.settings.updateOne({ userId: 7 }, { $set: { theme: "dark" } }, { upsert: true })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between deleteOne and deleteMany?</h2>
+<div class="answer">
+<p>deleteOne removes the first matching document and deleteMany removes all matches. Both return a deletedCount. There is no deleteAll shortcut other than deleteMany with an empty filter, which you should use carefully.</p>
+<pre><code>db.sessions.deleteMany({ expiresAt: { $lt: new Date() } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does findOneAndUpdate return and why is it useful?</h2>
+<div class="answer">
+<p>findOneAndUpdate atomically updates one document and returns it, by default the version before the update. Set returnDocument: "after" to get the updated version. This is the standard way to implement counters, queues and optimistic locking in one round trip.</p>
+<pre><code>db.jobs.findOneAndUpdate(
+  { status: "queued" },
+  { $set: { status: "running" } },
+  { sort: { createdAt: 1 }, returnDocument: "after" }
+)</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is bulkWrite used for?</h2>
+<div class="answer">
+<p>bulkWrite sends a batch of mixed insert, update, replace and delete operations in one request. It reduces round trips and lets you choose ordered or unordered execution. Each operation reports its own result or error.</p>
+<pre><code>db.users.bulkWrite([
+  { insertOne: { document: { name: "Luis" } } },
+  { updateOne: { filter: { name: "Ana" }, update: { $inc: { age: 1 } } } }
+], { ordered: false })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you import and export data with mongoimport and mongoexport?</h2>
+<div class="answer">
+<p>mongoimport reads JSON, CSV or TSV files into a collection, and mongoexport writes a collection to those formats. Both take a --uri or host, a database, a collection and a file path. They are command-line tools, not shell methods.</p>
+<pre><code>mongoimport --uri "mongodb://localhost:27017/shop" --collection products --file products.json
+mongoexport --uri "mongodb://localhost:27017/shop" --collection products --out products.json</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Why do indexes matter and what is the cost of adding one?</h2>
+<div class="answer">
+<p>Without an index MongoDB must scan every document in a collection to satisfy a query. An index is a B-tree structure that lets the server jump to matching documents, which changes cost from a collection scan to an index seek. The trade-off is extra storage and slower writes, since each index must be maintained.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you create a simple index?</h2>
+<div class="answer">
+<p>Call createIndex with a document describing the fields and direction. A value of 1 means ascending and -1 descending. Creating an index is idempotent, so re-running the same definition is safe.</p>
+<pre><code>db.users.createIndex({ email: 1 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you enforce uniqueness on a field?</h2>
+<div class="answer">
+<p>Create an index with the unique option set to true. If duplicate values already exist, the index build fails, so clean the data first. Duplicate inserts then fail with a duplicate key error that your application must handle.</p>
+<pre><code>db.users.createIndex({ email: 1 }, { unique: true })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does explain() tell you at a high level?</h2>
+<div class="answer">
+<p>explain() shows the query planner's chosen plan, including whether an index was used, how many documents and keys were examined, and the execution time. Look at the winning plan stage: COLLSCAN means a collection scan, while IXSCAN means an index was used. Comparing totalKeysExamined and totalDocsExamined with nReturned reveals index efficiency.</p>
+<pre><code>db.users.find({ email: "a@b.com" }).explain("executionStats")</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the basic trade-off between embedding and referencing?</h2>
+<div class="answer">
+<p>Embedding keeps related data inside one document, so a single read returns everything and writes stay atomic per document. Referencing stores an id and requires a second query or a $lookup to combine data. Embed when data is read together and bounded in size; reference when it is large, shared, or updated independently.</p>
+</div>
+</div>
+<div class="question">
+<h2>What are some basic schema design rules for MongoDB?</h2>
+<div class="answer">
+<p>Model around how your application reads and writes rather than around entity purity. Prefer embedding for one-to-few relationships that are always fetched together, and reference for one-to-many or many-to-many at scale. Keep documents well under the 16 MB limit and avoid unbounded arrays that grow forever.</p>
+</div>
+</div>
+<div class="question">
+<h2>What common beginner mistakes should you avoid in MongoDB?</h2>
+<div class="answer">
+<p>Common mistakes include treating MongoDB like a relational database with heavy normalization, storing unbounded arrays in a single document, and running updates without a filter. Others are querying without indexes, using skip for deep pagination, and ignoring the difference between null and missing fields. Handling duplicate key errors and validating input also get skipped often.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you connect to MongoDB from an official driver?</h2>
+<div class="answer">
+<p>Install the driver for your language, create a client with a connection string, and reuse that client across requests. The client manages a connection pool internally, so creating one per request is an anti-pattern. Await the initial connection or the first operation before serving traffic.</p>
+<pre><code>const { MongoClient } = require("mongodb");
+const client = new MongoClient(process.env.MONGO_URI);
+await client.connect();
+const users = client.db("shop").collection("users");</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What are the parts of a MongoDB connection string?</h2>
+<div class="answer">
+<p>A connection string starts with mongodb:// or the TLS variant mongodb+srv://, followed by credentials, host or SRV name, optional port, and a default database. Query parameters set options such as retryWrites, w, and readPreference. Credentials should be URL-encoded and never committed to source control.</p>
+<pre><code>mongodb+srv://appuser:secret@cluster0.example.mongodb.net/shop?retryWrites=true&amp;w=majority</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do database users and basic roles work?</h2>
+<div class="answer">
+<p>Users are created per database with createUser and are granted one or more roles. Built-in roles such as read, readWrite, dbAdmin and clusterMonitor cover common needs, and the principle of least privilege applies. Applications should use a dedicated user scoped to the database they need rather than an admin account.</p>
+<pre><code>db.createUser({ user: "appuser", pwd: "secret", roles: [ { role: "readWrite", db: "shop" } ] })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Why is MongoDB described as schema-flexible rather than schema-less?</h2>
+<div class="answer">
+<p>Documents in one collection may have different fields and types, so there is no enforced column definition. In practice applications still assume a shape, which is why schema validation is available. Schema-flexible means the database does not block variation, not that design is unnecessary.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you add schema validation to a collection?</h2>
+<div class="answer">
+<p>Pass a validator with a $jsonSchema to createCollection or to the collMod command. Set validationLevel to strict or moderate and validationAction to error or warn. Validation applies to inserts and updates, not to existing documents unless they are modified.</p>
+<pre><code>db.createCollection("users", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["email"],
+    properties: { email: { bsonType: "string" } }
+  } },
+  validationAction: "error"
+})</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What are the practical limits on document size and nesting?</h2>
+<div class="answer">
+<p>A single BSON document cannot exceed 16 MB, and very deep nesting is discouraged because it complicates queries and updates. If you approach the limit, the data model is usually wrong. Large binary payloads belong in GridFS or object storage.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between the mongo shell and mongosh?</h2>
+<div class="answer">
+<p>The legacy mongo shell was a C++ based REPL that is deprecated and no longer shipped with current server versions. mongosh is the supported replacement built on Node.js, offering better autocompletion, syntax highlighting and modern JavaScript. New work should always target mongosh.</p>
+</div>
+</div>
+<div class="question">
+<h2>What happens if you insert a document without _id from an application?</h2>
+<div class="answer">
+<p>The driver generates an ObjectId on the client before sending the write. That means the application already knows the id without a round trip. Only if a raw command omits _id does the server generate it.</p>
+</div>
+</div>
+<div class="question">
+<h2>Can _id be a value other than ObjectId?</h2>
+<div class="answer">
+<p>Yes, _id can be any BSON type except an array, including a string, number, date or embedded document. A natural unique key such as an email or SKU is a legitimate choice. Compound _id values are possible using a subdocument.</p>
+<pre><code>db.users.insertOne({ _id: "ana@example.com", name: "Ana" })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between a standalone server, a replica set and a sharded cluster?</h2>
+<div class="answer">
+<p>A standalone server has no redundancy or automatic failover. A replica set keeps copies on multiple nodes with an elected primary and automatic failover. A sharded cluster partitions data across shards for horizontal scale and uses config servers plus mongos routers.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the minimum sensible deployment for production?</h2>
+<div class="answer">
+<p>A three-member replica set is the usual minimum, providing a primary and two secondaries for failover. Backups, monitoring and authentication should be in place from day one. A single node is acceptable only for development.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do read and write concerns affect durability?</h2>
+<div class="answer">
+<p>Write concern w controls how many nodes must acknowledge a write before it returns; "majority" is the safe default. Read concern controls the consistency of data a read observes, with "majority" avoiding dirty reads. Higher guarantees cost latency.</p>
+<pre><code>db.orders.insertOne({ total: 10 }, { writeConcern: { w: "majority", j: true } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the purpose of the admin, local and config databases?</h2>
+<div class="answer">
+<p>admin holds administrative users and roles plus server-wide commands. local stores node-local data such as the oplog in a replica set member and is not replicated. config holds sharding metadata in a sharded cluster and should never be modified manually.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you list the databases and collections on a server from a driver?</h2>
+<div class="answer">
+<p>The client exposes listDatabases(), and a database object exposes listCollections(). These return cursors or arrays of metadata such as names and options. They require the appropriate list privileges.</p>
+<pre><code>const dbs = await client.db().admin().listDatabases();
+const cols = await db.listCollections().toArray();</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between findOne and find?</h2>
+<div class="answer">
+<p>findOne returns a single document or null, applying an implicit limit of one. find returns a cursor and is used when you expect multiple documents. Prefer findOne when you only need one record, since it avoids cursor management.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you check whether a document exists efficiently?</h2>
+<div class="answer">
+<p>Use countDocuments with a limit of one, or findOne with a projection of only _id. Both stop after the first match. Fetching whole documents just to test existence wastes bandwidth.</p>
+<pre><code>db.users.countDocuments({ email: "a@b.com" }, { limit: 1 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does the $exists operator do?</h2>
+<div class="answer">
+<p>$exists matches documents where a field is present (true) or absent (false). A field present with a null value still counts as existing. It is frequently combined with type checks in data clean-up queries.</p>
+<pre><code>db.users.find({ phone: { $exists: false } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How does MongoDB compare values of different BSON types?</h2>
+<div class="answer">
+<p>MongoDB compares by type order first, then by value within the same type. Numbers of different numeric types compare by numeric value. A string will never equal a number even if their text looks similar.</p>
+</div>
+</div>
+<div class="question">
+<h2>Why does a query for a number sometimes miss a string value?</h2>
+<div class="answer">
+<p>Because BSON is type-strict, a query for the number 5 does not match the string "5" or the double 5.0 in all contexts. Data imported from CSV or JSON often stores numbers as strings. Fixing the data with a type conversion is usually the right cure.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is $regex and what are its performance implications?</h2>
+<div class="answer">
+<p>$regex matches string fields against a regular expression. An anchored, case-sensitive prefix pattern can use an index, but unanchored or case-insensitive patterns generally cannot. Regex scans are expensive on large collections.</p>
+<pre><code>db.users.find({ email: { $regex: "^ana", $options: "i" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you query for documents where an array has a specific size?</h2>
+<div class="answer">
+<p>Use the $size operator with an exact integer, since it matches array length only. $size cannot take a range, so ranges require $expr with $size or a stored count field. Keeping a denormalized count field is a common workaround.</p>
+<pre><code>db.posts.find({ tags: { $size: 3 } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you query array elements by index position?</h2>
+<div class="answer">
+<p>Use dotted notation with the numeric index, as in "scores.0". This targets one concrete position and is rarely index-friendly. Positional queries are useful for debugging more than for production filters.</p>
+<pre><code>db.games.find({ "scores.0": { $gt: 90 } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does $all do with arrays?</h2>
+<div class="answer">
+<p>$all requires the array field to contain every listed value, in any order and with any extra values present. It is the array analogue of a logical AND over membership. It is often confused with $in, which requires only one match.</p>
+<pre><code>db.posts.find({ tags: { $all: ["mongodb", "index"] } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between matching an array of documents and matching one element?</h2>
+<div class="answer">
+<p>A plain condition on an array of subdocuments can be satisfied by different elements matching different criteria. $elemMatch forces one element to satisfy all criteria. Exact array equality requires the same elements in the same order, which is rarely what you want.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do sort and index direction relate?</h2>
+<div class="answer">
+<p>An index supports sorting on its key pattern, and a reverse scan supports the exact opposite direction. A compound index can serve a sort only if the sort fields follow the index prefix order. Otherwise the server performs an in-memory sort, which is limited and can fail on large result sets.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the 32 MB in-memory sort limit?</h2>
+<div class="answer">
+<p>When a sort cannot use an index, MongoDB sorts in memory and aborts if the operation exceeds the memory limit. The classic error is "Sort exceeded memory limit". Fixing it means adding a supporting index or enabling allowDiskUse.</p>
+<pre><code>db.logs.find({}).sort({ ts: -1 }).allowDiskUse(true)</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you paginate results without deep skip penalties?</h2>
+<div class="answer">
+<p>Range pagination filters on the last seen sort key instead of skipping N documents. This keeps the query index-supported regardless of page depth. It requires a stable, unique tiebreaker such as _id in the sort.</p>
+<pre><code>db.posts.find({ _id: { $lt: lastId } }).sort({ _id: -1 }).limit(20)</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does cursor.noCursorTimeout() do?</h2>
+<div class="answer">
+<p>By default an idle cursor is closed by the server after about ten minutes of inactivity. noCursorTimeout keeps it alive, at the risk of leaking server resources if you forget to close it. Always close such cursors explicitly.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you iterate a cursor in the Node.js driver?</h2>
+<div class="answer">
+<p>You can use toArray() for small result sets, or a for await loop for streaming. Streaming avoids loading everything into memory. Remember to close the cursor when you break out early.</p>
+<pre><code>const cursor = db.collection("logs").find({ level: "error" });
+for await (const doc of cursor) { console.log(doc); }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Why might countDocuments return a different number than a manual count of find results?</h2>
+<div class="answer">
+<p>countDocuments applies the same filter semantics as find, so the numbers should agree for the same filter. Discrepancies usually come from a different filter, from concurrent writes, or from using estimatedDocumentCount by mistake. In a sharded cluster, orphaned documents can also cause differences.</p>
+</div>
+</div>
+<div class="question">
+<h2>What happens when an update matches no documents?</h2>
+<div class="answer">
+<p>The operation succeeds with matchedCount 0 and modifiedCount 0; it is not an error. Only an upsert creates a document in that case. Applications often need to treat zero matches as a not-found condition themselves.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between matchedCount and modifiedCount?</h2>
+<div class="answer">
+<p>matchedCount is how many documents the filter selected, and modifiedCount is how many actually changed. Setting a field to its current value matches but does not modify. This distinction matters for optimistic concurrency checks.</p>
+</div>
+</div>
+<div class="question">
+<h2>Why should you avoid replacing a whole document to change one field?</h2>
+<div class="answer">
+<p>A full replacement forces you to send the entire document and risks dropping fields written by other code paths. Targeted operators such as $set are smaller on the wire and safer under concurrency. Replacements also make it easy to lose schema fields added later.</p>
+</div>
+</div>
+<div class="question">
+<h2>What does $push with $each and $slice accomplish?</h2>
+<div class="answer">
+<p>$each appends multiple values at once, and $slice trims the array to a fixed length after the push. Together they implement a bounded recent-items list. Using $sort with them keeps the array ordered.</p>
+<pre><code>db.feeds.updateOne({ _id: id }, {
+  $push: { recent: { $each: [item], $slice: -50 } }
+})</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do you remove an array element by condition with $pull?</h2>
+<div class="answer">
+<p>$pull accepts a value or a query condition and removes every element that satisfies it. It removes all matches, not just the first. Use $pull with $elemMatch-style criteria for arrays of subdocuments.</p>
+<pre><code>db.orders.updateOne({ _id: id }, { $pull: { lines: { qty: { $lte: 0 } } } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the positional $ operator used for?</h2>
+<div class="answer">
+<p>The positional operator updates the first array element matched by the query filter. It requires the array field to appear in the filter. The filtered positional operator $[&lt;identifier&gt;] with arrayFilters handles multiple or conditional elements.</p>
+<pre><code>db.orders.updateOne(
+  { _id: id, "lines.sku": "A1" },
+  { $inc: { "lines.$.qty": 1 } }
+)</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How do arrayFilters work?</h2>
+<div class="answer">
+<p>arrayFilters let you update specific array elements that satisfy named conditions, without relying on the first match. The update uses $[name] placeholders and the options supply the filter documents. This supports updating several elements or nested arrays in one call.</p>
+<pre><code>db.orders.updateOne(
+  { _id: id },
+  { $set: { "lines.$[l].status": "shipped" } },
+  { arrayFilters: [ { "l.qty": { $gt: 0 } } ] }
+)</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between $setOnInsert and $set in an upsert?</h2>
+<div class="answer">
+<p>$setOnInsert applies only when the upsert results in an insert, and is ignored on update. $set always applies. Combining them lets you default creation fields while updating mutable fields on every call.</p>
+<pre><code>db.stats.updateOne({ day: "2026-01-01" },
+  { $inc: { hits: 1 }, $setOnInsert: { createdAt: new Date() } },
+  { upsert: true })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What error do you get on a duplicate unique key and how should you handle it?</h2>
+<div class="answer">
+<p>You get a write error with code 11000, E11000 duplicate key. The correct handling is to catch it and translate it into a domain response such as "email already registered", not to crash. For idempotent inserts, an upsert often avoids the error entirely.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between a write error and a write concern error?</h2>
+<div class="answer">
+<p>A write error means an individual operation was rejected, for example by a unique index or validation rule. A write concern error means the write was applied but could not satisfy the requested acknowledgement level. Bulk results report both separately.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you delete a field from every document in a collection?</h2>
+<div class="answer">
+<p>Use updateMany with an empty filter and $unset on that field. This touches every document and generates heavy write load, so plan for it on large collections. Confirm the field is truly obsolete before running it.</p>
+<pre><code>db.users.updateMany({}, { $unset: { legacyFlag: "" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between a collection scan and an index scan in explain output?</h2>
+<div class="answer">
+<p>A COLLSCAN stage reads every document in the collection, so cost grows with collection size. An IXSCAN stage walks index keys and fetches only matching documents. FETCH may still appear after IXSCAN when non-indexed fields are needed.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is a covered query?</h2>
+<div class="answer">
+<p>A covered query is answered entirely from the index, with no document fetch. It requires that every field in the filter and projection exists in the index, and that _id is excluded if it is not part of the index. Explain will show no FETCH stage.</p>
+<pre><code>db.users.createIndex({ email: 1 });
+db.users.find({ email: "a@b.com" }, { _id: 0, email: 1 }).explain()</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>When should a one-to-many relationship embed an array of subdocuments?</h2>
+<div class="answer">
+<p>Embed when the children are always read with the parent, are few in number, and change together with the parent. This gives one atomic write and one read for the whole aggregate. Do not embed when the array can grow without bound.</p>
+</div>
+</div>
+<div class="question">
+<h2>When should you store an array of references instead of embedded documents?</h2>
+<div class="answer">
+<p>Use references when the child documents are large, shared across parents, or updated independently and frequently. References also keep the parent document small so it stays in cache. The cost is an extra query or a $lookup to resolve them.</p>
+<pre><code>{ "_id": "order_1", "lineIds": [ ObjectId("..."), ObjectId("...") ] }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the extended reference pattern?</h2>
+<div class="answer">
+<p>You store a small copy of the fields you usually need from a related document inside the parent, plus the reference id. Reads avoid a join most of the time, while the source of truth stays in the referenced collection. The copies must be refreshed when the source changes.</p>
+</div>
+</div>
+<div class="question">
+<h2>How large should an embedded array be allowed to get?</h2>
+<div class="answer">
+<p>There is no hard limit other than the 16 MB document size, but practical arrays should stay in the tens or low hundreds of elements. Unbounded arrays cause document growth, expensive rewrites and poor cache behavior. Use a separate collection or a bucketing pattern when growth is open-ended.</p>
+</div>
+</div>
+<div class="question">
+<h2>How does document growth affect write performance?</h2>
+<div class="answer">
+<p>If an update makes a document larger than its allocated space, the server may relocate it on disk. Frequent relocation fragments storage and slows writes. Keeping documents bounded and preallocating fixed-size patterns avoids most of this.</p>
+</div>
+</div>
+<div class="question">
+<h2>How would you model a many-to-many relationship?</h2>
+<div class="answer">
+<p>Store an array of ids on one side, usually the side queried more often, and keep the canonical documents in their own collection. For very large or attribute-rich relationships, use a dedicated join collection with one document per pair. This mirrors a junction table but is queried by id arrays.</p>
+</div>
+</div>
+<div class="question">
+<h2>Can one collection hold documents with different shapes?</h2>
+<div class="answer">
+<p>Yes, and it is normal for polymorphic data such as events or products of different categories. Add a discriminator field such as type and index it for efficient filtering. Keep shapes similar enough that queries and indexes remain useful.</p>
+<pre><code>{ "type": "click", "url": "/pricing" }
+{ "type": "purchase", "sku": "A1", "amount": 20 }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>When should you split data into separate collections?</h2>
+<div class="answer">
+<p>Split when documents have different access patterns, different retention rules, or wildly different shapes. Separate collections also help when one set needs different indexes or validators. Over-splitting forces application-side joins, so keep boundaries meaningful.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is a simple way to model a category tree?</h2>
+<div class="answer">
+<p>Store the ancestor path as an array of ids on each node, which lets you fetch a whole subtree with one indexed query. The parent reference alone supports only one level at a time. Materialized paths trade write cost for cheap subtree reads.</p>
+<pre><code>{ "_id": "laptops", "ancestors": ["electronics", "computers"] }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How should you store monetary amounts?</h2>
+<div class="answer">
+<p>Use Decimal128 for exact decimal arithmetic, or store integer minor units such as cents. Binary floating point doubles introduce rounding errors that are unacceptable for money. Always store the currency code alongside the amount.</p>
+<pre><code>{ "total": NumberDecimal("19.99"), "currency": "USD" }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How should dates and time zones be stored?</h2>
+<div class="answer">
+<p>Store dates as BSON Date values, which are UTC instants, and convert to local time in the application. Keep the time zone identifier separately when the local wall-clock time matters, such as for scheduled events. Avoid storing dates as strings because they sort and compare poorly.</p>
+</div>
+</div>
+<div class="question">
+<h2>Can field names contain dots or start with a dollar sign?</h2>
+<div class="answer">
+<p>Modern versions allow many such names, but they are strongly discouraged because dot notation and operators rely on those characters. Imported data with dots in keys breaks queries and updates in confusing ways. Rename such fields during ingestion.</p>
+</div>
+</div>
+<div class="question">
+<h2>Are collection names case-sensitive?</h2>
+<div class="answer">
+<p>Collection and database names are case-sensitive in MongoDB, but on case-insensitive filesystems such as default Windows volumes you cannot create names that differ only by case. Pick one naming convention and stay consistent. This avoids cross-platform surprises.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you store large files in MongoDB?</h2>
+<div class="answer">
+<p>GridFS splits a file into chunks in a fs.chunks collection and stores metadata in fs.files, bypassing the 16 MB document limit. For most new systems, object storage with a URL in the document is cheaper and simpler. GridFS still makes sense when files must live transactionally with metadata.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is a capped collection used for?</h2>
+<div class="answer">
+<p>A capped collection has a fixed maximum size and behaves as a circular buffer, overwriting the oldest documents. Inserts are fast and preserve natural order, which suits logs and recent-activity feeds. You cannot delete individual documents from a capped collection.</p>
+<pre><code>db.createCollection("logs", { capped: true, size: 1048576, max: 5000 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What are time series collections for?</h2>
+<div class="answer">
+<p>Time series collections store measurements efficiently by grouping them into internal buckets. They reduce storage and improve range queries over timestamps. You create one with the timeField option and optionally a metaField.</p>
+<pre><code>db.createCollection("sensorData", {
+  timeseries: { timeField: "ts", metaField: "sensorId", granularity: "minutes" }
+})</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How does connection pooling work in the official drivers?</h2>
+<div class="answer">
+<p>Each client maintains a pool of connections per server and checks out connections per operation. The pool is bounded by maxPoolSize, which defaults to 100. Reuse a single client per process and size the pool against your concurrency and server limits.</p>
+</div>
+</div>
+<div class="question">
+<h2>What do retryWrites and retryReads do?</h2>
+<div class="answer">
+<p>retryWrites lets the driver retry a single write once after a transient network error or failover, using the same transaction number to avoid duplicates. retryReads does the same for reads. Both are enabled by default in current drivers and require a replica set or sharded cluster.</p>
+</div>
+</div>
+<div class="question">
+<h2>Which timeout options should a driver configure?</h2>
+<div class="answer">
+<p>serverSelectionTimeoutMS controls how long the driver waits for a suitable server, and connectTimeoutMS bounds socket establishment. socketTimeoutMS limits how long an operation may sit idle on the socket. Set them low enough that failures surface quickly but high enough to tolerate normal latency.</p>
+</div>
+</div>
+<div class="question">
+<h2>What do read preferences control?</h2>
+<div class="answer">
+<p>readPreference decides which replica set members may serve a read: primary, primaryPreferred, secondary, secondaryPreferred, or nearest. Reading from secondaries reduces primary load but may return slightly stale data. Use primary for read-after-write consistency.</p>
+<pre><code>db.users.find({}).readPref("secondaryPreferred")</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does the mongodb+srv scheme change about connecting?</h2>
+<div class="answer">
+<p>The +srv form looks up DNS SRV records to discover hosts and TXT records for default options, so the URI stays short. It requires TLS and is standard for Atlas. You cannot combine +srv with an explicit port or multiple hosts.</p>
+</div>
+</div>
+<div class="question">
+<h2>How does a driver behave when the primary fails over?</h2>
+<div class="answer">
+<p>The driver detects the topology change, marks the old primary unavailable, and waits for a new primary to be elected. In-flight operations fail with a retryable error, and retryWrites resubmits them once. This is why applications must still handle transient errors.</p>
+</div>
+</div>
+<div class="question">
+<h2>How should connection strings and credentials be managed?</h2>
+<div class="answer">
+<p>Keep them in environment variables or a secrets manager rather than in code or committed config files. Grant the smallest role that works and rotate credentials periodically. Never log a full URI, since it usually contains the password.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you inspect a driver error to decide what to do?</h2>
+<div class="answer">
+<p>Driver errors expose a numeric code and a codeName such as DuplicateKey, plus error labels for retryable cases. Branch on the code rather than on the message text, which can change. Treat unknown codes as unexpected server errors and surface them.</p>
+<pre><code>if (err.code === 11000) { /* duplicate key */ }</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Are multi-document writes atomic in MongoDB?</h2>
+<div class="answer">
+<p>A write to a single document is always atomic, including updates that touch several fields or array elements. Multi-document operations are not atomic unless you use a transaction. Modeling related data into one document is often the simplest way to get atomicity.</p>
+</div>
+</div>
+<div class="question">
+<h2>When would you use a transaction?</h2>
+<div class="answer">
+<p>Use a transaction when several documents or collections must change together, such as transferring balance between accounts. Transactions require a replica set or sharded cluster and add latency and locking. Prefer a document model that avoids the need where possible.</p>
+<pre><code>const session = client.startSession();
+await session.withTransaction(async () =&gt; {
+  await accounts.updateOne({ _id: "a" }, { $inc: { bal: -10 } }, { session });
+  await accounts.updateOne({ _id: "b" }, { $inc: { bal: 10 } }, { session });
+});</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a compound index and what is the ESR guideline?</h2>
+<div class="answer">
+<p>A compound index covers several fields in a defined order, and the order determines which queries it can serve. The ESR guideline recommends Equality fields first, then Sort fields, then Range fields. Following it lets one index serve both the filter and the sort.</p>
+<pre><code>db.orders.createIndex({ status: 1, createdAt: -1, total: 1 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a multikey index?</h2>
+<div class="answer">
+<p>An index on a field that holds an array becomes multikey, with one index entry per array element. It makes queries on array membership fast. A compound index can have at most one multikey field, and multikey indexes cannot cover queries.</p>
+</div>
+</div>
+<div class="question">
+<h2>Can an index be used when the query sorts on a different field order?</h2>
+<div class="answer">
+<p>An index serves a sort only when the sort keys follow the index key pattern as a prefix, in the same or fully reversed direction. Otherwise the planner must sort in memory. Mixed directions within a compound sort require a matching index pattern.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is a partial index?</h2>
+<div class="answer">
+<p>A partial index includes only documents that match a filter expression, which shrinks the index and lowers maintenance cost. Queries can use it only when they are guaranteed to match that filter. It is ideal for indexing a rare status value.</p>
+<pre><code>db.orders.createIndex({ createdAt: 1 }, { partialFilterExpression: { status: "pending" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a TTL index?</h2>
+<div class="answer">
+<p>A TTL index deletes documents automatically after a number of seconds, based on a date field or an array of dates. A background task runs roughly every 60 seconds, so deletion is not immediate. TTL indexes cannot be compound.</p>
+<pre><code>db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a text index used for?</h2>
+<div class="answer">
+<p>A text index supports $text searches with word stemming and stop words across string fields. A collection may have only one text index, though it can span several fields. It is a basic search tool and not a replacement for a dedicated search engine.</p>
+<pre><code>db.articles.createIndex({ title: "text", body: "text" })
+db.articles.find({ $text: { $search: "mongodb index" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What does hint() do?</h2>
+<div class="answer">
+<p>hint() forces the query planner to use a specific index by key pattern or name. It is useful when the planner picks a worse plan, or for testing index performance. Hard-coding hints is risky because the collection's data distribution changes over time.</p>
+<pre><code>db.users.find({ email: "a@b.com" }).hint({ email: 1 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Why can a low-selectivity index be useless?</h2>
+<div class="answer">
+<p>If a field has few distinct values, such as a boolean, an index lookup may still match most documents. The planner then correctly prefers a collection scan, so the index only costs storage and write time. Index fields that actually narrow the result set.</p>
+</div>
+</div>
+<div class="question">
+<h2>Why is having too many indexes a problem?</h2>
+<div class="answer">
+<p>Every index must be updated on each insert, update and delete, which increases write latency and disk usage. Redundant indexes also confuse the planner and waste cache. Audit index usage and drop those that are never chosen.</p>
+<pre><code>db.users.aggregate([ { $indexStats: {} } ])</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What are the explain verbosity modes?</h2>
+<div class="answer">
+<p>queryPlanner shows the winning plan and rejected candidates without executing the query. executionStats executes it and reports counts and timings. allPlansExecution runs all candidate plans, which is heavier and meant for deep tuning.</p>
+<pre><code>db.users.find({ email: "a@b.com" }).explain("queryPlanner")</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the $type operator for?</h2>
+<div class="answer">
+<p>$type matches documents whose field value is of a given BSON type, using either an alias string or a numeric code. It is the main tool for finding badly typed data after an import. Combine it with $exists to reason about missing fields.</p>
+<pre><code>db.users.find({ age: { $type: "string" } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is collation and when do you need it?</h2>
+<div class="answer">
+<p>Collation defines language-aware comparison rules for strings, such as case-insensitive or accent-insensitive matching. Without it, comparisons are binary and case-sensitive. Set it per query, per index, or as a collection default.</p>
+<pre><code>db.users.find({ name: "ana" }).collation({ locale: "es", strength: 1 })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>How does collation interact with a unique index?</h2>
+<div class="answer">
+<p>A unique index enforces uniqueness according to its own collation. Two strings that differ only by case count as duplicates under a case-insensitive collation. Queries must use the same collation for the index to be usable.</p>
+<pre><code>db.users.createIndex({ email: 1 }, { unique: true, collation: { locale: "en", strength: 2 } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is $expr used for in a query?</h2>
+<div class="answer">
+<p>$expr allows aggregation expressions inside a find filter, which enables comparisons between two fields of the same document. Plain query operators only compare a field to a constant. $expr is more flexible but usually less index-friendly.</p>
+<pre><code>db.orders.find({ $expr: { $gt: ["$paid", "$total"] } })</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between db.stats() and collection stats()?</h2>
+<div class="answer">
+<p>db.stats() reports database-level figures such as data size and number of collections. db.collection.stats() reports document count, average object size, index sizes and total storage for one collection. These help spot oversized documents or bloated indexes.</p>
+<pre><code>db.orders.stats().avgObjSize</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>Why should new code avoid remove() and save()?</h2>
+<div class="answer">
+<p>remove() and save() are legacy shell helpers with confusing semantics and are deprecated in mongosh. deleteMany/deleteOne and insertOne/replaceOne express intent clearly and return structured results. Using the modern methods avoids surprises during migrations.</p>
+</div>
+</div>
+<div class="question">
+<h2>Can the _id index be dropped?</h2>
+<div class="answer">
+<p>No, the unique index on _id is created automatically and cannot be dropped. You can change nothing about its existence, only the values you store. This guarantee is what makes _id lookups reliably fast.</p>
+</div>
+</div>
+<div class="question">
+<h2>What is the difference between the read and readWrite roles?</h2>
+<div class="answer">
+<p>read grants query and read-only commands on a database, while readWrite adds insert, update, delete and index creation on that database. Neither grants administrative control of the server. Applications normally need only readWrite on their own database.</p>
+</div>
+</div>
+<div class="question">
+<h2>What does the root role allow and why is it dangerous?</h2>
+<div class="answer">
+<p>The root role grants full control over the entire deployment, including user and role management. Using it for an application means a single bug or leak can destroy all data. Reserve root for break-glass administration only.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you enable authentication on a server?</h2>
+<div class="answer">
+<p>Start mongod with the authorization setting enabled, then create the first administrative user via the localhost exception. After that, all connections must authenticate. Enabling authorization without creating an admin user first locks you out of user management.</p>
+<pre><code>mongod --dbpath /data/db --auth</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is SCRAM authentication in MongoDB?</h2>
+<div class="answer">
+<p>SCRAM is the default challenge-response mechanism for username and password authentication. Credentials are stored hashed per database, and the password never crosses the wire in clear text. TLS should still be used to protect the connection itself.</p>
+</div>
+</div>
+<div class="question">
+<h2>How do you grant a role on a different database to a user?</h2>
+<div class="answer">
+<p>Roles are granted as { role, db } pairs, so a user created in one database can hold roles on another. The user's authentication database stays fixed at creation time. This lets a single application user work across a few databases without being root.</p>
+<pre><code>db.getSiblingDB("admin").createUser({
+  user: "reporting",
+  pwd: "secret",
+  roles: [ { role: "read", db: "shop" }, { role: "read", db: "analytics" } ]
+})</code></pre>
+</div>
+</div>
+<div class="question">
+<h2>What is a custom role and when is it worth creating?</h2>
+<div class="answer">
+<p>A custom role is a named set of privileges you define with createRole, either from scratch or by inheriting built-in roles. It is worth it when built-in roles grant too much, such as an app that only needs to read one collection. Custom roles add operational overhead, so keep them few and documented.</p>
+</div>
+</div>

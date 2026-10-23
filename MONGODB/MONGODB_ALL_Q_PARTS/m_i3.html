@@ -1,0 +1,872 @@
+<div class="question">
+  <h2>How does a $lookup with a pipeline and let differ from the localField/foreignField form?</h2>
+  <div class="answer">
+    <p>The short form is a correlated equality join: <code>localField</code> is matched against <code>foreignField</code> and MongoDB can always use an index on the foreign field. The pipeline form is a full sub-query per input document. You pass outer values through <code>let</code> and read them inside the sub-pipeline as <code>$$</code> variables, so you can filter, project, sort and limit the foreign side before it is attached.</p>
+    <pre><code>db.orders.aggregate([
+  { $lookup: {
+      from: "customers",
+      let: { cid: "$customerId" },
+      pipeline: [
+        { $match: { $expr: { $eq: ["$_id", "$$cid"] } } },
+        { $project: { name: 1, tier: 1, _id: 0 } }
+      ],
+      as: "customer"
+  } }
+])</code></pre>
+    <p>The catch: an <code>$expr</code> comparison is not automatically indexable. Put an equality <code>$match</code> on an indexed field first, or the sub-pipeline becomes a collection scan per document. The pipeline form is the right tool when you need a top-N join, not a full array of matches.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When would you use $unionWith, and what does it not do for you?</h2>
+  <div class="answer">
+    <p><code>$unionWith</code> appends the output of another collection or pipeline to the current stream. It is the clean way to query a live collection and an archive collection as one logical set, or to combine pre-aggregated rollups with raw data.</p>
+    <pre><code>db.events.aggregate([
+  { $match: { type: "click" } },
+  { $unionWith: {
+      coll: "events_archive",
+      pipeline: [ { $match: { type: "click" } } ]
+  } }
+])</code></pre>
+    <p>What it does not do: no deduplication, no schema reconciliation, no ordering guarantee, and both branches must live in the same database. Duplicate <code>_id</code> values from both sides are returned twice. Each branch is read in full, so an unindexed <code>$match</code> in either branch costs a collection scan. Treat it as a UNION ALL, and add a <code>$group</code> or <code>$sort</code> afterwards only when you actually need it.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does $graphLookup traverse a hierarchy, and which options control its cost?</h2>
+  <div class="answer">
+    <p><code>$graphLookup</code> performs a breadth-first search inside one collection. <code>startWith</code> seeds the search, <code>connectFromField</code> and <code>connectToField</code> define the edge, and <code>as</code> names the resulting array. Documents are de-duplicated by <code>_id</code>, so cycles terminate.</p>
+    <pre><code>db.employees.aggregate([
+  { $graphLookup: {
+      from: "employees",
+      startWith: "$reportsTo",
+      connectFromField: "reportsTo",
+      connectToField: "_id",
+      as: "chain",
+      maxDepth: 5,
+      depthField: "level",
+      restrictSearchWithMatch: { active: true }
+  } }
+])</code></pre>
+    <p>Cost control: <code>maxDepth</code> caps recursion, <code>depthField</code> lets you stop or filter later, and <code>restrictSearchWithMatch</code> prunes branches early. Crucially, an index on <code>connectToField</code> turns each hop into an index lookup instead of a scan. Without <code>maxDepth</code> on a deep or cyclic graph, the working set grows quickly per input document.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does $facet run several sub-pipelines, and what are its limits?</h2>
+  <div class="answer">
+    <p><code>$facet</code> receives the documents produced so far and feeds the same input to every sub-pipeline in one pass. It is the standard way to return a page of results, a total count and per-facet counts in a single round trip.</p>
+    <pre><code>db.products.aggregate([
+  { $match: { status: "active" } },
+  { $facet: {
+      items: [ { $sort: { price: 1 } }, { $skip: 20 }, { $limit: 20 } ],
+      total: [ { $count: "n" } ],
+      byBrand: [ { $group: { _id: "$brand", n: { $sum: 1 } } } ]
+  } }
+])</code></pre>
+    <p>Limits worth knowing: the input is materialised before the facets run, so put <code>$match</code> and <code>$project</code> before it; sub-pipelines cannot contain <code>$out</code>, <code>$merge</code> or a nested <code>$facet</code>; and each facet's output document is capped at 100 MB, which <code>allowDiskUse</code> does not relieve. Indexes only help the stages before <code>$facet</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do $bucket and $bucketAuto differ, and when is each appropriate?</h2>
+  <div class="answer">
+    <p><code>$bucket</code> takes explicit, sorted <code>boundaries</code> that must all share one BSON type. Every document whose group-by value falls in <code>[lower, upper)</code> lands in that bucket, and you control the labels and the accumulators.</p>
+    <pre><code>{ $bucket: {
+    groupBy: "$price",
+    boundaries: [0, 50, 100, 500],
+    default: "other",
+    output: { n: { $sum: 1 }, avgPrice: { $avg: "$price" } }
+} }</code></pre>
+    <p><code>$bucketAuto</code> computes the boundaries itself from a requested bucket count, trying to distribute documents evenly; <code>granularity</code> (R5, R10, 1-2-5, POWERSOF2) snaps the edges to human-friendly numbers. Use <code>$bucket</code> for fixed business bands such as price tiers or SLA ranges, where the boundaries must stay stable across runs. Use <code>$bucketAuto</code> for exploratory histograms, accepting that boundaries shift as data changes and that documents outside the computed range can land in an overflow bucket.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What can $setWindowFields compute that $group cannot?</h2>
+  <div class="answer">
+    <p><code>$setWindowFields</code> keeps every document and adds computed fields over a window, instead of collapsing rows into groups. That gives you running totals, moving averages, ranks and period-over-period comparisons in one stage.</p>
+    <pre><code>db.orders.aggregate([
+  { $setWindowFields: {
+      partitionBy: "$customerId",
+      sortBy: { createdAt: 1 },
+      output: {
+        runningTotal: { $sum: "$amount",
+                        window: { documents: ["unbounded", "current"] } },
+        last30d: { $sum: "$amount",
+                   window: { range: [-30, "current"], unit: "day" } }
+      }
+  } }
+])</code></pre>
+    <p>Key mechanics: <code>documents</code> windows count positions, <code>range</code> windows work on the sort key's values (so <code>unit</code> applies to dates), and the default window is <code>["unbounded", "unbounded"]</code>. Because it needs ordered input, it sorts and can spill; it is the natural replacement for self-joins and correlated sub-queries used to compute deltas.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do $densify and $fill work together, and when do you need them?</h2>
+  <div class="answer">
+    <p><code>$densify</code> creates the documents that are missing from a sequence, and <code>$fill</code> assigns values to them. Together they turn sparse series into a continuous timeline, which matters when a chart or a downstream calculation must show zero-value periods rather than skip them.</p>
+    <pre><code>db.metrics.aggregate([
+  { $densify: { field: "ts", range: { step: 1, unit: "hour",
+                 bounds: "full" }, partitionByFields: ["host"] } },
+  { $fill: { sortBy: { ts: 1 }, partitionBy: "host",
+             output: { value: { method: "linear" } } } }
+])</code></pre>
+    <p><code>$densify</code> either extends the observed range or you supply explicit bounds. <code>$fill</code> supports a constant <code>value</code>, <code>locf</code> (last observation carried forward), or <code>linear</code> interpolation across the sort key. Both are partition-aware, so run them per tenant or per device. They generate rows, so the cost grows with the gap size: densifying years of minute data explodes the pipeline.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is the practical difference between $merge and $out for materialised results?</h2>
+  <div class="answer">
+    <p><code>$out</code> writes the whole pipeline result into a collection, atomically replacing whatever was there. It is simple and readers never see a half-written collection, but it rewrites everything on each run, so the cost is proportional to total output size.</p>
+    <p><code>$merge</code> is incremental: it matches on an <code>on</code> field (default <code>_id</code>, which needs a unique index), then applies <code>whenMatched</code> (<code>merge</code>, <code>replace</code>, <code>keepExisting</code>, <code>fail</code>, or a pipeline) and <code>whenNotMatched</code> (<code>insert</code>, <code>discard</code>, <code>fail</code>). That makes on-demand materialised views practical: recompute only a recent slice, merge it into the summary collection, and keep history.</p>
+    <pre><code>{ $merge: {
+    into: "daily_sales",
+    on: "_id",
+    whenMatched: [ { $set: { total: "$$new.total", refreshedAt: "$$NOW" } } ],
+    whenNotMatched: "insert"
+} }</code></pre>
+    <p>Both are write stages, so they cannot appear in a view definition or inside <code>$lookup</code>/<code>$facet</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are $$ROOT, $$NOW and $$REMOVE used for in pipelines?</h2>
+  <div class="answer">
+    <p>They are system variables, not fields. <code>$$ROOT</code> references the whole input document, which is handy for keeping a snapshot while reshaping: <code>{ $push: "$$ROOT" }</code> inside a <code>$group</code> collects full documents, and <code>{ $sortArray: { input: "$items", sortBy: { price: 1 } } }</code> style reshaping often starts from <code>$$ROOT</code>.</p>
+    <p><code>$$NOW</code> returns the same date value for the entire pipeline, evaluated once at start, so every document sees an identical timestamp. That makes age calculations safe: <code>{ $dateDiff: { startDate: "$createdAt", endDate: "$$NOW", unit: "day" } }</code>.</p>
+    <p><code>$$REMOVE</code> removes a field conditionally inside <code>$project</code> or <code>$addFields</code>: <code>{ secret: { $cond: [ "$isPublic", "$secret", "$$REMOVE" ] } }</code>. It is far cleaner than computing a value and then unsetting it in a later stage.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the edge cases of $unwind that break pipelines?</h2>
+  <div class="answer">
+    <p>By default <code>$unwind</code> drops the document entirely when the field is an empty array, missing, or null, which silently loses rows in reports.</p>
+    <pre><code>{ $unwind: {
+    path: "$items",
+    includeArrayIndex: "idx",
+    preserveNullAndEmptyArrays: true
+} }</code></pre>
+    <p><code>preserveNullAndEmptyArrays</code> keeps those documents with the array field absent, and <code>includeArrayIndex</code> gives the array position (null for preserved documents), which is useful for "position in cart" logic. Also note that a non-array value is treated as a one-element array, so string fields pass through unchanged. And unwinding multiplies document count, so a later <code>$group</code> or <code>$sort</code> processes far more rows than you might expect. Often <code>$filter</code> plus <code>$map</code> avoids the explosion.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the risks of using $function in an aggregation pipeline?</h2>
+  <div class="answer">
+    <p><code>$function</code> runs JavaScript on the server for every document. It is expressive, but it is the wrong default for three reasons.</p>
+    <ul>
+      <li><strong>Cost:</strong> the JS engine is invoked per document, so it is far slower than native operators and cannot use indexes at all.</li>
+      <li><strong>Opacity:</strong> the optimiser cannot reason about the expression, so stages around it cannot be pushed down or reordered.</li>
+      <li><strong>Portability:</strong> server-side JavaScript can be disabled at deployment level, so an expression that works in staging may fail in a hardened production tier.</li>
+    </ul>
+    <p>Most requests that reach for <code>$function</code> are satisfied by <code>$switch</code>, <code>$cond</code>, <code>$getField</code>, <code>$regexMatch</code>, or <code>$dateTrunc</code>. If the logic truly belongs in code, compute it in the application on write and store the result, so reads stay indexable and cheap.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is the 100 MB per-stage limit, and how does allowDiskUse change behaviour?</h2>
+  <div class="answer">
+    <p>Memory-hungry blocking stages such as <code>$sort</code>, <code>$group</code>, <code>$bucketAuto</code> and <code>$setWindowFields</code> are limited to 100 MB of RAM per stage. Exceeding it raises an error unless the operation may spill to disk.</p>
+    <pre><code>db.events.aggregate(pipeline, { allowDiskUse: true })</code></pre>
+    <p>Since MongoDB 6.0 the server parameter <code>allowDiskUseByDefault</code> is true, so pipelines spill instead of failing unless a deployment turns it off. Spilling prevents the error but does not make the query fast: disk-backed sorts are an order of magnitude slower, and the real fix is a supporting index, a preceding <code>$match</code>, or a <code>$project</code> that shrinks documents. The 100 MB bound is per stage; a <code>$facet</code> result is still capped at 100 MB per facet regardless of <code>allowDiskUse</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Does sorting before $group make $group use less memory?</h2>
+  <div class="answer">
+    <p>Not in general, and this is a common misconception carried over from SQL engines. <code>$group</code> is a blocking hash aggregation: it keeps one entry per distinct group key in memory, so its footprint scales with the number of distinct groups, not with input order. Pre-sorting by the group key does not remove that hash table, and it adds a full blocking sort of its own.</p>
+    <p>What actually helps:</p>
+    <ul>
+      <li>Filter first with <code>$match</code> so fewer documents reach the stage.</li>
+      <li>Reduce cardinality: grouping by <code>userId</code> over millions of users costs far more than grouping by <code>country</code>.</li>
+      <li><code>$project</code> only the fields the accumulators need.</li>
+      <li>Bound the work with <code>$limit</code> or a time window where the business question allows it.</li>
+    </ul>
+    <p>Check <code>explain</code> for spill indicators; a <code>$group</code> that writes to disk is a signal to redesign the pipeline, not to add a sort.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How expensive is $sample, and when does it not behave like a random sample?</h2>
+  <div class="answer">
+    <p><code>$sample</code> with a size below roughly 5% of the collection uses a pseudo-random cursor, which jumps to randomly chosen positions in the storage engine rather than reading every document. That is cheap on a large collection but it is not a strict uniform sample, and on small collections the server switches strategy.</p>
+    <p>For larger sample sizes it performs a top-k random sort, which scans the collection and keeps the best candidates in memory, so cost grows with collection size and the 100 MB stage limit applies.</p>
+    <pre><code>db.users.aggregate([ { $sample: { size: 100 } } ])</code></pre>
+    <p>Consequences: never put <code>$sample</code> after an expensive <code>$group</code> and expect it to save work, and do not use it for statistical guarantees. For "N random documents matching a filter", apply <code>$match</code> first; the sample is then drawn from the filtered stream, not the whole collection.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>$redact versus $project for hiding sensitive fields: which one do you choose?</h2>
+  <div class="answer">
+    <p><code>$redact</code> walks the document recursively and evaluates an expression per level, returning <code>$$DESCEND</code>, <code>$$PRUNE</code> or <code>$$KEEP</code>. It is the right tool when the decision depends on a field's own value at any depth, for example hiding every sub-document whose <code>classification</code> is <code>internal</code>.</p>
+    <pre><code>{ $redact: { $cond: [
+    { $eq: [ "$classification", "internal" ] }, "$$PRUNE", "$$DESCEND" ] } }</code></pre>
+    <p><code>$project</code> with an inclusion list is explicit, predictable, and cheap: you state exactly which fields leave the database. It is the safer default for API responses, because a new sensitive field added later is excluded unless someone opts it in.</p>
+    <p>Note that <code>$redact</code> cannot use an index for the fields it inspects and it runs after other stages, so it does not reduce the data read from disk. For a hard guarantee, restrict with a <code>$project</code> and enforce field-level access with views or roles.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you read explain output for an aggregation pipeline?</h2>
+  <div class="answer">
+    <p>Pass <code>explain: true</code> to <code>aggregate()</code>, or call <code>.explain("executionStats")</code> on the cursor. The output nests stages rather than showing one flat plan, so you read it inside-out: the innermost <code>$cursor</code> shows the collection access, and each stage reports its own timing and document counts.</p>
+    <pre><code>db.orders.explain("executionStats").aggregate([
+  { $match: { status: "open" } },
+  { $group: { _id: "$customerId", n: { $sum: 1 } } }
+])</code></pre>
+    <p>Look for <code>totalKeysExamined</code> versus <code>totalDocsExamined</code> at the cursor, <code>nReturned</code> per stage to spot where rows explode, <code>usedDisk</code> to catch spilling, and whether the <code>$match</code> was pushed into the <code>$cursor</code> or sits above it. A <code>$match</code> that appears after <code>$cursor</code> instead of inside it means the filter was applied in memory, not by the index.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does $sort followed by $limit behave differently from $limit followed by $sort?</h2>
+  <div class="answer">
+    <p>Because order of stages defines meaning, not just performance. <code>$sort</code> then <code>$limit</code> gives the top N by that key; <code>$limit</code> then <code>$sort</code> sorts an arbitrary subset, which is almost never what a report wants.</p>
+    <p>Performance-wise, the pair <code>$sort</code> + <code>$limit</code> is optimised into a top-k sort: the server keeps only N candidates in memory instead of materialising the full sorted set, so a <code>$limit</code> of 10 over millions of documents is far cheaper than sorting them all. The optimiser can also coalesce a <code>$sort</code> immediately followed by <code>$limit</code> when the source is a single collection.</p>
+    <pre><code>{ $sort: { score: -1 } }, { $limit: 10 }   // top 10, bounded memory</code></pre>
+    <p>If the sort is placed after a <code>$group</code> or <code>$unwind</code>, no index can help and the top-k optimisation still applies, but the input has already been materialised.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you test an aggregation pipeline without production collections?</h2>
+  <div class="answer">
+    <p>The <code>$documents</code> stage lets you define the input inline, which turns a pipeline into a self-contained, runnable test fixture.</p>
+    <pre><code>db.aggregate([
+  { $documents: [
+      { sku: "A", qty: 2, price: 10 },
+      { sku: "A", qty: 1, price: 10 },
+      { sku: "B", qty: 5, price: 2 }
+  ] },
+  { $group: { _id: "$sku", revenue: { $sum: { $multiply: ["$qty", "$price"] } } } }
+])</code></pre>
+    <p>This keeps the logic under test identical to what runs in production, with no fixture collection to create or clean up. Two caveats: <code>$documents</code> must be the first stage, and it accepts only constant expressions, so you cannot reference collection data. For deeper coverage, keep pipelines in one place in code and run them against a seeded test database in CI, asserting on exact output rather than on document counts.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do arrayFilters with several identifiers work in a nested array update?</h2>
+  <div class="answer">
+    <p><code>arrayFilters</code> lets you update specific elements of an array without knowing their positions. Each filter gets an identifier, and the update path references that identifier with <code>$[id]</code>.</p>
+    <pre><code>db.orders.updateOne(
+  { _id: 42 },
+  { $set: {
+      "items.$[i].status": "backordered",
+      "items.$[i].notes.$[n].flagged": true
+  } },
+  { arrayFilters: [
+      { "i.sku": { $in: ["A-1", "B-2"] } },
+      { "n.visibility": "public" }
+  ] }
+)</code></pre>
+    <p>Each identifier is an independent predicate on its own array level, so the two filters do not interfere. An element matches only if it satisfies the filter at that level. Rules that trip people up: you must declare an identifier for every <code>$[...]</code> placeholder, identifiers cannot be reused across levels, and the filter field paths are relative to the array element, not to the document root.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does the positional $ operator differ from $[] and $[identifier]?</h2>
+  <div class="answer">
+    <p>The positional <code>$</code> updates the first array element matched by the query filter. Its big limitation is that it is ambiguous with multiple array conditions, which is why pairing it with <code>$elemMatch</code> is the safe pattern.</p>
+    <pre><code>db.orders.updateOne(
+  { _id: 42, items: { $elemMatch: { sku: "A-1", qty: { $lt: 2 } } } },
+  { $inc: { "items.$.qty": 1 } }
+)</code></pre>
+    <p>Without <code>$elemMatch</code>, the two predicates could match different elements and the position is undefined. The alternatives are <code>$[]</code> (all elements) and <code>$[id]</code> (elements matching an <code>arrayFilters</code> entry). Prefer the identifier form in new code: it is explicit, handles multiple conditions cleanly, and does not depend on the query filter's shape, so refactoring the filter cannot silently change which element is updated.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does $push with $each, $position, $sort and $slice let you do in one write?</h2>
+  <div class="answer">
+    <p>It turns a read-modify-write into a single atomic update, which is exactly what a bounded leaderboard or recent-activity list needs.</p>
+    <pre><code>db.boards.updateOne(
+  { _id: "weekly" },
+  { $push: {
+      top: {
+        $each: [ { player: "ana", score: 91 } ],
+        $position: 0,
+        $sort: { score: -1 },
+        $slice: 10
+      }
+  } }
+)</code></pre>
+    <p>Order of application inside the modifier is fixed: <code>$each</code> inserts, <code>$position</code> places them, <code>$sort</code> orders the whole array, then <code>$slice</code> trims to the first or last N (negative keeps the tail). Because <code>$slice</code> runs last, the array never grows past the cap, so the document stays far below the 16 MB limit and the write stays cheap.</p>
+    <p>Note that <code>$sort</code> on the array elements requires the field to exist; missing sort keys are ordered by BSON type rules, so normalise the documents before relying on the ordering.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does $addToSet deduplicate, and where does it surprise people?</h2>
+  <div class="answer">
+    <p><code>$addToSet</code> adds a value only if an equal value is not already present, using BSON equality rather than a field-level key.</p>
+    <pre><code>db.users.updateOne(
+  { _id: 7 },
+  { $addToSet: { tags: { $each: ["beta", "beta", "gamma"] } } }
+)</code></pre>
+    <p>Surprises: the comparison is order-sensitive for embedded documents, so <code>{a:1, b:2}</code> and <code>{b:2, a:1}</code> are different values and both get added. Numeric types compare by value, so <code>1</code> and <code>1.0</code> do not duplicate, but <code>NumberInt(1)</code> and <code>NumberLong(1)</code> are distinct types. And each element is checked against the array, so a large <code>$each</code> on a huge array is O(n·m) and can be slow on hot documents.</p>
+    <p>If order and uniqueness matter more than array semantics, model membership as an object keyed by the value, or keep a separate collection with a unique index, which also removes the document-growth problem.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does $setOnInsert behave, and why can it not be used in an update pipeline?</h2>
+  <div class="answer">
+    <p><code>$setOnInsert</code> applies only when the upsert inserts a new document; on a match it is ignored. It is the standard way to stamp creation metadata without a second round trip.</p>
+    <pre><code>db.users.updateOne(
+  { email: "ana@example.com" },
+  { $set: { lastSeen: new Date() },
+    $setOnInsert: { createdAt: new Date(), role: "member" } },
+  { upsert: true }
+)</code></pre>
+    <p>Update pipelines (an array of stages such as <code>$set</code> and <code>$replaceWith</code>) are a different execution mode: the stage list is applied to the matched document and there is no notion of "insert only", so <code>$setOnInsert</code>, <code>$push</code>, <code>$inc</code> and friends are rejected there.</p>
+    <p>If you need computed creation values in a pipeline upsert, branch inside the pipeline on a field that only exists on insert, or simply use the classic modifier form for upserts and reserve pipelines for recomputation.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do aggregation-pipeline updates work, and when are they worth it?</h2>
+  <div class="answer">
+    <p>Instead of modifier operators you pass an array of stages, which lets the new value depend on other fields of the same document, computed on the server.</p>
+    <pre><code>db.products.updateMany(
+  { category: "sale" },
+  [ { $set: { finalPrice: { $round: [
+        { $multiply: ["$price", { $subtract: [1, "$discount"] }] }, 2 ] },
+      updatedAt: "$$NOW" } } ]
+)</code></pre>
+    <p>Allowed stages are the ones that reshape a single document: <code>$set</code>/<code>$addFields</code>, <code>$project</code>/<code>$unset</code>, and <code>$replaceWith</code>/<code>$replaceRoot</code>. The write is still atomic per document, so readers never observe the intermediate state.</p>
+    <p>The trade-off is that each document runs the pipeline, so a large <code>updateMany</code> with heavy expressions costs more CPU than a constant <code>$set</code>, and the expressions cannot use indexes. Use it for deterministic recomputation during backfills and schema migrations, not as a general substitute for computing values in the application.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why is $inc atomic, and what does it not protect you from?</h2>
+  <div class="answer">
+    <p><code>$inc</code> is applied by the storage engine while the document is locked for that write, so concurrent increments serialise and no update is lost. There is no read-then-write window for two clients to interleave, which is why counters should never be implemented as <code>find</code> then <code>save</code>.</p>
+    <pre><code>db.stats.updateOne({ _id: "page:home" }, { $inc: { views: 1 } })</code></pre>
+    <p>What it does not protect: numeric type overflow. A 32-bit integer at <code>2147483647</code> will not silently become a long; the update fails with an error, so initialise counters with <code>NumberLong</code> when they can exceed that. Nor does it help when the same document is the target of thousands of increments per second: the document becomes a hotspot and writes queue behind each other, so shard or bucket the counter instead.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why use findOneAndUpdate with returnDocument: "before" for a work queue?</h2>
+  <div class="answer">
+    <p>Because you need to know what you claimed, and the claim must happen in the same atomic step as the state change. With <code>returnDocument: "before"</code> you get the document as it was prior to the update, which is the only way to prove you are the client that moved it from <code>queued</code> to <code>processing</code>.</p>
+    <pre><code>const job = await jobs.findOneAndUpdate(
+  { status: "queued", runAt: { $lte: new Date() } },
+  { $set: { status: "processing", lockedBy: workerId,
+            lockedUntil: new Date(Date.now() + 60000) } },
+  { sort: { priority: -1, runAt: 1 }, returnDocument: "before",
+    projection: { payload: 1 } }
+);</code></pre>
+    <p>If the result is <code>null</code>, someone else won the race: no exception, no duplicate processing. With the default <code>"after"</code> you cannot tell whether you performed the transition or merely re-read a job another worker had already taken, which is the classic double-processing bug.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>An updateMany touches 50,000 documents. What atomicity guarantees do you actually have?</h2>
+  <div class="answer">
+    <p>Only per document. Each document's modification is atomic, but the set of documents as a whole is not: concurrent readers can observe some documents updated and others not, and if the operation fails partway, the earlier writes remain applied.</p>
+    <p>Two practical consequences:</p>
+    <ul>
+      <li>The update must be idempotent, because a retry after a partial failure will re-apply it to documents that already succeeded. Prefer absolute assignments or guards such as <code>{ migrated: { $ne: true } }</code> over relative operators like <code>$inc</code>.</li>
+      <li>A long <code>updateMany</code> yields to other operations between documents, so it does not block the collection, but it also gives you no isolation boundary.</li>
+    </ul>
+    <p>If the whole set must land together, wrap it in a transaction — subject to the 16 MB oplog entry size and the 60-second default lifetime, which means batching anyway. Otherwise accept eventual consistency and make progress resumable.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is $bit good for, and what are its constraints?</h2>
+  <div class="answer">
+    <p><code>$bit</code> performs bitwise <code>and</code>, <code>or</code> and <code>xor</code> on an integer field in place, atomically. Classic uses are permission masks, feature flags packed into one integer, and compact presence bitsets.</p>
+    <pre><code>db.users.updateOne(
+  { _id: 7 },
+  { $bit: { perms: { or: NumberInt(4) } } }
+);
+db.users.updateOne(
+  { _id: 7 },
+  { $bit: { perms: { and: NumberInt(~4) } } }
+);</code></pre>
+    <p>Constraints: the field must be an <code>int</code> or <code>long</code>. A missing field is treated as zero, but a field holding a double, string or decimal raises an error, so the schema must be consistent. Because the operation is read-modify-write inside the storage engine, concurrent flag flips do not clobber each other — unlike fetching the value and writing it back. For bitsets spanning more than 64 flags you need multiple fields or an array of longs.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What exactly does { field: null } match, and how does an index treat it?</h2>
+  <div class="answer">
+    <p>It matches three cases: the field is explicitly null, the field is absent, and the field is an array that contains null. That last case is the one people forget, because equality against an array matches if any element equals the value.</p>
+    <pre><code>db.users.find({ nickname: null })
+// matches: {nickname: null}, {}, {nickname: [null, "ace"]}</code></pre>
+    <p>A normal index stores a null entry both for explicit nulls and for missing fields, so the query can be answered with an index scan on the null key rather than a collection scan. That is why <code>{ field: null }</code> is indexable while <code>{ field: { $exists: false } }</code> historically was not. If you want strictly null and not missing, query <code>{ field: { $type: "null" } }</code>, and if you want "present", use <code>{ field: { $ne: null } }</code> knowing it excludes nulls but includes arrays.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does $type work, and what does the "number" alias cover?</h2>
+  <div class="answer">
+    <p><code>$type</code> matches by BSON type, either by string alias or numeric code. The alias <code>"number"</code> is a shorthand that expands to <code>double</code>, <code>int</code>, <code>long</code> and <code>decimal</code>, which is why it is the right choice when a field's numeric type drifted over the years.</p>
+    <pre><code>db.orders.find({ total: { $type: "number" } })
+db.orders.find({ total: { $type: ["int", "long"] } })
+db.orders.find({ total: { $type: "string" } })   // data-quality check</code></pre>
+    <p>Two behaviours to remember: for an array field, <code>$type</code> matches if any element has that type, and the aggregation expression <code>$type</code> returns an array of the distinct types present, which is useful for finding mixed-type fields before a migration. <code>$type</code> on an indexed field can use the index, unlike a <code>$where</code>-style check.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>In what order does MongoDB compare values of different BSON types?</h2>
+  <div class="answer">
+    <p>Cross-type comparison follows a fixed order, roughly: MinKey, Null, Numbers, String/Symbol, Object, Array, BinData, ObjectId, Boolean, Date, Timestamp, Regular Expression, MaxKey.</p>
+    <p>The important consequence is type bracketing: a range predicate only compares against values of the same type bracket. <code>{ price: { $lt: 100 } }</code> will never return a document where <code>price</code> is the string <code>"50"</code>, even though <code>"50"</code> sorts after numbers overall. That is deliberate — it stops queries from returning nonsense — but it also means a single stray string breaks range reports silently instead of loudly.</p>
+    <pre><code>db.items.find({ price: { $lt: 100 } })   // numbers only
+db.items.find({ price: { $type: "string" } })  // find the strays</code></pre>
+    <p>Note that numbers compare by numeric value across int, long, double and decimal, so <code>1</code> equals <code>1.0</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the risks of passing user input straight into $regex?</h2>
+  <div class="answer">
+    <p>Three distinct problems, and only one of them is about indexes.</p>
+    <ul>
+      <li><strong>Injection:</strong> characters like <code>.</code>, <code>*</code>, <code>(</code> change the meaning of the pattern, so a search for "a+b" quietly matches "aab". Escape the input before building the pattern.</li>
+      <li><strong>ReDoS:</strong> a nested quantifier such as <code>(a+)+$</code> can make the matcher backtrack exponentially. A short malicious string can pin a CPU core on the server, so cap input length and reject patterns with nested quantifiers, or avoid user-supplied patterns entirely.</li>
+      <li><strong>Cost:</strong> an unanchored pattern scans every candidate document; only <code>^prefix</code> patterns get index bounds.</li>
+    </ul>
+    <pre><code>const safe = input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+db.docs.find({ title: { $regex: "^" + safe } })</code></pre>
+    <p>For real search requirements, use a text index or Atlas Search rather than regex.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How does one unindexed branch affect an $or query?</h2>
+  <div class="answer">
+    <p>It usually collapses the whole query into a collection scan. To answer <code>$or</code> with indexes, the planner needs a usable index for every branch, then it runs them as sub-plans and deduplicates the results by record id. If any branch has no index, the planner compares costs and normally concludes that scanning once is cheaper than scanning once anyway plus doing index lookups for the other branches.</p>
+    <pre><code>db.orders.find({ $or: [
+  { customerId: 42 },        // indexed
+  { legacyRef: "X-9" }       // no index -&gt; whole query scans
+] })</code></pre>
+    <p>Read <code>explain</code> for <code>SUBPLAN</code>/<code>OR</code> stages; seeing <code>COLLSCAN</code> at the top confirms it. Fixes: index every branch, split into two queries and merge in the application, or restructure the data so one indexed field covers both cases. Also watch duplication — the same document can match several branches, which the <code>OR</code> stage removes.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does $elemMatch matter with arrays of objects, and when is dot notation equivalent?</h2>
+  <div class="answer">
+    <p>Dot notation with several predicates can be satisfied by different array elements; <code>$elemMatch</code> requires one element to satisfy all of them.</p>
+    <pre><code>// different elements can match each predicate
+db.orders.find({ "items.sku": "A-1", "items.qty": 5 })
+
+// the same element must match both
+db.orders.find({ items: { $elemMatch: { sku: "A-1", qty: 5 } } })</code></pre>
+    <p>For a single predicate the two are equivalent, and dot notation is preferable because it produces tighter index bounds and lets the planner use separate index entries per condition. Reach for <code>$elemMatch</code> whenever two or more conditions must describe the same element, and remember that <code>$elemMatch</code> on a single condition disables the usual multikey bounds optimisation, so it can be slower for simple equality.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why can't $size use an index, and what do you do instead?</h2>
+  <div class="answer">
+    <p>Because an index stores one entry per array element, not the array length. <code>{ tags: { $size: 3 } }</code> is a predicate on the array as a whole, so the server must examine every candidate document and count elements.</p>
+    <pre><code>db.posts.find({ tags: { $size: 3 } })   // COLLSCAN</code></pre>
+    <p>Workarounds:</p>
+    <ul>
+      <li>Maintain a <code>tagCount</code> field with <code>$inc</code> on push/pull and index it — the standard approach for "exactly N" queries.</li>
+      <li>For "at least N", an index on the array field with a range predicate can bound the candidates, then filter with <code>$expr: { $gte: [ { $size: "$tags" }, 3 ] }</code>.</li>
+      <li>For "has exactly one element", an index on <code>tags.1</code> plus <code>{ "tags.1": { $exists: false } }</code> is narrow and cheap.</li>
+    </ul>
+    <p>Any denormalised count must be kept consistent by every write path, or it silently drifts.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do $expr and $cond behave inside a filter, and what does it cost?</h2>
+  <div class="answer">
+    <p><code>$expr</code> lets a query use aggregation expressions, so you can compare two fields of the same document or branch on a condition with <code>$cond</code>.</p>
+    <pre><code>db.orders.find({ $expr: {
+  $gt: [ "$shippedAt", { $cond: [ { $eq: ["$express", true] },
+                                   "$promisedAt", "$createdAt" ] } ]
+} })</code></pre>
+    <p>The expression is evaluated per candidate document, so the planner cannot derive index bounds from it and you get a collection scan (or an index scan on whatever separate predicates exist). <code>$cond</code> additionally makes the predicate non-sargable: even a supporting index on the compared fields cannot be ranged, because the comparison target varies per document.</p>
+    <p>If this shape is hot, compute the threshold on write into a field and index it, or restructure to a plain range predicate. Reserve <code>$expr</code> for ad-hoc analysis and admin queries.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is the 32 MB sort limit, and how does an index avoid it?</h2>
+  <div class="answer">
+    <p>A blocking in-memory sort is capped at 32 MB of data. Beyond that the operation fails with <code>QueryExhausted</code>-style sort errors unless it can spill or use an index.</p>
+    <p>An index avoids the sort entirely when the requested order matches the index order for the scanned bounds: the plan shows no <code>SORT</code> stage, just <code>IXSCAN</code> followed by <code>FETCH</code>. The equality prefix can be in any order, but the sort fields must appear in index order with matching direction (or the exact reverse).</p>
+    <pre><code>db.orders.createIndex({ customerId: 1, createdAt: -1 });
+db.orders.find({ customerId: 42 }).sort({ createdAt: -1 }).limit(20);
+// IXSCAN supplies the order: no SORT, no 32 MB ceiling</code></pre>
+    <p>Since 4.4 <code>find</code> accepts <code>allowDiskUse</code>, which lets an oversized sort spill instead of failing — a safety valve, not a design. If <code>explain</code> shows <code>SORT</code> with <code>usedDisk: true</code>, the index is missing or the direction is wrong.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do maxTimeMS and $comment help you diagnose a slow endpoint?</h2>
+  <div class="answer">
+    <p><code>maxTimeMS</code> puts an upper bound on server-side execution and aborts the operation with error 50 (<code>MaxTimeMSExpired</code>) when exceeded, which stops one bad query from occupying a connection indefinitely. <code>$comment</code> attaches an arbitrary string that the server records in the profiler, in <code>currentOp</code> and in the slow-query log, which is how you connect a database operation back to the code path that issued it.</p>
+    <pre><code>db.orders.find({ status: "open" })
+  .comment("OrdersApi.listOpen v3 requestId=8f2c")
+  .maxTimeMS(800)</code></pre>
+    <p>Then <code>db.system.profile.find({ "command.comment": /OrdersApi/ })</code> gives you the exact plans and timings for that endpoint. Treat the timeout as a contract: the application must catch error 50 and return a controlled response rather than a 500, and the budget should be lower than the client's own timeout so the server gives up first.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do missing fields, nulls and arrays behave when you sort?</h2>
+  <div class="answer">
+    <p>Sorting uses the same cross-type order as comparison: missing fields sort as null, and null sorts before numbers and strings. So a document without a <code>score</code> field appears before every document that has one when sorting ascending, which usually surprises people building leaderboards.</p>
+    <pre><code>db.players.find().sort({ score: -1 })   // nulls land last here
+db.players.find({ score: { $ne: null } }).sort({ score: -1 })</code></pre>
+    <p>For arrays, ascending sort uses the smallest element of the array as the key and descending sort uses the largest, so an array-valued field can appear in an unexpected position. Sorting on an array field also prevents the plan from being a pure index-order scan when the index is multikey in ways that break the order guarantee, so verify with <code>explain</code> that no <code>SORT</code> stage appears. If ordering must be deterministic, add a tiebreaker such as <code>_id</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Is sorting by { $natural: -1 } a reliable way to fetch the latest documents?</h2>
+  <div class="answer">
+    <p>It works on small, append-only collections and it is a trap at scale. <code>$natural</code> bypasses indexes and returns documents in storage order; <code>-1</code> walks that order backwards, so on a fresh collection the newest inserts come first.</p>
+    <p>It stops being true once documents are updated or deleted. Updates can relocate a document inside the storage engine, and deleted space is reused by later inserts, so reverse natural order is no longer insertion order. A capped collection or a clustered collection keyed by a monotonic value does preserve insertion order, but a normal collection does not.</p>
+    <pre><code>db.events.find().sort({ $natural: -1 }).limit(20)   // works, but not "latest"</code></pre>
+    <p>The reliable version is an index on a monotonic field: <code>find().sort({ createdAt: -1 }).limit(20)</code>, ideally with <code>_id</code> as a tiebreaker. The index scan returns exactly the newest documents without touching the rest of the collection.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What happens when a field mixes Double and Decimal128 values?</h2>
+  <div class="answer">
+    <p>Comparisons work numerically across numeric types, so a Decimal128 <code>10.00</code> and a double <code>10</code> compare equal and sort together. Arithmetic is where the trouble starts: the result takes the wider type, so mixing decimal and double promotes to decimal, but the double has already lost precision before the conversion happens.</p>
+    <pre><code>db.invoices.aggregate([
+  { $group: { _id: null, total: { $sum: "$amount" } } }
+])
+// mixed types -&gt; decimal result, but double inputs carried their rounding error in</code></pre>
+    <p>Ordering also has a subtlety: <code>0.1</code> as a double is not exactly 0.1, so it can compare unequal to <code>NumberDecimal("0.1")</code> in edge cases, which breaks equality lookups and unique indexes over the field.</p>
+    <p>Practical rule: pick one type per field and enforce it with <code>$jsonSchema</code> <code>bsonType: "decimal"</code>. Never convert currency with <code>$toDouble</code> in the middle of a pipeline.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What precision and timezone information does a BSON Date carry?</h2>
+  <div class="answer">
+    <p>A BSON Date is a signed 64-bit integer of milliseconds since the Unix epoch, always UTC. There is no timezone stored with the value — the offset only exists when you format it for display or parse it from a string.</p>
+    <pre><code>new Date("2026-03-01T00:00:00-05:00")   // stored as 05:00Z
+ISODate("2026-03-01T00:00:00Z")</code></pre>
+    <p>Consequences: millisecond resolution only, so sub-millisecond ordering needs a separate sequence field; two events in the same millisecond are indistinguishable by date alone. Local midnight is not a fixed instant, so "today" must be computed with a timezone-aware library or an explicit offset, never by string concatenation on the client.</p>
+    <p>Do not confuse <code>Date</code> with <code>Timestamp</code>, which is an internal BSON type used by the oplog with second and increment components, and is not meant for application timestamps. Store UTC, convert at the edge, and keep a separate field for the user's declared timezone when it matters.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is inside an ObjectId, and does it guarantee creation order?</h2>
+  <div class="answer">
+    <p>Twelve bytes: a 4-byte Unix timestamp in seconds, a 5-byte random value generated once per process, and a 3-byte incrementing counter.</p>
+    <pre><code>ObjectId("65f1c2a4b7e3f10a9c8d4e21").getTimestamp()
+// ISODate("2024-03-13T09:12:04Z")</code></pre>
+    <p>Approximate order, yes: sorting by <code>_id</code> generally groups documents by insertion time, which is why it works as a cursor for pagination. Strict order, no — two processes can produce ids whose timestamps differ from the actual write order, the counter is per-process, and clock skew breaks the assumption entirely. Within a single process the counter makes ids monotonically increasing, which is why <code>_id</code> is usually a good tiebreaker.</p>
+    <p>Also note that ids are not secrets: the embedded timestamp leaks creation time. If that is sensitive, use a random UUID or a custom string key instead.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the driver traps when storing UUIDs as subtype 4 binary?</h2>
+  <div class="answer">
+    <p>A UUID is 16 bytes stored as <code>BinData</code>, and the subtype determines byte order. Subtype 4 is the standard, but drivers historically wrote subtype 3 with a different byte order, so the same logical UUID can end up as two distinct BSON values that never compare equal.</p>
+    <pre><code>db.users.insertOne({ _id: UUID("3b241101-e2bb-4255-8caf-4136c566a962") })
+// BinData(4, "OyQRAdK7QlWMr0E2xWapYg==")</code></pre>
+    <p>Traps to watch: configure the driver's UUID representation explicitly (in the Node.js driver, <code>uuidRepresentation: "standard"</code>); a legacy subtype 3 value inserted by an old service will not match a new subtype 4 query; and a unique index on the field will happily accept both representations as different keys. Migration requires rewriting values, not just changing the driver setting.</p>
+    <p>Also consider index locality: random UUIDs scatter inserts across the whole index, unlike monotonic ids.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you find documents approaching 16 MB before writes start failing?</h2>
+  <div class="answer">
+    <p>The hard limit is 16 MB per BSON document, and the failure mode is ugly: a <code>$push</code> or <code>$set</code> throws once the new version would exceed it, which typically happens in production on a document that has been growing quietly for months.</p>
+    <pre><code>db.articles.aggregate([
+  { $project: { size: { $bsonSize: "$$ROOT" } } },
+  { $match: { size: { $gt: 8000000 } } },
+  { $sort: { size: -1 } }
+])</code></pre>
+    <p>Remediation depends on the shape: for unbounded arrays, apply the subset or bucket pattern and keep a bounded recent slice in the parent; for large embedded blobs, move them to GridFS or object storage and keep a URL; for wide, uneven documents, split rarely-read fields into a companion collection keyed by the same <code>_id</code>. Note the limit also applies to aggregation output documents, so a <code>$group</code> that builds a huge array fails the same way.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Is there a nesting depth limit, and why does it matter in practice?</h2>
+  <div class="answer">
+    <p>Yes: BSON documents support a maximum nesting depth of 100 levels. Beyond that, writes are rejected. In practice you hit design problems long before the number.</p>
+    <p>Deeply nested paths are painful because every query, index and update has to spell out the full path, and a single mistyped segment silently matches nothing. Indexes on deep paths also grow, because the whole path is part of the index key metadata. Updates to a field at depth 8 are hard to express with positional operators, and <code>$lookup</code> or <code>$unwind</code> over such structures gets unreadable.</p>
+    <pre><code>{ a: { b: { c: { d: { e: 1 } } } } }   // "a.b.c.d.e" everywhere</code></pre>
+    <p>If a document needs more than three or four levels, that is usually a signal to flatten it, extract a sub-document into its own collection, or use an array of objects with a <code>type</code> discriminator instead of nested type-specific containers.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why do Long and Int32 cause bugs in JavaScript applications?</h2>
+  <div class="answer">
+    <p>Because JavaScript has no 64-bit integer. A BSON <code>long</code> arrives as a driver <code>Long</code> object, and treating it as a plain number silently truncates anything above 2^53.</p>
+    <pre><code>const doc = await coll.findOne({ _id: 1 });
+doc.seq.toNumber();                  // may lose precision
+Long.fromString(doc.seq.toString()); // safe round trip</code></pre>
+    <p>Typical failures: JSON serialisation turns a Long into <code>{ low, high, unsigned }</code>; <code>==</code> comparisons against numbers fail; arithmetic on the Long object yields nonsense. Numeric fields also drift in type — an <code>int</code> that exceeds 2,147,483,647 stops accepting <code>$inc</code> with an overflow error, and a value written as a double when it should be a long breaks equality with existing documents.</p>
+    <p>Decide the type per field, set <code>bsonType</code> validation, and configure the driver to promote longs consistently rather than relying on defaults.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why is document field order preserved, and when does it break equality?</h2>
+  <div class="answer">
+    <p>BSON stores fields in the order they were written and MongoDB does not reorder them, so <code>{ a: 1, b: 2 }</code> and <code>{ b: 2, a: 1 }</code> are different byte sequences. That matters because equality on an embedded document is order-sensitive: the query below matches the first document and not the second, even though the values are the same.</p>
+    <pre><code>db.docs.find({ sub: { x: 1, y: 2 } })   // does NOT match { sub: { y: 2, x: 1 } }</code></pre>
+    <p>Two practical consequences. Any hash or checksum computed over serialized BSON changes when a field is renamed, because <code>$rename</code> moves it to the end of the document. And an import that rebuilds documents in a different order silently breaks keys built from those hashes. When identity should ignore order, compare field by field with <code>$expr</code> instead of relying on document equality.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you validate nested objects and arrays with $jsonSchema?</h2>
+  <div class="answer">
+    <p>Each level needs its own <code>properties</code> block, and array elements are validated with <code>items</code>. A common mistake is declaring <code>required</code> at the top level and assuming it applies inside the array.</p>
+    <pre><code>{ $jsonSchema: {
+    bsonType: "object",
+    required: ["orderId", "items"],
+    properties: {
+      orderId: { bsonType: "string" },
+      items: {
+        bsonType: "array", minItems: 1,
+        items: {
+          bsonType: "object",
+          required: ["sku", "qty"],
+          additionalProperties: false,
+          properties: {
+            sku: { bsonType: "string" },
+            qty: { bsonType: "int", minimum: 1 }
+          }
+        }
+      }
+    }
+} }</code></pre>
+    <p><code>additionalProperties: false</code> makes the schema strict, which is powerful but painful when a new field is rolled out — plan it deliberately. Validation applies to inserts and updates on the collection, including updates through aggregation pipelines.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you roll out a new validator without breaking writes?</h2>
+  <div class="answer">
+    <p>Deploy it in warn mode first. <code>validationAction: "warn"</code> lets every write through but logs violations, so you can measure how much existing or in-flight code would fail before you enforce anything. <code>"error"</code> is the default and rejects the write with <code>DocumentValidationFailure</code>.</p>
+    <pre><code>db.runCommand({ collMod: "orders",
+  validator: { $jsonSchema: { bsonType: "object",
+                              required: ["status"] } },
+  validationLevel: "moderate",
+  validationAction: "warn" });</code></pre>
+    <p>Sequence: warn with <code>validationLevel: "moderate"</code> so already-invalid documents can still be updated if the update does not touch the missing field; watch the logs until violations stop; backfill the bad documents; then flip <code>validationAction</code> to <code>"error"</code>. The <code>"strict"</code> level applies the rules to all documents, including previously invalid ones, which reverts an unrelated field update — useful only once the data is clean.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What can you change at runtime with collMod?</h2>
+  <div class="answer">
+    <p><code>collMod</code> modifies collection metadata without recreating the collection, which makes it the safe way to change rules on a live collection.</p>
+    <ul>
+      <li><strong>Validation:</strong> <code>validator</code>, <code>validationLevel</code>, <code>validationAction</code>.</li>
+      <li><strong>TTL:</strong> change <code>expireAfterSeconds</code> on an existing TTL index by referring to its key pattern, including setting it to a much shorter value to purge old data quickly.</li>
+      <li><strong>Views:</strong> replace the pipeline of a view in place.</li>
+      <li><strong>Storage and indexing options:</strong> such as <code>changeStreamPreAndPostImages</code> and index hints.</li>
+    </ul>
+    <pre><code>db.runCommand({ collMod: "sessions",
+  index: { keyPattern: { lastSeen: 1 }, expireAfterSeconds: 3600 } })</code></pre>
+    <p>Changing <code>expireAfterSeconds</code> does not trigger an immediate mass delete: the TTL monitor runs about once a minute and removes in batches, so a large purge still takes time and produces oplog traffic.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What are the limits of a view that uses $lookup?</h2>
+  <div class="answer">
+    <p>A view is a stored pipeline evaluated at read time, so a <code>$lookup</code> inside it re-runs for every query — the join is never precomputed and no index can span the joined collections.</p>
+    <pre><code>db.createView("order_summary", "orders", [
+  { $lookup: { from: "customers", localField: "customerId",
+               foreignField: "_id", as: "customer" } },
+  { $unwind: "$customer" },
+  { $project: { customerName: "$customer.name", total: 1 } }
+]);</code></pre>
+    <p>Limits worth stating: the pipeline cannot contain <code>$out</code> or <code>$merge</code>, including inside an embedded <code>$lookup</code> sub-pipeline; a view must live in the same database as its source; it is read-only; and the definition is public — <code>getCollectionInfos</code> and <code>explain</code> expose the pipeline, so never embed literal secrets or references to sensitive fields. Also, the view has its own collation, which must match if it reads another view.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does a capped collection actually guarantee?</h2>
+  <div class="answer">
+    <p>It pre-allocates a fixed byte size and keeps documents in insertion order. When the space is full, the oldest documents are overwritten automatically, so the collection acts as a ring buffer with no cleanup job.</p>
+    <pre><code>db.createCollection("recent_logs",
+  { capped: true, size: 10485760, max: 100000 })</code></pre>
+    <p>Guarantees and restrictions: reads in natural order return insertion order, deletes are not allowed, updates that would grow a document beyond its allocated space fail, and the collection cannot be sharded. Because writes are append-only, they are fast and predictable, and a tailable cursor can follow new inserts.</p>
+    <p>Where it does not fit: anything needing deletion, resizing documents, secondary indexes with heavy query patterns, or TTL-based retention. For log retention with flexible queries, a normal collection with a TTL index is usually the better choice; capped collections are for fixed-size, in-order streams.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you enforce a rule that compares two fields, given that $jsonSchema cannot?</h2>
+  <div class="answer">
+    <p><code>$jsonSchema</code> validates structure and per-field types, but it has no expression language, so it cannot say "endDate must be after startDate" or "total must equal sum of line items".</p>
+    <p>The trick is that a validator is a query filter, not just a schema: you can combine <code>$jsonSchema</code> with query operators, including <code>$expr</code>.</p>
+    <pre><code>db.runCommand({ collMod: "bookings", validator: { $and: [
+  { $jsonSchema: { bsonType: "object", required: ["start", "end"],
+                   properties: { start: { bsonType: "date" },
+                                 end: { bsonType: "date" } } } },
+  { $expr: { $gte: ["$end", "$start"] } }
+] } })</code></pre>
+    <p>This runs per write on the server and rejects violations with <code>DocumentValidationFailure</code>. It costs a small amount of CPU and cannot reference other documents, so cross-document invariants still belong to unique indexes or transactions.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What makes a GeoJSON document valid for a 2dsphere index?</h2>
+  <div class="answer">
+    <p>The field must hold a GeoJSON object with a <code>type</code> and <code>coordinates</code>: <code>Point</code>, <code>LineString</code>, <code>Polygon</code>, <code>MultiPoint</code>, <code>MultiLineString</code>, <code>MultiPolygon</code> or <code>GeometryCollection</code>.</p>
+    <pre><code>db.places.createIndex({ location: "2dsphere" });
+db.places.insertOne({ name: "Cafe",
+  location: { type: "Point", coordinates: [-74.0721, 4.7110] } });</code></pre>
+    <p>Rules that cause silent failures: coordinates are <code>[longitude, latitude]</code>, in that order, not lat/lng; longitude must be within -180 to 180 and latitude within -90 to 90; a polygon's linear ring must be closed, with the first and last positions identical; and coordinates must be numbers, not strings, so a value imported as "4.7110" makes the document unindexable.</p>
+    <p>An insert with invalid geometry is rejected when the index exists, which is good — but a <code>2d</code> index without GeoJSON validation accepts far looser input and behaves differently.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When do you use $near and when $geoWithin?</h2>
+  <div class="answer">
+    <p><code>$near</code> answers "nearest to this point": results come back sorted by distance, and it supports <code>$minDistance</code> and <code>$maxDistance</code>. That ordering is exactly what you want for "closest stores", but it also means the server must compute and sort distances.</p>
+    <pre><code>db.stores.find({ location: { $near: {
+  $geometry: { type: "Point", coordinates: [-74.07, 4.71] },
+  $maxDistance: 2000
+} } }).limit(10);</code></pre>
+    <p><code>$geoWithin</code> answers "inside this shape": a polygon, a circle via <code>$centerSphere</code>, or a multi-polygon. The result is unordered, which makes it cheaper and composable — it can appear inside an aggregation <code>$match</code>, be combined with other predicates, and be used when order is not part of the question.</p>
+    <p>Rule of thumb: distance-ranked search uses <code>$near</code> (or <code>$geoNear</code> in aggregation); containment or region filtering uses <code>$geoWithin</code>.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why must $geoNear be the first stage of an aggregation?</h2>
+  <div class="answer">
+    <p>Because it relies on the geo index to produce documents in distance order, and once other stages have transformed or filtered the stream the index can no longer be used. The server therefore rejects the pipeline if <code>$geoNear</code> is not first.</p>
+    <pre><code>db.stores.aggregate([
+  { $geoNear: {
+      near: { type: "Point", coordinates: [-74.07, 4.71] },
+      distanceField: "dist.meters",
+      maxDistance: 3000,
+      query: { open: true },
+      key: "location",
+      spherical: true
+  } },
+  { $limit: 10 }
+])</code></pre>
+    <p>Notes: <code>distanceField</code> is required and receives the computed distance; <code>query</code> adds non-geo predicates that are applied alongside the index scan; <code>key</code> disambiguates when several geo indexes exist; <code>spherical: true</code> is required for 2dsphere semantics. It cannot be used inside <code>$lookup</code> or <code>$facet</code>, and unlike <code>$near</code> it works in aggregation at all.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What units does a 2dsphere distance use, and how do you convert them?</h2>
+  <div class="answer">
+    <p>Meters. With a <code>2dsphere</code> index, <code>$maxDistance</code>, <code>$minDistance</code> and the value in <code>distanceField</code> are all in meters on the WGS84 sphere, so a 5 km radius is <code>5000</code>.</p>
+    <pre><code>{ $geoNear: { near: point, distanceField: "d",
+              maxDistance: 5000, spherical: true } }
+// d ~ 5000 means 5 km</code></pre>
+    <p>Conversions are on you: divide by 1000 for kilometres, by 1609.34 for miles. <code>$geoNear</code> also offers <code>distanceMultiplier</code>, which scales the value written to <code>distanceField</code> — handy for returning kilometres directly, but be aware it does not change the unit of <code>maxDistance</code>, which stays in meters.</p>
+    <p>With a legacy <code>2d</code> index the unit is not meters at all: it is the coordinate system's own unit, and distances come back in radians for spherical queries. Mixing a <code>2d</code> index with GeoJSON input is the classic source of "my radius is 100x too small" bugs.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Which geo queries quietly bypass the geo index?</h2>
+  <div class="answer">
+    <p>Several shapes look reasonable but cannot be answered by the index:</p>
+    <ul>
+      <li><strong>Negations:</strong> <code>$not</code>, <code>$nin</code> or <code>$nor</code> around a geo predicate, since the index finds what is inside, not what is outside.</li>
+      <li><strong>Computed distance:</strong> an <code>$expr</code> or <code>$function</code> that calculates a haversine distance per document instead of using <code>$near</code>/<code>$geoNear</code>.</li>
+      <li><strong>Index type mismatch:</strong> a <code>2d</code> index queried with GeoJSON geometry, or a <code>2dsphere</code> index queried with legacy coordinate pairs and <code>$box</code>-style operators.</li>
+      <li><strong>Wrong field or representation:</strong> coordinates stored as strings, or as <code>{lat, lng}</code> objects instead of a GeoJSON array, which the index simply does not contain.</li>
+    </ul>
+    <p>Confirm with <code>explain</code>: a geo query should show <code>IXSCAN</code> with <code>2dsphere</code> in the index name, not <code>COLLSCAN</code>. If it scans, the predicate is not index-eligible regardless of how it reads.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you use collStats indexSizes to decide which index to drop?</h2>
+  <div class="answer">
+    <p><code>indexSizes</code> gives the on-disk bytes per index, which is the only honest measure of what an index costs you in cache and storage.</p>
+    <pre><code>const s = db.orders.stats();
+Object.entries(s.indexSizes).forEach(([k, v]) =&gt;
+  print(k.padEnd(40), (v / 1048576).toFixed(1) + " MB"));</code></pre>
+    <p>Interpretation: an index larger than the data it serves is usually a candidate for removal, especially if it is a prefix of another compound index. Compare with <code>$indexStats</code> access counts and with the working set — a rarely used index that fits in RAM is still cheap, one that pushes the working set out of cache is expensive.</p>
+    <p>Before dropping: check for hints referencing it, unique or TTL semantics it enforces, and whether a query relies on its sort order. Hide the index first (<code>db.collection.hideIndex()</code>) so you can restore it instantly if a rarely-hit path degrades.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What is the difference between profiler level 1 and level 2?</h2>
+  <div class="answer">
+    <p>Level 1 records only operations slower than <code>slowms</code>, which is the right setting for production triage. Level 2 records every operation, including sub-millisecond ones, so it captures the full workload but adds real overhead to every read and write and fills <code>system.profile</code> quickly.</p>
+    <pre><code>db.setProfilingLevel(1, { slowms: 100 });
+db.system.profile.find(
+  { ns: "app.orders", "command.comment": /OrdersApi/ },
+  { op: 1, millis: 1, planSummary: 1, keysExamined: 1, docsExamined: 1 }
+).sort({ ts: -1 }).limit(10)</code></pre>
+    <p>Read the entries for <code>planSummary</code> (was it <code>COLLSCAN</code> or <code>IXSCAN</code>?), the ratio of <code>keysExamined</code>/<code>docsExamined</code> to <code>nreturned</code>, <code>hasSortStage</code>, and <code>appName</code> when <code>appName</code> is set in the connection string. Level 2 is for short, targeted windows on staging or a single replica, never a permanent production setting.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>How do you inspect and change server parameters without restarting mongod?</h2>
+  <div class="answer">
+    <p>Use <code>getParameter</code> and <code>setParameter</code> admin commands. Only parameters marked as runtime-settable can be changed this way, and the change does not survive a restart, so it must also be written into the configuration file for permanence.</p>
+    <pre><code>db.adminCommand({ getParameter: 1, slowms: 1 });
+db.adminCommand({ setParameter: 1, logLevel: 1 });
+db.adminCommand({ setParameter: 1, slowms: 200 });</code></pre>
+    <p>Typical uses during an incident: raise <code>logLevel</code> briefly to capture verbose logs, adjust <code>slowms</code> without touching the profiler, or check limits such as <code>maxTransactionLockRequestTimeoutMillis</code>. Both commands require elevated privileges (<code>clusterMonitor</code> to read, <code>clusterManager</code>/<code>hostManager</code> to write).</p>
+    <p>Because settings are per node, in a replica set you must apply them to every member; a change on the primary alone makes behaviour inconsistent after failover.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>What does $collStats with latencyStats tell you that a profiler cannot?</h2>
+  <div class="answer">
+    <p>The profiler shows individual slow operations; <code>$collStats</code> aggregations show the distribution of all of them. <code>latencyStats</code> returns read and write latency histograms in microseconds, so you can see whether the 95th percentile degraded even when no single query crossed <code>slowms</code>.</p>
+    <pre><code>db.orders.aggregate([
+  { $collStats: { latencyStats: { histograms: true } } },
+  { $project: { reads: "$latencyStats.reads.latency",
+                writes: "$latencyStats.writes.latency" } }
+]);</code></pre>
+    <p>This is how you answer "is the collection slower than last week?" with per-collection evidence rather than a server-wide average. Combined with <code>storageStats</code> in the same stage you get document counts, average object size and free space in one call. It is a cheap, read-only command, safe to run on production, and the histograms reset on restart — so capture them periodically if you need a trend.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>Why does system.profile need managing, and how do you rotate it?</h2>
+  <div class="answer">
+    <p>Because it is a capped collection. Once it fills, new profile entries overwrite the oldest, so a long-running level-2 session can erase the very evidence you were collecting, and on a busy node the default size covers only seconds of activity.</p>
+    <pre><code>db.setProfilingLevel(0);
+db.system.profile.drop();
+db.createCollection("system.profile",
+  { capped: true, size: 50 * 1024 * 1024 });
+db.setProfilingLevel(1, { slowms: 100 });</code></pre>
+    <p>Profiling must be off while the collection is dropped, and it is recreated implicitly if you skip the explicit step. Practical routine: capture a bounded window, export the entries you need, then reset. Keep level 1 permanently with a sensible <code>slowms</code>, and reserve level 2 for minutes-long investigations on one node. Also remember that profiling writes are themselves writes, adding load to the same instance you are diagnosing.</p>
+  </div>
+</div>
+
+<div class="question">
+  <h2>When should an operational task be a mongosh script rather than driver code?</h2>
+  <div class="answer">
+    <p><code>mongosh</code> is for humans running a bounded administrative action: creating an index, adjusting a validator, sampling documents, checking a plan. It connects, does the work, and exits; there is no pool to size, no retry policy, and no deployment pipeline around it.</p>
+    <pre><code>// idempotent by construction
+const name = "orders_status_createdAt";
+if (!db.orders.getIndexes().some(i =&gt; i.name === name)) {
+  db.orders.createIndex({ status: 1, createdAt: -1 }, { name });
+}</code></pre>
+    <p>Driver code is for anything that must run repeatedly, be tested, retry on transient errors, or participate in a transaction. Scripts that mutate data at scale need the same discipline as application code — idempotent operations, a filter that can resume, batching, and a dry-run mode — but they should not become the permanent integration path. If a script is scheduled in cron and has error handling, it is application code that happens to be written in JavaScript.</p>
+  </div>
+</div>

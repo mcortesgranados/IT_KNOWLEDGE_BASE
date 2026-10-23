@@ -1,0 +1,437 @@
+<div class="question">
+  <h2>You must size RAM for a new cluster. How do you get from a working set estimate to a memory number, and why is total database size a bad starting point?</h2>
+  <div class="answer"><p>Total size counts data nobody reads. A 2 TB deployment where most of the volume is closed invoices from three years ago is not a 2 TB memory problem. The working set is what gets touched during one business cycle: the hot documents, the index entries that serve them, and the internal structures around both.</p>
+<p>Then convert deliberately. WiredTiger caches <em>uncompressed</em> pages, so cached bytes are larger than the bytes on disk once compression is on. Size the cache for the hot set, add headroom for connections, aggregation spills, the oplog and the operating system, and only then choose a tier. The honest confirmation is behavioural: at flat traffic, steadily growing <code>wiredTiger.cache.pages read into cache</code> means the set no longer fits.</p></div>
+</div>
+
+<div class="question">
+  <h2>A 2 TB dataset runs on a 64 GB cluster and users complain. How do you prove whether memory is actually the constraint?</h2>
+  <div class="answer"><p>I stop guessing and read the cache counters over a full business cycle, not a five-minute window. Three numbers decide it: pages read into cache per unit of work, bytes currently in cache versus the configured maximum, and unmodified pages evicted. Eviction of clean pages at steady state is the classic signature of a working set that does not fit.</p>
+<p>Then I check whether the pain tracks those numbers. If slow operations cluster exactly where disk read latency rises, memory pressure is real. If latency rises while the cache is calm and <code>tickets available</code> is near zero, I am looking at saturation of CPU or I/O, and more RAM buys nothing. Cross-checking FTDC over several days separates the two convincingly.</p></div>
+</div>
+
+<div class="question">
+  <h2>Before anyone approves a bigger tier, which measurements do you take, and in what order?</h2>
+  <div class="answer"><p>Order matters, because the first two eliminate most requests.</p>
+<ul>
+<li><strong>CPU shape, not average.</strong> Normalized CPU tells me whether I am steady at 80% or spiking to 100% every thirty seconds. The fixes differ completely.</li>
+<li><strong>Queue depth.</strong> <code>tickets available</code> and queued read/write operations show whether work is waiting. If nothing queues, the node is not saturated.</li>
+<li><strong>I/O behaviour.</strong> Disk IOPS against provisioned IOPS, plus read latency, says whether the bottleneck is storage rather than compute.</li>
+<li><strong>Top query shapes by total time.</strong> The profiler or the logs give me the handful of shapes that own the time.</li>
+</ul>
+<p>Only after that do I compare against a tier. Roughly half the time the answer is an index or a query rewrite, and the tier change would have hidden the problem for a quarter.</p></div>
+</div>
+
+<div class="question">
+  <h2>When is scaling up the right answer, and when is it just buying time for a design problem?</h2>
+  <div class="answer"><p>Scaling up is legitimate when the workload is genuinely bounded and the constraint is aggregate compute: a reporting burst, a growing but predictable transaction rate, a cache that needs a few more gigabytes. It is also the correct emergency response at 02:00, because it is reversible and takes minutes.</p>
+<p>It is buying time when the growth curve is steeper than the tier ladder, when a single hot document or a hot tenant dominates, when the query shapes are unindexed, or when the dataset will exceed any single node's memory within the planning horizon. The tell is that each resize is followed by the same incident a little later. Horizontal scaling is not free either: sharding costs you cross-shard queries, distributed transactions and a shard key you cannot easily change.</p></div>
+</div>
+
+<div class="question">
+  <h2>What does Atlas cluster autoscaling really scale, and which incidents does it not prevent?</h2>
+  <div class="answer"><p>Autoscaling changes the instance size inside a floor and ceiling you define, and optionally grows storage. It reacts to sustained utilisation, so it is a slow control loop: minutes of lag, a cooldown, and no action at all for spikes shorter than its evaluation window. It does not add shards, does not change your shard key, and does not rebalance a hot tenant.</p>
+<p>The incidents it cannot prevent are the interesting ones. A missing index, an unbounded aggregation, a connection storm or a runaway backfill will happily saturate the largest tier you allowed. Setting the ceiling too low gives you a cluster that scales into the same wall; setting it too high gives you a bill nobody approved. I treat autoscaling as a safety net for organic growth, not as a substitute for capacity planning.</p></div>
+</div>
+
+<div class="question">
+  <h2>What happens to a replica set as CPU approaches saturation, and why does throughput fall instead of flattening?</h2>
+  <div class="answer"><p>WiredTiger admits work through a fixed number of tickets for reads and writes. As CPU saturates, operations hold their tickets longer, the queue behind them grows, and latency rises faster than load does. Once clients time out, they retry, which adds load without adding useful work.</p>
+<p>Several feedback loops then start together: context switching costs rise, cache locality degrades, replication lag grows because the primary cannot apply and ship oplog fast enough, and majority write concern waits longer, which keeps sessions and connections occupied. If the primary also has to serve secondaries' catch-up reads, eviction gets worse. The result is the curve everyone recognises in production: p99 explodes, throughput drops, and the cluster looks busier while doing less.</p></div>
+</div>
+
+<div class="question">
+  <h2>A deploy starts fifty pods at once, each with a 100-connection pool. Talk me through the failure.</h2>
+  <div class="answer"><p>Five thousand connection attempts arrive within seconds. Each one costs a TCP handshake, TLS negotiation and authentication, all of it CPU on a node that is also serving real traffic and warming a cold cache. File descriptors and per-connection memory climb. Drivers block on server selection or pool checkout, so readiness probes fail, Kubernetes restarts the pods, and the second wave is larger than the first.</p>
+<p>The fixes are layered. Size pools from concurrency rather than from a default, keep <code>minPoolSize</code> low and let them fill gradually, set <code>maxIdleTimeMS</code> so idle sockets retire, add a startup probe that tolerates slow first connections, stagger rollouts, and put a connection proxy in front when the pod count is elastic. The pool is a per-process budget, not a per-cluster right.</p></div>
+</div>
+
+<div class="question">
+  <h2>Why is "100 connections per pod times 50 pods" a design error rather than a sizing error?</h2>
+  <div class="answer"><p>Because it treats a shared finite resource as if it were local. A pool of 100 is a statement about one process; multiplied by an autoscaling group it is a statement about the cluster, and the multiplier is not stable. The day the HPA goes to eighty pods, the arithmetic changes without anyone editing a config file.</p>
+<p>Sizing would ask how many connections the server can hold. Design asks how much concurrency the application actually needs. Per pod, that is roughly the number of in-flight database operations you expect, which follows from request rate and latency, not from a driver default. Cap total concurrency at the cluster, divide by expected replica count, and put the remainder behind a proxy that multiplexes. Then a scale-out event is boring.</p></div>
+</div>
+
+<div class="question">
+  <h2>What actually consumes connections on a mongod, and how many can you safely plan for?</h2>
+  <div class="answer"><p>Application pools are only the visible part. Each driver client also opens monitoring sockets for topology discovery, so the effective count is higher than <code>maxPoolSize</code> suggests. Add migrations, backup agents, BI tools, ad-hoc shells during an incident, monitoring exporters, Atlas Search and Stream Processing connections, and internal replica set traffic.</p>
+<p>I plan against concurrency, not against a headline number. Two things bound it: the per-tier connection ceiling published by Atlas, and the memory and scheduling cost each connection imposes on the node. A cluster holding thousands of idle connections is not free — they still occupy memory and file descriptors. My rule is to keep steady-state usage well under the ceiling so that an incident, a deploy and a human with a shell all fit in the remaining headroom.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do $lookup and heavy aggregation stages consume CPU differently from an indexed find?</h2>
+  <div class="answer"><p>An indexed find is a bounded tree traversal: a few pages, a few comparisons, a predictable cost per document returned. A <code>$lookup</code> is a nested loop. For every input document the engine runs the foreign pipeline, so if the foreign field is not indexed you get a collection scan per input document, and the cost is multiplicative rather than additive.</p>
+<p>Aggregation adds its own taxes. <code>$group</code> and <code>$sort</code> accumulate state in memory and spill to disk past the stage limit, <code>$unwind</code> multiplies documents, and <code>$graphLookup</code> explores recursively with no upper bound unless you set one. None of this shows up as a slow single operation; it shows up as steady CPU with modest opcounters, which is why I read <code>explain</code> for aggregations before blaming the hardware.</p></div>
+</div>
+
+<div class="question">
+  <h2>A product team wants a new feature next quarter. How do you estimate its capacity and cost before the code exists?</h2>
+  <div class="answer"><p>I turn the feature description into four numbers: expected operations per second at peak, documents touched per operation, bytes per document, and the read/write ratio. From those I derive the working set increment, the write amplification once indexes are counted, and the storage growth per month.</p>
+<p>Then I sketch the query shapes and check that each has an index that can serve it, because that is where estimates usually fail. I sanity-check against an existing similar endpoint: measured cost per thousand operations on today's cluster is a better predictor than any model. Finally I price the delta — tier headroom, backup retention, search or vector indexes if needed — and state the assumption that would invalidate the estimate. An estimate with a named risk is worth more than a precise one without.</p></div>
+</div>
+
+<div class="question">
+  <h2>How much spare capacity do you hold to survive the loss of one availability zone?</h2>
+  <div class="answer"><p>The arithmetic is simple and usually ignored: with three members spread across three zones, losing one leaves two nodes carrying all the traffic. Each survivor therefore needs enough headroom to run at roughly one and a half times its normal load, on CPU, memory and I/O alike. Atlas places replica set members in separate zones by default, so the topology is right; the sizing often is not.</p>
+<p>I also plan the transient. When the primary is the lost member, an election happens first, and the promoted secondary has a colder cache and possibly a longer oplog to apply. Reads routed by tag sets to the dead zone must fail over rather than stall. I test this deliberately, because a capacity plan that only works with all three members alive is a plan for the happy path.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you plan capacity for a seasonal peak you can date but not measure?</h2>
+  <div class="answer"><p>I model concurrency, not averages. Last year's peak gives a shape; the growth rate scales it. From peak requests per second and measured latency per operation I get required in-flight concurrency, and from that the connections and CPU the cluster must hold.</p>
+<p>Then I work backwards in time. Days before the event I move to the target tier so caches warm under real traffic, confirm that every promotion query has an index that also satisfies its sort, and check that no single tenant or hot document will dominate. I test the peak shape in staging at above expected load and keep the FTDC from that run. During the event the leading indicators are the ones I watch: tickets available, queue depth, replication lag. Scaling after the queue forms is scaling too late.</p></div>
+</div>
+
+<div class="question">
+  <h2>FTDC holds more history than anyone reads. Which five charts do you open first during an incident?</h2>
+  <div class="answer"><p>Normalized CPU first, because its shape tells me whether this is volume or a stall. Then tickets available alongside queued read and write operations: together they show saturation rather than merely high utilisation. Third, connections, since a storm explains CPU and latency simultaneously and points at the client. Fourth, disk IOPS with read and write latency, which separates an I/O wall from a compute wall. Fifth, cache dirty bytes and evictions, the memory-pressure signature.</p>
+<p>Replication lag and the oplog window come immediately after. I read them against the incident timeline rather than in isolation, because the useful question is always which counter moved first. FTDC keeps a rolling window measured in days, so for anything older I export it or rely on external metrics.</p></div>
+</div>
+
+<div class="question">
+  <h2>What symptoms tell you the bottleneck is the schema rather than the hardware?</h2>
+  <div class="answer"><p>Ratios, mostly. If <code>keysExamined</code> and <code>docsExamined</code> are orders of magnitude above <code>nReturned</code>, the cluster is doing work the model forced on it. A blocking <code>SORT</code> on a common query, a <code>COLLSCAN</code> that returns twelve documents, or an aggregation that fetches thousands of rows to filter them in the application are all design statements.</p>
+<p>Other tells: documents that grow until they move on disk, arrays that grow without bound, a dozen indexes where two would do and half are never used, and joins implemented as <code>$lookup</code> fan-outs across large collections. The decisive test is whether the cost curve follows data volume rather than request volume. If it does, a bigger tier just moves the wall further out and makes the eventual migration more expensive.</p></div>
+</div>
+
+<div class="question">
+  <h2>Indexes grow faster than documents. How do you plan disk capacity for that?</h2>
+  <div class="answer"><p>I budget them separately. <code>dbStats</code> and <code>collStats</code> give me <code>storageSize</code> and <code>indexSizes</code>, and the ratio between them is the number that drifts. Documents compress; index pages compress less well, and a new index on a high-cardinality field can add a meaningful fraction of the collection size on its own.</p>
+<p>The plan then includes everything the collection does not: the oplog, sized in hours of write volume rather than gigabytes; the journal; free space for index builds and compaction, which can transiently need close to double; and whatever headroom your backup or archive process requires. I trend the index-to-data ratio monthly. When it climbs, the question is which index earned its place, not which tier to buy.</p></div>
+</div>
+
+<div class="question">
+  <h2>M10, M30 and M50: what actually changes as you move up, and what does not?</h2>
+  <div class="answer"><p>What changes is the class of machine and its attached storage: vCPU and RAM, provisioned IOPS and throughput, connection ceiling, and the practical number of concurrent index builds and migrations you can survive. Cost moves roughly with that ladder, sometimes in steps rather than smoothly.</p>
+<p>What does not change is the shape of the deployment. You still get a three-member replica set, the same single primary, the same WiredTiger behaviour and the same limits on document size and aggregation memory. Replication and elections behave identically on an M10 and an M50. That matters when you resize: you are buying headroom, not a different architecture, and every design flaw you had at M10 you will still have at M50, only faster.</p></div>
+</div>
+
+<div class="question">
+  <h2>Why is the free tier not a production tier, and where does Flex sit?</h2>
+  <div class="answer"><p>The free tier exists so people can learn. It is shared infrastructure with tight connection and storage ceilings, no meaningful SLA, restricted backup and no control over the underlying resources. When another tenant's workload spikes, you feel it, and there is nothing you can tune. Any workload with a customer attached to it does not belong there.</p>
+<p>Flex occupies the space above it: a small dedicated-ish footprint with better limits and simpler operations, aimed at development, staging and low-traffic applications. It buys you predictability without the full dedicated tier feature set. My rule is blunt — if losing the cluster for an hour costs money or trust, neither tier is the answer; you need a dedicated cluster with backups, alerting and a support plan.</p></div>
+</div>
+
+<div class="question">
+  <h2>Continuous backup or daily snapshots: what can each one actually recover from?</h2>
+  <div class="answer"><p>Daily snapshots recover from disasters. They answer "restore the state as of last night" and nothing finer. A bad deploy that corrupts data at 10:40 is, at best, a restore to the previous snapshot with everything after it lost.</p>
+<p>Continuous backup keeps the oplog alongside the snapshots, so you can restore or query to a point in time, typically to within seconds, inside the retention window. That is what turns "we deleted the wrong tenant's records" from an incident into a task. Neither protects you from a logical error that ran weeks ago and was replicated everywhere, and neither is a substitute for a tested restore. I insist on knowing the last successful restore drill date, not just that backups are enabled.</p></div>
+</div>
+
+<div class="question">
+  <h2>When does Online Archive pay for itself, and what does it change about how you query?</h2>
+  <div class="answer"><p>It pays when a large share of the data is old, rarely read, and still occasionally required — audit trails, closed orders, historical events. Moving that partition to object storage lowers the cost of the hot tier, because you stop paying cluster-tier prices for bytes that only occupy disk.</p>
+<p>The change is architectural, not cosmetic. Archived data lives behind a separate connection endpoint backed by Atlas Data Federation, so a query that used to be one <code>find</code> may become a federated query with different latency and cost characteristics, billed by data scanned or processed. Applications must know which store to ask. I choose the partition rule carefully — usually a date field, sometimes tenant plus date — because a rule that cuts across common queries makes the archive useless in practice.</p></div>
+</div>
+
+<div class="question">
+  <h2>Global clusters give you local reads. Why is there still a single primary, and what does that cost writes?</h2>
+  <div class="answer"><p>Because MongoDB keeps one authoritative copy of the write stream per shard. Zones place members near users, and read preferences with tag sets send reads to the nearest zone, but every write for that shard still goes to its primary. Replication then fans out to the other zones. That is a deliberate consistency choice: one ordering of writes, no conflict resolution.</p>
+<p>The cost is round-trip time. A user in Sydney writing to a primary in Frankfurt pays the intercontinental latency on the write itself and again on any majority acknowledgement, and the same on a read-your-writes read unless the driver routes it to the primary. So I design for local reads and accept that writes are geographically expensive, or I shard so that each zone owns the data its users write. Global distribution does not make writes local.</p></div>
+</div>
+
+<div class="question">
+  <h2>Multi-cloud clusters: what risk do they remove, and what complexity do they add?</h2>
+  <div class="answer"><p>They remove single-vendor dependency. Shards can live on different providers or in different regions, so a regional outage or an account-level problem at one provider does not take the whole deployment with it. For regulated customers who want demonstrable provider diversity, that is the argument.</p>
+<p>The complexity is real. Cross-provider traffic between shards and config servers adds latency to every scatter-gather query and to metadata operations, and you pay for that egress. Cost becomes three invoices with three discount structures. Operational tooling has to handle different instance families and storage characteristics per provider. And it does not make writes faster — each shard still has one primary. I only recommend it when the availability requirement genuinely names multiple providers; otherwise zones within one provider buy most of the resilience for far less money.</p></div>
+</div>
+
+<div class="question">
+  <h2>Atlas Search index design: what do dynamic mappings cost you compared with explicit ones?</h2>
+  <div class="answer"><p>A dynamic mapping indexes whatever shape it finds, which is convenient and expensive. Every string becomes a searchable text field with its own analysis chain, every nested object gets traversed, and the index grows with fields nobody queries. On a polymorphic collection it can also produce surprising matches, because fields you never intended to be searchable are now in scope.</p>
+<p>An explicit mapping is work up front and pays back in relevance and cost. You declare which fields are <code>string</code> with which analyzer, which are <code>token</code> for exact filtering, which are <code>date</code> or <code>number</code> for range and sort, and which are <code>autocomplete</code> or <code>embeddedDocuments</code>. Analyzers matter as much: the standard analyzer strips diacritics and splits on punctuation, so a Spanish-language catalogue usually wants a language analyzer, and identifiers want keyword treatment. Mappings also need a rebuild to change, so I design them against real queries.</p></div>
+</div>
+
+<div class="question">
+  <h2>What does a $search query consume, and how do you keep search load away from your operational traffic?</h2>
+  <div class="answer"><p><code>$search</code> runs on separate search nodes rather than on the mongod serving your transactions, so the CPU it burns is not your primary's CPU. What it consumes is search-node capacity, measured in the work the query shape demands: number of clauses, phrase and wildcard queries, facets, and how many documents the analyzers must score before the top results are known.</p>
+<p>Cost control is mostly query design. Prefer <code>filter</code> clauses with <code>token</code> or exact fields over scoring on free text, avoid unbounded wildcards and regex, and keep facet definitions narrow. I also isolate: a search-heavy analytical tenant should get its own search tier rather than competing with the autocomplete used on every page. And because search is eventually consistent with writes, I never put a search result on a path that must reflect a write just made.</p></div>
+</div>
+
+<div class="question">
+  <h2>Walk me through a $vectorSearch index definition. What do dimensions, similarity and the HNSW settings control?</h2>
+  <div class="answer"><p>The definition names the vector field, its type, the number of dimensions and the similarity function. Dimensions must match the embedding model exactly — a mismatch is a hard error, not a silent degradation. Similarity must match how the model was trained to compare vectors: <code>cosine</code>, <code>dotProduct</code> or <code>euclidean</code>. Using the wrong one produces results that look plausible and rank badly, which is the worst kind of bug.</p>
+<p>The index is graph-based, so the tuning knobs trade recall against memory and build time. <code>maxEdges</code> controls how many neighbours each node keeps; higher means better recall and a larger index. <code>numEdgeCandidates</code> controls how hard the graph is searched during construction. At query time <code>numCandidates</code> is the knob you actually turn: wider search, better recall, more latency. I also declare filter fields in the index, because a field that is not indexed cannot be used to pre-filter.</p></div>
+</div>
+
+<div class="question">
+  <h2>Pre-filtering inside $vectorSearch changes recall. How do you measure it and what do you tune?</h2>
+  <div class="answer"><p>Approximate search explores a graph; a selective filter removes most of it, so the walk can run out of eligible neighbours before it finds the true nearest ones. With a tight filter on a small subset, recall can collapse while latency looks fine — the query returns plausible neighbours that are not the nearest.</p>
+<p>I measure against ground truth: run the same filtered query with <code>exact</code> enabled on a sample of real queries, and compare the returned set to the approximate one. Then I tune <code>numCandidates</code> upward, widen the filter, or restructure so the filter is a partition rather than a predicate — precomputing per-tenant or per-category vector scopes. If recall still fails at acceptable latency, the honest answer is that this workload wants exact search on a small candidate set, or a different engine.</p></div>
+</div>
+
+<div class="question">
+  <h2>When should vector search live in a separate engine rather than in Atlas?</h2>
+  <div class="answer"><p>Atlas Vector Search wins when the vectors belong next to the documents they describe. You get one system to secure, one backup story, one place where a deleted document stops being retrievable, and pre-filtering on operational fields without copying data anywhere.</p>
+<p>A separate engine wins on specialisation: very large vector counts, exotic similarity metrics, hybrid ranking with sophisticated re-rankers, heavy batch evaluation, or a team that already runs that engine and has the expertise. The cost of splitting is real and usually underestimated — you now need a synchronisation pipeline, an idempotent consumer, a reconciliation job, and a deletion path that respects the same retention rules. I choose separation when the vector workload would distort the operational cluster, not merely because another engine scores slightly better on a benchmark.</p></div>
+</div>
+
+<div class="question">
+  <h2>Atlas Stream Processing versus a hand-written change stream consumer: what do you actually gain?</h2>
+  <div class="answer"><p>You gain operations rather than logic. Stream processors run as managed processes with their own scaling, checkpointing and restart behaviour, and you express the pipeline in aggregation syntax — <code>$source</code>, transformations, <code>$emit</code> to a collection, a topic or another stream. Resume tokens, partitioning and failure recovery stop being your code.</p>
+<p>What you give up is control. Debugging moves from your logs to a service you do not own, local development needs a separate runtime, and some transformations that are trivial in application code are awkward in the pipeline language. I reach for it when the pipeline is genuinely streaming and the team does not want to own a consumer fleet; I keep a hand-written consumer when the logic needs external calls, complex state or libraries the pipeline cannot express.</p></div>
+</div>
+
+<div class="question">
+  <h2>Which Atlas alerts earn their pager, and which do you delete in the first week?</h2>
+  <div class="answer"><p>Alerts earn a pager when they are actionable at 03:00 and predictive rather than retrospective. That list is short: normalized system CPU sustained above a threshold, connections approaching the tier ceiling, queued I/O, replication lag, oplog window shrinking, disk space with a real time-to-full estimate, and backup failures. Each maps to a runbook step.</p>
+<p>Everything else becomes a ticket or a dashboard panel. Raw opcounter spikes, single slow queries, brief election events and per-second IOPS blips generate noise without decisions. I also set the notification channels deliberately: pages to on-call, warnings to a channel someone reads during the day. An alert nobody acts on trains the team to ignore the pager, which is worse than no alert at all.</p></div>
+</div>
+
+<div class="question">
+  <h2>Which Atlas limits have you seen break a reasonable design?</h2>
+  <div class="answer"><p>The ones that bite are structural, not exotic. Atlas Search indexes are definitions with their own field and size constraints, so a collection with thousands of dynamic keys cannot be fully indexed and needs an explicit mapping over a curated subset. Vector indexes cap dimensions, which quietly rules out some large embedding models unless you reduce them.</p>
+<p>Then the MongoDB limits that survive into Atlas: 16 MB per document, a 100 MB ceiling per aggregation stage without disk spill, sort memory that must fit or spill, and index key size limits that reject long strings. Namespaces and connection ceilings are the operational ones. The pattern is always the same — the limit is discoverable in a document, but nobody reads it until a design that assumed otherwise is already half built. I check these in design review, not in the incident.</p></div>
+</div>
+
+<div class="question">
+  <h2>How does a major-version upgrade actually happen in Atlas, and what do you still control?</h2>
+  <div class="answer"><p>Atlas performs the mechanics: it rolls the replica set members one at a time, waits for each to rejoin and catch up, and preserves the cluster. What you control is timing, the version you target, and everything around it. You choose a maintenance window, decide whether to skip intermediate versions, and confirm driver and library compatibility before anything moves.</p>
+<p>The part people miss is that upgrading binaries does not raise the feature compatibility version for you in the way you might assume. You should know which FCV your application expects, because new features are gated behind it and a downgrade is only possible while FCV still allows it. My pre-flight is: driver versions, deprecated operators and commands in the logs, index builds finished, backups current, and a tested rollback statement. Then I watch the first hours closely — plans can change after an upgrade.</p></div>
+</div>
+
+<div class="question">
+  <h2>Compare what is really isolated in database-per-tenant, collection-per-tenant and shared-with-tenantId.</h2>
+  <div class="answer"><p>Database-per-tenant isolates namespaces, users, collection-level settings and backup granularity. What it does not isolate is the mongod: CPU, cache, IOPS and connections are shared, and a runaway query in one database still evicts another's pages.</p>
+<p>Collection-per-tenant isolates data boundaries and makes deletion a <code>drop</code>, but every collection carries metadata and file overhead, and cross-tenant reporting becomes a fan-out over thousands of namespaces. Shared-with-<code>tenantId</code> isolates nothing by itself; it isolates only what your code and indexes enforce. In exchange it gives you one schema to migrate, one index set, and efficient cross-tenant analytics.</p>
+<p>So the honest framing is that all three share the same hardware and only the first two isolate administrative operations. Security isolation at the document level is a property of your query layer, not of the model.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you make it structurally impossible for a query to escape its tenant?</h2>
+  <div class="answer"><p>By making the tenant a property of the connection rather than an argument. A request-scoped context carries the tenant, and a thin data-access layer injects it into every filter, refusing to execute a query that has no tenant predicate on a tenant-scoped collection. Developers never write <code>tenantId</code> by hand, so they cannot forget it.</p>
+<p>Defence in depth behind that: a validator or a lint rule that rejects raw collection access outside the layer; tests that run with two tenants seeded and assert no cross-reads; and, where the model allows, per-tenant credentials or a per-tenant view so the database enforces the boundary too. I also audit for the classic leaks — <code>$lookup</code> without a tenant clause in the sub-pipeline, aggregation stages that project away the discriminator, and cached results keyed without the tenant.</p></div>
+</div>
+
+<div class="question">
+  <h2>Why must tenantId be the first field of a compound index rather than just present in it?</h2>
+  <div class="answer"><p>Because index bounds are built as a prefix. An index on <code>{tenantId: 1, status: 1, createdAt: -1}</code> gives, for one tenant, a contiguous range that can then be narrowed by status and traversed in sort order. Put <code>status</code> first and the same query scans every tenant's active documents and filters afterwards — the index still exists, it just stops being selective.</p>
+<p>The second reason is cardinality. A tenant identifier is usually the highest-cardinality field you always know, so leading with it keeps the scanned range proportional to one tenant's data instead of the whole collection. The third is that leading with the tenant makes the index usable as a shard-key prefix in a hashed or compound shard key, which keeps queries targeted. Same fields, different order, entirely different system.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you detect a noisy neighbour before the affected customer opens a ticket?</h2>
+  <div class="answer"><p>You cannot see per-tenant cost unless you measure it, and the profiler is too coarse by default. I attach the tenant to the operation — an application-level comment via <code>$comment</code>, or <code>appName</code> per service — so slow-query records and logs can be grouped by tenant. Then the profiler or the log becomes a per-tenant cost report.</p>
+<p>From there the leading indicators are comparative: one tenant's p99 rising while the cluster's average is flat, one tenant's operation count tripling, one tenant's documents examined dominating the total. On the server side I look for a hot collection, a hot chunk or an uneven shard distribution. Detecting it before the ticket means reviewing that report on a schedule and having a throttling or routing lever ready, not discovering the pattern during the complaint.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you enforce per-tenant quotas without turning one counter into a hotspot?</h2>
+  <div class="answer"><p>Not with a single document per tenant that every request increments. That document becomes a write bottleneck and a lock contention point the moment a tenant is busy, which is exactly when the quota matters.</p>
+<p>I use a coarse window and shard the counter: a document keyed by tenant and time bucket, incremented with <code>$inc</code>, and a decision that reads the aggregate of the current bucket. Enforcement then happens at a boundary further out — a token bucket in the application with periodic reconciliation against the database, or rate limiting at the API gateway where it costs nothing. Hard limits that must be exact, such as storage per tenant, are computed from metadata on a schedule rather than on the request path. The database should be the record of consumption, not the arbiter of every request.</p></div>
+</div>
+
+<div class="question">
+  <h2>A customer invokes their right to erasure. How do you delete one tenant completely without touching anyone else?</h2>
+  <div class="answer"><p>The model decides the mechanics. With database-per-tenant or collection-per-tenant, deletion is a <code>drop</code>: fast, complete, and it takes the indexes with it. With a shared collection it is a bounded <code>deleteMany</code> on the tenant predicate, which I always run in batches with a rate limit so it does not hold resources or bloat the oplog in one burst.</p>
+<p>Then the parts people forget: derived copies. Search indexes and vector indexes must have the tenant's documents removed, caches keyed by tenant invalidated, backups and archives covered by a documented retention statement, analytics exports purged. I keep an inventory of every store that receives tenant data, because an erasure that misses one copy is a compliance failure, not an incomplete task. Finally I record what was deleted and when, without retaining the content itself.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you move a single large tenant to another shard or zone with minimal disruption?</h2>
+  <div class="answer"><p>If the shard key starts with the tenant, the data is already a contiguous range and the move is a chunk migration — the balancer's normal work, or a targeted <code>moveChunk</code> when I want it to happen now. Zones make this a policy rather than an operation: tag the shard, tag the tenant's range, and let the balancer place it. For a whole collection belonging to one tenant, <code>moveCollection</code> relocates it without copying document by document.</p>
+<p>Disruption control is the same in every case: run it when the cluster is quiet, watch the migration's impact on the destination's cache and I/O, and throttle if other tenants feel it. The failure mode to avoid is a jumbo chunk, which cannot move. That happens when the shard key is too coarse for the tenant's data volume, and the fix is a better key, not more patience.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you do per-tenant encryption, and who holds the keys?</h2>
+  <div class="answer"><p>Two different problems get called encryption. Encryption at rest is the provider's job and is per-cluster, not per-tenant: it protects disks that leave the building, not one tenant from another. Per-tenant cryptographic separation needs client-side field-level encryption, where each tenant's data is encrypted with a distinct data key wrapped by a customer or platform key management service.</p>
+<p>The design question is custody. If the platform holds all keys, a compromised application can decrypt everything; the isolation is organisational. If the customer holds their key, you get real separation and a new operational dependency — lost key, lost data, and a support process for revocation. I scope it to the fields that justify it, keep per-tenant data keys addressed by <code>keyAltName</code>, and plan rotation explicitly, because rotating keys you cannot enumerate is how these projects fail.</p></div>
+</div>
+
+<div class="question">
+  <h2>What does ten thousand collections actually cost a mongod?</h2>
+  <div class="answer"><p>Metadata and I/O amplification, mostly. Every collection has its own files and its own entry in the catalog, so checkpoints and startup reconciliation walk all of them, and DDL takes catalog locks that get more expensive as the count grows. Memory is consumed per collection and per open file handle, and the operating system's cache is shared with the data pages you actually wanted cached.</p>
+<p>The subtler cost is operational. A backup or restore enumerates everything, schema migrations must touch every namespace, and monitoring by collection becomes unreadable. Then there is the tail: idle collections still get checkpointed. In practice the ceiling arrives long before any documented limit — as rising checkpoint duration and slow listCollections during deploys. When I see that, the answer is usually to move the long tail into a shared collection rather than to buy a bigger machine.</p></div>
+</div>
+
+<div class="question">
+  <h2>Is there a practical ceiling on collections per database, and what breaks first?</h2>
+  <div class="answer"><p>Not a number you can design against. The published limits on document size and namespace length matter more than any count, and the failure is gradual rather than a hard stop. What breaks first, in my experience, is time spent in checkpointing and in operations that enumerate namespaces — <code>listCollections</code>, backup, restore, and anything that opens every file.</p>
+<p>Second is DDL contention: creating or dropping collections takes locks that become noticeable when the catalog is large and busy. Third is observability, which degrades quietly because per-collection metrics become noise. So I size by workload shape instead of by count: if tenants are numerous and small, they belong in a shared collection with a discriminator. Collection-per-tenant is for a bounded number of large tenants, not for the long tail.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you run cross-tenant reporting without dragging production down?</h2>
+  <div class="answer"><p>I keep it off the primary and off the operational shape. Options in order of preference: a dedicated analytics node in the replica set that reporting reads from with a separate read preference; a materialised rollup collection written by change streams or a scheduled aggregation, so the report reads pre-aggregated data; or Atlas Data Federation over archives and snapshots when the report is historical.</p>
+<p>In a shared collection, the report must be written so it can use an index that does not start with <code>tenantId</code> — a separate reporting index, or a rollup collection keyed by date. In a collection-per-tenant model the same report is a fan-out across thousands of namespaces, which is where <code>$unionWith</code> or an external job starts to look attractive. Whatever the mechanism, I bound it: a time range is mandatory, <code>maxTimeMS</code> is set, and the job runs against a node that is allowed to be slow.</p></div>
+</div>
+
+<div class="question">
+  <h2>When is $unionWith the right tool for fan-out across tenants, and when does it betray you?</h2>
+  <div class="answer"><p>It is right when you need one result set assembled from a bounded number of collections and the branches are cheap — a handful of tenants for a consolidated statement, or an operational collection unioned with an archive collection. Each branch is a full pipeline, so it can carry its own filter, projection and limits.</p>
+<p>It betrays you at scale. The number of branches is fixed in the pipeline text, so a per-tenant model with thousands of collections means generating enormous pipelines and paying planning cost on every execution. Materialisation into a temporary result adds memory pressure, and on a sharded cluster the branches can lose targeting and scatter. I use it for a known, small set and reach for a rollup collection or an external job when the fan-out grows with the customer count.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you isolate backup and restore per tenant?</h2>
+  <div class="answer"><p>Only the physical model gives it to you for free. Database-per-tenant means a restore of one database can be scoped, and collection-per-tenant means one collection. In a shared collection there is no per-tenant snapshot; the snapshot contains everyone, so isolation has to come from the restore procedure rather than the backup.</p>
+<p>For shared collections I restore into a scratch environment and extract the tenant's documents by predicate, or I keep a per-tenant export of the tables that matter. That is slower and needs somewhere to land, but it is honest. I also decide the recovery objective per tenant tier: a large customer may warrant a shorter recovery point objective, which usually means a more granular continuous backup rather than a different topology. And I test a single-tenant restore, because that is the path nobody exercises until a customer asks.</p></div>
+</div>
+
+<div class="question">
+  <h2>Describe the hybrid model: shared for the long tail, dedicated for the whales. Where does it break?</h2>
+  <div class="answer"><p>The idea is sound. Thousands of small tenants share a collection, where the cost per tenant is negligible and one schema migration serves everyone. A handful of large tenants get their own database or cluster, where their IOPS, cache and noisy-neighbour behaviour are contained and their backup and encryption requirements can differ.</p>
+<p>It breaks in three places. Migration between tiers becomes a product feature, not an ops task, and it must be online and reversible. The codebase now has two data paths, so every query, index and report exists twice and drifts. And the threshold is a moving target: tenants grow, and a plan that moves them at a fixed size will thrash. I define the threshold by measured resource use with hysteresis, and I treat cross-tier migration as a first-class, tested capability before onboarding the first whale.</p></div>
+</div>
+
+<div class="question">
+  <h2>Migrating from SQL: which parts of a relational schema must not be translated literally?</h2>
+  <div class="answer"><p>Normalisation, first. A schema decomposed into many small tables is a bet that joins are cheap; in MongoDB the equivalent is usually an embedded document that answers the common query in one read. Copying the table diagram gives you a document database that behaves like a slow relational one.</p>
+<p>Then the fixed columns. A table with <code>attr1</code> through <code>attr40</code>, mostly null, is a modelling failure in SQL that becomes a modelling failure in BSON. And sequences: identity columns and triggers do not exist, so identifiers come from <code>ObjectId</code>, a counter collection, or your own domain ID, and that choice affects sharding.</p>
+<p>Finally, the parts you should keep. Referential integrity, uniqueness and type rules must be re-expressed as unique indexes, schema validators and application invariants — not dropped because "MongoDB is schemaless". Losing those constraints is the most common source of silent corruption in these migrations.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you move a live replica set to a sharded cluster without a maintenance window?</h2>
+  <div class="answer"><p>Not by resharding in place on the old topology. I stand up the sharded cluster, choose the shard key deliberately — usually a compound key starting with the tenant or the highest-selectivity field used in queries — and then sync data with <code>mongosync</code> from the replica set to the sharded cluster while both serve traffic. That keeps a continuous copy and a measurable lag.</p>
+<p>Before cutover I build indexes on the target, re-sync to near-zero lag, and run parity checks. Then a short write freeze: stop writes at the application, drain the sync, verify counts and samples, flip the connection strings, resume. The freeze is seconds to minutes rather than hours because the data is already there. The subtlety is that a shard key cannot be changed cheaply later, so this decision deserves more review than the tooling does.</p></div>
+</div>
+
+<div class="question">
+  <h2>mongosync: where does it fit, and where does it stop?</h2>
+  <div class="answer"><p>It fits continuous, low-downtime migrations between MongoDB deployments — replica set to replica set, replica set to sharded, sharded to sharded — including into Atlas, where the live migration service uses it under the hood. It copies data and keeps applying changes, reports lag and progress, and supports a reverse direction so that rolling back means syncing changes back rather than restoring a backup.</p>
+<p>It stops at the edges of the data model. Users, roles, some administrative state and cluster-level configuration are not what you are migrating; those are rebuilt on the target. Indexes are created from the collection metadata, but I verify them, because a build on the target may fail where it succeeded on the source. Very large collections extend the initial copy, and heavy write rates can keep lag from converging. And it is not a transformation tool: if the schema must change, that is a separate project.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you move an on-premises deployment to Atlas with minutes of downtime?</h2>
+  <div class="answer"><p>In order: connectivity first, so the Atlas cluster can reach the source over private networking and the source can reach Atlas; then sizing the target with headroom for the copy plus the post-cutover load; then a full sync with continuous change application, started well ahead of the window.</p>
+<p>While the sync runs I handle the things that are not data: users and roles, network access lists, encryption keys if client-side encryption is in play, connection strings in configuration, and driver versions. The cutover itself is a write pause, confirm sync lag is zero, validate counts and a sample of documents, switch the application, then monitor the first hour with FTDC open. Minutes, not zero — I never promise zero, because DNS and in-flight writes exist. And I keep the source intact and read-only for a defined period as the rollback.</p></div>
+</div>
+
+<div class="question">
+  <h2>What is the correct sequencing for a major-version migration with FCV?</h2>
+  <div class="answer"><p>Binaries before features, and features never in the same change as binaries. First upgrade the drivers and confirm the application runs against the current version. Then roll the new binaries onto the secondaries, step down the primary, let it be upgraded and re-elected, and confirm the set is healthy with the old feature compatibility version still in place.</p>
+<p>Only after a stability period do I raise FCV, which unlocks the new behaviour and is the point of no easy return — a downgrade is possible while FCV still permits the old version, and not after. Then I adopt new features deliberately, one at a time, with their own testing. The sequencing exists because the two steps have different risk profiles: the binary upgrade is reversible, the FCV bump is a commitment. Doing them together removes your rollback.</p></div>
+</div>
+
+<div class="question">
+  <h2>What does a credible rollback plan for a migration contain?</h2>
+  <div class="answer"><p>A trigger, a mechanism, an owner and a time limit. The trigger is a measurable condition — error rate above a threshold for ten minutes, p99 latency doubled, parity check failing — agreed before the migration starts, so nobody argues at 03:00 about whether it is bad enough.</p>
+<p>The mechanism must be tested, not hypothetical. For a sync-based migration that means the reverse sync path, kept running or ready to start, and the knowledge that changes written to the target after cutover must come back. For an in-place upgrade it means a downgrade path while FCV still allows it, or a restore. Both need the source retained, unmodified and reachable. The time limit is the part people skip: rollback stops being safe once the target has accepted writes for hours, so the decision window is finite and stated.</p></div>
+</div>
+
+<div class="question">
+  <h2>You inherit a collection where the same field holds three types and half the dates are strings. How do you migrate it?</h2>
+  <div class="answer"><p>First I inventory rather than guess: aggregate by BSON type of each suspect field, count the shapes, and look at the odd ones. The distribution usually shows that 99% is fine and a long tail of documents is not, which changes the approach from a rewrite to a targeted repair.</p>
+<p>Then I add a validator in a mode that reports rather than rejects, fix the writes that produce bad data, and backfill in batches with an idempotent, resumable job that only touches documents still failing the predicate. Each batch is small enough to keep the oplog and cache healthy. Where the type is genuinely ambiguous — a string that might be a date or a code — I do not guess; those documents go to a quarantine collection for a human decision. Only when the count of non-conforming documents is zero do I tighten the validator.</p></div>
+</div>
+
+<div class="question">
+  <h2>Dual writes during a transition: how do you run them and how do you cut them off?</h2>
+  <div class="answer"><p>Dual write means every write goes to both stores until the new one is trusted. It is fragile if done naively, because the two writes are not atomic: one can succeed while the other fails, and nothing reconciles them.</p>
+<p>So I order them. Write to the old store as the source of truth, emit an event or queue entry, and let a consumer write to the new store idempotently, with retries and a dead-letter path. Reads can then be shadowed — served from the new store and compared against the old — to build confidence before any user depends on it. Cutover is a flag flip per read path, then per write path, with a reconciliation job running throughout. "Cut off" is the same operation in reverse: stop writing to the old store, keep it read-only for the rollback window, then retire it. Dual writes without reconciliation are just two systems that disagree.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you validate that the new cluster holds the same data as the old one?</h2>
+  <div class="answer"><p>Counts first, per collection and per logical partition — not a single total, because totals hide offsetting errors. Then a deterministic sample: pick documents by a stable predicate such as an ID range or a hash boundary, fetch them from both sides, and compare field by field with normalisation for type and precision differences. Where ordering matters, compare sorted checksums over a projection rather than whole documents.</p>
+<p>The traps are known: floating-point and decimal representations differ across systems, dates lose or gain precision, and BSON field order can vary so naive hashing of the whole document fails. I also reconcile the write stream, not just the bulk copy — the last hour is where dual-write bugs live. If a mismatch appears, a diff report by key is worth more than a percentage, because it tells you which transformation is wrong.</p></div>
+</div>
+
+<div class="question">
+  <h2>Migrating indexes: what does it cost and what order do you build them in?</h2>
+  <div class="answer"><p>Each index is a sorted structure over every document, so the cost is roughly a full scan plus writes and memory proportional to the build. N indexes roughly means N passes, which is why building twelve indexes on a large collection during business hours is a capacity event, not a background task.</p>
+<p>I build the ones that serve the cutover traffic first — the indexes without which the application degrades — and defer the nice-to-have ones until after the migration is stable. Where possible I build on the target before data arrives, or in parallel only if the host has headroom. Text and wildcard indexes are heavier than they look, and a unique index can fail on data the source allowed, so I check for duplicates before the build rather than discovering them mid-migration. Order is cheap to plan and expensive to get wrong.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you move a single collection larger than 100 GB?</h2>
+  <div class="answer"><p>Not with one long-running copy. I split by a natural partition — a date range, an ID range, or the shard key — and move the partitions in sequence, each verified before the next starts. That gives resumability: a failure costs one partition, not the whole job.</p>
+<p>If both sides are MongoDB, <code>mongosync</code> handles the initial copy and the ongoing changes, which removes the reconciliation problem. If the target is a file-based restore, I take a filesystem or snapshot copy rather than a logical dump, because <code>mongodump</code> on a collection that size is slow and index rebuilds double the time. Throughout, I watch the target's disk headroom, because the copy plus index builds can transiently exceed the final size, and I throttle to protect whatever else lives on those nodes. The final delta and switchover are a short freeze.</p></div>
+</div>
+
+<div class="question">
+  <h2>Walk me through the maintenance window: before, during, after.</h2>
+  <div class="answer"><p><strong>Before:</strong> the change is rehearsed on a production-shaped copy, the rollback is written and tested, backups are current and a restore has been verified, the monitoring dashboard is open, and the on-call list is confirmed. I also publish the expected impact and the abort criteria.</p>
+<p><strong>During:</strong> one person executes, another observes and keeps the timeline. Every step is logged with timestamps. If an abort criterion is hit, we roll back rather than improvise — the window is not the place for new ideas.</p>
+<p><strong>After:</strong> verify the application end to end, not just the cluster; watch p99, error rate, replication lag and queue depth for a defined period; confirm backups and alerts still fire; then write the timeline into the ticket while it is fresh. Most damage happens after the window, when everyone has relaxed.</p></div>
+</div>
+
+<div class="question">
+  <h2>Tell me about a migration that overran. What did you misjudge?</h2>
+  <div class="answer"><p>The pattern I have seen more than once: the copy finished on schedule and the cutover took four times the estimate. The data transfer was measured and planned; the things around it were not. Index builds on the target ran after the copy rather than before it, so they competed with replication, and a unique index failed on duplicates that existed in the source for years.</p>
+<p>The second misjudgement was the application. Cache keys included the old hostname, connection strings lived in three places, and one background job had a hard-coded URI. None of that is database work, and all of it is on the critical path.</p>
+<p>What I do differently now: rehearse the entire cutover, including the application, on a copy; build indexes before data or in parallel with headroom; and write the rollback and the abort criteria before the window opens.</p></div>
+</div>
+
+<div class="question">
+  <h2>Which MongoDB metrics give you warning days before an incident?</h2>
+  <div class="answer"><p>The ones that measure margin rather than pain. Cache eviction of clean pages at steady traffic means the working set is outgrowing memory. A slowly falling oplog window means write volume is outpacing retention. Rising queued operations at peak means the queue is forming before latency shows it. Growing connections with flat traffic means a leak, not growth.</p>
+<p>I also watch the derived ratios: documents examined per document returned, tickets available at peak, index size versus data size. None of these pages anyone; all of them predict. The discipline is reviewing them on a cadence with a threshold that triggers an investigation, so the conversation about a new index happens in a planning meeting rather than in an incident channel. A metric that only fires when users are already unhappy is a notification, not an early warning.</p></div>
+</div>
+
+<div class="question">
+  <h2>What does FTDC store, for how long, and how do you use it after the fact?</h2>
+  <div class="answer"><p>It is the diagnostic data collector built into every server: a compact, compressed stream of <code>serverStatus</code>, replication and WiredTiger counters, sampled frequently and written to a bounded directory. It is not a general metrics store, so it keeps a rolling window measured in days, not months, and older samples are discarded as it rotates.</p>
+<p>After the fact I use it for correlation, not for dashboards. I find the first counter that moved, then look at what moved with it — tickets, evictions, connections, lag — to establish direction of causation rather than coincidence. Because it survives on the host, it also covers the minutes around a restart, which external monitoring often misses. For anything beyond the retention window I export the diagnostics to object storage or rely on long-term metrics, and I do that before decommissioning a problematic node.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you feed MongoDB telemetry into OpenTelemetry without drowning the collector?</h2>
+  <div class="answer"><p>By treating command monitoring as sampled telemetry, not as a firehose. A driver can emit an event per operation; at production volume that is more data than the tracing backend can price. I sample at the driver, keep all errors and all slow operations, and additionally trace a small random fraction of normal requests end to end.</p>
+<p>For host and server metrics I poll <code>db.serverStatus()</code> on an interval, extract a fixed set of counters, and emit them as gauges through the collector rather than shipping raw payloads. The collector then does aggregation and filtering before export. Two rules keep this sane: every metric has an owner and a question it answers, and every span carries the tenant and operation shape so it can be joined with slow-query data. Unbounded telemetry is a cost problem disguised as an engineering virtue.</p></div>
+</div>
+
+<div class="question">
+  <h2>It is 02:00 and the cluster is slow. What do you look for in mongod.log first?</h2>
+  <div class="answer"><p>I search for state changes before I search for slow queries, because the log records events that explain a sudden shift better than any latency number: an election or stepdown, a member transitioning state, a connection accepted spike, a timeout to a node, a checkpoint taking unusually long, a journal flush stall.</p>
+<p>Then the slow-query entries in the same window, grouped by shape rather than read one by one — the pattern matters, not the individual line. After that, anything about index builds, <code>dropDatabase</code>, or long-running operations being killed. The habit that pays off is knowing what normal looks like: a healthy log is boring, so a burst of connection messages at an odd hour is immediately visible. Log parsing rules should highlight elections, transitions and reassembly warnings, not just "slow".</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you configure the slow query log so that it is useful and affordable?</h2>
+  <div class="answer"><p>The profiler captures into a capped collection and competes for the same resources as your workload, so it is a diagnostic tool, not a permanent setting. My default is profiler off, and instead use the slow-operation logging that writes to <code>mongod.log</code> above a threshold set relative to the workload — slow enough to stay quiet at normal traffic, low enough to catch the tail.</p>
+<p>When I need the profiler I enable it for a bounded window, filtered to the database or collection under investigation, at the level that captures timings without full execution details unless those are required. Then I aggregate by query shape: total time and call count matter more than the single worst entry. The output must feed a decision — an index, a rewrite, a schema change. A slow log nobody reads is just extra I/O.</p></div>
+</div>
+
+<div class="question">
+  <h2>Query Shape metrics arrived in 9.0. What problem do they solve that the profiler did not?</h2>
+  <div class="answer"><p>The profiler tells you about individual slow operations, which means you get a list of incidents rather than a diagnosis. Many identical queries, each individually under the threshold, can consume most of the CPU and never appear. Grouping by query shape — the filter structure with values abstracted — turns thousands of log lines into a handful of ranked problems.</p>
+<p>That is the shift: from "this query at 10:04 was slow" to "this class of query accounts for a third of execution time and is growing". Literal values are stripped, so shapes aggregate across tenants and users, and the ranking is by resource consumption rather than by latency. It is the metric I would put on the dashboard first, because it points directly at the index or rewrite that fixes the most. Atlas exposes a comparable view through Intelligent Workload Management.</p></div>
+</div>
+
+<div class="question">
+  <h2>What is on your minimum viable cluster dashboard, and what deliberately is not?</h2>
+  <div class="answer"><p>One row of saturation, one of throughput, one of errors. Saturation: normalized CPU, tickets available, queued operations, connections as a percentage of the tier ceiling, disk IOPS against provisioned, cache dirty bytes. Throughput: opcounters by type and replication lag, with the oplog window. Errors: failed writes, write concern errors, and the count of operations exceeding a latency threshold.</p>
+<p>What is deliberately absent: per-collection metrics for hundreds of collections, raw memory split into twelve series, and anything without a threshold that implies an action. A dashboard is not storage, it is an argument — it should answer "are we healthy, and if not, which resource is the constraint" within ten seconds. Everything else belongs in drill-down or in the query-shape report, where someone is already investigating.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you alert on replication lag without paging on every burst?</h2>
+  <div class="answer"><p>Lag alone is a bad alert, because lag is normal during bulk writes and index builds. What matters is duration combined with trend. I alert when lag exceeds a threshold and is still rising after several consecutive evaluation periods, which filters out the transient spikes, and I pair it with the oplog window so that a secondary at risk of falling off the oplog escalates differently from one that is merely behind.</p>
+<p>The distinction changes the response. Lag under a minute resolves itself; lag growing steadily means an undersized secondary, a network problem, or a write pattern the replica cannot apply fast enough. Falling off the oplog means a full resync is coming, which is a capacity event. I also alert on the derived risk rather than the symptom: time remaining before the secondary is out of oplog is the number that deserves a page.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you alert on tickets and queued I/O in a way that predicts saturation?</h2>
+  <div class="answer"><p>Tickets are WiredTiger's admission control: a fixed pool that operations must hold to read or write. When tickets available sits near zero for sustained periods, work is waiting on the storage engine, and latency is about to be visible to users. So I alert on the sustained condition, not the instantaneous dip — a momentary drain at the top of every minute is normal.</p>
+<p>Queued read and write operations are the same signal expressed as backlog, and they are more intuitive to read in an incident: a queue that grows faster than it drains is saturation arriving. The useful threshold is workload-specific, so I derive it from a healthy week's peak rather than from a generic number. The pairing matters: tickets low with a flat queue means a brief burst; tickets low with a rising queue means the cluster is about to fall over.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you alert on connections when connection count is a symptom, not a cause?</h2>
+  <div class="answer"><p>I alert on the ratio to the tier ceiling, not on an absolute count, and I separate "approaching the ceiling" from "connections dropping abruptly". The first predicts refused connections and points at pool sizing or a pod explosion; the second usually means a network event, a restart or a proxy failure, and it is often the faster signal of real trouble.</p>
+<p>Because the cause is almost always the client, the alert should carry attribution: which <code>appName</code>, which host, how many from each. Without that, the responder can only guess. I also watch the per-connection work rate — thousands of connections each doing almost nothing is a pooling bug, whereas a few hundred doing real work is healthy — and I keep the check for a monotonic climb, which is the signature of a leak that will eventually exhaust the ceiling.</p></div>
+</div>
+
+<div class="question">
+  <h2>Write me the postmortem outline that actually changes behaviour.</h2>
+  <div class="answer"><p>Timeline with timestamps and sources, not narrative. Then the customer impact in concrete terms — duration, affected tenants, operations lost or delayed. Then the technical mechanism: which resource saturated, which feedback loop amplified it, why the safeguards did not hold.</p>
+<p>The part that matters is the last two sections, and I insist they contain no verbs like "be more careful". Each action item names an owner, a date, and a verification — a test that would fail today and pass after the fix. "Add an alert on queue depth and prove it fires in staging by Friday" is an action item; "improve monitoring" is a wish.</p>
+<p>I also ask what made the incident slow to detect and slow to diagnose separately from what caused it. Often the cause is mundane and the detection is the real failure, which is where the cheapest improvements live.</p></div>
+</div>
+
+<div class="question">
+  <h2>What makes a runbook usable at 03:00, and what do you automate before you write one?</h2>
+  <div class="answer"><p>At 03:00 the reader is tired and the system is degraded, so a runbook is a decision tree, not an essay. First line: how do I confirm this is the problem. Then the first three actions, each with an exact command and the expected output, and a clear statement of when to stop and escalate. Anything requiring judgement gets a default, because a tired person choosing freely is how small incidents become big ones.</p>
+<p>Before writing one I automate the safest step, which is usually information gathering: a script that dumps the relevant counters, the top query shapes and the recent log anomalies into one place. That removes the most error-prone part. On-call automation order is: collect, then safely mitigate, then remediate. Automating remediation first is how you get a machine that confidently makes things worse.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you prove SLA compliance without keeping full-fidelity telemetry forever?</h2>
+  <div class="answer"><p>You define the measurement before you need it, then keep aggregates rather than raw events. The SLA is a statement about a service level indicator — successful requests, latency below a threshold — so I compute it at the boundary where requests arrive, emit a counter per interval, and retain those rollups far longer than any log.</p>
+<p>That makes the cost question tractable: high-cardinality raw spans and full command monitoring are sampled and short-lived, while the derived availability and latency series are cheap and kept for years. The audit trail is the definition, the rollups and the incident record, not every query ever executed.</p>
+<p>Two details decide whether the number survives scrutiny. Exclusions must be written down in advance — planned maintenance, customer-side failures — and the measurement must match the definition, not the friendliest available metric. I would rather report a slightly worse number that is defensible than a perfect one nobody can reproduce.</p></div>
+</div>

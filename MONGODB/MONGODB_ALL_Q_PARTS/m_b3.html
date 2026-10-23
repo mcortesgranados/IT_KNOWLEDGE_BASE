@@ -1,0 +1,144 @@
+<div class="question">
+  <h2>How do you create a free Atlas cluster, and what does the free tier include?</h2>
+  <div class="answer"><p>In the Atlas UI choose <strong>Database &rarr; Build a Database</strong>, pick the <strong>M0</strong> (free) tier, select a cloud provider and a region close to your users, name the cluster and deploy. Provisioning takes a few minutes and Atlas walks you through a security quickstart where you create the first database user and add your IP address.</p><p>An M0 cluster gives you about 512 MB of storage on shared infrastructure: no dedicated RAM or IOPS, so throughput is modest and noisy neighbours are possible. It is limited to one free cluster per project, has no automated cloud backups, and some features (dedicated tiers, certain backup and scaling options) require a paid tier such as M10 or higher. It is perfect for learning, demos and small prototypes, not for production.</p></div>
+</div>
+
+<div class="question">
+  <h2>What is the Atlas IP access list, and why does it block my connection?</h2>
+  <div class="answer"><p>The IP access list (formerly called the whitelist) is a set of IP addresses or CIDR blocks that Atlas accepts TCP connections from. It is enforced by the cluster's front end before authentication, so a correct username and password still fail if your address is not listed: you typically see a timeout or an error such as <code>connection ... refused</code> or <code>not allowed to connect</code>.</p><p>Add your current public IP under <strong>Network Access &rarr; Add IP Address</strong>. Cloud runtimes, CI agents and home connections change addresses often, which is the usual reason a working app suddenly cannot connect. You can add <code>0.0.0.0/0</code> to allow everything, but that exposes the cluster to the internet and should be limited to throwaway sandboxes.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you create a database user in Atlas, and which role should you give it?</h2>
+  <div class="answer"><p>Atlas database users are separate from your Atlas account: you create them under <strong>Database Access &rarr; Add New Database User</strong>, choosing password (SCRAM) or certificate authentication. Then you assign roles scoped to a database.</p><p>Give the application the smallest role that works: <code>readWrite</code> on the single application database covers normal CRUD, while <code>read</code> fits reporting or analytics services. Cluster-wide roles such as <code>readAnyDatabase</code>, <code>dbAdminAnyDatabase</code> or <code>atlasAdmin</code> should be reserved for operational tooling and humans, never for an app server, because a compromised process would reach every database in the cluster.</p><pre><code>mongosh "mongodb+srv://cluster0.abcde.mongodb.net/" \
+  --username appUser --authenticationDatabase admin</code></pre></div>
+</div>
+
+<div class="question">
+  <h2>How do you connect Compass or mongosh to an Atlas cluster with the mongodb+srv string?</h2>
+  <div class="answer"><p>Open the cluster in Atlas, click <strong>Connect</strong>, and pick the tool: <strong>Compass</strong> gives you a paste-ready string, <strong>Shell</strong> gives the <code>mongosh</code> command with your cluster host. The string looks like this:</p><pre><code>mongodb+srv://appUser:Secret123@cluster0.abcde.mongodb.net/shop?retryWrites=true&amp;w=majority</code></pre><p>Two practical details cause most failures. First, special characters in the password must be percent-encoded (<code>@</code> becomes <code>%40</code>, <code>:</code> becomes <code>%3A</code>). Second, the path segment (<code>/shop</code>) is the default database, while authentication normally goes against <code>admin</code>. The <code>+srv</code> form resolves the replica set members from DNS, and TLS is enabled for you, so no extra options are needed.</p></div>
+</div>
+
+<div class="question">
+  <h2>Where do you find metrics and backups in the Atlas UI?</h2>
+  <div class="answer"><p>Select the cluster and open the <strong>Metrics</strong> tab: it charts operations per second, connections, network throughput, disk utilisation, query targeting and WiredTiger cache pressure, with a configurable time range. The <strong>Real-Time Performance</strong> panel shows currently running operations and slow queries, which is the fastest way to see what is happening right now.</p><p>Backups live in the <strong>Backup</strong> tab, where you can see snapshots, configure a backup policy and restore to a point in time or to a new cluster. Free and shared tiers do not include automated cloud backups, so on M0 you must export your own data with <code>mongodump</code>. Alerts can be wired to email or Slack from the project settings.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you list the indexes on a collection, and how do you read the output?</h2>
+  <div class="answer"><p>Use <code>getIndexes()</code>, which returns one document per index with the key pattern, the generated name and the options.</p><pre><code>db.users.getIndexes()
+
+[
+  { v: 2, key: { _id: 1 }, name: "_id_" },
+  { v: 2, key: { email: 1 }, name: "email_1", unique: true },
+  { v: 2, key: { country: 1, createdAt: -1 }, name: "country_1_createdAt_-1" }
+]</code></pre><p>Read it left to right: <code>key</code> is the indexed field order (<code>1</code> ascending, <code>-1</code> descending, <code>"text"</code> or <code>"2dsphere"</code> for special types), <code>name</code> is what you pass to <code>dropIndex()</code>, and options such as <code>unique</code>, <code>sparse</code>, <code>partialFilterExpression</code> or <code>expireAfterSeconds</code> describe behaviour. <code>v: 2</code> is the current index format version.</p></div>
+</div>
+
+<div class="question">
+  <h2>When should you drop an index, and how do you do it?</h2>
+  <div class="answer"><p>Drop an index when it duplicates the prefix of a longer compound index, when it is never used, or when a write-heavy collection pays more in maintenance than the index returns in reads. Check usage first with <code>db.users.aggregate([{ $indexStats: {} }])</code>: an <code>accesses.ops</code> counter that stays near zero after a full workload cycle is strong evidence.</p><pre><code>db.users.dropIndex("email_1")
+db.users.dropIndex({ country: 1, createdAt: -1 })</code></pre><p>Do it in staging first, and remember that dropping frees disk and write overhead immediately but cannot be undone except by recreating it, which on a large collection is an expensive build. The <code>_id</code> index cannot be dropped.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you rebuild an index in MongoDB, and when is it worth doing?</h2>
+  <div class="answer"><p>MongoDB has no <code>REBUILD INDEX</code> statement like some relational engines. The reliable approach is to drop the index and create it again with the options you want; on a replica set the build is replicated to secondaries, and from 4.4 you can create an index as <code>hidden: true</code> first, then unhide it once it is built, so it never becomes visible half-ready.</p><pre><code>db.users.createIndex(
+  { email: 1 },
+  { unique: true, hidden: true, name: "email_1_new" }
+)
+db.users.unhideIndex("email_1_new")</code></pre><p>Rebuild only for a concrete reason: changing options (unique, partial, collation), suspected corruption, or a badly fragmented index. Routine rebuilding is not part of MongoDB maintenance and costs a full collection scan plus heavy I/O.</p></div>
+</div>
+
+<div class="question">
+  <h2>What does it mean when an index is "building"?</h2>
+  <div class="answer"><p>It means the server is scanning the collection to populate the index entries, and until that finishes the index exists in the catalog but the query planner will not use it. Builds run in a hybrid mode: they take a brief exclusive lock on the collection to start and finish, but yield to reads and writes in between, so the collection stays available.</p><p>You can watch progress with <code>db.currentOp({ "msg": "Index Build" })</code>, which reports the index name and a progress percentage, or through <code>db.adminCommand({ currentOp: 1, $all: true })</code> on a replica set. A build that seems stuck is usually I/O bound or waiting for a long-running transaction to finish. Dropping the index while it builds aborts the build.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you check how much space the indexes on a collection take?</h2>
+  <div class="answer"><p><code>db.users.stats()</code> reports <code>indexSizes</code> as a document mapping each index name to its size in bytes, plus <code>totalIndexSize</code>. <code>db.users.totalIndexSize()</code> returns just the total, which is handy in a script.</p><pre><code>db.users.stats().totalIndexSize   // bytes
+db.users.stats().indexSizes
+// { _id_: 81920, email_1: 65536, country_1_createdAt_-1: 204800 }</code></pre><p>For a single index on a large collection, the aggregation form with <code>$collStats</code> and <code>storageStats</code> avoids pulling the whole stats document. This matters because indexes live in memory as well as on disk: if total index size greatly exceeds the WiredTiger cache, every query risks disk reads, and an oversized unused index is a good candidate for dropping.</p></div>
+</div>
+<div class="question">
+  <h2>How do you check the server version and the mongosh version?</h2>
+  <div class="answer"><p>Inside the shell, <code>db.version()</code> returns the server version string such as <code>8.0.4</code>; <code>db.serverBuildInfo()</code> adds the git commit, available storage engines and compile options, and <code>db.hello()</code> tells you whether you are connected to a primary or a secondary. The client version is not a shell method: run <code>mongosh --version</code> in your terminal, or check <code>db.getMongo()</code> in the shell for the connection object.</p><pre><code>db.version()          // "8.0.4"  (server)
+mongosh --version     // "2.3.1"  (client, from the OS terminal)</code></pre><p>The distinction matters during upgrades and when a documented helper is missing: newer <code>mongosh</code> against an old server can behave differently, and features you read about may not exist on the server you reached.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you filter db.currentOp() to find long-running operations?</h2>
+  <div class="answer"><p>Pass a filter document instead of dumping every operation. The most useful fields are <code>active</code>, <code>secs_running</code>, <code>ns</code> and <code>op</code>.</p><pre><code>db.currentOp({
+  active: true,
+  secs_running: { $gt: 5 },
+  ns: { $ne: "" }
+})</code></pre><p>For each result read <code>opid</code> (needed for killing), <code>op</code> (query, update, command), <code>ns</code>, <code>secs_running</code>, <code>planSummary</code> (<code>COLLSCAN</code> on a huge collection is a red flag), <code>numYields</code>, <code>waitingForLock</code> and <code>client</code>. If nothing shows up, remember that idle connections and drivers' pooled sockets appear as inactive, and that the shell only sees operations on the node it is connected to.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you kill a long-running operation with killOp?</h2>
+  <div class="answer"><p>Find the operation id first, then kill it from the admin database. The id is an <code>opid</code>, not a session or thread id.</p><pre><code>db.currentOp({ active: true, secs_running: { $gt: 30 } })
+db.adminCommand({ killOp: 1, op: 123456 })</code></pre><p>The server interrupts the operation at its next yield point, so a long index build or a large update may take a moment to stop, and the client receives an error such as <code>operation was interrupted</code>. Some internal operations cannot be killed safely, and killing a write mid-flight can leave partial work unless it was in a transaction. Always confirm with <code>currentOp</code> afterwards, and prefer fixing the query or index over killing operations routinely.</p></div>
+</div>
+
+<div class="question">
+  <h2>In db.serverStatus(), what should you look at first?</h2>
+  <div class="answer"><p>Start with three areas. <strong>Connections</strong>: compare <code>connections.current</code> with <code>connections.available</code>; being close to the limit means pool leaks or undersized limits. <strong>Queues and locks</strong>: non-zero <code>globalLock.currentQueue.readers/writers</code> shows contention. <strong>WiredTiger cache</strong>: check <code>wiredTiger.cache["bytes currently in the cache"]</code> against <code>["maximum bytes configured"]</code> and watch the tracked dirty bytes, since a cache at capacity with high dirty pages turns reads into disk I/O.</p><pre><code>db.serverStatus().connections
+db.serverStatus().globalLock.currentQueue
+db.serverStatus().wiredTiger.cache["bytes currently in the cache"]</code></pre><p>Then glance at <code>opcounters</code> for traffic shape and <code>asserts</code> for errors. The document is huge, so query the specific path instead of printing all of it.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you rename a collection, and how do you rename a field?</h2>
+  <div class="answer"><p>Rename a collection with <code>renameCollection</code>, which needs the admin database and takes a lock; both names must be in the same database, and <code>dropTarget: true</code> overwrites an existing target.</p><pre><code>db.adminCommand({
+  renameCollection: "shop.orders_old",
+  to: "shop.orders",
+  dropTarget: true
+})</code></pre><p>Rename a field inside documents with the <code>$rename</code> update operator, using a dotted path for nested fields:</p><pre><code>db.users.updateMany({}, { $rename: { "name": "fullName" } })
+db.users.updateMany({}, { $rename: { "address.zip": "address.postalCode" } })</code></pre><p><code>$rename</code> is a per-document update, not an atomic schema change: it overwrites the target field if it exists, does not work on array elements, and on a large collection should be run in batches so you can throttle and resume.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you use $slice in a find projection to return only part of an array?</h2>
+  <div class="answer"><p><code>$slice</code> in a projection trims an array after the document is matched, without changing which documents are returned. Three forms are worth memorising.</p><pre><code>db.posts.find({}, { comments: { $slice: 3 } })     // first 3
+db.posts.find({}, { comments: { $slice: -3 } })    // last 3
+db.posts.find({}, { comments: { $slice: [10, 5] } }) // skip 10, take 5</code></pre><p>It is the standard way to avoid shipping a 500-element array to a mobile client, and it can be combined with other projection fields. The catch: the filter runs first, so you cannot ask for documents whose sliced window contains a value; that needs <code>$filter</code> or an aggregation with <code>$slice</code> as an expression. Also remember the document on disk is still read in full.</p></div>
+</div>
+
+<div class="question">
+  <h2>How do you create a read-only view and control who can read it?</h2>
+  <div class="answer"><p>A view is a saved aggregation pipeline over a collection or another view. It stores no data, is computed on every read, and is inherently read-only: insert, update and delete are rejected against it.</p><pre><code>db.createView("publicUsers", "users", [
+  { $match: { active: true } },
+  { $project: { name: 1, city: 1, email: 0, ssn: 0 } }
+])</code></pre><p>Grant privileges on the view's own namespace rather than the base collection, so a reporting user can read the projection but not the raw documents:</p><pre><code>db.createRole({
+  role: "publicUsersReader",
+  privileges: [{ resource: { db: "shop", collection: "publicUsers" },
+                 actions: ["find"] }],
+  roles: []
+})
+db.grantRolesToUser("reporting", [{ role: "publicUsersReader", db: "shop" }])</code></pre><p>Typical uses are hiding PII, freezing a stable field shape for consumers, and pre-filtering tenants.</p></div>
+</div>
+
+<div class="question">
+  <h2>What is a namespace in MongoDB?</h2>
+  <div class="answer"><p>A namespace is the fully qualified name of a collection or index in the form <code>database.collection</code>, for example <code>shop.orders</code>. It is the identifier the catalog, the query planner and every diagnostic surface use: you see it as the <code>ns</code> field in <code>currentOp</code>, in slow-query log lines, in profiler output, in lock reports and in error messages such as a duplicate key error naming <code>shop.orders</code>.</p><p>Namespaces matter operationally because MongoDB documents a length limit (120 bytes for a collection namespace, 255 for index namespaces), so extremely long database or collection names can be rejected. Views, time series collections and GridFS buckets all occupy their own namespaces, which is why a dump of a "single" logical dataset often shows several entries.</p></div>
+</div>
+
+<div class="question">
+  <h2>Why can't { field: { $exists: false } } use an index the way { field: null } can?</h2>
+  <div class="answer"><p>Because the two predicates are not the same. <code>{ field: null }</code> matches documents where the field is explicitly null <em>or</em> missing, and a normal (non-sparse) index stores missing fields as null entries, so the planner can seek to them. <code>$exists: false</code> matches only missing fields, and those documents are precisely the ones a sparse index omits, so a sparse index cannot answer it and the server falls back to a collection scan.</p><pre><code>db.users.find({ deletedAt: null })          // can use index on deletedAt
+db.users.find({ deletedAt: { $exists: false } }) // usually COLLSCAN
+db.users.find({ deletedAt: { $exists: true } })  // can use a sparse index</code></pre><p>That asymmetry is a good reason to write explicit nulls instead of omitting fields when you plan to query on absence.</p></div>
+</div>
+
+<div class="question">
+  <h2>How should a UUID be stored: as BinData or as a string?</h2>
+  <div class="answer"><p>Store it as BSON binary with the UUID subtype (subtype 4 for a standard RFC 4122 UUID), using the driver's native UUID type rather than a hand-made buffer.</p><pre><code>// mongosh
+db.devices.insertOne({
+  _id: UUID("3f2504e0-4f89-11d3-9a0c-0305e82c3301")
+})
+
+// Node.js driver
+await devices.insertOne({ _id: new UUID("3f2504e0-4f89-11d3-9a0c-0305e82c3301") })</code></pre><p>Binary form is 16 bytes against roughly 36 for the canonical string, so indexes are smaller, comparisons follow byte order, and there are no case or collation surprises. The string form is friendlier for debugging, URLs and CSV round trips, but it doubles storage and invites the classic bug of mixing uppercase and lowercase representations of the same identifier. Whichever you choose, keep one format for the field across the whole system.</p></div>
+</div>
