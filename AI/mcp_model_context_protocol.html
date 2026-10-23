@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Model Context Protocol (MCP) — architecture, primitives and the 2026-07-28 revision</title>
+<style>
+ body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+ .container { max-width: 980px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+ h1 { color: #1565c0; margin-bottom: 4px; }
+ h2 { color: #2e7d32; margin-top: 36px; border-bottom: 2px solid #e8f5e9; padding-bottom: 6px; }
+ h3 { color: #7b1fa2; margin-top: 24px; }
+ p, li { line-height: 1.5; }
+ code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: .92em; }
+ .lead { color: #475569; font-size: 1.02em; }
+ .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .warn { background: #fff3e0; border-left: 4px solid #ef6c00; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .good { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .note ul, .warn ul, .good ul { list-style: disc inside; margin: 6px 0 0; padding-left: 1.1em; }
+ .note li, .warn li, .good li { margin-bottom: 2px; line-height: 1.35; }
+ pre { background: #f5f5f5; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: .88em; line-height: 1.45; border-left: 4px solid #94a3b8; }
+ .formula { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1565c0; border-radius: 6px; padding: 10px 14px; margin: 12px 0; font-family: 'Consolas', monospace; font-size: .92em; overflow-x: auto; }
+ .table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; }
+ .table th, .table td { border: 1px solid #ddd; padding: 9px 10px; text-align: left; vertical-align: top; font-size: .95em; }
+ .table th { background: #f0f7ff; color: #1565c0; }
+ .table tr:nth-child(even) td { background: #fbfdff; }
+ .tag { display: inline-block; font-size: .72em; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; color: #fff; background: #1565c0; vertical-align: middle; }
+ .tag.bad { background: #c62828; } .tag.ok { background: #2e7d32; } .tag.mid { background: #ef6c00; }
+ .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px; }
+ .toc ol { margin: 6px 0 0; padding-left: 1.3em; }
+ .toc a { color: #1565c0; text-decoration: none; }
+ .toc a:hover { text-decoration: underline; }
+ .checklist { list-style: none; padding-left: 0; }
+ .checklist li { padding-left: 1.7em; position: relative; margin-bottom: 6px; }
+ .checklist li::before { content: "\2610"; position: absolute; left: 0; color: #1565c0; font-size: 1.1em; }
+ figure { margin: 20px 0; text-align: center; }
+ figcaption { color: #64748b; font-size: .88em; margin-top: 6px; }
+ .footer { text-align: right; color: #888; font-size: .95em; margin-top: 40px; }
+ .footer a { color: #1565c0; text-decoration: none; }
+ @media (max-width: 600px) { .container { padding: 16px 12px; } .table th, .table td { padding: 7px; } }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Model Context Protocol (MCP)</h1>
+    <p class="lead">An open protocol that turns <em>N integrations &times; M applications</em> into <em>N + M</em>: a server exposes tools, resources and prompts once, and any compatible host can use them. Written against the <strong>2026-07-28</strong> revision, the current one at the time of writing.</p>
+
+    <div class="toc">
+      <strong>Contents</strong>
+      <ol>
+        <li><a href="#problem">The problem it solves</a></li>
+        <li><a href="#architecture">Host, client, server</a></li>
+        <li><a href="#primitives">Primitives: tools, resources, prompts</a></li>
+        <li><a href="#lifecycle">The stateless lifecycle (2026-07-28)</a></li>
+        <li><a href="#transports">Transports</a></li>
+        <li><a href="#mrtr">Multi round-trip requests</a></li>
+        <li><a href="#auth">Authorization</a></li>
+        <li><a href="#extensions">Extensions: tasks, skills, apps</a></li>
+        <li><a href="#security">Security model</a></li>
+        <li><a href="#build">Writing a server</a></li>
+        <li><a href="#migration">Migrating from 2025-11-25</a></li>
+        <li><a href="#checklist">Review checklist</a></li>
+        <li><a href="#sources">Sources</a></li>
+      </ol>
+    </div>
+
+    <h2 id="problem">1. The problem it solves</h2>
+    <p>Before MCP, every assistant that needed your issue tracker, your database and your file system implemented three bespoke connectors, and every vendor reimplemented the same integrations for every assistant. The cost grows as the product of both sides.</p>
+    <figure>
+      <svg viewBox="0 0 820 190" width="100%" height="190" role="img" aria-label="Left: three applications each wired to four services, twelve links. Right: the same applications and services connected through MCP, seven links.">
+        <g font-family="Segoe UI, Arial" font-size="11">
+          <text x="10" y="16" fill="#b71c1c" font-weight="800">WITHOUT MCP &mdash; N &times; M adapters</text>
+          <g fill="#e3f2fd" stroke="#1565c0">
+            <rect x="20" y="30" width="76" height="24" rx="5"/><rect x="20" y="66" width="76" height="24" rx="5"/><rect x="20" y="102" width="76" height="24" rx="5"/>
+          </g>
+          <g fill="#f3e5f5" stroke="#7b1fa2">
+            <rect x="230" y="26" width="86" height="24" rx="5"/><rect x="230" y="62" width="86" height="24" rx="5"/><rect x="230" y="98" width="86" height="24" rx="5"/><rect x="230" y="134" width="86" height="24" rx="5"/>
+          </g>
+          <g stroke="#c62828" stroke-width="1.1" opacity=".75">
+            <line x1="96" y1="42" x2="230" y2="38"/><line x1="96" y1="42" x2="230" y2="74"/><line x1="96" y1="42" x2="230" y2="110"/><line x1="96" y1="42" x2="230" y2="146"/>
+            <line x1="96" y1="78" x2="230" y2="38"/><line x1="96" y1="78" x2="230" y2="74"/><line x1="96" y1="78" x2="230" y2="110"/><line x1="96" y1="78" x2="230" y2="146"/>
+            <line x1="96" y1="114" x2="230" y2="38"/><line x1="96" y1="114" x2="230" y2="74"/><line x1="96" y1="114" x2="230" y2="110"/><line x1="96" y1="114" x2="230" y2="146"/>
+          </g>
+          <text x="30" y="44" fill="#0d47a1">app 1</text><text x="30" y="80" fill="#0d47a1">app 2</text><text x="30" y="116" fill="#0d47a1">app 3</text>
+          <text x="238" y="42" fill="#4a148c">system A</text><text x="238" y="78" fill="#4a148c">system B</text><text x="238" y="114" fill="#4a148c">system C</text><text x="238" y="150" fill="#4a148c">system D</text>
+
+          <text x="420" y="16" fill="#1b5e20" font-weight="800">WITH MCP &mdash; N + M</text>
+          <rect x="430" y="58" width="86" height="46" rx="8" fill="#e0f2f1" stroke="#00695c"/>
+          <text x="473" y="78" text-anchor="middle" fill="#004d40" font-weight="700">host</text>
+          <text x="473" y="93" text-anchor="middle" fill="#00695c" font-size="10">MCP client</text>
+          <g fill="#f3e5f5" stroke="#7b1fa2">
+            <rect x="640" y="26" width="96" height="22" rx="5"/><rect x="640" y="58" width="96" height="22" rx="5"/><rect x="640" y="90" width="96" height="22" rx="5"/><rect x="640" y="122" width="96" height="22" rx="5"/>
+          </g>
+          <g stroke="#2e7d32" stroke-width="1.2">
+            <line x1="516" y1="81" x2="640" y2="37"/><line x1="516" y1="81" x2="640" y2="69"/><line x1="516" y1="81" x2="640" y2="101"/><line x1="516" y1="81" x2="640" y2="133"/>
+          </g>
+          <text x="648" y="41" fill="#4a148c">server A</text><text x="648" y="73" fill="#4a148c">server B</text><text x="648" y="105" fill="#4a148c">server C</text><text x="648" y="137" fill="#4a148c">server D</text>
+        </g>
+      </svg>
+      <figcaption>Each server implements the protocol once; any compatible host gets every capability it is allowed to see.</figcaption>
+    </figure>
+
+    <h2 id="architecture">2. Host, client, server</h2>
+    <table class="table">
+      <tr><th>Role</th><th>Responsibility</th><th>Examples</th></tr>
+      <tr><td><strong>Host</strong></td><td>The application the user interacts with. Owns consent, the model, and the conversation. Creates one client per server.</td><td>Desktop assistant, IDE, chat app</td></tr>
+      <tr><td><strong>Client</strong></td><td>The connector inside the host. Speaks JSON-RPC to exactly one server and isolates it.</td><td>The host's internal MCP module</td></tr>
+      <tr><td><strong>Server</strong></td><td>Exposes capabilities: tools, resources, prompts. May be local (a process) or remote (an HTTP service).</td><td>Filesystem, Git, database, ticketing</td></tr>
+    </table>
+    <p>The wire format is JSON-RPC 2.0: <code>tools/call</code>, <code>resources/read</code>, <code>prompts/get</code>, <code>server/discover</code>, plus notifications. Requests carry a protocol version and client capabilities in <code>_meta</code>, so no handshake is needed.</p>
+
+    <h2 id="primitives">3. Primitives: tools, resources, prompts</h2>
+    <table class="table">
+      <tr><th>Primitive</th><th>What it is</th><th>Who controls it</th><th>Typical use</th></tr>
+      <tr><td><code>tools</code></td><td>Functions the model may call, with JSON Schema input and optional output schema</td><td>Model</td><td>Query a database, open a ticket, run a query</td></tr>
+      <tr><td><code>resources</code></td><td>Read-only context addressed by URI</td><td>Application / user</td><td>Files, records, dashboards</td></tr>
+      <tr><td><code>prompts</code></td><td>Reusable templates with arguments</td><td>User</td><td>Slash commands, workflows</td></tr>
+      <tr><td>Elicitation</td><td>Server asks for missing input</td><td>Server-initiated</td><td>Confirm a parameter, pick an option</td></tr>
+    </table>
+    <div class="note"><strong>The distinction is about control, not shape.</strong> A resource is context the user or the app chooses to attach; a tool is an action the model chooses to take. Putting a dangerous write behind a resource URI does not make it safe.</div>
+
+    <h2 id="lifecycle">4. The stateless lifecycle (2026-07-28)</h2>
+    <p>The current revision removed protocol-level sessions and the <code>initialize</code> / <code>notifications/initialized</code> handshake. Every request is self-describing:</p>
+    <pre>{
+  "jsonrpc": "2.0",
+  "id": 17,
+  "method": "tools/call",
+  "params": {
+    "name": "get_order_status",
+    "arguments": { "order_id": "CO-104422" },
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": { "extensions": [] },
+      "io.modelcontextprotocol/clientInfo": { "name": "desktop-host", "version": "3.4.1" }
+    }
+  }
+}</pre>
+    <table class="table">
+      <tr><th>Element</th><th>Behaviour in 2026-07-28</th></tr>
+      <tr><td><code>server/discover</code></td><td>Servers <strong>must</strong> implement it: advertises supported versions, capabilities and identity. Clients may call it first or use it to probe over STDIO.</td></tr>
+      <tr><td>Protocol version</td><td>Sent on every request in <code>_meta</code>; a mismatch returns <code>UnsupportedProtocolVersionError</code>.</td></tr>
+      <tr><td><code>resultType</code></td><td>Required on every result: <code>"complete"</code> or <code>"input_required"</code>. Older servers that omit it are treated as <code>"complete"</code>.</td></tr>
+      <tr><td>Cross-call state</td><td>No session id. Servers mint explicit handles and pass them as ordinary tool arguments.</td></tr>
+      <tr><td>Caching</td><td>List and read results carry <code>ttlMs</code> and <code>cacheScope</code> (<code>public</code> / <code>private</code>).</td></tr>
+      <tr><td>Change notifications</td><td>One <code>subscriptions/listen</code> stream, opted in per type (<code>toolsListChanged</code>, <code>resourcesListChanged</code>&hellip;).</td></tr>
+      <tr><td>Logging</td><td>Per request via <code>io.modelcontextprotocol/logLevel</code>; <code>logging/setLevel</code> was removed. Servers must not emit <code>notifications/message</code> unless the request asked for it.</td></tr>
+    </table>
+    <div class="good"><strong>Why it matters operationally:</strong> a stateless server can sit behind a plain load balancer, scale horizontally, and be retried safely. The trade-off is that anything stateful must be modelled explicitly.</div>
+
+    <h2 id="transports">5. Transports</h2>
+    <table class="table">
+      <tr><th>Transport</th><th>Shape</th><th>Use</th><th>Status</th></tr>
+      <tr><td><code>stdio</code></td><td>Newline-delimited JSON over stdin/stdout of a child process</td><td>Local servers shipped with the host</td><td><span class="tag ok">Active</span></td></tr>
+      <tr><td>Streamable HTTP</td><td>POST for requests, optional long-lived POST-response stream for notifications</td><td>Remote servers, multi-tenant</td><td><span class="tag ok">Active</span></td></tr>
+      <tr><td>HTTP + SSE</td><td>Separate GET stream</td><td>Legacy servers</td><td><span class="tag mid">Deprecated</span></td></tr>
+    </table>
+    <p>In 2026-07-28 Streamable HTTP lost <code>Mcp-Session-Id</code>, the standalone GET endpoint and SSE resumability: a broken response stream loses the in-flight request and the client must re-issue it with a new request id. Standard headers <code>Mcp-Method</code> and <code>Mcp-Name</code> are required on POST.</p>
+
+    <h2 id="mrtr">6. Multi round-trip requests</h2>
+    <p>Server-initiated requests (<code>sampling/createMessage</code>, <code>roots/list</code>, <code>elicitation/create</code>) were replaced by a client-driven pattern. The server answers with an interim result instead of calling back:</p>
+    <pre>client → tools/call { name: "deploy", arguments: {...} }
+server → { "resultType": "input_required",
+           "inputRequests": [ { "type": "elicitation", "message": "Target environment?",
+                                "requestedSchema": { "environment": { "enum": ["staging","prod"] } } } ],
+           "requestState": "opaque-token" }
+
+client → tools/call { name: "deploy", arguments: {...},
+                      inputResponses: [...], requestState: "opaque-token" }
+server → { "resultType": "complete", "content": [...] }</pre>
+    <div class="note"><strong>Benefit.</strong> The server no longer needs a channel to call the client, so it can run behind a request/response gateway, and the retry carries the answer explicitly &mdash; which makes the interaction auditable.</div>
+
+    <h2 id="auth">7. Authorization</h2>
+    <p>Remote servers use OAuth 2.1. The MCP-specific requirements are the ones implementers get wrong:</p>
+    <table class="table">
+      <tr><th>Requirement</th><th>Rule</th></tr>
+      <tr><td>Resource indicators</td><td>The token is requested for the MCP server's canonical URI (<code>resource</code> parameter), so a token minted for one server cannot be replayed against another.</td></tr>
+      <tr><td>Issuer validation</td><td>Authorization servers should return <code>iss</code> (RFC 9207) and clients must compare it to the recorded issuer before redeeming the code.</td></tr>
+      <tr><td>Client registration</td><td>Client ID Metadata Documents are preferred; dynamic client registration (RFC 7591) is deprecated but still supported for compatibility.</td></tr>
+      <tr><td>Credential binding</td><td>Credentials are bound to the issuing authorization server: key them by issuer, never reuse across servers, re-register on change.</td></tr>
+      <tr><td>Application type</td><td>Clients must send an appropriate <code>application_type</code> during registration to avoid redirect URI conflicts.</td></tr>
+      <tr><td>Consent</td><td>Hosts obtain explicit user consent before exposing data to a server or invoking a tool.</td></tr>
+    </table>
+
+    <h2 id="extensions">8. Extensions: tasks, skills, apps</h2>
+    <p>Extensions are opt-in, negotiated through the <code>extensions</code> field of <code>ClientCapabilities</code> and <code>ServerCapabilities</code>. Three are notable in the current revision:</p>
+    <table class="table">
+      <tr><th>Extension</th><th>Adds</th><th>Use case</th></tr>
+      <tr><td><code>io.modelcontextprotocol/tasks</code></td><td>Asynchronous execution with <code>tasks/get</code> polling, <code>tasks/update</code> for client input and durable handles</td><td>Long migrations, report generation</td></tr>
+      <tr><td>Skills over MCP</td><td>Structured instructions for agent workflows, discovered through the protocol</td><td>Packaging know-how next to the tools</td></tr>
+      <tr><td>MCP Apps</td><td>Interactive UI (charts, forms, players) rendered inline in the conversation</td><td>Dashboards, confirmations</td></tr>
+    </table>
+
+    <h2 id="security">9. Security model</h2>
+    <table class="table">
+      <tr><th>Risk</th><th>How it happens</th><th>Control</th></tr>
+      <tr><td>Tool poisoning</td><td>A malicious server hides instructions in tool descriptions or annotations</td><td>Trust servers explicitly; treat descriptions as untrusted; review on change</td></tr>
+      <tr><td>Prompt injection through resources</td><td>Retrieved content tells the model to call a destructive tool</td><td>Never let resource text authorise a tool; keep it in an untrusted block</td></tr>
+      <tr><td>Confused deputy</td><td>A server uses its own broad credentials for a narrow user request</td><td>Per-user tokens, resource indicators, per-tool scopes</td></tr>
+      <tr><td>Over-broad scopes</td><td>One token grants every tool</td><td>Scope per tool family; deny by default</td></tr>
+      <tr><td>Data exfiltration</td><td>A tool sends context to an external endpoint</td><td>Egress allow-list, review of server endpoints</td></tr>
+      <tr><td>Silent change</td><td>Server updates tool behaviour after approval</td><td>Pin versions, hash tool definitions, alert on change</td></tr>
+    </table>
+    <div class="warn"><strong>Tools are arbitrary code execution.</strong> The specification says it plainly: hosts must obtain explicit consent before invoking a tool, and tool annotations are untrusted unless they come from a trusted server.</div>
+
+    <h2 id="build">10. Writing a server</h2>
+    <pre># conceptual shape of a minimal server (any SDK)
+server = Server("orders")
+
+@server.tool(
+    name="get_order_status",
+    description="Return status for one order id. Use search_orders when the user describes the order instead.",
+    input_schema={"order_id": "string:^[A-Z]{2}-\\d{6}$"},
+    output_schema={"status": "placed|shipped|delivered|cancelled", "eta_days": "integer"})
+def get_order_status(order_id, ctx):
+    if not ctx.scopes.has("orders:read"):
+        raise McpError(-32021, "missing scope orders:read")
+    row = db.orders.find(order_id)          # short, indexed query
+    if not row:
+        raise McpError(-32602, "not_found: call search_orders first")
+    return {"status": row.status, "eta_days": row.eta_days}
+
+server.run(transport="streamable-http", auth=oauth21(resource=ISSUER_URI))</pre>
+    <table class="table">
+      <tr><th>Rule</th><th>Why</th></tr>
+      <tr><td>Implement <code>server/discover</code></td><td>Required by the current revision; clients may call it before anything else</td></tr>
+      <tr><td>Return deterministic <code>tools/list</code> order</td><td>Enables client caching and improves prompt cache hit rates</td></tr>
+      <tr><td>Set <code>ttlMs</code> and <code>cacheScope</code></td><td>Lets hosts cache lists and reads safely</td></tr>
+      <tr><td>Keep tool results small</td><td>Tool output is the main driver of agent context growth</td></tr>
+      <tr><td>Structured, actionable errors</td><td>The model can correct a bad call if the error says how</td></tr>
+      <tr><td>Idempotency keys on writes</td><td>Clients retry; a duplicate write is a data bug</td></tr>
+    </table>
+
+    <h2 id="migration">11. Migrating from 2025-11-25</h2>
+    <table class="table">
+      <tr><th>Removed or changed</th><th>Replace with</th></tr>
+      <tr><td><code>initialize</code> handshake, <code>Mcp-Session-Id</code></td><td>Per-request <code>_meta</code> with version and capabilities; <code>server/discover</code></td></tr>
+      <tr><td><code>ping</code>, <code>logging/setLevel</code>, <code>notifications/roots/list_changed</code></td><td>Health via the transport; per-request <code>logLevel</code></td></tr>
+      <tr><td>HTTP GET stream, <code>resources/subscribe</code></td><td><code>subscriptions/listen</code></td></tr>
+      <tr><td>SSE resumability (<code>Last-Event-ID</code>)</td><td>Re-issue the request with a new id</td></tr>
+      <tr><td>Server-initiated sampling / roots / elicitation</td><td>Multi round-trip requests (<code>input_required</code>)</td></tr>
+      <tr><td>Blocking <code>tasks/result</code></td><td>Tasks extension with <code>tasks/get</code> and <code>tasks/update</code></td></tr>
+      <tr><td>Roots, Sampling, Logging as features</td><td><span class="tag mid">Deprecated</span> &mdash; pass paths as arguments, call the LLM provider directly, log to stderr or OpenTelemetry</td></tr>
+      <tr><td>Dynamic client registration</td><td>Client ID Metadata Documents (DCR kept for compatibility)</td></tr>
+    </table>
+
+    <h2 id="checklist">12. Review checklist</h2>
+    <ul class="checklist">
+      <li>Every tool has a narrow verb, a schema and a description that states when <em>not</em> to use it</li>
+      <li><code>server/discover</code> implemented and the protocol version echoed in every response</li>
+      <li>Tokens are audience-bound to this server's resource URI, scoped per tool family</li>
+      <li>Tool definitions are hashed and pinned; a change triggers review</li>
+      <li>Resource content is treated as untrusted and cannot trigger a tool call</li>
+      <li>Writes are idempotent, or gated behind an explicit approval step</li>
+      <li>List and read results declare <code>ttlMs</code> and <code>cacheScope</code></li>
+      <li>Errors are structured and tell the model how to recover</li>
+      <li>No secrets in tool output, logs or error messages</li>
+      <li>Deprecated features are absent from new code</li>
+    </ul>
+
+    <h2 id="sources">13. Sources</h2>
+    <ul>
+      <li><a href="https://modelcontextprotocol.io/specification/2026-07-28" target="_blank" rel="noopener">MCP specification, revision 2026-07-28</a> &mdash; normative text.</li>
+      <li><a href="https://modelcontextprotocol.io/specification/2026-07-28/changelog" target="_blank" rel="noopener">Changelog 2026-07-28</a> &mdash; what changed since 2025-11-25.</li>
+      <li><a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noopener">MCP architecture overview</a> &mdash; host, client, server.</li>
+      <li><a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener">Anthropic, <em>Introducing the Model Context Protocol</em></a> &mdash; original announcement (November 2024).</li>
+    </ul>
+
+    <div class="footer"><a href="../IT.html">&larr; Back to the IT Knowledge Base</a></div>
+  </div>
+</body>
+</html>

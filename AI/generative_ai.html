@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Generative AI — from next-token prediction to production systems</title>
+<style>
+ body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+ .container { max-width: 980px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+ h1 { color: #1565c0; margin-bottom: 4px; }
+ h2 { color: #2e7d32; margin-top: 36px; border-bottom: 2px solid #e8f5e9; padding-bottom: 6px; }
+ h3 { color: #7b1fa2; margin-top: 24px; }
+ p, li { line-height: 1.5; }
+ code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: .92em; }
+ .lead { color: #475569; font-size: 1.02em; }
+ .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .warn { background: #fff3e0; border-left: 4px solid #ef6c00; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .good { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .note ul, .warn ul, .good ul { list-style: disc inside; margin: 6px 0 0; padding-left: 1.1em; }
+ .note li, .warn li, .good li { margin-bottom: 2px; line-height: 1.35; }
+ pre { background: #f5f5f5; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: .88em; line-height: 1.45; border-left: 4px solid #94a3b8; }
+ .formula { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1565c0; border-radius: 6px; padding: 10px 14px; margin: 12px 0; font-family: 'Consolas', monospace; font-size: .92em; overflow-x: auto; }
+ .table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; }
+ .table th, .table td { border: 1px solid #ddd; padding: 9px 10px; text-align: left; vertical-align: top; font-size: .95em; }
+ .table th { background: #f0f7ff; color: #1565c0; }
+ .table tr:nth-child(even) td { background: #fbfdff; }
+ .tag { display: inline-block; font-size: .72em; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; color: #fff; background: #1565c0; vertical-align: middle; }
+ .tag.bad { background: #c62828; } .tag.ok { background: #2e7d32; } .tag.mid { background: #ef6c00; }
+ .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px; }
+ .toc ol { margin: 6px 0 0; padding-left: 1.3em; }
+ .toc a { color: #1565c0; text-decoration: none; }
+ .toc a:hover { text-decoration: underline; }
+ .checklist { list-style: none; padding-left: 0; }
+ .checklist li { padding-left: 1.7em; position: relative; margin-bottom: 6px; }
+ .checklist li::before { content: "\2610"; position: absolute; left: 0; color: #1565c0; font-size: 1.1em; }
+ figure { margin: 20px 0; text-align: center; }
+ figcaption { color: #64748b; font-size: .88em; margin-top: 6px; }
+ .footer { text-align: right; color: #888; font-size: .95em; margin-top: 40px; }
+ .footer a { color: #1565c0; text-decoration: none; }
+ @media (max-width: 600px) { .container { padding: 16px 12px; } .table th, .table td { padding: 7px; } }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Generative AI</h1>
+    <p class="lead">A statistical model that learned the joint distribution of data and can sample from it. Everything else &mdash; chat, code, images, agents &mdash; is engineering around that one primitive.</p>
+
+    <div class="toc">
+      <strong>Contents</strong>
+      <ol>
+        <li><a href="#what">What it is, and what it is not</a></li>
+        <li><a href="#stack">Anatomy of a generative AI system</a></li>
+        <li><a href="#transformer">The transformer in one page</a></li>
+        <li><a href="#training">How a model is trained</a></li>
+        <li><a href="#decoding">Decoding: turning probabilities into text</a></li>
+        <li><a href="#modalities">Beyond text: images, audio, video</a></li>
+        <li><a href="#grounding">Grounding with retrieval (RAG)</a></li>
+        <li><a href="#prompting">Prompting patterns that survive production</a></li>
+        <li><a href="#evaluation">Evaluation: what to measure</a></li>
+        <li><a href="#cost">Cost and latency</a></li>
+        <li><a href="#risks">Failure modes and mitigations</a></li>
+        <li><a href="#checklist">Production checklist</a></li>
+        <li><a href="#sources">Sources</a></li>
+      </ol>
+    </div>
+
+    <h2 id="what">1. What it is, and what it is not</h2>
+    <p>A generative model learns <code>P(x)</code> &mdash; the probability distribution of the training data &mdash; and then draws new samples from it. For language models the distribution is factorised one token at a time:</p>
+    <div class="formula">P(x<sub>1</sub>&hellip;x<sub>n</sub>) = &prod;<sub>t=1..n</sub> P(x<sub>t</sub> | x<sub>1</sub>&hellip;x<sub>t-1</sub>)</div>
+    <p>That single equation explains most behaviour you will observe: fluent output, no source of truth, sensitivity to how the prefix is phrased, and the fact that a wrong answer is generated with exactly the same machinery as a right one.</p>
+
+    <table class="table">
+      <tr><th>It is</th><th>It is not</th></tr>
+      <tr><td>A compressor of statistical regularities in its training data</td><td>A database of facts with citations</td></tr>
+      <tr><td>Deterministic given a seed, temperature and prompt</td><td>Reproducible across model versions</td></tr>
+      <tr><td>Excellent at transformation, summarisation, drafting, classification</td><td>Reliable at exact arithmetic, current events, or counting</td></tr>
+      <tr><td>A component inside a system that supplies context and checks</td><td>A replacement for retrieval, rules, or a business process</td></tr>
+    </table>
+
+    <div class="note"><strong>Mental model.</strong> Treat the model as a very well-read intern with no memory of yesterday, no access to your systems, and full confidence. The engineering job is to give it context, constrain its output, and verify what it returns.</div>
+
+    <h2 id="stack">2. Anatomy of a generative AI system</h2>
+    <figure>
+      <svg viewBox="0 0 900 150" width="100%" height="150" role="img" aria-label="Pipeline: input, retrieval, prompt assembly, model, validation, output">
+        <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#64748b"/></marker></defs>
+        <g font-family="Segoe UI, Arial" font-size="12">
+          <rect x="8" y="45" width="120" height="56" rx="8" fill="#e3f2fd" stroke="#1565c0"/><text x="68" y="70" text-anchor="middle" fill="#0d47a1" font-weight="700">Input</text><text x="68" y="87" text-anchor="middle" fill="#37474f">user + session</text>
+          <rect x="152" y="45" width="130" height="56" rx="8" fill="#e8f5e9" stroke="#2e7d32"/><text x="217" y="70" text-anchor="middle" fill="#1b5e20" font-weight="700">Retrieval</text><text x="217" y="87" text-anchor="middle" fill="#37474f">search + rerank</text>
+          <rect x="306" y="45" width="140" height="56" rx="8" fill="#f3e5f5" stroke="#7b1fa2"/><text x="376" y="70" text-anchor="middle" fill="#4a148c" font-weight="700">Prompt assembly</text><text x="376" y="87" text-anchor="middle" fill="#37474f">system, tools, context</text>
+          <rect x="470" y="45" width="120" height="56" rx="8" fill="#fff3e0" stroke="#ef6c00"/><text x="530" y="70" text-anchor="middle" fill="#e65100" font-weight="700">Model</text><text x="530" y="87" text-anchor="middle" fill="#37474f">decode tokens</text>
+          <rect x="614" y="45" width="130" height="56" rx="8" fill="#e0f2f1" stroke="#00695c"/><text x="679" y="70" text-anchor="middle" fill="#004d40" font-weight="700">Validation</text><text x="679" y="87" text-anchor="middle" fill="#37474f">schema, rules, checks</text>
+          <rect x="768" y="45" width="120" height="56" rx="8" fill="#eceff1" stroke="#37474f"/><text x="828" y="70" text-anchor="middle" fill="#263238" font-weight="700">Output</text><text x="828" y="87" text-anchor="middle" fill="#37474f">UI or action</text>
+          <line x1="128" y1="73" x2="150" y2="73" stroke="#64748b" marker-end="url(#ar)"/>
+          <line x1="282" y1="73" x2="304" y2="73" stroke="#64748b" marker-end="url(#ar)"/>
+          <line x1="446" y1="73" x2="468" y2="73" stroke="#64748b" marker-end="url(#ar)"/>
+          <line x1="590" y1="73" x2="612" y2="73" stroke="#64748b" marker-end="url(#ar)"/>
+          <line x1="744" y1="73" x2="766" y2="73" stroke="#64748b" marker-end="url(#ar)"/>
+        </g>
+      </svg>
+      <figcaption>The model is one box in five. Most quality gains in production come from the other four.</figcaption>
+    </figure>
+
+    <p>Each stage owns a different failure mode: retrieval owns relevance, prompt assembly owns instruction drift, the model owns fluency and reasoning, validation owns correctness of contract, and output owns user trust.</p>
+
+    <h2 id="transformer">3. The transformer in one page</h2>
+    <p>Text is split into <strong>tokens</strong> (sub-word units). Each token becomes an embedding vector; the sequence passes through N identical blocks of self-attention plus a feed-forward network; a final linear layer scores every vocabulary item for the next position.</p>
+
+    <h3>Self-attention</h3>
+    <div class="formula">Attention(Q, K, V) = softmax( Q&middot;K<sup>T</sup> / &radic;d<sub>k</sub> ) &middot; V</div>
+    <p>Each token builds a query, compares it against the keys of all previous tokens, normalises the scores with softmax, and mixes the corresponding values. The <code>1/&radic;d<sub>k</sub></code> factor keeps the dot products from saturating the softmax as dimensionality grows.</p>
+
+    <table class="table">
+      <tr><th>Concept</th><th>What it buys you</th><th>Where you feel it</th></tr>
+      <tr><td>Context window</td><td>How much text the attention can look at</td><td>Long documents, chat history, agent transcripts</td></tr>
+      <tr><td>Causal mask</td><td>Token <em>t</em> only sees tokens before it</td><td>Why generation is left-to-right and streaming works</td></tr>
+      <tr><td>KV cache</td><td>Reuse of previous keys/values</td><td>Latency and memory per concurrent request</td></tr>
+      <tr><td>Positional encoding</td><td>Order information</td><td>Degradation on very long or shuffled inputs</td></tr>
+    </table>
+
+    <div class="warn"><strong>Attention is not memory.</strong> Everything the model "knows" about your session lives in the tokens you resend. Truncate the transcript and the knowledge disappears with it.</div>
+
+    <h2 id="training">4. How a model is trained</h2>
+    <table class="table">
+      <tr><th>Stage</th><th>Objective</th><th>Data</th><th>Effect</th></tr>
+      <tr><td>Pre-training</td><td>Next-token prediction on trillions of tokens</td><td>Web, books, code</td><td>Knowledge, syntax, reasoning traces</td></tr>
+      <tr><td>Supervised fine-tuning (SFT)</td><td>Imitate curated instruction&rarr;answer pairs</td><td>Tens of thousands of examples</td><td>Follows instructions, adopts format</td></tr>
+      <tr><td>Preference tuning (RLHF / DPO)</td><td>Prefer chosen over rejected answers</td><td>Pairwise human or model judgements</td><td>Helpfulness, tone, refusal behaviour</td></tr>
+      <tr><td>Distillation</td><td>Small model mimics large model outputs</td><td>Teacher generations</td><td>Cheaper, faster, slightly less capable</td></tr>
+      <tr><td>LoRA / adapters</td><td>Fine-tune low-rank deltas</td><td>Domain corpus</td><td>Style and vocabulary without full retraining</td></tr>
+    </table>
+
+    <div class="note"><strong>Fine-tuning vs retrieval.</strong> Use retrieval when the problem is <em>missing knowledge</em>. Use fine-tuning when the problem is <em>format, vocabulary or task shape</em>. Fine-tuning facts into a model is expensive and drifts; retrieval stays auditable.</div>
+
+    <h2 id="decoding">5. Decoding: turning probabilities into text</h2>
+    <p>At each step the model produces a score for every token in the vocabulary. A softmax turns scores into probabilities and a decoding rule picks one.</p>
+    <div class="formula">p<sub>i</sub> = exp(z<sub>i</sub>/T) / &sum;<sub>j</sub> exp(z<sub>j</sub>/T)</div>
+    <table class="table">
+      <tr><th>Parameter</th><th>What it does</th><th>Practical setting</th></tr>
+      <tr><td><code>temperature</code></td><td>Flattens (high) or sharpens (low) the distribution</td><td>0&ndash;0.3 for extraction and code; 0.7&ndash;1.0 for ideation</td></tr>
+      <tr><td><code>top_p</code></td><td>Keeps the smallest set of tokens whose mass reaches p</td><td>0.9&ndash;0.95; do not tune together with temperature</td></tr>
+      <tr><td><code>top_k</code></td><td>Keeps only the k highest-probability tokens</td><td>Rarely needed when top_p is set</td></tr>
+      <tr><td><code>max_tokens</code></td><td>Hard stop on generation length</td><td>Always set it; truncation must be handled</td></tr>
+      <tr><td>stop sequences</td><td>End generation on a marker</td><td>Cheap way to bound structured output</td></tr>
+    </table>
+    <div class="good"><strong>Determinism.</strong> Temperature 0 makes sampling greedy, not reproducible: floating-point non-associativity, batching and provider-side version changes still move the output. Design for it &mdash; validate the contract, not the exact string.</div>
+
+    <h2 id="modalities">6. Beyond text: images, audio, video</h2>
+    <table class="table">
+      <tr><th>Modality</th><th>Core mechanism</th><th>Controls that matter</th></tr>
+      <tr><td>Images</td><td>Diffusion: learn to reverse a noising process, then sample from noise</td><td>Prompt, negative prompt, steps, guidance scale, seed, aspect ratio</td></tr>
+      <tr><td>Speech</td><td>Neural codecs plus autoregressive or flow models</td><td>Voice, speaking rate, prosody, language</td></tr>
+      <tr><td>Video</td><td>Temporal diffusion or latent sequence models</td><td>Duration, motion strength, keyframe conditioning</td></tr>
+      <tr><td>Embeddings</td><td>Encoder mapping text to a vector space</td><td>Dimension, normalisation, distance metric</td></tr>
+    </table>
+    <p>Diffusion is worth one formula because it explains the main knob, guidance: the model learns <code>&epsilon;<sub>&theta;</sub>(x<sub>t</sub>, t)</code>, the noise present at step <code>t</code>, and sampling walks backwards. Classifier-free guidance extrapolates between the unconditional and conditional predictions, trading diversity for prompt adherence.</p>
+
+    <h2 id="grounding">7. Grounding with retrieval (RAG)</h2>
+    <p>Retrieval-augmented generation replaces the model's memory with a search step whose results are pasted into the prompt. It converts an unsolvable problem (make the model know your data) into a solvable one (make search return the right chunk).</p>
+    <pre>query ──▶ rewrite ──▶ embed ──▶ vector + keyword search ──▶ rerank ──▶ top-k chunks
+                                                                          │
+                          answer ◀── model with citations ◀── prompt ◀────┘</pre>
+    <table class="table">
+      <tr><th>Stage</th><th>Typical failure</th><th>Fix</th></tr>
+      <tr><td>Chunking</td><td>Chunks split mid-argument</td><td>Overlap, heading-aware splits, keep tables intact</td></tr>
+      <tr><td>Embedding</td><td>Domain vocabulary not represented</td><td>Domain-tuned or hybrid lexical + dense search</td></tr>
+      <tr><td>Reranking</td><td>Top-k full of near-duplicates</td><td>Cross-encoder rerank plus diversity (MMR)</td></tr>
+      <tr><td>Citation</td><td>Model paraphrases beyond the source</td><td>Require span-level quotes; verify they exist</td></tr>
+      <tr><td>Freshness</td><td>Index older than the source of truth</td><td>Incremental indexing with timestamps</td></tr>
+    </table>
+    <div class="warn"><strong>Retrieval cannot fix a bad question.</strong> Query rewriting, synonym expansion and filters usually move relevance more than swapping the embedding model.</div>
+
+    <h2 id="prompting">8. Prompting patterns that survive production</h2>
+    <table class="table">
+      <tr><th>Pattern</th><th>Use when</th><th>Sketch</th></tr>
+      <tr><td>Role + contract</td><td>Any task with a fixed output shape</td><td>"You extract fields. Reply only with JSON matching this schema."</td></tr>
+      <tr><td>Few-shot</td><td>Format or judgement is hard to describe</td><td>2&ndash;5 representative input/output pairs, including a hard negative</td></tr>
+      <tr><td>Chain of thought</td><td>Multi-step arithmetic or logic</td><td>"Work through the steps, then give the final answer on its own line."</td></tr>
+      <tr><td>Decomposition</td><td>Task mixes independent sub-problems</td><td>One call per sub-task, deterministic assembly</td></tr>
+      <tr><td>Self-check</td><td>Output is verifiable</td><td>Second pass: "verify each claim against the sources; list failures."</td></tr>
+      <tr><td>Tool use</td><td>Data or actions live outside the model</td><td>Typed functions with validation on the way in and out</td></tr>
+    </table>
+    <div class="note"><strong>Prompt hygiene.</strong> Version prompts in the repository, pin the model version, and treat every prompt change as a code change with an evaluation run attached. A prompt nobody can diff is a configuration bug waiting to happen.</div>
+
+    <h2 id="evaluation">9. Evaluation: what to measure</h2>
+    <table class="table">
+      <tr><th>Layer</th><th>Metric</th><th>Notes</th></tr>
+      <tr><td>Task accuracy</td><td>Exact match, F1, pass@k</td><td>Only valid with a stable, versioned gold set</td></tr>
+      <tr><td>Grounding</td><td>Faithfulness, citation precision</td><td>Check that quoted spans exist in the source</td></tr>
+      <tr><td>Retrieval</td><td>Recall@k, MRR, nDCG</td><td>Measure separately from generation</td></tr>
+      <tr><td>Safety</td><td>Refusal rate on adversarial set, leakage rate</td><td>Needs a red-team corpus that grows over time</td></tr>
+      <tr><td>Operations</td><td>p95 latency, cost per request, error rate</td><td>Product metrics, not model metrics</td></tr>
+      <tr><td>Preference</td><td>Win rate against a baseline</td><td>LLM-as-judge is fast but biased; calibrate on human labels</td></tr>
+    </table>
+    <div class="warn"><strong>Judge bias.</strong> An LLM judge prefers longer answers, its own family of models, and the first option it sees. Randomise order, pin the judge version, and keep a human-labelled slice as ground truth.</div>
+
+    <h2 id="cost">10. Cost and latency</h2>
+    <div class="formula">cost &asymp; (input tokens &times; p<sub>in</sub> + output tokens &times; p<sub>out</sub>) &times; requests</div>
+    <table class="table">
+      <tr><th>Lever</th><th>Effect</th><th>Risk</th></tr>
+      <tr><td>Smaller model for easy calls</td><td>Large cost cut</td><td>Routing errors on edge cases</td></tr>
+      <tr><td>Prompt caching</td><td>Cheap repeated prefixes</td><td>Cache invalidation when context changes</td></tr>
+      <tr><td>Shorter context</td><td>Directly proportional savings</td><td>Dropping evidence the answer needed</td></tr>
+      <tr><td>Streaming</td><td>Better perceived latency</td><td>Harder to validate before display</td></tr>
+      <tr><td>Batching</td><td>Higher throughput</td><td>Unacceptable for interactive paths</td></tr>
+      <tr><td>Retrieval instead of long context</td><td>Fewer tokens per call</td><td>Recall risk, extra component</td></tr>
+    </table>
+
+    <h2 id="risks">11. Failure modes and mitigations</h2>
+    <table class="table">
+      <tr><th>Failure</th><th>Symptom</th><th>Mitigation</th></tr>
+      <tr><td>Hallucination</td><td>Confident, plausible, unsupported</td><td>Retrieval, mandatory citations, span verification, refusal path</td></tr>
+      <tr><td>Prompt injection</td><td>Retrieved text or a document overrides instructions</td><td>Separate untrusted content, allow-lists, never let retrieved text call tools</td></tr>
+      <tr><td>Data leakage</td><td>Other tenants' data in the answer</td><td>Filtering at retrieval, per-tenant indexes, output scanning</td></tr>
+      <tr><td>Bias</td><td>Systematic skew across groups</td><td>Stratified eval sets, human review, documented limitations</td></tr>
+      <tr><td>Drift</td><td>Quality falls after a provider update</td><td>Pin versions, regression suite on every upgrade</td></tr>
+      <tr><td>Over-trust</td><td>Users stop checking</td><td>Confidence cues, source links, visible limitations</td></tr>
+    </table>
+
+    <h2 id="checklist">12. Production checklist</h2>
+    <ul class="checklist">
+      <li>Model and prompt versions are pinned and recorded with every response</li>
+      <li>Every factual answer carries a source the user can open</li>
+      <li>Output is validated against a schema before it reaches the UI or a downstream action</li>
+      <li>Evaluation set is versioned, stratified, and run in CI on every prompt or model change</li>
+      <li>Token, latency and cost budgets are defined per endpoint and alerted on</li>
+      <li>Untrusted text is isolated from instructions and cannot trigger tool calls</li>
+      <li>Refusal and "I do not know" paths exist and are tested</li>
+      <li>Personal data is filtered before it enters a prompt or a log</li>
+      <li>Fallback model or degraded mode exists for provider outages</li>
+      <li>A human owns the final decision wherever the output is consequential</li>
+    </ul>
+
+    <h2 id="sources">13. Sources</h2>
+    <ul>
+      <li><a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Vaswani et al., <em>Attention Is All You Need</em></a> &mdash; the transformer.</li>
+      <li><a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">Lewis et al., <em>Retrieval-Augmented Generation</em></a> &mdash; the RAG formulation.</li>
+      <li><a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener">Wei et al., <em>Chain-of-Thought Prompting</em></a> &mdash; stepwise reasoning.</li>
+      <li><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework</a> &mdash; governance vocabulary.</li>
+    </ul>
+
+    <div class="footer"><a href="../IT.html">&larr; Back to the IT Knowledge Base</a></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Agentic AI — autonomy, tools, loops and guardrails</title>
+<style>
+ body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+ .container { max-width: 980px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+ h1 { color: #1565c0; margin-bottom: 4px; }
+ h2 { color: #2e7d32; margin-top: 36px; border-bottom: 2px solid #e8f5e9; padding-bottom: 6px; }
+ h3 { color: #7b1fa2; margin-top: 24px; }
+ p, li { line-height: 1.5; }
+ code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: .92em; }
+ .lead { color: #475569; font-size: 1.02em; }
+ .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .warn { background: #fff3e0; border-left: 4px solid #ef6c00; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .good { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .note ul, .warn ul, .good ul { list-style: disc inside; margin: 6px 0 0; padding-left: 1.1em; }
+ .note li, .warn li, .good li { margin-bottom: 2px; line-height: 1.35; }
+ pre { background: #f5f5f5; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: .88em; line-height: 1.45; border-left: 4px solid #94a3b8; }
+ .formula { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1565c0; border-radius: 6px; padding: 10px 14px; margin: 12px 0; font-family: 'Consolas', monospace; font-size: .92em; overflow-x: auto; }
+ .table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; }
+ .table th, .table td { border: 1px solid #ddd; padding: 9px 10px; text-align: left; vertical-align: top; font-size: .95em; }
+ .table th { background: #f0f7ff; color: #1565c0; }
+ .table tr:nth-child(even) td { background: #fbfdff; }
+ .tag { display: inline-block; font-size: .72em; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; color: #fff; background: #1565c0; vertical-align: middle; }
+ .tag.bad { background: #c62828; } .tag.ok { background: #2e7d32; } .tag.mid { background: #ef6c00; }
+ .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px; }
+ .toc ol { margin: 6px 0 0; padding-left: 1.3em; }
+ .toc a { color: #1565c0; text-decoration: none; }
+ .toc a:hover { text-decoration: underline; }
+ .checklist { list-style: none; padding-left: 0; }
+ .checklist li { padding-left: 1.7em; position: relative; margin-bottom: 6px; }
+ .checklist li::before { content: "\2610"; position: absolute; left: 0; color: #1565c0; font-size: 1.1em; }
+ figure { margin: 20px 0; text-align: center; }
+ figcaption { color: #64748b; font-size: .88em; margin-top: 6px; }
+ .footer { text-align: right; color: #888; font-size: .95em; margin-top: 40px; }
+ .footer a { color: #1565c0; text-decoration: none; }
+ @media (max-width: 600px) { .container { padding: 16px 12px; } .table th, .table td { padding: 7px; } }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Agentic AI</h1>
+    <p class="lead">A model that loops: it observes, decides, calls something outside itself, reads the result, and decides again. Autonomy is a dial, not a category &mdash; and every notch costs predictability.</p>
+
+    <div class="toc">
+      <strong>Contents</strong>
+      <ol>
+        <li><a href="#what">Agent, workflow, chatbot: three different things</a></li>
+        <li><a href="#loop">The loop</a></li>
+        <li><a href="#capabilities">The four capabilities</a></li>
+        <li><a href="#patterns">Orchestration patterns</a></li>
+        <li><a href="#tools">Designing tools the model can use</a></li>
+        <li><a href="#memory">Memory and context</a></li>
+        <li><a href="#reliability">Why long tasks fail</a></li>
+        <li><a href="#guardrails">Guardrails and authority</a></li>
+        <li><a href="#observability">Observability and evaluation</a></li>
+        <li><a href="#economics">Economics and latency</a></li>
+        <li><a href="#checklist">Production checklist</a></li>
+        <li><a href="#sources">Sources</a></li>
+      </ol>
+    </div>
+
+    <h2 id="what">1. Agent, workflow, chatbot: three different things</h2>
+    <table class="table">
+      <tr><th></th><th>Chatbot</th><th>Workflow</th><th>Agent</th></tr>
+      <tr><td>Control flow</td><td>Human writes every turn</td><td>Code decides the path</td><td>Model decides the next step</td></tr>
+      <tr><td>Number of model calls</td><td>One per message</td><td>Fixed, known in advance</td><td>Variable, bounded by a budget</td></tr>
+      <tr><td>Failure surface</td><td>Bad answer</td><td>Brittle branch</td><td>Loops, drift, side effects</td></tr>
+      <tr><td>Best for</td><td>Conversation, drafting</td><td>Repeatable business process</td><td>Open-ended goals over tools</td></tr>
+      <tr><td>Testability</td><td>Prompt evals</td><td>Deterministic unit tests</td><td>Trajectory evals plus budgets</td></tr>
+    </table>
+    <div class="note"><strong>Default to the workflow.</strong> If you can draw the decision tree, do not let a model guess it. Agency is worth paying for only when the path genuinely depends on what the tools return.</div>
+
+    <h3>Autonomy ladder</h3>
+    <table class="table">
+      <tr><th>Level</th><th>Who decides</th><th>Example</th><th>Risk</th></tr>
+      <tr><td>L0 &mdash; suggested</td><td>Human</td><td>Draft a reply</td><td>Almost none</td></tr>
+      <tr><td>L1 &mdash; assisted</td><td>Human, model retrieves</td><td>Search and propose a fix</td><td>Bad evidence</td></tr>
+      <tr><td>L2 &mdash; approve each action</td><td>Model proposes, human confirms</td><td>Create a ticket after review</td><td>Confirmation fatigue</td></tr>
+      <tr><td>L3 &mdash; bounded autonomy</td><td>Model, inside limits</td><td>Refund up to a threshold</td><td>Silent accumulation of small errors</td></tr>
+      <tr><td>L4 &mdash; unsupervised</td><td>Model</td><td>Nightly reconciliation with escalation</td><td>Blast radius</td></tr>
+    </table>
+
+    <h2 id="loop">2. The loop</h2>
+    <figure>
+      <svg viewBox="0 0 760 210" width="100%" height="210" role="img" aria-label="Agent loop: goal, plan, act with tools, observe, reflect, then answer or replan">
+        <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#64748b"/></marker></defs>
+        <g font-family="Segoe UI, Arial" font-size="12">
+          <rect x="20" y="20" width="130" height="50" rx="8" fill="#e3f2fd" stroke="#1565c0"/><text x="85" y="50" text-anchor="middle" fill="#0d47a1" font-weight="700">Goal</text>
+          <rect x="200" y="20" width="130" height="50" rx="8" fill="#f3e5f5" stroke="#7b1fa2"/><text x="265" y="50" text-anchor="middle" fill="#4a148c" font-weight="700">Plan</text>
+          <rect x="380" y="20" width="150" height="50" rx="8" fill="#fff3e0" stroke="#ef6c00"/><text x="455" y="50" text-anchor="middle" fill="#e65100" font-weight="700">Act &mdash; tool call</text>
+          <rect x="580" y="20" width="150" height="50" rx="8" fill="#e0f2f1" stroke="#00695c"/><text x="655" y="50" text-anchor="middle" fill="#004d40" font-weight="700">Observe result</text>
+          <rect x="380" y="130" width="150" height="50" rx="8" fill="#e8f5e9" stroke="#2e7d32"/><text x="455" y="160" text-anchor="middle" fill="#1b5e20" font-weight="700">Reflect / verify</text>
+          <rect x="200" y="130" width="130" height="50" rx="8" fill="#eceff1" stroke="#37474f"/><text x="265" y="160" text-anchor="middle" fill="#263238" font-weight="700">Answer</text>
+          <line x1="150" y1="45" x2="198" y2="45" stroke="#64748b" marker-end="url(#a2)"/>
+          <line x1="330" y1="45" x2="378" y2="45" stroke="#64748b" marker-end="url(#a2)"/>
+          <line x1="530" y1="45" x2="578" y2="45" stroke="#64748b" marker-end="url(#a2)"/>
+          <path d="M655,70 L655,105 L455,105 L455,128" fill="none" stroke="#64748b" marker-end="url(#a2)"/>
+          <path d="M380,155 L332,155" fill="none" stroke="#2e7d32" marker-end="url(#a2)"/>
+          <path d="M455,130 L455,105 L265,105 L265,72" fill="none" stroke="#ef6c00" stroke-dasharray="5 4" marker-end="url(#a2)"/>
+        </g>
+      </svg>
+      <figcaption>Dashed path: the loop repeats with the observation added to context. The exit must be a budget, not a hope.</figcaption>
+    </figure>
+
+    <p>The canonical formulation is <strong>ReAct</strong>: interleave a short reasoning trace with an action, feed the observation back, repeat. Modern implementations add an explicit verification step before the exit.</p>
+    <pre>while budget.remaining() and steps &lt; MAX_STEPS:
+    thought  = model.reason(goal, history, tools)
+    if thought.is_final: break
+    action   = thought.tool_call            # validated against schema
+    result   = registry.invoke(action, timeout=..., idempotency_key=...)
+    history += [thought, action, truncate(result)]
+verify(history)                             # own call, own criteria
+return answer_or_escalation(history)</pre>
+
+    <h2 id="capabilities">3. The four capabilities</h2>
+    <table class="table">
+      <tr><th>Capability</th><th>Question it answers</th><th>Implemented by</th></tr>
+      <tr><td>Planning</td><td>What sequence of steps reaches the goal?</td><td>Decomposition prompt, plan-and-execute, tree search</td></tr>
+      <tr><td>Tool use</td><td>How do I affect the world or read live data?</td><td>Typed function calling, MCP servers, HTTP APIs</td></tr>
+      <tr><td>Memory</td><td>What must survive the next turn?</td><td>Scratchpad, summary, vector store, structured state</td></tr>
+      <tr><td>Reflection</td><td>Is the result good enough to ship?</td><td>Self-critique, verifier model, executable checks</td></tr>
+    </table>
+    <div class="good"><strong>Reflection with a checker beats reflection by opinion.</strong> A test that runs, a schema that validates, or a diff that applies gives the agent ground truth. "Are you sure?" gives it a second guess.</div>
+
+    <h2 id="patterns">4. Orchestration patterns</h2>
+    <table class="table">
+      <tr><th>Pattern</th><th>Shape</th><th>Use when</th><th>Cost</th></tr>
+      <tr><td>Single agent + tools</td><td>One loop, many tools</td><td>Most tasks; start here</td><td>Low</td></tr>
+      <tr><td>Router</td><td>Classify, then dispatch to a specialist prompt</td><td>Distinct intents with different contracts</td><td>Low</td></tr>
+      <tr><td>Supervisor</td><td>Manager agent delegates to workers, merges results</td><td>Parallelisable sub-tasks</td><td>Medium</td></tr>
+      <tr><td>Pipeline / chain</td><td>Fixed sequence of agents</td><td>Stages with clean hand-offs</td><td>Low, deterministic</td></tr>
+      <tr><td>Hierarchical</td><td>Supervisors of supervisors</td><td>Large tool surfaces</td><td>High, hard to debug</td></tr>
+      <tr><td>Swarm / handoff</td><td>Peers pass control</td><td>Support triage with specialisms</td><td>Medium, unbounded</td></tr>
+    </table>
+    <div class="warn"><strong>Multi-agent is not free accuracy.</strong> Every hand-off loses context and adds a place for errors to hide. Add an agent only when it removes a tool-selection conflict or isolates a permission boundary.</div>
+
+    <h2 id="tools">5. Designing tools the model can use</h2>
+    <table class="table">
+      <tr><th>Rule</th><th>Why</th></tr>
+      <tr><td>One verb per tool; no boolean mode flags</td><td>The model picks tools by description, not by branching inside a call</td></tr>
+      <tr><td>Descriptions state when <em>not</em> to use it</td><td>Prevents the most common wrong selection</td></tr>
+      <tr><td>Schema validated before execution</td><td>Turns a malformed call into a clear error the model can fix</td></tr>
+      <tr><td>Errors are structured and actionable</td><td><code>{"error":"not_found","hint":"use search_orders first"}</code></td></tr>
+      <tr><td>Writes require an idempotency key</td><td>Retries are normal in agent loops</td></tr>
+      <tr><td>Hard timeout and page-size limits</td><td>A single slow call can end the whole task</td></tr>
+      <tr><td>Results truncated to what matters</td><td>Tool output is the main driver of context growth</td></tr>
+      <tr><td>Permissions scoped per tool, per tenant</td><td>The agent must not inherit the user's full authority</td></tr>
+    </table>
+    <pre>{
+  "name": "get_order_status",
+  "description": "Return status for one order. Use only when the user supplies an order id; use search_orders when they describe the order instead.",
+  "inputSchema": { "type": "object", "properties": { "order_id": { "type": "string", "pattern": "^[A-Z]{2}-\\d{6}$" } }, "required": ["order_id"] },
+  "outputSchema": { "type": "object", "properties": { "status": { "enum": ["placed","shipped","delivered","cancelled"] }, "eta_days": { "type": "integer" } } }
+}</pre>
+
+    <h2 id="memory">6. Memory and context</h2>
+    <table class="table">
+      <tr><th>Layer</th><th>Contents</th><th>Lifetime</th><th>Failure if misused</th></tr>
+      <tr><td>Working context</td><td>Goal, recent steps, tool results</td><td>One task</td><td>Overflow, lost early instructions</td></tr>
+      <tr><td>Scratchpad</td><td>Plan, open questions, decisions</td><td>One task</td><td>Stale plan followed blindly</td></tr>
+      <tr><td>Episodic store</td><td>Past tasks, outcomes, corrections</td><td>Weeks</td><td>Retrieving irrelevant precedent</td></tr>
+      <tr><td>Semantic store</td><td>Domain knowledge, documents</td><td>Long</td><td>Outdated or poisoned content</td></tr>
+      <tr><td>Structured state</td><td>Entities, ids, statuses</td><td>Long</td><td>Divergence from the system of record</td></tr>
+    </table>
+    <div class="note"><strong>Summarise, do not accumulate.</strong> Compaction &mdash; replacing old turns with a structured summary &mdash; keeps the instruction at the top of the window and the cost flat. Keep the raw transcript outside the prompt for audit.</div>
+
+    <h2 id="reliability">7. Why long tasks fail</h2>
+    <div class="formula">P(task succeeds) = p<sup>n</sup>&nbsp;&nbsp;&nbsp;&nbsp;(p = per-step reliability, n = steps)</div>
+    <p>At 99% per step, a 50-step task succeeds 60% of the time. At 95%, it succeeds 8% of the time. Autonomy multiplies error, which is why budgets and checkpoints matter more than model choice.</p>
+    <table class="table">
+      <tr><th>Failure mode</th><th>Symptom</th><th>Control</th></tr>
+      <tr><td>Loop</td><td>Same tool called with the same arguments</td><td>Repeat detection, max steps, forced replan</td></tr>
+      <tr><td>Goal drift</td><td>Answers a nearby question</td><td>Restate the goal every N steps</td></tr>
+      <tr><td>Context rot</td><td>Ignores early instructions</td><td>Compaction, pinned system block</td></tr>
+      <tr><td>Overreach</td><td>Deletes or sends more than asked</td><td>Least privilege, dry-run mode, approvals</td></tr>
+      <tr><td>False completion</td><td>Claims success without evidence</td><td>Verifier with executable checks</td></tr>
+      <tr><td>Cascading bad data</td><td>A wrong id propagates</td><td>Validate entities against the source before use</td></tr>
+    </table>
+
+    <h2 id="guardrails">8. Guardrails and authority</h2>
+    <table class="table">
+      <tr><th>Control</th><th>Implementation</th><th>Blocks</th></tr>
+      <tr><td>Least privilege</td><td>Per-tool, per-tenant credentials, no wildcard scopes</td><td>Full-account damage</td></tr>
+      <tr><td>Human in the loop</td><td>Approval gate for irreversible actions</td><td>Silent destructive writes</td></tr>
+      <tr><td>Sandbox</td><td>Container, no network by default, read-only mounts</td><td>Code execution escapes</td></tr>
+      <tr><td>Budgets</td><td>Tokens, steps, money, wall-clock per task</td><td>Runaway cost</td></tr>
+      <tr><td>Allow-list</td><td>Domains, tables, repositories the agent may touch</td><td>Scope creep</td></tr>
+      <tr><td>Dry run</td><td>Produce the diff or the payload, apply on approval</td><td>Irreversible mistakes</td></tr>
+      <tr><td>Audit log</td><td>Every call with arguments, result hash, actor</td><td>Unexplainable outcomes</td></tr>
+    </table>
+    <div class="warn"><strong>Prompt injection is the agent's main attack surface.</strong> Any text the agent reads &mdash; a web page, an email, a PDF, a tool description &mdash; is a potential instruction. Keep retrieved content in a clearly delimited, untrusted block and never let it authorise a tool call.</div>
+
+    <h2 id="observability">9. Observability and evaluation</h2>
+    <table class="table">
+      <tr><th>Signal</th><th>Why it matters</th></tr>
+      <tr><td>Trajectory (steps, tools, arguments, results)</td><td>The only way to explain a wrong outcome</td></tr>
+      <tr><td>Steps and tokens per task</td><td>Leading indicator of loops and cost drift</td></tr>
+      <tr><td>Tool error rate by tool</td><td>Finds bad schemas faster than prompt tweaks</td></tr>
+      <tr><td>Escalation and abstention rate</td><td>Distinguishes "confident" from "correct"</td></tr>
+      <tr><td>Outcome evals on frozen scenarios</td><td>Compares versions on end state, not wording</td></tr>
+      <tr><td>Replay of failed trajectories</td><td>Turns incidents into regression tests</td></tr>
+    </table>
+    <p>Evaluate on three levels: final answer correctness, trajectory efficiency (did it take the short path?), and safety (did it stay inside its permissions?). A single end-to-end score hides all three.</p>
+
+    <h2 id="economics">10. Economics and latency</h2>
+    <div class="formula">task cost &asymp; &sum;<sub>steps</sub> (input<sub>t</sub> &times; p<sub>in</sub> + output<sub>t</sub> &times; p<sub>out</sub>) + tool cost</div>
+    <table class="table">
+      <tr><th>Pattern</th><th>Steps</th><th>Relative cost</th><th>When it pays</th></tr>
+      <tr><td>Single call with tools listed</td><td>1&ndash;2</td><td>1&times;</td><td>Simple lookup or classification</td></tr>
+      <tr><td>ReAct loop</td><td>3&ndash;10</td><td>3&ndash;8&times;</td><td>Multi-source research, remediation</td></tr>
+      <tr><td>Supervisor + 3 workers</td><td>6&ndash;15</td><td>5&ndash;12&times;</td><td>Independent sub-tasks in parallel</td></tr>
+      <tr><td>Plan + verify + repair</td><td>4&ndash;12</td><td>4&ndash;10&times;</td><td>Anything that must be right</td></tr>
+    </table>
+
+    <h2 id="checklist">11. Production checklist</h2>
+    <ul class="checklist">
+      <li>Each tool has a narrow verb, a validated schema and a hard timeout</li>
+      <li>Writes are idempotent and reversible or gated by approval</li>
+      <li>Budgets exist for steps, tokens, money and wall-clock, with a clean stop</li>
+      <li>Credentials are scoped per tool and per tenant, never the operator's own</li>
+      <li>Untrusted content is isolated and cannot trigger actions</li>
+      <li>Every run produces a replayable trajectory with tool arguments and results</li>
+      <li>Frozen scenario suite runs on every prompt, tool or model change</li>
+      <li>Escalation to a human is a designed path, not an exception</li>
+      <li>Failure produces a partial result and an explanation, never a silent retry loop</li>
+      <li>Cost per successful task is tracked, not just cost per call</li>
+    </ul>
+
+    <h2 id="sources">12. Sources</h2>
+    <ul>
+      <li><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Yao et al., <em>ReAct: Synergizing Reasoning and Acting</em></a> &mdash; the reason/act loop.</li>
+      <li><a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener">Shinn et al., <em>Reflexion</em></a> &mdash; self-reflection with feedback.</li>
+      <li><a href="https://arxiv.org/abs/2304.03442" target="_blank" rel="noopener">Park et al., <em>Generative Agents</em></a> &mdash; memory streams and retrieval.</li>
+      <li><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic, <em>Building effective agents</em></a> &mdash; workflow versus agent.</li>
+      <li><a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">NIST AI Risk Management Framework</a> &mdash; governance controls.</li>
+    </ul>
+
+    <div class="footer"><a href="../IT.html">&larr; Back to the IT Knowledge Base</a></div>
+  </div>
+</body>
+</html>
