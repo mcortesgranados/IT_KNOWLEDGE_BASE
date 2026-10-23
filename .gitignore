@@ -1,3 +1,10 @@
 # Local backups and one-off reports generated during maintenance
 *.bak
 reporte_jpg_huerfanos.html
+
+# GCP course material lives outside the repo to keep its size down
+CLOUD/GCP/
+
+# Local working screenshots
+shots/
+ans-c01-03-43-after-next.png
