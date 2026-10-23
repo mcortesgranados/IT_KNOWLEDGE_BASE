@@ -122,13 +122,66 @@ main > h3 + dl dd { margin-left: 20px; }
 .example-block { margin: -4px 0 18px; }
 .example-link { display: inline-flex; align-items: center; gap: 7px; padding: 5px 13px; border: 1px solid #90caf9; border-radius: 999px; background: #e3f2fd; color: #0d47a1; font-size: .92em; font-weight: 700; text-decoration: none; }
 .example-link:hover, .example-link:focus { background: #bbdefb; outline: 2px solid #64b5f6; outline-offset: 1px; }
+/* ---------- Question search ---------- */
+p[id^="q"] { scroll-margin-top: 104px; }
+.qsearch { position: sticky; top: 0; z-index: 30; margin: 0 0 14px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: rgba(255,255,255,.98); box-shadow: 0 3px 10px rgba(15,23,42,.10); }
+.qsearch-label { display: block; margin: 0 0 6px; color: #0d47a1; font-size: .78rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.qsearch-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+#qsearch-input { flex: 1 1 320px; min-width: 0; padding: 9px 12px; border: 1px solid #94a3b8; border-radius: 999px; background: #fff; color: #23272f; font: inherit; font-size: .98rem; }
+#qsearch-input:focus { outline: 3px solid #1565c0; outline-offset: 1px; border-color: #1565c0; }
+.qsearch-count { margin: 0; color: #64748b; font-size: .8rem; font-weight: 800; white-space: nowrap; }
+.qsearch-results { margin: 8px 0 0; padding: 0; list-style: none; max-height: 46vh; overflow: auto; border-top: 1px solid #e2e8f0; }
+.qsearch-results li { margin: 0; border-bottom: 1px solid #eef2f7; }
+.qsearch-results a { display: flex; gap: 10px; padding: 8px 6px; border-radius: 6px; color: #17386d; text-decoration: none; }
+.qsearch-results a:hover, .qsearch-results a:focus { background: #e3f2fd; outline: 2px solid #1565c0; outline-offset: -2px; }
+.qsearch-num { flex: 0 0 auto; align-self: flex-start; padding: 1px 8px; border-radius: 999px; background: #7b1fa2; color: #fff; font-size: .72rem; font-weight: 900; letter-spacing: .03em; }
+.qsearch-q { display: block; font-weight: 700; line-height: 1.35; }
+.qsearch-snip { display: block; margin-top: 3px; color: #475569; font-size: .86rem; font-weight: 400; line-height: 1.35; }
+.qsearch-results mark, .qsearch-more mark { background: #fff59d; color: inherit; padding: 0 1px; border-radius: 2px; }
+.qsearch-empty { margin: 8px 0 0; padding: 8px 2px 2px; color: #64748b; font-size: .9rem; }
+.qsearch-more { margin: 6px 0 0; color: #64748b; font-size: .8rem; font-weight: 700; }
+.q-hit { background: #fff8e1; box-shadow: inset 5px 0 0 #f9a825; border-radius: 6px; animation: qhit 1.4s ease-out; }
+@keyframes qhit { 0% { background: #ffe082; } 100% { background: #fff8e1; } }
+@media print { .qsearch { display: none; } }
+
+/* --- Topic blocks and red source boxes (added) --- */
+.topic-block { margin: 28px 0 30px; padding: 2px 18px 14px; border: 3px solid #c62828; border-radius: 12px; background: #fffdfd; }
+.topic-block > h2 { margin-top: 14px; }
+.topic-ref-box { margin: 12px 0 20px; padding: 12px 16px 14px; border: 2px solid #c62828; border-left-width: 9px; border-radius: 9px; background: #fff4f4; }
+.topic-ref-box .ref-title { margin: 0 0 9px; color: #b71c1c; font-size: .98rem; font-weight: 800; }
+.topic-ref-box ul { margin: 0; padding-left: 20px; }
+.topic-ref-box li { margin: 6px 0; line-height: 1.45; }
+.topic-ref-box a { color: #0d47a1; font-weight: 700; text-decoration: none; border-bottom: 1px solid #90caf9; }
+.topic-ref-box a:hover, .topic-ref-box a:focus { background: #ffdede; outline: 2px solid #ef9a9a; outline-offset: 1px; }
+.topic-ref-box .ref-range { color: #6d4c41; font-size: .9em; font-weight: 600; }
+@media (max-width: 600px) { .topic-block { padding: 2px 10px 10px; } .topic-ref-box { padding: 10px 12px; } }
+
 </style>
 </head>
 
 <body>
 <div class="container">
 <main>
+<div class="qsearch" role="search">
+  <label class="qsearch-label" for="qsearch-input">🔎 Search questions</label>
+  <div class="qsearch-row">
+    <input id="qsearch-input" type="search" autocomplete="off" spellcheck="false" placeholder="Type a keyword: hooks, state, keys, memo, context…" aria-controls="qsearch-results" aria-describedby="qsearch-count" />
+    <p class="qsearch-count" id="search-count" aria-live="polite">Loading index…</p>
+  </div>
+  <ol class="qsearch-results" id="qsearch-results" aria-label="Matching questions" hidden="hidden"></ol>
+  <p class="qsearch-empty" id="search-empty" hidden="hidden">No matches. Try a different keyword — the search covers the question and its answer.</p>
+  <p class="qsearch-more" id="search-more" hidden="hidden"></p>
+</div>
+<section class="topic-block" id="topic-01">
 <h2 class="style1 style1">React Beginner Questions - Set 1</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; React fundamentals: library, components, JSX, props and state <span class="ref-range">(q001&ndash;q010)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer">react.dev — Learn React</a></li>
+  <li><a href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener noreferrer">react.dev — Writing markup with JSX</a></li>
+  <li><a href="https://react.dev/learn/creating-a-react-app" target="_blank" rel="noopener noreferrer">react.dev — Creating a React app</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q001"><b>1. What is React?</b><br />
   React is a JavaScript library used for building user interfaces, primarily for single-page applications.</p>
 <p class="example-block"><a class="example-link" href="examples/q001.html">🧪 Code example</a></p>
@@ -160,7 +213,18 @@ main > h3 + dl dd { margin-left: 20px; }
   A React application can be created using the Create React App (CRA) command-line tool.</p>
 <p class="example-block"><a class="example-link" href="examples/q010.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-02">
 <h2 class="style1 style1">React Beginner Questions - Set 2</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Rendering, entry point and core hooks (useState, useEffect, keys, refs) <span class="ref-range">(q011&ndash;q020)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react-dom/client/createRoot" target="_blank" rel="noopener noreferrer">react.dev — createRoot</a></li>
+  <li><a href="https://react.dev/reference/react/useState" target="_blank" rel="noopener noreferrer">react.dev — useState</a></li>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q011"><b>11. What is the purpose of ReactDOM?</b><br />
   ReactDOM is used to render React components into the actual DOM.</p>
 <p class="example-block"><a class="example-link" href="examples/q011.html">🧪 Code example</a></p>
@@ -192,7 +256,20 @@ main > h3 + dl dd { margin-left: 20px; }
   Conditional rendering allows React to render different UI elements based on a condition.</p>
 <p class="example-block"><a class="example-link" href="examples/q020.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-03">
 <h2 class="style1 style1">React Beginner Questions - Set 3</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Routing, context and performance hooks (memo, lazy, useCallback, useMemo) <span class="ref-range">(q021&ndash;q030)</span></p>
+<ul>
+  <li><a href="https://reactrouter.com/" target="_blank" rel="noopener noreferrer">reactrouter.com — React Router docs</a></li>
+  <li><a href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener noreferrer">react.dev — Passing data deeply with context</a></li>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/reference/react/useMemo" target="_blank" rel="noopener noreferrer">react.dev — useMemo</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q021"><b>21. What is React Router?</b><br />
   React Router is a library used for handling navigation and routing in React applications.</p>
 <p class="example-block"><a class="example-link" href="examples/q021.html">🧪 Code example</a></p>
@@ -224,7 +301,18 @@ main > h3 + dl dd { margin-left: 20px; }
   The useMemo hook is used to memoize expensive computations and only recompute when dependencies change.</p>
 <p class="example-block"><a class="example-link" href="examples/q030.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-04">
 <h2 class="style1 style1">React Beginner Questions - Set 4</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Error boundaries, context, forms, lifting state and portals <span class="ref-range">(q031&ndash;q040)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener noreferrer">react.dev — Reacting to input with state</a></li>
+  <li><a href="https://react.dev/reference/react-dom/createPortal" target="_blank" rel="noopener noreferrer">react.dev — createPortal</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q031"><b>31. What is the purpose of error boundaries in React?</b><br />
   Error boundaries are React components that catch JavaScript errors in the component tree and display a fallback UI instead of crashing the application.</p>
 <p class="example-block"><a class="example-link" href="examples/q031.html">🧪 Code example</a></p>
@@ -256,7 +344,18 @@ main > h3 + dl dd { margin-left: 20px; }
   A controlled component is an input element whose value is controlled by React state rather than the DOM.</p>
 <p class="example-block"><a class="example-link" href="examples/q040.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-05">
 <h2 class="style1 style1">React Beginner Questions - Set 5</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Uncontrolled inputs, keys, SSR/hydration and lifecycle equivalents <span class="ref-range">(q041&ndash;q050)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener noreferrer">react.dev — Reacting to input with state</a></li>
+  <li><a href="https://react.dev/reference/react-dom/server" target="_blank" rel="noopener noreferrer">react.dev — react-dom/server (SSR)</a></li>
+  <li><a href="https://react.dev/reference/react-dom/client/hydrateRoot" target="_blank" rel="noopener noreferrer">react.dev — hydrateRoot</a></li>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q041"><b>41. What is an uncontrolled component in React?</b><br />
   An uncontrolled component is an input element that maintains its own state using the DOM instead of React state.</p>
 <p class="example-block"><a class="example-link" href="examples/q041.html">🧪 Code example</a></p>
@@ -288,7 +387,19 @@ main > h3 + dl dd { margin-left: 20px; }
   useEffect is a hook used in functional components, whereas componentDidMount is a lifecycle method used in class components to run code after the component mounts.</p>
 <p class="example-block"><a class="example-link" href="examples/q050.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-06">
 <h2 class="style1 style1">React Beginner Questions - Set 6</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Rendering internals, refs and state updates <span class="ref-range">(q051&ndash;q060)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener noreferrer">react.dev — Render and commit</a></li>
+  <li><a href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener noreferrer">react.dev — Preserving and resetting state (reconciliation)</a></li>
+  <li><a href="https://react.dev/reference/react/useImperativeHandle" target="_blank" rel="noopener noreferrer">react.dev — useImperativeHandle</a></li>
+  <li><a href="https://react.dev/reference/react/forwardRef" target="_blank" rel="noopener noreferrer">react.dev — forwardRef</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q051"><b>51. What is the virtual DOM in React?</b><br />
   The virtual DOM is a lightweight copy of the real DOM that React uses to improve performance by minimizing direct DOM manipulations.</p>
 <p class="example-block"><a class="example-link" href="examples/q051.html">🧪 Code example</a></p>
@@ -320,7 +431,18 @@ main > h3 + dl dd { margin-left: 20px; }
   A functional component is a JavaScript function that returns JSX and does not have its own state or lifecycle methods unless using hooks.</p>
 <p class="example-block"><a class="example-link" href="examples/q060.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-07">
 <h2 class="style1 style1">React Beginner Questions - Set 7</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; JSX, props, prop drilling and composition <span class="ref-range">(q061&ndash;q070)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener noreferrer">react.dev — Writing markup with JSX</a></li>
+  <li><a href="https://react.dev/learn/passing-props-to-a-component" target="_blank" rel="noopener noreferrer">react.dev — Passing props to a component</a></li>
+  <li><a href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener noreferrer">react.dev — Passing data deeply with context</a></li>
+  <li><a href="https://react.dev/reference/react/Fragment" target="_blank" rel="noopener noreferrer">react.dev — Fragment</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q061"><b>61. What is JSX?</b><br />
   JSX (JavaScript XML) is a syntax extension for JavaScript that allows writing HTML-like code in React components, which is later transformed into JavaScript.</p>
 <p class="example-block"><a class="example-link" href="examples/q061.html">🧪 Code example</a></p>
@@ -352,7 +474,19 @@ main > h3 + dl dd { margin-left: 20px; }
   The render method in class components is responsible for returning the JSX that defines what the UI should look like.</p>
 <p class="example-block"><a class="example-link" href="examples/q070.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-08">
 <h2 class="style1 style1">React Beginner Questions - Set 8</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Props vs state, HOCs, refs, Suspense and DevTools <span class="ref-range">(q071&ndash;q080)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/state-a-components-memory" target="_blank" rel="noopener noreferrer">react.dev — State: a component's memory</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Higher-order components</a></li>
+  <li><a href="https://react.dev/reference/react/useRef" target="_blank" rel="noopener noreferrer">react.dev — useRef</a></li>
+  <li><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer">react.dev — Suspense</a></li>
+  <li><a href="https://react.dev/learn/react-developer-tools" target="_blank" rel="noopener noreferrer">react.dev — React Developer Tools</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q071"><b>71. What is the difference between props and state?</b><br />
   Props are immutable values passed from parent to child components, whereas state is mutable and managed within a component.</p>
 <p class="example-block"><a class="example-link" href="examples/q071.html">🧪 Code example</a></p>
@@ -384,7 +518,18 @@ main > h3 + dl dd { margin-left: 20px; }
   React DevTools is a browser extension that allows inspecting the React component tree, checking component props and state, and profiling performance.</p>
 <p class="example-block"><a class="example-link" href="examples/q080.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-09">
 <h2 class="style1 style1">React Beginner Questions - Set 9</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Functional vs class components, lifecycle and the Context API <span class="ref-range">(q081&ndash;q090)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener noreferrer">react.dev — useReducer</a></li>
+  <li><a href="https://reactrouter.com/" target="_blank" rel="noopener noreferrer">reactrouter.com — React Router docs</a></li>
+  <li><a href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener noreferrer">react.dev — Passing data deeply with context</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q081"><b>81. What is JSX and why do we use it in React?</b><br />
   JSX is a syntax extension that allows us to write HTML-like code within JavaScript. It makes the React code more readable and easier to write.</p>
 <p class="example-block"><a class="example-link" href="examples/q081.html">🧪 Code example</a></p>
@@ -416,7 +561,20 @@ main > h3 + dl dd { margin-left: 20px; }
   The Context API provides a way to share state globally across the component tree without passing props manually at each level.</p>
 <p class="example-block"><a class="example-link" href="examples/q090.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-10">
 <h2 class="style1 style1">React Beginner Questions - Set 10</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Context, forms, memoization, portals, StrictMode and Suspense <span class="ref-range">(q091&ndash;q100)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react/useMemo" target="_blank" rel="noopener noreferrer">react.dev — useMemo</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://react.dev/reference/react-dom/createPortal" target="_blank" rel="noopener noreferrer">react.dev — createPortal</a></li>
+  <li><a href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener noreferrer">react.dev — StrictMode</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q091"><b>91. What is the purpose of the useContext hook?</b><br />
   The useContext hook is used to access the value of a context directly in functional components, avoiding prop drilling.</p>
 <p class="example-block"><a class="example-link" href="examples/q091.html">🧪 Code example</a></p>
@@ -448,7 +606,18 @@ main > h3 + dl dd { margin-left: 20px; }
   React’s Suspense and lazy enable code splitting, allowing components to be loaded asynchronously and showing a fallback UI while the component is loading.</p>
 <p class="example-block"><a class="example-link" href="examples/q100.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-11">
 <h2 class="style1 style1">React Beginner Questions - Set 11</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; State, effects, styling, events, keys and fragments <span class="ref-range">(q101&ndash;q110)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/state-a-components-memory" target="_blank" rel="noopener noreferrer">react.dev — State: a component's memory</a></li>
+  <li><a href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener noreferrer">react.dev — Responding to events</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+  <li><a href="https://react.dev/reference/react/Fragment" target="_blank" rel="noopener noreferrer">react.dev — Fragment</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q101"><b>101. What is the difference between React’s state and props?</b><br />
   State is mutable and managed within a component, while props are immutable and passed from a parent to a child component.</p>
 <p class="example-block"><a class="example-link" href="examples/q101.html">🧪 Code example</a></p>
@@ -480,7 +649,19 @@ main > h3 + dl dd { margin-left: 20px; }
   Controlled components are form elements whose value is controlled by React state, allowing for greater control over user inputs and validation.</p>
 <p class="example-block"><a class="example-link" href="examples/q110.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-12">
 <h2 class="style1 style1">React Beginner Questions - Set 12</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Side effects, class lifecycle, error handling and data fetching <span class="ref-range">(q111&ndash;q120)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/synchronizing-with-effects" target="_blank" rel="noopener noreferrer">react.dev — Synchronizing with effects</a></li>
+  <li><a href="https://react.dev/learn/lifecycle-of-reactive-effects" target="_blank" rel="noopener noreferrer">react.dev — Lifecycle of reactive effects</a></li>
+  <li><a href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener noreferrer">react.dev — You might not need an Effect</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener noreferrer">react.dev — useReducer</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q111"><b>111. What is the difference between class components and functional components?</b><br />
   Class components are ES6 classes that can hold state and lifecycle methods, while functional components are simple JavaScript functions that use hooks for state and side effects.</p>
 <p class="example-block"><a class="example-link" href="examples/q111.html">🧪 Code example</a></p>
@@ -512,7 +693,20 @@ main > h3 + dl dd { margin-left: 20px; }
   AJAX requests in React can be made using JavaScript’s `fetch` API or third-party libraries like Axios, typically inside `useEffect` for functional components.</p>
 <p class="example-block"><a class="example-link" href="examples/q120.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-13">
 <h2 class="style1 style1">React Intermediate Questions - Set 1</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; HOCs, render props, context and effect timing <span class="ref-range">(q121&ndash;q130)</span></p>
+<ul>
+  <li><a href="https://legacy.reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Higher-order components</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/render-props.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Render props</a></li>
+  <li><a href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener noreferrer">react.dev — Passing data deeply with context</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener noreferrer">react.dev — Preserving and resetting state (reconciliation)</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q121"><b>1. What are higher-order components (HOCs) in React?</b><br />
   A higher-order component is a function that takes a component and returns a new component with additional props or behavior. HOCs are used for code reuse and logic abstraction.</p>
 <p class="example-block"><a class="example-link" href="examples/q121.html">🧪 Code example</a></p>
@@ -543,7 +737,20 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1 style1" id="q130"><b>10. How do you handle side effects in functional components?</b><br />
   Side effects in functional components are handled by using the `useEffect` hook, which allows you to perform operations like fetching data, subscribing to events, or manually updating the DOM.</p>
 <p class="example-block"><a class="example-link" href="examples/q130.html">🧪 Code example</a></p>
+</section>
+<section class="topic-block" id="topic-14">
 <h2 class="style1 style1">React Intermediate Questions - Set 2</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Refs, memoization, error handling, code splitting and routing <span class="ref-range">(q131&ndash;q140)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useRef" target="_blank" rel="noopener noreferrer">react.dev — useRef</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/useState" target="_blank" rel="noopener noreferrer">react.dev — useState</a></li>
+  <li><a href="https://reactrouter.com/" target="_blank" rel="noopener noreferrer">reactrouter.com — React Router docs</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q131"><b>11. What is the `useRef` hook in React and how is it used?</b><br />
   `useRef` is a hook that allows you to persist values across renders without causing re-renders. It can be used for accessing DOM elements or storing mutable values.</p>
 <p class="example-block"><a class="example-link" href="examples/q131.html">🧪 Code example</a></p>
@@ -575,7 +782,20 @@ main > h3 + dl dd { margin-left: 20px; }
   Data between sibling components can be passed through a common parent component, which holds the state and passes it down to the children as props, or by using context for more complex scenarios.</p>
 <p class="example-block"><a class="example-link" href="examples/q140.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-15">
 <h2 class="style1 style1">React Intermediate Questions - Set 3</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Memo, fragments, lazy loading, reconciliation and compound components <span class="ref-range">(q141&ndash;q150)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://react.dev/reference/react/Fragment" target="_blank" rel="noopener noreferrer">react.dev — Fragment</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+  <li><a href="https://react.dev/reference/react/Children" target="_blank" rel="noopener noreferrer">react.dev — Children</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q141"><b>21. What is the purpose of `React.memo`?</b><br />
   `React.memo` is a higher-order component that prevents unnecessary re-renders of a functional component by memoizing its output and re-rendering only when props change.</p>
 <p class="example-block"><a class="example-link" href="examples/q141.html">🧪 Code example</a></p>
@@ -607,7 +827,20 @@ main > h3 + dl dd { margin-left: 20px; }
   `dangerouslySetInnerHTML` is used to set raw HTML content inside a component. It’s called “dangerous” because it exposes the app to cross-site scripting (XSS) attacks, and should be used with caution.</p>
 <p class="example-block"><a class="example-link" href="examples/q150.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-16">
 <h2 class="style1 style1">React Intermediate Questions - Set 4</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; SSR, reducers, JSX vs HTML and Redux-managed state <span class="ref-range">(q151&ndash;q160)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react-dom/server" target="_blank" rel="noopener noreferrer">react.dev — react-dom/server (SSR)</a></li>
+  <li><a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener noreferrer">react.dev — useReducer</a></li>
+  <li><a href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener noreferrer">react.dev — Writing markup with JSX</a></li>
+  <li><a href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener noreferrer">react.dev — StrictMode</a></li>
+  <li><a href="https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers" target="_blank" rel="noopener noreferrer">redux.js.org — State, actions and reducers</a></li>
+  <li><a href="https://react-redux.js.org/using-react-redux/connect-mapstate" target="_blank" rel="noopener noreferrer">react-redux.js.org — connect()</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q151"><b>31. What is server-side rendering (SSR) in React?</b><br />
   Server-side rendering (SSR) is the process of rendering React components on the server, sending the fully rendered HTML to the client. This can improve initial load times and SEO.</p>
 <p class="example-block"><a class="example-link" href="examples/q151.html">🧪 Code example</a></p>
@@ -638,7 +871,20 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1 style1" id="q160"><b>40. How do you handle component state in a Redux store?</b><br />
   In Redux, component state is managed by dispatching actions to a store. A reducer listens for these actions and updates the store's state accordingly, allowing components to subscribe to the state.</p>
 <p class="example-block"><a class="example-link" href="examples/q160.html">🧪 Code example</a></p>
+</section>
+<section class="topic-block" id="topic-17">
 <h2 class="style1 style1">React Intermediate Questions - Set 5</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Effects, shared state, HOCs, form validation and imperative refs <span class="ref-range">(q161&ndash;q170)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+  <li><a href="https://react.dev/learn/sharing-state-between-components" target="_blank" rel="noopener noreferrer">react.dev — Sharing state between components</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Higher-order components</a></li>
+  <li><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener noreferrer">react.dev — Reacting to input with state</a></li>
+  <li><a href="https://react.dev/reference/react/useImperativeHandle" target="_blank" rel="noopener noreferrer">react.dev — useImperativeHandle</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q161"><b>41. What is the purpose of `useEffect` in React?</b><br />
   `useEffect` is used to perform side effects in functional components, such as fetching data, subscribing to external events, or directly manipulating the DOM after a render.</p>
 <p class="example-block"><a class="example-link" href="examples/q161.html">🧪 Code example</a></p>
@@ -670,7 +916,21 @@ main > h3 + dl dd { margin-left: 20px; }
   Functional components are simpler and use hooks for managing state and side effects, while class components use lifecycle methods and `this` to manage state and handle events.</p>
 <p class="example-block"><a class="example-link" href="examples/q170.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-18">
 <h2 class="style1 style1">React Intermediate Questions - Set 6</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Context, error boundaries, callbacks, nested routes and props <span class="ref-range">(q171&ndash;q180)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/reference/react/useMemo" target="_blank" rel="noopener noreferrer">react.dev — useMemo</a></li>
+  <li><a href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener noreferrer">react.dev — StrictMode</a></li>
+  <li><a href="https://reactrouter.com/start/library/routing" target="_blank" rel="noopener noreferrer">reactrouter.com — Routing</a></li>
+  <li><a href="https://react.dev/learn/passing-props-to-a-component" target="_blank" rel="noopener noreferrer">react.dev — Passing props to a component</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q171"><b>51. What is the `useContext` hook used for?</b><br />
   The `useContext` hook allows you to consume values from a React context, making it easier to share global state across components without manually passing props.</p>
 <p class="example-block"><a class="example-link" href="examples/q171.html">🧪 Code example</a></p>
@@ -702,7 +962,21 @@ main > h3 + dl dd { margin-left: 20px; }
   The Virtual DOM is a lightweight copy of the actual DOM. React updates the Virtual DOM first, then calculates the minimal set of changes to apply to the actual DOM to optimize performance.</p>
 <p class="example-block"><a class="example-link" href="examples/q180.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-19">
 <h2 class="style1 style1">React Intermediate Questions - Set 7</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Refs, routing, forms, render props and layout effects <span class="ref-range">(q181&ndash;q190)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useRef" target="_blank" rel="noopener noreferrer">react.dev — useRef</a></li>
+  <li><a href="https://reactrouter.com/" target="_blank" rel="noopener noreferrer">reactrouter.com — React Router docs</a></li>
+  <li><a href="https://react.dev/learn/conditional-rendering" target="_blank" rel="noopener noreferrer">react.dev — Conditional rendering</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+  <li><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener noreferrer">react.dev — Reacting to input with state</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/render-props.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Render props</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q181"><b>61. What is the `useRef` hook used for in React?</b><br />
   `useRef` is used to persist values across renders without causing re-renders. It can be used to access DOM elements or store mutable values that don't need to trigger a re-render.</p>
 <p class="example-block"><a class="example-link" href="examples/q181.html">🧪 Code example</a></p>
@@ -734,7 +1008,20 @@ main > h3 + dl dd { margin-left: 20px; }
   `React.Fragment` is used to group multiple children elements without adding extra nodes to the DOM. It helps in returning multiple elements from a component without introducing unnecessary divs or wrappers.</p>
 <p class="example-block"><a class="example-link" href="examples/q190.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-20">
 <h2 class="style1 style1">React Intermediate Questions - Set 8</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Re-render control, async data, reducers and pagination <span class="ref-range">(q191&ndash;q200)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+  <li><a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener noreferrer">react.dev — useReducer</a></li>
+  <li><a href="https://react.dev/learn/sharing-state-between-components" target="_blank" rel="noopener noreferrer">react.dev — Sharing state between components</a></li>
+  <li><a href="https://react.dev/learn/you-might-not-need-an-effect" target="_blank" rel="noopener noreferrer">react.dev — You might not need an Effect</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q191"><b>71. How can you prevent unnecessary re-renders in React?</b><br />
   Unnecessary re-renders can be prevented by using `React.memo`, `shouldComponentUpdate`, and `useMemo` or `useCallback` hooks to memoize components or values, as well as optimizing state and props updates.</p>
 <p class="example-block"><a class="example-link" href="examples/q191.html">🧪 Code example</a></p>
@@ -766,7 +1053,21 @@ main > h3 + dl dd { margin-left: 20px; }
   Pagination in React can be implemented by managing page state using `useState`, slicing the data array based on the current page, and rendering the data for the corresponding page.</p>
 <p class="example-block"><a class="example-link" href="examples/q200.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-21">
 <h2 class="style1 style1">React Intermediate Questions - Set 9</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Component APIs: createElement, keys, class state and event binding <span class="ref-range">(q201&ndash;q210)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/typechecking-with-proptypes.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Type checking with PropTypes</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/createElement" target="_blank" rel="noopener noreferrer">react.dev — createElement</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener noreferrer">react.dev — Responding to events</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q201"><b>81. What is the purpose of `useEffect` in React?</b><br />
   `useEffect` is a hook used for handling side effects in functional components. It allows you to perform tasks like fetching data, subscribing to external services, or directly manipulating the DOM.</p>
 <p class="example-block"><a class="example-link" href="examples/q201.html">🧪 Code example</a></p>
@@ -797,7 +1098,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1 style1" id="q210"><b>90. How do you handle event binding in React?</b><br />
   In React, event handlers are typically bound using arrow functions or class method syntax. For class components, methods are often bound to the instance in the constructor using `.bind()`, while in functional components, arrow functions automatically bind the context.</p>
 <p class="example-block"><a class="example-link" href="examples/q210.html">🧪 Code example</a></p>
+</section>
+<section class="topic-block" id="topic-22">
 <h2 class="style1 style1">React Intermediate Questions - Set 9</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Repeated set (q211–q220): createElement, keys, class state and events <span class="ref-range">(q211&ndash;q220)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/typechecking-with-proptypes.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Type checking with PropTypes</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/createElement" target="_blank" rel="noopener noreferrer">react.dev — createElement</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener noreferrer">react.dev — Responding to events</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q211"><b>81. What is the purpose of `useEffect` in React?</b><br />
   `useEffect` is a hook used for handling side effects in functional components. It allows you to perform tasks like fetching data, subscribing to external services, or directly manipulating the DOM.</p>
 <p class="example-block"><a class="example-link" href="examples/q211.html">🧪 Code example</a></p>
@@ -828,7 +1143,22 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1 style1" id="q220"><b>90. How do you handle event binding in React?</b><br />
   In React, event handlers are typically bound using arrow functions or class method syntax. For class components, methods are often bound to the instance in the constructor using `.bind()`, while in functional components, arrow functions automatically bind the context.</p>
 <p class="example-block"><a class="example-link" href="examples/q220.html">🧪 Code example</a></p>
+</section>
+<section class="topic-block" id="topic-23">
 <h2 class="style1 style1">React Intermediate Questions - Set 10</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Performance, error boundaries, lazy loading, portals and env variables <span class="ref-range">(q221&ndash;q230)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useMemo" target="_blank" rel="noopener noreferrer">react.dev — useMemo</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener noreferrer">react.dev — Render and commit</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener noreferrer">react.dev — StrictMode</a></li>
+  <li><a href="https://react.dev/reference/react-dom/createPortal" target="_blank" rel="noopener noreferrer">react.dev — createPortal</a></li>
+  <li><a href="https://vitejs.dev/guide/env-and-mode" target="_blank" rel="noopener noreferrer">vitejs.dev — Env variables and modes</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q221"><b>91. What is the difference between `useMemo` and `useCallback`?</b><br />
   `useMemo` is used to memoize the result of a computation, while `useCallback` is used to memoize a function itself. `useMemo` helps prevent unnecessary recalculations, and `useCallback` prevents function recreation between renders.</p>
 <p class="example-block"><a class="example-link" href="examples/q221.html">🧪 Code example</a></p>
@@ -862,7 +1192,22 @@ main > h3 + dl dd { margin-left: 20px; }
   Performance optimization in React can be achieved using techniques like memoization (`useMemo`, `React.memo`), lazy loading, code splitting, efficient state management, avoiding unnecessary re-renders, and using the production build of React.</p>
 <p class="example-block"><a class="example-link" href="examples/q230.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-24">
 <h2 class="style1 style1">React Intermediate Questions - Set 11</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Reconciliation, synthetic events, refs, debouncing and tree shaking <span class="ref-range">(q231&ndash;q240)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener noreferrer">react.dev — Preserving and resetting state (reconciliation)</a></li>
+  <li><a href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener noreferrer">react.dev — Responding to events</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/Fragment" target="_blank" rel="noopener noreferrer">react.dev — Fragment</a></li>
+  <li><a href="https://react.dev/reference/react/forwardRef" target="_blank" rel="noopener noreferrer">react.dev — forwardRef</a></li>
+  <li><a href="https://lodash.com/docs/4.17.15#debounce" target="_blank" rel="noopener noreferrer">lodash.com — debounce</a></li>
+  <li><a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noopener noreferrer">webpack.js.org — Tree shaking</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q231"><b>101. What is reconciliation in React?</b><br />
   Reconciliation is the process by which React updates the virtual DOM and efficiently determines the minimal changes needed to update the real DOM.</p>
 <p class="example-block"><a class="example-link" href="examples/q231.html">🧪 Code example</a></p>
@@ -894,7 +1239,21 @@ main > h3 + dl dd { margin-left: 20px; }
   Tree shaking is a technique used to remove unused JavaScript code during bundling, helping reduce the final bundle size and improving performance.</p>
 <p class="example-block"><a class="example-link" href="examples/q240.html">🧪 Code example</a></p>
 <p class="style1 style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-25">
 <h2 class="style1 style1">React Intermediate Questions - Set 12</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Code splitting, hydration, hooks rules, Suspense and display names <span class="ref-range">(q241&ndash;q250)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://react.dev/reference/react-dom/client/hydrateRoot" target="_blank" rel="noopener noreferrer">react.dev — hydrateRoot</a></li>
+  <li><a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener noreferrer">react.dev — useReducer</a></li>
+  <li><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer">react.dev — Suspense</a></li>
+  <li><a href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noopener noreferrer">react.dev — Rules of Hooks</a></li>
+  <li><a href="https://react.dev/reference/react/Children" target="_blank" rel="noopener noreferrer">react.dev — Children</a></li>
+</ul>
+</aside>
 <p class="style1 style1" id="q241"><b>111. What is code splitting in React?</b><br />
   Code splitting is a technique used to break a large JavaScript bundle into smaller chunks that are loaded dynamically, improving performance and reducing initial load time.</p>
 <p class="example-block"><a class="example-link" href="examples/q241.html">🧪 Code example</a></p>
@@ -925,7 +1284,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1 style1" id="q250"><b>120. What is the significance of the `displayName` property in React?</b><br />
   The `displayName` property is used to define a human-readable name for a component in debugging tools like React Developer Tools.</p>
 <p class="example-block"><a class="example-link" href="examples/q250.html">🧪 Code example</a></p>
+</section>
+<section class="topic-block" id="topic-26">
 <h2 class="style1">React Advanced Questions - Set 1</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Fiber, concurrent rendering, Server Components and priorities <span class="ref-range">(questions 1&ndash;10)</span></p>
+<ul>
+  <li><a href="https://github.com/acdlite/react-fiber-architecture" target="_blank" rel="noopener noreferrer">React Fiber architecture (acdlite)</a></li>
+  <li><a href="https://react.dev/blog/2022/03/29/react-v18" target="_blank" rel="noopener noreferrer">react.dev — React v18 release</a></li>
+  <li><a href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noopener noreferrer">react.dev — Server Components</a></li>
+  <li><a href="https://react.dev/reference/react/startTransition" target="_blank" rel="noopener noreferrer">react.dev — startTransition</a></li>
+  <li><a href="https://react.dev/reference/react/useDeferredValue" target="_blank" rel="noopener noreferrer">react.dev — useDeferredValue</a></li>
+  <li><a href="https://react.dev/reference/react/useSyncExternalStore" target="_blank" rel="noopener noreferrer">react.dev — useSyncExternalStore</a></li>
+  <li><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer">react.dev — Suspense</a></li>
+</ul>
+</aside>
 <p class="style1"><b>1. What is React Fiber?</b><br />
   React Fiber is the new reconciliation algorithm introduced in React 16 that improves rendering performance and enables features like concurrent mode, suspense, and priority-based updates.</p>
 <p class="style1"><b>2. How does concurrent mode work in React?</b><br />
@@ -947,7 +1320,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>10. How do Suspense boundaries improve application performance?</b><br />
   Suspense boundaries allow React to pause rendering and show fallback UI while waiting for asynchronous operations, reducing UI flickering and improving perceived performance.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-27">
 <h2 class="style1">React Advanced Questions - Set 2</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Transitions, virtualization, automatic batching and hydration <span class="ref-range">(questions 11&ndash;20)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useTransition" target="_blank" rel="noopener noreferrer">react.dev — useTransition</a></li>
+  <li><a href="https://react.dev/reference/react/startTransition" target="_blank" rel="noopener noreferrer">react.dev — startTransition</a></li>
+  <li><a href="https://github.com/bvaughn/react-window" target="_blank" rel="noopener noreferrer">react-window (list virtualization)</a></li>
+  <li><a href="https://react.dev/reference/react/useMemo" target="_blank" rel="noopener noreferrer">react.dev — useMemo</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react-dom/client/hydrateRoot" target="_blank" rel="noopener noreferrer">react.dev — hydrateRoot</a></li>
+  <li><a href="https://react.dev/blog/2022/03/29/react-v18" target="_blank" rel="noopener noreferrer">react.dev — React v18 release</a></li>
+</ul>
+</aside>
 <p class="style1"><b>11. What is the `useTransition` hook in React?</b><br />
   `useTransition` is a React hook that allows marking certain state updates as non-urgent, helping prevent UI blocking by keeping the interface responsive.</p>
 <p class="style1"><b>12. What is the difference between `useTransition` and `startTransition`?</b><br />
@@ -969,7 +1356,20 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>20. How does React manage batching updates?</b><br />
   React batches multiple state updates into a single re-render to optimize performance. React 18 introduced automatic batching, which groups updates from different event handlers.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-28">
 <h2 class="style1">React Advanced Questions - Set 3</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Imperative handles, deferred values, synthetic events, Profiler and useId <span class="ref-range">(questions 21&ndash;30)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/useImperativeHandle" target="_blank" rel="noopener noreferrer">react.dev — useImperativeHandle</a></li>
+  <li><a href="https://react.dev/reference/react/useDeferredValue" target="_blank" rel="noopener noreferrer">react.dev — useDeferredValue</a></li>
+  <li><a href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener noreferrer">react.dev — Responding to events</a></li>
+  <li><a href="https://react.dev/reference/react/Profiler" target="_blank" rel="noopener noreferrer">react.dev — Profiler</a></li>
+  <li><a href="https://react.dev/reference/react/useId" target="_blank" rel="noopener noreferrer">react.dev — useId</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+</ul>
+</aside>
 <p class="style1"><b>21. What is the role of `useImperativeHandle` in React?</b><br />
   `useImperativeHandle` allows customizing the instance value of a ref when using `forwardRef`, giving parent components more control over child component methods.</p>
 <p class="style1"><b>22. How does React’s `useDeferredValue` improve rendering performance?</b><br />
@@ -991,7 +1391,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>30. What is the `useId` hook introduced in React 18?</b><br />
   `useId` generates stable unique IDs for accessibility and server-side rendering, ensuring IDs do not clash between client and server-rendered content.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-29">
 <h2 class="style1">React Advanced Questions - Set 4</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Batching, transitions, context propagation, insertion effects and render phases <span class="ref-range">(questions 31&ndash;39)</span></p>
+<ul>
+  <li><a href="https://react.dev/blog/2022/03/29/react-v18" target="_blank" rel="noopener noreferrer">react.dev — React v18 release</a></li>
+  <li><a href="https://react.dev/reference/react/startTransition" target="_blank" rel="noopener noreferrer">react.dev — startTransition</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react/useInsertionEffect" target="_blank" rel="noopener noreferrer">react.dev — useInsertionEffect</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://react.dev/reference/react/useSyncExternalStore" target="_blank" rel="noopener noreferrer">react.dev — useSyncExternalStore</a></li>
+  <li><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer">react.dev — Suspense</a></li>
+</ul>
+</aside>
 <p class="style1"><b>31. How does automatic batching improve performance in React 18?</b><br />
   Automatic batching groups multiple state updates into a single re-render, reducing unnecessary renders and improving performance.</p>
 <p class="style1"><b>32. What are React’s Transition APIs, and how do they work?</b><br />
@@ -1011,7 +1425,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>39. What are React’s render phases?</b><br />
   React has two render phases: the **render phase**, where it calculates th </p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-30">
 <h2 class="style1">React Advanced Questions - Set 5</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; SSR vs CSR vs SSG, hydration, Server Components and error boundaries <span class="ref-range">(questions 41&ndash;50)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react-dom/server" target="_blank" rel="noopener noreferrer">react.dev — react-dom/server (SSR)</a></li>
+  <li><a href="https://react.dev/reference/react-dom/client/hydrateRoot" target="_blank" rel="noopener noreferrer">react.dev — hydrateRoot</a></li>
+  <li><a href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noopener noreferrer">react.dev — Server Components</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/useSyncExternalStore" target="_blank" rel="noopener noreferrer">react.dev — useSyncExternalStore</a></li>
+  <li><a href="https://react.dev/blog/2022/03/29/react-v18" target="_blank" rel="noopener noreferrer">react.dev — React v18 release</a></li>
+  <li><a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noopener noreferrer">webpack.js.org — Tree shaking</a></li>
+</ul>
+</aside>
 <p class="style1"><b>41. What is hydration in React?</b><br />
   Hydration is the process of attaching event listeners and state to server-rendered HTML, allowing the React application to become fully interactive.</p>
 <p class="style1"><b>42. What are React Server Components?</b><br />
@@ -1035,7 +1463,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>50. How does React’s concurrent mode improve performance?</b><br />
   Concurrent mode enables React to work on multiple tasks simultaneously, pausing low-priority updates and keeping the UI responsive.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-31">
 <h2 class="style1">React Advanced Questions - Set 6</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Fiber advantages, effect timing, streaming and list virtualization <span class="ref-range">(questions 51&ndash;60)</span></p>
+<ul>
+  <li><a href="https://github.com/acdlite/react-fiber-architecture" target="_blank" rel="noopener noreferrer">React Fiber architecture (acdlite)</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer">react.dev — Suspense</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://github.com/bvaughn/react-window" target="_blank" rel="noopener noreferrer">react-window (list virtualization)</a></li>
+  <li><a href="https://react.dev/reference/react-dom/client/hydrateRoot" target="_blank" rel="noopener noreferrer">react.dev — hydrateRoot</a></li>
+</ul>
+</aside>
 <p class="style1"><b>51. What are React Fiber’s main advantages over the older reconciliation algorithm?</b><br />
   React Fiber improves rendering by enabling incremental rendering, prioritization, and pausing of updates, making UI updates smoother.</p>
 <p class="style1"><b>52. How does `useLayoutEffect` differ from `useEffect`?</b><br />
@@ -1057,7 +1499,22 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>60. What are module federation and micro-frontends in React?</b><br />
   Module federation allows splitting large applications into smaller, independently deployable micro-frontends that share dependencies dynamically.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-32">
 <h2 class="style1">React Advanced Questions - Set 7</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Concurrent rendering, lazy/Suspense, global state, forms and memoization <span class="ref-range">(questions 61&ndash;70)</span></p>
+<ul>
+  <li><a href="https://react.dev/blog/2022/03/29/react-v18" target="_blank" rel="noopener noreferrer">react.dev — React v18 release</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/learn/passing-data-deeply-with-context" target="_blank" rel="noopener noreferrer">react.dev — Passing data deeply with context</a></li>
+  <li><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener noreferrer">react.dev — Reacting to input with state</a></li>
+  <li><a href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noopener noreferrer">react.dev — Rules of Hooks</a></li>
+  <li><a href="https://react.dev/reference/react/useMemo" target="_blank" rel="noopener noreferrer">react.dev — useMemo</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/render-props.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Render props</a></li>
+</ul>
+</aside>
 <p class="style1"><b>61. How does React’s concurrent rendering improve user experience?</b><br />
   Concurrent rendering enables React to prioritize urgent updates while pausing non-urgent ones, leading to smoother and faster UI responses.</p>
 <p class="style1"><b>62. What is the significance of `React.lazy` and `Suspense`?</b><br />
@@ -1079,7 +1536,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>70. How do you handle side effects in React components?</b><br />
   Use the `useEffect` hook to handle side effects like fetching data, interacting with the DOM, or subscribing to external data sources.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-33">
 <h2 class="style1">React Advanced Questions - Set 8</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; memo, HOCs, async effects, context, error boundaries and code splitting <span class="ref-range">(questions 71&ndash;80)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Higher-order components</a></li>
+  <li><a href="https://react.dev/learn/synchronizing-with-effects" target="_blank" rel="noopener noreferrer">react.dev — Synchronizing with effects</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/useRef" target="_blank" rel="noopener noreferrer">react.dev — useRef</a></li>
+</ul>
+</aside>
 <p class="style1"><b>71. What is the purpose of `React.memo`?</b><br />
   `React.memo` is used to memoize functional components, preventing unnecessary re-renders if props haven't changed.</p>
 <p class="style1"><b>72. What is a higher-order component (HOC) in React?</b><br />
@@ -1101,7 +1572,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>80. How do you handle code-splitting in React?</b><br />
   Code-splitting can be done using `React.lazy` and `Suspense`, dynamically loading components only when needed, reducing the initial bundle size.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-34">
 <h2 class="style1">React Advanced Questions - Set 9</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Portals, fragments, context performance, virtual DOM and dynamic routing <span class="ref-range">(questions 81&ndash;90)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react-dom/createPortal" target="_blank" rel="noopener noreferrer">react.dev — createPortal</a></li>
+  <li><a href="https://react.dev/reference/react/Fragment" target="_blank" rel="noopener noreferrer">react.dev — Fragment</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener noreferrer">react.dev — Render and commit</a></li>
+  <li><a href="https://react.dev/learn/responding-to-events" target="_blank" rel="noopener noreferrer">react.dev — Responding to events</a></li>
+  <li><a href="https://reactrouter.com/start/library/routing" target="_blank" rel="noopener noreferrer">reactrouter.com — Routing</a></li>
+  <li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer">react.dev — useEffect</a></li>
+</ul>
+</aside>
 <p class="style1"><b>81. What are React Portals and how are they used?</b><br />
   React Portals provide a way to render children into a DOM node outside the parent component hierarchy, useful for modals or tooltips.</p>
 <p class="style1"><b>82. What is the purpose of `React.Fragment`?</b><br />
@@ -1123,7 +1608,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>90. How do you test React components effectively?</b><br />
   Use testing libraries like `Jest` and `React Testing Library` to write unit and integration tests, mock API calls, and ensure components behave as expected.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-35">
 <h2 class="style1">React Advanced Questions - Set 10</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Reconciliation, lazy routes, reducers, contexts and Suspense boundaries <span class="ref-range">(questions 91&ndash;100)</span></p>
+<ul>
+  <li><a href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noopener noreferrer">react.dev — Preserving and resetting state (reconciliation)</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener noreferrer">react.dev — useReducer</a></li>
+  <li><a href="https://react.dev/reference/react/useImperativeHandle" target="_blank" rel="noopener noreferrer">react.dev — useImperativeHandle</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noopener noreferrer">react.dev — Suspense</a></li>
+  <li><a href="https://react.dev/learn/rendering-lists" target="_blank" rel="noopener noreferrer">react.dev — Rendering lists (keys)</a></li>
+</ul>
+</aside>
 <p class="style1"><b>91. How does React handle reconciliation?</b><br />
   React uses the reconciliation algorithm to compare the previous virtual DOM with the new one and updates the real DOM efficiently by minimizing changes.</p>
 <p class="style1"><b>92. How do you implement lazy loading of routes in React?</b><br />
@@ -1145,7 +1644,20 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>100. What is the role of keys in React lists?</b><br />
   Keys help React identify which items in the list are changed, added, or removed, optimizing the rendering and preventing unnecessary re-renders.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-36">
 <h2 class="style1">React Advanced Questions - Set 11</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; Render props, ref forwarding, layout effects, createContext and SSR <span class="ref-range">(questions 101&ndash;110)</span></p>
+<ul>
+  <li><a href="https://legacy.reactjs.org/docs/render-props.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Render props</a></li>
+  <li><a href="https://react.dev/reference/react/forwardRef" target="_blank" rel="noopener noreferrer">react.dev — forwardRef</a></li>
+  <li><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noopener noreferrer">react.dev — useLayoutEffect</a></li>
+  <li><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noopener noreferrer">react.dev — useContext</a></li>
+  <li><a href="https://react.dev/reference/react-dom/server" target="_blank" rel="noopener noreferrer">react.dev — react-dom/server (SSR)</a></li>
+  <li><a href="https://react.dev/reference/react/StrictMode" target="_blank" rel="noopener noreferrer">react.dev — StrictMode</a></li>
+</ul>
+</aside>
 <p class="style1"><b>101. What are render props in React?</b><br />
   Render props is a pattern where a component takes a function as a prop and uses it to dynamically decide what to render, enabling component reuse.</p>
 <p class="style1"><b>102. How can you pass a ref to a child component in React?</b><br />
@@ -1167,7 +1679,21 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1"><b>110. How does React handle reconciliation in the context of list rendering?</b><br />
   React uses a key property in lists to efficiently reconcile changes. It compares keys from the old and new virtual DOM and reorders or updates elements only when necessary.</p>
 <p class="style1">&nbsp;</p>
+</section>
+<section class="topic-block" id="topic-37">
 <h2 class="style1">React Advanced Questions - Set 12</h2>
+<aside class="topic-ref-box">
+<p class="ref-title">📚 Sources for this topic &mdash; memo, HOCs, controlled components, lazy, PureComponent and re-renders <span class="ref-range">(questions 111&ndash;120)</span></p>
+<ul>
+  <li><a href="https://react.dev/reference/react/memo" target="_blank" rel="noopener noreferrer">react.dev — memo</a></li>
+  <li><a href="https://legacy.reactjs.org/docs/higher-order-components.html" target="_blank" rel="noopener noreferrer">legacy.reactjs.org — Higher-order components</a></li>
+  <li><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noopener noreferrer">react.dev — Reacting to input with state</a></li>
+  <li><a href="https://react.dev/reference/react/lazy" target="_blank" rel="noopener noreferrer">react.dev — lazy</a></li>
+  <li><a href="https://react.dev/reference/react/PureComponent" target="_blank" rel="noopener noreferrer">react.dev — PureComponent</a></li>
+  <li><a href="https://react.dev/reference/react/Component" target="_blank" rel="noopener noreferrer">react.dev — Component (lifecycle & error boundaries)</a></li>
+  <li><a href="https://react.dev/reference/react/useCallback" target="_blank" rel="noopener noreferrer">react.dev — useCallback</a></li>
+</ul>
+</aside>
 <p class="style1"><b>111. What is the purpose of `React.memo`?</b><br />
   `React.memo` is a higher-order component that memoizes the rendering of a component, preventing unnecessary re-renders when the props have not changed.</p>
 <p class="style1"><b>112. What are higher-order components (HOCs) in React?</b><br />
@@ -1230,7 +1756,207 @@ main > h3 + dl dd { margin-left: 20px; }
 <p class="style1 style1">&nbsp;</p>
 <p class="style1 style1">&nbsp;</p>
 <p class="style1 style1">&nbsp;</p>
+</section>
 </main>
 </div>
+<script type="text/javascript">
+(function () {
+  var input = document.getElementById('qsearch-input');
+  var list = document.getElementById('qsearch-results');
+  var empty = document.getElementById('search-empty');
+  var more = document.getElementById('search-more');
+  var count = document.getElementById('search-count');
+  if (!input || !list || !count) { return; }
+
+  var MAX = 25;
+  var index = [];
+  var timer = null;
+
+  function fold(text) {
+    var out = '', map = [], i, k, ch, base;
+    for (i = 0; i < text.length; i++) {
+      ch = text.charAt(i);
+      base = ch.normalize ? ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : ch;
+      if (!base) { continue; }
+      for (k = 0; k < base.length; k++) {
+        out += base.charAt(k).toLowerCase();
+        map.push(i);
+      }
+    }
+    return { s: out, map: map };
+  }
+
+  var nodes = document.querySelectorAll('p[id^="q"]');
+  for (var n = 0; n < nodes.length; n++) {
+    var el = nodes[n];
+    if (!/^q\d+$/.test(el.id)) { continue; }
+    var bold = el.getElementsByTagName('b')[0];
+    var raw = (bold ? bold.textContent : el.textContent) || '';
+    raw = raw.replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+    var label = /^(\d+)[.)]/.exec(raw);
+    var q = raw.replace(/^\d+[.)]\s*/, '');
+    var full = (el.textContent || '').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+    index.push({
+      id: el.id,
+      num: label ? label[1] : String(n + 1),
+      q: q,
+      full: full,
+      fq: fold(q).s,
+      ff: fold(full).s
+    });
+  }
+
+  function clearNode(node) {
+    while (node.firstChild) { node.removeChild(node.firstChild); }
+  }
+
+  function mark(text, qz) {
+    var frag = document.createDocumentFragment();
+    var folded = fold(text);
+    var at = folded.s.indexOf(qz);
+    if (at < 0) { frag.appendChild(document.createTextNode(text)); return frag; }
+    var pos = 0, guard = 0, startO, endO, m;
+    while (at >= 0 && guard < 60) {
+      startO = folded.map[at];
+      endO = folded.map[at + qz.length - 1] + 1;
+      frag.appendChild(document.createTextNode(text.slice(pos, startO)));
+      m = document.createElement('mark');
+      m.textContent = text.slice(startO, endO);
+      frag.appendChild(m);
+      pos = endO;
+      at = folded.s.indexOf(qz, at + qz.length);
+      guard++;
+    }
+    frag.appendChild(document.createTextNode(text.slice(pos)));
+    return frag;
+  }
+
+  function flash(id) {
+    var target = document.getElementById(id);
+    if (!target) { return; }
+    var previous = document.querySelectorAll('.q-hit');
+    for (var i = 0; i < previous.length; i++) {
+      previous[i].className = previous[i].className.replace(/\s*q-hit\b/g, '');
+    }
+    target.className = target.className.replace(/\s*q-hit\b/g, '');
+    void target.offsetWidth;
+    target.className += ' q-hit';
+  }
+
+  function render() {
+    var raw = input.value.replace(/^\s+|\s+$/g, '');
+    clearNode(list);
+    more.hidden = true;
+    if (raw.length < 2) {
+      list.hidden = true;
+      empty.hidden = true;
+      count.textContent = index.length + ' questions indexed';
+      return;
+    }
+    var qz = fold(raw).s;
+    var onQuestion = [], onAnswer = [];
+    for (var i = 0; i < index.length; i++) {
+      if (index[i].fq.indexOf(qz) > -1) { onQuestion.push(index[i]); }
+      else if (index[i].ff.indexOf(qz) > -1) { onAnswer.push(index[i]); }
+    }
+    var hits = onQuestion.concat(onAnswer);
+    count.textContent = hits.length + (hits.length === 1 ? ' match' : ' matches');
+    if (!hits.length) {
+      list.hidden = true;
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    var shown = hits.slice(0, MAX);
+    for (var j = 0; j < shown.length; j++) {
+      var it = shown[j];
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#' + it.id;
+      a.setAttribute('data-target', it.id);
+      var num = document.createElement('span');
+      num.className = 'qsearch-num';
+      num.textContent = 'Q' + it.num;
+      var body = document.createElement('span');
+      body.className = 'qsearch-q';
+      body.appendChild(mark(it.q || it.full, qz));
+      a.appendChild(num);
+      a.appendChild(body);
+      if (it.fq.indexOf(qz) < 0) {
+        var ff = fold(it.full);
+        var at = ff.s.indexOf(qz);
+        if (at > -1) {
+          var o = ff.map[at];
+          var from = Math.max(0, o - 45);
+          var to = Math.min(it.full.length, o + 130);
+          var snip = document.createElement('span');
+          snip.className = 'qsearch-snip';
+          snip.appendChild(document.createTextNode(from > 0 ? '… ' : ''));
+          snip.appendChild(mark(it.full.slice(from, to), qz));
+          snip.appendChild(document.createTextNode(to < it.full.length ? ' …' : ''));
+          body.appendChild(snip);
+        }
+      }
+      li.appendChild(a);
+      list.appendChild(li);
+    }
+    if (hits.length > shown.length) {
+      more.textContent = 'Showing the first ' + shown.length + ' of ' + hits.length + ' matches. Refine the keyword to narrow the list.';
+      more.hidden = false;
+    }
+    list.hidden = false;
+  }
+
+  list.addEventListener('click', function (e) {
+    var a = e.target;
+    while (a && a !== list && a.nodeName.toLowerCase() !== 'a') { a = a.parentNode; }
+    if (!a || a === list) { return; }
+    list.hidden = true;
+    window.setTimeout(function () { flash(a.getAttribute('data-target')); }, 30);
+  });
+
+  input.addEventListener('input', function () {
+    if (timer) { window.clearTimeout(timer); }
+    timer = window.setTimeout(render, 90);
+  });
+
+  input.addEventListener('focus', function () {
+    if (input.value.replace(/\s/g, '').length >= 2) { render(); }
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      list.hidden = true; empty.hidden = true; more.hidden = true; input.blur(); return;
+    }
+    if (e.key === 'ArrowDown' || e.key === 'Enter') {
+      var first = list.hidden ? null : list.getElementsByTagName('a')[0];
+      if (first) {
+        e.preventDefault();
+        if (e.key === 'Enter') { first.click(); } else { first.focus(); }
+      }
+    }
+  });
+
+  list.addEventListener('keydown', function (e) {
+    var links = list.getElementsByTagName('a');
+    var i = -1, k;
+    for (k = 0; k < links.length; k++) { if (links[k] === document.activeElement) { i = k; } }
+    if (e.key === 'ArrowDown' && i > -1 && links[i + 1]) { e.preventDefault(); links[i + 1].focus(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); if (i > 0) { links[i - 1].focus(); } else { input.focus(); } }
+    if (e.key === 'Escape') { list.hidden = true; input.focus(); }
+  });
+
+  window.addEventListener('hashchange', function () {
+    var id = window.location.hash.replace('#', '');
+    if (id) { flash(id); }
+  });
+
+  render();
+  if (window.location.hash) {
+    window.setTimeout(function () { flash(window.location.hash.replace('#', '')); }, 60);
+  }
+})();
+</script>
 </body>
 </html>
+
