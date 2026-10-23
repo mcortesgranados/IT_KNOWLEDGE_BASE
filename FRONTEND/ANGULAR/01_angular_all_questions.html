@@ -22203,6 +22203,15 @@ export class WeightPipe implements PipeTransform {
 
   input.addEventListener('focus', function () {
     if (input.value.replace(/\s/g, '').length >= 2) { render(); }
+    if (input.value) { input.select(); }
+  });
+
+  var pressX = -1;
+  input.addEventListener('mousedown', function (e) { pressX = e.clientX; });
+  input.addEventListener('click', function (e) {
+    if (!input.value) { return; }
+    var dragged = pressX >= 0 && Math.abs(e.clientX - pressX) > 4;
+    if (!dragged && input.selectionStart === input.selectionEnd) { input.select(); }
   });
 
   input.addEventListener('keydown', function (e) {
