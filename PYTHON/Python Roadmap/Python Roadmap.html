@@ -29,8 +29,40 @@
 .style3 {border: 1px none #CCCCCC; font-size: 9px;}
  </style>
 
+<style type="text/css">
+  /* --- Buscador del roadmap (añadido) --- */
+  #kb-search { position:sticky; top:0; z-index:40; margin:12px 0 16px; padding:10px 12px 12px; border:1px solid #cbd5e1; border-radius:10px; background:rgba(255,255,255,.97); box-shadow:0 3px 10px rgba(15,23,42,.12); font-family:Arial,Helvetica,sans-serif; }
+  #kb-search .kbsearch-label { display:block; margin:0 0 6px; color:#0d47a1; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+  #kb-search .kbsearch-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin:0; }
+  #kb-search-input { flex:1 1 300px; min-width:0; padding:9px 12px; border:1px solid #94a3b8; border-radius:999px; background:#fff; color:#0f172a; font:inherit; font-size:15px; line-height:1.2; }
+  #kb-search-input:focus { outline:3px solid #1565c0; outline-offset:1px; border-color:#1565c0; }
+  #kb-search-input::-webkit-search-cancel-button, #kb-search-input::-webkit-search-decoration { -webkit-appearance:none; appearance:none; display:none; }
+  #kb-search-clear { padding:8px 14px; border:1px solid #cbd5e1; border-radius:999px; background:#f8fafc; color:#334155; font:inherit; font-size:13px; font-weight:800; cursor:pointer; }
+  #kb-search-clear:hover, #kb-search-clear:focus { background:#e3f2fd; border-color:#1565c0; color:#0d47a1; outline:2px solid #1565c0; outline-offset:1px; }
+  #kb-search-count { margin:0; color:#64748b; font-size:12px; font-weight:800; white-space:nowrap; }
+  #kb-search-results { margin:8px 0 0; padding:0; list-style:none; max-height:42vh; overflow:auto; border-top:1px solid #e2e8f0; }
+  #kb-search-results li { margin:0; padding:0; list-style:none; border-bottom:1px solid #eef2f7; }
+  #kb-search-results a { display:block; padding:8px; border-radius:6px; color:#17386d; text-decoration:none; }
+  #kb-search-results a:hover, #kb-search-results a:focus { background:#e3f2fd; outline:2px solid #1565c0; outline-offset:-2px; }
+  #kb-search-results .kbsearch-q { display:block; font-weight:700; font-size:14px; line-height:1.35; }
+  #kb-search-results .kbsearch-snip { display:block; margin-top:3px; color:#475569; font-size:13px; font-weight:400; line-height:1.35; }
+  #kb-search-results mark { background:#fff59d; color:inherit; padding:0 1px; border-radius:2px; }
+  #kb-search-empty { margin:8px 0 0; color:#64748b; font-size:13px; }
+  @media print { #kb-search { display:none; } }
+</style>
+
 <body>
 <p class="signo_grande style1"><strong><a name="PYTHONMAININDEX" id="PYTHONMAININDEX"></a>PYTHON MAIN INDEX</strong></p>
+<div id="kb-search" role="search">
+  <label class="kbsearch-label" for="kb-search-input">Buscar en el roadmap</label>
+  <div class="kbsearch-row">
+    <input id="kb-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Palabra clave: flask, pandas, numpy, decorators..." aria-controls="kb-search-results" aria-describedby="kb-search-count" />
+    <button id="kb-search-clear" type="button">Limpiar</button>
+    <p id="kb-search-count" aria-live="polite">Cargando índice…</p>
+  </div>
+  <ol id="kb-search-results" style="display:none"></ol>
+  <p id="kb-search-empty" style="display:none">Sin coincidencias. Prueba con otra palabra clave.</p>
+</div>
 <ul class="style1"><li><span class="style2"><strong>PR01_01_LEARN_THE_BASICS
     </strong></span>
     <ul>
@@ -19536,5 +19568,240 @@
   </tr>
 </table>
 <p class="style1">&nbsp;</p>
+</body>
+
+<script type="text/javascript">
+(function () {
+  var input = document.getElementById('kb-search-input');
+  var list = document.getElementById('kb-search-results');
+  var empty = document.getElementById('kb-search-empty');
+  var countEl = document.getElementById('kb-search-count');
+  var clearBtn = document.getElementById('kb-search-clear');
+  if (!input || !list || !countEl) { return; }
+
+  var MAX = 15;
+  var entries = [];
+  var byKey = {};
+  var shown = [];
+  var timer = null;
+
+  function clean(s) {
+    var t = (s || '').replace(/\s+/g, ' ');
+    t = t.replace(/^[\s\u00a0\-–—:.]+/, '');
+    return t.replace(/[\s\u00a0]+$/, '');
+  }
+
+  function fold(s) {
+    var t = s || '';
+    if (t.normalize) { t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+    t = t.toLowerCase().replace(/\s+/g, ' ');
+    return t.replace(/^\s+|\s+$/g, '');
+  }
+
+  var anchors = document.getElementsByTagName('a');
+  for (var i = 0; i < anchors.length; i++) {
+    var a = anchors[i];
+    var name = a.getAttribute('name');
+    if (!name) { continue; }
+    var key = name.toLowerCase();
+    if (key === 'pythonmainindex') { continue; }
+
+    var cell = a.parentNode || a;
+    var row = a;
+    while (row && row.tagName && row.tagName !== 'TR' && row.tagName !== 'BODY') {
+      row = row.parentNode;
+    }
+    var inRow = !!(row && row.tagName === 'TR');
+    var label = clean(a.textContent);
+    if (!label) {
+      var inner = cell.getElementsByTagName ? cell.getElementsByTagName('a') : [];
+      for (var z = 0; z < inner.length; z++) {
+        var innerText = clean(inner[z].textContent);
+        if (innerText) { label = innerText; break; }
+      }
+    }
+    if (!label) { label = clean(cell.textContent); }
+    if (!label) { label = name; }
+    if (label.length > 140) { label = label.substring(0, 140) + '\u2026'; }
+    var body = clean((inRow ? row : cell).textContent);
+
+    var entry = byKey[key];
+    if (entry) {
+      if (inRow && !entry.inRow) {
+        entry.anchor = a;
+        entry.inRow = true;
+        entry.body = body;
+        entry.lbody = body.toLowerCase();
+      }
+      continue;
+    }
+    entry = {
+      name: name,
+      label: label,
+      body: body,
+      lbody: body.toLowerCase(),
+      nlabel: fold(label + ' ' + name),
+      nbody: fold(body),
+      anchor: a,
+      inRow: inRow
+    };
+    byKey[key] = entry;
+    entries.push(entry);
+  }
+
+  if (!entries.length) { countEl.textContent = 'Sin indice disponible'; return; }
+  countEl.textContent = entries.length + ' secciones indexadas';
+
+  function escRe(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function markInto(parent, text, q) {
+    if (!q || !text) {
+      parent.appendChild(document.createTextNode(text || ''));
+      return;
+    }
+    var parts = text.split(new RegExp('(' + escRe(q) + ')', 'ig'));
+    for (var k = 0; k < parts.length; k++) {
+      if (!parts[k]) { continue; }
+      if (k % 2 === 1) {
+        var m = document.createElement('mark');
+        m.appendChild(document.createTextNode(parts[k]));
+        parent.appendChild(m);
+      } else {
+        parent.appendChild(document.createTextNode(parts[k]));
+      }
+    }
+  }
+
+  function snippet(entry, q) {
+    var body = entry.body;
+    if (!body) { return ''; }
+    var nb = fold(body);
+    if (nb === fold(entry.label) || nb === fold(entry.name)) { return ''; }
+    var pos = entry.lbody.indexOf(q.toLowerCase());
+    if (pos < 0) { pos = 0; }
+    var start = pos > 60 ? pos - 60 : 0;
+    var end = start + 200;
+    if (end > body.length) { end = body.length; }
+    var out = (start > 0 ? '\u2026' : '') + body.substring(start, end) + (end < body.length ? '\u2026' : '');
+    return out;
+  }
+
+  function flash(node) {
+    if (!node || !node.style) { return; }
+    var prev = node.style.backgroundColor;
+    node.style.backgroundColor = '#fff59d';
+    setTimeout(function () { node.style.backgroundColor = prev; }, 1600);
+  }
+
+  function jumpTo(entry) {
+    if (!entry || !entry.anchor) { return; }
+    try { entry.anchor.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    catch (err) { entry.anchor.scrollIntoView(); }
+    flash(entry.anchor.parentNode);
+    if (window.history && history.replaceState) {
+      history.replaceState(null, '', '#' + entry.name);
+    }
+  }
+
+  function render(q) {
+    while (list.firstChild) { list.removeChild(list.firstChild); }
+    shown = [];
+    var raw = clean(q);
+    if (!raw) {
+      list.style.display = 'none';
+      empty.style.display = 'none';
+      countEl.textContent = entries.length + ' secciones indexadas';
+      return;
+    }
+    var nq = fold(raw);
+    var first = [];
+    var rest = [];
+    for (var j = 0; j < entries.length; j++) {
+      var e = entries[j];
+      if (e.nlabel.indexOf(nq) >= 0) { first.push(e); }
+      else if (e.nbody.indexOf(nq) >= 0) { rest.push(e); }
+    }
+    var all = first.concat(rest);
+    if (!all.length) {
+      countEl.textContent = 'Sin coincidencias';
+      list.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    var total = all.length === 1 ? '1 coincidencia' : all.length + ' coincidencias';
+    countEl.textContent = all.length > MAX ? total + ' · mostrando ' + MAX : total;
+    shown = all.slice(0, MAX);
+    list.style.display = 'block';
+
+    for (var k = 0; k < shown.length; k++) {
+      var it = shown[k];
+      var li = document.createElement('li');
+      var link = document.createElement('a');
+      link.setAttribute('href', '#' + it.name);
+      var head = document.createElement('span');
+      head.className = 'kbsearch-q';
+      markInto(head, it.label, raw);
+      link.appendChild(head);
+      var snip = snippet(it, raw);
+      if (snip) {
+        var sp = document.createElement('span');
+        sp.className = 'kbsearch-snip';
+        markInto(sp, snip, raw);
+        link.appendChild(sp);
+      }
+      link.onclick = (function (target) {
+        return function (ev) {
+          if (ev && ev.preventDefault) { ev.preventDefault(); }
+          jumpTo(target);
+          return false;
+        };
+      })(it);
+      li.appendChild(link);
+      list.appendChild(li);
+    }
+  }
+
+  input.oninput = function () {
+    if (timer) { clearTimeout(timer); }
+    timer = setTimeout(function () { render(input.value); }, 120);
+  };
+
+  input.onsearch = function () { render(input.value); };
+  input.onchange = function () { render(input.value); };
+
+  input.onkeydown = function (ev) {
+    ev = ev || window.event;
+    var code = ev.key || ev.keyCode;
+    if ((code === 'Enter' || code === 13) && shown.length) {
+      jumpTo(shown[0]);
+      if (ev.preventDefault) { ev.preventDefault(); }
+      return false;
+    }
+    if (code === 'Escape' || code === 27) {
+      input.value = '';
+      render('');
+    }
+  };
+
+  if (clearBtn) {
+    clearBtn.onclick = function () {
+      input.value = '';
+      render('');
+      input.focus();
+    };
+  }
+
+  var pre = /[?&]q=([^&]*)/.exec(window.location.search || '');
+  if (pre && pre[1]) {
+    var raw = decodeURIComponent(pre[1].replace(/\+/g, ' '));
+    input.value = raw;
+    render(raw);
+    input.focus();
+  }
+})();
+</script>
 </body>
 </html>
