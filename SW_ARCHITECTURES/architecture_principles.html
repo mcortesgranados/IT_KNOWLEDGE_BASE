@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Software Architecture Principles — SoC, Loose Coupling, High Cohesion</title>
+<style>
+ body { font-family: 'Segoe UI', Arial, sans-serif; background: #fafbfc; color: #23272f; margin: 0; padding: 0; }
+ .container { max-width: 980px; margin: 40px auto; background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-radius: 10px; padding: 32px 40px; }
+ h1 { color: #1565c0; margin-bottom: 4px; }
+ h2 { color: #2e7d32; margin-top: 36px; border-bottom: 2px solid #e8f5e9; padding-bottom: 6px; }
+ h3 { color: #7b1fa2; margin-top: 24px; }
+ p, li { line-height: 1.5; }
+ code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: .92em; }
+ .lead { color: #475569; font-size: 1.02em; }
+ .note { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .warn { background: #fff3e0; border-left: 4px solid #ef6c00; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .good { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; margin: 12px 0; border-radius: 7px; }
+ .note ul, .warn ul, .good ul { list-style: disc inside; margin: 6px 0 0; padding-left: 1.1em; }
+ .note li, .warn li, .good li { margin-bottom: 2px; line-height: 1.35; }
+ pre { background: #f5f5f5; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: .9em; line-height: 1.45; border-left: 4px solid #94a3b8; }
+ .table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; }
+ .table th, .table td { border: 1px solid #ddd; padding: 9px 10px; text-align: left; vertical-align: top; font-size: .95em; }
+ .table th { background: #f0f7ff; color: #1565c0; }
+ .table tr:nth-child(even) td { background: #fbfdff; }
+ .tag { display: inline-block; font-size: .72em; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; color: #fff; background: #1565c0; vertical-align: middle; }
+ .tag.bad { background: #c62828; }
+ .tag.ok { background: #2e7d32; }
+ .tag.mid { background: #ef6c00; }
+ .toc { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 18px; }
+ .toc ol { margin: 6px 0 0; padding-left: 1.3em; }
+ .toc a { color: #1565c0; text-decoration: none; }
+ .toc a:hover { text-decoration: underline; }
+ .checklist { list-style: none; padding-left: 0; }
+ .checklist li { padding-left: 1.7em; position: relative; margin-bottom: 6px; }
+ .checklist li::before { content: "\2610"; position: absolute; left: 0; color: #1565c0; font-size: 1.1em; }
+ figure { margin: 20px 0; text-align: center; }
+ figcaption { color: #64748b; font-size: .88em; margin-top: 6px; }
+ .footer { text-align: right; color: #888; font-size: .95em; margin-top: 40px; }
+ @media (max-width: 600px) { .container { padding: 16px 12px; } .table th, .table td { padding: 7px; } }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Software Architecture Principles</h1>
+    <p class="lead">Separation of Concerns &middot; High Cohesion &middot; Loose Coupling — the three principles that decide whether a system stays changeable after year three.</p>
+
+    <div class="toc">
+      <strong>Contents</strong>
+      <ol>
+        <li><a href="#soc">Separation of Concerns</a></li>
+        <li><a href="#cohesion">High Cohesion</a></li>
+        <li><a href="#coupling">Loose Coupling</a></li>
+        <li><a href="#balance">How the three balance each other</a></li>
+        <li><a href="#metrics">Measuring them</a></li>
+        <li><a href="#review">Review checklist</a></li>
+        <li><a href="#smells">Smells and anti-patterns</a></li>
+      </ol>
+    </div>
+
+    <h2 id="soc">1. Separation of Concerns (SoC)</h2>
+
+    <p><strong>Definition.</strong> SoC is the practice of dividing a system into parts that each address a <em>distinct</em> concern, so that a decision about one concern can be made without knowing the details of the others. A "concern" is any coherent set of responsibilities that can change for its own reasons: persistence, transport, business rules, presentation, authentication, observability, configuration.</p>
+
+    <p>SoC is the oldest of the three — Dijkstra described it in 1974 as "the only available technique for effective ordering of one's thoughts" — and it is the reason layered, hexagonal and clean architectures exist at all. The other two principles are what you measure <em>after</em> you have separated concerns: cohesion tells you whether you cut in the right place, coupling tells you whether the cut actually isolates change.</p>
+
+    <h3>Where the boundaries usually go</h3>
+
+    <table class="table">
+      <thead>
+        <tr><th>Concern</th><th>Owns</th><th>Must not know about</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Presentation / UI</td><td>Rendering, input events, view state, formatting</td><td>SQL, table names, HTTP verbs of internal services</td></tr>
+        <tr><td>Transport / API</td><td>Routing, status codes, (de)serialization, auth handshake</td><td>Business invariants, persistence details</td></tr>
+        <tr><td>Application / use cases</td><td>Orchestration, transactions, authorization checks</td><td>The concrete database, the concrete UI</td></tr>
+        <tr><td>Domain</td><td>Entities, invariants, business rules, domain events</td><td>Frameworks, I/O, JSON, HTTP, ORM annotations</td></tr>
+        <tr><td>Infrastructure</td><td>Repositories, message brokers, file systems, external clients</td><td>Business rules (it implements, it does not decide)</td></tr>
+        <tr><td>Cross-cutting</td><td>Logging, tracing, metrics, caching, error mapping</td><td>Should be applied declaratively, not copied into each module</td></tr>
+      </tbody>
+    </table>
+
+    <figure>
+      <svg viewBox="0 0 820 300" width="100%" style="max-width:780px" role="img" aria-label="Layers with dependencies pointing inward">
+        <defs>
+          <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L7,3 z" fill="#1565c0"/>
+          </marker>
+        </defs>
+        <rect x="260" y="105" width="300" height="90" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+        <text x="410" y="132" text-anchor="middle" font-family="Segoe UI,Arial" font-size="14" font-weight="700" fill="#1b5e20">DOMAIN</text>
+        <text x="410" y="152" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#33691e">entities &middot; invariants &middot; domain events</text>
+        <text x="410" y="172" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#33691e">no frameworks, no I/O</text>
+
+        <rect x="160" y="60" width="500" height="180" rx="10" fill="none" stroke="#7b1fa2" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="175" y="80" font-family="Segoe UI,Arial" font-size="12" font-weight="700" fill="#6a1b9a">APPLICATION / USE CASES</text>
+
+        <rect x="55" y="22" width="710" height="256" rx="12" fill="none" stroke="#1565c0" stroke-width="2"/>
+        <text x="70" y="42" font-family="Segoe UI,Arial" font-size="12" font-weight="700" fill="#0d47a1">ADAPTERS — HTTP &middot; UI &middot; CLI &middot; MESSAGING &middot; PERSISTENCE</text>
+
+        <line x1="410" y1="20" x2="410" y2="60" stroke="#1565c0" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="410" y1="240" x2="410" y2="200" stroke="#1565c0" stroke-width="2" marker-end="url(#ar)"/>
+        <text x="425" y="215" font-family="Segoe UI,Arial" font-size="11" fill="#1565c0">dependencies always point inward</text>
+        <text x="425" y="45" font-family="Segoe UI,Arial" font-size="11" fill="#1565c0">outer layer may change freely</text>
+      </svg>
+      <figcaption>Concerns separated into concentric layers; the domain stays framework-free, so infrastructure can be replaced without touching business rules.</figcaption>
+    </figure>
+
+    <h3>Violation, then repair</h3>
+
+    <pre>
+// ---- BAD: one function owns transport, rules, persistence and presentation ----
+async function checkout(req, res) {
+  const cart = JSON.parse(req.body);                              // transport
+  if (cart.items.length === 0) return res.status(400).send('empty'); // rules + transport
+  let total = cart.items.reduce((s, i) =&gt; s + i.price * i.qty, 0);
+  if (cart.coupon === 'SAVE10') total = total * 0.9;               // rule buried in the controller
+  await db.query('INSERT INTO orders (total) VALUES (?)', [total]); // persistence
+  res.send('&lt;h1&gt;Thanks! Total ' + total + '&lt;/h1&gt;');               // presentation
+}
+
+// ---- GOOD: each concern in its own place ----
+class Checkout {                       // domain: pure rules, unit-testable without a server
+  static total(items, coupon) { /* invariants + pricing */ }
+}
+class OrderRepository { save(order) {} }               // infrastructure
+class CheckoutController {                             // transport only: map in, map out
+  constructor(useCase) { this.useCase = useCase; }
+  async handle(req, res) {
+    const result = await this.useCase.execute(toCommand(req.body));
+    res.status(result.ok ? 200 : 422).json(result);
+  }
+}</pre>
+
+    <div class="note">
+      <strong>Practical test.</strong> Ask of every module: <em>"if this concern changed — new database, new UI framework, new auth provider — how many files would I open?"</em> If the answer includes files that have nothing to do with that concern, the separation is decorative rather than real.
+    </div>
+
+    <h2 id="cohesion">2. High Cohesion</h2>
+
+    <p><strong>Definition.</strong> Cohesion measures how strongly related the responsibilities inside a single module are. High cohesion means everything in the module serves one purpose and changes for the same reason. It is the answer to "did I cut the system in the right place?".</p>
+
+    <p>The classic seven levels, best to worst:</p>
+
+    <table class="table">
+      <thead>
+        <tr><th>Level</th><th>Meaning</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Functional</td><td>Every element contributes to one single, well-defined task</td><td><span class="tag ok">target</span></td></tr>
+        <tr><td>Sequential</td><td>Output of one part is the input of the next (a pipeline)</td><td><span class="tag ok">good</span></td></tr>
+        <tr><td>Communicational</td><td>Parts operate on the same data (e.g. a report built from one dataset)</td><td><span class="tag ok">acceptable</span></td></tr>
+        <tr><td>Procedural</td><td>Parts run in a fixed order but share no data</td><td><span class="tag mid">weak</span></td></tr>
+        <tr><td>Temporal</td><td>Grouped because they happen at the same time (an <code>initAll()</code>)</td><td><span class="tag mid">weak</span></td></tr>
+        <tr><td>Logical</td><td>Grouped by category, chosen at runtime by a flag ("all validators")</td><td><span class="tag bad">avoid</span></td></tr>
+        <tr><td>Coincidental</td><td>Grouped arbitrarily ("utils", "helpers", "common")</td><td><span class="tag bad">avoid</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>The "and" test</h3>
+
+    <p>A cheap, reliable detector: describe what the module does in one sentence. Every <strong>"and"</strong> in that sentence is a candidate split. Every "or" is a strategy hiding behind a flag.</p>
+
+    <pre>
+// ---- BAD: "InvoiceService creates invoices AND renders PDFs AND emails customers" ----
+class InvoiceService {
+  create() {}
+  renderPdf() {}
+  sendEmail() {}
+}
+
+// ---- GOOD: three modules, three reasons to change ----
+class InvoiceService   { create() {} }        // changes when billing rules change
+class InvoiceRenderer  { toPdf(invoice) {} }  // changes when the template changes
+class InvoiceNotifier  { send(invoice) {} }   // changes when the delivery channel changes</pre>
+
+    <div class="warn">
+      <strong>Symptoms of low cohesion.</strong>
+      <ul>
+        <li>Names that need "Manager", "Helper", "Util", "Common", "Shared" to make sense.</li>
+        <li>A class whose constructor injects seven unrelated collaborators.</li>
+        <li>A single test file that needs a database, a browser and a mail stub to run one assertion.</li>
+        <li>Two teams that always edit the same file for unrelated reasons — the module is a shared dumping ground.</li>
+      </ul>
+    </div>
+
+    <div class="good">
+      <strong>Heuristic for splitting.</strong> Split by <em>reason to change</em>, not by technical layer alone. If two pieces of code always change together for the same business reason, they belong together even if they are "different layers" — cohesion beats symmetry.
+    </div>
+
+    <h2 id="coupling">3. Loose Coupling</h2>
+
+    <p><strong>Definition.</strong> Coupling measures how much one module depends on the internal details of another. Loose coupling means a module can be understood, tested, replaced or redeployed without editing its neighbours — interaction happens through a narrow, stable, intention-revealing contract.</p>
+
+    <p>Coupling types, from worst to best:</p>
+
+    <table class="table">
+      <thead>
+        <tr><th>Type</th><th>What leaks</th><th>Example</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Content</td><td>One module touches another's internals</td><td>Reading <code>order._items</code> directly</td><td><span class="tag bad">never</span></td></tr>
+        <tr><td>Common</td><td>Shared mutable global state</td><td>A singleton cache everyone writes to</td><td><span class="tag bad">avoid</span></td></tr>
+        <tr><td>Control</td><td>One module dictates another's flow through flags</td><td><code>render(data, true, false)</code></td><td><span class="tag bad">avoid</span></td></tr>
+        <tr><td>Stamp</td><td>A whole structure is passed when a field is needed</td><td><code>processCustomer(customer)</code> using only <code>id</code></td><td><span class="tag mid">tolerable</span></td></tr>
+        <tr><td>Data</td><td>Only the parameters that are actually needed</td><td><code>charge(customerId, amountCents)</code></td><td><span class="tag ok">good</span></td></tr>
+        <tr><td>Message / contract</td><td>Nothing but a published interface or event schema</td><td><code>PaymentGateway.charge(Charge)</code></td><td><span class="tag ok">target</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Tight versus loose, same feature</h3>
+
+    <pre>
+// ---- BAD: the use case is welded to Stripe, to its SDK and to its errors ----
+class SubscribeUseCase {
+  async run(userId, plan) {
+    const stripe = new Stripe(process.env.STRIPE_KEY);
+    const sub = await stripe.subscriptions.create({ customer: userId, items: [{ price: plan }] });
+    return sub.id;
+  }
+}
+
+// ---- GOOD: the use case depends on a port it defines itself ----
+interface PaymentGateway {                  // the contract belongs to the caller, not the vendor
+  charge(customerId: string, amountCents: number): Promise&lt;ChargeId&gt;;
+}
+
+class SubscribeUseCase {
+  constructor(private readonly payments: PaymentGateway) {}
+  async run(customerId: string, amountCents: number) {
+    return this.payments.charge(customerId, amountCents);
+  }
+}
+
+// infrastructure: swap Stripe for Adyen or an in-memory fake without touching the use case
+class StripeGateway implements PaymentGateway { /* ... */ }</pre>
+
+    <h3>Techniques that actually reduce coupling</h3>
+
+    <ul>
+      <li><strong>Depend on abstractions you own.</strong> Ports defined by the consumer (hexagonal / dependency inversion) mean vendor SDK types never reach the domain.</li>
+      <li><strong>Invert with dependency injection</strong> instead of importing a concrete client or a service locator.</li>
+      <li><strong>Prefer asynchronous events over synchronous chains</strong> when the caller does not need the answer — the publisher then knows only the event schema.</li>
+      <li><strong>Share contracts, not models.</strong> Publish DTOs and event schemas; never share ORM entities or domain objects across service boundaries.</li>
+      <li><strong>Law of Demeter.</strong> Talk to your direct collaborator, not to its collaborator's collaborator (<code>a.getB().getC().do()</code> is a coupling chain of length three).</li>
+      <li><strong>Depend in the direction of stability.</strong> Volatile modules (UI, adapters) depend on stable ones (domain, contracts); never the reverse.</li>
+      <li><strong>Keep the boundary narrow.</strong> A 40-method interface couples as much as a shared database. Small interfaces, few parameters, explicit types.</li>
+    </ul>
+
+    <div class="note">
+      <strong>Coupling is not binary, it is a budget.</strong> You cannot remove it — a system with zero coupling does nothing. You choose <em>where</em> it lands: at a stable, documented, versioned seam rather than scattered through internals.
+    </div>
+
+    <h2 id="balance">4. How the three balance each other</h2>
+
+    <p>The three principles are one idea seen from three angles: <strong>SoC tells you to cut, cohesion tells you whether the cut is coherent, coupling tells you whether the cut insulates change.</strong> Optimising only one degrades the others.</p>
+
+    <table class="table">
+      <thead>
+        <tr><th>If you over-apply…</th><th>You get</th><th>Because</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Separation of concerns</td><td>Micro-modules, "lasagna code", a change touching twelve files</td><td>Every concept becomes its own layer; the distance between a request and its effect grows</td></tr>
+        <tr><td>High cohesion (per module)</td><td>God modules that absorb every related rule</td><td>Maximising internal cohesion without considering boundaries concentrates change</td></tr>
+        <tr><td>Loose coupling</td><td>Indirection everywhere, hard-to-follow call graphs, "just one more interface"</td><td>Every dependency is hidden behind a port, including trivial ones</td></tr>
+      </tbody>
+    </table>
+
+    <div class="good">
+      <strong>The working rule.</strong> Cut along business capabilities (SoC), keep each cut internally coherent around one reason to change (cohesion), and expose only a narrow contract across the cut (loose coupling). Applied together they yield the property that matters operationally: <em>a change stays local</em>.
+    </div>
+
+    <h2 id="metrics">5. Measuring them</h2>
+
+    <p>You do not have to guess. Structural metrics approximate cohesion and coupling well enough to catch regressions in CI:</p>
+
+    <table class="table">
+      <thead>
+        <tr><th>Metric</th><th>Formula / meaning</th><th>Reading</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Afferent coupling <code>Ca</code></td><td>Classes outside the package that depend on it</td><td>High = stable, widely used, expensive to change</td></tr>
+        <tr><td>Efferent coupling <code>Ce</code></td><td>Classes outside the package it depends on</td><td>High = fragile, many external reasons to break</td></tr>
+        <tr><td>Instability <code>I</code></td><td><code>Ce / (Ca + Ce)</code>, from 0 (stable) to 1 (unstable)</td><td>Stable modules must be abstract; unstable ones concrete</td></tr>
+        <tr><td>Abstractness <code>A</code></td><td>Abstract types / total types in the package</td><td>Pairs with <code>I</code> to locate the "main sequence"</td></tr>
+        <tr><td>Distance <code>D</code></td><td><code>|A + I − 1|</code></td><td><code>D → 1</code> flags a zone of pain (rigid &amp; concrete) or uselessness (abstract &amp; unused)</td></tr>
+        <tr><td>Lack of cohesion of methods (LCOM)</td><td>Method pairs that share no attribute, minus pairs that do</td><td>High LCOM = the class does several jobs</td></tr>
+      </tbody>
+    </table>
+
+    <p>Tooling that computes these on real code: <code>jdepend</code> and <code>ArchUnit</code> (Java), <code>NetArchTest</code> (·NET), <code>dependency-cruiser</code> and <code>madge</code> (JS/TS), <code>pydeps</code> and <code>import-linter</code> (Python). Architectural tests are the durable form of these principles: encode "domain must not import infrastructure" as an assertion, not as a convention in a wiki.</p>
+
+    <h2 id="review">6. Review checklist</h2>
+
+    <ul class="checklist">
+      <li>Every module can be described in one sentence without "and".</li>
+      <li>Each module has one identifiable reason to change, and it is written down.</li>
+      <li>The domain layer has no framework, I/O, serialization or ORM dependency.</li>
+      <li>External systems are reached through ports owned by the consumer, not vendor SDK types.</li>
+      <li>No shared mutable global state between modules; state is passed explicitly.</li>
+      <li>Cross-boundary data are DTOs or event schemas, never internal entities.</li>
+      <li>Dependencies point inward / toward stability; no cycles between packages.</li>
+      <li>Swapping a database, a broker or a UI framework would not require editing business rules.</li>
+      <li>Each module's tests can run without standing up the whole system.</li>
+      <li>Architectural constraints are enforced by automated tests, not by convention.</li>
+    </ul>
+
+    <h2 id="smells">7. Smells and anti-patterns</h2>
+
+    <table class="table">
+      <thead>
+        <tr><th>Smell</th><th>Principle violated</th><th>Typical repair</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>God class / god service</td><td>Cohesion</td><td>Split by reason to change; extract collaborators</td></tr>
+        <tr><td>Anemic domain + logic in controllers</td><td>SoC</td><td>Move invariants into the domain, keep controllers for mapping</td></tr>
+        <tr><td>Shared database between services</td><td>Coupling</td><td>One owner per dataset; integrate via API or events</td></tr>
+        <tr><td>Circular package dependencies</td><td>Coupling + SoC</td><td>Extract the shared abstraction into a lower, stable module</td></tr>
+        <tr><td>Distributed monolith</td><td>Coupling</td><td>Synchronous chain of services → merge or make it asynchronous</td></tr>
+        <tr><td>Utility / "common" module growth</td><td>Cohesion</td><td>Delete it; move each function to its real owner</td></tr>
+        <tr><td>Boolean parameter flags</td><td>Control coupling</td><td>Split into distinct methods or a strategy type</td></tr>
+        <tr><td>Leaky abstraction (ORM entities in the API)</td><td>SoC + coupling</td><td>Explicit DTOs at the boundary</td></tr>
+        <tr><td>Service locator / static singletons</td><td>Coupling</td><td>Constructor injection with explicit ports</td></tr>
+      </tbody>
+    </table>
+
+    <div class="footer">
+      <p>© 2025 Software Architecture Principles &middot; SoC &middot; Cohesion &middot; Coupling</p>
+    </div>
+  </div>
+</body>
+</html>
