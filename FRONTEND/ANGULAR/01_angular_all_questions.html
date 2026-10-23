@@ -22256,17 +22256,28 @@ export class WeightPipe implements PipeTransform {
   }
 
   // ?q=<term> prefills the search box and runs the search (used by the JD topic links)
-  var initialQuery = '';
-  if (window.location.search) {
-    var qs = new URLSearchParams(window.location.search);
-    initialQuery = (qs.get('q') || '').trim();
-  }
-  if (initialQuery) {
-    input.value = initialQuery;
+  function applyQueryFromUrl() {
+    var q = '';
+    if (window.location.search) {
+      try {
+        q = (new URLSearchParams(window.location.search).get('q') || '').trim();
+      } catch (e) { q = ''; }
+    }
+    if (!q || input.value.trim() === q) { return; }
+    if (input.value.trim() !== '') { return; }
+    input.value = q;
     render();
     window.scrollTo(0, 0);
-    window.setTimeout(function () { input.focus(); input.select(); }, 80);
+    window.setTimeout(function () {
+      try { input.focus(); input.select(); } catch (e) {}
+    }, 80);
   }
+
+  applyQueryFromUrl();
+  // re-apply after a bfcache restore, where the browser may reinstate an empty field
+  window.addEventListener('pageshow', function (ev) {
+    if (ev.persisted || input.value.trim() === '') { applyQueryFromUrl(); }
+  });
 })();
 </script>
 <script>document.getElementById("totop").addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});</script>
